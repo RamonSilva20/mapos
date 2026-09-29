@@ -264,7 +264,7 @@ foreach ($servicos as $s) {
 
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form id="formFaturar" action="<?= current_url() ?>" method="post">
+    <form id="formFaturar" action="<?= esc_url(current_url()) ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar Venda</h3>

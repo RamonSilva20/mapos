@@ -12,7 +12,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?= $custom_error ?>
-                <form action="<?= current_url() ?>" id="formArquivo" method="post" class="form-horizontal">
+                <form action="<?= esc_url(current_url()) ?>" id="formArquivo" method="post" class="form-horizontal">
 
 
                     <div class="control-group">

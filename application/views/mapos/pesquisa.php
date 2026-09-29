@@ -1,6 +1,6 @@
  <div class="span12" style="margin-left: 0; margin-top: 0">
     <div class="span12" style="margin-left: 0">
-        <form action="<?= current_url() ?>">
+        <form action="<?= esc_url(current_url()) ?>">
             <div class="span10" style="margin-left: 0">
                 <input type="text" class="span12" name="termo" placeholder="Digite o termo a pesquisar"/>
             </div>

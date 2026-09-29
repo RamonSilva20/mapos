@@ -40,7 +40,7 @@ $periodo = $this->input->get('periodo');
     <?php } ?>
 
     <div class="span12" style="margin-left: 0;margin-top: 1rem;">
-        <form action="<?= current_url() ?>" method="get">
+        <form action="<?= esc_url(current_url()) ?>" method="get">
             <div class="span2" style="margin-left: 0">
                 <label>Período</label>
                 <select id="periodo" name="periodo" class="span12">
@@ -271,7 +271,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
             <div class="span6" style="margin-left: 0">
                 <label for="descricao">Descrição/Referência*</label>
                 <input class="span12" id="descricao" type="text" name="descricao" required />
-                <input id="urlAtual" type="hidden" name="urlAtual" value="<?= current_url() ?>" />
+                <input id="urlAtual" type="hidden" name="urlAtual" value="<?= esc(current_url()) ?>" />
             </div>
             <div class="span12" style="margin-left: 0">
                 <div class="span12" style="margin-left: 0">
@@ -388,7 +388,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
           <div class="span6" style="margin-left: 0"> 
     		<label for="descricao_parc">Descrição/Referência*</label>
     		<input class="span12" id="descricao_parc" type="text" name="descricao_parc" required />
-    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?= current_url() ?>"/>
+    		<input id="urlAtual" type="hidden" name="urlAtual" value="<?= esc(current_url()) ?>"/>
     	</div>	
     	        
     		<div class="span6" style="margin-left: 0"> 

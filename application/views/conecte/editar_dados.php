@@ -13,7 +13,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
 
-                <form action="<?= current_url() ?>" id="formCliente" method="post" class="form-horizontal">
+                <form action="<?= esc_url(current_url()) ?>" id="formCliente" method="post" class="form-horizontal">
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                     <div class="control-group">
                         <input type="hidden" name="idClientes" id="idClientes" value="<?= esc($result->idClientes) ?>" />

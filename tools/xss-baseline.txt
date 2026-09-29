@@ -1,10 +1,510 @@
 # Baseline for tools/check_view_escaping.php
 #
-# Each entry is "application/views/relative/path.php|value expression" for a
-# place where a value intentionally reaches the page without an escaper.
-# Comment lines above an entry explain why.
+# Written by `php tools/check_view_escaping.php --update-baseline`. The counts
+# below are computed from the scan that wrote the file, so they cannot describe
+# a different state than the entries that follow them.
 #
-# This file is intentionally empty: every view output is currently escaped.
+# Each entry is "application/views/relative/path.php|value expression", or
+# "application/views/relative/path.php|prefix value expression" for the checks
+# that work on the whole file. A comment line above an entry is the expression.
+#
+# ---------------------------------------------------------------------------
+# 2026-09-28 - The 221 "unescaped" entries below are NOT reviewed decisions.
+# They are a debt this file records, and the reason is a hole in the gate,
+# not a judgement about the views.
+#
+# The fifth output form only matched an echo whose value started with a dollar
+# sign, so a line that wrapped a database value in a string concatenation - the
+# most common way this project emits one - was never read by any check. The
+# fail-closed guard (EscapingChecks::unrecognizedOutput()) is what found them.
+# Fixing the views means choosing an escaper per context in 48 files, which
+# is view work, not gate work, and it was explicitly deferred: the decision is
+# to record the debt and make it countable rather than to fix it inside a gate
+# change.
+#
+# Until someone does that work, "xss:check is green" means "no NEW unescaped
+# output", and the 221 above are the known remainder. The count is the
+# thing to watch, not the colour.
+# ---------------------------------------------------------------------------
+#
+# The 13 "unrecognized-output" entries are the guard reporting
+# tokens it could not read. Most are the word "print" in CSS
+# (@media print) and JavaScript (window.print()) - not PHP at all, and
+# the pattern is deliberately wider than the forms. The rest are
+# views/errors/cli/*.php, whose multi-line echo of several values is a real
+# form no regex here recognises. Each is a line someone should look at,
+# which is why they are entries and not silence.
+#
 # Run `php tools/check_view_escaping.php --update-baseline` after adding an
 # entry on purpose, and review the diff - each line is a decision to leave a
 # value unescaped.
+#
+
+# $r->hora
+application/views/auditoria/logs.php|$r->hora
+# $r->ip
+application/views/auditoria/logs.php|$r->ip
+# $r->tarefa
+application/views/auditoria/logs.php|$r->tarefa
+# $r->usuario
+application/views/auditoria/logs.php|$r->usuario
+# $r->celular
+application/views/clientes/clientes.php|$r->celular
+# $r->contato
+application/views/clientes/clientes.php|$r->contato
+# $r->documento
+application/views/clientes/clientes.php|$r->documento
+# $r->email
+application/views/clientes/clientes.php|$r->email
+# $r->idClientes
+application/views/clientes/clientes.php|$r->idClientes
+# $r->idClientes , $r->nomeCliente
+application/views/clientes/clientes.php|$r->idClientes , $r->nomeCliente
+# $r->telefone
+application/views/clientes/clientes.php|$r->telefone
+# $dataFinal
+application/views/clientes/visualizar.php|$dataFinal
+# $dataInicial
+application/views/clientes/visualizar.php|$dataInicial
+# $dataVenda
+application/views/clientes/visualizar.php|$dataVenda
+# $faturado
+application/views/clientes/visualizar.php|$faturado
+# $r->idOs
+application/views/clientes/visualizar.php|$r->idOs
+# $r->idVendas
+application/views/clientes/visualizar.php|$r->idVendas
+# $r->valorTotal
+application/views/clientes/visualizar.php|$r->valorTotal
+# $result->idClientes
+application/views/clientes/visualizar.php|$result->idClientes
+# $cobrancaStatus
+application/views/cobrancas/cobrancas.php|$cobrancaStatus
+# $dataVenda
+application/views/cobrancas/cobrancas.php|$dataVenda
+# $r->idCobranca
+application/views/cobrancas/cobrancas.php|$r->idCobranca
+# $r->link
+application/views/cobrancas/cobrancas.php|$r->link
+# $r->os_id , $r->os_id
+application/views/cobrancas/cobrancas.php|$r->os_id , $r->os_id
+# $r->payment_gateway
+application/views/cobrancas/cobrancas.php|$r->payment_gateway
+# $r->payment_method
+application/views/cobrancas/cobrancas.php|$r->payment_method
+# $r->vendas_id , $r->vendas_id
+application/views/cobrancas/cobrancas.php|$r->vendas_id , $r->vendas_id
+# $cobrancaStatus
+application/views/conecte/cobrancas.php|$cobrancaStatus
+# $dataVenda
+application/views/conecte/cobrancas.php|$dataVenda
+# $r->charge_id
+application/views/conecte/cobrancas.php|$r->charge_id
+# $r->idCobranca
+application/views/conecte/cobrancas.php|$r->idCobranca
+# $r->link
+application/views/conecte/cobrancas.php|$r->link
+# $r->os_id , $r->os_id
+application/views/conecte/cobrancas.php|$r->os_id , $r->os_id
+# $r->vendas_id , $r->vendas_id
+application/views/conecte/cobrancas.php|$r->vendas_id , $r->vendas_id
+# $cor , $cor , $r->status
+application/views/conecte/compras.php|$cor , $cor , $r->status
+# $corGarantia , $corGarantia , $vencGarantia
+application/views/conecte/compras.php|$corGarantia , $corGarantia , $vencGarantia
+# $dataVenda
+application/views/conecte/compras.php|$dataVenda
+# $faturado
+application/views/conecte/compras.php|$faturado
+# $r->idVendas
+application/views/conecte/compras.php|$r->idVendas
+# $r->idVendas , $r->idVendas
+application/views/conecte/compras.php|$r->idVendas , $r->idVendas
+# $r->nome
+application/views/conecte/compras.php|$r->nome
+# $a->idAnexos , $link , $thumb , $a->anexo
+application/views/conecte/detalhes_os.php|$a->idAnexos , $link , $thumb , $a->anexo
+# $p->descricao
+application/views/conecte/detalhes_os.php|$p->descricao
+# $p->quantidade
+application/views/conecte/detalhes_os.php|$p->quantidade
+# $s->nome
+application/views/conecte/detalhes_os.php|$s->nome
+# $s->quantidade
+application/views/conecte/detalhes_os.php|$s->quantidade
+# $p->descricao
+application/views/conecte/imprimirOs.php|$p->descricao
+# $p->quantidade
+application/views/conecte/imprimirOs.php|$p->quantidade
+# $s->nome
+application/views/conecte/imprimirOs.php|$s->nome
+# $s->quantidade
+application/views/conecte/imprimirOs.php|$s->quantidade
+# $p->descricao
+application/views/conecte/imprimirVenda.php|$p->descricao
+# $p->quantidade
+application/views/conecte/imprimirVenda.php|$p->quantidade
+# print();
+application/views/conecte/imprimirVenda.php|unrecognized-output: print();
+# $p->descricao
+application/views/conecte/minha_os.php|$p->descricao
+# $p->quantidade
+application/views/conecte/minha_os.php|$p->quantidade
+# $s->nome
+application/views/conecte/minha_os.php|$s->nome
+# print();
+application/views/conecte/minha_os.php|unrecognized-output: print();
+# $cor , $cor , $r->status
+application/views/conecte/os.php|$cor , $cor , $r->status
+# $corGarantia , $corGarantia , $vencGarantia
+application/views/conecte/os.php|$corGarantia , $corGarantia , $vencGarantia
+# $dataFinal
+application/views/conecte/os.php|$dataFinal
+# $dataInicial
+application/views/conecte/os.php|$dataInicial
+# $r->idOs
+application/views/conecte/os.php|$r->idOs
+# $r->idOs , $r->idOs , $r->idOs
+application/views/conecte/os.php|$r->idOs , $r->idOs , $r->idOs
+# $r->nome
+application/views/conecte/os.php|$r->nome
+# $c->idVendas
+application/views/conecte/painel.php|$c->idVendas
+# $c->nome
+application/views/conecte/painel.php|$c->nome
+# $cor , $cor , $c->status
+application/views/conecte/painel.php|$cor , $cor , $c->status
+# $cor , $cor , $o->status
+application/views/conecte/painel.php|$cor , $cor , $o->status
+# $corGarantia , $corGarantia , $vencGarantia
+application/views/conecte/painel.php|$corGarantia , $corGarantia , $vencGarantia
+# $faturado
+application/views/conecte/painel.php|$faturado
+# $o->idOs
+application/views/conecte/painel.php|$o->idOs
+# $o->nome
+application/views/conecte/painel.php|$o->nome
+# $p->descricao
+application/views/conecte/visualizar_compra.php|$p->descricao
+# $p->quantidade
+application/views/conecte/visualizar_compra.php|$p->quantidade
+# $a->idAnexos , $link , $thumb
+application/views/conecte/visualizar_os.php|$a->idAnexos , $link , $thumb
+# $p->descricao
+application/views/conecte/visualizar_os.php|$p->descricao
+# $p->preco , $p->precoVenda
+application/views/conecte/visualizar_os.php|$p->preco , $p->precoVenda
+# $p->quantidade
+application/views/conecte/visualizar_os.php|$p->quantidade
+# $preco
+application/views/conecte/visualizar_os.php|$preco
+# $s->nome
+application/views/conecte/visualizar_os.php|$s->nome
+# $s->quantidade
+application/views/conecte/visualizar_os.php|$s->quantidade
+# print();
+application/views/conecte/visualizar_os.php|unrecognized-output: print();
+# $r->id
+application/views/emails/emails.php|$r->id
+# $r->to
+application/views/emails/emails.php|$r->to
+# $status[$r->status]
+application/views/emails/emails.php|$status[$r->status]
+# echo "\nERROR: ",
+application/views/errors/cli/error_404.php|unrecognized-output: echo "\nERROR: ",
+# echo "\nDatabase error: ",
+application/views/errors/cli/error_db.php|unrecognized-output: echo "\nDatabase error: ",
+# echo "\nERROR: ",
+application/views/errors/cli/error_general.php|unrecognized-output: echo "\nERROR: ",
+# $label , $r->tipo
+application/views/financeiro/lancamentos.php|$label , $r->tipo
+# $r->cliente_fornecedor
+application/views/financeiro/lancamentos.php|$r->cliente_fornecedor
+# $r->desconto , $r->desconto
+application/views/financeiro/lancamentos.php|$r->desconto , $r->desconto
+# $r->descricao
+application/views/financeiro/lancamentos.php|$r->descricao
+# $r->forma_pgto
+application/views/financeiro/lancamentos.php|$r->forma_pgto
+# $r->idLancamentos
+application/views/financeiro/lancamentos.php|$r->idLancamentos
+# $r->idLancamentos , $r->descricao , $r->valor , $data_pagamento , $r->baixado , $r->cliente_fornecedor , $r->forma_pgto , $r->tipo , $r->observacoes , $r->desconto , $r->valor_desconto , $r->valor , $r->nome
+application/views/financeiro/lancamentos.php|$r->idLancamentos , $r->descricao , $r->valor , $data_pagamento , $r->baixado , $r->cliente_fornecedor , $r->forma_pgto , $r->tipo , $r->observacoes , $r->desconto , $r->valor_desconto , $r->valor , $r->nome
+# $r->observacoes
+application/views/financeiro/lancamentos.php|$r->observacoes
+# $status
+application/views/financeiro/lancamentos.php|$status
+# $vencimento
+application/views/financeiro/lancamentos.php|$vencimento
+# >index , php/financeiro/adicionarDespesa" method="post"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3> </div> <div class="modal-body"> <div class="span12 alert alert-info" style="margin-left , >" /> </div> <div class="span12" style="margin-left , 0"> <div class="span12" style="margin-left: 0"> <label for="fornecedor">Fornecedor / Empresa*</label> <input class="span12" id="fornecedor" type="text" name="fornecedor" /> <input class="span12" id="idFornecedor" type="hidden" name="idFornecedor" /> </div> <div class="span12" style="margin-left: 0"> <label for="observacoes">Observações</label> <textarea class="span12" id="observacoes" name="observacoes"></textarea> </div> </div> <div class="span12" style="margin-left: 0"> <div class="span4" style="margin-left: 0"> <label for="valor">Valor*</label> <input type="hidden" name="tipo" value="despesa" /> <input class="span12 money" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal=" , " /> </div> <div class="span4"> <label for="vencimento">Data Vencimento*</label> <input class="span12 datepicker" autocomplete="off" type="text" name="vencimento" /> </div> </div> <div class="span12" style="margin-left: 0"> <div class="span4" style="margin-left: 0"> <label for="pago">Foi Pago?</label> &nbsp &nbsp &nbsp &nbsp<input id="pago" type="checkbox" name="pago" value="1" /> </div> <div id="divPagamento" class="span8" style=" display: none"> <div class="span6"> <label for="pagamento">Data Pagamento</label> <input class="span12 datepicker" autocomplete="off" id="pagamento" type="text" name="pagamento" /> </div> <div class="span6"> <label for="formaPgto">Forma Pgto</label> <select name="formaPgto" class="span12"> <option value="Dinheiro">Dinheiro</option> <option value="Cartão de Crédito">Cartão de Crédito</option> <option value="Cheque">Cheque</option> <option value="Boleto">Boleto</option> <option value="Depósito">Depósito</option> <option value="Débito">Débito</option> <option value="Pix">Pix</option> </select> </div> </div> </div> </div> <div class="modal-footer" style="display:flex
+application/views/financeiro/lancamentos.php|>index , php/financeiro/adicionarDespesa" method="post"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> <h3 id="myModalLabel">MapOS - Adicionar Despesa</h3> </div> <div class="modal-body"> <div class="span12 alert alert-info" style="margin-left , >" /> </div> <div class="span12" style="margin-left , 0"> <div class="span12" style="margin-left: 0"> <label for="fornecedor">Fornecedor / Empresa*</label> <input class="span12" id="fornecedor" type="text" name="fornecedor" /> <input class="span12" id="idFornecedor" type="hidden" name="idFornecedor" /> </div> <div class="span12" style="margin-left: 0"> <label for="observacoes">Observações</label> <textarea class="span12" id="observacoes" name="observacoes"></textarea> </div> </div> <div class="span12" style="margin-left: 0"> <div class="span4" style="margin-left: 0"> <label for="valor">Valor*</label> <input type="hidden" name="tipo" value="despesa" /> <input class="span12 money" type="text" name="valor" data-affixes-stay="true" data-thousands="" data-decimal=" , " /> </div> <div class="span4"> <label for="vencimento">Data Vencimento*</label> <input class="span12 datepicker" autocomplete="off" type="text" name="vencimento" /> </div> </div> <div class="span12" style="margin-left: 0"> <div class="span4" style="margin-left: 0"> <label for="pago">Foi Pago?</label> &nbsp &nbsp &nbsp &nbsp<input id="pago" type="checkbox" name="pago" value="1" /> </div> <div id="divPagamento" class="span8" style=" display: none"> <div class="span6"> <label for="pagamento">Data Pagamento</label> <input class="span12 datepicker" autocomplete="off" id="pagamento" type="text" name="pagamento" /> </div> <div class="span6"> <label for="formaPgto">Forma Pgto</label> <select name="formaPgto" class="span12"> <option value="Dinheiro">Dinheiro</option> <option value="Cartão de Crédito">Cartão de Crédito</option> <option value="Cheque">Cheque</option> <option value="Boleto">Boleto</option> <option value="Depósito">Depósito</option> <option value="Débito">Débito</option> <option value="Pix">Pix</option> </select> </div> </div> </div> </div> <div class="modal-footer" style="display:flex
+# current_url()
+application/views/financeiro/lancamentos.php|current_url()
+# $dataGarantia
+application/views/garantias/garantias.php|$dataGarantia
+# $r->idGarantias
+application/views/garantias/garantias.php|$r->idGarantias
+# $r->idUsuarios , $r->nome
+application/views/garantias/garantias.php|$r->idUsuarios , $r->nome
+# $r->refGarantia
+application/views/garantias/garantias.php|$r->refGarantia
+# $textoGarantiaShort
+application/views/garantias/garantias.php|$textoGarantiaShort
+# print {
+application/views/garantias/imprimirGarantia.php|unrecognized-output: print {
+# print {
+application/views/garantias/imprimirGarantiaOs.php|unrecognized-output: print {
+# $result->idGarantias
+application/views/garantias/visualizarGarantia.php|$result->idGarantias
+# $login
+application/views/mapos/login.php|$login
+# $cor , $cor
+application/views/mapos/pesquisa.php|$cor , $cor
+# $dataInicial
+application/views/mapos/pesquisa.php|$dataInicial
+# $r->descricao
+application/views/mapos/pesquisa.php|$r->descricao
+# $r->documento
+application/views/mapos/pesquisa.php|$r->documento
+# $r->estoque
+application/views/mapos/pesquisa.php|$r->estoque
+# $r->idClientes
+application/views/mapos/pesquisa.php|$r->idClientes
+# $r->idOs
+application/views/mapos/pesquisa.php|$r->idOs
+# $r->idProdutos
+application/views/mapos/pesquisa.php|$r->idProdutos
+# $r->idServicos
+application/views/mapos/pesquisa.php|$r->idServicos
+# $r->nome
+application/views/mapos/pesquisa.php|$r->nome
+# $r->nomeCliente
+application/views/mapos/pesquisa.php|$r->nomeCliente
+# $r->preco
+application/views/mapos/pesquisa.php|$r->preco
+# $r->precoVenda
+application/views/mapos/pesquisa.php|$r->precoVenda
+# $a->anotacao
+application/views/os/editarOs.php|$a->anotacao
+# $a->idAnexos , $link , $thumb
+application/views/os/editarOs.php|$a->idAnexos , $link , $thumb
+# $a->idAnotacoes
+application/views/os/editarOs.php|$a->idAnotacoes
+# $p->descricao
+application/views/os/editarOs.php|$p->descricao
+# $p->idProdutos_os , $p->idProdutos , $p->quantidade
+application/views/os/editarOs.php|$p->idProdutos_os , $p->idProdutos , $p->quantidade
+# $p->preco , $p->precoVenda
+application/views/os/editarOs.php|$p->preco , $p->precoVenda
+# $p->quantidade
+application/views/os/editarOs.php|$p->quantidade
+# $preco
+application/views/os/editarOs.php|$preco
+# $s->idServicos_os
+application/views/os/editarOs.php|$s->idServicos_os
+# $s->nome
+application/views/os/editarOs.php|$s->nome
+# $s->quantidade
+application/views/os/editarOs.php|$s->quantidade
+# $p->descricao
+application/views/os/emails/os.php|$p->descricao
+# $p->preco , $p->precoVenda
+application/views/os/emails/os.php|$p->preco , $p->precoVenda
+# $p->quantidade
+application/views/os/emails/os.php|$p->quantidade
+# $preco
+application/views/os/emails/os.php|$preco
+# $s->nome
+application/views/os/emails/os.php|$s->nome
+# $s->quantidade
+application/views/os/emails/os.php|$s->quantidade
+# $p->descricao
+application/views/os/imprimirOs.php|$p->descricao
+# $p->quantidade
+application/views/os/imprimirOs.php|$p->quantidade
+# $s->nome
+application/views/os/imprimirOs.php|$s->nome
+# $s->quantidade
+application/views/os/imprimirOs.php|$s->quantidade
+# print();
+application/views/os/imprimirOs.php|unrecognized-output: print();
+# $endereco
+application/views/os/imprimirOsTermica.php|$endereco
+# $p->descricao
+application/views/os/imprimirOsTermica.php|$p->descricao
+# $p->preco , $p->precoVenda
+application/views/os/imprimirOsTermica.php|$p->preco , $p->precoVenda
+# $p->quantidade
+application/views/os/imprimirOsTermica.php|$p->quantidade
+# $preco
+application/views/os/imprimirOsTermica.php|$preco
+# $s->nome
+application/views/os/imprimirOsTermica.php|$s->nome
+# $s->quantidade
+application/views/os/imprimirOsTermica.php|$s->quantidade
+# print {
+application/views/os/imprimirOsTermica.php|unrecognized-output: print {
+# $cor , $cor , $r->status
+application/views/os/os.php|$cor , $cor , $r->status
+# $corGarantia , $corGarantia , $vencGarantia
+application/views/os/os.php|$corGarantia , $corGarantia , $vencGarantia
+# $dataFinal
+application/views/os/os.php|$dataFinal
+# $dataInicial
+application/views/os/os.php|$dataInicial
+# $r->idClientes , $r->nomeCliente
+application/views/os/os.php|$r->idClientes , $r->nomeCliente
+# $r->idOs
+application/views/os/os.php|$r->idOs
+# $r->nome
+application/views/os/os.php|$r->nome
+# $a->anotacao
+application/views/os/visualizarOs.php|$a->anotacao
+# $a->idAnexos , $link , $thumb
+application/views/os/visualizarOs.php|$a->idAnexos , $link , $thumb
+# $p->descricao
+application/views/os/visualizarOs.php|$p->descricao
+# $p->preco , $p->precoVenda
+application/views/os/visualizarOs.php|$p->preco , $p->precoVenda
+# $p->quantidade
+application/views/os/visualizarOs.php|$p->quantidade
+# $preco
+application/views/os/visualizarOs.php|$preco
+# $result->idOs
+application/views/os/visualizarOs.php|$result->idOs
+# $s->nome
+application/views/os/visualizarOs.php|$s->nome
+# $s->quantidade
+application/views/os/visualizarOs.php|$s->quantidade
+# $r->idPermissao
+application/views/permissoes/permissoes.php|$r->idPermissao
+# $r->idPermissao , $r->idPermissao
+application/views/permissoes/permissoes.php|$r->idPermissao , $r->idPermissao
+# $r->nome
+application/views/permissoes/permissoes.php|$r->nome
+# $situacao
+application/views/permissoes/permissoes.php|$situacao
+# $r->codDeBarra
+application/views/produtos/produtos.php|$r->codDeBarra
+# $r->descricao
+application/views/produtos/produtos.php|$r->descricao
+# $r->estoque
+application/views/produtos/produtos.php|$r->estoque
+# $r->idProdutos
+application/views/produtos/produtos.php|$r->idProdutos
+# $r->idProdutos , $r->estoque
+application/views/produtos/produtos.php|$r->idProdutos , $r->estoque
+# $l->cliente_fornecedor
+application/views/relatorios/imprimir/imprimirFinanceiro.php|$l->cliente_fornecedor
+# $l->forma_pgto
+application/views/relatorios/imprimir/imprimirFinanceiro.php|$l->forma_pgto
+# $l->tipo
+application/views/relatorios/imprimir/imprimirFinanceiro.php|$l->tipo
+# $pagamento
+application/views/relatorios/imprimir/imprimirFinanceiro.php|$pagamento
+# $situacao
+application/views/relatorios/imprimir/imprimirFinanceiro.php|$situacao
+# $vencimento
+application/views/relatorios/imprimir/imprimirFinanceiro.php|$vencimento
+# $c->desconto
+application/views/relatorios/imprimir/imprimirOs.php|$c->desconto
+# $c->descricaoProduto
+application/views/relatorios/imprimir/imprimirOs.php|$c->descricaoProduto
+# $c->idOs
+application/views/relatorios/imprimir/imprimirOs.php|$c->idOs
+# $c->nomeCliente
+application/views/relatorios/imprimir/imprimirOs.php|$c->nomeCliente
+# $c->status
+application/views/relatorios/imprimir/imprimirOs.php|$c->status
+# $p->descricao
+application/views/relatorios/imprimir/imprimirProdutos.php|$p->descricao
+# $p->estoque
+application/views/relatorios/imprimir/imprimirProdutos.php|$p->estoque
+# $p->precoCompra
+application/views/relatorios/imprimir/imprimirProdutos.php|$p->precoCompra
+# $p->precoVenda
+application/views/relatorios/imprimir/imprimirProdutos.php|$p->precoVenda
+# $p->unidade
+application/views/relatorios/imprimir/imprimirProdutos.php|$p->unidade
+# $r->descricao
+application/views/relatorios/imprimir/imprimirSKU.php|$r->descricao
+# $r->idClientes
+application/views/relatorios/imprimir/imprimirSKU.php|$r->idClientes
+# $r->idProdutos
+application/views/relatorios/imprimir/imprimirSKU.php|$r->idProdutos
+# $r->idRelacionado
+application/views/relatorios/imprimir/imprimirSKU.php|$r->idRelacionado
+# $r->nomeCliente
+application/views/relatorios/imprimir/imprimirSKU.php|$r->nomeCliente
+# $r->origem
+application/views/relatorios/imprimir/imprimirSKU.php|$r->origem
+# $r->quantidade
+application/views/relatorios/imprimir/imprimirSKU.php|$r->quantidade
+# $s->descricao
+application/views/relatorios/imprimir/imprimirServicos.php|$s->descricao
+# $s->nome
+application/views/relatorios/imprimir/imprimirServicos.php|$s->nome
+# $s->preco
+application/views/relatorios/imprimir/imprimirServicos.php|$s->preco
+# $v->desconto
+application/views/relatorios/imprimir/imprimirVendas.php|$v->desconto
+# $v->idVendas
+application/views/relatorios/imprimir/imprimirVendas.php|$v->idVendas
+# $v->nome
+application/views/relatorios/imprimir/imprimirVendas.php|$v->nome
+# $v->nomeCliente
+application/views/relatorios/imprimir/imprimirVendas.php|$v->nomeCliente
+# $r->descricao
+application/views/servicos/servicos.php|$r->descricao
+# $r->idServicos
+application/views/servicos/servicos.php|$r->idServicos
+# $r->nome
+application/views/servicos/servicos.php|$r->nome
+# $login
+application/views/tema/topo.php|$login
+# $p->idPermissao , $p->nome
+application/views/usuarios/adicionarUsuario.php|$p->idPermissao , $p->nome
+# $p->idPermissao , $selected , $p->nome
+application/views/usuarios/editarUsuario.php|$p->idPermissao , $selected , $p->nome
+# $p->descricao
+application/views/vendas/editarVenda.php|$p->descricao
+# $p->idItens , $p->idProdutos , $p->quantidade
+application/views/vendas/editarVenda.php|$p->idItens , $p->idProdutos , $p->quantidade
+# $p->quantidade
+application/views/vendas/editarVenda.php|$p->quantidade
+# $preco
+application/views/vendas/editarVenda.php|$preco
+# $p->descricao
+application/views/vendas/imprimirVenda.php|$p->descricao
+# $p->quantidade
+application/views/vendas/imprimirVenda.php|$p->quantidade
+# print();
+application/views/vendas/imprimirVenda.php|unrecognized-output: print();
+# $p->descricao
+application/views/vendas/imprimirVendaOrcamento.php|$p->descricao
+# $p->quantidade
+application/views/vendas/imprimirVendaOrcamento.php|$p->quantidade
+# print();
+application/views/vendas/imprimirVendaOrcamento.php|unrecognized-output: print();
+# $p->descricao
+application/views/vendas/imprimirVendaTermica.php|$p->descricao
+# $p->preco , $p->precoVenda
+application/views/vendas/imprimirVendaTermica.php|$p->preco , $p->precoVenda
+# $p->quantidade
+application/views/vendas/imprimirVendaTermica.php|$p->quantidade
+# print();
+application/views/vendas/imprimirVendaTermica.php|unrecognized-output: print();
+# $corGarantia , $corGarantia , $vencGarantia
+application/views/vendas/vendas.php|$corGarantia , $corGarantia , $vencGarantia
+# $corStatus , $corStatus , $r->status
+application/views/vendas/vendas.php|$corStatus , $corStatus , $r->status
+# $dataVenda
+application/views/vendas/vendas.php|$dataVenda
+# $faturado
+application/views/vendas/vendas.php|$faturado
+# $r->idClientes , $r->nomeCliente
+application/views/vendas/vendas.php|$r->idClientes , $r->nomeCliente
+# $r->idVendas
+application/views/vendas/vendas.php|$r->idVendas
+# $r->nome
+application/views/vendas/vendas.php|$r->nome

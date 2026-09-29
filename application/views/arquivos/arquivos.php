@@ -9,7 +9,7 @@
                 </span>
                 <h5>Arquivos</h5>
             </div>
-        <form method="get" action="<?= current_url(); ?>">
+        <form method="get" action="<?= esc_url(current_url()) ?>">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) : ?>
                 <div class="span3">
                     <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="button btn btn-mini btn-success" style="max-width:150px">

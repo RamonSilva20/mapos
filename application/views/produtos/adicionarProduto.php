@@ -36,7 +36,7 @@
             </div>
             <div class="widget-content nopadding tab-content">
                 <?= $custom_error ?>
-                <form action="<?= current_url() ?>" id="formProduto" method="post" class="form-horizontal">
+                <form action="<?= esc_url(current_url()) ?>" id="formProduto" method="post" class="form-horizontal">
                     <div class="control-group">
                         <label for="codDeBarra" class="control-label">Código de Barra<span class=""></span></label>
                         <div class="controls">

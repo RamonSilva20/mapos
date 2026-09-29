@@ -73,7 +73,7 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
                             <div class="span12" id="divCadastrarOs">
-                                <form action="<?= current_url() ?>" method="post" id="formOs">
+                                <form action="<?= esc_url(current_url()) ?>" method="post" id="formOs">
                                     <?= form_hidden('idOs', $result->idOs) ?>
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <h3>N° OS: <?= esc($result->idOs) ?></h3>
@@ -502,7 +502,7 @@ if (!$anotacoes) {
 <!-- Modal Faturar-->
 <div id="modal-faturar" class="modal hide fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
-    <form id="formFaturar" action="<?= current_url() ?>" method="post">
+    <form id="formFaturar" action="<?= esc_url(current_url()) ?>" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Faturar OS</h3>
@@ -984,12 +984,12 @@ if (!$anotacoes) {
                         dataType: 'json',
                         success: function (data) {
                             if (data.result == true) {
-                                $("#divProdutos").load("<?= current_url() ?> #divProdutos");
+                                $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
                                 $("#quantidade").val('');
                                 $("#preco").val('');
                                 $("#resultado").val('');
                                 $("#desconto").val('');
-                                $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                                $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                                 $("#produto").val('').focus();
                             } else {
                                 Swal.fire({
@@ -1039,12 +1039,12 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divServicos").load("<?= current_url() ?> #divServicos");
+                            $("#divServicos").load(<?= esc_json(current_url()) ?> + " #divServicos");
                             $("#quantidade_servico").val('');
                             $("#preco_servico").val('');
                             $("#resultado").val('');
                             $("#desconto").val('');
-                            $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                            $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                             $("#servico").val('').focus();
                         } else {
                             Swal.fire({
@@ -1081,7 +1081,7 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divAnotacoes").load("<?= current_url() ?> #divAnotacoes");
+                            $("#divAnotacoes").load(<?= esc_json(current_url()) ?> + " #divAnotacoes");
                             $("#anotacao").val('');
                             $('#btn-close-anotacao').trigger('click');
                             $("#divFormAnotacoes").html('');
@@ -1115,7 +1115,7 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divAnexos").load("<?= current_url() ?> #divAnexos");
+                            $("#divAnexos").load(<?= esc_json(current_url()) ?> + " #divAnexos");
                             $("#userfile").val('');
 
                         } else {
@@ -1145,8 +1145,8 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divProdutos").load("<?= current_url() ?> #divProdutos");
-                            $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                            $("#divProdutos").load(<?= esc_json(current_url()) ?> + " #divProdutos");
+                            $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                             $("#resultado").val('');
                             $("#desconto").val('');
 
@@ -1176,8 +1176,8 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divServicos").load("<?= current_url() ?> #divServicos");
-                            $("#divValorTotal").load("<?= current_url() ?> #divValorTotal");
+                            $("#divServicos").load(<?= esc_json(current_url()) ?> + " #divServicos");
+                            $("#divValorTotal").load(<?= esc_json(current_url()) ?> + " #divValorTotal");
                             $("#resultado").val('');
                             $("#desconto").val('');
 
@@ -1220,7 +1220,7 @@ if (!$anotacoes) {
                 data: "idOs=" + idOS,
                 success: function (data) {
                     if (data.result == true) {
-                        $("#divAnexos").load("<?= current_url() ?> #divAnexos");
+                        $("#divAnexos").load(<?= esc_json(current_url()) ?> + " #divAnexos");
                     } else {
                         Swal.fire({
                             type: "error",
@@ -1244,7 +1244,7 @@ if (!$anotacoes) {
                     dataType: 'json',
                     success: function (data) {
                         if (data.result == true) {
-                            $("#divAnotacoes").load("<?= current_url() ?> #divAnotacoes");
+                            $("#divAnotacoes").load(<?= esc_json(current_url()) ?> + " #divAnotacoes");
 
                         } else {
                             Swal.fire({

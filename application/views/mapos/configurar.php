@@ -17,7 +17,7 @@
                 <li><a data-toggle="tab" href="#menu6">API</a></li>
                 <li><a data-toggle="tab" href="#menu7">E-mail</a></li>
             </ul>
-            <form action="<?= current_url() ?>" id="formConfigurar" method="post" class="form-horizontal">
+            <form action="<?= esc_url(current_url()) ?>" id="formConfigurar" method="post" class="form-horizontal">
                 <div class="widget-content nopadding tab-content">
                     <?= $custom_error ?>
                     <!-- Menu Gerais -->

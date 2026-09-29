@@ -8,7 +8,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * Separado de respond_redirect() para ser verificável. O status sai por
  * header() nativo, e em CLI isso não é observável: não há getter no CI_Output e
  * xdebug_get_headers() não existe. Como uma função pura, a regra fica coberta de
- * verdade em vez de ser apenas replicada na documentação.
+ * verdade em vez de ser apenas replicada na documentação — a tabela toda está em
+ * GeneralHelperTest, e é o único lugar onde ela deve ser testada. O controller
+ * não é o dono da regra, e um teste dele aqui seria a mesma tabela duas vezes.
  *
  * 307 e 303 preservam o método da requisição, o que é o que se quer num POST.
  * Fora de HTTP/1.1 não há informação confiável e o redirect() cai em 302.

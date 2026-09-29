@@ -420,7 +420,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                 data: "idOs=" + idOS,
                 success: function(data) {
                     if (data.result == true) {
-                        $("#divAnexos").load("<?= current_url() ?> #divAnexos");
+                        $("#divAnexos").load(<?= esc_json(current_url()) ?> + " #divAnexos");
                     } else {
                         swal({
                             type: "error",
