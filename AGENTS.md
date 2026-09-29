@@ -22,7 +22,8 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - `application/config/`: Configuration files (`config.php`, `database.php`, `routes.php`, etc.).
 - `application/database/migrations/`: Database schema migration files.
 - `docker/`: Docker Compose configuration for local development.
-- `application/tests/`: PHPUnit suite (`Controllers/`, `Support/`, `bootstrap.php`, `bin/setup-db.php`, `bin/check-schema-parity.php`). One test class per controller, named `<Controller>ControllerTest`; several controllers in `application/controllers/api/` map to `<Controller>ControllerTest` too. It lives inside the document root and `bin/setup-db.php` rebuilds a database, so access is blocked in two places: `application/tests/.htaccess` (Apache) and the `location ^~ /application/ { return 404; }` rule in `docker/etc/nginx/default.conf` and `default.template.conf` (nginx). Nginx does **not** read `.htaccess`, so changing one without the other silently reopens the folder. The `^~` is required, otherwise the `~* \.php$` location is matched first and the files are executed.
+- `application/tests/`: PHPUnit suite (`Controllers/`, `Support/`, `bootstrap.php`, `bin/setup-db.php`, `bin/check-schema-parity.php`). One test class per controller, named `<Controller>ControllerTest`; several controllers in `application/controllers/api/` map to `<Controller>ControllerTest` too. It lives inside the document root and `bin/setup-db.php` rebuilds a database, so access is blocked in two places: `application/tests/.htaccess` (Apache) and the `location ^~ /application/ { return 404; }` rule in `docker/etc/nginx/default.conf` and `default.template.conf` (nginx). Nginx does **not** read `.htaccess`, so changing one without the other silently reopens the folder. The `^~` is required, otherwise the `~* \.php$` location is matched first and the files are executed. `ServedPathsTest` enforces the pairing, because the two nginx files are near-copies with no link between them and `docker-compose.yml` renders `default.template.conf` over `default.conf` — the template is the one that is live.
+- `tools/`: the XSS gate (`check_view_escaping.php` and `ViewEscaping/`). Blocked the same way, `tools/.htaccess` plus `location ^~ /tools/`. The script refuses to run outside CLI, so nothing here is executable over HTTP, but `tools/xss-baseline.txt` is data: it lists every value that reaches a page without an escaper, with file, expression and line. Serving it publishes a map of what is unescaped, and `ServedPathsTest` covers this folder along with `application/`.
 
 ## Testing
 
@@ -101,9 +102,9 @@ running `Tools::migrate()` against an up-to-date schema takes 2ms. The split now
 is **keep the schema, clean the data**, and knowing which half a change belongs to
 is the point:
 
-- The **schema** is reused when `TestDatabase::isSchemaCurrent()` says so, which
-  needs three things: the database exists, `migrations.version` equals the newest
-  migration timestamp, and a fingerprint matches. On a reuse, `setup-db.php` runs
+- The **schema** is reused when the fingerprint says it is current, which needs
+  three things: the database exists, `migrations.version` equals the newest
+  migration timestamp, and the fingerprint matches. On a reuse, `setup-db.php` runs
   no seeds at all — the `Usuarios` seed writes an explicit `idUsuarios`, so
   replaying it aborts with 1062 — and instead re-checks the three fixture users.
   `Tools::migrate()` still runs on both paths: it is a 2ms no-op when the schema
@@ -137,6 +138,79 @@ is the point:
   full migration either way. `quality.yml` runs the setup a second time and
   **requires** the reuse message, because the only way this degrades is silently:
   it would just rebuild everything and pass, slower.
+
+### Running the suite in parallel
+
+`composer test` is single-process and stays that way: it is what CI runs and what
+you get by default. `composer test:parallel` is the opt-in ParaTest path, and it
+exists because of one hard fact about this suite — `TransactsDatabase` rolls each
+case back, and `LoginControllerTest` and `BaselineDataResetTest` both `DELETE` and
+re-`INSERT` from `usuarios`, so on a **shared** database they take an X-lock on
+InnoDB rows and serialize against each other. Two processes that were meant to run
+at once stop running at once.
+
+ParaTest does not isolate databases, so `application/tests/Support/Clone/TestSchemaClone.php`
+does. It runs before the app boots, in `bootstrap.php`, and only when `TEST_TOKEN`
+is set:
+
+- The **model** is `mapos_test`, the one `setup-db.php` builds. Each worker gets
+  its own database named from the token *before* the `_test` suffix —
+  `mapos_1_test` — because `assertDatabaseNameIsSafe()` requires that suffix and
+  is not negotiable. `TestDatabase::workerDatabaseName()` owns that rule and is
+  pure, so it can be tested without a database.
+- The clone is `CREATE TABLE ... LIKE` for all 28 tables, `INSERT ... SELECT` to
+  copy the data, then a **replay of the 26 foreign keys**. `CREATE TABLE ... LIKE`
+  does not copy foreign keys, and the inline form fails because the dependency
+  order is wrong (`anexos` references `os`), so the constraints go on afterwards
+  in dependency order. The reference is qualified with the worker's own database,
+  which is what keeps the constraint inside the worker.
+- Reuse is by schema fingerprint, exactly as for the model. The first run of a
+  token costs ~3.7s; every later run of that token costs ~2ms. That asymmetry is
+  the whole reason the tool is opt-in rather than the default.
+
+**Measure before you raise the worker count.** The cold cost is linear in workers,
+because each worker pays its own clone and MySQL serializes DDL. A snapshot on a
+253-test suite, same machine, `--processes=4` and serial:
+
+| run | warm | cold |
+| --- | --- | --- |
+| serial | 2.32s | ~2.0s (not re-measured) |
+| 4 workers | 1.37s | 9.88s |
+
+Only the two rows above are current; the earlier 104-test table also had 2, 8 and
+28 workers, and those three were **not** re-measured, so treat the shape — linear
+in workers when cold, flat when warm — as what they showed and not as a number you
+can quote. Re-measure the whole table when the suite changes shape again, and in
+particular before changing the pinned count.
+
+Warm is flat because the fingerprints persist, so the number that decides whether
+this is worth anything is the *cold* one, and today cold parallel loses to serial
+outright: 9.88s against 2.32s, to save 0.95s once the workers exist.
+`test:parallel` therefore pins `--processes=4` and **CI does not run it**: a clean
+runner would pay four clones to save a fraction of one second. The honest summary
+is that this is infrastructure for a suite that has not grown into it yet. Revisit
+when the suite is long enough that the test time dominates the clone, and
+re-measure the table above when you do.
+
+- Anything that creates a database in a test must put the token in the name.
+  `workerDatabaseName()` in `DatabaseGuard` is the one place that derives it, and
+  `DatabaseGuardTest` is what covers it — along with
+  `TestSchemaCloneForeignKeysTest` and `TestSchemaCloneReproductionTest`, which build
+  a worker database. A hardcoded name is a race: every worker drops and
+  recreates the same schema, one reads the origin mid-build, and the parity check
+  reports a difference that is not there. That bug cost 4 workers 7.1s instead of
+  1.5s before it was found.
+- `composer test:clean` drops the worker databases the ParaTest runs left behind.
+  It never touches the model, and it re-derives each candidate name with
+  `workerDatabaseName()` instead of matching a pattern written in the script, so
+  it cannot delete a name the clone code could not have produced.
+- Credentials are read through `TestDatabase::env()`, which consults `$_ENV`,
+  `$_SERVER` and `getenv()` in turn. This is not defensive padding: Dotenv does
+  not wire the putenv adapter on every setup, and `$_ENV` follows
+  `variables_order`, which arrives **empty in a ParaTest worker** while
+  `$_SERVER` is full. Reading `$_ENV` directly worked in the serial suite and
+  failed in the parallel one, with the worker opening the database as `root` with
+  no password.
 
 Tests are **in-process**: the app boots once inside `application/tests/bootstrap.php` and each
 test instantiates the controller directly, because restarting the CI3 lifecycle per
@@ -242,7 +316,8 @@ Additional rules:
 - Values that intentionally carry pre-rendered markup (`$topo`, `$custom_error`, `$modalGerarPagamento`, and anything from `printSafeHtml()`) must not be escaped again — escape them where they are built instead. These come from `$this->load->view($name, $data, true)` or from markup the controller assembled, so they are already finished HTML. Escaping one is not redundant, it is destructive: `htmlspecialchars()` turns the markup into visible text **and neutralises any `<script>` nested inside it**, which silently disables whatever that view was included for.
 - Build URLs with `rawurlencode()` on each query value, then pass the result through `esc_url()` (or `esc_img_src()` when the URL lands in an `<img src>`).
 - `clean_url()` and `url_scheme()` are the shared lower half of both URL escapers. Call them only when you need to decide something the escapers do not already decide; reaching for them in a view is usually a sign a third context wants its own function.
-- Run `composer xss:check` after editing views. It runs three checks: values that reach the page without an escaper, values whose type the escaper changes (such as a `JSON.parse()` fed an escaper), and pre-rendered markup wrongly wrapped in an escaper. If an omission is deliberate, record it with `composer xss:baseline` and explain it in `tools/xss-baseline.txt`.
+- Run `composer xss:check` after editing views. It runs four checks: values that reach the page without an escaper, values whose type the escaper changes (such as a `JSON.parse()` fed an escaper), pre-rendered markup wrongly wrapped in an escaper, and output tokens it could not read at all. The last one fails closed: a value the gate could not read is not a value the gate approved. Exit `1` means a finding the baseline does not cover, exit `2` means it read no view at all (wrong path, empty directory, unmounted volume) and wrote nothing, and only then is `0` a gate in order.
+- To record a deliberate omission, the order is: run `composer xss:baseline` **first**, then explain the entries it just wrote in `tools/xss-baseline.txt`. Each new entry arrives with a placeholder comment holding the offending snippet; replace it with the reason. The command preserves the header and the explanations of entries that still exist, so a re-run after a legitimate schema change does not destroy the reasoning of the ones you are not touching. What it does overwrite is a comment whose entry no longer exists — that is intentional, since a justification for a finding that is gone is a justification for nothing.
 
 Note: `global_xss_filtering` in `application/config/config.php` is an input
 filter, not output encoding. It does not protect values read from the database
