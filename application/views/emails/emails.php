@@ -31,12 +31,12 @@
                                         'failed' => '<span class="badge badge-warning">Falhou</span>',
                                     ];
                     echo '<tr>';
-                    echo '<td>' . $r->id . '</td>';
-                    echo '<td>' . $r->to . '</td>';
-                    echo '<td>' . $status[$r->status] . '</td>';
+                    echo '<td>' . esc($r->id) . '</td>';
+                    echo '<td>' . esc($r->to) . '</td>';
+                    echo '<td>' . esc($status[$r->status] ?? '') . '</td>';
                     echo '<td>' . date('d/m/Y H:i:s', strtotime($r->date)) . '</td>';
                     echo '<td>';
-                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" email="' . $r->id . '" class="btn-nwe4" title="Excluir item"><i class="bx bx-trash-alt"></i></a>  ';
+                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" email="' . esc($r->id) . '" class="btn-nwe4" title="Excluir item"><i class="bx bx-trash-alt"></i></a>  ';
                     echo '</td>';
                     echo '</tr>';
                 } ?>

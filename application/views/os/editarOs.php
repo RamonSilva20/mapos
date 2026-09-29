@@ -261,10 +261,10 @@ foreach ($servicos as $s) {
 foreach ($produtos as $p) {
     $total = $total + $p->subTotal;
     echo '<tr>';
-    echo '<td>' . $p->descricao . '</td>';
-    echo '<td><div align="center">' . $p->quantidade . '</td>';
-    echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda) . '</td>';
-    echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
+    echo '<td>' . esc($p->descricao) . '</td>';
+    echo '<td><div align="center">' . esc($p->quantidade) . '</td>';
+    echo '<td><div align="center">R$: ' . esc($p->preco ?: $p->precoVenda) . '</td>';
+    echo (strtolower($result->status) != "cancelado") ? '<td><div align="center"><a href="" idAcao="' . esc($p->idProdutos_os) . '" prodAcao="' . esc($p->idProdutos) . '" quantAcao="' . esc($p->quantidade) . '" title="Excluir Produto" class="btn-nwe4"><i class="bx bx-trash-alt"></i></a></td>' : '<td></td>';
     echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
     echo '</tr>';
 } ?>
@@ -339,10 +339,10 @@ foreach ($servicos as $s) {
     $subtotals = $preco * ($s->quantidade ?: 1);
     $totals = $totals + $subtotals;
     echo '<tr>';
-    echo '<td>' . $s->nome . '</td>';
-    echo '<td><div align="center">' . ($s->quantidade ?: 1) . '</div></td>';
-    echo '<td><div align="center">R$ ' . $preco . '</div></td>';
-    echo '<td><div align="center"><span idAcao="' . $s->idServicos_os . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
+    echo '<td>' . esc($s->nome) . '</td>';
+    echo '<td><div align="center">' . esc($s->quantidade ?: 1) . '</div></td>';
+    echo '<td><div align="center">R$ ' . esc($preco) . '</div></td>';
+    echo '<td><div align="center"><span idAcao="' . esc($s->idServicos_os) . '" title="Excluir Serviço" class="btn-nwe4 servico"><i class="bx bx-trash-alt"></i></span></div></td>';
     echo '<td><div align="center">R$: ' . number_format($subtotals, 2, ',', '.') . '</div></td>';
     echo '</tr>';
 } ?>
@@ -397,8 +397,8 @@ foreach ($servicos as $s) {
                                             $link = $a->url . '/' . $a->anexo;
                                         }
                                         echo '<div class="span3" style="min-height: 150px; margin-left: 0">
-                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
-                                                        <img src="' . $thumb . '" alt="">
+                                                    <a style="min-height: 150px;" href="#modal-anexo" imagem="' . esc($a->idAnexos) . '" link="' . esc_url($link) . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                                        <img src="' . esc_img_src($thumb) . '" alt="">
                                                     </a>
                                                 </div>';
                                     }
@@ -431,8 +431,8 @@ foreach ($servicos as $s) {
         foreach ($anotacoes as $a) {
             echo '<tr>';
             echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
-            echo '<td>' . $a->anotacao . '</td>';
-            echo '<td><span idAcao="' . $a->idAnotacoes . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
+            echo '<td>' . esc($a->anotacao) . '</td>';
+            echo '<td><span idAcao="' . esc($a->idAnotacoes) . '" title="Excluir Anotação" class="btn-nwe4 anotacao"><i class="bx bx-trash-alt"></i></span></td>';
             echo '</tr>';
         }
 if (!$anotacoes) {

@@ -28,16 +28,18 @@
           {
               $hora = date('H');
               if ($hora >= 00 && $hora < 12) {
-                  return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
+                  $saudacao = 'Olá! Bom dia';
               } elseif ($hora >= 12 && $hora < 18) {
-                  return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
+                  $saudacao = 'Olá! Boa tarde';
               } else {
-                  return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
+                  $saudacao = 'Olá! Boa noite';
               }
+
+              return esc($saudacao) . (empty($nome) ? '' : ', ' . esc($nome));
           }
       }
   $login = 'bem-vindo';
-  echo saudacao($login);
+  echo esc(saudacao($login));
   // Irá retornar conforme o horário:
   ?>
       </h1>

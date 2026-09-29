@@ -38,16 +38,16 @@
                         }
         foreach ($produtos as $r) {
             echo '<tr>';
-            echo '<td>' . $r->idProdutos . '</td>';
-            echo '<td>' . $r->descricao . '</td>';
-            echo '<td>' . $r->precoVenda . '</td>';
-            echo '<td>' . $r->estoque . '</td>';
+            echo '<td>' . esc($r->idProdutos) . '</td>';
+            echo '<td>' . esc($r->descricao) . '</td>';
+            echo '<td>' . esc($r->precoVenda) . '</td>';
+            echo '<td>' . esc($r->estoque) . '</td>';
             echo '<td>';
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
+                echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/produtos/visualizar/' . rawurlencode((string) $r->idProdutos)) . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
             }
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-                echo '<a href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn-nwe3" title="Editar produto"><i class="bx bx-edit"></i></a>';
+                echo '<a href="' . esc_url(base_url() . 'index.php/produtos/editar/' . rawurlencode((string) $r->idProdutos)) . '" class="btn-nwe3" title="Editar produto"><i class="bx bx-edit"></i></a>';
             }
             echo '</td>';
             echo '</tr>';
@@ -86,17 +86,17 @@
         }
         foreach ($clientes as $r) {
             echo '<tr>';
-            echo '<td>' . $r->idClientes . '</td>';
-            echo '<td>' . $r->nomeCliente . '</td>';
-            echo '<td>' . $r->documento . '</td>';
+            echo '<td>' . esc($r->idClientes) . '</td>';
+            echo '<td>' . esc($r->nomeCliente) . '</td>';
+            echo '<td>' . esc($r->documento) . '</td>';
             $cor = ($r->fornecedor ? '#CDB380' : '#CD0000');
-            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . ($r->fornecedor ? 'Fornecedor' : 'Cliente') . '</span> </td>';
+            echo '<td><span class="badge" style="background-color: ' . esc_css($cor) . '; border-color: ' . esc_css($cor) . '">' . ($r->fornecedor ? 'Fornecedor' : 'Cliente') . '</span> </td>';
             echo '<td>';
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
+                echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/clientes/visualizar/' . rawurlencode((string) $r->idClientes)) . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
             }
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                echo '<a href="' . base_url() . 'index.php/clientes/editar/' . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="fas fa-edit"></i></a>';
+                echo '<a href="' . esc_url(base_url() . 'index.php/clientes/editar/' . rawurlencode((string) $r->idClientes)) . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="fas fa-edit"></i></a>';
             }
             echo '</td>';
             echo '</tr>';
@@ -136,12 +136,12 @@
                     }
         foreach ($servicos as $r) {
             echo '<tr>';
-            echo '<td>' . $r->idServicos . '</td>';
-            echo '<td>' . $r->nome . '</td>';
-            echo '<td>' . $r->preco . '</td>';
+            echo '<td>' . esc($r->idServicos) . '</td>';
+            echo '<td>' . esc($r->nome) . '</td>';
+            echo '<td>' . esc($r->preco) . '</td>';
             echo '<td>';
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
-                echo '<a href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="fas fa-edit"></i></a>';
+                echo '<a href="' . esc_url(base_url() . 'index.php/servicos/editar/' . rawurlencode((string) $r->idServicos)) . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="fas fa-edit"></i></a>';
             }
             echo '</td>';
             echo '</tr>';
@@ -183,16 +183,16 @@
             $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
             $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
             echo '<tr>';
-            echo '<td>' . $r->idOs . '</td>';
-            echo '<td>' . $dataInicial . '</td>';
+            echo '<td>' . esc($r->idOs) . '</td>';
+            echo '<td>' . esc($dataInicial) . '</td>';
             echo '<td>' . printSafeHtml($r->descricaoProduto) . '</td>';
             echo '<td>' . printSafeHtml($r->defeito) . '</td>';
             echo '<td>';
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
+                echo '<a style="margin-right: 1%" href="' . esc_url(base_url() . 'index.php/os/visualizar/' . rawurlencode((string) $r->idOs)) . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
             }
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
+                echo '<a href="' . esc_url(base_url() . 'index.php/os/editar/' . rawurlencode((string) $r->idOs)) . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
             }
             echo '</td>';
             echo '</tr>';

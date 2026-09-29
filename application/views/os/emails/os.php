@@ -233,9 +233,9 @@ $totalProdutos = 0; ?>
                 <?php foreach ($produtos as $p) {
                     $totalProdutos = $totalProdutos + $p->subTotal;
                     echo '<tr class="item">';
-                    echo '<td>' . $p->descricao . '</td>';
-                    echo '<td>' . $p->quantidade . '</td>';
-                    echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
+                    echo '<td>' . esc($p->descricao) . '</td>';
+                    echo '<td>' . esc($p->quantidade) . '</td>';
+                    echo '<td>' . esc($p->preco ?: $p->precoVenda) . '</td>';
                     echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                     echo '</tr>';
                 } ?>
@@ -260,9 +260,9 @@ $totalProdutos = 0; ?>
                     $subtotal = $preco * ($s->quantidade ?: 1);
                     $totalServico = $totalServico + $subtotal;
                     echo '<tr class="item">';
-                    echo '<td>' . $s->nome . '</td>';
-                    echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                    echo '<td>' . $preco . '</td>';
+                    echo '<td>' . esc($s->nome) . '</td>';
+                    echo '<td>' . esc($s->quantidade ?: 1) . '</td>';
+                    echo '<td>' . esc($preco) . '</td>';
                     echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                     echo '</tr>';
                 } ?>

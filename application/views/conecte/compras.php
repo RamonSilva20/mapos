@@ -123,14 +123,14 @@ if (!$results) { ?>
                                 break;
                         }
                         echo '<tr>';
-                        echo '<td>' . $r->idVendas . '</td>';
-                        echo '<td>' . $r->nome . '</td>';
-                        echo '<td>' . $dataVenda . '</td>';
-                        echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-                        echo '<td>' . $faturado . '</td>';
-                        echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                        echo '<td><a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $r->idVendas . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>
-                      <a href="' . base_url() . 'index.php/mine/imprimirCompra/' . $r->idVendas . '" class="btn-nwe6" title="Imprimir" target="_blank"><i class="bx bx-printer"></i></a>
+                        echo '<td>' . esc($r->idVendas) . '</td>';
+                        echo '<td>' . esc($r->nome) . '</td>';
+                        echo '<td>' . esc($dataVenda) . '</td>';
+                        echo '<td><span class="badge" style="background-color: ' . esc_css($corGarantia) . '; border-color: ' . esc_css($corGarantia) . '">' . esc($vencGarantia) . '</span> </td>';
+                        echo '<td>' . esc($faturado) . '</td>';
+                        echo '<td><span class="badge" style="background-color: ' . esc_css($cor) . '; border-color: ' . esc_css($cor) . '">' . esc($r->status) . '</span> </td>';
+                        echo '<td><a href="' . esc_url(base_url() . 'index.php/mine/visualizarCompra/' . rawurlencode((string) $r->idVendas)) . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>
+                      <a href="' . esc_url(base_url() . 'index.php/mine/imprimirCompra/' . rawurlencode((string) $r->idVendas)) . '" class="btn-nwe6" title="Imprimir" target="_blank" rel="noopener noreferrer"><i class="bx bx-printer"></i></a>
                   </td>';
                         echo '</tr>';
                     } ?>

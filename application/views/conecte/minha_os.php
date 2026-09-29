@@ -163,8 +163,8 @@
                                         foreach ($produtos as $p) {
                                             $totalProdutos = $totalProdutos + $p->subTotal;
                                             echo '<tr>';
-                                            echo '<td style="text-align: center">' . $p->descricao . '</td>';
-                                            echo '<td style="text-align: center">' . $p->quantidade . '</td>';
+                                            echo '<td style="text-align: center">' . esc($p->descricao) . '</td>';
+                                            echo '<td style="text-align: center">' . esc($p->quantidade) . '</td>';
 
                                             echo '<td style="text-align: center">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                             echo '</tr>';
@@ -177,7 +177,7 @@
                                                 $preco = $s->preco;
                                                 $totalServico = $totalServico + $preco;
                                                 echo '<tr>';
-                                                echo '<td style="text-align: center">' . $s->nome . '</td>';
+                                                echo '<td style="text-align: center">' . esc($s->nome) . '</td>';
                                                 echo '<td></td>';
                                                 echo '<td style="text-align: center">R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
                                                 echo '</tr>';

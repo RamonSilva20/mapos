@@ -119,9 +119,9 @@
 foreach ($produtos as $p) {
     $total = $total + $p->subTotal;
     echo '<tr>';
-    echo '<td>' . $p->descricao . '</td>';
+    echo '<td>' . esc($p->descricao) . '</td>';
     echo '<td>R$ ' . number_format($p->preco, 2, ',', '.') . '</td>';
-    echo '<td>' . $p->quantidade . '</td>';
+    echo '<td>' . esc($p->quantidade) . '</td>';
     echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
     echo '</tr>';
 } ?>
@@ -157,9 +157,9 @@ foreach ($produtos as $p) {
 foreach ($servicos as $s) {
     $total = $total + $s->subTotal;
     echo '<tr>';
-    echo '<td>' . $s->nome . '</td>';
+    echo '<td>' . esc($s->nome) . '</td>';
     echo '<td>R$ ' . number_format($s->preco, 2, ',', '.') . '</td>';
-    echo '<td>' . $s->quantidade . '</td>';
+    echo '<td>' . esc($s->quantidade) . '</td>';
     echo '<td>R$ ' . number_format($s->subTotal, 2, ',', '.') . '</td>';
     echo '</tr>';
 } ?>
@@ -209,10 +209,10 @@ foreach ($servicos as $s) {
                                             $link = $a->url . '/' . $a->anexo;
                                         }
                                         echo '<div class="span3" style="min-height: 150px; margin-left: 0">
-                                            <a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal">
-                                            <img src="' . $thumb . '" alt="">
+                                            <a style="min-height: 150px;" href="#modal-anexo" imagem="' . esc($a->idAnexos) . '" link="' . esc_url($link) . '" role="button" class="btn anexo span12" data-toggle="modal">
+                                            <img src="' . esc_img_src($thumb) . '" alt="">
                                             </a>
-                                            <span>' . $a->anexo . '</span>
+                                            <span>' . esc($a->anexo) . '</span>
                                             </div>';
                                     }?>
                                 </div>

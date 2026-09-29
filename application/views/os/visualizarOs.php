@@ -5,7 +5,7 @@
             <div class="widget-title" style="margin: 10px 0 0">
                 <div class="buttons">
                     <?php if ($editavel) {
-                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . base_url() . 'index.php/os/editar/' . $result->idOs . '">
+                        echo '<a title="Editar OS" class="button btn btn-mini btn-success" href="' . esc_url(base_url() . 'index.php/os/editar/' . rawurlencode((string) $result->idOs)) . '">
                             <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text">Editar</span>
                         </a>';
                     } ?>
@@ -220,7 +220,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 <tbody>
                                     <?php foreach ($anotacoes as $a) {
                                         echo '<tr>';
-                                        echo '<td>' . $a->anotacao . '</td>';
+                                        echo '<td>' . esc($a->anotacao) . '</td>';
                                         echo '<td>' . date('d/m/Y H:i:s', strtotime($a->data_hora)) . '</td>';
                                         echo '</tr>';
                                     }
@@ -248,7 +248,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                                 $thumb = $a->url . '/thumbs/' . $a->thumb;
                                                 $link = $a->url . '/' . $a->anexo;
                                             }
-                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . $a->idAnexos . '" link="' . $link . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . $thumb . '" alt=""></a></div>';
+                                            echo '<div class="span3" style="min-height: 150px; margin-left: 0"><a style="min-height: 150px;" href="#modal-anexo" imagem="' . esc($a->idAnexos) . '" link="' . esc_url($link) . '" role="button" class="btn anexo span12" data-toggle="modal"><img src="' . esc_img_src($thumb) . '" alt=""></a></div>';
                                         } ?>
                                     </th>
                                 </tbody>
@@ -269,9 +269,9 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 <tbody>
                                     <?php foreach ($produtos as $p) {
                                         echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td>' . $p->quantidade . '</td>';
-                                        echo '<td>R$ ' . $p->preco ?: $p->precoVenda . '</td>';
+                                        echo '<td>' . esc($p->descricao) . '</td>';
+                                        echo '<td>' . esc($p->quantidade) . '</td>';
+                                        echo '<td>R$ ' . esc($p->preco ?: $p->precoVenda) . '</td>';
                                         echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
@@ -300,9 +300,9 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                                 $preco = $s->preco ?: $s->precoVenda;
                                 $subtotal = $preco * ($s->quantidade ?: 1);
                                 echo '<tr>';
-                                echo '<td>' . $s->nome . '</td>';
-                                echo '<td>' . ($s->quantidade ?: 1) . '</td>';
-                                echo '<td>R$ ' . $preco . '</td>';
+                                echo '<td>' . esc($s->nome) . '</td>';
+                                echo '<td>' . esc($s->quantidade ?: 1) . '</td>';
+                                echo '<td>R$ ' . esc($preco) . '</td>';
                                 echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                                 echo '</tr>';
                             } ?>

@@ -96,9 +96,9 @@
                                                 foreach ($produtos as $p) {
                                                     $totalProdutos = $totalProdutos + $p->subTotal;
                                                     echo '<tr>';
-                                                    echo '<td>' . $p->descricao . '</td>';
-                                                    echo '<td>' . $p->quantidade . '</td>';
-                                                    echo '<td>R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                                    echo '<td>' . esc($p->descricao) . '</td>';
+                                                    echo '<td>' . esc($p->quantidade) . '</td>';
+                                                    echo '<td>R$ ' . esc($p->preco ?: $p->precoVenda) . '</td>';
                                                     echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                                     echo '</tr>';
                                                 } ?>

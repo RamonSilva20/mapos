@@ -145,7 +145,7 @@
                                     } else {
                                         $selected = '';
                                     }
-                                    echo '<option value="' . $p->idPermissao . '"' . $selected . '>' . $p->nome . '</option>';
+                                    echo '<option value="' . esc($p->idPermissao) . '"' . esc($selected) . '>' . esc($p->nome) . '</option>';
                                 } ?>
                             </select>
                         </div>
