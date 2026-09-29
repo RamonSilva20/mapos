@@ -4,6 +4,8 @@ namespace Tests\Schema;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\Database\SchemaReader;
+use Tests\Support\Database\TestDatabase;
 
 /**
  * Afirma propriedades do schema que a suíte monta.
@@ -61,27 +63,26 @@ final class SchemaTest extends TestCase
         yield 'servicos.preco' => ['servicos', 'preco'];
     }
 
+    /**
+     * O tipo declarado de uma coluna, lido pelo mesmo caminho que o resto da suíte.
+     *
+     * Passa pela SchemaReader em vez da própria consulta a information_schema
+     * porque este arquivo afirma um valor absoluto: uma segunda leitura do schema
+     * seria uma segunda resposta para a mesma pergunta, e as duas poderiam divergir
+     * sem que nenhuma delas estivesse errada. `strtolower()` é do teste, e não da
+     * leitora, porque a normalização pertence a quem compara.
+     */
     private function columnType(string $table, string $column): string
     {
-        $db = get_instance()->db;
+        $test = TestDatabase::fromEnvironment();
 
-        $type = $db->list_fields($table);
-        $this->assertContains(
-            $column,
+        $type = SchemaReader::columnType($test->pdo(), $test->database(), $table, $column);
+
+        $this->assertNotNull(
             $type,
-            "A tabela {$table} não tem a coluna {$column}."
+            "A tabela {$table} não tem a coluna {$column}, ou ela não aparece no information_schema."
         );
 
-        // list_fields() só devolve os nomes. O tipo vem do information_schema, que
-        // é o que o SHOW CREATE TABLE do MySQL também usa como fonte.
-        $row = $db->query(
-            'SELECT COLUMN_TYPE FROM information_schema.COLUMNS
-              WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?',
-            [$table, $column]
-        )->row();
-
-        $this->assertNotNull($row, "{$table}.{$column} não aparece no information_schema.");
-
-        return strtolower((string) $row->COLUMN_TYPE);
+        return strtolower($type);
     }
 }

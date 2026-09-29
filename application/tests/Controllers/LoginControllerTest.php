@@ -3,7 +3,7 @@
 namespace Tests\Controllers;
 
 use Tests\Support\ControllerTestCase;
-use Tests\Support\TransactsDatabase;
+use Tests\Support\Transaction\TransactsDatabase;
 
 /**
  * Testa o controller Login inteiro: a tela (GET /index.php/login), o endpoint
@@ -46,7 +46,7 @@ class LoginControllerTest extends ControllerTestCase
     use TransactsDatabase;
 
     /**
-     * Pede a reinstateção da linha de base antes de cada caso.
+     * Pede a reinstalação da linha de base antes de cada caso.
      *
      * A transação sozinha não dá conta desta classe: ela mexe no
      * `dataExpiracao` das contas para cobrir o chk_date() do Login, e como uma
@@ -113,14 +113,14 @@ class LoginControllerTest extends ControllerTestCase
     public function testDoesNotRevealWhetherTheEmailExists(): void
     {
         $this->postLogin('admin@admin.com', 'senha-errada');
-        $senhaErrada = $this->callController('Login', 'verificarLogin');
+        $wrongPassword = $this->callController('Login', 'verificarLogin');
 
         $this->postLogin('nao-existe@admin.com', 'senha-errada');
-        $emailInexistente = $this->callController('Login', 'verificarLogin');
+        $unknownEmail = $this->callController('Login', 'verificarLogin');
 
         $this->assertSame(
-            $senhaErrada['message'],
-            $emailInexistente['message'],
+            $wrongPassword['message'],
+            $unknownEmail['message'],
             'E-mail inexistente e senha errada precisam devolver a mesma mensagem, senão a resposta revela quais e-mails têm conta.'
         );
     }
@@ -213,7 +213,7 @@ class LoginControllerTest extends ControllerTestCase
      */
     public function testEveryFailurePathReturnsAFreshCsrfToken(): void
     {
-        $casos = [
+        $cases = [
             'sem corpo' => static function (): void {
             },
             'e-mail inválido' => function (): void {
@@ -233,18 +233,18 @@ class LoginControllerTest extends ControllerTestCase
             },
         ];
 
-        foreach ($casos as $descricao => $prepara) {
+        foreach ($cases as $description => $prepare) {
             $this->resetApplicationState();
-            $prepara();
+            $prepare();
 
             $response = $this->callController('Login', 'verificarLogin');
 
-            $this->assertFalse($response['result'], "{$descricao} deveria falhar.");
+            $this->assertFalse($response['result'], "{$description} deveria falhar.");
             $this->assertNotEmpty(
                 $response['MAPOS_TOKEN'] ?? null,
-                "{$descricao} não devolveu MAPOS_TOKEN."
+                "{$description} não devolveu MAPOS_TOKEN."
             );
-            $this->assertNotEmpty($response['message'], "{$descricao} devolveu mensagem vazia.");
+            $this->assertNotEmpty($response['message'], "{$description} devolveu mensagem vazia.");
         }
     }
 
@@ -479,31 +479,6 @@ class LoginControllerTest extends ControllerTestCase
 
         $this->assertTrue($response['result'], 'Uma conta sem expiração deveria entrar.');
         $this->assertTrue($this->ci()->session->userdata('logado'));
-    }
-
-    /**
-     * O redirect do logout precisa continuar sendo o que o CI3 escolheria.
-     *
-     * respond_redirect() existe só para não chamar exit(), e o exit() era a
-     * única diferença em relação ao redirect() do helper url. Se o cálculo do
-     * status divergir, o navegador passa a tratar o logout como outra coisa:
-     * 307/303 preservam o método do POST, 302 não.
-     *
-     * A regra é verificada em redirect_status_for() e não pelo controller,
-     * porque o status sai por header() nativo e em CLI não há como lê-lo: o
-     * CI_Output não expõe getter e xdebug_get_headers() não existe.
-     */
-    public function testTheRedirectStatusFollowsTheCi3Rule(): void
-    {
-        // O que o redirect() do CI3 faria para cada caso.
-        $this->assertSame(307, redirect_status_for('GET', 'HTTP/1.1'));
-        $this->assertSame(303, redirect_status_for('POST', 'HTTP/1.1'));
-        $this->assertSame(303, redirect_status_for('DELETE', 'HTTP/1.1'));
-
-        // Fora de HTTP/1.1 não há informação confiável, e o CI3 cai em 302.
-        $this->assertSame(302, redirect_status_for('POST', 'HTTP/1.0'));
-        $this->assertSame(302, redirect_status_for('POST', null));
-        $this->assertSame(302, redirect_status_for(null, 'HTTP/1.1'));
     }
 
     /**

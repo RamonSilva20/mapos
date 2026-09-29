@@ -4,6 +4,8 @@ namespace Tests\Support;
 
 use PHPUnit\Framework\TestCase;
 
+use Tests\Support\App\TestApplication;
+
 /**
  * Base dos testes que exercitam controllers.
  *
@@ -14,7 +16,8 @@ use PHPUnit\Framework\TestCase;
  * Um detalhe importante para quem estende esta base: não registre error handler
  * com set_error_handler($anterior) para restaurar. Isso empilha no stack em vez
  * de desempilhar, e o PHPUnit acusa o vazamento marcando todos os testes como
- * risky. Use restore_error_handler(), como em ignoringCliHeaderWarnings().
+ * risky. Use restore_error_handler(), como em ignoringCliHeaderWarnings(), e
+ * ver a nota em AGENTS.md.
  */
 abstract class ControllerTestCase extends TestCase
 {
@@ -57,8 +60,15 @@ abstract class ControllerTestCase extends TestCase
 
         if (isset($ci->output)) {
             $ci->output->set_output('');
-            // Cabeçalhos de uma resposta anterior (o Location de um logout, por
-            // exemplo) não podem vazar para o caso seguinte.
+            // Limpa os cabeçalhos acumulados, para o caso seguinte não ler um
+            // Location de um logout anterior. A propriedade é pública no CI_Output e
+            // não tem método que a zere, porque em requisição web cada resposta
+            // nasce de um Output novo; aqui o mesmo objeto serve a todos os casos.
+            //
+            // Apendar outro Location não resolveria: get_header() varre de trás
+            // para frente e devolve a última ocorrência, então quem só escreve o
+            // header que espera continuaria lendo o valor certo por acidente — e
+            // um caso que afirma a AUSÊNCIA de um header leria o antigo.
             $ci->output->headers = [];
         }
     }
@@ -70,7 +80,7 @@ abstract class ControllerTestCase extends TestCase
      * do cookie por hash_equals, sem armazenamento no servidor. Como setcookie()
      * é no-op em CLI, o cookie é escrito à mão.
      */
-    protected function postLogin(string $email, string $senha): void
+    protected function postLogin(string $email, string $password): void
     {
         $hash = (string) $this->ci()->security->get_csrf_hash();
 
@@ -78,7 +88,7 @@ abstract class ControllerTestCase extends TestCase
         $_COOKIE[config_item('csrf_cookie_name')] = $hash;
         $_POST[config_item('csrf_token_name')] = $hash;
         $_POST['email'] = $email;
-        $_POST['senha'] = $senha;
+        $_POST['senha'] = $password;
     }
 
     /**
@@ -189,9 +199,9 @@ abstract class ControllerTestCase extends TestCase
         // Por isso o controller passa a apontar para a conexão do processo, e a
         // sobra é fechada em vez de vazar.
         if (isset($controller->db) && $controller->db !== $ci->db) {
-            $sobra = $controller->db;
+            $left = $controller->db;
             $controller->db = $ci->db;
-            $sobra->close();
+            $left->close();
         }
 
         ob_start();
