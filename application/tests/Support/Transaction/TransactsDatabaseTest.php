@@ -1,9 +1,11 @@
 <?php
 
-namespace Tests\Support;
+namespace Tests\Support\Transaction;
 
 use PHPUnit\Framework\Attributes\Depends;
+
 use PHPUnit\Framework\TestCase;
+use Tests\Support\App\Ci3Introspection;
 
 /**
  * Prova que a TransactsDatabase realmente isola.
@@ -40,7 +42,7 @@ final class TransactsDatabaseTest extends TestCase
 
         $this->assertSame(
             1,
-            $this->transactionDepth(get_instance()->db),
+            Ci3Introspection::transactionDepth(get_instance()->db),
             'O depth do CI3 deveria ser 1 durante o caso.'
         );
     }
@@ -59,11 +61,11 @@ final class TransactsDatabaseTest extends TestCase
         $db = get_instance()->db;
 
         $db->trans_start();
-        $this->assertSame(2, $this->transactionDepth($db), 'trans_start() aninhado deveria subir o depth.');
+        $this->assertSame(2, Ci3Introspection::transactionDepth($db), 'trans_start() aninhado deveria subir o depth.');
 
         $db->trans_complete();
 
-        $this->assertSame(1, $this->transactionDepth($db), 'trans_complete() aninhado deveria só descer o depth.');
+        $this->assertSame(1, Ci3Introspection::transactionDepth($db), 'trans_complete() aninhado deveria só descer o depth.');
 
         $this->assertSame(
             0,
@@ -85,10 +87,10 @@ final class TransactsDatabaseTest extends TestCase
         $db = get_instance()->db;
 
         $db->trans_start();
-        $this->assertSame(2, $this->transactionDepth($db));
+        $this->assertSame(2, Ci3Introspection::transactionDepth($db));
 
         $db->trans_rollback();
-        $this->assertSame(1, $this->transactionDepth($db));
+        $this->assertSame(1, Ci3Introspection::transactionDepth($db));
 
         // Este é o ponto: o rollback interno não tinha SAVEPOINT para usar, então
         // o depth voltou para 1 sem desfazer nada, e a transação do harness
@@ -100,7 +102,7 @@ final class TransactsDatabaseTest extends TestCase
             'Um rollback interno não pode derrubar a transação do harness, porque ela não tem SAVEPOINT.'
         );
 
-        $this->assertSame(1, $this->transactionDepth($db));
+        $this->assertSame(1, Ci3Introspection::transactionDepth($db));
     }
 
     /**
@@ -116,12 +118,12 @@ final class TransactsDatabaseTest extends TestCase
         $db = get_instance()->db;
 
         $db->trans_start();
-        $this->assertSame(2, $this->transactionDepth($db));
+        $this->assertSame(2, Ci3Introspection::transactionDepth($db));
 
         $db->trans_complete();
         $db->trans_rollback();
 
-        $this->assertSame(0, $this->transactionDepth($db));
+        $this->assertSame(0, Ci3Introspection::transactionDepth($db));
         $this->assertSame(
             1,
             $this->autocommit(),
@@ -151,10 +153,10 @@ final class TransactsDatabaseTest extends TestCase
      */
     public function testTheRowWrittenHereIsVisibleInsideTheTransaction(): void
     {
-        $this->escreverLinhaDeLog();
+        $this->writeLogRow();
         $this->assertSame(
             1,
-            $this->contarLinhasDeLog(),
+            $this->countLogRows(),
             'A gravação deveria estar visível de dentro da transação que a trait abriu.'
         );
     }
@@ -164,7 +166,7 @@ final class TransactsDatabaseTest extends TestCase
     {
         $this->assertSame(
             0,
-            $this->contarLinhasDeLog(),
+            $this->countLogRows(),
             'A linha do caso anterior sobreviveu, então a trait está descartando com commit em vez de rollback.'
         );
     }
@@ -172,7 +174,7 @@ final class TransactsDatabaseTest extends TestCase
     /**
      * Grava uma linha em `logs` com a marca do par de casos.
      */
-    private function escreverLinhaDeLog(): void
+    private function writeLogRow(): void
     {
         get_instance()->db->insert('logs', [
             'usuario' => 'harness',
@@ -186,7 +188,7 @@ final class TransactsDatabaseTest extends TestCase
     /**
      * Quantas linhas o par de casos deixou em `logs`.
      */
-    private function contarLinhasDeLog(): int
+    private function countLogRows(): int
     {
         return (int) get_instance()->db
             ->query("SELECT COUNT(*) AS total FROM `logs` WHERE `tarefa` = 'TransactsDatabaseTest'")
@@ -196,26 +198,11 @@ final class TransactsDatabaseTest extends TestCase
     /**
      * O autocommit da conexão, que é como o CI3 marca a transação aberta.
      *
-     * Detalhe do protocolo: com a conexão em buffering, o ROLLBACK do caso
-     * anterior deixaria um resultado não lido e a próxima consulta falharia com
-     * "Cannot execute queries while other unbuffered queries are active". Por
-     * isso o CAST para inteiro vem na mesma consulta, sem uma segunda ida ao
-     * servidor entre a medição e o seu uso.
+     * A leitura e o porquê de ela ser uma só estão em
+     * `Ci3Introspection::autocommit()`.
      */
     private function autocommit(): int
     {
-        $row = get_instance()->db->query('SELECT CAST(@@autocommit AS UNSIGNED) AS autocommit')->row_array();
-
-        return (int) ($row['autocommit'] ?? 1);
-    }
-
-    /**
-     * Lê o `_trans_depth`, que é protected. Ver TransactsDatabase.
-     */
-    private function transactionDepth(object $db): int
-    {
-        return (function (): int {
-            return $this->_trans_depth;
-        })->call($db);
+        return Ci3Introspection::autocommit(get_instance()->db);
     }
 }

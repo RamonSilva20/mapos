@@ -1,6 +1,8 @@
 <?php
 
-namespace Tests\Support;
+namespace Tests\Support\App;
+
+use Tests\Support\Database\TestDatabase;
 
 /**
  * A metade da suíte que é sobre o CodeIgniter, separada da que é sobre o banco.
@@ -130,37 +132,27 @@ final class TestApplication
      * Mantém o registro de classes do CI3 consistente antes de construir outro
      * controller.
      *
-     * O CI3 não é reentrante, e isto só aparece quando o processo constrói mais
-     * de um controller. No primeiro, CI_Controller::__construct percorre
-     * is_loaded() ANTES de $this->load->initialize() rodar o autoloader, então o
-     * registro ainda está vazio e nada quebra. Ao construir um segundo, o
-     * registro já está cheio, e o foreach chama load_class() com o nome cru.
-     *
-     * Isso estoura para qualquer classe que o Loader tenha instanciado, e não o
-     * load_class(), que só procura um libraries/<nome-minusculo>.php em APPPATH e
-     * BASEPATH:
-     *   - Session: é a do core, system/libraries/Session/Session.php, classe
-     *     CI_Session. O diretório não é um arquivo, e load_class() não sonda
-     *     diretório nenhum;
-     *   - Permission: existe em application/libraries/Permission.php, mas é
-     *     declarada sem o prefixo CI_ que load_class() pressupõe;
-     *   - Form_validation: é CI_Form_validation e o arquivo existe, mas quem
-     *     injeta $this->CI no construtor é o Loader. Via load_class() ela chega
-     *     nula.
+     * O CI3 não é reentrante, e isto só aparece quando o processo constrói mais de
+     * um controller. No primeiro, CI_Controller::__construct percorre is_loaded()
+     * ANTES de $this->load->initialize() rodar o autoloader, então o registro ainda
+     * está vazio e nada quebra. Ao construir um segundo, o registro já está cheio, e
+     * o foreach chama load_class() com o nome cru — e load_class() só procura um
+     * libraries/<nome-minusculo>.php em APPPATH e BASEPATH, o que estoura para
+     * qualquer classe que o Loader tenha instanciado por outro caminho: o core
+     * `Session`, o `Permission` da aplicação (sem o prefixo CI_) e o
+     * `Form_validation` (que via load_class() chega com $this->CI nulo).
      *
      * As classes core não têm esse problema: o Codeigniter.php as carrega pelo
-     * load_class(), que as memoriza no cache estático da função, e o segundo
-     * controller as recebe do mesmo jeito.
+     * load_class(), que as memoriza no cache estático da função.
      *
      * O mesmo vale para models, por um motivo diferente. Loader::model()
-     * (Loader.php:268) faz:
+     * (Loader.php:268) retorna cedo em in_array($name, $this->_ci_models, TRUE),
+     * ANTES de $CI->$name = $model — ou seja, sem anexar nada. Como o Loader é
+     * singleton e a lista sobrevive entre os casos, do segundo controller em diante
+     * todo model já consta como "carregado" e $this->Mapos_model fica null.
      *
-     *     if (in_array($name, $this->_ci_models, TRUE)) { return $this; }
-     *
-     * O retorno sai antes de $CI->$name = $model, ou seja, sem anexar nada ao
-     * controller. Como o Loader é singleton e a lista sobrevive entre os casos,
-     * do segundo controller em diante todo model já consta como "carregado" e
-     * $this->Mapos_model fica null.
+     * As escritas que isso exige estão em Ci3Introspection, e AGENTS.md traz a
+     * lista das classes afetadas.
      */
     public static function resetSharedState(): void
     {
@@ -172,30 +164,8 @@ final class TestApplication
             }
         }
 
-        // _ci_models é protected, então a closure é amarrada ao escopo do Loader
-        // para poder escrever na propriedade.
-        $resetModels = function (): void {
-            $this->_ci_models = [];
-        };
-
-        $resetModels->call(self::superObject()->load);
-
-        // CI_Controller::$instance é private static, e o último controller
-        // construído continua apontado para lá. Sem esta volta, o get_instance()
-        // de quem vem depois entrega um controller já jogado fora — e é por ele
-        // que Loader::database() resolve o $CI, o que faz a suíte abrir uma
-        // conexão nova a cada controller. O Closure::bind amarra a closure ao
-        // escopo da CI_Controller, sem objeto, para poder escrever na
-        // propriedade privada estática.
-        $restoreInstance = \Closure::bind(
-            function (object $super): void {
-                self::$instance = $super;
-            },
-            null,
-            \CI_Controller::class
-        );
-
-        $restoreInstance(self::$super);
+        Ci3Introspection::clearModelRegistry(self::superObject()->load);
+        Ci3Introspection::restoreControllerInstance(self::superObject());
     }
 
     /**
