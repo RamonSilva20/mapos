@@ -17,22 +17,22 @@
  *
  * "Mantém o schema, limpa os dados" é a divisão do trabalho aqui. O schema é caro
  * (a cadeia de migrations leva ~9s) e raramente muda, então ele é reaproveitado
- * quando isSchemaCurrent() diz que está em dia. Os dados são o que a execução
+ * quando a impressão digital diz que está em dia. Os dados são o que a execução
  * anterior suja, e quem os limpa antes de cada caso é a TransactsDatabase, não este
  * script — ver o método resetBaselineData().
  *
  * `--fresh` ignora a verificação e remonta tudo, para quando o atalho não serve.
  */
 
-use Tests\Support\TestApplication;
-use Tests\Support\TestDatabase;
-use Tests\Support\TestFixtures;
+use Tests\Support\App\TestApplication;
+use Tests\Support\Database\SchemaFingerprint;
+use Tests\Support\Database\TestFixtures;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/lib/_boot.php';
 
-TestDatabase::assertCommandLine();
+$test = bootTestDatabase();
 
-$test = TestDatabase::fromEnvironment();
 $database = $test->database();
 
 $echo = static function (string $message): void {
@@ -42,17 +42,17 @@ $echo = static function (string $message): void {
 // --fresh monta do zero. O caminho padrão não pergunta: perguntar por padrão é
 // interativo, e um script de CI precisa responder sozinho.
 $fresh = in_array('--fresh', $argv, true);
-$reusable = ! $fresh && $test->isSchemaCurrent($database);
+$reusable = ! $fresh && $test->schemaFingerprint()->isCurrent($database);
 
 if ($fresh) {
     // A impressão digital é removida junto com o banco. Sem isto, uma montagem
     // --fresh que falha no meio deixaria o arquivo de uma versão que não é a do
     // banco, e a execução seguinte acreditaria nele.
-    $test->forgetSchemaFingerprint($database);
+    $test->schemaFingerprint()->forget($database);
 }
 
 if ($reusable) {
-    $echo("Schema de '{$database}' em dia (migrations até " . TestDatabase::latestMigrationVersion() . '); reaproveitando.');
+    $echo("Schema de '{$database}' em dia (migrations até " . SchemaFingerprint::latestMigrationVersion() . '); reaproveitando.');
 } else {
     $echo("Montando o banco '{$database}' a partir das migrações.");
 
@@ -86,20 +86,24 @@ if ($reusable) {
 
     // A impressão digital só vale depois que a montagem deu certo, e é ela que
     // autoriza a próxima execução a pular o caminho caro.
-    $test->recordSchemaFingerprint($database);
+    $test->schemaFingerprint()->record($database);
 }
 
 // Confere o resultado, para uma montagem quebrada falhar aqui e não no meio de
 // um teste com uma mensagem sem pistas. No caminho reaproveitado esta conferência
 // é a verificação de que as fixtures estão lá, já que nenhuma seed rodou.
-$usuarios = get_instance()->db->count_all_results('usuarios');
+$users = get_instance()->db->count_all_results('usuarios');
 
-if ($usuarios !== 3) {
-    fwrite(STDERR, "Esperava 3 usuários e encontrei {$usuarios}.\n");
+if ($users !== TestFixtures::USER_COUNT) {
+    fwrite(STDERR, sprintf("Esperava %d usuários e encontrei %d.\n", TestFixtures::USER_COUNT, $users));
     fwrite(STDERR, $reusable
         ? "O banco foi reaproveitado sem as fixtures. Rode 'composer test:fresh' para remontá-lo.\n"
         : "As fixtures não instalaram os três usuários.\n");
     exit(1);
 }
 
-$echo('3 usuários disponíveis: admin@admin.com, inativo@admin.com, expirado@admin.com (senha 123456).');
+$echo(sprintf(
+    '%d usuários disponíveis: %s (senha 123456).',
+    TestFixtures::USER_COUNT,
+    implode(', ', TestFixtures::userEmails())
+));

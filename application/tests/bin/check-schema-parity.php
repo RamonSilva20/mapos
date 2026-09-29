@@ -15,54 +15,45 @@
  * aparecer anos depois num relatório financeiro.
  */
 
-use Tests\Support\TestApplication;
-use Tests\Support\TestDatabase;
+use Tests\Support\App\TestApplication;
+use Tests\Support\Database\DatabaseGuard;
+use function Tests\Support\Database\schemaDiffBetween;
+use Tests\Support\Database\SchemaReader;
+
+use Tests\Support\Database\TestDatabase;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/lib/_boot.php';
+require_once __DIR__ . '/lib/schema-diff.php';
 
-TestDatabase::assertCommandLine();
+$test = bootTestDatabase();
 
 $rootPath = TestDatabase::rootPath();
-$test = TestDatabase::fromEnvironment();
 
-/**
- * Lê o schema de um banco como mapa table => column => type.
- *
- * Só a definição da coluna entra na comparação. Charset, collation e a ordem das
- * colunas mudam entre o dump e o dbforge sem significar divergência de schema, e
- * compará-las só produziria ruído.
- */
-$readSchema = static function (PDO $pdo): array {
-    $schema = [];
-
-    foreach ($pdo->query('SHOW FULL TABLES WHERE Table_type = "BASE TABLE"')->fetchAll() as $table) {
-        $name = current($table);
-
-        // A tabela de controle do Migrator não faz parte do schema da aplicação.
-        if ($name === 'migrations') {
-            continue;
-        }
-
-        foreach ($pdo->query("SHOW COLUMNS FROM `{$name}`")->fetchAll() as $column) {
-            $schema[$name][$column['Field']] = $column['Type'];
-        }
-    }
-
-    ksort($schema);
-
-    return $schema;
-};
+$readSchema = static fn (PDO $pdo, string $database): array => SchemaReader::applicationSchema($pdo, $database);
 
 // Os nomes derivados também precisam terminar em '_test', porque o mesmo guard
 // protege o DROP.
-$dumpName = 'mapos_parity_dump_test';
-$migrationName = 'mapos_parity_migration_test';
+//
+// O token do worker entra no nome pelo mesmo motivo do clone: sem ele, dois
+// processos de paridade rodando ao mesmo tempo recriam os mesmos dois bancos e
+// cada um lê o schema do meio da reconstrução do outro. O token vem antes do
+// sufixo, que é o que assertDatabaseNameIsSafe() exige, e o nome é montado por
+// workerDatabaseName() — a mesma função que o clone usa, para as duas metades
+// do gate não saberem cada uma a sua regra.
+// `solo` é o token da execução de processo único, o mesmo que o clone usa: sem
+// TEST_TOKEN não há isolamento a fazer, e o nome precisa ser estável para o
+// gate poder ser repetido.
+$token = TestDatabase::parallelToken() ?? 'solo';
+
+$dumpName = DatabaseGuard::workerDatabaseName('mapos_parity_dump', $token);
+$migrationName = DatabaseGuard::workerDatabaseName('mapos_parity_migration', $token);
 
 // --- Lado 1: o que o install/do_install.php produz, a partir do banco.sql ---
 
 $dumpPdo = $test->recreate($dumpName);
 $dumpPdo->exec((string) file_get_contents($rootPath . '/banco.sql'));
-$dumpSchema = $readSchema($dumpPdo);
+$dumpSchema = $readSchema($dumpPdo, $dumpName);
 
 // --- Lado 2: o que a cadeia de migrações produz ---
 
@@ -73,7 +64,7 @@ $test->recreate($migrationName);
 TestApplication::boot($migrationName);
 
 $migrationError = TestApplication::migrate();
-$migrationSchema = $readSchema($test->pdo($migrationName));
+$migrationSchema = $readSchema($test->pdo($migrationName), $migrationName);
 
 $test->drop($dumpName);
 $test->drop($migrationName);
@@ -83,55 +74,7 @@ if ($migrationError !== '') {
     exit(1);
 }
 
-/**
- * Diferença entre os dois schemas, como lista de linhas legíveis.
- *
- * Percorre a união dos nomes de tabela e, dentro de cada uma, a união das
- * colunas, de modo que "só no banco.sql" e "só nas migrações" saem do mesmo
- * laço. Antes eram dois laços quase idênticos, e o segundo não tinha o laço
- * interno de colunas: uma coluna removida de um dos lados aparecia como
- * "coluna só no banco.sql" num caminho e ficava invisível no outro, dependendo
- * de qual schema fosse percorrido por último.
- */
-$diffSchema = static function (array $dump, array $migrations): array {
-    $diff = [];
-
-    foreach (array_unique([...array_keys($dump), ...array_keys($migrations)]) as $table) {
-        if (! isset($migrations[$table])) {
-            $diff[] = "tabela só no banco.sql: {$table}";
-
-            continue;
-        }
-
-        if (! isset($dump[$table])) {
-            $diff[] = "tabela só nas migrações: {$table}";
-
-            continue;
-        }
-
-        $dumpColumns = $dump[$table];
-        $migrationColumns = $migrations[$table];
-
-        foreach (array_unique([...array_keys($dumpColumns), ...array_keys($migrationColumns)]) as $column) {
-            if (! isset($migrationColumns[$column])) {
-                $diff[] = "coluna só no banco.sql: {$table}.{$column} {$dumpColumns[$column]}";
-            } elseif (! isset($dumpColumns[$column])) {
-                $diff[] = "coluna só nas migrações: {$table}.{$column} {$migrationColumns[$column]}";
-            } elseif (strcasecmp($dumpColumns[$column], $migrationColumns[$column]) !== 0) {
-                $diff[] = sprintf(
-                    'tipo divergente: %-24s banco.sql=%-18s migracoes=%s',
-                    "{$table}.{$column}",
-                    $dumpColumns[$column],
-                    $migrationColumns[$column]
-                );
-            }
-        }
-    }
-
-    return $diff;
-};
-
-$diff = $diffSchema($dumpSchema, $migrationSchema);
+$diff = schemaDiffBetween($dumpSchema, $migrationSchema);
 
 if ($diff === []) {
     fwrite(STDOUT, sprintf(

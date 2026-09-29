@@ -12,18 +12,20 @@
          displayDetailsOnTestsThatTriggerErrors="true"
          displayDetailsOnTestsThatTriggerNotices="true"
          displayDetailsOnPhpunitDeprecations="false">
+    <!--
+        Um testsuite só, e não um por pasta. O PHPUnit serial não sente a
+        diferença: os quatro diretórios viram um diretório. O ParaTest sente, porque
+        ele cria um conjunto de processos por testsuite, e quatro testsuites
+        multiplicam o número de processos por quatro sem nenhuma razão — a
+        suíte é uma, e dividir o diretório não divide o trabalho.
+
+        O sufixo padrão do PHPUnit é `Test.php`, e é ele que mantém
+        `application/tests/bin/*.php` e o próprio `bootstrap.php` fora da
+        coleta.
+    -->
     <testsuites>
-        <testsuite name="Schema">
-            <directory>application/tests/Schema</directory>
-        </testsuite>
-        <testsuite name="Helpers">
-            <directory>application/tests/Helpers</directory>
-        </testsuite>
-        <testsuite name="Controllers">
-            <directory>application/tests/Controllers</directory>
-        </testsuite>
-        <testsuite name="Support">
-            <directory>application/tests/Support</directory>
+        <testsuite name="Map-OS">
+            <directory>application/tests</directory>
         </testsuite>
     </testsuites>
     <source>

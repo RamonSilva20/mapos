@@ -19,8 +19,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | arquivo gerado, obrigando a uma exceção no .php-cs-fixer.php.
 |
 | Mandar para o diretório temporário resolve na raiz, sem exceção: o log é saída
-| de runtime e não tem por que viver no repositório. É o mesmo destino que o
-| save_path da sessão usa em TestDatabase::bootApplication().
+| de runtime e não tem por que viver no repositório.
 |
 */
 

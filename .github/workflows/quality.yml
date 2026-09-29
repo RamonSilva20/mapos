@@ -90,8 +90,13 @@ jobs:
             exit 1
           fi
 
-          if ! grep -q "^3 usuários disponíveis" <<< "$saida"; then
-            echo "::error::O schema reaproveitado não tem as três contas de fixture."
+          # A contagem das contas é conferida dentro do setup-db.php, que sai com
+          # erro se ela não bater. Aqui o que interessa é o caminho de reuso ter
+          # chegado até o fim, e o número fica de fora do grep de propósito: ele
+          # é TestFixtures::USER_COUNT, e escrevê-lo aqui seria uma segunda
+          # fonte para a mesma verdade.
+          if ! grep -q "usuários disponíveis" <<< "$saida"; then
+            echo "::error::O schema reaproveitado não percorreu a conferência de fixtures."
             exit 1
           fi
 
