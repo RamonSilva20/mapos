@@ -355,29 +355,32 @@ autoload and the only thing that loads `general`. A `require_once` of the helper
 in `index.php` does make `esc()` exist at that moment, and it was tried; it is
 still wrong, because it only holds while `general_helper.php` contains nothing but
 `function_exists`-guarded definitions. Nothing enforces that invariant, and the
-breakage would land in the one file every request passes through. Those templates
-escape with `htmlspecialchars((string) $x, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')`
-instead: the same flags as `esc()`, but PHP core, so it works at any point in the
-boot and depends on nothing. `composer xss:check` accepts it
-(`EscapingPolicy::ESCAPERS`). `esc_scalar()`'s type guard is not really lost:
-`show_error()` has already turned `$message` into a string by the time a view
-sees it, and the `(string)` cast covers the `int` severity and line numbers that
-`error_php.php` and `error_exception.php` receive.
+breakage would land in the one file every request passes through. `html/error_exception.php` and `html/error_php.php` escape with
+`htmlspecialchars((string) $x, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')`: the same
+flags as `esc()`, but PHP core, so it works at any point in the boot and depends
+on nothing. `composer xss:check` accepts it (`EscapingPolicy::ESCAPERS`).
+`esc_scalar()`'s type guard is not really lost there: `show_error()` has already
+turned `$message` into a string by the time a view sees it, and the `(string)`
+cast covers the `int` severity and line numbers those two receive.
 
-Two things about what arrives in those variables. `show_error()` wraps `$message`
-in `<p>` *before* the include, and `DB_driver::display_error()` builds it with
-`implode('</p><p>', ...)` on an array, so what lands in the view is somebody
-else's markup. The views that print it (`html/error_404`, `html/error_db`,
-`html/error_general`) strip the paragraph tags and emit their own `<p>`, because
-escaping the wrapper made the user read `<p>The page you requested was not
-found.</p>` as literal text. Do not reach for `strip_tags()` to do that: it eats a
-real `WHERE x<3` out of a genuine SQL error, which is the one message on that
-page you cannot afford to mangle. The other five templates print `$message`
-inside markup they already own, so they leave it alone.
+The three views that print `$message` on its own — `html/error_404`,
+`html/error_db`, `html/error_general` — print it **raw**, and are the six
+`unescaped` entries in `tools/xss-baseline.txt`. The reason is the other half of
+the same problem: `show_error()` wraps `$message` in `<p>` *before* the include,
+and `DB_driver::display_error()` joins an array of errors with `</p><p>`, so
+what lands in the view is markup, and it is CodeIgniter's. Escaping it made the
+user read `<p>The page you requested was not found.</p>` as literal text.
+Stripping the paragraph tags is the other option and it is worse: a real
+`display_error()` hands over a real SQL error, and `strip_tags()` eats the
+`x<3` out of `WHERE x<3`. What is left unescaped is the framework's own heading
+and message; the exposure that remains is a message quoting input back, and
+`error_exception.php`/`error_php.php` are the reference for what these three
+would look like if their input ever became attacker-controlled.
 
 And the three CLI templates that never used `esc()` (`cli/error_404`,
 `cli/error_db`, `cli/error_general`) are right not to: their sink is a terminal,
-not markup, which is why they are the standing entries in `tools/xss-baseline.txt`.
+not markup, which is why they are among the standing `unrecognized-output`
+entries in `tools/xss-baseline.txt`.
 
 Additional rules:
 
