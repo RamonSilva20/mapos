@@ -165,6 +165,7 @@ final class TestApplication
         }
 
         Ci3Introspection::clearModelRegistry(self::superObject()->load);
+        Ci3Introspection::resetLoaderViewAliases(self::superObject()->load);
         Ci3Introspection::restoreControllerInstance(self::superObject());
     }
 

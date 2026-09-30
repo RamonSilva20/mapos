@@ -173,4 +173,47 @@ final class Ci3Introspection
             CI_Controller::class
         )($super);
     }
+
+    /**
+     * Tira do Loader os nomes que ele copiou de um controller já morto.
+     *
+     * O `Loader::_ci_load()` é quem dá vida a `$this` dentro de uma view: ele
+     * copia para o Loader, por referência, as propriedades do controller — e só
+     * copia a que ainda não existe (`isset($this->$chave)`). Como o Loader é
+     * singleton, a primeira view do processo congela aí o retrato do primeiro
+     * controller, e os próximos nunca o atualizam.
+     *
+     * O sintoma é sutil. Um controller que carrega uma library no meio do método
+     * (como o `pagination` do `Auditoria::index()`) ganha a PROPRIEDADE nova do
+     * controller, e o `$this->pagination` do controller funciona; mas a view
+     * renderizada logo depois lê o retrato velho do Loader, que aponta para o
+     * objeto do controller ANTERIOR — com o estado de lá, `total_rows` de um
+     * teste que já virou. Quem exercita a tela pela segunda vez no mesmo processo
+     * vê o pagination somindo sem que nada no código do controller explique.
+     *
+     * As propriedades próprias do Loader são todas `_ci_*` (protegidas); o que
+     * sobra — `pagination`, `session`, `permission`, os models, `db` — é o
+     * retrato a ser esquecido. Sem rodar isto antes de cada controller, a suíte
+     * só renderiza layout uma vez por processo: a primeira renderização congela
+     * o retrato, e todas as outras leem o objeto da primeira.
+     *
+     * O guard `strpos($name, '_ci_')` não é defesa teórica: `Closure::call()`
+     * reajusta o escopo para a classe do objeto, então o `get_object_vars()`
+     * aqui enxerga as propriedades protegidas do Loader. Sem o filtro, o unset
+     * levaria junto `_ci_models` e `_ci_classes`, e o Loader que deveria
+     * esquecer o controller velho passaria a esquecer também os models que ele
+     * carrega.
+     */
+    public static function resetLoaderViewAliases(object $loader): void
+    {
+        (function (): void {
+            foreach (array_keys(get_object_vars($this)) as $name) {
+                if (strpos($name, '_ci_') === 0) {
+                    continue;
+                }
+
+                unset($this->$name);
+            }
+        })->call($loader);
+    }
 }
