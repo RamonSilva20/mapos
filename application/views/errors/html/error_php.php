@@ -6,10 +6,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <h4>A PHP Error was encountered</h4>
 
-<p>Severity: <?= esc($severity) ?></p>
-<p>Message:  <?= esc($message) ?></p>
-<p>Filename: <?= esc($filepath) ?></p>
-<p>Line Number: <?= esc($line) ?></p>
+<p>Severity: <?= htmlspecialchars((string) $severity, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+<p>Message:  <?= htmlspecialchars((string) $message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+<p>Filename: <?= htmlspecialchars((string) $filepath, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+<p>Line Number: <?= htmlspecialchars((string) $line, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
 
 <?php if (defined('SHOW_DEBUG_BACKTRACE') && SHOW_DEBUG_BACKTRACE === true) : ?>
 
@@ -19,9 +19,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<?php if (isset($error['file']) && strpos($error['file'], realpath(BASEPATH)) !== 0) : ?>
 
 			<p style="margin-left:10px">
-			File: <?= esc($error['file']) ?><br />
-			Line: <?= esc($error['line']) ?><br />
-			Function: <?= esc($error['function']) ?>
+			File: <?= htmlspecialchars((string) $error['file'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br />
+			Line: <?= htmlspecialchars((string) $error['line'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br />
+			Function: <?= htmlspecialchars((string) $error['function'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
 			</p>
 
 		<?php endif ?>
