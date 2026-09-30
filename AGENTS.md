@@ -229,6 +229,16 @@ using it:
 - `Loader::_ci_models` must be cleared too. `Loader::model()` returns early on
   `in_array($name, $this->_ci_models, TRUE)` *before* attaching the model, so from
   the second controller onwards `$this->Some_model` is null.
+- The Loader's "view snapshot" must be wiped. `Loader::_ci_load()` gives a view its
+  `$this` by copying the controller's object vars onto the Loader, but only the
+  vars it does not already have — so the first view of the process freezes a
+  snapshot of the first controller, and later controllers never refresh it. A
+  library loaded lazily mid-method (e.g. `pagination` in `Auditoria::index()`)
+  works on the controller but its render reads the stale snapshot, and the second
+  test to render the layout sees the first test's `total_rows`. This only shows
+  once a test renders `tema/*`, which is why it was caught by
+  `AuditoriaControllerTest`; the fix is `Ci3Introspection::resetLoaderViewAliases()`,
+  which unsets every non-`_ci_*` property on the Loader.
 - `ignoringCliHeaderWarnings()` wraps the one call left that hits `setcookie()`:
   `csrf_verify()` inside the CI3 `Security` library. It warns in CLI and Whoops
   turns that into an exception. It must restore with `restore_error_handler()`,
@@ -269,6 +279,8 @@ Known limits of the in-process approach:
    - Schema modifications must be implemented via migrations (`application/database/migrations/`), never by editing `banco.sql` directly.
 4. **Commit Messages:**
    - Follow [Conventional Commits](https://www.conventionalcommits.org/): `feat`, `fix`, `docs`, `refactor`, `chore`, etc.
+5. **Language:**
+   - Code identifiers (classes, methods, variables, constants, parameters) in English; comments in Portuguese. User-facing strings stay in Portuguese.
 
 ## Output Escaping in Views
 
