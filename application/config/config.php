@@ -254,8 +254,14 @@ $config['log_threshold'] = 1;
 | Leave this BLANK unless you would like to set something other than the default
 | application/logs/ directory. Use a full server path with trailing slash.
 |
+| APP_LOG_PATH carries the same choice through the environment, for installs that
+| want the logs out of the document root and for the boundary test, whose child
+| server runs as production and would otherwise write into the source tree. A log
+| file left in application/logs/ is picked up by `composer format:check`, because
+| that one does not honour .gitignore.
+|
 */
-$config['log_path'] = '';
+$config['log_path'] = $_ENV['APP_LOG_PATH'] ?? '';
 
 /*
 |--------------------------------------------------------------------------

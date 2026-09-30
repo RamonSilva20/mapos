@@ -26,6 +26,9 @@ use Tests\Support\Database\TestDatabase;
  * ## O que este arquivo fixa, e o que ele não fixa
  *
  * Fixa o 401 web (o `Location` que sai) e o 401 da API (o JSON que não mudou).
+ * Também fixa a página de erro do 404 do Router, que é a única resposta que o
+ * CI3 renderiza antes de existir um controller — e portanto antes de existir um
+ * `Loader` carregado pelo autoload.
  * O 403 web NÃO é medido aqui: ele precisa de uma sessão autenticada com
  * cookies, e montar isso por HTTP exigiria um POST de login com token CSRF
  * válido, que é a parte do login que a suíte já cobre in-process. O destino do
@@ -47,13 +50,6 @@ final class FrontendBoundaryTest extends TestCase
     private static ?int $port = null;
 
     private static string $serverError = '';
-
-    /**
-     * Os arquivos que estavam em `application/logs/` antes das requisições.
-     *
-     * Ver `testTheChildLeavesNoLogFileInTheSourceTree()`.
-     */
-    private static array $logsBefore = [];
 
     /**
      * Sobe o servidor e espera ele aceitar conexão.
@@ -104,8 +100,6 @@ final class FrontendBoundaryTest extends TestCase
 
         for ($attempt = 0; $attempt < 100; $attempt++) {
             if (self::canConnect($port)) {
-                self::$logsBefore = self::logFiles();
-
                 return;
             }
 
@@ -201,6 +195,45 @@ final class FrontendBoundaryTest extends TestCase
     }
 
     /**
+     * Uma rota inexistente mostra a página de erro, e não um fatal.
+     *
+     * Este é o caso que quebrou a página de erro em si. O ponto em que as views
+     * `errors/html/error_*.php` precisam escapar é um ponto em que o `Loader`
+     * ainda não rodou: `Loader::initialize()` — que carrega o helper `general`
+     * pelo autoload — só acontece no construtor de `CI_Controller`, e o 404 do
+     * Router acontece antes disso. Por isso elas não chamam `esc()`; elas
+     * escapam com `htmlspecialchars()`, que é PHP core e não depende de nada já
+     * ter sido carregado. Com `esc()` as views morriam com "Call to undefined
+     * function esc()", e o que o usuário recebia era um erro fatal dentro de uma
+     * página de erro.
+     *
+     * A asserção do corpo importa tanto quanto a do status: um 404 com a página
+     * certa passa, e um 404 com HTML de erro do PHP também passa, então é o texto
+     * "404 Page Not Found" que distingue os dois. `assertStringNotContainsString`
+     * fecha a porta oposta, contando o fatal como falha mesmo que o cabeçalho
+     * chegue a sair.
+     */
+    #[Depends('testTheServerIsRunning')]
+    public function testAnUnknownRouteRendersTheErrorPage(): void
+    {
+        $this->requireServer();
+
+        $response = $this->request('/index.php/rota-que-nao-existe-' . self::$port);
+
+        $this->assertSame(404, $response['status'], 'Uma rota inexistente deixou de responder 404. Corpo: ' . $response['body']);
+        $this->assertStringContainsString(
+            '404 Page Not Found',
+            $response['body'],
+            'A resposta não é a página de erro do CI3, o que significa que ela não chegou a ser renderizada.'
+        );
+        $this->assertStringNotContainsString(
+            'undefined function',
+            $response['body'],
+            'A página de erro morreu dentro dela mesma: um dos escapadores não existia ainda quando a view foi incluída.'
+        );
+    }
+
+    /**
      * O processo filho não escreve log na árvore de código-fonte.
      *
      * A suíte resolve isso hoje com `config/testing/config.php`, que aponta o
@@ -208,25 +241,33 @@ final class FrontendBoundaryTest extends TestCase
      * dentro do repositório faz o `composer format:check` falhar em cima de um
      * arquivo que ninguém editou. Este processo roda como `production` — é o que
      * dá o roteamento de verdade, já que `config/testing/routes.php` aponta o
-     * controller padrão para um inerte — e portanto escreve em
-     * `application/logs/`, que é o caminho que aquela configuração desvia.
+     * controller padrão para um inerte — e portanto alcançaria
+     * `application/logs/` sem o `APP_LOG_PATH` que `childEnvironment()` passa.
      *
      * Com `log_threshold = 1` só o nível ERROR vira arquivo, e um 307 e um 401
      * limpos não são erro. A asserção existe para transformar essa suposição em
      * fato verificado: se alguém baixar o threshold, ou um dia o `php -S` logar
      * algo em ERROR, este caso falha dizendo o que fazer, em vez de o repositório
      * silenciosamente ganhar um arquivo gerado.
+     *
+     * A referência é tirada aqui, e não no `startServer()`, para o caso medir o
+     * que as PRÓPRIAS requisições escreveram. Comparar com o estado do boot faria
+     * este teste depender da ordem em que a classe roda: o 404 acima grava em
+     * ERROR de propósito, e um teste que mede "nada foi escrito" não pode ter uma
+     * escrita legítima de outro teste como linha de base.
      */
     #[Depends('testTheServerIsRunning')]
     public function testTheChildLeavesNoLogFileInTheSourceTree(): void
     {
         $this->requireServer();
 
+        $before = self::logFiles();
+
         $this->request('/index.php/clientes/gerenciar');
         $this->request('/index.php/api/v1/clientes');
 
         $this->assertSame(
-            self::$logsBefore,
+            $before,
             self::logFiles(),
             'O processo filho escreveu em application/logs/. O bootstrap roda como production para ter o roteamento de verdade, e é por isso que esta verificação existe: apague o arquivo, e se o log for legítimo, aponte o log_path do filho para o diretório temporário em vez de relaxar a verificação.'
         );
@@ -310,6 +351,15 @@ final class FrontendBoundaryTest extends TestCase
      * `TestDatabase::fromEnvironment()` já preenche as duas para o processo da
      * suíte, e o `$_ENV` daqui é justamente o que ele acabou de publicar — o
      * filho nascia sem elas porque ninguém as repassava.
+     *
+     * `APP_LOG_PATH` desvia o log do filho para o mesmo diretório temporário que
+     * `config/testing/config.php` usa. O caminho era obrigatório: `show_404()`
+     * grava em `log_message('error', ...)` antes de renderizar a página, então o
+     * caso do 404 escreveria um arquivo em `application/logs/` — e o
+     * `composer format:check` não honra `.gitignore`, de modo que esse arquivo
+     * gerado faria a checagem falhar em cima de algo que ninguém editou. É a
+     * saída que a mensagem de falha daquele outro caso já pedia, agora com o
+     * caminho existindo para responder a ela.
      */
     private static function childEnvironment(int $port): array
     {
@@ -325,6 +375,7 @@ final class FrontendBoundaryTest extends TestCase
             'PATH' => getenv('PATH') ?: '/usr/bin:/bin',
             'APP_ENVIRONMENT' => 'production',
             'APP_BASEURL' => "http://127.0.0.1:{$port}/",
+            'APP_LOG_PATH' => self::childLogPath(),
             'API_ENABLED' => 'true',
             'API_JWT_KEY' => $_ENV['API_JWT_KEY'] ?? 'mapos-frontend-boundary-jwt-key',
             'API_TOKEN_EXPIRE_TIME' => $_ENV['API_TOKEN_EXPIRE_TIME'] ?? '3600',
@@ -336,6 +387,16 @@ final class FrontendBoundaryTest extends TestCase
             'DB_USERNAME' => $_ENV['DB_USERNAME'] ?? '',
             'DB_PASSWORD' => $_ENV['DB_PASSWORD'] ?? '',
         ];
+    }
+
+    /**
+     * O diretório de log do filho, com barra final como o `log_path` exige.
+     *
+     * O mesmo caminho que `config/testing/config.php` escolhe, e pela mesma razão.
+     */
+    private static function childLogPath(): string
+    {
+        return rtrim(sys_get_temp_dir(), '/') . '/mapos-test-logs/';
     }
 
     /**

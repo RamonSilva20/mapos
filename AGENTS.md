@@ -89,6 +89,17 @@ read, and its values win for anything the suite does not set itself.
   therefore gets all five keys from `childEnvironment()` — they come from the
   `$_ENV` that `TestDatabase::fromEnvironment()` published, so a developer's
   `.env` still wins and CI's absence is not a behaviour difference.
+  A sixth key, `APP_LOG_PATH`, comes from the same place but for the opposite
+  reason: not to stop the child writing, but to let it write *somewhere else*.
+  `show_404()` calls `log_message('error', ...)` before rendering, so the 404 case
+  logs by design, and a log file under `application/logs/` is enough to fail
+  `format:check` — that one does not honour `.gitignore`, so a generated file
+  counts as one needing fixes. The child therefore points `log_path` at the same
+  temporary directory `config/testing/config.php` uses, which is what lets
+  `testTheChildLeavesNoLogFileInTheSourceTree()` stay strict instead of learning
+  to tolerate a file. That case takes its own reference right before its
+  requests rather than at server start, so a legitimate write from the 404 case
+  cannot become its baseline depending on method order.
   Note `application/.env` is **gitignored**: a test that reads config the app
   only gets from that file passes on a developer machine and fails on every
   runner, which is exactly how `API_ENABLED` (it gates `routes_api.php` in
