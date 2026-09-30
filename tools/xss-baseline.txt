@@ -9,8 +9,8 @@
 # that work on the whole file. A comment line above an entry is the expression.
 #
 # ---------------------------------------------------------------------------
-# There are no "unescaped" entries below. That debt is paid: every value that
-# reaches a page now goes through an escaper chosen for its context.
+# The six "unescaped" entries are explained at the end of this header. Every
+# other value that reaches a page goes through an escaper chosen for its context.
 #
 # The work started because of a hole in the gate, not a decision to leave
 # anything unescaped. The fifth output form only matched an echo whose value
@@ -26,7 +26,30 @@
 # (window.print()): not PHP at all, so no escaper applies, and the pattern is
 # deliberately wider than the forms so that a miss fails closed.
 #
-# The other three are views/errors/cli/*.php, which CodeIgniter loads only
+# The six "unescaped" entries are $heading and $message in
+# views/errors/html/{error_404,error_db,error_general}.php, and they are a
+# reviewed decision. CodeIgniter builds both values in Exceptions::show_error(),
+# including the template with a plain `include` at whatever point in the boot the
+# failure happened - the Router's 404 is before there is a controller, so before
+# the autoload ever loads `general` and `esc()` does not exist yet. Calling esc()
+# there is what made a 404 answer 500 with "Call to undefined function esc()".
+#
+# The message is markup by the time the view sees it, and that markup is
+# CodeIgniter's own: show_error() wraps $message in <p> before the include, and
+# DB_driver::display_error() joins an array of errors with "</p><p>". Escaping it
+# showed the user `<p>The page you requested was not found.</p>` as literal text,
+# which is why the three views print it raw inside a div. Stripping the <p> tags
+# instead is the alternative, and it is worse: display_error() hands over a real
+# SQL error, and strip_tags() eats the `x<3` out of `WHERE x<3`.
+#
+# What is unescaped here is the framework's own heading and message, and the
+# remaining exposure is a message that quotes input back - a database error
+# echoing a value from a query. That is a known trade, not an oversight, and the
+# two error views that do escape every value (error_exception, error_php) are the
+# reference for what the other three would look like if their input ever became
+# attacker-controlled.
+#
+# The last three of those 13 are views/errors/cli/*.php, which CodeIgniter loads only
 # when is_cli() is true (system/core/Exceptions.php selects the 'cli'
 # subdirectory). They echo a multi-line list of values to a terminal, and in
 # that branch CI3 does not wrap the message in <p>, so the output is plain
@@ -53,6 +76,18 @@ application/views/errors/cli/error_404.php|unrecognized-output: echo "\nERROR: "
 application/views/errors/cli/error_db.php|unrecognized-output: echo "\nDatabase error: ",
 # echo "\nERROR: ",
 application/views/errors/cli/error_general.php|unrecognized-output: echo "\nERROR: ",
+# $heading
+application/views/errors/html/error_404.php|$heading
+# $message
+application/views/errors/html/error_404.php|$message
+# $heading
+application/views/errors/html/error_db.php|$heading
+# $message
+application/views/errors/html/error_db.php|$message
+# $heading
+application/views/errors/html/error_general.php|$heading
+# $message
+application/views/errors/html/error_general.php|$message
 # print {
 application/views/garantias/imprimirGarantia.php|unrecognized-output: print {
 # print {

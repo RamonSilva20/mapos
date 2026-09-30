@@ -75,6 +75,35 @@ read, and its values win for anything the suite does not set itself.
   leaving them in the source tree made `format:check` fail on a generated file.
   The PHPUnit result cache lives in `.phpunit.cache/`. Nothing about the suite
   needs an exception in `.php-cs-fixer.php` anymore.
+- `FrontendBoundaryTest` is the exception to that rule, and on purpose: its child
+  `php -S` runs as `production`, because that is the only way to get the real
+  routing, so it logs to `application/logs/` like any production request. A case
+  asserts the tree stays clean, since a log generated there is what makes
+  `format:check` fail on a file nobody edited. Two things used to break that
+  assertion, and both are worth knowing before adding a child request:
+  `application/config/*.php` reads `APP_ENCRYPTION_KEY`, `GLOBAL_XSS_FILTERING`,
+  `API_JWT_KEY` and `API_TOKEN_EXPIRE_TIME` from `$_ENV` **without a fallback**,
+  so an absent key is a warning, and a warning is an ERROR-level log line at
+  `log_threshold = 1`; and `WhoopsHook::extractEnvNames()` used to `file()` the
+  `.env` unconditionally, warning on every install that has none. The child
+  therefore gets all five keys from `childEnvironment()` — they come from the
+  `$_ENV` that `TestDatabase::fromEnvironment()` published, so a developer's
+  `.env` still wins and CI's absence is not a behaviour difference.
+  A sixth key, `APP_LOG_PATH`, comes from the same place but for the opposite
+  reason: not to stop the child writing, but to let it write *somewhere else*.
+  `show_404()` calls `log_message('error', ...)` before rendering, so the 404 case
+  logs by design, and a log file under `application/logs/` is enough to fail
+  `format:check` — that one does not honour `.gitignore`, so a generated file
+  counts as one needing fixes. The child therefore points `log_path` at the same
+  temporary directory `config/testing/config.php` uses, which is what lets
+  `testTheChildLeavesNoLogFileInTheSourceTree()` stay strict instead of learning
+  to tolerate a file. That case takes its own reference right before its
+  requests rather than at server start, so a legitimate write from the 404 case
+  cannot become its baseline depending on method order.
+  Note `application/.env` is **gitignored**: a test that reads config the app
+  only gets from that file passes on a developer machine and fails on every
+  runner, which is exactly how `API_ENABLED` (it gates `routes_api.php` in
+  `routes.php`) made the API case measure a 404 instead of its 401.
 - `application/config/testing/config.php` and `.../routes.php` are loaded because
   `ENVIRONMENT` is `testing`, and CI3 includes those two files *after* their
   production counterparts. `routes.php` is the one to remember: it points
@@ -229,6 +258,16 @@ using it:
 - `Loader::_ci_models` must be cleared too. `Loader::model()` returns early on
   `in_array($name, $this->_ci_models, TRUE)` *before* attaching the model, so from
   the second controller onwards `$this->Some_model` is null.
+- The Loader's "view snapshot" must be wiped. `Loader::_ci_load()` gives a view its
+  `$this` by copying the controller's object vars onto the Loader, but only the
+  vars it does not already have — so the first view of the process freezes a
+  snapshot of the first controller, and later controllers never refresh it. A
+  library loaded lazily mid-method (e.g. `pagination` in `Auditoria::index()`)
+  works on the controller but its render reads the stale snapshot, and the second
+  test to render the layout sees the first test's `total_rows`. This only shows
+  once a test renders `tema/*`, which is why it was caught by
+  `AuditoriaControllerTest`; the fix is `Ci3Introspection::resetLoaderViewAliases()`,
+  which unsets every non-`_ci_*` property on the Loader.
 - `ignoringCliHeaderWarnings()` wraps the one call left that hits `setcookie()`:
   `csrf_verify()` inside the CI3 `Security` library. It warns in CLI and Whoops
   turns that into an exception. It must restore with `restore_error_handler()`,
@@ -269,6 +308,8 @@ Known limits of the in-process approach:
    - Schema modifications must be implemented via migrations (`application/database/migrations/`), never by editing `banco.sql` directly.
 4. **Commit Messages:**
    - Follow [Conventional Commits](https://www.conventionalcommits.org/): `feat`, `fix`, `docs`, `refactor`, `chore`, etc.
+5. **Language:**
+   - Code identifiers (classes, methods, variables, constants, parameters) in English; comments in Portuguese. User-facing strings stay in Portuguese.
 
 ## Output Escaping in Views
 
@@ -304,6 +345,42 @@ separate function rather than as a flag: the two contexts answer different
 questions, and a single function would have to be wrong in one of them. Use
 `esc_img_src()` for every `<img src>`; do not fall back to `esc()`, which lets
 `javascript:` through.
+
+The `views/errors/{html,cli}/error_*.php` are the one place where you must
+**not** use `esc()`, or any other helper. CodeIgniter includes those templates by
+plain `include` from `Exceptions::show_error()`, at whatever point in the boot the
+failure happened, and the Router's 404 happens before there is a controller —
+therefore before `Loader::initialize()`, which is the only thing that runs the
+autoload and the only thing that loads `general`. A `require_once` of the helper
+in `index.php` does make `esc()` exist at that moment, and it was tried; it is
+still wrong, because it only holds while `general_helper.php` contains nothing but
+`function_exists`-guarded definitions. Nothing enforces that invariant, and the
+breakage would land in the one file every request passes through. `html/error_exception.php` and `html/error_php.php` escape with
+`htmlspecialchars((string) $x, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')`: the same
+flags as `esc()`, but PHP core, so it works at any point in the boot and depends
+on nothing. `composer xss:check` accepts it (`EscapingPolicy::ESCAPERS`).
+`esc_scalar()`'s type guard is not really lost there: `show_error()` has already
+turned `$message` into a string by the time a view sees it, and the `(string)`
+cast covers the `int` severity and line numbers those two receive.
+
+The three views that print `$message` on its own — `html/error_404`,
+`html/error_db`, `html/error_general` — print it **raw**, and are the six
+`unescaped` entries in `tools/xss-baseline.txt`. The reason is the other half of
+the same problem: `show_error()` wraps `$message` in `<p>` *before* the include,
+and `DB_driver::display_error()` joins an array of errors with `</p><p>`, so
+what lands in the view is markup, and it is CodeIgniter's. Escaping it made the
+user read `<p>The page you requested was not found.</p>` as literal text.
+Stripping the paragraph tags is the other option and it is worse: a real
+`display_error()` hands over a real SQL error, and `strip_tags()` eats the
+`x<3` out of `WHERE x<3`. What is left unescaped is the framework's own heading
+and message; the exposure that remains is a message quoting input back, and
+`error_exception.php`/`error_php.php` are the reference for what these three
+would look like if their input ever became attacker-controlled.
+
+And the three CLI templates that never used `esc()` (`cli/error_404`,
+`cli/error_db`, `cli/error_general`) are right not to: their sink is a terminal,
+not markup, which is why they are among the standing `unrecognized-output`
+entries in `tools/xss-baseline.txt`.
 
 Additional rules:
 

@@ -1,6 +1,6 @@
-<?php
-defined('BASEPATH') or exit('No direct script access allowed');
-?><!DOCTYPE html>
+<?php defined('BASEPATH') or exit('No direct script access allowed');?>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -57,8 +57,10 @@ p {
 </head>
 <body>
 	<div id="container">
-		<h1><?= esc($heading) ?></h1>
-		<?= esc($message) ?>
+		<h1><?= $heading; ?></h1>
+		<div id="body">
+			<?= $message; ?>
+		</div>
 	</div>
 </body>
 </html>

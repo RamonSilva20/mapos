@@ -62,6 +62,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Exceptions\\": "application/exceptions",
             "Libraries\\": "application/libraries",
             "Tools\\": "tools/"
         }
