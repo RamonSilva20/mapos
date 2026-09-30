@@ -75,6 +75,24 @@ read, and its values win for anything the suite does not set itself.
   leaving them in the source tree made `format:check` fail on a generated file.
   The PHPUnit result cache lives in `.phpunit.cache/`. Nothing about the suite
   needs an exception in `.php-cs-fixer.php` anymore.
+- `FrontendBoundaryTest` is the exception to that rule, and on purpose: its child
+  `php -S` runs as `production`, because that is the only way to get the real
+  routing, so it logs to `application/logs/` like any production request. A case
+  asserts the tree stays clean, since a log generated there is what makes
+  `format:check` fail on a file nobody edited. Two things used to break that
+  assertion, and both are worth knowing before adding a child request:
+  `application/config/*.php` reads `APP_ENCRYPTION_KEY`, `GLOBAL_XSS_FILTERING`,
+  `API_JWT_KEY` and `API_TOKEN_EXPIRE_TIME` from `$_ENV` **without a fallback**,
+  so an absent key is a warning, and a warning is an ERROR-level log line at
+  `log_threshold = 1`; and `WhoopsHook::extractEnvNames()` used to `file()` the
+  `.env` unconditionally, warning on every install that has none. The child
+  therefore gets all five keys from `childEnvironment()` — they come from the
+  `$_ENV` that `TestDatabase::fromEnvironment()` published, so a developer's
+  `.env` still wins and CI's absence is not a behaviour difference.
+  Note `application/.env` is **gitignored**: a test that reads config the app
+  only gets from that file passes on a developer machine and fails on every
+  runner, which is exactly how `API_ENABLED` (it gates `routes_api.php` in
+  `routes.php`) made the API case measure a 404 instead of its 401.
 - `application/config/testing/config.php` and `.../routes.php` are loaded because
   `ENVIRONMENT` is `testing`, and CI3 includes those two files *after* their
   production counterparts. `routes.php` is the one to remember: it points
