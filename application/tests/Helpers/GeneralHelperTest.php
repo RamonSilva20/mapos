@@ -1,5 +1,8 @@
 <?php
 
+use Exceptions\Http\AuthenticationRequired;
+use Exceptions\Http\AuthorizationDenied;
+use Exceptions\Http\HttpException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -285,5 +288,96 @@ class GeneralHelperTest extends TestCase
         $this->assertSame(302, redirect_status_for('POST', 'HTTP/2'));
         $this->assertSame(302, redirect_status_for('POST', null));
         $this->assertSame(302, redirect_status_for(null, 'HTTP/1.1'));
+    }
+
+    public function testUnauthenticatedExceptionRedirectsToLogin(): void
+    {
+        $this->assertSame('login', http_exception_redirect_target(new AuthenticationRequired()));
+    }
+
+    public function testAuthorizedButDeniedExceptionRedirectsToHome(): void
+    {
+        $this->assertSame(base_url(), http_exception_redirect_target(new AuthorizationDenied()));
+    }
+
+    /**
+     * Os dois destinos são diferentes, e não duas escritas do mesmo texto.
+     *
+     * Se os dois voltassem 'login', este arquivo continuaria verde: as duas
+     * asserções acima comparam com o valor que a função deveria devolver, e
+     * `base_url()` não é 'login'. A diferença é a propriedade que importa para
+     * quem está usando a tela — quem não entrou pode entrar de novo, quem entrou
+     * e não pode não resolve nada entrando de novo — e por isso ela é afirmada
+     * diretamente, e não deixada como consequência de duas asserções.
+     */
+    public function testTheTwoDestinationsAreNotTheSameOne(): void
+    {
+        $this->assertNotSame(
+            http_exception_redirect_target(new AuthenticationRequired()),
+            http_exception_redirect_target(new AuthorizationDenied())
+        );
+    }
+
+    /**
+     * Uma exceção fora dos dois pares conhecidos cai no login, e o renderizador
+     * web ignora o status de qualquer forma.
+     *
+     * O par 401/403 é o que os guards de hoje produzem. Um `HttpException` com
+     * outro status ainda tem que responder alguma coisa no lado web, e este caso
+     * fixa qual: o mesmo caminho do 401, porque o destino é decidido pela
+     * exceção ser ou não `AuthorizationDenied`, e não pelo número. Fica escrito
+     * para que a escolha não vire um default implícito quando alguém criar uma
+     * terceira subclasse.
+     */
+    public function testAnUnknownStatusFallsBackToTheLoginTarget(): void
+    {
+        $unknown = new class('algo deu errado') extends HttpException {
+            public function __construct(string $message)
+            {
+                parent::__construct($message, 500);
+            }
+        };
+
+        $this->assertSame(500, $unknown->status());
+        $this->assertSame('login', http_exception_redirect_target($unknown));
+    }
+
+    /**
+     * A família inteira não expõe nenhum destino, e o contrato é medido aqui.
+     *
+     * O que se afirma é a lista de métodos DECLARADOS em cada classe, e não
+     * todos os métodos públicos: os herdados de `Exception` (`getMessage`,
+     * `getTrace`, `__wakeup`, ...) não são a família e não precisam ser
+     * enumerados um a um. Declarados, os três são exatos: a base acrescenta o
+     * construtor que recebe o status e o `status()` que o devolve, e cada
+     * subclasse só o construtor que o fixa.
+     *
+     * É por esta lista que a garantia é de que um guard que recebe a exceção não
+     * tem onde ler uma URL — não há método, nem setter, nem propriedade — e o
+     * destino não pode acabar escolhido a partir de dado de requisição, que
+     * transformaria o 403 em redirecionamento aberto.
+     */
+    public function testTheFamilyExposesTheStatusAndNothingElse(): void
+    {
+        $declared = static function (string $class): array {
+            $names = array_map(
+                static fn (ReflectionMethod $method): string => $method->getName(),
+                (new ReflectionClass($class))->getMethods(ReflectionMethod::IS_PUBLIC)
+            );
+
+            $own = array_values(array_filter(
+                $names,
+                static fn (string $name, int $index): bool => (new ReflectionClass($class))->getMethod($name)->getDeclaringClass()->getName() === $class,
+                ARRAY_FILTER_USE_BOTH
+            ));
+
+            sort($own);
+
+            return $own;
+        };
+
+        $this->assertSame(['__construct', 'status'], $declared(HttpException::class));
+        $this->assertSame(['__construct'], $declared(AuthenticationRequired::class));
+        $this->assertSame(['__construct'], $declared(AuthorizationDenied::class));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Exceptions\Http\AuthorizationDenied;
+
 if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -12,7 +14,7 @@ class Usuarios extends MY_Controller
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar os usuários.');
-            redirect(base_url());
+            throw new AuthorizationDenied('Você não tem permissão para configurar os usuários.');
         }
 
         $this->load->helper('form');

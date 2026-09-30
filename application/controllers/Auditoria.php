@@ -1,5 +1,7 @@
 <?php
 
+use Exceptions\Http\AuthorizationDenied;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Auditoria extends MY_Controller
@@ -10,7 +12,7 @@ class Auditoria extends MY_Controller
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'cAuditoria')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar logs do sistema.');
-            redirect(base_url());
+            throw new AuthorizationDenied('Você não tem permissão para visualizar logs do sistema.');
         }
         $this->load->model('Audit_model');
         $this->data['menuConfiguracoes'] = 'Auditoria';

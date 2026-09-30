@@ -74,6 +74,27 @@ abstract class ControllerTestCase extends TestCase
     }
 
     /**
+     * Deixa a sessão no estado de quem já entrou, com um papel escolhido.
+     *
+     * `CI_Session::userdata()` lê `$_SESSION[$key]` direto (Session.php:798), e
+     * não uma cópia interna, então escrever o superglobal é o bastante — é o
+     * mesmo caminho que o Login usa e que os testes de logout já observam.
+     *
+     * O `permissao` é o `idPermissao` que o guard repete em
+     * `checkPermission()`. O padrão é 1, que é o papel administrativo do banco
+     * de teste; para exercitar a NEGAÇÃO, passe um id que não exista, e não um
+     * ao qual falte uma atividade — assim o caso não depende de quais atividades
+     * o seed deixou ligadas. O cache do `Permission` é zerado em
+     * `TestApplication::resetSharedState()` justamente para que o id escolhido
+     * aqui seja o id avaliado.
+     */
+    protected function loginAs(int $permissionId = 1): void
+    {
+        $_SESSION['logado'] = true;
+        $_SESSION['permissao'] = $permissionId;
+    }
+
+    /**
      * Monta um POST de login com um token CSRF válido.
      *
      * A verificação do CI3 (Security::csrf_verify) compara o valor do POST com o
@@ -159,14 +180,22 @@ abstract class ControllerTestCase extends TestCase
     }
 
     /**
-     * Igual a callController(), mas devolve o corpo cru em vez de decodificar.
+     * Constrói um controller e devolve a instância, sem chamar método nenhum.
      *
-     * Para o que não responde JSON, como uma view renderizada.
+     * Porta separada de callControllerRaw() porque nem todo teste chega a um
+     * método: o que exercita um GUARD de construtor precisa só do construtor,
+     * já que o guard lança antes de qualquer método rodar. Sem esta porta, esse
+     * teste teria de escolher um método qualquer do controller só para ter o que
+     * chamar — e um método escolhido à toa é um método que grava no banco e faz
+     * o caso depender de dado que nada tem a ver com o guard.
+     *
+     * A ordem dentro do método importa: resetSharedState() ANTES do `new`, porque
+     * é ele que resolve o cache de permissões e o registro de classes, e o guard
+     * lê os dois no primeiro statement do construtor.
      */
-    protected function callControllerRaw(string $class, string $method): string
+    protected function constructController(string $class): object
     {
         $ci = $this->ci();
-        $ci->output->set_output('');
 
         // O CI3 não tem autoloader de controllers: eles são carregados por
         // caminho de arquivo, pelo Loader.
@@ -203,6 +232,21 @@ abstract class ControllerTestCase extends TestCase
             $controller->db = $ci->db;
             $left->close();
         }
+
+        return $controller;
+    }
+
+    /**
+     * Igual a callController(), mas devolve o corpo cru em vez de decodificar.
+     *
+     * Para o que não responde JSON, como uma view renderizada.
+     */
+    protected function callControllerRaw(string $class, string $method): string
+    {
+        $ci = $this->ci();
+        $ci->output->set_output('');
+
+        $controller = $this->constructController($class);
 
         ob_start();
 

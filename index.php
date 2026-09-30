@@ -37,6 +37,8 @@
  * @filesource
  */
 
+use Exceptions\Http\HttpException;
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -312,5 +314,28 @@ define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
  * --------------------------------------------------------------------
  *
  * And away we go...
+ *
+ * O catch transforma as exceções de autorização de volta no que o
+ * redirect() já fazia, porque é aqui que o destino pode ser decidido: uma
+ * sessão ausente vai para o login, uma permissão ausente vai para a home, e a
+ * API responde JSON em vez de redirecionar. Nenhum controller sabe disso, e é o
+ * ponto — o guard lança e a exceção carrega só o status.
+ *
+ * Este é o único lugar onde dá para pegar uma exceção de construtor. Os hooks
+ * do CI3 não servem: `pre_controller` roda ANTES de o controller ser
+ * instanciado, e não existe hook de exceção. E o catch precisa ficar aqui, e
+ * não dentro do run(), por causa do `exit()`: uma exceção lançada no
+ * construtor aborta o run() antes de `_display()`, então um `Location` acumulado
+ * por `CI_Output::set_header()` nunca seria enviado — um 3xx sem destino. Por
+ * isso o caminho web usa `redirect()`, que emite o header na hora, e não
+ * `respond_redirect()`.
  */
-require_once BASEPATH . 'core/CodeIgniter.php';
+try {
+    require_once BASEPATH . 'core/CodeIgniter.php';
+} catch (HttpException $e) {
+    render_http_exception($e);
+
+    // O redirect() do caminho web já encerrou. O exit() cobre o caminho JSON,
+    // em que o _display() escreve a resposta e devolve.
+    exit;
+}
