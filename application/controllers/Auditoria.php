@@ -6,6 +6,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Auditoria extends MY_Controller
 {
+    public const CLEAN_SUCCESS_MESSAGE = 'Limpeza de logs realizada com sucesso.';
+
+    public const CLEAN_EMPTY_MESSAGE = 'Nenhum log com mais de 30 dias encontrado.';
+
+    public const CLEAN_AUDIT_TASK = 'Efetuou limpeza de logs';
+
     public function __construct()
     {
         parent::__construct();
@@ -37,12 +43,12 @@ class Auditoria extends MY_Controller
     public function clean()
     {
         if ($this->Audit_model->clean()) {
-            log_info('Efetuou limpeza de logs');
-            $this->session->set_flashdata('success', 'Limpeza de logs realizada com sucesso.');
+            log_info(self::CLEAN_AUDIT_TASK);
+            $this->session->set_flashdata('success', self::CLEAN_SUCCESS_MESSAGE);
         } else {
-            $this->session->set_flashdata('error', 'Nenhum log com mais de 30 dias encontrado.');
+            $this->session->set_flashdata('error', self::CLEAN_EMPTY_MESSAGE);
         }
-        redirect(site_url('auditoria'));
+        respond_redirect(site_url('auditoria'));
     }
 }
 
