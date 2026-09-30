@@ -1,15 +1,6 @@
-<?php
-defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');?>
 
-// `show_error()` embrulha a mensagem em `<p>` antes de incluir esta view -- e o
-// `display_error()` do banco ainda a monta com `implode('</p><p>', ...)`, o que
-// faz dela um arranjo de quem chamou, não desta view. Imprimi-lo escapado vira
-// texto visivel: foi assim que um 404 chegou ao usuario mostrando
-// `&lt;p&gt;The page you requested was not found.&lt;/p&gt;`. Tirar as tags de
-// paragrafo devolve o markup para a view; `strip_tags()` nao serve, porque ele
-// comeria o `WHERE x<3` de um erro de SQL de verdade.
-$paragraph = trim(preg_replace('#</?p>#i', '', (string) $message));
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -66,8 +57,10 @@ p {
 </head>
 <body>
 	<div id="container">
-		<h1><?= htmlspecialchars((string) $heading, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></h1>
-		<p><?= htmlspecialchars($paragraph, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+		<h1><?= $heading; ?></h1>
+		<div id="body">
+			<?= $message; ?>
+		</div>
 	</div>
 </body>
 </html>
