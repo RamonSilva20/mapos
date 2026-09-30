@@ -44,6 +44,16 @@ class WhoopsHook
 
     private function extractEnvNames(string $filePath)
     {
+        // `file()` avisa quando o arquivo não existe, e o aviso vira linha de log
+        // em `application/logs/`. O `.env` é opcional por construção — o
+        // `index.php` só o carrega `if (file_exists($envFile))` —, então num
+        // install sem ele, ou no CI, esta linha era o motivo de o repositório
+        // ganhar um arquivo gerado a cada requisição. A lista de nomes é uma
+        // proteção de sigilo, e não ter `.env` não tem nada a esconder.
+        if (! is_file($filePath)) {
+            return [];
+        }
+
         $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if (! $lines) {
             return [];

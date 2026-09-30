@@ -293,6 +293,23 @@ final class FrontendBoundaryTest extends TestCase
      * em vez de responder 401. As credenciais vêm de `$_ENV['DB_*']`, que o
      * `TestDatabase::fromEnvironment()` acabou de publicar — e num worker do
      * ParaTest elas são as do worker, que é o banco que o filho tem de usar.
+     *
+     * `API_ENABLED` entra aqui, e não por ser bonito: `routes.php` só exige o
+     * `routes_api.php` quando `$_ENV['API_ENABLED']` é verdadeiro, e essa chave
+     * mora no `application/.env`, que é ignorado pelo git. Sem esta linha o
+     * filho sobe sem a tabela de rotas da API, `/api/v1/clientes` cai em 404, e
+     * o caso que deveria medir o 401 da API falha medindo o 404 — em toda
+     * máquina sem `.env`, que é o CI inteiro. O `.env` local mascara isso: com
+     * `API_ENABLED=true` na sua máquina o caso passa, e o furo só aparece onde
+     * ninguém tem `.env`. Um teste que depende de um arquivo que o git ignora
+     * não é um teste, é uma configuração travestida.
+     *
+     * `APP_ENCRYPTION_KEY` e `GLOBAL_XSS_FILTERING` vêm pelo mesmo motivo, e
+     * com a mesma fonte do resto: o `config.php` lê as duas sem valor padrão, e
+     * a ausência delas é um aviso que o CI3 grava em `application/logs/`. O
+     * `TestDatabase::fromEnvironment()` já preenche as duas para o processo da
+     * suíte, e o `$_ENV` daqui é justamente o que ele acabou de publicar — o
+     * filho nascia sem elas porque ninguém as repassava.
      */
     private static function childEnvironment(int $port): array
     {
@@ -308,6 +325,11 @@ final class FrontendBoundaryTest extends TestCase
             'PATH' => getenv('PATH') ?: '/usr/bin:/bin',
             'APP_ENVIRONMENT' => 'production',
             'APP_BASEURL' => "http://127.0.0.1:{$port}/",
+            'API_ENABLED' => 'true',
+            'API_JWT_KEY' => $_ENV['API_JWT_KEY'] ?? 'mapos-frontend-boundary-jwt-key',
+            'API_TOKEN_EXPIRE_TIME' => $_ENV['API_TOKEN_EXPIRE_TIME'] ?? '3600',
+            'APP_ENCRYPTION_KEY' => $_ENV['APP_ENCRYPTION_KEY'] ?? 'mapos-frontend-boundary-key',
+            'GLOBAL_XSS_FILTERING' => $_ENV['GLOBAL_XSS_FILTERING'] ?? 'false',
             'DB_HOSTNAME' => $_ENV['DB_HOSTNAME'] ?? '127.0.0.1',
             'DB_PORT' => $_ENV['DB_PORT'] ?? '',
             'DB_DATABASE' => $_ENV['DB_DATABASE'] ?? '',
