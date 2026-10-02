@@ -16,18 +16,17 @@ use Tests\Support\Transaction\TransactsDatabase;
  * representante da família, então aqui o foco é o comportamento dos dois
  * métodos.
  *
- * A limpeza era fechada por `redirect()` do CI3, que chama `exit()` e mataria
- * o processo do PHPUnit. O controller agora usa `respond_redirect()` (o mesmo
- * que o `Login::sair()` usa), que emite o `Location` pelo `CI_Output` sem
- * encerrar o processo; o status continua o que o `redirect()` escolheria —
- * 303 num POST — porque `respond_redirect()` resolve o número por
- * `redirect_status_for()`.
+ * O que este arquivo não cobre, e por quê, está em AGENTS.md, na seção
+ * "Writing a controller test": a limpeza era fechada por `redirect()` do CI3,
+ * que chama `exit()` e mataria o processo do PHPUnit, e agora sai por
+ * `respond_redirect()`, que emite o `Location` pelo `CI_Output` sem encerrar o
+ * processo.
  *
  * Nenhum teste aqui precisa de reinstall da linha de base: as escritas ficam
  * em `logs` e a transação da trait desfaz tudo, e nenhum outro fixture é
  * alterado.
  */
-class AuditoriaControllerTest extends ControllerTestCase
+final class AuditoriaControllerTest extends ControllerTestCase
 {
     use TransactsDatabase;
 
@@ -43,17 +42,6 @@ class AuditoriaControllerTest extends ControllerTestCase
         $_SESSION['nome_admin'] = 'Admin';
     }
 
-    /**
-     * GET auditoria: a tela renderiza, e sem logs traz o estado vazio.
-     *
-     * Este é o primeiro teste que renderiza o layout inteiro
-     * (tema/topo, tema/menu, tema/conteudo, tema/rodape) em processo, e é ele
-     * que pegaria um "Cannot redeclare" como o que o guard `function_exists()`
-     * de `saudacao()` já resolveu. O descarte do retrato velho do Loader entre
-     * controllers não depende desta ordem: ele é pinado de verdade em
-     * `testIndexRendersPaginationReflectingCurrentData`, com duas renderizações
-     * no mesmo caso.
-     */
     public function testIndexRendersTheLogsPage(): void
     {
         $html = $this->callControllerRaw('Auditoria', 'index');
@@ -64,13 +52,6 @@ class AuditoriaControllerTest extends ControllerTestCase
         $this->assertStringContainsString('auditoria/clean', $html);
     }
 
-    /**
-     * GET auditoria: as linhas da tabela logs aparecem na tela.
-     *
-     * A ordem — `order_by('idLogs', 'desc')`, a mais recente primeiro — é
-     * fixada em `testIndexRendersPaginationReflectingCurrentData`; aqui basta
-     * que as duas linhas existam na página.
-     */
     public function testIndexListsTheLogRows(): void
     {
         $this->insertLog('Efetuou login no sistema', 'Maria');
@@ -85,12 +66,9 @@ class AuditoriaControllerTest extends ControllerTestCase
     }
 
     /**
-     * GET auditoria: o conteúdo do log sai escapado.
-     *
-     * `tarefa` é um texto gravado pela aplicação, mas a coluna é livre e o
-     * guard de permissão é o único filtro: qualquer script que entre aqui seria
-     * executado se a view fizesse `echo` puro. A view usa `esc()` e este caso
-     * fixa que o `<script>` chega como texto.
+     * `tarefa` é um texto gravado pela aplicação, mas a coluna é livre e o guard
+     * de permissão é o único filtro: um `<script>` aqui seria executado se a
+     * view fizesse `echo` puro.
      */
     public function testIndexEscapesTheLogContent(): void
     {
@@ -103,25 +81,11 @@ class AuditoriaControllerTest extends ControllerTestCase
     }
 
     /**
-     * GET auditoria: com mais logs que o per_page da configuração, a página
-     * corta na décima linha e o pagination renderiza os links — e a segunda
-     * renderização reflete os dados de agora, não os do primeiro controller.
-     *
-     * As duas renderizações no mesmo caso são o que torna o
-     * `Ci3Introspection::resetLoaderViewAliases()` verificável de verdade: a
-     * primeira congela (em tese) um retrato vazio no Loader, e a segunda lê o
-     * `$this->pagination` da view — que apontaria para o retrato velho, com
-     * `total_rows` de zero, se o harness não o tivesse descartado. Um teste de
-     * uma renderização só pegaria isso se acontecesse de correr depois de um
-     * outro que deixasse o retrato no Loader — dependência de ordem, e não uma
-     * prova.
-     *
-     * O conhecido é a ordem e o corte: a primeira inserida (a mais antiga,
-     * `idLogs` menor) fica na página seguinte. O deslocamento viria do terceiro
-     * segmento da URI, que em processo não existe; aqui o que importa é que a
-     * primeira página mostra 10 e o resto aparece no link. O `'pagination'` só
-     * existe na página pela `create_links()`, então a presença dele diz que os
-     * links foram realmente montados.
+     * Duas renderizações no mesmo caso são o que torna o descarte do retrato
+     * velho do Loader verificável; ver AGENTS.md, "The Loader freezes a view
+     * snapshot". As duas asserções de linha são o corte: a mais antiga fica na
+     * página seguinte, e o deslocamento viria do terceiro segmento da URI, que
+     * em processo não existe.
      */
     public function testIndexRendersPaginationReflectingCurrentData(): void
     {
@@ -143,12 +107,9 @@ class AuditoriaControllerTest extends ControllerTestCase
     }
 
     /**
-     * auditoria/clean: remove o que é mais velho que 30 dias e mantém o resto.
-     *
      * A data exata de 30 dias atrás NÃO é removida: o model faz `data <`
-     * ('- 30 dias'), estrito, então um log com exatamente 30 dias fica. O corte
-     * é afirmado por causa do dia, não por cima: é fácil trocar o `<` por `<=`
-     * e nenhum teste perceber.
+     * ('- 30 dias'), estrito. O corte é afirmado por causa do dia, e não por
+     * cima, porque trocar o `<` por `<=` não quebraria nenhum outro caso.
      */
     public function testCleanRemovesOnlyLogsOlderThanThirtyDays(): void
     {
@@ -182,12 +143,8 @@ class AuditoriaControllerTest extends ControllerTestCase
     }
 
     /**
-     * auditoria/clean: no caminho de sucesso, o próprio ato é registrado.
-     *
-     * O `log_info()` escreve uma linha nova em `logs`, com o usuário da
-     * sessão. É isso que deixa a limpeza auditável — e é uma linha que o caso
-     * anterior não força a existir, porque o assert vazio passaria tanto com
-     * ela quanto sem ela.
+     * Uma linha nova com o usuário da sessão é o que torna a limpeza auditável,
+     * e é uma linha que o caso anterior não força a existir.
      */
     public function testCleanRecordsTheCleanupInTheAuditLog(): void
     {
@@ -202,12 +159,8 @@ class AuditoriaControllerTest extends ControllerTestCase
     }
 
     /**
-     * auditoria/clean: sem logs antigos, nada é apagado e a tela recebe o
-     * aviso.
-     *
-     * O model devolve false quando `affected_rows()` é 0, e o controller
-     * responde com o flashdata de erro. O `log_info()` fica fora desse caminho:
-     * uma limpeza que não limpou nada não é uma limpeza para registrar.
+     * O `log_info()` fica fora deste caminho: uma limpeza que não limpou nada
+     * não é uma limpeza para registrar.
      */
     public function testCleanWithNothingOldSetsTheErrorFlash(): void
     {
@@ -233,15 +186,6 @@ class AuditoriaControllerTest extends ControllerTestCase
         );
     }
 
-    /**
-     * Nos dois caminhos, clean() manda a tela de volta para a auditoria.
-     *
-     * Antes o `Location` existia, mas saía por `redirect()` do CI3, que chama
-     * `exit()` — e era isso que mantinha o fluxo não testável. O status segue o
-     * que o `redirect()` escolheria, regra que vive em
-     * `redirect_status_for()` e já é coberta em GeneralHelperTest; este caso
-     * segura o destino.
-     */
     public function testCleanRedirectsBackToTheAuditoriaPage(): void
     {
         $this->insertLog('Velho', 'Maria', 31);
@@ -255,12 +199,10 @@ class AuditoriaControllerTest extends ControllerTestCase
     }
 
     /**
-     * Conta quantas linhas de log têm a tarefa escolhida.
-     *
      * Sempre a tabela toda por chave, para as asserções sobre o que o clean()
-     * removeu e o que manteve não dependem de contagem verificada por
-     * diferença — que é como um `count_all()` sobre restante confunde a
-     * remoção com a linha que o próprio clean() registra.
+     * removeu e o que manteve não dependam de contagem por diferença, que é
+     * como um `count_all()` confunde a remoção com a linha que o próprio
+     * clean() registra.
      */
     private function countLogs(string $task): int
     {
@@ -271,12 +213,9 @@ class AuditoriaControllerTest extends ControllerTestCase
     }
 
     /**
-     * Insere uma linha de log com a data, o usuário e a tarefa escolhidos.
-     *
      * Sempre uma linha nova, então a ordem de `idLogs` entre inserções é a
-     * ordem das chamadas — que é o que o teste de paginação usa para saber o
-     * que vaza e o que não vaza da primeira página. A `hora` é fixa de
-     * propósito, para a asserção não depender do relógio.
+     * ordem das chamadas — que é o que o teste de paginação usa. A `hora` é
+     * fixa de propósito, para a asserção não depender do relógio.
      */
     private function insertLog(string $task, string $user = 'Admin', int $daysAgo = 0): void
     {

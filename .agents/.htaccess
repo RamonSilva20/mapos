@@ -1,0 +1,13 @@
+# Esta pasta fica dentro da raiz do documento, e setup-db.php reconstrói um
+# banco do zero. O assertCommandLine() do script é a última linha de defesa, não
+# a primeira: ele impede a execução, mas não a exposição do código-fonte.
+#
+# Vale para Apache. O nginx não lê .htaccess, e a regra equivalente está em
+# docker/etc/nginx/default.conf e default.template.conf.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
