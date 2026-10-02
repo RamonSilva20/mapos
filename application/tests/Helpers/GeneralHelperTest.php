@@ -217,6 +217,11 @@ class GeneralHelperTest extends TestCase
             'data html' => ['data:text/html;base64,PHNjcmlwdD4='],
             'data with image in the path' => ['data:text/html,<img src=x onerror=alert(1)>'],
             'control char smuggling' => ["java\nscript:alert(1)"],
+            // A letra de unidade do Windows é lida como esquema por `parse_url()`,
+            // então um caminho de disco vira "C", que não é uma URL de imagem e
+            // volta como "". É o que impede `imprimirTopo.php` de usar este
+            // escaper: lá o valor é um caminho de disco, e não uma URL.
+            'windows drive letter' => ['C:\\laragon\\www\\mapos\\assets\\uploads\\logo.png'],
         ];
     }
 
@@ -288,6 +293,19 @@ class GeneralHelperTest extends TestCase
         $this->assertSame(302, redirect_status_for('POST', 'HTTP/2'));
         $this->assertSame(302, redirect_status_for('POST', null));
         $this->assertSame(302, redirect_status_for(null, 'HTTP/1.1'));
+    }
+
+    /**
+     * The status is what separates "did not log in" from "logged in and may not".
+     *
+     * A family without a status would serve the screen, where every refusal turns
+     * into a redirect, and would break the API, which is the only place the two
+     * are told apart.
+     */
+    public function testThePairOfStatusesIsUnauthorizedAndForbidden(): void
+    {
+        $this->assertSame(401, (new AuthenticationRequired())->status());
+        $this->assertSame(403, (new AuthorizationDenied())->status());
     }
 
     public function testUnauthenticatedExceptionRedirectsToLogin(): void

@@ -2,8 +2,9 @@
     <div>
         <br>
         <div style="width: 50%; float: left" class="float-left col-md-3">
-            <?php if (file_exists(convertUrlToUploadsPath($emitente->url_logo))) { ?>
-                <img style="width: 150px" src="<?= esc_img_src(convertUrlToUploadsPath($emitente->url_logo)) ?>" alt="<?= esc($emitente->nome) ?>"><br><br>
+            <?php $logoEmitente = convertUrlToUploadsPath($emitente->url_logo); ?>
+            <?php if (file_exists($logoEmitente)) { ?>
+                <img style="width: 150px" src="<?= esc($logoEmitente) ?>" alt="<?= esc($emitente->nome) ?>"><br><br>
             <?php } else { ?>
                 <div style="width: 150px;"><p></p></div>
             <?php } ?>

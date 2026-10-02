@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/main.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/blue.css" class="skin-color" />
 </head>
 
 <body style="background-color: transparent">

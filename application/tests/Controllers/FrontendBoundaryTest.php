@@ -12,30 +12,19 @@ use Tests\Support\Database\TestDatabase;
  * O que o servidor RESPONDE depois da troca de `redirect()` por exceção.
  *
  * {@see \Tests\Controllers\AuthorizationGuardControllerTest} roda os guards
- * in-process e afirma a exceção: tipo, status, mensagem, flashdata. Nada ali
- * diz o que sai do servidor, e essa é a metade que este arquivo mede — porque é
- * a metade que o usuário recebe, e porque a suíte in-process não pode dizê-la:
- * `header()` não existe em CLI, e a resposta real se forma em `_display()` e
- * no `exit()` depois do catch. Um `exit()` aqui mataria o processo do PHPUnit,
- * que é a razão de os guards lançarem exceção em vez de redirecionar.
+ * in-process e afirma a exceção; nada ali diz o que sai do servidor, e essa é a
+ * metade que este arquivo mede. O servidor é um PROCESSO FILHO porque
+ * `header()` não existe em CLI: a fronteira sob teste é o `index.php` dos dois
+ * lados, do guard ao `Location`, e ela só existe num ciclo de requisição real.
  *
- * Por isso o servidor é um PROCESSO FILHO, e não uma segunda instância
- * in-process: a fronteira que está sob teste é o `index.php` dos dois lados, do
- * guard ao `Location`, e ela existe só num ciclo de requisição de verdade.
+ * Fixa o 401 web, o 401 da API e a página de erro do 404 do Router. O 403 web
+ * NÃO é medido aqui: montá-lo por HTTP exigiria um POST de login com token CSRF
+ * válido, que a suíte já cobre in-process. O 404 é a única resposta que o CI3
+ * renderiza antes de existir um controller, e portanto antes de o `Loader`
+ * carregar o helper `general` — por isso as views de erro escapam com
+ * `htmlspecialchars()` e não com `esc()`.
  *
- * ## O que este arquivo fixa, e o que ele não fixa
- *
- * Fixa o 401 web (o `Location` que sai) e o 401 da API (o JSON que não mudou).
- * Também fixa a página de erro do 404 do Router, que é a única resposta que o
- * CI3 renderiza antes de existir um controller — e portanto antes de existir um
- * `Loader` carregado pelo autoload.
- * O 403 web NÃO é medido aqui: ele precisa de uma sessão autenticada com
- * cookies, e montar isso por HTTP exigiria um POST de login com token CSRF
- * válido, que é a parte do login que a suíte já cobre in-process. O destino do
- * 403 é uma função pura, testada em GeneralHelperTest, e a decisão de que o 403
- * é 403 e não 401 é de `AuthorizationDenied`. O que falta é o `Location`
- * intermediário, e ele é uma chamada de `redirect()` a menos, igual ao do 401 que
- * este arquivo mede.
+ * As chaves de ambiente do filho e os limites in-process estão em AGENTS.md.
  */
 final class FrontendBoundaryTest extends TestCase
 {
@@ -195,23 +184,9 @@ final class FrontendBoundaryTest extends TestCase
     }
 
     /**
-     * Uma rota inexistente mostra a página de erro, e não um fatal.
-     *
-     * Este é o caso que quebrou a página de erro em si. O ponto em que as views
-     * `errors/html/error_*.php` precisam escapar é um ponto em que o `Loader`
-     * ainda não rodou: `Loader::initialize()` — que carrega o helper `general`
-     * pelo autoload — só acontece no construtor de `CI_Controller`, e o 404 do
-     * Router acontece antes disso. Por isso elas não chamam `esc()`; elas
-     * escapam com `htmlspecialchars()`, que é PHP core e não depende de nada já
-     * ter sido carregado. Com `esc()` as views morriam com "Call to undefined
-     * function esc()", e o que o usuário recebia era um erro fatal dentro de uma
-     * página de erro.
-     *
      * A asserção do corpo importa tanto quanto a do status: um 404 com a página
      * certa passa, e um 404 com HTML de erro do PHP também passa, então é o texto
-     * "404 Page Not Found" que distingue os dois. `assertStringNotContainsString`
-     * fecha a porta oposta, contando o fatal como falha mesmo que o cabeçalho
-     * chegue a sair.
+     * "404 Page Not Found" que distingue os dois.
      */
     #[Depends('testTheServerIsRunning')]
     public function testAnUnknownRouteRendersTheErrorPage(): void
@@ -234,27 +209,13 @@ final class FrontendBoundaryTest extends TestCase
     }
 
     /**
-     * O processo filho não escreve log na árvore de código-fonte.
-     *
-     * A suíte resolve isso hoje com `config/testing/config.php`, que aponta o
-     * `log_path` para o diretório temporário justamente porque um log gerado
-     * dentro do repositório faz o `composer format:check` falhar em cima de um
-     * arquivo que ninguém editou. Este processo roda como `production` — é o que
-     * dá o roteamento de verdade, já que `config/testing/routes.php` aponta o
-     * controller padrão para um inerte — e portanto alcançaria
-     * `application/logs/` sem o `APP_LOG_PATH` que `childEnvironment()` passa.
-     *
-     * Com `log_threshold = 1` só o nível ERROR vira arquivo, e um 307 e um 401
-     * limpos não são erro. A asserção existe para transformar essa suposição em
-     * fato verificado: se alguém baixar o threshold, ou um dia o `php -S` logar
-     * algo em ERROR, este caso falha dizendo o que fazer, em vez de o repositório
-     * silenciosamente ganhar um arquivo gerado.
-     *
      * A referência é tirada aqui, e não no `startServer()`, para o caso medir o
-     * que as PRÓPRIAS requisições escreveram. Comparar com o estado do boot faria
-     * este teste depender da ordem em que a classe roda: o 404 acima grava em
-     * ERROR de propósito, e um teste que mede "nada foi escrito" não pode ter uma
-     * escrita legítima de outro teste como linha de base.
+     * que as PRÓPRIAS requisições escreveram: o 404 acima grava em ERROR de
+     * propósito, e um teste que mede "nada foi escrito" não pode ter uma escrita
+     * legítima de outro teste como linha de base.
+     *
+     * As seis chaves que o filho precisa, e o porquê de cada uma, estão em
+     * AGENTS.md, em `FrontendBoundaryTest`.
      */
     #[Depends('testTheServerIsRunning')]
     public function testTheChildLeavesNoLogFileInTheSourceTree(): void
@@ -328,38 +289,14 @@ final class FrontendBoundaryTest extends TestCase
     /**
      * As variáveis que o filho precisa, e nada mais.
      *
-     * O `proc_open()` recebe o ambiente inteiro, e não só o que este teste
-     * quer: um `$_ENV` com meia dúzia de chaves faz o `config/config.php` cair
-     * no placeholder de `base_url` e o `index.php` abrir a página de instalação
-     * em vez de responder 401. As credenciais vêm de `$_ENV['DB_*']`, que o
-     * `TestDatabase::fromEnvironment()` acabou de publicar — e num worker do
-     * ParaTest elas são as do worker, que é o banco que o filho tem de usar.
+     * O `proc_open()` recebe o ambiente inteiro, e não só o que este teste quer:
+     * um `$_ENV` com meia dúzia de chaves faz o `config/config.php` cair no
+     * placeholder de `base_url` e o `index.php` abrir a página de instalação em
+     * vez de responder 401.
      *
-     * `API_ENABLED` entra aqui, e não por ser bonito: `routes.php` só exige o
-     * `routes_api.php` quando `$_ENV['API_ENABLED']` é verdadeiro, e essa chave
-     * mora no `application/.env`, que é ignorado pelo git. Sem esta linha o
-     * filho sobe sem a tabela de rotas da API, `/api/v1/clientes` cai em 404, e
-     * o caso que deveria medir o 401 da API falha medindo o 404 — em toda
-     * máquina sem `.env`, que é o CI inteiro. O `.env` local mascara isso: com
-     * `API_ENABLED=true` na sua máquina o caso passa, e o furo só aparece onde
-     * ninguém tem `.env`. Um teste que depende de um arquivo que o git ignora
-     * não é um teste, é uma configuração travestida.
-     *
-     * `APP_ENCRYPTION_KEY` e `GLOBAL_XSS_FILTERING` vêm pelo mesmo motivo, e
-     * com a mesma fonte do resto: o `config.php` lê as duas sem valor padrão, e
-     * a ausência delas é um aviso que o CI3 grava em `application/logs/`. O
-     * `TestDatabase::fromEnvironment()` já preenche as duas para o processo da
-     * suíte, e o `$_ENV` daqui é justamente o que ele acabou de publicar — o
-     * filho nascia sem elas porque ninguém as repassava.
-     *
-     * `APP_LOG_PATH` desvia o log do filho para o mesmo diretório temporário que
-     * `config/testing/config.php` usa. O caminho era obrigatório: `show_404()`
-     * grava em `log_message('error', ...)` antes de renderizar a página, então o
-     * caso do 404 escreveria um arquivo em `application/logs/` — e o
-     * `composer format:check` não honra `.gitignore`, de modo que esse arquivo
-     * gerado faria a checagem falhar em cima de algo que ninguém editou. É a
-     * saída que a mensagem de falha daquele outro caso já pedia, agora com o
-     * caminho existindo para responder a ela.
+     * Por que cada uma das seis chaves de configuração é necessária — e por que
+     * a ausência delas passa num teste e falha no CI — está em AGENTS.md, na
+     * seção `FrontendBoundaryTest`.
      */
     private static function childEnvironment(int $port): array
     {

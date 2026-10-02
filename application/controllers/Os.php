@@ -453,7 +453,7 @@ class Os extends MY_Controller
             );
             $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
         }
-        
+
         $this->data['imprimirAnexo'] = isset($_ENV['IMPRIMIR_ANEXOS']) ? (filter_var($_ENV['IMPRIMIR_ANEXOS'] ?? false, FILTER_VALIDATE_BOOLEAN)) : false;
 
         $this->load->view('os/imprimirOs', $this->data);
