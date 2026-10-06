@@ -36,10 +36,12 @@ class Mine extends CI_Controller
         $this->form_validation->set_rules('senha', 'Senha', 'required');
 
         if ($this->input->post('token') == null || $this->input->post('token') == '') {
-            return redirect('mine');
+            respond_redirect(site_url('mine'));
+
+            return;
         }
         if ($this->form_validation->run() == false) {
-            echo json_encode(['result' => false, 'message' => 'Por favor digite uma senha']);
+            return $this->respondJson(['result' => false, 'message' => 'Por favor digite uma senha']);
         } else {
             $token = $this->check_token($this->input->post('token'));
             $cliente = $token ? $this->check_credentials($token->email) : null;
@@ -48,7 +50,8 @@ class Mine extends CI_Controller
             // sido utilizado e corresponder a um cliente existente.
             if ($token == null || $cliente == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
                 log_info('Alteração de senha. Porém, o token é inválido, expirado ou já utilizado.');
-                echo json_encode(['result' => false, 'message' => 'Token inválido ou expirado. Solicite uma nova recuperação de senha.']);
+
+                return $this->respondJson(['result' => false, 'message' => 'Token inválido ou expirado. Solicite uma nova recuperação de senha.']);
             } else {
                 if ($token->email == $cliente->email) {
                     $data = [
@@ -64,14 +67,15 @@ class Mine extends CI_Controller
                             $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
                             $this->session->set_userdata($session_mine_data);
                             log_info('Alteração da senha realizada com sucesso.');
-                            echo json_encode(['result' => true]);
+                            return $this->respondJson(['result' => true]);
                         }
                     }
                 } else {
                     $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
                     $this->session->set_userdata($session_mine_data);
                     log_info('Alteração de senha. Porém, dados divergentes.');
-                    echo json_encode(['result' => false, 'message' => 'Dados divergentes.']);
+
+                    return $this->respondJson(['result' => false, 'message' => 'Dados divergentes.']);
                 }
             }
         }
@@ -124,16 +128,20 @@ class Mine extends CI_Controller
             $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
             log_info('Acesso via link do email (Token). Porém, o token é inválido, expirado ou já utilizado.');
 
-            return redirect(base_url() . 'index.php/mine');
+            respond_redirect(base_url() . 'index.php/mine');
+
+            return;
         }
 
         $cliente = $this->check_credentials($token->email);
 
         if ($cliente == null || $token->email != $cliente->email) {
-            $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
+            $this->session->set_flashdata('error', 'Token inválido ou expirado');
             log_info('Acesso via link do email (Token). Porém, os dados de acesso estão incorretos.');
 
-            return redirect(base_url() . 'index.php/mine');
+            respond_redirect(base_url() . 'index.php/mine');
+
+            return;
         }
 
         return $this->load->view('conecte/nova_senha', $token);
@@ -150,7 +158,9 @@ class Mine extends CI_Controller
             // A mensagem é escapada no momento da exibição (views com esc_msg),
             // por isso o valor deve ser enviado puro.
             $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . $emailSolicitado);
-            redirect(base_url() . 'index.php/mine');
+            respond_redirect(base_url() . 'index.php/mine');
+
+            return;
         } else {
             $this->load->model('resetSenhas_model', '', true);
             $data = [
@@ -164,29 +174,36 @@ class Mine extends CI_Controller
                 $this->session->set_userdata($session_mine_data);
                 log_info('Cliente solicitou alteração de senha.');
                 $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . $cliente->email);
-                redirect(base_url() . 'index.php/mine');
+                respond_redirect(base_url() . 'index.php/mine');
+
+                return;
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar solicitação!');
                 $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
                 $this->session->set_userdata($session_mine_data);
                 log_info('Cliente solicitou alteração de senha. Porém falhou ao realizar solicitação!');
-                redirect(current_url());
+                respond_redirect(current_url());
+
+                return;
             }
         }
     }
 
     public function login()
     {
-        header('Access-Control-Allow-Origin: ' . base_url());
-        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-        header('Access-Control-Max-Age: 1000');
-        header('Access-Control-Allow-Headers: Content-Type');
+        // Pelo CI_Output, e não pelo header() do PHP: o Output só emite no fim da
+        // requisição, o que mantém o cabeçalho correto sem acordar os avisos de
+        // "Cannot modify header information" do CLI.
+        $this->output->set_header('Access-Control-Allow-Origin: ' . base_url());
+        $this->output->set_header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+        $this->output->set_header('Access-Control-Max-Age: 1000');
+        $this->output->set_header('Access-Control-Allow-Headers: Content-Type');
 
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
         if ($this->form_validation->run() == false) {
-            echo json_encode(['result' => false, 'message' => validation_errors()]);
+            return $this->respondFailure(validation_errors());
         } else {
             $email = $this->input->post('email');
             $password = $this->input->post('senha');
@@ -213,19 +230,19 @@ class Mine extends CI_Controller
                         'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login',
                         'data' => date('Y-m-d'),
                         'hora' => date('H:i:s'),
-                        'ip' => $_SERVER['REMOTE_ADDR']
+                        'ip' => $_SERVER['REMOTE_ADDR'] ?? ''
                     ];
 
                     $this->Audit_model->add($log_data);
 
-                    echo json_encode(['result' => true]);
+                    return $this->respondJson(['result' => true]);
                 } else {
-                    echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+                    return $this->respondFailure('Os dados de acesso estão incorretos.');
                 }
             } else {
                 // Mesma mensagem do erro de senha: mensagens distintas revelam
                 // quais e-mails possuem cadastro.
-                echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+                return $this->respondFailure('Os dados de acesso estão incorretos.');
             }
         }
     }
@@ -487,11 +504,12 @@ class Mine extends CI_Controller
     public function visualizarOs($id = null)
     {
         if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
+            respond_redirect(site_url('mine'));
+
+            return;
         }
 
         $data['menuOs'] = 'os';
-        $this->data['custom_error'] = '';
         $this->load->model('mapos_model');
         $this->load->model('os_model');
         $this->CI = &get_instance();
@@ -499,6 +517,16 @@ class Mine extends CI_Controller
 
         $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
+
+        // getById() devolve null para uma OS que não existe, e o idClientes logo
+        // abaixo seria lido de um null.
+        if ($data['result'] == null) {
+            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
+            respond_redirect(site_url('mine/painel'));
+
+            return;
+        }
+
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
@@ -512,7 +540,9 @@ class Mine extends CI_Controller
 
         if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
             $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
-            redirect('mine/painel');
+            respond_redirect(site_url('mine/painel'));
+
+            return;
         }
 
         $data['output'] = 'conecte/visualizar_os';
@@ -923,6 +953,30 @@ class Mine extends CI_Controller
         $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
     }
 
+    /**
+     * Devolve uma falha com um token de CSRF novo.
+     *
+     * O token vai em toda falha, e não só na de credenciais: a tela da área do
+     * cliente renova o campo de CSRF do formulário a partir deste valor depois de
+     * cada tentativa, e um caminho sem ele deixaria o formulário com o token
+     * velho — a tentativa seguinte bateria no 403 do `csrf_verify()`.
+     */
+    private function respondFailure(string $message)
+    {
+        return $this->respondJson([
+            'result' => false,
+            'message' => $message,
+            'MAPOS_TOKEN' => $this->security->get_csrf_hash(),
+        ]);
+    }
+
+    private function respondJson(array $payload)
+    {
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($payload, JSON_UNESCAPED_UNICODE));
+    }
+
     private function check_credentials($email)
     {
         $this->db->where('email', $email);
@@ -977,9 +1031,11 @@ class Mine extends CI_Controller
         $this->load->model('email_model');
 
         if ($emitente == null) {
-            $this->session->set_flashdata(['error' => 'Cadastrar Emitente.\n\n Por favor contate o administrador do sistema.']);
+            // Aspas duplas: em aspas simples o \n vira a barra e o n na tela.
+            $this->session->set_flashdata(['error' => "Cadastrar Emitente.\n\n Por favor contate o administrador do sistema."]);
+            respond_redirect(base_url() . 'index.php/mine/resetarSenha');
 
-            return redirect(base_url() . 'index.php/mine/resetarSenha');
+            return null;
         }
 
         $headers = [

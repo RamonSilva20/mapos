@@ -53,6 +53,38 @@ final class SchemaTest extends TestCase
     }
 
     /**
+     * resets_de_senha.token_utilizado tem DEFAULT 0.
+     *
+     * A coluna é NOT NULL e o fluxo de recuperação de senha nunca escreve nela:
+     * o INSERT da 20220307173741 manda só email, token e data_expiracao. Ela
+     * sobreviveu sem DEFAULT porque a aplicação desliga o modo estrito —
+     * database.php traz 'stricton' => false, e o mysqli_driver remove
+     * STRICT_TRANS_TABLES e STRICT_ALL_TABLES do sql_mode da sessão — e sem
+     * esses dois o MySQL preenche a coluna com o zero implícito. É o mesmo
+     * caminho que faz `datetime` responder '0000-00-00 00:00:00'.
+     *
+     * Então nada quebra hoje, e é exatamente por isso que o DEFAULT merece uma
+     * afirmação: a dependência é invisível. Quem liga 'stricton' => true, ou quem
+     * roda a suíte contra um servidor que não deixa a sessão ser ajustada, recebe
+     * 1364 Field 'token_utilizado' doesn't have a default value no meio do
+     * recuperação de senha — que é justamente o caminho que um usuário visitou
+     * para testar o produto.
+     *
+     * A migration 20261005120000 é a que instala o DEFAULT. A prova de que ela
+     * continua de pé é o DEFAULT existir, e não o INSERT succeeding: sem ele o
+     * MineControllerTest passaria igual, porque ele também roda com o modo
+     * estrito desligado.
+     */
+    public function testResetTokenUsedColumnKeepsItsDefault(): void
+    {
+        $this->assertSame(
+            '0',
+            $this->columnDefault('resets_de_senha', 'token_utilizado'),
+            'resets_de_senha.token_utilizado perdeu o DEFAULT 0 e voltou a depender do MySQL em modo não estrito.'
+        );
+    }
+
+    /**
      * @return iterable<string, array{string, string}>
      */
     public static function moneyColumns(): iterable
@@ -84,5 +116,28 @@ final class SchemaTest extends TestCase
         );
 
         return strtolower($type);
+    }
+
+    /**
+     * O DEFAULT de uma coluna, lido pelo mesmo caminho que o resto da suíte.
+     *
+     * Deliberadamente não passa por assertNotNull() como columnType(): a ausência
+     * de DEFAULT é um valor legítimo que o teste precisa ver, e não um erro de
+     * leitura. Uma coluna que sumiu do information_schema também responderia
+     * null, e a diferença interessa — a primeira é o DEFAULT perdido, a segunda
+     * é a coluna perdida. Por isso o método afirma o nome da coluna junto.
+     */
+    private function columnDefault(string $table, string $column): ?string
+    {
+        $test = TestDatabase::fromEnvironment();
+
+        $exists = SchemaReader::columnType($test->pdo(), $test->database(), $table, $column);
+
+        $this->assertNotNull(
+            $exists,
+            "A tabela {$table} não tem a coluna {$column}, ou ela não aparece no information_schema."
+        );
+
+        return SchemaReader::columnDefault($test->pdo(), $test->database(), $table, $column);
     }
 }

@@ -118,6 +118,36 @@ final class SchemaReader
     }
 
     /**
+     * O DEFAULT declarado de uma coluna, ou null quando a coluna não tem um.
+     *
+     * O information_schema não é unânime sobre como representa a ausência: o
+     * MySQL 8 devolve string vazia, enquanto outros devolvem SQL NULL. Por isso
+     * a ausência é normalizada para null aqui — o valor que o MySQL 8 devolve
+     * seria indistinguível de uma coluna defaultada para a string vazia, e a
+     * diferença interessa para quem compara.
+     *
+     * Um DEFAULT presente não é convertido: `NULL` como default chega como string
+     * 'NULL', e `'0'` chega como '0'. A conversão fica de fora de propósito,
+     * pelo mesmo motivo de columnType().
+     */
+    public static function columnDefault(PDO $pdo, string $database, string $table, string $column): ?string
+    {
+        $statement = $pdo->prepare(
+            'SELECT column_default FROM information_schema.columns
+             WHERE table_schema = ? AND table_name = ? AND column_name = ?'
+        );
+        $statement->execute([$database, $table, $column]);
+
+        $default = $statement->fetchColumn();
+
+        if ($default === false || $default === null || $default === '') {
+            return null;
+        }
+
+        return (string) $default;
+    }
+
+    /**
      * O schema da aplicação como mapa tabela => coluna => tipo, ordenado e sem as
      * tabelas de controle.
      *

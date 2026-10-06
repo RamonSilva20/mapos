@@ -48,6 +48,8 @@ abstract class ControllerTestCase extends TestCase
         $_COOKIE = [];
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
+        $this->resetUriSegments();
+
         // Um teste que exercite um logout destrói a sessão nativa, e o bootstrap
         // só a abre uma vez. Reabrindo aqui, os casos seguintes não herdam a
         // sessão morta e o sess_regenerate() do próximo login não volta a emitir
@@ -95,6 +97,39 @@ abstract class ControllerTestCase extends TestCase
     }
 
     /**
+     * Aponta a URI para um caminho, para o controller ler segmentos e
+     * parâmetros nomeados como leria numa requisição web.
+     *
+     * O `CI_URI` é singleton e foi construído uma vez, no boot do
+     * bootstrap.php, com `$_SERVER['argv'] = ['index.php']` — ou seja, sem
+     * segmento nenhum. Escrever `$_SERVER['REQUEST_URI']` aqui não resolveria:
+     * o objeto já está pronto e ninguém o repassa pela URI.
+     *
+     * `segments` e `keyval` são públicos no CI3, então não precisa de
+     * reflexão. O `keyval` é limpo junto porque é um cache por índice, preenchido
+     * por `uri_to_assoc($n)` na primeira chamada e reutilizado depois: sem o
+     * reset, o segundo caso que lê `uri_to_assoc(3)` receberia o mapa do
+     * caminho do caso anterior.
+     *
+     * Só `segments` e `keyval`: nenhum controller da suíte usa `ruri_*()`, que
+     * vive em `rsegments` e que nada aqui escreve.
+     */
+    protected function resetUriSegments(string $path = ''): void
+    {
+        $uri = $this->ci()->uri;
+
+        $uri->uri_string = trim($path, '/');
+        $uri->segments = [];
+        $uri->keyval = [];
+
+        foreach (explode('/', trim($path, '/')) as $index => $segment) {
+            if ($segment !== '') {
+                $uri->segments[$index + 1] = $segment;
+            }
+        }
+    }
+
+    /**
      * Monta um POST de login com um token CSRF válido.
      *
      * A verificação do CI3 (Security::csrf_verify) compara o valor do POST com o
@@ -103,13 +138,37 @@ abstract class ControllerTestCase extends TestCase
      */
     protected function postLogin(string $email, string $password): void
     {
+        $this->postWithCsrfToken(['email' => $email, 'senha' => $password]);
+    }
+
+    /**
+     * Monta um POST qualquer com um token CSRF válido.
+     *
+     * O `postLogin()` é a porta da tela de login e não serve para os outros
+     * endpoints: ele preenche `email` e `senha`, e um `Mine::senhaSalvar()` que
+     * recebesse esse corpo aceitaria uma senha vazia de novo. Aqui os campos
+     * vêm do argumento, e `null` no lugar de um campo significa que ele não é
+     * enviado — que é como se distingue "campo ausente" de "campo vazio".
+     *
+     * Chamar isto duas vezes no mesmo caso renova o par cookie/POST, porque
+     * `csrf_regenerate` está ligado e um token já usado não passa na segunda
+     * tentativa.
+     *
+     * @param array<string, string|null> $fields
+     */
+    protected function postWithCsrfToken(array $fields): void
+    {
         $hash = (string) $this->ci()->security->get_csrf_hash();
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_COOKIE[config_item('csrf_cookie_name')] = $hash;
-        $_POST[config_item('csrf_token_name')] = $hash;
-        $_POST['email'] = $email;
-        $_POST['senha'] = $password;
+        $_POST = [config_item('csrf_token_name') => $hash];
+
+        foreach ($fields as $field => $value) {
+            if ($value !== null) {
+                $_POST[$field] = $value;
+            }
+        }
     }
 
     /**
