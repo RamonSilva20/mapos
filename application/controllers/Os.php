@@ -21,6 +21,11 @@ class Os extends MY_Controller
 
     public function gerenciar()
     {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
+            redirect(base_url());
+        }
+
         $this->load->library('pagination');
         $this->load->model('mapos_model');
 
@@ -639,6 +644,12 @@ class Os extends MY_Controller
 
     public function autoCompleteProduto()
     {
+        if (! $this->hasAnyPermission(['aOs', 'eOs'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteProduto($q);
@@ -647,6 +658,12 @@ class Os extends MY_Controller
 
     public function autoCompleteProdutoSaida()
     {
+        if (! $this->hasAnyPermission(['aOs', 'eOs', 'aVenda', 'eVenda'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteProdutoSaida($q);
@@ -655,6 +672,12 @@ class Os extends MY_Controller
 
     public function autoCompleteCliente()
     {
+        if (! $this->hasAnyPermission(['aOs', 'eOs', 'rOs', 'aVenda', 'eVenda', 'rVenda'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteCliente($q);
@@ -663,6 +686,12 @@ class Os extends MY_Controller
 
     public function autoCompleteUsuario()
     {
+        if (! $this->hasAnyPermission(['aOs', 'eOs', 'rOs', 'aVenda', 'eVenda', 'rVenda'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteUsuario($q);
@@ -671,6 +700,12 @@ class Os extends MY_Controller
 
     public function autoCompleteTermoGarantia()
     {
+        if (! $this->hasAnyPermission(['aOs', 'eOs'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteTermoGarantia($q);
@@ -679,6 +714,12 @@ class Os extends MY_Controller
 
     public function autoCompleteServico()
     {
+        if (! $this->hasAnyPermission(['aOs', 'eOs'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->os_model->autoCompleteServico($q);
