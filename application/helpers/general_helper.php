@@ -284,3 +284,20 @@ if (! function_exists('printSafeHtml')) {
         return $purifier->purify($html);
     }
 }
+
+if (! function_exists('protegerDiretorioUpload')) {
+    /**
+     * Cria um index.html nos diretórios de upload informados para impedir a
+     * listagem do conteúdo quando o servidor web permite indexação.
+     */
+    function protegerDiretorioUpload(array $diretorios)
+    {
+        foreach ($diretorios as $diretorio) {
+            $index = rtrim($diretorio, '/\\') . DIRECTORY_SEPARATOR . 'index.html';
+
+            if (is_dir($diretorio) && ! file_exists($index)) {
+                @file_put_contents($index, "<html>\n<head>\n\t<title>403 Forbidden</title>\n</head>\n<body>\n\n<p>Directory access is forbidden.</p>\n\n</body>\n</html>\n");
+            }
+        }
+    }
+}

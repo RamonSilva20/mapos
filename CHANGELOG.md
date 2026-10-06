@@ -4,6 +4,24 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.55.1] - 2026-10-06
+
+### Added
+- Adicionado arquivo `AGENTS.md` com orientações para agentes de IA. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
+### Fixed
+- Correção de SQL injection nos filtros de lançamentos financeiros. [@RamonSilva20](https://github.com/RamonSilva20)
+- Página de erro detalhada (Whoops) agora só é exibida em ambiente de desenvolvimento. [@RamonSilva20](https://github.com/RamonSilva20)
+- Correção que permitia renovar indefinidamente um token expirado da API. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adicionadas verificações de permissão ausentes na listagem de OS, na pesquisa global e nos autocompletes. [@RamonSilva20](https://github.com/RamonSilva20)
+- Nomes de anexos imprevisíveis e bloqueio de execução de scripts e de listagem nas pastas de upload. [@RamonSilva20](https://github.com/RamonSilva20)
+- Token de recuperação de senha da área do cliente gerado com `random_bytes()`. [@RamonSilva20](https://github.com/RamonSilva20)
+- Verificação do certificado TLS nas requisições do atualizador. [@RamonSilva20](https://github.com/RamonSilva20)
+- Chave de criptografia gerada com `random_bytes()` no instalador. [@RamonSilva20](https://github.com/RamonSilva20)
+- Correção da busca na API de produtos, serviços e clientes. [@RamonSilva20](https://github.com/RamonSilva20)
+- Adequação para exibir conteúdo de forma segura e evitar possível XSS nas telas de visualização. [@Pr3d4dor](https://github.com/Pr3d4dor)
+- Correção na geração de captcha e na ordem de carregamento de funções JS no cadastro de cliente. [@Pr3d4dor](https://github.com/Pr3d4dor)
+
 ## [4.55.0] - 2026-09-25
 
 ### Added

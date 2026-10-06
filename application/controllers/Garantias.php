@@ -201,6 +201,12 @@ class Garantias extends MY_Controller
 
     public function autoCompleteProduto()
     {
+        if (! $this->hasAnyPermission(['aGarantia', 'eGarantia'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->vendas_model->autoCompleteProduto($q);
@@ -209,6 +215,12 @@ class Garantias extends MY_Controller
 
     public function autoCompleteCliente()
     {
+        if (! $this->hasAnyPermission(['aGarantia', 'eGarantia'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->vendas_model->autoCompleteCliente($q);
@@ -217,6 +229,12 @@ class Garantias extends MY_Controller
 
     public function autoCompleteUsuario()
     {
+        if (! $this->hasAnyPermission(['aGarantia', 'eGarantia'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->vendas_model->autoCompleteUsuario($q);
