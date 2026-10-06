@@ -271,7 +271,7 @@ class UsuariosController extends REST_Controller
             // Verificar credenciais do usuário
             if (password_verify($password, $user->senha)) {
                 $this->log_app('Efetuou login no sistema', $user->nome);
-                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . $user->permissoes_id, 1, true)['permissoes']);
+                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
 
                 $token_data = [
                     'uid' => $user->idUsuarios,
@@ -313,6 +313,14 @@ class UsuariosController extends REST_Controller
     {
         $user = $this->logged_user(true)->usuario;
 
+        // Usuário removido ou desativado não pode renovar o token
+        if (empty($user) || (int) $user->situacao !== 1) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
+
         if (! empty($user->email)) {
             if (! empty($user)) {
                 // token regeneration process
@@ -323,7 +331,7 @@ class UsuariosController extends REST_Controller
                     'type' => REST_Controller::TOKEN_TYPE_USER,
                 ];
 
-                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . $user->permissoes_id, 1, true)['permissoes']);
+                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
 
                 $result = [
                     'access_token' => $this->authorization_token->generateToken($token_data),
