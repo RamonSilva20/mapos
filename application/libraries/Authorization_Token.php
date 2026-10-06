@@ -109,15 +109,21 @@ class Authorization_Token
 
                 if (! empty($token_decode) and is_object($token_decode)) {
                     // Check Token API Time [API_TIME]
-                    if (empty($token_decode->API_TIME or ! is_numeric($token_decode->API_TIME))) {
+                    if (empty($token_decode->API_TIME) || ! is_numeric($token_decode->API_TIME)) {
 
                         return ['status' => false, 'message' => 'Token Time Not Define!'];
                     } else {
                         /**
                          * Check Token Time Valid
+                         *
+                         * Na renovação o token pode estar expirado, mas só dentro de uma
+                         * janela igual ao tempo de expiração: sem esse limite um token
+                         * vazado poderia ser renovado indefinidamente.
                          */
-                        $time_difference = strtotime('now') - $token_decode->API_TIME;
-                        if ($time_difference >= $this->token_expire_time && $regenToken == false) {
+                        $time_difference = time() - (int) $token_decode->API_TIME;
+                        $expire_time = (int) $this->token_expire_time;
+                        $max_age = $regenToken ? $expire_time * 2 : $expire_time;
+                        if ($time_difference >= $max_age) {
                             return ['status' => false, 'message' => 'Token Time Expire.'];
 
                         } else {

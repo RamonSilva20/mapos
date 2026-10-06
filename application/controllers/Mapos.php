@@ -75,10 +75,12 @@ class Mapos extends MY_Controller
         $termo = $this->input->get('termo');
 
         $data['results'] = $this->mapos_model->pesquisar($termo);
-        $this->data['produtos'] = $data['results']['produtos'];
-        $this->data['servicos'] = $data['results']['servicos'];
-        $this->data['os'] = $data['results']['os'];
-        $this->data['clientes'] = $data['results']['clientes'];
+
+        // Cada grupo de resultados só é exibido para quem pode visualizá-lo
+        $this->data['produtos'] = $this->hasAnyPermission(['vProduto']) ? $data['results']['produtos'] : [];
+        $this->data['servicos'] = $this->hasAnyPermission(['vServico']) ? $data['results']['servicos'] : [];
+        $this->data['os'] = $this->hasAnyPermission(['vOs']) ? $data['results']['os'] : [];
+        $this->data['clientes'] = $this->hasAnyPermission(['vCliente']) ? $data['results']['clientes'] : [];
         $this->data['view'] = 'mapos/pesquisa';
 
         return $this->layout();
