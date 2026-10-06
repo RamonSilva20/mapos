@@ -932,6 +932,8 @@ class Os extends MY_Controller
             }
         }
 
+        protegerDiretorioUpload([dirname($directory), $directory, $directory . DIRECTORY_SEPARATOR . 'thumbs']);
+
         $upload_conf = [
             'upload_path' => $directory,
             'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
@@ -960,7 +962,7 @@ class Os extends MY_Controller
                 $upload_data = $this->upload->data();
 
                 // Gera um nome de arquivo aleatório mantendo a extensão original
-                $new_file_name = uniqid() . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
+                $new_file_name = bin2hex(random_bytes(16)) . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
                 $new_file_path = $upload_data['file_path'] . $new_file_name;
 
                 rename($upload_data['full_path'], $new_file_path);
