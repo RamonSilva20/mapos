@@ -9,9 +9,11 @@ class WhoopsHook
 {
     public function bootWhoops()
     {
-        $whoopsEnabled = empty($_ENV['WHOOPS_ERROR_PAGE_ENABLED'])
-            ? true
-            : filter_var($_ENV['WHOOPS_ERROR_PAGE_ENABLED'], FILTER_VALIDATE_BOOLEAN);
+        // A página do Whoops expõe código-fonte e stack trace: só é exibida em
+        // ambiente de desenvolvimento e quando habilitada explicitamente no .env
+        $whoopsEnabled = defined('ENVIRONMENT')
+            && ENVIRONMENT === 'development'
+            && filter_var($_ENV['WHOOPS_ERROR_PAGE_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
         if (! $whoopsEnabled) {
             return;
