@@ -39,6 +39,15 @@ O **Map-OS** é um projeto de código aberto **mantido e desenvolvido pela empre
 
 Quer ajudar a melhorar o Map-OS? Leia o **[Guia de Contribuição](CONTRIBUTING.md)** para saber como preparar o ambiente de desenvolvimento, o padrão de código adotado e como abrir um Pull Request.
 
+### SYSGO - Hospedagem Parceira
+Acesse seu MAP-OS de qualquer lugar com a SYSGO, a solução de hospedagem pensada para quem busca praticidade, segurança e estabilidade.
+
+Com instalação automatizada, ambiente dedicado ao MAP-OS Oficial, suporte na configuração e utilização, backups e alta disponibilidade, a SYSGO ajuda você a manter seu sistema sempre em funcionamento com confiança.
+
+Solicite seu acesso agora: [Fale com um Especialista!](https://wa.me/sysgo)
+
+<p><img src="docs/sysgo.png" alt="SysGO - Soluções que Simplificam"></p>
+
 ### [Instalação](Instalacao_xampp_windows.md)
 
 1. Faça o download dos arquivos.
@@ -129,12 +138,6 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 ### Comandos de terminal
 
 Para listar todos os comandos de terminal disponíveis, basta executar o comando `php index.php tools` a partir da raiz do projeto, após feita todo o processo de instalação.
-
-### Hospedagem Parceira
-Em parceria com o Projeto Map-OS a SysGO oferece hospedagem de qualidade e suporte personalizado para usuários dos Map-OS com custo justo e confiabilidade.
-Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
-
-<p><img src="https://sysgo.com.br/img-externo/mapos-github.jpg" alt="SysGO - MAP-OS Cloud Hosting" style="width:50%;"></p>
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
