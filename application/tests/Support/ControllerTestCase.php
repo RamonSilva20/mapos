@@ -192,6 +192,10 @@ abstract class ControllerTestCase extends TestCase
      * em qualquer contexto e o que faz sentido silenciar é o aviso, não o
      * erro.
      *
+     * Os quatro argumentos do handler são repassados inteiros porque o
+     * _error_handler() do CI3 exige os quatro; encaminhar só o nível e a
+     * mensagem lançava ArgumentCountError no meio de um teste.
+     *
      * A volta usa restore_error_handler(), e não set_error_handler($previous).
      * set_error_handler empilha no stack, então restaurar assim deixava duas
      * entradas extras e o PHPUnit detectava isso como handler vazado do teste,
@@ -201,12 +205,12 @@ abstract class ControllerTestCase extends TestCase
     protected function ignoringCliHeaderWarnings(callable $callback): mixed
     {
         $previous = set_error_handler(
-            static function (int $level, string $message) use (&$previous): bool {
+            static function (int $level, string $message, string $file = '', int $line = 0) use (&$previous): bool {
                 if ($level === E_WARNING && str_contains($message, 'Cannot modify header information')) {
                     return true;
                 }
 
-                return $previous !== null ? (bool) $previous($level, $message) : false;
+                return $previous !== null ? (bool) $previous($level, $message, $file, $line) : false;
             }
         );
 
