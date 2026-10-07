@@ -8,7 +8,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 
 ## Tech Stack & Requirements
 
-- **Language:** PHP >= 8.4
+- **Language:** PHP >= 8.5
 - **Framework:** CodeIgniter 3 (`application/`)
 - **Database:** MySQL / MariaDB (managed via CodeIgniter Query Builder and Migrations in `application/database/migrations/`)
 - **Dependency Manager:** Composer (vendor directory configured at `application/vendor`)
