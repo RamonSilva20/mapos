@@ -147,7 +147,7 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 * [ezyang/htmlpurifier](https://github.com/ezyang/htmlpurifier)
 
 ### Requerimentos
-* PHP >= 8.4
+* PHP >= 8.5
 * MySQL >= 5.7 ou >= 8.0
 * Composer >= 2
 

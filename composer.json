@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": "^8.4",
+        "php": "^8.5",
         "ext-curl": "*",
         "ext-gd": "*",
         "mercadopago/dx-php": "^3.8.0",
@@ -20,11 +20,15 @@
         "friendsofphp/php-cs-fixer": "^3.93.0",
         "symfony/var-dumper": "^6.4.32",
         "fakerphp/faker": "^1.24.1",
+        "phpstan/phpstan": "^2.3",
         "phpunit/phpunit": "^12.5"
     },
     "scripts": {
         "format": [
             "application/vendor/bin/php-cs-fixer fix"
+        ],
+        "analyse": [
+            "application/vendor/bin/phpstan analyse --memory-limit=1G"
         ],
         "test": [
             "application/vendor/bin/phpunit"

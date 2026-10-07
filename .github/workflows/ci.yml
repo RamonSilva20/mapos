@@ -1,0 +1,211 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - v5
+  pull_request:
+
+permissions:
+  contents: read
+
+# Um job por etapa, para a falha aparecer nomeada no status do PR em vez de
+# "CI falhou" sem pista de onde.
+jobs:
+  lint:
+    name: Lint (php -l)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # A versão do PHP segue o composer.json. Se subir o requisito mínimo em
+      # um PR, este número tem que subir junto, senão o composer install falha
+      # com "your php version does not satisfy that requirement".
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: curl, gd, mbstring
+
+      # php -l em cada arquivo do projeto, menos vendor e third_party. Vale mais
+      # que o lint do composer porque o CodeIgniter 3 não é autoloadável e o
+      # composer não enxerga application/controllers.
+      #
+      # O grep no fim é o que dá sinal de falha: o php -l imprime "No syntax
+      # errors detected" em arquivo íntegro e "PHP Parse error..." no arquivo
+      # quebrado.
+      #
+      # A saída vai para um arquivo e a decisão é sobre o conteúdo, não sobre o
+      # código de saída. grep -v devolve 1 justamente quando não sobra linha
+      # nenhuma, que é o caso de um projeto inteiro sem erro de sintaxe: usar o
+      # status do grep invertia o sentido da checagem e reprovava o CI verde.
+      - name: php -l em todos os arquivos PHP
+        run: |
+          find . \
+            -type f \
+            -name '*.php' \
+            -not -path './application/vendor/*' \
+            -not -path './application/third_party/*' \
+            -not -path './vendor/*' \
+            -print0 \
+          | xargs -0 -P4 -I{} php -l {} \
+          | grep -v '^No syntax errors detected' > /tmp/lint.txt || true
+
+          if [ -s /tmp/lint.txt ]; then
+            echo "::error::Erro de sintaxe encontrado:"
+            cat /tmp/lint.txt
+            exit 1
+          fi
+
+          echo "Nenhum erro de sintaxe."
+
+      # Sem --strict: ele falha também no aviso de licença ausente, que é
+      # herdado do projeto e não tem relação com este PR. O que importa aqui é
+      # que o lock esteja em sincronia com o composer.json, e o modo normal
+      # ainda falha quando esse é o caso.
+      - name: Valida o composer.json e o lock
+        run: composer validate --no-check-all --no-check-publish
+
+      # O validate sozinho não pega lock desatualizado, então o check é
+      # explícito: composer install falha na divergência de content-hash.
+      - name: Confere que o lock está em sincronia
+        run: composer install --dry-run --no-interaction --no-scripts
+
+  cs:
+    name: Lint (php-cs-fixer)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: curl, gd, mbstring
+
+      - run: composer install --no-interaction --no-progress
+
+      - name: php-cs-fixer --dry-run
+        run: application/vendor/bin/php-cs-fixer fix --dry-run --diff
+
+  phpstan:
+    name: Análise estática (PHPStan)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: curl, gd, mbstring
+
+      - run: composer install --no-interaction --no-progress
+
+      # O baseline cobre os 189 avisos pré-existentes. O que importa é que
+      # qualquer erro novo que o baseline não cobre derruba o build.
+      - run: composer analyse
+
+  audit:
+    name: Dependências (composer audit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: curl, gd, mbstring
+
+      # Só o lock, sem instalar: o audit não precisa do código no disco.
+      - run: composer install --no-interaction --no-progress --no-scripts
+
+      # --abandoned=report não falha, mas sai como aviso no log.
+      - name: composer audit
+        run: composer audit --abandoned=report
+
+  tests:
+    name: Testes (PHPUnit)
+    runs-on: ubuntu-latest
+    # A suíte do #2828 entra na v5 em um PR próprio. Enquanto ela não estiver
+    # presente, o job é pulado em vez de quebrado.
+    #
+    # A condição fica em um step, e não no if do job: hashFiles não pode ser
+    # avaliado no contexto de job. E o checkout vem antes da guarda, porque
+    # hashFiles só enxerga arquivos que já estão no disco.
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verifica se a suíte está presente
+        id: guard
+        run: |
+          if [ -f phpunit.xml ]; then
+            echo "pulando=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "A suíte ainda não está na branch (chega com o #2828)."
+            echo "pulando=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: shivammathur/setup-php@v2
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+        with:
+          php-version: '8.5'
+          extensions: curl, gd, mbstring, sqlite3, pdo_sqlite
+
+      - run: composer install --no-interaction --no-progress
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+
+      - run: composer test
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+
+  css:
+    name: Build de CSS
+    runs-on: ubuntu-latest
+    # O Tailwind v4 (#2832) ainda não existe na v5, então não há o que construir.
+    # Este job faz o build e falha se o CSS commitado estiver desatualizado; a
+    # guarda abaixo o mantém verde até o package.json existir.
+    #
+    # A condição fica em um step, e não no if do job: hashFiles não pode ser
+    # avaliado no contexto de job. E o checkout vem antes da guarda, porque
+    # hashFiles só enxerga arquivos que já estão no disco.
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verifica se o projeto npm está presente
+        id: guard
+        run: |
+          if [ -f package.json ]; then
+            echo "pulando=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "O package.json ainda não está na branch (chega com o #2832)."
+            echo "pulando=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+        with:
+          node-version: '22'
+          # cache: npm exige package-lock.json. Sem o manifest, o setup-node
+          # falha com "Dependencies lock file is not found", que é como este
+          # job quebrava antes de a guarda existir.
+          cache: ${{ steps.guard.outputs.pulando != '1' && 'npm' || '' }}
+
+      - run: npm ci
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+
+      - name: npm run build
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+        run: npm run build
+
+      - name: Verifica se o CSS compilado foi commitado
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+        run: |
+          if [ -n "$(git status --porcelain -- '*.css')" ]; then
+            echo "::error::O CSS compilado está desatualizado. Rode 'npm run build' e commite o resultado."
+            git status --porcelain -- '*.css'
+            git --no-pager diff -- '*.css' | head -100
+            exit 1
+          fi

@@ -16,6 +16,9 @@ if (! defined('BASEPATH')) {
  */
 class Sqltoci
 {
+    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor */
+    public $ci;
+
     public $db_user;
 
     public $db_pass;
