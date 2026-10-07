@@ -56,7 +56,7 @@ Descreva **o problema** que você quer resolver, não apenas a solução imagina
 
 ### Requisitos
 
-- PHP >= 8.4, com as extensões `curl` e `gd`
+- PHP >= 8.5, com as extensões `curl` e `gd`
 - MySQL >= 5.7 (recomendado 8.0+)
 - Composer >= 2
 
