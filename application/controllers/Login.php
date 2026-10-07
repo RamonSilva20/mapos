@@ -74,11 +74,25 @@ class Login extends CI_Controller
         exit();
     }
 
+    /**
+     * Diz se a conta está expirada.
+     *
+     * Sem data cadastrada a conta não expira: usuarios.dataExpiracao é
+     * date DEFAULT NULL e o servidor não exige preenchimento, então tratar
+     * o vazio como expirado trancava o login de quem nunca teve expiração
+     * configurada — com a mensagem enganosa de "conta expirada".
+     *
+     * @param  string|null  $data_banco  Data no formato aceito por DateTime, ou null
+     */
     private function chk_date($data_banco)
     {
-        $data_banco = new DateTime($data_banco);
-        $data_hoje = new DateTime('now');
+        // O trim importa: string só com espaços é truthy em PHP, então com
+        // empty() um campo enviado em branco cairia no new DateTime() e
+        // voltaria a ser lido como expirado.
+        if (trim((string) $data_banco) === '') {
+            return false;
+        }
 
-        return $data_banco < $data_hoje;
+        return new DateTime($data_banco) < new DateTime('now');
     }
 }
