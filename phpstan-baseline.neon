@@ -1,0 +1,877 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Binary operation "\+" between \(array\<string\>\|string\) and float results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Financeiro.php
+
+		-
+			message: '#^Call to function is_numeric\(\) with float will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: application/controllers/Financeiro.php
+
+		-
+			message: '#^Function date_format invoked with 1 parameter, 2 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: application/controllers/Financeiro.php
+
+		-
+			message: '#^Loose comparison using \!\= between non\-falsy\-string and null will always evaluate to true\.$#'
+			identifier: notEqual.alwaysTrue
+			count: 1
+			path: application/controllers/Financeiro.php
+
+		-
+			message: '#^Parameter \#1 \$object of function date_format expects DateTimeInterface, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/controllers/Financeiro.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 2
+			path: application/controllers/Financeiro.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 5\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Mine.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 6\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Mine.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 10\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Mine.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 11\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Mine.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: application/controllers/Mine.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 5\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Os.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 6\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Os.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 10\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Os.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 11\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Os.php
+
+		-
+			message: '#^Loose comparison using \=\= between true and '''' will always evaluate to false\.$#'
+			identifier: equal.alwaysFalse
+			count: 1
+			path: application/controllers/Os.php
+
+		-
+			message: '#^Offset ''IMPRIMIR_ANEXOS'' on non\-empty\-array\<mixed\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: application/controllers/Os.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: application/controllers/Os.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 2
+			path: application/controllers/Relatorios.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 5\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Vendas.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 6\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Vendas.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 10\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Vendas.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 11\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/Vendas.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: application/controllers/Vendas.php
+
+		-
+			message: '#^Binary operation "\*" between 20\|non\-empty\-array\|non\-falsy\-string and non\-empty\-array\|non\-falsy\-string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/api/v1/ApiController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/ApiController.php
+
+		-
+			message: '#^Binary operation "\*" between 20\|non\-empty\-array\|non\-falsy\-string and non\-empty\-array\|non\-falsy\-string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/api/v1/ClientesController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/ClientesController.php
+
+		-
+			message: '#^Binary operation "\*" between non\-empty\-array\|non\-falsy\-string and 20\|non\-empty\-array\|non\-falsy\-string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/api/v1/OsController.php
+
+		-
+			message: '#^Loose comparison using \=\= between true and '''' will always evaluate to false\.$#'
+			identifier: equal.alwaysFalse
+			count: 2
+			path: application/controllers/api/v1/OsController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/OsController.php
+
+		-
+			message: '#^Variable \$new_file_name might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: application/controllers/api/v1/OsController.php
+
+		-
+			message: '#^Variable \$totalProdutos might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: application/controllers/api/v1/OsController.php
+
+		-
+			message: '#^Variable \$totalServico might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: application/controllers/api/v1/OsController.php
+
+		-
+			message: '#^Variable \$url might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: application/controllers/api/v1/OsController.php
+
+		-
+			message: '#^Binary operation "\*" between 20\|non\-empty\-array\|non\-falsy\-string and non\-empty\-array\|non\-falsy\-string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/api/v1/ProdutosController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/ProdutosController.php
+
+		-
+			message: '#^Binary operation "\*" between 20\|non\-empty\-array\|non\-falsy\-string and non\-empty\-array\|non\-falsy\-string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/api/v1/ServicosController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application/libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/ServicosController.php
+
+		-
+			message: '#^Binary operation "\*" between 20\|non\-empty\-array\|non\-falsy\-string and non\-empty\-array\|non\-falsy\-string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/controllers/api/v1/UsuariosController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/UsuariosController.php
+
+		-
+			message: '#^Variable \$user in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: application/controllers/api/v1/UsuariosController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/client/ClientCobrancasController.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$idVendas \(int\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: application/controllers/api/v1/client/ClientComprasController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/client/ClientComprasController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/client/ClientLoginController.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$id \(int\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: application/controllers/api/v1/client/ClientOsController.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application//libraries/REST_Controller\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/controllers/api/v1/client/ClientOsController.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Comparison operation "\<" between 0 and 5 is always true\.$#'
+			identifier: smaller.alwaysTrue
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Default value of the parameter \#1 \$data \(string\) of function create_captcha\(\) is incompatible with type array\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Function create_captcha\(\) should return string but returns array\<string, float\|string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Function create_captcha\(\) should return string but returns false\.$#'
+			identifier: return.type
+			count: 5
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Parameter \#2 \$max of function mt_rand expects int, float given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Parameter \#2 \$x1 of function imageline expects int, float given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Parameter \#3 \$y1 of function imageline expects int, float given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Parameter \#4 \$x2 of function imageline expects int, float given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Parameter \#5 \$y2 of function imageline expects int, float given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between mixed and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 2
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Unused result of "or" operator\.$#'
+			identifier: logicalOr.resultUnused
+			count: 2
+			path: application/helpers/captcha_helper.php
+
+		-
+			message: '#^Variable \$arr might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: application/helpers/codegen_helper.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(bool	whether or not the content is an image file\)\: Unexpected token "whether", expected variable at offset 56 on line 5$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: application/helpers/security_helper.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(string\)\: Unexpected token "\\n \* ", expected variable at offset 40 on line 4$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: application/helpers/security_helper.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<1, 11\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/helpers/validation_helper.php
+
+		-
+			message: '#^Call to function is_array\(\) with non\-empty\-array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^Call to static method decode\(\) on an unknown class Firebase\\JWT\\JWT\.$#'
+			identifier: class.notFound
+			count: 1
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^Call to static method encode\(\) on an unknown class Firebase\\JWT\\JWT\.$#'
+			identifier: class.notFound
+			count: 1
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^PHPDoc tag @return has invalid value \(\: user informations\)\: Unexpected token "\:", expected type at offset 60 on line 4$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^Path in require_once\(\) "/var/www/html/application/third_party/php\-jwt/BeforeValidException\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^Path in require_once\(\) "/var/www/html/application/third_party/php\-jwt/ExpiredException\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^Path in require_once\(\) "/var/www/html/application/third_party/php\-jwt/JWT\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^Path in require_once\(\) "/var/www/html/application/third_party/php\-jwt/SignatureInvalidException\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: application/libraries/Authorization_Token.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 5\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Binary operation "\*" between string and 8\|9\|int\<2, 6\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 10\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Binary operation "\*" between string and int\<2, 11\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Method Format\:\:to_csv\(\) should return string but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between null and null will always evaluate to false\.$#'
+			identifier: notIdentical.alwaysFalse
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between null and null will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 4
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: application/libraries/Format.php
+
+		-
+			message: '#^Array has 2 duplicate keys with value ''message'' \(''message'', ''message''\)\.$#'
+			identifier: array.duplicateKey
+			count: 1
+			path: application/libraries/Gateways/Asaas.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 5
+			path: application/libraries/Gateways/BasePaymentGateway.php
+
+		-
+			message: '#^Call to an undefined method Gerencianet\:\:cancelCharge\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/Gateways/GerencianetSdk.php
+
+		-
+			message: '#^Call to an undefined method Gerencianet\:\:createOneStepCharge\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/Gateways/GerencianetSdk.php
+
+		-
+			message: '#^Call to an undefined method Gerencianet\:\:createOneStepLink\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/Gateways/GerencianetSdk.php
+
+		-
+			message: '#^Call to an undefined method Gerencianet\:\:detailCharge\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/Gateways/GerencianetSdk.php
+
+		-
+			message: '#^Call to an undefined method Gerencianet\:\:settleCharge\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/Gateways/GerencianetSdk.php
+
+		-
+			message: '#^Property GerencianetSdk\:\:\$gerenciaNetApi \(Gerencianet\) does not accept Efi\\EfiPay\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: application/libraries/Gateways/GerencianetSdk.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: application/libraries/Gateways/MercadoPago.php
+
+		-
+			message: '#^Call to function is_object\(\) with array will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: application/libraries/Gateways/MercadoPago.php
+
+		-
+			message: '#^Call to method getMessage\(\) on an unknown class MercadoPago\\Exceptions\\MPException\.$#'
+			identifier: class.notFound
+			count: 2
+			path: application/libraries/Gateways/MercadoPago.php
+
+		-
+			message: '#^Caught class MercadoPago\\Exceptions\\MPException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: application/libraries/Gateways/MercadoPago.php
+
+		-
+			message: '#^Parameter \#1 \$message of class Exception constructor expects string, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/libraries/Gateways/MercadoPago.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: application/libraries/Gateways/MercadoPago.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: application/libraries/Gateways/MercadoPago.php
+
+		-
+			message: '#^Method Github_updater\:\:get_update_comments\(\) should return array but returns false\.$#'
+			identifier: return.type
+			count: 1
+			path: application/libraries/Github_updater.php
+
+		-
+			message: '#^Access to an undefined property MY_Email\:\:\$_bcc_array\.$#'
+			identifier: property.notFound
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Access to an undefined property MY_Email\:\:\$_body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Call to an undefined method MY_Email\:\:bcc\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Call to an undefined method MY_Email\:\:cc\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Call to an undefined method MY_Email\:\:message\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Call to an undefined method MY_Email\:\:print_debugger\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Call to an undefined method MY_Email\:\:to\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Method CI_Email\:\:__construct\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: application/libraries/MY_Email.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Call to function is_bool\(\) with bool will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Call to function is_object\(\) with \*NEVER\* will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Constant CI_VERSION not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Empty array passed to foreach\.$#'
+			identifier: foreach.emptyArray
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Method REST_Controller\:\:_check_login\(\) should return bool but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Path in require\(\) "/var/www/html/application/libraries/Format\.php" is not a file or it does not exist\.$#'
+			identifier: require.fileNotFound
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between true and true will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Undefined variable\: \$ldaphost$#'
+			identifier: variable.undefined
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Variable \$ldaphost in isset\(\) is never defined\.$#'
+			identifier: isset.variable
+			count: 1
+			path: application/libraries/REST_Controller.php
+
+		-
+			message: '#^Call to function is_array\(\) with string\|null will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: application/libraries/Sqltoci.php
+
+		-
+			message: '#^Default value of the parameter \#1 \$params \(array\) of method Sqltoci\:\:init_config\(\) is incompatible with type type\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: application/libraries/Sqltoci.php
+
+		-
+			message: '#^Iterating over an object of an unknown class type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: application/libraries/Sqltoci.php
+
+		-
+			message: '#^Method Sqltoci\:\:generate\(\) should return bool\|string but empty return statement found\.$#'
+			identifier: return.empty
+			count: 2
+			path: application/libraries/Sqltoci.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, type given\.$#'
+			identifier: argument.type
+			count: 1
+			path: application/libraries/Sqltoci.php
+
+		-
+			message: '#^Parameter \$params of method Sqltoci\:\:init_config\(\) has invalid type type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: application/libraries/Sqltoci.php
+
+		-
+			message: '#^Property Sqltoci\:\:\$ci \(object\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: application/libraries/Sqltoci.php
+
+		-
+			message: '#^Variable \$usuarios might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: application/models/Api_model.php
+
+		-
+			message: '#^Call to an undefined method Conecte_model\:\:valorTotalOS\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: application/models/Conecte_model.php
+
+		-
+			message: '#^Call to method setAmount\(\) on an unknown class StaticPayload\.$#'
+			identifier: class.notFound
+			count: 1
+			path: application/models/Conecte_model.php
+
+		-
+			message: '#^Instantiated class StaticPayload not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: application/models/Conecte_model.php
+
+		-
+			message: '#^Variable \$row_set might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: application/models/Financeiro_model.php
+
+		-
+			message: '#^Variable \$row_set might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: application/models/Garantias_model.php
+
+		-
+			message: '#^Method Piggly\\Pix\\StaticPayload\:\:setDescription\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: application/models/Os_model.php
+
+		-
+			message: '#^Variable \$row_set might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: application/models/Os_model.php
+
+		-
+			message: '#^Method Piggly\\Pix\\StaticPayload\:\:setDescription\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: application/models/Vendas_model.php
+
+		-
+			message: '#^Variable \$row_set might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: application/models/Vendas_model.php
+
+		-
+			message: '#^Variable \$dashboard_url might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/finished.php
+
+		-
+			message: '#^Variable \$installed might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/finished.php
+
+		-
+			message: '#^Variable \$settings might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/finished.php
+
+		-
+			message: '#^Variable \$dashboard_url might not be defined\.$#'
+			identifier: variable.undefined
+			count: 9
+			path: install/view/index.php
+
+		-
+			message: '#^Variable \$installed might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/index.php
+
+		-
+			message: '#^Variable \$settings might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: install/view/index.php
+
+		-
+			message: '#^Variable \$all_requirement_success might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/pre-installation.php
+
+		-
+			message: '#^Variable \$allow_url_fopen_success might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/pre-installation.php
+
+		-
+			message: '#^Variable \$current_php_version might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/pre-installation.php
+
+		-
+			message: '#^Variable \$php_version_required might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/pre-installation.php
+
+		-
+			message: '#^Variable \$php_version_success might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: install/view/pre-installation.php
+
+		-
+			message: '#^Variable \$settings might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: install/view/pre-installation.php

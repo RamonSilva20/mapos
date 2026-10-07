@@ -6,6 +6,19 @@ use Libraries\Gateways\Contracts\PaymentGateway;
 
 abstract class BasePaymentGateway implements PaymentGateway
 {
+    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor dos gateways */
+    protected $ci;
+
+    /**
+     * Existe só para satisfazer o PHPStan.
+     *
+     * As subclasses chamam parent::__construct(), mas esta classe não tem
+     * construtor próprio, e o PHPStan resolve a chamada contra CI_Model/_
+     * Controller e acusa "undefined static method __construct()".
+     */
+    public function __construct()
+    {
+    }
     public function gerarCobranca($id, $tipo, $metodoPagamento, $data = [])
     {
         switch ($metodoPagamento) {

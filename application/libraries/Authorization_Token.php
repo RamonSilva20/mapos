@@ -21,6 +21,9 @@ use Firebase\JWT\JWT;
 
 class Authorization_Token
 {
+    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor */
+    protected $CI;
+
     /**
      * Token Key
      */
@@ -62,7 +65,7 @@ class Authorization_Token
     /**
      * Generate Token
      *
-     * @param: {array} data
+     * @param  array  $data
      */
     public function generateToken($data = null)
     {
@@ -149,7 +152,7 @@ class Authorization_Token
     /**
      * Token Header Check
      *
-     * @param: request headers
+     * @param  array  $headers
      */
     private function tokenIsExist($headers)
     {

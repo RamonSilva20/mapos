@@ -6,6 +6,9 @@ if (! defined('BASEPATH')) {
 
 class Github_updater
 {
+    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor */
+    public $ci;
+
     const API_URL = 'https://api.github.com/repos/';
 
     const GITHUB_URL = 'https://github.com/';
