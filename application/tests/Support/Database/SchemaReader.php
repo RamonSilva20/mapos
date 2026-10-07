@@ -120,11 +120,14 @@ final class SchemaReader
     /**
      * O DEFAULT declarado de uma coluna, ou null quando a coluna não tem um.
      *
-     * O information_schema não é unânime sobre como representa a ausência: o
-     * MySQL 8 devolve string vazia, enquanto outros devolvem SQL NULL. Por isso
-     * a ausência é normalizada para null aqui — o valor que o MySQL 8 devolve
-     * seria indistinguível de uma coluna defaultada para a string vazia, e a
-     * diferença interessa para quem compara.
+     * A ausência é SQL NULL no `information_schema`, e é null aqui. Uma versão
+     * anterior desta função também devolvia null para a string vazia, achando que
+     * o MySQL 8 não distinguia as duas coisas; ele distingue, e a confusão custava
+     * uma coluna que o MySQL mostra com `DEFAULT ''` e que outra ponta lê como
+     * coluna sem default nenhum. O
+     * sintoma é silencioso dos dois lados: quem lê null não sabe se a coluna tem
+     * default vazio, e o gate de paridade declarava em paridade um default que
+     * só existe de um lado.
      *
      * Um DEFAULT presente não é convertido: `NULL` como default chega como string
      * 'NULL', e `'0'` chega como '0'. A conversão fica de fora de propósito,
@@ -140,7 +143,7 @@ final class SchemaReader
 
         $default = $statement->fetchColumn();
 
-        if ($default === false || $default === null || $default === '') {
+        if ($default === false || $default === null) {
             return null;
         }
 
@@ -148,19 +151,77 @@ final class SchemaReader
     }
 
     /**
-     * O schema da aplicação como mapa tabela => coluna => tipo, ordenado e sem as
-     * tabelas de controle.
+     * A definição completa de cada coluna, como mapa tabela => coluna => atributos.
      *
-     * A forma que o gate de paridade compara, e a única que o projeto documenta
-     * como "o schema": só definição de coluna. Charset, collation e ordem de
-     * colunas mudam entre o dump e o dbforge sem significar divergência, e compará-los
-     * só produziria ruído.
+     * São seis atributos porque cada um deles já divergiu uma vez, ou divergiria em
+     * silêncio se o gate não olhasse:
      *
-     * @return array<string, array<string, string>>
+     *   - `type`: o que o gate já comparava.
+     *   - `default`: um `DEFAULT ''` que só existe de um lado muda o que a aplicação
+     *     grava numa coluna que ninguém preenche. Foi o defeito que a migration
+     *     20261005131000 removeu de `usuarios.cep`, e o gate não teria dito nada.
+     *   - `charset` e `collation`: um banco em `latin1` e um em `utf8mb4` aceitam os
+     *     mesmos tipos e devolvem as mesmas linhas, e a diferença só aparece quando
+     *     alguém grava um emoji. Uma coluna numérica não tem charset, e daí o null.
+     *   - `nullable`: muda o que o MySQL grava numa coluna que o código deixa vazia.
+     *   - `extra`: `auto_increment` e as expressões geradas. Uma coluna `id` que um
+     *     lado perdeu o `AUTO_INCREMENT` é um esquema que não insere.
+     *
+     * A ausência de default é null e não string vazia, e a distinção é do MySQL:
+     * `information_schema` devolve SQL NULL para a coluna sem DEFAULT e a string
+     * vazia para a coluna com `DEFAULT ''`. Ver columnDefault(), que é o mesmo
+     * cuidado aplicado a uma coluna só.
+     *
+     * @return array<string, array<string, array{type: string, default: ?string, charset: ?string, collation: ?string, nullable: bool, extra: string}>>
+     */
+    public static function columnSchema(PDO $pdo, string $database): array
+    {
+        $statement = $pdo->prepare(
+            'SELECT table_name, column_name, column_type, column_default, is_nullable,
+                    character_set_name, collation_name, extra
+             FROM information_schema.columns
+             WHERE table_schema = ? ORDER BY table_name, ordinal_position'
+        );
+        $statement->execute([$database]);
+
+        $columns = [];
+
+        foreach ($statement->fetchAll() as $row) {
+            $default = $row['COLUMN_DEFAULT'];
+
+            $columns[(string) $row['TABLE_NAME']][(string) $row['COLUMN_NAME']] = [
+                'type' => (string) $row['COLUMN_TYPE'],
+                'default' => $default === null ? null : (string) $default,
+                'charset' => $row['CHARACTER_SET_NAME'] === null ? null : (string) $row['CHARACTER_SET_NAME'],
+                'collation' => $row['COLLATION_NAME'] === null ? null : (string) $row['COLLATION_NAME'],
+                'nullable' => (string) $row['IS_NULLABLE'] === 'YES',
+                'extra' => (string) $row['EXTRA'],
+            ];
+        }
+
+        return $columns;
+    }
+
+    /**
+     * O schema da aplicação como mapa tabela => coluna => definição completa,
+     * ordenado e sem as tabelas de controle.
+     *
+     * A forma que o gate de paridade compara. Antes comparava só o tipo, o que
+     * deixava passar de tudo o que importa mais: um charset, um default e um
+     * `AUTO_INCREMENT` divergente entre o banco.sql e as migrations é uma
+     * instalação que se comporta diferente da atualização, e nenhuma delas erra
+     * alto o bastante para alguém perceber.
+     *
+     * A ordem de colunas NÃO é comparada e nem entra aqui: `SHOW CREATE TABLE`
+     * devolve as colunas na ordem do ordinal, e tanto o dump quanto a cadeia
+     * produzem essa ordem, mas um `ALTER TABLE MODIFY` que mova uma coluna para o
+     * fim muda a ordem sem mudar nada do que a aplicação enxerga.
+     *
+     * @return array<string, array<string, array{type: string, default: ?string, charset: ?string, collation: ?string, nullable: bool, extra: string}>>
      */
     public static function applicationSchema(PDO $pdo, string $database): array
     {
-        $columns = self::columnTypes($pdo, $database);
+        $columns = self::columnSchema($pdo, $database);
 
         $schema = [];
 
@@ -169,6 +230,39 @@ final class SchemaReader
         }
 
         return $schema;
+    }
+
+    /**
+     * A collation de cada tabela, como mapa tabela => collation.
+     *
+     * O companheiro do nível de coluna que applicationSchema() compara. Sem ele o
+     * gate é cego para uma tabela sem coluna de texto — `itens_de_vendas` — porque
+     * `information_schema.columns` devolve CHARACTER_SET_NAME null para toda coluna
+     * numérica, e sobra pouco para comparar num schema em que o que diverge é o
+     * DEFAULT da própria tabela. TABLE_COLLATION é onde esse defeito aparece.
+     *
+     * Mesma exclusão das tabelas de controle e a mesma disciplina de
+     * ordenação de tableNames(): quem lê compara depois, e comparar exige ordem
+     * estável.
+     *
+     * @return array<string, string> tabela => collation
+     */
+    public static function tableCollations(PDO $pdo, string $database): array
+    {
+        $statement = $pdo->prepare(
+            "SELECT table_name, table_collation FROM information_schema.tables
+             WHERE table_schema = ? AND table_type = 'BASE TABLE'
+             ORDER BY table_name"
+        );
+        $statement->execute([$database]);
+
+        $collations = [];
+
+        foreach ($statement->fetchAll() as $row) {
+            $collations[(string) $row['TABLE_NAME']] = (string) $row['TABLE_COLLATION'];
+        }
+
+        return array_diff_key($collations, array_flip(self::CONTROL_TABLES));
     }
 
     /**
@@ -194,21 +288,23 @@ final class SchemaReader
     /**
      * Os bancos cujo nome casa com um padrão, em ordem estável.
      *
-     * O `LIKE` chega aqui como argumento, e o `ESCAPE` do MySQL é o que permite
-     * que a base com underscore seja comparada como wildcard. Sem o `ESCAPE`, um
-     * nome de base com `_` casaria com qualquer caractere, e a busca por
-     * `mapos_1_test` traria `maposX1_test` junto — que o chamador pode apagar.
+     * O `LIKE` chega aqui como argumento com o coringa que o chamador quer usar:
+     * `%` atravessa sem ser escapado, porque é ele que torna `mapos_%_test` um
+     * padrão de busca. `_` e `\` são escapados, e é esse escape que impede o
+     * underscore do nome de um worker (`mapos_1_test`) de casar com qualquer
+     * caractere — sem ele a busca traria `maposX1_test` junto, que o chamador pode
+     * apagar.
      *
-     * O `default` do escape é o que torna isso seguro: sem o segundo argumento de
-     * `LIKE`, o MySQL usa a barra invertida, e o padrão que o chamador escreve já
-     * precisa ter escapado os coringas. Por isso o método escapa `\`, `_` e `%` do
-     * padrão recebido, e quem chama passa a base como está.
+     * O `%` já esteve na lista de escape, e o defeito era silencioso: o padrão do
+     * `drop-worker-databases.php` virava `mapos\_\%\_test`, não casava com banco
+     * algum, e o script respondia "Nenhum banco de worker para apagar" com quatro
+     * na frente. Escapar o coringa de quem chama é transformar a busca em nada.
      *
      * @return list<string>
      */
     public static function databasesLike(PDO $pdo, string $pattern): array
     {
-        $escaped = str_replace(['\\', '_', '%'], ['\\\\', '\\_', '\\%'], $pattern);
+        $escaped = str_replace(['\\', '_'], ['\\\\', '\\_'], $pattern);
 
         $statement = $pdo->prepare(
             'SELECT SCHEMA_NAME FROM information_schema.SCHEMATA

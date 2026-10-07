@@ -196,7 +196,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
     </div>
 </div>
 
-<?= esc($modalGerarPagamento) ?>
+<?= $modalGerarPagamento ?>
 
 <!-- Modal PIX -->
 <div id="modal-pix" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"

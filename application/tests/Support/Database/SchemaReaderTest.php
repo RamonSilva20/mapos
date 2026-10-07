@@ -183,6 +183,25 @@ final class SchemaReaderTest extends TestCase
             'A diferença entre a lista crua e a de aplicação tem que ser só as tabelas de controle.'
         );
 
+        $this->assertArrayHasKey(
+            'idOs',
+            $schema['os'],
+            'A aplicação compara coluna contra coluna, então a coluna precisa ser a chave interna.'
+        );
+        $this->assertSame(
+            [
+                'type',
+                'default',
+                'charset',
+                'collation',
+                'nullable',
+                'extra',
+            ],
+            array_keys($schema['os']['idOs']),
+            'O gate percorre os atributos por esta lista. Um atributo novo aqui e ausente na lista seria '
+                . 'lido de um banco e nunca comparado, e um atributo fora de ordem muda a ordem das linhas do relatório.'
+        );
+
         $sorted = array_keys($schema);
         sort($sorted, SORT_STRING);
 
@@ -192,6 +211,110 @@ final class SchemaReaderTest extends TestCase
             'A ordem vem do ORDER BY de tableNames(); um ksort aqui seria redundante, e perdê-lo '
                 . 'faria o assertSame do gate de paridade passar a comparar ordem.'
         );
+    }
+
+    /**
+     * O DEFAULT ausente é null, e o `DEFAULT ''` é string vazia.
+     *
+     * O MySQL distingue os dois: `information_schema` devolve SQL NULL para a coluna
+     * sem DEFAULT e a string vazia para a coluna com `DEFAULT ''`. A leitura
+     * precisa preservar essa distinção porque é a diferença entre uma coluna que
+     * grava vazio quando o código omite o valor e uma coluna que falha — e a
+     * migration 20261005131000 existe por causa dela, removendo um `DEFAULT
+     * '70005-115'` que vinha de um endereço de desenvolvimento real.
+     *
+     * `usuarios.cep` é a coluna que afirma as duas metades: `DEFAULT ''` depois da
+     * migration, e o tipo `varchar(9)`, que é o que o `DEFAULT ''` acompanha.
+     */
+    #[Test]
+    public function testAnEmptyStringDefaultIsReadAsSuchAndAnAbsentDefaultAsNull(): void
+    {
+        $test = TestDatabase::fromEnvironment();
+        $pdo = self::database();
+
+        $this->assertSame(
+            '',
+            SchemaReader::columnDefault($pdo, $test->database(), 'usuarios', 'cep'),
+            'DEFAULT \'\' é string vazia, e não ausência de default.'
+        );
+
+        $this->assertNull(
+            SchemaReader::columnDefault($pdo, $test->database(), 'categorias', 'categoria'),
+            'Uma coluna que existe e não declara DEFAULT também é null, e é o mesmo par que a string vazia precisa diferenciar.'
+        );
+
+        $schema = SchemaReader::columnSchema($pdo, $test->database());
+
+        $this->assertSame(
+            '',
+            $schema['usuarios']['cep']['default'],
+            'A leitura estruturada precisa distinguir o mesmo par que columnDefault() distingue.'
+        );
+        $this->assertNull(
+            $schema['categorias']['categoria']['default'],
+            'E precisa ler a coluna sem DEFAULT como null, senão as duas pontas do gate comparam vazio com vazio.'
+        );
+    }
+
+    /**
+     * Os seis atributos chegam com o valor que o MySQL devolve, não normalizados.
+     *
+     * Uma coluna numérica não tem charset, e daí o null em `charset` e `collation`.
+     * Uma coluna de texto tem, e é o par que decide se o banco guarda um emoji. O
+     * teste afirma os dois numa coluna só de cada tipo porque normalizar o vazio
+     * para `''` faria as duas indistinguíveis.
+     */
+    #[Test]
+    public function testTheStructuralColumnMapSeparatesTextFromNumericColumns(): void
+    {
+        $test = TestDatabase::fromEnvironment();
+        $pdo = self::database();
+
+        $schema = SchemaReader::columnSchema($pdo, $test->database());
+
+        $this->assertSame(
+            'utf8mb4',
+            $schema['os']['descricaoProduto']['charset'],
+            'Uma coluna de texto declara o charset em que a aplicação espera gravar.'
+        );
+        $this->assertSame(
+            'utf8mb4_general_ci',
+            $schema['os']['descricaoProduto']['collation']
+        );
+
+        $this->assertNull($schema['os']['idOs']['charset'], 'Um INT não tem charset, e o null é essa informação.');
+        $this->assertNull($schema['os']['idOs']['collation']);
+
+        $this->assertSame('auto_increment', $schema['os']['idOs']['extra']);
+        $this->assertFalse($schema['os']['idOs']['nullable']);
+    }
+
+    /**
+     * A collation de tabela é lida do nível que a coluna não enxerga.
+     *
+     * `itens_de_vendas` é a tabela que o defeito 2 escondia: só colunas numéricas,
+     * então nenhum CHARACTER_SET_NAME para comparar. A collation dela mora em
+     * TABLE_COLLATION, e é esta leitura que a expõe ao gate.
+     */
+    #[Test]
+    public function testTheTableCollationsExposeTheTableLevelDefault(): void
+    {
+        $test = TestDatabase::fromEnvironment();
+        $pdo = self::database();
+
+        $collations = SchemaReader::tableCollations($pdo, $test->database());
+
+        $this->assertArrayNotHasKey('migrations', $collations, 'Tabela de controle fica de fora, como em applicationSchema().');
+        $this->assertArrayHasKey('itens_de_vendas', $collations, 'Uma tabela sem coluna de texto ainda tem collation no nível da tabela.');
+        $this->assertSame(
+            'utf8mb4_general_ci',
+            $collations['itens_de_vendas'],
+            'A cadeia de migrations cria as tabelas com a collation do config/database.php.'
+        );
+
+        $sorted = array_keys($collations);
+        sort($sorted, SORT_STRING);
+        $this->assertSame($sorted, array_keys($collations), 'A leitura segue a mesma ordem estável de tableNames().');
     }
 
     /**
@@ -223,41 +346,61 @@ final class SchemaReaderTest extends TestCase
     }
 
     /**
-     * O `LIKE` de `databasesLike()` escapa os coringas, e é por isso que ele acha
-     * o worker e não o molde de nome dele.
+     * A busca por worker acha o que existe, e não o molde de nome dele.
      *
      * O nome do modelo é `mapos_test` e o de um worker é `mapos_1_test`: os dois
-     * casam com `mapos%_test`, mas só o segundo é worker, e é o script de limpeza que
-     * decide o que pode apagar. Sem o `ESCAPE`, o `_` do padrão casa com qualquer
-     * caractere e a busca por `mapos_1_test` traz `maposX1_test` junto — que o
-     * chamador pode apagar, porque o nome real passou pelo filtro.
+     * casam com `mapos%_test`, mas só o segundo é worker, e é o script de limpeza
+     * que decide o que pode apagar. O `_` do padrão é escapado para casar com `_`
+     * e não com qualquer caractere — senão a busca traria `maposX1_test` junto.
+     *
+     * O `%` do padrão, ao contrário, É o coringa: ele já esteve na lista de escape
+     * e o padrão virava `mapos\_\%\_test`, que não casava com banco algum — o
+     * script respondia "Nenhum banco de worker para apagar" com quatro na frente.
+     * É por isso que o caso cria um banco com cara de worker antes de buscar: a
+     * primeira asserção é resultado não vazio, e vazio é exatamente como o
+     * defeito se camuflava.
      */
     #[Test]
-    public function testTheWildcardSearchTreatsTheUnderscoreAsText(): void
+    public function testTheWildcardSearchFindsWorkerDatabasesAndNotTheModel(): void
     {
         $test = TestDatabase::fromEnvironment();
         $pdo = self::database();
 
-        $base = DatabaseGuard::modelBase($test->templateDatabase());
-        $found = SchemaReader::databasesLike($pdo, $base . '_%_test');
+        $probe = DatabaseGuard::workerDatabaseName('mapos_probe', 'reader');
+        $test->recreate($probe);
 
-        $this->assertNotContains(
-            $test->templateDatabase(),
-            $found,
-            'O modelo NÃO pode aparecer no padrão do worker, e essa é a razão de o padrão exigir '
-                . 'um token no meio. `mapos_test` contra `mapos\_%\_test` é o `LIKE` recusando o '
-                . 'modelo por construção, e é o que impede o script de limpeza de derrubá-lo: '
-                . 'reconstruí-lo custa os ~9,8s da cadeia de migrations.'
-        );
+        try {
+            $base = DatabaseGuard::modelBase($test->templateDatabase());
+            $found = SchemaReader::databasesLike($pdo, $base . '_%_test');
 
-        foreach ($found as $name) {
-            $this->assertMatchesRegularExpression(
-                '/^' . preg_quote($base, '/') . '_[^_]+_test$/',
-                $name,
-                'O padrão não pode trazer um nome em que o token tem mais de um caractere. '
-                    . 'Um `_` do padrão que casou com `_` está funcionando como coringa, e é '
-                    . 'exatamente o que faria a limpeza apagar um banco que ninguém criou.'
+            $this->assertNotEmpty(
+                $found,
+                'O padrão de worker não achou o banco que este caso acabou de criar. O `%` do '
+                    . 'padrão não pode ser escapado: ele é o coringa de quem chama.'
             );
+
+            $this->assertContains($probe, $found, 'O banco de sonda deste caso precisa aparecer na busca.');
+
+            $this->assertNotContains(
+                $test->templateDatabase(),
+                $found,
+                'O modelo NÃO pode aparecer no padrão do worker, e essa é a razão de o padrão exigir '
+                    . 'um token no meio. `mapos_test` contra `mapos\_%\_test` é o `LIKE` recusando o '
+                    . 'modelo por construção, e é o que impede o script de limpeza de derrubá-lo: '
+                    . 'reconstruí-lo custa os ~9,8s da cadeia de migrations.'
+            );
+
+            foreach ($found as $name) {
+                $this->assertTrue(
+                    DatabaseGuard::isWorkerDatabaseName($name, $test->templateDatabase()),
+                    "A busca achou '{$name}', que o nome de worker derive de '{$test->templateDatabase()}': "
+                        . 'a refazenda do nome é o que separa a limpeza de um DROP preguiçoso. Um `_` '
+                        . 'do padrão que casou com `_` está funcionando como coringa, e é exatamente o '
+                        . 'que faria a limpeza apagar um banco que ninguém criou.'
+                );
+            }
+        } finally {
+            $test->drop($probe);
         }
     }
 

@@ -6,6 +6,7 @@ use PHPUnit\Framework\Attributes\AfterClass;
 use PHPUnit\Framework\Attributes\BeforeClass;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\App\ChildEnvironment;
 use Tests\Support\Database\TestDatabase;
 
 /**
@@ -294,46 +295,26 @@ final class FrontendBoundaryTest extends TestCase
      * placeholder de `base_url` e o `index.php` abrir a página de instalação em
      * vez de responder 401.
      *
-     * Por que cada uma das seis chaves de configuração é necessária — e por que
+     * A metade compartilhada — os caminhos do ambiente e as cinco chaves de
+     * configuração — vem de ChildEnvironment::base(); aqui ficam só as do
+     * servidor: a resposta `APP_*` e as credenciais `DB_*`.
+     *
+     * Por que cada uma das cinco chaves de configuração é necessária — e por que
      * a ausência delas passa num teste e falha no CI — está em AGENTS.md, na
      * seção `FrontendBoundaryTest`.
      */
     private static function childEnvironment(int $port): array
     {
-        $environment = [];
-
-        foreach (['PATH', 'HOME', 'LANG', 'LC_ALL', 'TMPDIR', 'COMPOSER_HOME', 'XDG_CONFIG_HOME'] as $name) {
-            if (isset($_ENV[$name])) {
-                $environment[$name] = $_ENV[$name];
-            }
-        }
-
-        return $environment + [
-            'PATH' => getenv('PATH') ?: '/usr/bin:/bin',
+        return ChildEnvironment::base() + [
             'APP_ENVIRONMENT' => 'production',
             'APP_BASEURL' => "http://127.0.0.1:{$port}/",
-            'APP_LOG_PATH' => self::childLogPath(),
             'API_ENABLED' => 'true',
-            'API_JWT_KEY' => $_ENV['API_JWT_KEY'] ?? 'mapos-frontend-boundary-jwt-key',
-            'API_TOKEN_EXPIRE_TIME' => $_ENV['API_TOKEN_EXPIRE_TIME'] ?? '3600',
-            'APP_ENCRYPTION_KEY' => $_ENV['APP_ENCRYPTION_KEY'] ?? 'mapos-frontend-boundary-key',
-            'GLOBAL_XSS_FILTERING' => $_ENV['GLOBAL_XSS_FILTERING'] ?? 'false',
             'DB_HOSTNAME' => $_ENV['DB_HOSTNAME'] ?? '127.0.0.1',
             'DB_PORT' => $_ENV['DB_PORT'] ?? '',
             'DB_DATABASE' => $_ENV['DB_DATABASE'] ?? '',
             'DB_USERNAME' => $_ENV['DB_USERNAME'] ?? '',
             'DB_PASSWORD' => $_ENV['DB_PASSWORD'] ?? '',
         ];
-    }
-
-    /**
-     * O diretório de log do filho, com barra final como o `log_path` exige.
-     *
-     * O mesmo caminho que `config/testing/config.php` escolhe, e pela mesma razão.
-     */
-    private static function childLogPath(): string
-    {
-        return rtrim(sys_get_temp_dir(), '/') . '/mapos-test-logs/';
     }
 
     /**
