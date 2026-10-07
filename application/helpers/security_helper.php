@@ -53,7 +53,7 @@ if (! function_exists('xss_clean')) {
 /**
  * Sanitize Filename
  *
- * @param	string
+ * @param  string  $filename
  * @return string
  */
 if (! function_exists('sanitize_filename')) {
@@ -70,7 +70,7 @@ if (! function_exists('sanitize_filename')) {
 /**
  * Hash encode a string
  *
- * @param	string
+ * @param  string  $str
  * @return string
  */
 if (! function_exists('do_hash')) {
@@ -89,7 +89,7 @@ if (! function_exists('do_hash')) {
 /**
  * Strip Image Tags
  *
- * @param	string
+ * @param  string  $str
  * @return string
  */
 if (! function_exists('strip_image_tags')) {
@@ -107,7 +107,7 @@ if (! function_exists('strip_image_tags')) {
 /**
  * Convert PHP tags to entities
  *
- * @param	string
+ * @param  string  $str
  * @return string
  */
 if (! function_exists('encode_php_tags')) {

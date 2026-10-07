@@ -18,6 +18,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class MY_Email extends CI_Email
 {
+    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor */
+    protected $CI;
+
     // DB table
     private $table_email_queue = 'email_queue';
 

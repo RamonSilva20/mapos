@@ -1,0 +1,54 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+
+    paths:
+        - application/core
+        - application/controllers
+        - application/helpers
+        - application/libraries
+        - application/models
+        - install
+
+    # O CI3 injeta as bibliotecas em $this por assignação dinâmica e expõe
+    # funções globais sem assinatura visível. Os stubs declaram esse contrato
+    # para o PHPStan não reportar o framework inteiro como bug.
+    #
+    # scanFiles e não stubFiles: stubFiles só substitui a assinatura de símbolos
+    # que o PHPStan já encontra. Base e as funções globais não são autoloadáveis,
+    # então precisam ser escaneadas para entrarem na tabela de símbolos.
+    scanFiles:
+        - phpstan-stubs/ci3.php
+
+    excludePaths:
+        analyseAndScan:
+            # third_party e vendor não são código do Map-OS: entram na análise
+            # só como dependência, nunca como alvo.
+            - application/vendor
+            - application/third_party
+            - application/database/migrations
+            - phpstan-stubs
+
+    # O CI3 é legado e não tem anotações de tipo. reportUnmatchedIgnoredErrors
+    # fica desligado para o baseline não quebrar quando um ignore fica sem
+    # correspondência depois de uma correção.
+    reportUnmatchedIgnoredErrors: false
+
+    # O CI3 popula model e biblioteca por assignação dinâmica
+    # ($this->os_model = $this->load->model('os_model')), sem declarar a
+    # propriedade. As classes abaixo entram como "universal object crates":
+    # qualquer propriedade ou método acessado nelas resolve para object.
+    #
+    # É o que faz as ~740 "propriedade não definida" sumirem. O custo é que um
+    # nome de propriedade digitado errado em controller também passa, o que
+    # config()->treatPhpDocTypesAsCertain pode reduzir depois, quando houver
+    # PHPdoc no código.
+    universalObjectCratesClasses:
+        - CI_Controller
+        - CI_Model
+
+# Sem scanFiles: a suíte do #2828 pode ainda não estar na branch quando este
+    # PR for avaliado, e um caminho declarado aqui ausente faz o PHPStan abortar
+    # antes de analisar qualquer coisa.
