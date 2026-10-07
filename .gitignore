@@ -6,6 +6,8 @@
 # misc
 .DS_Store
 .vscode
+.phpunit.cache/
+.phpunit.result.cache
 
 /vendor/
 /application/vendor/

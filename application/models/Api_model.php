@@ -4,8 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * User_model class.
- *
- * @extends CI_Model
  */
 class Api_model extends CI_Model
 {
