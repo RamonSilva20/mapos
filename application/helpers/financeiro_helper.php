@@ -20,13 +20,16 @@ function financeiroLancamentosWhere($db, array $filtros = [])
     $tipo = $filtros['tipo'] ?? null;
     $status = $filtros['status'] ?? null;
 
-    // Datas inválidas caem para o dia atual em vez de gerar erro fatal
-    $dataDe = DateTime::createFromFormat('d/m/Y', (string) $vencimento_de) ?: new DateTime();
-    $dataAte = DateTime::createFromFormat('d/m/Y', (string) $vencimento_ate) ?: new DateTime();
+    // Data inválida cai para o dia de hoje em vez de gerar erro fatal. A conversão
+    // valida também o getLastErrors, porque createFromFormat normaliza data com
+    // estouro de campo em vez de recusá-la: sem isso, 31/02 viraria 2027-03-03
+    // e o filtro listaria a janela errada sem avisar.
+    $dataDe = financeiroDataBrada($vencimento_de);
+    $dataAte = financeiroDataBrada($vencimento_ate);
 
     $conditions = [
-        'data_vencimento >= ' . $db->escape($dataDe->format('Y-m-d')),
-        'data_vencimento <= ' . $db->escape($dataAte->format('Y-m-d')),
+        'data_vencimento >= ' . $db->escape($dataDe),
+        'data_vencimento <= ' . $db->escape($dataAte),
     ];
 
     if (in_array($status, ['0', '1'], true)) {
