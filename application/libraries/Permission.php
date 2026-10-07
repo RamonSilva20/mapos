@@ -20,7 +20,7 @@ if (! defined('BASEPATH')) {
  */
 class Permission
 {
-    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor */
+    /** @var object Instância do CodeIgniter, preenchida no construtor */
     private $CI;
 
     private $permissions = [];

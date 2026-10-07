@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<files version="1">
+ <file path="application/controllers/Login.php">
+  <line number="79" hash="b76835c1399443592f286578ac4a5f590eebf8b9">
+   <issue><![CDATA[DateTime::__construct(): Passing null to parameter #1 ($datetime) of type string is deprecated]]></issue>
+  </line>
+ </file>
+ <file path="application/vendor/codeigniter/framework/system/database/DB_driver.php">
+  <line number="372" hash="f579bfd3df4c1c22eed2bcf0b7c1a552a26b23a1">
+   <issue><![CDATA[Creation of dynamic property CI_DB_sqlite3_driver::$compress is deprecated]]></issue>
+   <issue><![CDATA[Creation of dynamic property CI_DB_sqlite3_driver::$failover is deprecated]]></issue>
+   <issue><![CDATA[Creation of dynamic property CI_DB_sqlite3_driver::$stricton is deprecated]]></issue>
+  </line>
+ </file>
+</files>
