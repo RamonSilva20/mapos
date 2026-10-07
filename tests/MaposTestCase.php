@@ -50,6 +50,15 @@ abstract class MaposTestCase extends PHPUnitTestCase
     }
 
     /**
+     * Lê uma propriedade privada, inclusive para conferir o estado depois de
+     * uma chamada.
+     */
+    protected function readPrivateProperty(object $object, string $property)
+    {
+        return (new ReflectionProperty($object, $property))->getValue($object);
+    }
+
+    /**
      * Objeto mínimo no formato que as classes esperam do $this->CI.
      */
     protected function fakeCiInstance($db)
