@@ -5,7 +5,6 @@ namespace Tests\Support\Clone;
 use PDO;
 use Tests\Support\Database\DatabaseGuard;
 use Tests\Support\Database\SchemaReader;
-use Tests\Support\Database\TestDatabase;
 
 /**
  * Os nomes dos bancos sintéticos e a comparação entre dois deles.
@@ -51,7 +50,7 @@ trait TestSchemaCloneShared
      */
     private static function databaseName(string $base): string
     {
-        return DatabaseGuard::workerDatabaseName($base, TestDatabase::parallelToken() ?? 'solo');
+        return DatabaseGuard::workerName($base);
     }
 
     private static function origin(): string

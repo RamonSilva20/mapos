@@ -136,7 +136,42 @@ final class DatabaseGuardTest extends TestCase
     }
 
     /**
-     * O nome do worker entra antes do sufixo, e não depois.
+         * workerName() resolve o token do ambiente, e o nome é o mesmo que a forma
+         * com token na mão produziria.
+         *
+         * É a chamada que os scripts e o clone usam; o `?? 'solo'` copiado em cinco
+         * arquivos passou a morar aqui, e a promessa é a delegação sem desvio. O
+         * ambiente é restaurado no finally porque a suíte pode estar rodando sob o
+         * ParaTest, onde o TEST_TOKEN do worker é a própria razão do nome.
+         */
+    #[Test]
+    public function testWorkerNameFollowsTheEnvironmentToken(): void
+    {
+        $original = getenv('TEST_TOKEN');
+
+        try {
+            putenv('TEST_TOKEN=7');
+            $this->assertSame('mapos_7_test', DatabaseGuard::workerName('mapos_test'));
+        } finally {
+            putenv('TEST_TOKEN=' . ($original === false ? '' : $original));
+        }
+    }
+
+    #[Test]
+    public function testWorkerNameFallsBackToSoloWithoutAnEnvironmentToken(): void
+    {
+        $original = getenv('TEST_TOKEN');
+
+        try {
+            putenv('TEST_TOKEN=');
+            $this->assertSame('mapos_solo_test', DatabaseGuard::workerName('mapos_test'));
+        } finally {
+            putenv('TEST_TOKEN=' . ($original === false ? '' : $original));
+        }
+    }
+
+    /**
+     * Os dois lados do momento do nome: token antes do sufixo, e a guarda por trás.
      *
      * Este é o caso que a ordem do nome obedece: `mapos_test_1` é recusado pela
      * guarda acima, e é recusado DE PROPÓSITO. Se o token fosse depois do sufixo, o

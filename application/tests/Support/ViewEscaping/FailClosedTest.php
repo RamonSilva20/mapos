@@ -86,7 +86,7 @@ final class FailClosedTest extends TestCase
      * silencioso.
      */
     #[Test]
-    public function testNenhumaFormaDeSaidaEscapaDasDuasConferencias(): void
+    public function testNoOutputShapeEscapesBothChecks(): void
     {
         $unreported = 0;
         $covered = 0;
@@ -121,7 +121,7 @@ final class FailClosedTest extends TestCase
      * falha se a guarda virar no-op.
      */
     #[Test]
-    public function testAGuardaReportaOQueNenhumaFormaCobre(): void
+    public function testTheGuardReportsWhatNoShapeCovers(): void
     {
         // O caso que o inventário achou nas views: um `echo` de statement solto,
         // sem ponto e vírgula e sem tag de fechamento, que nenhuma das seis
@@ -159,7 +159,7 @@ final class FailClosedTest extends TestCase
      * por isso que a forma existe.
      */
     #[Test]
-    public function testTokenQueNaoEPhpNaoSomeDoRelatorio(): void
+    public function testANonPhpTokenDoesNotDisappearFromTheReport(): void
     {
         foreach ([
             '<style>@media print { width: 210mm }</style>',
@@ -211,7 +211,7 @@ final class FailClosedTest extends TestCase
      * fail-closed que ninguém vai olhar em uma semana.
      */
     #[Test]
-    public function testViewSemSaidaNaoEUmAchado(): void
+    public function testAViewWithoutOutputIsNotAFinding(): void
     {
         $this->assertNull(EscapingChecks::unrecognizedOutput('<p><?= esc($a) ?></p>'));
         $this->assertNull(EscapingChecks::unrecognizedOutput('<style>@media screen { }</style>'));
@@ -226,7 +226,7 @@ final class FailClosedTest extends TestCase
      * linha 0 é um relatório que ninguém pode usar para ir ver o caso.
      */
     #[Test]
-    public function testOSnippetDaGuardaEstaNoArquivo(): void
+    public function testTheGuardSnippetIsInTheFile(): void
     {
         $view = "<p>texto</p>\n<?php if (\$q) { echo \$r->nome\n</p>\n";
         $snippet = EscapingChecks::unrecognizedOutput($view);

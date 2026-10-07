@@ -3,19 +3,22 @@
 /**
  * O boot compartilhado pelos scripts de linha de comando da suíte.
  *
- * Os três scripts — setup-db.php, check-schema-parity.php e drop-worker-databases.php
- * — precisam da mesma coisa antes de qualquer trabalho: recusar se não vierem da
- * linha de comando, e resolver as credenciais do banco de testes. As três cópias
- * carregavam também o mesmo comentário de três linhas explicando por que a guarda
- * lança em vez de sair, e era esse comentário que mais rendia: escrito três vezes,
- * ele passou a descrever o comportamento dos três em vez do de um.
+ * Os scripts da pasta bin — setup-db.php, check-schema-parity.php,
+ * drop-worker-databases.php e probe-utf8mb4-down.php —
+ * precisam da mesma coisa antes de qualquer trabalho: recusar se não vierem da
+ * linha de comando, e resolver as credenciais do banco de testes. As cópias
+ * carregavam também o mesmo comentário explicando por que a guarda lança em vez
+ * de sair, e era esse comentário que mais rendia: escrito três vezes, ele passou
+ * a descrever o comportamento de todos em vez do de um.
  *
  * A promessa que a função cumpre é estreita e é esta: uma falha NESTA função sai
- * como mensagem em STDERR e código 1. Ela não é o try/catch de cada script. Uma
- * `RuntimeException` de `recreate()` continua sendo fatal de PHP, e cada script que
- * chama `recreate()` é responsável pela borda dele. A alternativa — um try/catch
- * global em volta do corpo inteiro de cada script — é o que faria a função acima
- * parecer maior do que é, e ela é pequena de propósito.
+ * como mensagem em STDERR e código 1. Ela não é o try/catch de cada script. Os
+ * scripts que criam banco de worker são os que são responsáveis pela borda
+ * deles: derrubam o que criaram num `finally` que nenhum exit() pode pular, e
+ * usam exceções em vez de exit() dentro da região guardada. O que sobra é o
+ * caso documentado — um `exit()` cru cravado no boot profundo do CI3 ainda pula
+ * o finally — e esse banco se resolve por recreate() na próxima execução e por
+ * test:clean no fim.
  */
 
 use Tests\Support\Database\DatabaseGuard;

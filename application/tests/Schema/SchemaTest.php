@@ -85,6 +85,29 @@ final class SchemaTest extends TestCase
     }
 
     /**
+     * `usuarios.cep` é `DEFAULT ''`, e não mais o CEP de desenvolvimento.
+     *
+     * A migration 20200306012421 criou a coluna com `DEFAULT '70005-115'`, o
+     * endereço de quem escreveu a migration, e a 20261005131000 removeu o default.
+     * Cada linha de usuário que a aplicação grava sem `cep` recebia aquele
+     * endereço, e nada no produto denuncia isso: o campo mostra o valor e ninguém
+     * sabe que ele é inventado.
+     *
+     * O default agora é a string vazia, e o teste afirma a string vazia — não
+     * null. As duas são "não preenchido" para quem grava, mas só uma delas é o
+     * que o schema diz, e uma leitura que normaliza as duas não conseguiria
+     * distinguir um `DEFAULT ''` de coluna sem DEFAULT nenhum.
+     */
+    public function testUsuarioCepNoLongerCarriesTheDevelopmentDefault(): void
+    {
+        $this->assertSame(
+            '',
+            $this->columnDefault('usuarios', 'cep'),
+            'usuarios.cep voltou a receber um CEP de desenvolvimento em toda linha nova que a aplicação grava sem ele.'
+        );
+    }
+
+    /**
      * @return iterable<string, array{string, string}>
      */
     public static function moneyColumns(): iterable

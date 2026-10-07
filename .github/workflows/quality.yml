@@ -20,7 +20,9 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.4
+        # Fixada para a suíte ter um servidor estável; o tag flutuante muda a
+        # versão em que os testes rodam de um dia para o outro.
+        image: mysql:8.4.11
         env:
           MYSQL_ROOT_PASSWORD: root
           # A conexão do runner chega pelo bridge do Docker, não por socket, e
@@ -104,5 +106,13 @@ jobs:
       # banco.sql. Nada mais exercita os dois caminhos, então sem esta
       # comparação eles podem divergir em silêncio — e foi exatamente isso que
       # escondeu as colunas DECIMAL(10,0) do create_base por anos.
-      - name: Check banco.sql against the migrations
+      #
+      # O passo compara o schema que um banco.sql recém-importado dá com o que a
+      # cadeia de migrations dá (fidelidade da importação), no mesmo build da
+      # cadeia. A metade de reprodutibilidade do byte a byte foi removida: o
+      # render vinha do SHOW CREATE de um servidor específico e a mesma versão
+      # do MySQL denunciava a mesma coluna de duas formas a depender da
+      # execução. Quando o instalador passar a criar o banco pelas migrations,
+      # este passo e o banco.sql saem juntos.
+      - name: Check banco.sql against the migrations (schema import fidelity)
         run: composer check:parity

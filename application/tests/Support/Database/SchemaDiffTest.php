@@ -4,6 +4,7 @@ namespace Tests\Support\Database;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * A comparação que decide se banco.sql e as migrations divergem.
@@ -27,6 +28,29 @@ require_once dirname(__DIR__, 2) . '/bin/lib/schema-diff.php';
 final class SchemaDiffTest extends TestCase
 {
     /**
+     * Uma coluna do schema, com o default que o gate vai comparar.
+     *
+     * Existe porque a forma do schema mudou de `coluna => string` para
+     * `coluna => atributos`, e escrever os seis atributos em cada caso sintético
+     * enterraria o teste na forma do dado. O que importa em quase todo teste é o
+     * `type`, e é o que os casos abaixo mexem.
+     *
+     * @param  array<string, mixed> $overrides
+     * @return array<string, mixed>
+     */
+    private static function column(string $type = 'int', array $overrides = []): array
+    {
+        return $overrides + [
+            'type' => $type,
+            'default' => null,
+            'charset' => null,
+            'collation' => null,
+            'nullable' => false,
+            'extra' => '',
+        ];
+    }
+
+    /**
      * Schemas idênticos não produzem diferença nenhuma.
      *
      * Este é o caso que o gate de paridade exercita em toda execução do CI, e é
@@ -37,8 +61,8 @@ final class SchemaDiffTest extends TestCase
     public function testIdenticalSchemasProduceNoDifference(): void
     {
         $schema = [
-            'clientes' => ['idClientes' => 'int', 'nome' => 'varchar(255)'],
-            'os' => ['idOs' => 'int', 'valor' => 'decimal(10,2)'],
+            'clientes' => ['idClientes' => self::column('int'), 'nome' => self::column('varchar(255)')],
+            'os' => ['idOs' => self::column('int'), 'valor' => self::column('decimal(10,2)')],
         ];
 
         $this->assertSame([], schemaDiffBetween($schema, $schema));
@@ -55,8 +79,8 @@ final class SchemaDiffTest extends TestCase
     #[Test]
     public function testATableOnlyOnOneSideIsReportedByThatSide(): void
     {
-        $dump = ['clientes' => ['idClientes' => 'int'], 'so_no_dump' => ['id' => 'int']];
-        $migrations = ['clientes' => ['idClientes' => 'int'], 'so_nas_migrations' => ['id' => 'int']];
+        $dump = ['clientes' => ['idClientes' => self::column()], 'so_no_dump' => ['id' => self::column()]];
+        $migrations = ['clientes' => ['idClientes' => self::column()], 'so_nas_migrations' => ['id' => self::column()]];
 
         $this->assertSame(
             [
@@ -83,8 +107,8 @@ final class SchemaDiffTest extends TestCase
     #[Test]
     public function testAColumnRemovedOnEitherSideIsReportedInBothDirections(): void
     {
-        $dump = ['os' => ['idOs' => 'int', 'numero' => 'int', 'despejo' => 'int']];
-        $migrations = ['os' => ['idOs' => 'int', 'numero' => 'int']];
+        $dump = ['os' => ['idOs' => self::column(), 'numero' => self::column(), 'despejo' => self::column()]];
+        $migrations = ['os' => ['idOs' => self::column(), 'numero' => self::column()]];
 
         $this->assertSame(
             ['coluna só no banco.sql: os.despejo int'],
@@ -110,8 +134,8 @@ final class SchemaDiffTest extends TestCase
     #[Test]
     public function testAColumnIsNotReportedWhenTheWholeTableIsMissingOnTheOtherSide(): void
     {
-        $dump = ['os' => ['idOs' => 'int']];
-        $migrations = ['clientes' => ['idClientes' => 'int']];
+        $dump = ['os' => ['idOs' => self::column()]];
+        $migrations = ['clientes' => ['idClientes' => self::column()]];
 
         $this->assertSame(
             [
@@ -133,11 +157,11 @@ final class SchemaDiffTest extends TestCase
     #[Test]
     public function testADivergentTypeNamesBothSidesAndBothValues(): void
     {
-        $dump = ['os' => ['valor' => 'decimal(10,0)']];
-        $migrations = ['os' => ['valor' => 'decimal(12,2)']];
+        $dump = ['os' => ['valor' => self::column('decimal(10,0)')]];
+        $migrations = ['os' => ['valor' => self::column('decimal(12,2)')]];
 
         $this->assertSame(
-            ['tipo divergente: os.valor                 banco.sql=decimal(10,0)      migracoes=decimal(12,2)'],
+            ['type      divergente: os.valor                 banco.sql=decimal(10,0)      migracoes=decimal(12,2)'],
             schemaDiffBetween($dump, $migrations)
         );
     }
@@ -156,8 +180,8 @@ final class SchemaDiffTest extends TestCase
         $this->assertSame(
             [],
             schemaDiffBetween(
-                ['os' => ['valor' => 'VARCHAR(255)']],
-                ['os' => ['valor' => 'varchar(255)']]
+                ['os' => ['valor' => self::column('VARCHAR(255)')]],
+                ['os' => ['valor' => self::column('varchar(255)')]]
             )
         );
     }
@@ -178,26 +202,310 @@ final class SchemaDiffTest extends TestCase
     #[Test]
     public function testTheKeyInsertionOrderDoesNotChangeTheResult(): void
     {
-        $dump = ['a' => ['x' => 'int'], 'b' => ['y' => 'int']];
-        $migrations = ['b' => ['y' => 'varchar(4)'], 'a' => ['x' => 'int']];
+        $dump = ['a' => ['x' => self::column()], 'b' => ['y' => self::column()]];
+        $migrations = ['b' => ['y' => self::column('varchar(4)')], 'a' => ['x' => self::column()]];
 
         $sameContentOtherOrder = [
-            'a' => ['x' => 'int'],
-            'b' => ['y' => 'int'],
+            'a' => ['x' => self::column()],
+            'b' => ['y' => self::column()],
         ];
         $sameContentOtherOrderMigrations = [
-            'a' => ['x' => 'int'],
-            'b' => ['y' => 'varchar(4)'],
+            'a' => ['x' => self::column()],
+            'b' => ['y' => self::column('varchar(4)')],
         ];
 
         $expected = [
-            'tipo divergente: b.y                      banco.sql=int                migracoes=varchar(4)',
+            'type      divergente: b.y                      banco.sql=int                migracoes=varchar(4)',
         ];
 
         $this->assertSame($expected, schemaDiffBetween($dump, $migrations));
         $this->assertSame(
             $expected,
             schemaDiffBetween($sameContentOtherOrder, $sameContentOtherOrderMigrations)
+        );
+    }
+
+    /**
+     * Um DEFAULT de um lado e ausente do outro é uma divergência nomeada.
+     *
+     * Este é o defeito que o gate não via e que a migration 20261005131000 removeu
+     * de `usuarios.cep`: um `DEFAULT '70005-115'` que existia em banco.sql e não
+     * existia na cadeia. O tipo era o mesmo nos dois lados, então o gate dizia
+     * que o schema estava em paridade com um default Having Date leaking de um
+     * endereço de desenvolvimento para dentro de toda linha nova.
+     *
+     * E o inverso também diverge, que é a direção mais difícil de enxergar: uma
+     * coluna com `DEFAULT ''` de um lado e sem DEFAULT do outro se comporta igual
+     * quando alguém passa o valor, e diferente quando ninguém passa.
+     */
+    #[Test]
+    public function testADivergentDefaultIsReportedInBothDirections(): void
+    {
+        $withDefault = ['usuarios' => ['cep' => self::column('varchar(9)', ['default' => '70005-115'])]];
+        $withoutDefault = ['usuarios' => ['cep' => self::column('varchar(9)', ['default' => null])]];
+
+        $this->assertSame(
+            ['default   divergente: usuarios.cep             banco.sql=70005-115          migracoes=NULL'],
+            schemaDiffBetween($withDefault, $withoutDefault)
+        );
+
+        $this->assertSame(
+            ['default   divergente: usuarios.cep             banco.sql=NULL               migracoes=70005-115'],
+            schemaDiffBetween($withoutDefault, $withDefault)
+        );
+    }
+
+    /**
+     * `DEFAULT ''` e coluna sem DEFAULT são duas coisas diferentes.
+     *
+     * Se o gate tratasse a string vazia como "não há valor", estas duas colunas
+     * seriam iguais e o teste passaria sem exercitar nada. É o mesmo cuidado que
+     * `SchemaReader::columnDefault()` documenta do outro lado da leitura: quem
+     * normaliza a ausência para a string vazia perde a diferença que o MySQL
+     * distingue entre SQL NULL e ''.
+     */
+    #[Test]
+    public function testAnEmptyStringDefaultIsNotTreatedAsAnAbsentDefault(): void
+    {
+        $emptyDefault = ['usuarios' => ['cep' => self::column('varchar(9)', ['default' => ''])]];
+        $noDefault = ['usuarios' => ['cep' => self::column('varchar(9)', ['default' => null])]];
+
+        $this->assertSame(
+            ['default   divergente: usuarios.cep             banco.sql=\'\'                 migracoes=NULL'],
+            schemaDiffBetween($emptyDefault, $noDefault)
+        );
+    }
+
+    /**
+     * Um charset ou collation de um lado e de outro é uma divergência nomeada.
+     *
+     * `latin1` e `utf8mb4` produzem o mesmo tipo e as mesmas linhas, e a diferença
+     * só aparece quando alguém grava um caractere de 4 bytes. Um gate que olhasse só
+     * o tipo declarava em paridade um banco que não sabe guardar um emoji.
+     */
+    #[Test]
+    public function testADivergentCharsetAndCollationAreReportedByName(): void
+    {
+        $dump = ['os' => ['descricao' => self::column('mediumtext', [
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_general_ci',
+        ])]];
+        $migrations = ['os' => ['descricao' => self::column('mediumtext', [
+            'charset' => 'latin1',
+            'collation' => 'latin1_swedish_ci',
+        ])]];
+
+        $this->assertSame(
+            [
+                'charset   divergente: os.descricao             banco.sql=utf8mb4            migracoes=latin1',
+                'collation divergente: os.descricao             banco.sql=utf8mb4_general_ci migracoes=latin1_swedish_ci',
+            ],
+            schemaDiffBetween($dump, $migrations)
+        );
+    }
+
+    /**
+     * Uma coluna que só um lado aceita nulo é uma divergência nomeada.
+     *
+     * O relatório escreve SIM e NAO, e não true e false nem 1 e 0, porque quem lê
+     * a saída do CI está olhando uma frase, não um valor serializado.
+     */
+    #[Test]
+    public function testADivergentNullabilityIsReportedAsYesOrNo(): void
+    {
+        $dump = ['os' => ['numero' => self::column('int', ['nullable' => true])]];
+        $migrations = ['os' => ['numero' => self::column('int', ['nullable' => false])]];
+
+        $this->assertSame(
+            ['nullable  divergente: os.numero                banco.sql=SIM                migracoes=NAO'],
+            schemaDiffBetween($dump, $migrations)
+        );
+    }
+
+    /**
+     * Um `AUTO_INCREMENT` que um lado perdeu é uma divergência nomeada.
+     *
+     * `os.idOs` sem `AUTO_INCREMENT` é um esquema que não insere linha nenhuma, e
+     * o tipo continuaria `int` dos dois lados — que é o motivo de `extra` estar na
+     * lista de atributos comparados.
+     */
+    #[Test]
+    public function testADivergentExtraIsReportedByName(): void
+    {
+        $dump = ['os' => ['idOs' => self::column('int')]];
+        $migrations = ['os' => ['idOs' => self::column('int', ['extra' => 'auto_increment'])]];
+
+        $this->assertSame(
+            ["extra     divergente: os.idOs                  banco.sql=''                 migracoes=auto_increment"],
+            schemaDiffBetween($dump, $migrations)
+        );
+    }
+
+    /**
+     * Duas colunas com vários atributos divergentes geram uma linha cada.
+     *
+     * Uma linha por coluna, com tudo junto, obrigaria quem lê a abrir os dois
+     * lados para saber qual dos atributos divergia. Nomear o atributo é o que faz a
+     * linha apontar para a migration, e é por isso que o laço é por atributo.
+     */
+    #[Test]
+    public function testEachDivergentAttributeProducesItsOwnLine(): void
+    {
+        $dump = ['os' => ['idOs' => self::column()]];
+        $migrations = ['os' => ['idOs' => self::column('int', [
+            'extra' => 'auto_increment',
+            'nullable' => true,
+        ])]];
+
+        $this->assertSame(
+            [
+                'nullable  divergente: os.idOs                  banco.sql=NAO                migracoes=SIM',
+                'extra     divergente: os.idOs                  banco.sql=\'\'                 migracoes=auto_increment',
+            ],
+            schemaDiffBetween($dump, $migrations)
+        );
+    }
+
+    /**
+     * O `default` é a comparação que NÃO ignora a caixa.
+     *
+     * `type`, `charset`, `collation` e `extra` são case-insensitive no MySQL, e o
+     * gate os compara assim de propósito. O `default` é dado de aplicação: um
+     * `DEFAULT 'ADMIN'` grava ADMIN a cada linha nova e um `DEFAULT 'admin'` grava
+     * admin, e um perfil com o tipo trocado é um defeito que um gate case-insensitive
+     * deixaria passar como "em paridade".
+     */
+    #[Test]
+    public function testTheDefaultComparisonIsCaseSensitive(): void
+    {
+        $dump = ['usuarios' => ['tipo' => self::column('varchar(16)', ['default' => 'ADMIN'])]];
+        $migrations = ['usuarios' => ['tipo' => self::column('varchar(16)', ['default' => 'admin'])]];
+
+        $this->assertSame(
+            ['default   divergente: usuarios.tipo            banco.sql=ADMIN              migracoes=admin'],
+            schemaDiffBetween($dump, $migrations)
+        );
+    }
+
+    /**
+     * O `collation` continua case-insensitive mesmo com o resto estrito.
+     *
+     * O par acima troca só a caixa do valor: se o `===` da comparação de default
+     * vazasse para os outros atributos, este par divergiria e o gate acusaria um
+     * schema que o MySQL lê como idêntico.
+     */
+    #[Test]
+    public function testCollationAndCharsetComparisonStillIgnoreCaseAfterTheStrictDefault(): void
+    {
+        $schema = ['os' => ['descricao' => self::column('mediumtext', [
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_general_ci',
+        ])]];
+        $sameValuesOtherCase = ['os' => ['descricao' => self::column('mediumtext', [
+            'charset' => 'UTF8MB4',
+            'collation' => 'UTF8MB4_GENERAL_CI',
+        ])]];
+
+        $this->assertSame([], schemaDiffBetween($schema, $sameValuesOtherCase));
+    }
+
+    /**
+     * O `extra` continua case-insensitive: AUTO_INCREMENT e auto_increment são o mesmo.
+     *
+     * Este é o atributo que o stricton do caso acima NÃO cobre — o tipo inteiro não
+     * está no caminho case-insensitive da mesma forma que charset. O MySQL devolve
+     * as letras do jeito que o usuário escreveu o DDL, e o dump não tem por que
+     * grafar igual à migration.
+     */
+    #[Test]
+    public function testExtraComparisonStillIgnoresCase(): void
+    {
+        $this->assertSame(
+            [],
+            schemaDiffBetween(
+                ['os' => ['idOs' => self::column('int', ['extra' => 'AUTO_INCREMENT'])]],
+                ['os' => ['idOs' => self::column('int', ['extra' => 'auto_increment'])]]
+            )
+        );
+    }
+
+    /**
+     * Um atributo que um dos lados não sabe descrever é defeito, e não divergência.
+     *
+     * Garantir a forma dos dois lados é o que deixa a comparação honesta: repetir o
+     * valor que o lado não tem — `$dump ?? ''` — transforma "o leitor não trouxe o
+     * atributo" em "os dois têm o atributo e um é vazio", que é a divergência que o
+     * nosso schema de verdade pode ter de verdade. A exceção nomeia a coluna e o
+     * atributo para o erro apontar direto para o leitor que mudou.
+     */
+    #[Test]
+    public function testASchemaLackingAComparedAttributeThrowsNamingIt(): void
+    {
+        $withoutExtra = ['os' => ['idOs' => self::column()]];
+        unset($withoutExtra['os']['idOs']['extra']);
+        $complete = ['os' => ['idOs' => self::column('int')]];
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("atributo 'extra' ausente de os.idOs");
+
+        schemaDiffBetween($complete, $withoutExtra);
+    }
+
+    /**
+     * Collations de tabela iguais não produzem diferença.
+     *
+     * Este é o caso base do irmão novo do gate, e ele existe porque o par de
+     * schemas de verdade já está em paridade — uma regressão que comparasse contrário
+     * apareceria como "tabelas divergentes" sem ninguém ter mexido em collation.
+     */
+    #[Test]
+    public function testIdenticalTableCollationsProduceNoDifference(): void
+    {
+        $collations = ['os' => 'utf8mb4_general_ci', 'itens_de_vendas' => 'utf8mb4_general_ci'];
+
+        $this->assertSame([], schemaTableDiffBetween($collations, $collations));
+    }
+
+    /**
+     * A tabela que só um dos lados tem não é relatada aqui.
+     *
+     * A presença de tabela é a meia dúzia de linhas "tabela só no banco.sql" /
+     * "só nas migrations" da irmã, e contar a mesma diferença duas vezes — uma por
+     * tabela, uma por collation — faria o relatório dizer "7 tabelas divergentes"
+     * para um problema de 4 linhas.
+     */
+    #[Test]
+    public function testATableOnlyOnOneSideIsNotReportedAsACollationDivergence(): void
+    {
+        $this->assertSame(
+            [],
+            schemaTableDiffBetween(
+                ['solo_no_dump' => 'utf8mb4_general_ci'],
+                ['solo_nas_migrations' => 'utf8mb4_general_ci']
+            )
+        );
+    }
+
+    /**
+     * A collation de tabela divergente é relatada pelo nome, dos dois lados.
+     *
+     * `itens_de_vendas` é a tabela que este relatório existe para pegar: só colunas
+     * numéricas, nenhum CHARACTER_SET_NAME para a irmã comparar, e a collation dela
+     * só aparece no nível da tabela. Um banco.sql que a tivesse em utf8mb3 passaria
+     * no gate antigo e gravaria o VARCHAR normalizado de um jeito e o número de
+     * outro — na verdade guardaria errado o total de uma venda.
+     */
+    #[Test]
+    public function testADivergentTableCollationIsReportedByTableName(): void
+    {
+        $this->assertSame(
+            [
+                'collation divergente: itens_de_vendas          banco.sql=utf8mb3_general_ci migracoes=utf8mb4_general_ci',
+            ],
+            schemaTableDiffBetween(
+                ['itens_de_vendas' => 'utf8mb3_general_ci'],
+                ['itens_de_vendas' => 'utf8mb4_general_ci']
+            )
         );
     }
 }
