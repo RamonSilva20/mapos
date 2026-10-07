@@ -18,8 +18,17 @@ $db['default'] = [
     'db_debug' => (ENVIRONMENT !== 'production'),
     'cache_on' => false,
     'cachedir' => '',
-    'char_set' => $_ENV['DB_CHARSET'] ?? 'utf8',
-    'dbcollat' => $_ENV['DB_COLLATION'] ?? 'utf8_general_ci',
+    // utf8mb4, e não utf8: no MySQL 8 `utf8` é apelido de utf8mb3, que não
+    // tem os 4 bytes do emoji. Este par de valores tem duas consequências, e as
+    // duas importam. O mysql_forge::_create_table_attr() acrescenta
+    // `DEFAULT CHARACTER SET = char_set COLLATE = dbcollat` em toda tabela criada
+    // por dbforge, então o valor daqui é o charset de toda tabela que a cadeia de
+    // migrations constrói. E o DB_driver::_initialize() chama
+    // db_set_charset($this->char_set), então o valor daqui também é o charset
+    // negociado por toda query — mesmo com a tabela em utf8mb4, um caractere de
+    // 4 bytes não sobrevive à conexão se ela ainda é utf8mb3.
+    'char_set' => $_ENV['DB_CHARSET'] ?? 'utf8mb4',
+    'dbcollat' => $_ENV['DB_COLLATION'] ?? 'utf8mb4_general_ci',
     'swap_pre' => '',
     'encrypt' => false,
     'compress' => false,

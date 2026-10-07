@@ -91,13 +91,35 @@ read, and its values win for anything the suite does not set itself.
   two rejection paths in `Login` are coverable. Their password is copied from
   the row the `Usuarios` seed just wrote, not repeated here, so the two cannot
   drift. All three accounts use the password `123456`.
-- `application/tests/bin/check-schema-parity.php` builds a second database from
-  `banco.sql` and compares it against the migration-built one, table by table
-  and column by column, failing on any difference. It is the barrier that keeps
-  the installer's dump and the migration chain from drifting apart, since
-  nothing else exercises both. `composer check:parity` runs it; CI runs it too.
-  Note it compares table and column **types** only, not indexes, foreign keys,
-  charset or collation, and it excludes the `migrations` control table.
+- `application/tests/bin/check-schema-parity.php` builds two worker databases —
+  one from `banco.sql`, one from the migration chain — and compares them, table
+  by table and column by column, failing on any difference. It is the barrier
+  that keeps the installer's dump and the migration chain from drifting apart,
+  since nothing else exercises both — while the installer still imports
+  `banco.sql`. `composer check:parity` runs it; CI runs it too. It compares
+  column `type`, `default` (case-sensitive), `charset`, `collation`, nullability
+  and `extra`, plus table-level `collation` — the level where a table like
+  `itens_de_vendas`, with no text column, keeps a divergent default invisible.
+  It does not compare indexes or foreign keys, and it excludes the `migrations`
+  control table. The byte-for-byte reproducibility half (and with it
+  `generate-dump.php` and `dump-render.php`) was removed: the old render came
+  from `SHOW CREATE TABLE` as a specific server speaks it, and the same MySQL
+  version reported the same column two different ways depending on the build
+  (native server vs the official image), so the byte gate reproved an unchanged,
+  semantically identical file. When the installer moves to building the database
+  from the migrations, this step and `banco.sql` go together.
+- `application/tests/Schema/Utf8mb4DownTest` runs a child process
+  (`bin/probe-utf8mb4-down.php`) because `TestApplication::boot()` can run once
+  per process: the migration `down()` under test needs a fresh database with a
+  4-byte character in it. One child per mode, two modes total: the refusal
+  (an emoji in `probe_down`, `down()` must throw before converting anything) and
+  the clean conversion (a single `probe_clean` table, `down()` must complete).
+  The probe writes through a raw utf8mb4 PDO, not the app connection — the
+  config connects as `utf8` (utf8mb3), which would turn the emoji into `?` on
+  the way in and leave the migration nothing to refuse. That degradation is
+  also the one an upgraded install hits unless `DB_CHARSET=utf8mb4` is set in
+  `.env`: the migration converts the tables, but a utf8mb3 connection still
+  mangles the emoji before it ever reaches a column.
 - The suite writes its CI3 logs to a temporary directory, not to
   `application/logs` (`application/config/testing/config.php`). The logs are
   runtime output, and leaving them in the source tree made `format:check` fail
@@ -116,7 +138,11 @@ read, and its values win for anything the suite does not set itself.
   `.env` unconditionally, warning on every install that has none. The child
   therefore gets all five keys from `childEnvironment()` — they come from the
   `$_ENV` that `TestDatabase::fromEnvironment()` published, so a developer's
-  `.env` still wins and CI's absence is not a behaviour difference. A sixth key,
+  `.env` still wins and CI's absence is not a behaviour difference. The shared
+  lower half of that environment — the `PATH`/`HOME` passthrough and the five
+  config keys — lives once in `ChildEnvironment::base()`, and each child builder
+  adds what its own transport needs (`DB_*` + `APP_*` for the server test,
+  `MAPOS_TEST_DB_*` + `TEST_TOKEN` for the probe). A sixth key,
   `APP_LOG_PATH`, comes from the same place but for the opposite reason: not to
   stop the child writing, but to let it write *somewhere else*. `show_404()`
   calls `log_message('error', ...)` before rendering, so the 404 case logs by

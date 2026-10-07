@@ -32,7 +32,7 @@ final class SchemaFingerprintTest extends TestCase
      * O token entra no meio do nome, e é o mesmo cuidado de
      * DatabaseGuard::workerDatabaseName(): um nome fixo seria derrubado e remontado
      * por todos os processos do ParaTest ao mesmo tempo. `prepareDatabaseNames()`
-     * monta pelo workerDatabaseName() da produção, e a propriedade fica vazia no
+     * monta pelo workerName() da produção, e a propriedade fica vazia no
      * lugar de ter um valor padrão para que um caso que esqueça de chamar a
      * preparação receba um nome inválido em vez de um nome compartilhado.
      */
@@ -61,15 +61,13 @@ final class SchemaFingerprintTest extends TestCase
      * o MySQL aceita: o nome tem de terminar em `_test`, e a guarda roda antes de
      * qualquer conexão — um nome fora do padrão aborta o processo inteiro em vez de
      * testar o que pretende. A base sem o sufixo é o que entra no
-     * workerDatabaseName(), que devolve o nome com `_test` no fim.
+     * workerName(), que devolve o nome com `_test` no fim.
      */
     #[Before]
     public function prepareDatabaseNames(): void
     {
-        $token = TestDatabase::parallelToken() ?? 'solo';
-
-        $this->database = DatabaseGuard::workerDatabaseName('mapos_schema_probe', $token);
-        $this->missingDatabaseName = DatabaseGuard::workerDatabaseName('mapos_nunca_criado', $token);
+        $this->database = DatabaseGuard::workerName('mapos_schema_probe');
+        $this->missingDatabaseName = DatabaseGuard::workerName('mapos_nunca_criado');
     }
 
     /**
@@ -83,7 +81,7 @@ final class SchemaFingerprintTest extends TestCase
      * O `drop()` de `TestDatabase`, e não um `DROP DATABASE` escrito aqui. Este
      * arquivo mantinha a própria instrução, com o nome concatenado entre crases, e
      * assim a única barreira contra um `DROP` no banco errado — `DatabaseGuard` — não
-     * era consultada neste caminho. O nome vinha de `workerDatabaseName()`, que já é
+     * era consultada neste caminho. O nome vinha de `workerName()`, que já é
      * verificado, mas a verificação acontecia por acaso e não por construção: a
      * segunda escrita do `DROP` é a que deixa de depender do que o chamador fez.
      */

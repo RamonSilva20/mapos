@@ -177,6 +177,20 @@ final class DatabaseGuard
     }
 
     /**
+     * O nome de um banco de worker, com o token resolvido por quem busca.
+     *
+     * workerDatabaseName() exige o token na mão; esta é a forma de chamada que os
+     * scripts e o clone usam de verdade: o token do ParaTest quando existe, e
+     * 'solo' quando não. O `?? 'solo'` aparecia copiado em cinco arquivos, e cada
+     * cópia era uma chance de um deles derivar o token de um jeito diferente e
+     * dois processos brigarem pelo mesmo banco sem ninguém ver.
+     */
+    public static function workerName(string $template): string
+    {
+        return self::workerDatabaseName($template, TestDatabase::parallelToken() ?? 'solo');
+    }
+
+    /**
      * Este nome é o de um worker derivado DESTE modelo?
      *
      * A conferida é o que separa o drop-worker-databases.php de um `DROP` preguiçoso,
