@@ -11,6 +11,7 @@ class Financeiro extends MY_Controller
         parent::__construct();
         $this->load->model('financeiro_model');
         $this->load->helper('codegen_helper');
+        $this->load->helper('financeiro_helper');
         $this->data['menuLancamentos'] = 'financeiro';
     }
 
@@ -34,29 +35,15 @@ class Financeiro extends MY_Controller
 
         $periodo = $this->input->get('periodo');
 
-        // Datas inválidas caem para o dia atual em vez de gerar erro fatal
-        $dataDe = DateTime::createFromFormat('d/m/Y', (string) $vencimento_de) ?: new DateTime();
-        $dataAte = DateTime::createFromFormat('d/m/Y', (string) $vencimento_ate) ?: new DateTime();
-
-        // Todos os valores vindos do GET são validados ou escapados antes de entrar no WHERE
-        $conditions = [
-            'data_vencimento >= ' . $this->db->escape($dataDe->format('Y-m-d')),
-            'data_vencimento <= ' . $this->db->escape($dataAte->format('Y-m-d')),
-        ];
-
-        if (in_array($status, ['0', '1'], true)) {
-            $conditions[] = 'baixado = ' . (int) $status;
-        }
-
-        if (! empty($cliente)) {
-            $conditions[] = 'cliente_fornecedor LIKE ' . $this->db->escape('%' . $this->db->escape_like_str($cliente) . '%') . " ESCAPE '!'";
-        }
-
-        if (in_array($tipo, ['receita', 'despesa'], true)) {
-            $conditions[] = 'tipo = ' . $this->db->escape($tipo);
-        }
-
-        $where = implode(' AND ', $conditions);
+        // Todos os valores vindos do GET são validados ou escapados em
+        // financeiroLancamentosWhere, antes de entrarem no WHERE.
+        $where = financeiroLancamentosWhere($this->db, [
+            'vencimento_de' => $vencimento_de,
+            'vencimento_ate' => $vencimento_ate,
+            'cliente' => $cliente,
+            'tipo' => $tipo,
+            'status' => $status,
+        ]);
 
         $this->load->library('pagination');
 

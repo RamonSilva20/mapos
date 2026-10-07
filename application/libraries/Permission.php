@@ -20,6 +20,9 @@ if (! defined('BASEPATH')) {
  */
 class Permission
 {
+    /** @var object Instância do CodeIgniter, preenchida no construtor */
+    private $CI;
+
     private $permissions = [];
 
     private $table = 'permissoes'; //Nome tabela onde ficam armazenadas as permissões

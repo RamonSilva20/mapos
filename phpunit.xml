@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="application/vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+         colors="true"
+         executionOrder="depends,defects"
+         failOnRisky="true"
+         failOnWarning="true"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnPhpunitDeprecations="true">
+
+    <testsuites>
+        <testsuite name="Map-OS">
+            <directory>tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- O DB_driver do CodeIgniter 3 cria propriedades dinâmicas, o que é
+             deprecado no PHP 8.2+. O baseline registra esses avisos para que não
+             poluam a saída; qualquer depreciação nova vira falha visível. -->
+        <source baseline="phpunit-baseline.xml">
+        <include>
+            <directory suffix=".php">application</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">application/vendor</directory>
+            <directory suffix=".php">application/third_party</directory>
+            <directory suffix=".php">application/database</directory>
+            <directory suffix=".php">application/config</directory>
+        </exclude>
+    </source>
+</phpunit>

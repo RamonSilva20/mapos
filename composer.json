@@ -19,11 +19,15 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.93.0",
         "symfony/var-dumper": "^6.4.32",
-        "fakerphp/faker": "^1.24.1"
+        "fakerphp/faker": "^1.24.1",
+        "phpunit/phpunit": "^12.5"
     },
     "scripts": {
         "format": [
             "application/vendor/bin/php-cs-fixer fix"
+        ],
+        "test": [
+            "application/vendor/bin/phpunit"
         ]
     },
     "config": {
