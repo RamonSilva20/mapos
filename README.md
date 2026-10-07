@@ -40,9 +40,11 @@ O **Map-OS** é um projeto de código aberto **mantido e desenvolvido pela empre
 Quer ajudar a melhorar o Map-OS? Leia o **[Guia de Contribuição](CONTRIBUTING.md)** para saber como preparar o ambiente de desenvolvimento, o padrão de código adotado e como abrir um Pull Request.
 
 ### SYSGO - Hospedagem Parceira
-Se deseja acessar seu MAP-OS de qualquer lugar, a SysGO é a solução.
-A SysGO oferece instalação automatizada e ambiente dedicao ao MAP-OS Oficial, com suporte a configuração e utilização, backup, estabiliade e confiança.
-Solicite seu acesso agora [Fale com um Especialista!](https://wa.me/sysgo)
+Acesse seu MAP-OS de qualquer lugar com a SYSGO, a solução de hospedagem pensada para quem busca praticidade, segurança e estabilidade.
+
+Com instalação automatizada, ambiente dedicado ao MAP-OS Oficial, suporte na configuração e utilização, backups e alta disponibilidade, a SYSGO ajuda você a manter seu sistema sempre em funcionamento com confiança.
+
+Solicite seu acesso agora: [Fale com um Especialista!](https://wa.me/sysgo)
 
 <p><img src="docs/sysgo.png" alt="SysGO - Soluções que Simplificam"></p>
 
