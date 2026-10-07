@@ -1,0 +1,113 @@
+version: 2
+
+updates:
+  # Ações do GitHub usadas nos workflows. As tags @v4, @v11 e @v2 são major
+  # tags, então o Dependabot abre PR no mesmo major e eu reviso a mudança antes
+  # do merge.
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'America/Sao_Paulo'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+      - 'ci'
+    commit-message:
+      prefix: 'ci'
+    groups:
+      actions-stale:
+        patterns:
+          - 'actions/stale'
+      actions-checkout:
+        patterns:
+          - 'actions/checkout'
+      actions-setup-node:
+        patterns:
+          - 'actions/setup-node'
+      actions-setup-php:
+        patterns:
+          - 'shivammathur/setup-php'
+      actions-gh-release:
+        patterns:
+          - 'softprops/action-gh-release'
+
+  # Dependências do Composer, com o lock commitado. O groups por tipo deixa as
+  # atualizações de uma mesma família irem juntas, que é como se reviewa.
+  - package-ecosystem: 'composer'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'America/Sao_Paulo'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+      - 'php'
+    commit-message:
+      prefix: 'fix'
+    # Minor e patch juntos: no Composer, uma minor de uma dependência de
+    # produção costuma puxar patch de várias outras via constraint.
+    groups:
+      dev-dependencies:
+        dependency-type: 'dev'
+      phpstan:
+        patterns:
+          - 'phpstan/phpstan'
+      phpunit:
+        patterns:
+          - 'phpunit/phpunit'
+      php-cs-fixer:
+        patterns:
+          - 'friendsofphp/php-cs-fixer'
+      security:
+        update-types:
+          - 'patch'
+        patterns:
+          - '!friendsofphp/php-cs-fixer'
+          - '!phpstan/phpstan'
+          - '!phpunit/phpunit'
+          - '!symfony/var-dumper'
+          - '!fakerphp/faker'
+
+  # npm fica comentado de propósito.
+  #
+  # Não existe package.json na v5 ainda; ele chega com o Tailwind v4 (#2832).
+  # Enquanto não houver manifest, o Dependabot reporta erro no ecosystem npm a
+  # cada rodada. Descomentar este bloco junto com o #2832.
+  #
+  # Sem entry no npm, os PRs de segurança do npm param de chegar. Isso importa
+  # porque o histórico mostra 28 alertas de dependência já tratados neste
+  # repositório (oito high, vinte medium), dos quais parte era de jquery — que
+  # é justamente npm. dependabot_security_updates está enabled, mas ele só
+  # abre PR para ecosystem que tenha entry aqui.
+  #
+  # - package-ecosystem: 'npm'
+  #   directory: '/'
+  #   schedule:
+  #     interval: 'weekly'
+  #     day: 'monday'
+  #     time: '06:00'
+  #     timezone: 'America/Sao_Paulo'
+  #   open-pull-requests-limit: 5
+  #   labels:
+  #     - 'dependencies'
+  #   commit-message:
+  #     prefix: 'build'
+  #   groups:
+  #     tailwind:
+  #       patterns:
+  #         - 'tailwindcss'
+  #         - '@tailwindcss/*'
+  #     chart:
+  #       patterns:
+  #         - 'chart.js'
+  #         - 'fullcalendar*'
+  #     form:
+  #       patterns:
+  #         - 'imask'
+  #         - 'flatpickr'
+  #         - 'tom-select*'
