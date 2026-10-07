@@ -42,27 +42,74 @@ jobs:
           git tag "${{ inputs.tag }}"
           git push origin "${{ inputs.tag }}"
 
+      # A versão do PHP segue o composer.json. Quando o #2829 mergear na v5 e
+      # subir o mínimo para 8.5, este número acompanha.
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.5"
           extensions: gd, mbstring
 
+      # composer install, e não composer update.
+      #
+      # O update resolvia de novo na tag, o que faz o zip declarar versões que
+      # nunca foram testadas e nunca foram commitadas. Com --prefer-lowest ele
+      # resolvia para o pior caso possível de cada dependência. O install usa o
+      # composer.lock, que é a resolução que passou pelos testes.
+      #
+      # --no-dev porque nenhuma dependência de desenvolvimento é usada em
+      # runtime (php-cs-fixer, var-dumper, faker, phpunit e phpstan). Elas
+      # entravam no zip de quem instala, somando dezenas de MB sem uso.
       - name: Install dependencies
         run: |
-          composer update --optimize-autoloader --prefer-lowest --prefer-stable
+          composer install --optimize-autoloader --no-dev --no-interaction --no-progress
 
       - name: List installed dependencies
         run: composer show -D
 
+      # O composer install só emite warning quando o lock está defasado em
+      # relação ao composer.json, e sai com 0. Sem esta checagem, uma release
+      # pode sair com dependências diferentes das que estão no lock.
+      - name: Confere que o lock está em sincronia com o composer.json
+        run: |
+          if composer validate --no-check-all --no-check-publish 2>&1 | grep -q "not up to date"; then
+            echo "::error::O composer.lock está defasado em relação ao composer.json."
+            echo "Rode 'composer update --lock' e commite o composer.lock."
+            exit 1
+          fi
+
       - name: Create release archive
         run: |
-          zip -r "${{ inputs.tag }}-release.zip" ./
+          # O zip vai para quem instala o Map-OS, não para quem develope.
+          # Fora .git (69 MB), node_modules e os fontes de CSS, que só fazem
+          # sentido com o build.
+          #
+          # .env e as pastas de upload ficam de fora por accident: estão no
+          # .gitignore, então não estão no repositório clonado. install/files e
+          # application/.env.example vão junto, que é o esperado.
+          zip -r "${{ inputs.tag }}-release.zip" ./ \
+            --exclude './.git/*' \
+            --exclude './.github/*' \
+            --exclude './node_modules/*' \
+            --exclude './assets/src/*' \
+            --exclude './.php-cs-fixer.cache' \
+            --exclude './.phpunit.cache' \
+            --exclude './.phpunit.result.cache'
+
+      # O SHA256 vai anexado à release para o updater (#2871) conseguir
+      # conferir a integridade do zip. Sem ele, o updater baixa e executa
+      # qualquer coisa que o servidor devolver.
+      - name: Calculate SHA256
+        run: |
+          sha256sum "${{ inputs.tag }}-release.zip" > "${{ inputs.tag }}-release.zip.sha256"
+          cat "${{ inputs.tag }}-release.zip.sha256"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag }}
-          files: "${{ inputs.tag }}-release.zip"
+          files: |
+            ${{ inputs.tag }}-release.zip
+            ${{ inputs.tag }}-release.zip.sha256
           generate_release_notes: true
           make_latest: true
