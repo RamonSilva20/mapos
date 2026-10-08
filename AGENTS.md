@@ -34,6 +34,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
    - CI runs `php scripts/check-escape.php`, which fails on any new unescaped `<?= $x ?>`/`echo $x` in `application/views/`. Existing occurrences are counted per file in `escape-baseline.json`; never raise those counts to make CI pass — escape the output instead.
    - Never use raw SQL string concatenation; use CodeIgniter Query Builder or query bindings (`?` or `$this->db->where()`) to prevent SQL injection.
    - Never expose sensitive data (e.g., password hashes) in public models or API responses.
+   - Every login entry point goes through `Limite_login` (`application/libraries/Limite_login.php`): check `bloqueado()` before verifying the password, call `registrarFalha()` on a wrong e-mail or password and `registrarSucesso()` on success, and answer with the same generic message for an unknown e-mail and a wrong password.
 3. **Database Changes:**
    - Schema modifications must be implemented via migrations (`application/database/migrations/`), never by editing `banco.sql` directly.
 4. **Commit Messages:**

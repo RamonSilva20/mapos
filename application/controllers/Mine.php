@@ -190,47 +190,57 @@ class Mine extends CI_Controller
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
         if ($this->form_validation->run() == false) {
             echo json_encode(['result' => false, 'message' => validation_errors()]);
-        } else {
-            $email = $this->input->post('email');
-            $password = $this->input->post('senha');
-            $cliente = $this->check_credentials($email);
 
-            if ($cliente) {
-                // Verificar credenciais do usuário
-                if (password_verify($password, $cliente->senha)) {
-                    // Novo ID de sessão a cada autenticação, para que um ID
-                    // fixado antes do login não continue válido depois dele.
-                    $this->session->sess_regenerate(true);
-
-                    $session_mine_data = [
-                        'nome' => $cliente->nomeCliente,
-                        'cliente_id' => $cliente->idClientes,
-                        'email' => $cliente->email,
-                        'conectado' => true,
-                        'isCliente' => true
-                    ];
-                    $this->session->set_userdata($session_mine_data);
-                    $this->load->model('Audit_model');
-                    $log_data = [
-                        'usuario' => $cliente->nomeCliente,
-                        'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login',
-                        'data' => date('Y-m-d'),
-                        'hora' => date('H:i:s'),
-                        'ip' => $_SERVER['REMOTE_ADDR']
-                    ];
-
-                    $this->Audit_model->add($log_data);
-
-                    echo json_encode(['result' => true]);
-                } else {
-                    echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
-                }
-            } else {
-                // Mesma mensagem do erro de senha: mensagens distintas revelam
-                // quais e-mails possuem cadastro.
-                echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
-            }
+            return;
         }
+
+        $email = $this->input->post('email');
+        $password = $this->input->post('senha');
+        $ip = $this->input->ip_address();
+
+        // Limite de tentativas (#2870): bloqueado, nem consulta a senha.
+        $this->load->library('Limite_login');
+        if ($this->limite_login->bloqueado('cliente', $email, $ip)) {
+            echo json_encode(['result' => false, 'message' => Limite_login::MENSAGEM, 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+
+            return;
+        }
+
+        $cliente = $this->check_credentials($email);
+
+        // Mesma mensagem para e-mail inexistente e senha errada: mensagens
+        // distintas revelam quais e-mails possuem cadastro.
+        if (! $cliente || ! password_verify($password, $cliente->senha)) {
+            $this->limite_login->registrarFalha('cliente', $email, $ip);
+            echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+
+            return;
+        }
+
+        $this->limite_login->registrarSucesso('cliente', $email);
+
+        // Novo ID de sessão a cada autenticação, para que um ID
+        // fixado antes do login não continue válido depois dele.
+        $this->session->sess_regenerate(true);
+
+        $this->session->set_userdata([
+            'nome' => $cliente->nomeCliente,
+            'cliente_id' => $cliente->idClientes,
+            'email' => $cliente->email,
+            'conectado' => true,
+            'isCliente' => true,
+        ]);
+
+        $this->load->model('Audit_model');
+        $this->Audit_model->add([
+            'usuario' => $cliente->nomeCliente,
+            'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login',
+            'data' => date('Y-m-d'),
+            'hora' => date('H:i:s'),
+            'ip' => $ip,
+        ]);
+
+        echo json_encode(['result' => true]);
     }
 
     public function painel()

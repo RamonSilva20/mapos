@@ -29,23 +29,35 @@ class ClientLoginController extends REST_Controller
         $email = $this->input->post('email', true);
         $password = $this->input->post('password', true);
 
-        $cliente = $this->check_credentials($email);
+        $ip = $this->input->ip_address();
 
-        if (!$cliente) {
+        // Limite de tentativas (#2870), no mesmo escopo da área do cliente.
+        $this->load->library('Limite_login');
+        if ($this->limite_login->bloqueado('cliente', $email, $ip)) {
+            header('Retry-After: ' . Limite_login::BLOQUEIO_INICIAL_SEGUNDOS);
             $this->response([
-                'result' => false,
-                 'message' => 'Usuário não encontrado.'
-                ], REST_Controller::HTTP_UNAUTHORIZED);
+                'status' => false,
+                'message' => Limite_login::MENSAGEM,
+            ], REST_Controller::HTTP_TOO_MANY_REQUESTS);
+
             return;
         }
 
-        if (!password_verify($password, $cliente->senha)) {
+        $cliente = $this->check_credentials($email);
+
+        // Mesma resposta para e-mail inexistente e senha errada: "Usuário não
+        // encontrado" revelava quais e-mails possuem cadastro.
+        if (!$cliente || !password_verify((string) $password, $cliente->senha)) {
+            $this->limite_login->registrarFalha('cliente', $email, $ip);
             $this->response([
                 'status' => false,
                 'message' => 'Os dados de acesso estão incorretos.'
                 ], REST_Controller::HTTP_UNAUTHORIZED);
+
             return;
         }
+
+        $this->limite_login->registrarSucesso('cliente', $email);
 
         $tokenData = [
             'uid' => $cliente->idClientes,
@@ -64,7 +76,7 @@ class ClientLoginController extends REST_Controller
             'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login pelo APP',
             'data' => date('Y-m-d'),
             'hora' => date('H:i:s'),
-            'ip' => $_SERVER['REMOTE_ADDR']
+            'ip' => $ip
         ];
         $this->Audit_model->add($log_data);
 

@@ -36,6 +36,9 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Logins do painel e da área do cliente como superfícies de entrada do `DESIGN.md`: fundo escuro com estrelas, título com destaque lima, card escuro com campos claros e ENTRAR com halo, e cada login aponta para o outro na barra do topo. O login do cliente deixa o Bootstrap, o jQuery e o script inline e passa a usar o mesmo módulo do painel. As telas de entrada não seguem mais o modo de cor do painel. #2927 [@RamonSilva20](https://github.com/RamonSilva20)
 - Ilustrações-adesivo em SVG (chave, celular, notebook, caixa de entrega e técnico) nas telas de entrada, com fonte em `assets/src/stickers` e saída otimizada pelo svgo (`npm run build:stickers`). #2928 [@RamonSilva20](https://github.com/RamonSilva20)
 
+### Security
+- Limite de tentativas de login no painel, na área do cliente e nas duas APIs: depois de 5 falhas para o mesmo e-mail (ou 20 do mesmo IP), bloqueio temporário de 1 minuto que dobra a cada nova falha, até 1 hora. A mensagem é a mesma para os dois casos, cada bloqueio vai para a auditoria e a tabela `login_attempts` guarda só o hash do e-mail e do IP. A API do cliente deixa de responder "Usuário não encontrado", e o painel só informa conta expirada depois da senha certa. #PR_NUM [@RamonSilva20](https://github.com/RamonSilva20)
+
 ### Removed
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
 
