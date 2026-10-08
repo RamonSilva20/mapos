@@ -33,8 +33,9 @@ class ClientLoginController extends REST_Controller
 
         // Limite de tentativas (#2870), no mesmo escopo da área do cliente.
         $this->load->library('Limite_login');
-        if ($this->limite_login->bloqueado('cliente', $email, $ip)) {
-            header('Retry-After: ' . Limite_login::BLOQUEIO_INICIAL_SEGUNDOS);
+        $restantes = $this->limite_login->segundosRestantes('cliente', $email, $ip);
+        if ($restantes > 0) {
+            header('Retry-After: ' . $restantes);
             $this->response([
                 'status' => false,
                 'message' => Limite_login::MENSAGEM,

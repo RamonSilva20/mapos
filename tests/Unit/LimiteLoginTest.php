@@ -35,10 +35,11 @@ final class LimiteLoginTest extends MaposTestCase
         $this->auditoria = [];
     }
 
-    private function limite(): Limite_login
+    private function limite(string $segredo = 'segredo-de-teste'): Limite_login
     {
         return new Limite_login([
             'db' => $this->db,
+            'segredo' => $segredo,
             'relogio' => fn () => $this->agora,
             'auditar' => function (string $tarefa, string $ip) {
                 $this->auditoria[] = [$tarefa, $ip];
@@ -158,6 +159,40 @@ final class LimiteLoginTest extends MaposTestCase
         $this->assertMatchesRegularExpression('/"chave":"[0-9a-f]{64}"/', $dump);
     }
 
+    /**
+     * A chave é um HMAC com a encryption_key: sem o segredo, não dá para
+     * conferir um e-mail candidato contra a tabela.
+     */
+    public function testChaveDependeDoSegredo(): void
+    {
+        $this->falhar($this->limite('segredo-a'), 1, 'ana@x.com', '10.0.0.1');
+        $chave = $this->db->where('tipo', 'email')->get('login_attempts')->row()->chave;
+
+        $this->assertSame(hash_hmac('sha256', 'email|ana@x.com', 'segredo-a'), $chave);
+        $this->assertNotSame(hash('sha256', 'email|ana@x.com'), $chave);
+
+        // Com outro segredo, o mesmo e-mail é outra chave.
+        $this->falhar($this->limite('segredo-b'), 1, 'ana@x.com', '10.0.0.9');
+        $this->assertSame(2, $this->db->where('tipo', 'email')->count_all_results('login_attempts'));
+    }
+
+    public function testSegundosRestantesSeguemOBloqueioMaisLongo(): void
+    {
+        $limite = $this->limite();
+        $this->assertSame(0, $limite->segundosRestantes('usuario', 'ana@x.com', '10.0.0.1'));
+
+        $this->falhar($limite, 5);
+        $this->assertSame(60, $limite->segundosRestantes('usuario', 'ana@x.com', '10.0.0.1'));
+
+        $this->agora += 61;
+        $limite->registrarFalha('usuario', 'ana@x.com', '10.0.0.1');
+        $this->agora += 20;
+        $this->assertSame(100, $limite->segundosRestantes('usuario', 'ana@x.com', '10.0.0.1'));
+
+        $this->agora += 101;
+        $this->assertSame(0, $limite->segundosRestantes('usuario', 'ana@x.com', '10.0.0.1'));
+    }
+
     public function testBloqueioVaiParaAAuditoriaSemRevelarOEmail(): void
     {
         $this->falhar($this->limite(), 5, 'ana@x.com', '10.0.0.1');
@@ -214,7 +249,7 @@ final class LimiteLoginTest extends MaposTestCase
             $fonte = (string) file_get_contents(MAPOS_ROOT . '/' . $arquivo);
             $this->assertSame(1, preg_match('/function ' . $metodo . '\(\).*?(?=\n    (?:public|private|protected) function |\n}\s*$)/s', $fonte, $corpo), $arquivo);
             $codigo = $corpo[0];
-            $this->assertStringContainsString("->bloqueado('{$escopo}'", $codigo, $arquivo);
+            $this->assertMatchesRegularExpression("/->(bloqueado|segundosRestantes)\\('{$escopo}'/", $codigo, $arquivo);
             $this->assertStringContainsString("->registrarFalha('{$escopo}'", $codigo, $arquivo);
             $this->assertStringContainsString("->registrarSucesso('{$escopo}'", $codigo, $arquivo);
             $this->assertStringContainsString('Limite_login::MENSAGEM', $codigo, $arquivo);

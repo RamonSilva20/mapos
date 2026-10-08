@@ -261,8 +261,9 @@ class UsuariosController extends REST_Controller
 
         // Limite de tentativas (#2870), no mesmo escopo do login do painel.
         $this->load->library('Limite_login');
-        if ($this->limite_login->bloqueado('usuario', $email, $ip)) {
-            header('Retry-After: ' . Limite_login::BLOQUEIO_INICIAL_SEGUNDOS);
+        $restantes = $this->limite_login->segundosRestantes('usuario', $email, $ip);
+        if ($restantes > 0) {
+            header('Retry-After: ' . $restantes);
             $this->response([
                 'status' => false,
                 'message' => Limite_login::MENSAGEM,

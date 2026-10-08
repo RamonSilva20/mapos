@@ -24,8 +24,10 @@ if (! defined('BASEPATH')) {
  * usuários podem sair pelo mesmo IP (NAT de empresa). Sem falhas por
  * JANELA_SEGUNDOS, o contador recomeça.
  *
- * A tabela guarda só o SHA-256 das chaves. Se ela ainda não existir (migration
- * não rodada), o limite fica desligado e o login segue normal.
+ * A tabela guarda só um HMAC-SHA256 das chaves, com a encryption_key da
+ * instalação como segredo: sem ela, um dump da tabela não pode ser cruzado com
+ * uma lista de e-mails. Se ela ainda não existir (migration não rodada), o
+ * limite fica desligado e o login segue normal.
  */
 class Limite_login
 {
@@ -55,10 +57,12 @@ class Limite_login
     /** @var callable(): int */
     private $relogio;
 
+    private string $segredo;
+
     private ?bool $ativo = null;
 
     /**
-     * @param  array{db?: mixed, auditar?: callable, relogio?: callable}|null  $opcoes  Para os testes; no framework vem vazio.
+     * @param  array{db?: mixed, auditar?: callable, relogio?: callable, segredo?: string}|null  $opcoes  Para os testes; no framework vem vazio.
      */
     public function __construct($opcoes = null)
     {
@@ -67,6 +71,7 @@ class Limite_login
         $this->db = $opcoes['db'] ?? get_instance()->db;
         $this->auditar = $opcoes['auditar'] ?? [$this, 'auditarNoBanco'];
         $this->relogio = $opcoes['relogio'] ?? 'time';
+        $this->segredo = (string) ($opcoes['segredo'] ?? config_item('encryption_key'));
     }
 
     /**
@@ -90,20 +95,30 @@ class Limite_login
      */
     public function bloqueado(string $escopo, ?string $email, string $ip): bool
     {
+        return $this->segundosRestantes($escopo, $email, $ip) > 0;
+    }
+
+    /**
+     * Segundos até o fim do bloqueio mais longo entre o e-mail e o IP; 0 se
+     * nenhum dos dois está bloqueado. A API manda esse valor no Retry-After.
+     */
+    public function segundosRestantes(string $escopo, ?string $email, string $ip): int
+    {
         if (! $this->ativo()) {
-            return false;
+            return 0;
         }
 
         $agora = $this->agora();
+        $restantes = 0;
 
         foreach ($this->chaves($escopo, $email, $ip) as [$tipo, $chave]) {
             $linha = $this->linha($escopo, $tipo, $chave);
-            if ($linha && $linha->bloqueado_ate !== null && strtotime($linha->bloqueado_ate) > $agora) {
-                return true;
+            if ($linha && $linha->bloqueado_ate !== null) {
+                $restantes = max($restantes, strtotime($linha->bloqueado_ate) - $agora);
             }
         }
 
-        return false;
+        return $restantes;
     }
 
     /**
@@ -206,7 +221,10 @@ class Limite_login
 
     private function hash(string $tipo, string $valor): string
     {
-        return hash('sha256', $tipo . '|' . $valor);
+        $dado = $tipo . '|' . $valor;
+
+        // Sem encryption_key configurada, cai no SHA-256 simples.
+        return $this->segredo !== '' ? hash_hmac('sha256', $dado, $this->segredo) : hash('sha256', $dado);
     }
 
     private function linha(string $escopo, string $tipo, string $chave): ?object
