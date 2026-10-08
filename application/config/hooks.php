@@ -22,6 +22,15 @@ $hook['display_override'][] = [
     'filepath' => 'hooks',
 ];
 
+// Cabeçalhos de segurança e CSP em report-only (#2867). Ver
+// docs/cabecalhos-de-seguranca.md.
+$hook['pre_system'][] = [
+    'class' => '',
+    'function' => 'enviarCabecalhosSeguranca',
+    'filename' => 'security_headers.php',
+    'filepath' => 'hooks',
+];
+
 $hook['pre_system'][] = [
     'class' => 'WhoopsHook',
     'function' => 'bootWhoops',
