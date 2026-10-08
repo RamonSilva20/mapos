@@ -12,6 +12,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - **Framework:** CodeIgniter 3 (`application/`)
 - **Database:** MySQL / MariaDB (managed via CodeIgniter Query Builder and Migrations in `application/database/migrations/`)
 - **Dependency Manager:** Composer (vendor directory configured at `application/vendor`)
+- **Front-end Build:** Tailwind CSS v4 via npm (`package.json`, Node >= 22). Only needed to change views or CSS; installing Map-OS never requires Node.
 
 ## Architecture & Directory Structure
 
@@ -37,6 +38,13 @@ Map-OS is an open-source Service Order and Business Management system built in P
    - Schema modifications must be implemented via migrations (`application/database/migrations/`), never by editing `banco.sql` directly.
 4. **Commit Messages:**
    - Follow [Conventional Commits](https://www.conventionalcommits.org/): `feat`, `fix`, `docs`, `refactor`, `chore`, etc.
+
+## Front-end Build
+
+- Source CSS lives in `assets/src/app.css`; the compiled output `assets/dist/app.css` **is committed**.
+- After changing any view or CSS, run `npm ci && npm run build` and commit the `assets/dist` changes. CI rebuilds and fails if the committed output is stale.
+- Tailwind scans `application/views/**/*.php`: write full class names in PHP, never build them by string concatenation.
+- Never commit `node_modules/`.
 
 ## Security & Integrity Mandates
 
