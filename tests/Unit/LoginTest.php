@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Login.
  *
@@ -38,40 +40,100 @@ final class LoginTest extends MaposTestCase
     }
 
     /**
-     * knownIssue #2884: usuarios.dataExpiracao é date DEFAULT NULL e a tela de
-     * cadastro não exige preenchimento, então uma conta criada sem expiração
-     * cai neste caminho com $data_banco = null.
+     * Conta sem data de expiração não expira.
      *
-     * chk_date(null) faz new DateTime(null), que resolve para o instante atual,
-     * e compara contra um segundo new DateTime('now'). A resposta depende de o
-     * relógio ter avançado entre as duas chamadas: quando avançou, o primeiro é
-     * "menor que" o segundo e o login é recusado com "A conta do usuário está
-     * expirada".
-     *
-     * Este teste roda a comparação várias vezes porque o resultado é
-     * dependente de timing: assertTrue fixo reprovava de forma intermitente,
-     * passando na máquina local e falhando no CI. Nos dois casos chk_date
-     * devolveu false pelo menos uma vez em N tentativas.
-     *
-     * O que fixa o defeito é o bloqueio acontecer alguma vez. Quando #2884 for
-     * corrigido, chk_date passa a devolver false sempre, e este teste falha de
-     * forma determinística — que é o sinal de que a correção entrou.
+     * usuarios.dataExpiracao é date DEFAULT NULL e o servidor não exige
+     * preenchimento, então esse é o estado de qualquer usuário criado sem
+     * expiração. Antes da correção, chk_date(null) fazia new DateTime(null),
+     * que resolve para o instante atual, e comparava contra um segundo
+     * new DateTime('now'): quando o relógio tinha avançado entre as duas
+     * chamadas, o login era recusado com "a conta está expirada".
      */
-    public function testContaSemDataDeExpiracaoEhBloqueadaEmAlgumMomento(): void
+    public function testContaSemDataDeExpiracaoNaoExpira(): void
     {
-        $bloqueios = 0;
+        $this->assertFalse($this->contaExpirada(null));
+    }
 
-        for ($i = 0; $i < 200; $i++) {
-            $bloqueios += $this->contaExpirada(null) ? 1 : 0;
+    /**
+     * String vazia e o valor zero-ish do banco caem no mesmo caminho de null.
+     *
+     * A coluna é date, então o banco devolve null ou uma data — mas o dado
+     * vem de um POST e a API usa post('dataExpiracao'), que devolve string
+     * vazia quando o campo não vem.
+     */
+    #[DataProvider('valoresVaziosDeExpiracao')]
+    public function testValoresVaziosNaoExpiram($valor): void
+    {
+        $this->assertFalse($this->contaExpirada($valor));
+    }
+
+    public static function valoresVaziosDeExpiracao(): array
+    {
+        return [
+            'null' => [null],
+            'string vazia' => [''],
+            'string de espacos' => ['   '],
+        ];
+    }
+
+    /**
+     * A regra continua valendo depois da correção: data passada expira.
+     */
+    public function testDataPassadaContinuaExpirando(): void
+    {
+        $this->assertTrue($this->contaExpirada('01/01/2020'));
+    }
+
+    /**
+     * A regra de expiração existe em dois lugares: Login::chk_date() e
+     * UsuariosController::chk_date(), na API.
+     *
+     * As duas cópias nasceram idênticas e essa duplicação é a origem de metade
+     * do problema do #2884: corrigir uma e esquecer a outra deixa o admin e a
+     * API discordando sobre quem pode entrar. Este teste falha se as duas
+     * implementações divergirem.
+     *
+     * A comparação é sobre o corpo do método, sem os comentários, porque os
+     * dois arquivos documentam contextos diferentes (interface web e token).
+     */
+    public function testAsDuasCopiasDeChkDateNaoDivergem(): void
+    {
+        $login = $this->corpoDoMetodo(
+            dirname(__DIR__, 2) . '/application/controllers/Login.php',
+            'chk_date'
+        );
+        $api = $this->corpoDoMetodo(
+            dirname(__DIR__, 2) . '/application/controllers/api/v1/UsuariosController.php',
+            'chk_date'
+        );
+
+        $this->assertNotNull($login, 'Login::chk_date não encontrado.');
+        $this->assertNotNull($api, 'UsuariosController::chk_date não encontrado.');
+        $this->assertSame(
+            $login,
+            $api,
+            'Login::chk_date e UsuariosController::chk_date divergiram. Corrija as duas '
+                . 'juntas, senão o admin e a API discordam sobre quem pode entrar.'
+        );
+    }
+
+    /**
+     * Extrai o corpo de um método privado, sem os comentários de bloco.
+     */
+    private function corpoDoMetodo(string $arquivo, string $metodo): ?string
+    {
+        $fonte = file_get_contents($arquivo);
+        $padrao = '/function ' . preg_quote($metodo, '/') . '\s*\([^)]*\)\s*\{(.*?)\n    \}/s';
+
+        if (! preg_match($padrao, $fonte, $achados)) {
+            return null;
         }
 
-        $this->assertGreaterThan(
-            0,
-            $bloqueios,
-            'Com dataExpiracao nula, chk_date deveria recusar o login em algum momento (#2884). '
-                . 'Se está retornando false sempre, provavelmente o #2884 já foi corrigido: '
-                . 'atualize este teste para esperar false.'
-        );
+        // Tira comentários de linha e de bloco, e normaliza o espaçamento.
+        $corpo = preg_replace('#/\*.*?\*/#s', '', $achados[1]);
+        $corpo = preg_replace('#//[^\n]*#', '', (string) $corpo);
+
+        return trim((string) preg_replace('/[ \t]+/', ' ', (string) $corpo));
     }
 
     public function testSenhaConfereComHashValido(): void
