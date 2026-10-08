@@ -180,12 +180,12 @@ $config = [
     'os' => [
         [
             'field' => 'dataInicial',
-            'label' => 'DataInicial',
+            'label' => 'Data inicial',
             'rules' => 'required|trim',
         ],
         [
             'field' => 'dataFinal',
-            'label' => 'DataFinal',
+            'label' => 'Data final',
             'rules' => 'trim|required',
         ],
         [
@@ -193,17 +193,17 @@ $config = [
             'label' => 'Garantia',
             'rules' => 'trim|numeric',
             'errors' => [
-                'numeric' => 'Por favor digite apenas número.',
+                'numeric' => 'Informe a garantia em dias, só com números.',
             ],
         ],
         [
             'field' => 'termoGarantia',
-            'label' => 'Termo Garantia',
+            'label' => 'Termo de garantia',
             'rules' => 'trim',
         ],
         [
             'field' => 'descricaoProduto',
-            'label' => 'DescricaoProduto',
+            'label' => 'Descrição do produto ou serviço',
             'rules' => 'trim',
         ],
         [
@@ -218,22 +218,22 @@ $config = [
         ],
         [
             'field' => 'observacoes',
-            'label' => 'Observacoes',
+            'label' => 'Observações',
             'rules' => 'trim',
         ],
         [
             'field' => 'clientes_id',
-            'label' => 'clientes',
+            'label' => 'Cliente',
             'rules' => 'trim|required',
         ],
         [
             'field' => 'usuarios_id',
-            'label' => 'usuarios_id',
+            'label' => 'Técnico responsável',
             'rules' => 'trim|required',
         ],
         [
             'field' => 'laudoTecnico',
-            'label' => 'Laudo Tecnico',
+            'label' => 'Laudo técnico',
             'rules' => 'trim',
         ],
     ],

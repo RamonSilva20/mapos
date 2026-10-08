@@ -280,95 +280,136 @@ class Os_model extends CI_Model
         return $this->db->count_all($table);
     }
 
+    // Autocompletes: devolvem a lista (vazia quando nada casa) e o controller
+    // responde em JSON. Cada item mantém label e id, que as telas legadas
+    // (jQuery UI) usam, e traz valor (o texto que fica no campo ao escolher) e
+    // detalhe (a linha secundária da lista) para o combobox da v5
+    // (assets/js/lib/autocomplete.js).
+
     public function autoCompleteProduto($q)
     {
-        $this->db->select('*');
-        $this->db->limit(25);
-        $this->db->like('codDeBarra', $q);
-        $this->db->or_like('descricao', $q);
-        $query = $this->db->get('produtos');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
-            }
-            echo json_encode($row_set);
-        }
+        return $this->produtosParaAutocomplete($q, false);
     }
 
     public function autoCompleteProdutoSaida($q)
     {
-        $this->db->select('*');
+        return $this->produtosParaAutocomplete($q, true);
+    }
+
+    private function produtosParaAutocomplete($q, bool $saida): array
+    {
+        $this->db->select('idProdutos, descricao, precoVenda, estoque');
         $this->db->limit(25);
-        $this->db->like('codDeBarra', $q);
-        $this->db->or_like('descricao', $q);
-        $this->db->where('saida', 1);
-        $query = $this->db->get('produtos');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
-            }
-            echo json_encode($row_set);
+        // O OR entre parênteses, para não anular o filtro de saída.
+        $this->db->group_start()->like('codDeBarra', $q)->or_like('descricao', $q)->group_end();
+        if ($saida) {
+            $this->db->where('saida', 1);
         }
+
+        $itens = [];
+        foreach ($this->db->get('produtos')->result_array() as $row) {
+            $itens[] = [
+                'label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'],
+                'valor' => $row['descricao'],
+                'detalhe' => 'Preço: R$ ' . $row['precoVenda'] . ' · Estoque: ' . $row['estoque'],
+                'estoque' => $row['estoque'],
+                'id' => $row['idProdutos'],
+                'preco' => $row['precoVenda'],
+            ];
+        }
+
+        return $itens;
     }
 
     public function autoCompleteCliente($q)
     {
-        $this->db->select('*');
+        $this->db->select('idClientes, nomeCliente, telefone, celular, documento');
         $this->db->limit(25);
         $this->db->like('nomeCliente', $q);
         $this->db->or_like('telefone', $q);
         $this->db->or_like('celular', $q);
         $this->db->or_like('documento', $q);
-        $query = $this->db->get('clientes');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'] . ' | Documento: ' . $row['documento'], 'id' => $row['idClientes']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('clientes')->result_array() as $row) {
+            $detalhe = array_filter([$row['documento'], $row['celular'] ?: $row['telefone']], static fn ($v) => (string) $v !== '');
+            $itens[] = [
+                'label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'] . ' | Documento: ' . $row['documento'],
+                'valor' => $row['nomeCliente'],
+                'detalhe' => implode(' · ', $detalhe),
+                'id' => $row['idClientes'],
+            ];
         }
+
+        return $itens;
     }
 
     public function autoCompleteUsuario($q)
     {
-        $this->db->select('*');
+        $this->db->select('idUsuarios, nome, telefone');
         $this->db->limit(25);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
-        $query = $this->db->get('usuarios');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('usuarios')->result_array() as $row) {
+            $itens[] = [
+                'label' => $row['nome'] . ' | Telefone: ' . $row['telefone'],
+                'valor' => $row['nome'],
+                'detalhe' => (string) $row['telefone'],
+                'id' => $row['idUsuarios'],
+            ];
         }
+
+        return $itens;
     }
 
     public function autoCompleteTermoGarantia($q)
     {
-        $this->db->select('*');
+        $this->db->select('idGarantias, refGarantia');
         $this->db->limit(25);
         $this->db->like('LOWER(refGarantia)', $q);
-        $query = $this->db->get('garantias');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['refGarantia'], 'id' => $row['idGarantias']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('garantias')->result_array() as $row) {
+            $itens[] = ['label' => $row['refGarantia'], 'valor' => $row['refGarantia'], 'detalhe' => '', 'id' => $row['idGarantias']];
         }
+
+        return $itens;
     }
 
     public function autoCompleteServico($q)
     {
-        $this->db->select('*');
+        $this->db->select('idServicos, nome, preco');
         $this->db->limit(25);
         $this->db->like('nome', $q);
-        $query = $this->db->get('servicos');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'] . ' | Preço: R$ ' . $row['preco'], 'id' => $row['idServicos'], 'preco' => $row['preco']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('servicos')->result_array() as $row) {
+            $itens[] = [
+                'label' => $row['nome'] . ' | Preço: R$ ' . $row['preco'],
+                'valor' => $row['nome'],
+                'detalhe' => 'Preço: R$ ' . $row['preco'],
+                'id' => $row['idServicos'],
+                'preco' => $row['preco'],
+            ];
         }
+
+        return $itens;
+    }
+
+    /**
+     * Diz se existe o registro com o id, para conferir os ids escolhidos nos
+     * autocompletes antes de gravar a OS. Com $ativo, só usuários ativos.
+     */
+    public function existe(string $tabela, string $chave, int $id, bool $ativo = false): bool
+    {
+        $this->db->where($chave, $id);
+        if ($ativo) {
+            $this->db->where('situacao', 1);
+        }
+
+        return $this->db->count_all_results($tabela) > 0;
     }
 
     public function anexar($os, $anexo, $url, $thumb, $path)
