@@ -28,6 +28,15 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - ficha com markup, margem e entrada de estoque.
 
   A entrada de estoque passa a somar no banco (`estoque = estoque + ?`), em vez de confiar no estoque atual enviado pelo navegador, e não deixa o estoque ficar negativo. #2941 [@RamonSilva20](https://github.com/RamonSilva20)
+- Módulo de OS migrado para os componentes da v5 (#2842), em três etapas:
+  - listagem com filtros na URL, total por linha e exclusão em `modal-confirm`, que também apaga anotações, arquivos dos anexos e o lançamento da fatura. #2940 [@RamonSilva20](https://github.com/RamonSilva20)
+  - formulário único para cadastrar e editar os dados, com autocomplete acessível de cliente, técnico e termo de garantia. A OS faturada ou cancelada passa a ser bloqueada também no GET. #2942 [@RamonSilva20](https://github.com/RamonSilva20)
+  - tela da OS com abas. Produtos, serviços, anexos, anotações e desconto mudam sem recarregar a página. Também passam a existir:
+    - histórico de status (tabela `os_historico`);
+    - faturamento que preenche `os.lancamento`;
+    - PIX copia e cola gerado no servidor, sem o jsQR do rawgit, também na venda.
+
+    Os endpoints conferem no banco a OS, os itens, a quantidade devolvida ao estoque e o desconto. #2943 [@RamonSilva20](https://github.com/RamonSilva20)
 - Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
 - Ficha do cliente migrada para os componentes da v5:
   - abas por link (dados, ordens de serviço e vendas), com contadores;

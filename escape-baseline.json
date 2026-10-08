@@ -55,8 +55,6 @@
     "application/views/os/emails/os.php": 26,
     "application/views/os/imprimirOs.php": 67,
     "application/views/os/imprimirOsTermica.php": 52,
-    "application/views/os/itensOs.php": 34,
-    "application/views/os/visualizarOs.php": 24,
     "application/views/permissoes/editarPermissao.php": 4,
     "application/views/permissoes/permissoes.php": 5,
     "application/views/produtos/formulario.php": 6,
@@ -80,5 +78,5 @@
     "application/views/vendas/imprimirVendaOrcamento.php": 28,
     "application/views/vendas/imprimirVendaTermica.php": 20,
     "application/views/vendas/vendas.php": 13,
-    "application/views/vendas/visualizarVenda.php": 17
+    "application/views/vendas/visualizarVenda.php": 16
 }

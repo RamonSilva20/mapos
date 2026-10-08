@@ -230,65 +230,43 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
     </div>
 </div>
 
-<script src="https://cdn.rawgit.com/cozmo/jsQR/master/dist/jsQR.js"></script>
+<input type="hidden" id="pixPayload" value="<?= e($pixPayload ?? '') ?>" data-telefone="<?= e($zapnumber ?? '') ?>">
 <script type="text/javascript">
-
+    // O copia e cola vem do servidor (Vendas_model::getPixPayload()). Antes a
+    // imagem do QR Code era decodificada no navegador com o jsQR do rawgit
+    // (#2842).
     $('#copyButton').on('click', function() {
-        var $qrCodeImage = $('#qrCodeImage');
-        var canvas = document.createElement('canvas');
-        canvas.width = $qrCodeImage.width();
-        canvas.height = $qrCodeImage.height();
-        var context = canvas.getContext('2d');
-        context.drawImage($qrCodeImage[0], 0, 0, $qrCodeImage.width(), $qrCodeImage.height());
-        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        var code = jsQR(imageData.data, imageData.width, imageData.height);
-        if (code) {
-            navigator.clipboard.writeText(code.data).then(function() {
-                $('#modal-pix').modal('hide');
-                swal({
-                    type: "success",
-                    title: "Sucesso!",
-                    text: "QR Code copiado com sucesso: " + code.data,
-                    icon: "success",
-                    timer: 3000,
-                    showConfirmButton: false,
-                });
-
-            }).catch(function(err) {
-                swal({
-                    type: "error",
-                    title: "Atenção",
-                    text: "Erro ao copiar QR Code: ",
-                    err
-                });
-            });
-        } else {
+        var codigo = $('#pixPayload').val();
+        if (!codigo) {
             swal({
                 type: "error",
                 title: "Atenção",
-                text: "Não foi possível decodificar o QR Code.",
+                text: "Código PIX indisponível para esta venda.",
             });
+            return;
         }
+        navigator.clipboard.writeText(codigo).then(function() {
+            $('#modal-pix').modal('hide');
+            swal({
+                type: "success",
+                title: "Sucesso!",
+                text: "Código PIX copiado: " + codigo,
+                icon: "success",
+                timer: 3000,
+                showConfirmButton: false,
+            });
+        }).catch(function() {
+            swal({
+                type: "error",
+                title: "Atenção",
+                text: "Não foi possível copiar o código PIX.",
+            });
+        });
     });
 
     $('#pixWhatsApp').on('click', function() {
-        var $qrCodeImage = $('#qrCodeImage');
-        var canvas = document.createElement('canvas');
-        canvas.width = $qrCodeImage.width();
-        canvas.height = $qrCodeImage.height();
-        var context = canvas.getContext('2d');
-        context.drawImage($qrCodeImage[0], 0, 0, $qrCodeImage.width(), $qrCodeImage.height());
-        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        var code = jsQR(imageData.data, imageData.width, imageData.height);
-        if (code) {
-            var whatsappLink = 'https://api.whatsapp.com/send?phone=55' + <?= isset($zapnumber) ? $zapnumber : "" ?> + '&text=' + code.data;
-            window.open(whatsappLink, '_blank');
-        } else {
-            swal({
-                type: "error",
-                title: "Atenção",
-                text: "Não foi possível decodificar o QR Code.",
-            });
-        }
+        var codigo = $('#pixPayload').val();
+        var telefone = String($('#pixPayload').data('telefone') || '');
+        window.open('https://api.whatsapp.com/send?phone=55' + encodeURIComponent(telefone) + '&text=' + encodeURIComponent(codigo), '_blank');
     });
 </script>

@@ -12,4 +12,46 @@
    <issue><![CDATA[Creation of dynamic property CI_DB_sqlite3_driver::$stricton is deprecated]]></issue>
   </line>
  </file>
+ <file path="application/vendor/piggly/php-pix/src/Emv/Field.php">
+  <line number="51" hash="ace3208d8f2c436839e9e321e7a8196b34489c93">
+   <issue><![CDATA[Piggly\Pix\Emv\Field::__construct(): Implicitly marking parameter $id as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="52" hash="dbae9b4bbb11ee03155c0a0f9a829bf0c3dce3f6">
+   <issue><![CDATA[Piggly\Pix\Emv\Field::__construct(): Implicitly marking parameter $name as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="53" hash="3663a514da66380929b9d974f84b5eaf348425d0">
+   <issue><![CDATA[Piggly\Pix\Emv\Field::__construct(): Implicitly marking parameter $size as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="54" hash="c2fb11d3570da654e9ed6a50305a05af187a12d4">
+   <issue><![CDATA[Piggly\Pix\Emv\Field::__construct(): Implicitly marking parameter $required as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="55" hash="57c406433bf61a9219aeb6d56d86f7db3e78ee4a">
+   <issue><![CDATA[Piggly\Pix\Emv\Field::__construct(): Implicitly marking parameter $default as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="application/vendor/piggly/php-pix/src/Emv/MultiField.php">
+  <line number="59" hash="ace3208d8f2c436839e9e321e7a8196b34489c93">
+   <issue><![CDATA[Piggly\Pix\Emv\MultiField::__construct(): Implicitly marking parameter $id as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="60" hash="dbae9b4bbb11ee03155c0a0f9a829bf0c3dce3f6">
+   <issue><![CDATA[Piggly\Pix\Emv\MultiField::__construct(): Implicitly marking parameter $name as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="61" hash="3663a514da66380929b9d974f84b5eaf348425d0">
+   <issue><![CDATA[Piggly\Pix\Emv\MultiField::__construct(): Implicitly marking parameter $size as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="62" hash="c2fb11d3570da654e9ed6a50305a05af187a12d4">
+   <issue><![CDATA[Piggly\Pix\Emv\MultiField::__construct(): Implicitly marking parameter $required as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="63" hash="b929c6f5c53d03fb044af63c38027bbf381a4d5b">
+   <issue><![CDATA[Piggly\Pix\Emv\MultiField::__construct(): Implicitly marking parameter $minId as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+  <line number="64" hash="6bdf416ecdad84c034779f0eabcc9fe8b3ca0f9f">
+   <issue><![CDATA[Piggly\Pix\Emv\MultiField::__construct(): Implicitly marking parameter $maxId as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
+ <file path="application/vendor/piggly/php-pix/src/Parser.php">
+  <line number="306" hash="7707d04abe0fbe541b9c04be7c8a996029bd2348">
+   <issue><![CDATA[Piggly\Pix\Parser::parseTid(): Implicitly marking parameter $tid as nullable is deprecated, the explicit nullable type must be used instead]]></issue>
+  </line>
+ </file>
 </files>

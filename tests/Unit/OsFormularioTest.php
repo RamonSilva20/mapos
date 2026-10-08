@@ -163,7 +163,7 @@ final class OsFormularioTest extends MaposTestCase
 
     private function controllerComFakes(string $statusAtual, array $produtos): array
     {
-        $registro = (object) ['estoque' => [], 'edit' => null];
+        $registro = (object) ['estoque' => [], 'edit' => null, 'historico' => []];
 
         $osModel = new class($produtos, $registro) {
             public function __construct(private array $produtos, private object $registro)
@@ -180,6 +180,11 @@ final class OsFormularioTest extends MaposTestCase
                 $this->registro->edit = [$tabela, $dados, $chave, $id];
 
                 return true;
+            }
+
+            public function registrarStatus($idOs, $anterior, $novo, $usuario)
+            {
+                $this->registro->historico[] = [$idOs, $anterior, $novo, $usuario];
             }
         };
         $produtosModel = new class($registro) {
@@ -202,12 +207,20 @@ final class OsFormularioTest extends MaposTestCase
 
             public $load;
 
+            public $session;
+
             public function __construct()
             {
             }
         };
         $controller->os_model = $osModel;
         $controller->produtos_model = $produtosModel;
+        $controller->session = new class() {
+            public function userdata($chave)
+            {
+                return $chave === 'id_admin' ? '7' : null;
+            }
+        };
         $controller->load = new class() {
             public function model($nome)
             {
@@ -226,6 +239,8 @@ final class OsFormularioTest extends MaposTestCase
         $this->assertSame(12, $this->invokeMethod($controller, 'salvarOs', [$os, ['status' => 'Cancelado']]));
         $this->assertSame([[5, 2, '+']], $registro->estoque);
         $this->assertSame(['os', ['status' => 'Cancelado'], 'idOs', 12], $registro->edit);
+        // A mudança de status entra no histórico, com quem mudou.
+        $this->assertSame([[12, 'Aberto', 'Cancelado', 7]], $registro->historico);
 
         [$controller, $os, $registro] = $this->controllerComFakes('Cancelado', $produtos);
         $this->invokeMethod($controller, 'salvarOs', [$os, ['status' => 'Aberto']]);

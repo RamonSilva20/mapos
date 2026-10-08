@@ -5,7 +5,8 @@
 // - Valida no navegador com as regras do próprio HTML (required, type,
 //   pattern, maxlength) antes de enviar; o erro aparece no campo, com a mesma
 //   marcação do erro que o servidor renderiza (lib/formulario.js), e o foco vai
-//   para o primeiro campo com erro. O servidor valida de novo sempre.
+//   para o primeiro campo com erro. O servidor valida de novo sempre; quando a
+//   tela volta com erros dele, o foco também vai para o primeiro campo marcado.
 // - Depois de um erro, o campo é revalidado enquanto o usuário corrige.
 // - Ao enviar, o botão fica em carregamento (data-rotulo-carregando) e não
 //   aceita um segundo clique.
@@ -93,6 +94,10 @@ export default function iniciar(formulario) {
 
         marcarCarregando(evento.submitter ?? formulario.querySelector('[type=submit]'), true);
     });
+
+    // A tela voltou do servidor com erros: o foco vai para o primeiro campo
+    // marcado, e não para o primeiro do formulário (autofocus).
+    formulario.querySelector('[aria-invalid="true"]')?.focus();
 
     // Voltar pelo histórico (bfcache) não pode deixar o botão travado.
     window.addEventListener('pageshow', () => {

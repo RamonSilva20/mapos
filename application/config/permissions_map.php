@@ -131,8 +131,7 @@ $config['permissions_map'] = [
         'downloadanexo' => 'vOs',
         'adicionar' => 'aOs',
         'editar' => 'eOs',
-        // Itens, anexos, anotações, desconto e faturamento (tela provisória).
-        'itens' => 'eOs',
+        // Itens, anexos, anotações, desconto e faturamento da tela da OS (JSON).
         'adicionarProduto' => 'eOs',
         'excluirProduto' => 'eOs',
         'adicionarServico' => 'eOs',

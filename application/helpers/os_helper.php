@@ -294,3 +294,329 @@ if (! function_exists('osValoresDoFormulario')) {
         return array_merge(array_fill_keys($campos, ''), $padrao);
     }
 }
+
+/*
+ * Tela da OS (#2842): itens, desconto, faturamento e histórico.
+ */
+
+if (! defined('OS_FORMAS_PAGAMENTO')) {
+    // Formas de pagamento do faturamento, as mesmas do formulário da v4.
+    define('OS_FORMAS_PAGAMENTO', ['Dinheiro', 'Pix', 'Cartão de Crédito', 'Cartão de Débito', 'Boleto', 'Depósito', 'Cheque']);
+}
+
+if (! defined('OS_ABAS')) {
+    // Abas da tela da OS (?aba=), na ordem em que aparecem.
+    define('OS_ABAS', ['resumo', 'produtos', 'servicos', 'anexos', 'anotacoes', 'historico']);
+}
+
+if (! function_exists('osNumero')) {
+    /**
+     * Quantidade digitada (o serviço aceita fração, como horas): aceita
+     * "1.5", "1,5" e "1.234,5". Vazio ou inválido devolve null. Valores em
+     * dinheiro usam valorDecimal() (status_helper), no formato das colunas.
+     */
+    function osNumero($valor): ?float
+    {
+        if (! is_scalar($valor)) {
+            return null;
+        }
+
+        $texto = str_replace(' ', '', trim((string) $valor));
+        if ($texto === '') {
+            return null;
+        }
+
+        if (str_contains($texto, ',')) {
+            // Vírgula decimal: os pontos são separador de milhar.
+            $texto = str_replace(['.', ','], ['', '.'], $texto);
+        }
+
+        return preg_match('/^-?\d+(\.\d+)?$/', $texto) ? (float) $texto : null;
+    }
+}
+
+if (! function_exists('osItemDoFormulario')) {
+    /**
+     * Confere o POST de um produto ou serviço adicionado à OS e devolve os
+     * dados da linha de produtos_os/servicos_os (sem o os_id). Os erros vêm
+     * pelo nome do campo da tela: produto ou servico, quantidade e preco.
+     *
+     * $cadastro é a linha de produtos (idProdutos, estoque) ou de servicos
+     * (idServicos) escolhida no autocomplete, já conferida no banco pelo
+     * controller. Produto tem quantidade inteira (produtos_os.quantidade é
+     * INT) e, com o controle de estoque ligado, não passa do estoque.
+     *
+     * @param  array<string, mixed>  $post
+     * @return array{0: array<string, int|float>, 1: array<string, string>}
+     */
+    function osItemDoFormulario(array $post, string $tipo, ?object $cadastro, bool $controleEstoque = false): array
+    {
+        $produto = $tipo === 'produto';
+        $erros = [];
+
+        if ($cadastro === null) {
+            $erros[$produto ? 'produto' : 'servico'] = $produto ? 'Escolha um produto da lista.' : 'Escolha um serviço da lista.';
+        }
+
+        $quantidade = osNumero($post['quantidade'] ?? null);
+        if ($quantidade === null || $quantidade <= 0) {
+            $erros['quantidade'] = 'Informe uma quantidade maior que zero.';
+        } elseif ($produto && floor($quantidade) != $quantidade) {
+            $erros['quantidade'] = 'A quantidade de produto é um número inteiro.';
+        } elseif ($produto && $controleEstoque && $cadastro !== null && $quantidade > (float) $cadastro->estoque) {
+            $erros['quantidade'] = 'Estoque insuficiente: há ' . (int) $cadastro->estoque . ' em estoque.';
+        }
+
+        $preco = valorDecimal($post['preco'] ?? null);
+        if ($preco === null) {
+            $erros['preco'] = 'Informe um preço válido, como 49,90.';
+        }
+
+        if ($erros !== []) {
+            return [[], $erros];
+        }
+
+        $quantidade = $produto ? (int) $quantidade : (float) $quantidade;
+        $preco = round((float) $preco, 2);
+
+        return [[
+            ($produto ? 'produtos_id' : 'servicos_id') => (int) ($produto ? $cadastro->idProdutos : $cadastro->idServicos),
+            'quantidade' => $quantidade,
+            'preco' => $preco,
+            'subTotal' => round($preco * $quantidade, 2),
+        ], []];
+    }
+}
+
+if (! function_exists('osTotais')) {
+    /**
+     * Totais da OS a partir das somas de produtos e serviços e dos campos de
+     * desconto da tabela os.
+     *
+     * os.valor_desconto guarda o total já com desconto (0 quando não há
+     * desconto). Antes de faturar, os.desconto é o número digitado (R$ ou %)
+     * e os.tipo_desconto diz qual; depois de faturar, os.desconto passa a ser
+     * o valor do desconto em reais.
+     *
+     * @return array{produtos: float, servicos: float, bruto: float, desconto: float, total: float, tipo: string|null, informado: float}
+     */
+    function osTotais(float $produtos, float $servicos, $valorComDesconto = 0, $tipoDesconto = null, $descontoInformado = 0): array
+    {
+        $bruto = round($produtos + $servicos, 2);
+        $comDesconto = round((float) $valorComDesconto, 2);
+        $total = $comDesconto > 0 && $comDesconto < $bruto ? $comDesconto : $bruto;
+        $temDesconto = $total < $bruto;
+
+        return [
+            'produtos' => round($produtos, 2),
+            'servicos' => round($servicos, 2),
+            'bruto' => $bruto,
+            'desconto' => round($bruto - $total, 2),
+            'total' => $total,
+            'tipo' => $temDesconto ? (in_array($tipoDesconto, ['real', 'porcento'], true) ? $tipoDesconto : 'real') : null,
+            'informado' => $temDesconto ? round((float) $descontoInformado, 2) : 0.0,
+        ];
+    }
+}
+
+if (! function_exists('osCalcularDesconto')) {
+    /**
+     * Desconto da OS calculado no servidor (na v4 o total com desconto vinha
+     * pronto do navegador). Valor 0 remove o desconto.
+     *
+     * @return array{0: array{tipo_desconto: string|null, desconto: float, valor_desconto: float}|null, 1: array<string, string>}
+     */
+    function osCalcularDesconto(float $bruto, $tipo, $valor): array
+    {
+        if (! in_array($tipo, ['real', 'porcento'], true)) {
+            return [null, ['tipoDesconto' => 'Escolha o tipo de desconto.']];
+        }
+
+        $numero = valorDecimal($valor);
+        if ($numero === null) {
+            return [null, ['desconto' => 'Informe o desconto, como 10 ou 10,50.']];
+        }
+        $numero = (float) $numero;
+
+        if ($numero == 0) {
+            return [['tipo_desconto' => null, 'desconto' => 0.0, 'valor_desconto' => 0.0], []];
+        }
+
+        if ($bruto <= 0) {
+            return [null, ['desconto' => 'Adicione produtos ou serviços antes de dar desconto.']];
+        }
+
+        if ($tipo === 'porcento' && $numero > 100) {
+            return [null, ['desconto' => 'O desconto em porcentagem vai até 100%.']];
+        }
+
+        $emReais = $tipo === 'porcento' ? round($bruto * $numero / 100, 2) : round($numero, 2);
+        $total = round($bruto - $emReais, 2);
+
+        // O banco usa valor_desconto = 0 para "sem desconto": um desconto que
+        // zera (ou passa) o total não tem como ser gravado.
+        if ($total <= 0) {
+            return [null, ['desconto' => 'O desconto tem de ser menor que o total da OS (' . dinheiro($bruto) . ').']];
+        }
+
+        return [['tipo_desconto' => $tipo, 'desconto' => round($numero, 2), 'valor_desconto' => $total], []];
+    }
+}
+
+if (! function_exists('osFaturaDoFormulario')) {
+    /**
+     * Lançamento (receita) do faturamento da OS. Valor, desconto e cliente
+     * vêm da OS e dos totais calculados no servidor; do formulário só saem a
+     * descrição, as datas, a forma de pagamento e as observações.
+     *
+     * @param  array<string, mixed>  $post
+     * @param  array{bruto: float, desconto: float, total: float}  $totais
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    function osFaturaDoFormulario(array $post, object $os, array $totais, ?int $usuario): array
+    {
+        $texto = static fn (string $campo): string => is_scalar($post[$campo] ?? null) ? trim((string) $post[$campo]) : '';
+        $erros = [];
+
+        if ($totais['total'] <= 0) {
+            $erros['_geral'] = 'Adicione produtos ou serviços antes de faturar.';
+        }
+
+        $descricao = $texto('descricao');
+        if ($descricao === '') {
+            $erros['descricao'] = 'Informe a descrição do lançamento.';
+        } elseif (mb_strlen($descricao) > 255) {
+            $erros['descricao'] = 'A descrição tem até 255 caracteres.';
+        }
+
+        $vencimento = dataIsoParaYmd($texto('vencimento'));
+        if ($vencimento === null) {
+            $erros['vencimento'] = 'Informe a data de vencimento.';
+        }
+
+        $recebido = in_array($texto('recebido'), ['1', 'on', 'true'], true);
+        $recebimento = null;
+        if ($recebido) {
+            $recebimento = dataIsoParaYmd($texto('recebimento'));
+            if ($recebimento === null) {
+                $erros['recebimento'] = 'Informe a data em que foi recebido.';
+            }
+        }
+
+        $forma = $texto('formaPgto');
+        if (! in_array($forma, OS_FORMAS_PAGAMENTO, true)) {
+            $erros['formaPgto'] = 'Escolha a forma de pagamento.';
+        }
+
+        if ($erros !== []) {
+            return [[], $erros];
+        }
+
+        return [[
+            'descricao' => $descricao,
+            'valor' => $totais['bruto'],
+            'tipo_desconto' => 'real',
+            'desconto' => $totais['desconto'],
+            'valor_desconto' => $totais['total'],
+            'clientes_id' => (int) $os->clientes_id,
+            'cliente_fornecedor' => (string) $os->nomeCliente,
+            'data_vencimento' => $vencimento,
+            'data_pagamento' => $recebimento,
+            'baixado' => $recebido ? 1 : 0,
+            'forma_pgto' => $forma,
+            'tipo' => 'receita',
+            'observacoes' => $texto('observacoes'),
+            'usuarios_id' => $usuario,
+        ], []];
+    }
+}
+
+if (! function_exists('osTextoExibicao')) {
+    /**
+     * Texto livre da OS para exibir na tela: o que o formulário grava (texto
+     * escapado com <br>) e o HTML do editor antigo passam pelo HTMLPurifier.
+     */
+    function osTextoExibicao(?string $html): HtmlSeguro
+    {
+        return html_purificado((string) $html);
+    }
+}
+
+if (! function_exists('osTelefoneWhatsApp')) {
+    /**
+     * Número para o link do WhatsApp (wa.me): só dígitos, com o DDI 55 quando
+     * vier só DDD + número. Sem número válido, null.
+     */
+    function osTelefoneWhatsApp(?string $telefone): ?string
+    {
+        $digitos = (string) preg_replace('/\D/', '', (string) $telefone);
+        if (strlen($digitos) === 10 || strlen($digitos) === 11) {
+            return '55' . $digitos;
+        }
+
+        return strlen($digitos) === 12 || strlen($digitos) === 13 ? $digitos : null;
+    }
+}
+
+if (! function_exists('osTextoWhatsApp')) {
+    /**
+     * Mensagem de WhatsApp da OS (configuração notifica_whats) com os
+     * marcadores trocados. Os textos da OS guardam HTML (texto escapado com
+     * <br>, ou o HTML do editor antigo): viram texto puro com as quebras de
+     * linha, sem entidades como &amp;lt; (na v4 o texto saía com elas).
+     *
+     * @param  array<string, string>  $troca  Marcador ({CLIENTE_NOME}...) => valor
+     */
+    function osTextoWhatsApp(?string $modelo, array $troca): string
+    {
+        // Cada parte vira texto puro uma vez só: limpar de novo depois da troca
+        // apagaria um "<" que o próprio texto da OS tenha.
+        $limpos = array_map(static fn ($valor) => osTextoParaEdicao((string) $valor), $troca);
+
+        return strtr(osTextoParaEdicao((string) $modelo), $limpos);
+    }
+}
+
+if (! function_exists('osOpcoesDeCobranca')) {
+    /**
+     * Opções do "Gerar cobrança" a partir de config/payment_gateways.php: uma
+     * por gateway e forma de pagamento, com o valor "Biblioteca|forma" (o
+     * módulo os/tela separa os dois campos que cobrancas/adicionar espera).
+     *
+     * @return array<string, string> valor => rótulo
+     */
+    function osOpcoesDeCobranca($gateways): array
+    {
+        $opcoes = [];
+        foreach (is_array($gateways) ? $gateways : [] as $gateway) {
+            if (! is_array($gateway) || ! isset($gateway['library_name'], $gateway['name']) || ! preg_match('/^[A-Za-z0-9_]+$/', (string) $gateway['library_name'])) {
+                continue;
+            }
+
+            foreach ($gateway['payment_methods'] ?? [] as $forma) {
+                if (isset($forma['value'], $forma['name'])) {
+                    $opcoes[$gateway['library_name'] . '|' . $forma['value']] = $gateway['name'] . ' — ' . $forma['name'];
+                }
+            }
+        }
+
+        return $opcoes;
+    }
+}
+
+if (! function_exists('osVencimentoGarantia')) {
+    /**
+     * Fim da garantia (data final da OS + dias de garantia), quando a garantia
+     * já corre (OS Finalizada ou Faturada). Sem garantia, null.
+     */
+    function osVencimentoGarantia(?string $dataFinal, $dias, ?string $status): ?string
+    {
+        $dias = is_numeric($dias) ? (int) $dias : 0;
+        $base = dataIsoParaYmd(substr((string) $dataFinal, 0, 10));
+        if ($dias <= 0 || $base === null || ! in_array($status, ['Finalizado', 'Faturado'], true)) {
+            return null;
+        }
+
+        return date('Y-m-d', strtotime($base . ' +' . $dias . ' days'));
+    }
+}

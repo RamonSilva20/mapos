@@ -29,8 +29,6 @@
     "application/views/mapos/painel.php": 2,
     "application/views/os/imprimirOs.php": 1,
     "application/views/os/imprimirOsTermica.php": 1,
-    "application/views/os/itensOs.php": 1,
-    "application/views/os/visualizarOs.php": 1,
     "application/views/permissoes/adicionarPermissao.php": 1,
     "application/views/permissoes/editarPermissao.php": 1,
     "application/views/permissoes/permissoes.php": 1,

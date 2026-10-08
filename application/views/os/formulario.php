@@ -11,8 +11,8 @@
  *   campo inválido.
  * - Os textos livres são texto simples; a formatação do editor antigo
  *   (Trumbowyg) sai ao salvar, e as quebras de linha ficam.
- * - Produtos, serviços, anexos, anotações, desconto e faturamento ficam em
- *   os/itens, linkado no topo ao editar.
+ * - Produtos, serviços, anexos, anotações, desconto e faturamento ficam na
+ *   tela da OS (os/visualizar), linkada no topo ao editar.
  *
  * @var object|null             $os         null ao cadastrar
  * @var array<string, string>   $valores    osValoresDoFormulario()
@@ -65,12 +65,12 @@ $statusOpcoes = array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STA
             </div>
             <p class="text-caption text-muted"><?= e($editando ? $os->nomeCliente : 'Os produtos e serviços são adicionados depois de criar a OS.') ?></p>
         </div>
-        <?php if ($pode['itens']) { ?>
+        <?php if ($pode['ver_os']) { ?>
             <?= component('button', [
-                'label' => 'Itens, anexos e faturamento',
-                'icon' => 'shopping-basket',
+                'label' => 'Ver OS, itens e faturamento',
+                'icon' => 'eye',
                 'variant' => 'outline',
-                'href' => site_url('os/itens/' . (int) $os->idOs),
+                'href' => site_url('os/visualizar/' . (int) $os->idOs),
             ]) ?>
         <?php } ?>
     </header>
