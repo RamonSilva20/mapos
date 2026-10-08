@@ -95,7 +95,7 @@ class Servicos extends MY_Controller
             $erros = $this->validarFormulario('servicos');
             $preco = valorDecimal($this->input->post('preco'));
             if (! isset($erros['preco']) && $preco === null) {
-                $erros['preco'] = 'Informe o preço em reais, como 150,00.';
+                $erros['preco'] = 'Informe o preço em reais, como 150,00 (até 99.999.999,99).';
             }
 
             if ($erros === []) {

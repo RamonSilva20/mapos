@@ -58,8 +58,9 @@ export function formatarCep(valor) {
  * Valor em reais sem o símbolo: os dígitos viram centavos ("123456" →
  * "1.234,56"). Um valor do banco ("1234.50") também sai formatado.
  */
-export function formatarDinheiro(valor) {
-    const digitos = somenteDigitos(valor).replace(/^0+(?=\d)/, '').slice(0, 15);
+export function formatarDinheiro(valor, maxDigitos = 10) {
+    // 10 dígitos: o máximo de DECIMAL(10,2), 99.999.999,99.
+    const digitos = somenteDigitos(valor).replace(/^0+(?=\d)/, '').slice(0, maxDigitos);
     if (digitos === '') {
         return '';
     }
