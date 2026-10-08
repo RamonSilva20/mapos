@@ -88,6 +88,20 @@ if (! class_exists('CI_Controller', false)) {
     }
 }
 
+// Os models usam $this->db, que o CI_Model real busca na instância do
+// framework. O stub expõe $db para o teste injetar o SQLite.
+if (! class_exists('CI_Model', false)) {
+    class CI_Model
+    {
+        /** @var object */
+        public $db;
+
+        public function __construct()
+        {
+        }
+    }
+}
+
 // Mesma ideia para as migrations: o CI_Migration real busca o banco na
 // instância do framework. O stub expõe $db para o teste injetar o SQLite.
 if (! class_exists('CI_Migration', false)) {
@@ -105,6 +119,7 @@ require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'tema_helper.php';
 require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-escape.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'js_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'componente_helper.php';
+require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'listagem_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'icone_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'layout_helper.php';
 require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-inline-script.php';

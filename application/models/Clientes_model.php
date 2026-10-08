@@ -27,6 +27,55 @@ class Clientes_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Clientes da listagem (#2852), do mais recente para o mais antigo.
+     *
+     * @param  array{pesquisa?: string, tipo?: 'cliente'|'fornecedor'}  $filtros  Saída de listagemFiltros()
+     */
+    public function listar(array $filtros, int $limite, int $offset): array
+    {
+        $this->aplicarFiltros($filtros);
+
+        return $this->db
+            ->order_by('idClientes', 'desc')
+            ->limit($limite, max(0, $offset))
+            ->get('clientes')
+            ->result();
+    }
+
+    /**
+     * Total da listagem com os mesmos filtros de listar(): a paginação conta
+     * só o que a busca encontra.
+     */
+    public function contar(array $filtros): int
+    {
+        $this->aplicarFiltros($filtros);
+
+        return (int) $this->db->count_all_results('clientes');
+    }
+
+    /**
+     * pesquisa procura em nome, documento, e-mail, telefone e celular (o OR
+     * fica entre parênteses, para não anular o filtro de tipo); tipo separa
+     * clientes de fornecedores.
+     */
+    private function aplicarFiltros(array $filtros): void
+    {
+        if (($filtros['pesquisa'] ?? '') !== '') {
+            $this->db->group_start()
+                ->like('nomeCliente', $filtros['pesquisa'])
+                ->or_like('documento', $filtros['pesquisa'])
+                ->or_like('email', $filtros['pesquisa'])
+                ->or_like('telefone', $filtros['pesquisa'])
+                ->or_like('celular', $filtros['pesquisa'])
+                ->group_end();
+        }
+
+        if (($filtros['tipo'] ?? '') !== '') {
+            $this->db->where('fornecedor', $filtros['tipo'] === 'fornecedor' ? 1 : 0);
+        }
+    }
+
     public function getById($id)
     {
         $this->db->where('idClientes', $id);

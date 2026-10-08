@@ -31,7 +31,8 @@ $variantes = [
 ];
 
 $tamanhos = [
-    'sm' => $icon_only ? 'size-8' : 'h-8 gap-1.5 px-3',
+    // DESIGN.md: botões com 44px no celular, inclusive os pequenos.
+    'sm' => $icon_only ? 'size-8 max-sm:size-11' : 'h-8 gap-1.5 px-3 max-sm:h-11',
     'md' => $icon_only ? 'size-10 max-sm:size-11' : 'h-10 gap-2 px-4 max-sm:h-11',
     'lg' => $icon_only ? 'size-12' : 'h-12 gap-2 px-5',
 ];

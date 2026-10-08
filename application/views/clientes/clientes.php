@@ -1,130 +1,129 @@
-<style>
-    select {
-        width: 70px;
-    }
-</style>
-<div class="new122">
-    <div class="widget-title" style="margin: -20px 0 0">
-        <span class="icon">
-            <i class="fas fa-user"></i>
-        </span>
-        <h5>Clientes</h5>
-    </div>
-    <div class="span12" style="margin-left: 0">
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) { ?>
-            <div class="span3">
-                <a href="<?= base_url() ?>index.php/clientes/adicionar" class="button btn btn-mini btn-success"
-                    style="max-width: 165px">
-                    <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">
-                        Cliente / Fornecedor
-                    </span>
-                </a>
-            </div>
-        <?php } ?>
-        <form class="span9" method="get" action="<?= base_url() ?>index.php/clientes"
-            style="display: flex; justify-content: flex-end;">
-            <div class="span3">
-                <input type="text" name="pesquisa" id="pesquisa"
-                    placeholder="Buscar por Nome, Doc, Email ou Telefone..." class="span12"
-                    value="<?= html_escape($this->input->get('pesquisa')) ?>">
-            </div>
-            <div class="span1">
-                <button class="button btn btn-mini btn-warning" style="min-width: 30px">
-                    <span class="button__icon"><i class='bx bx-search-alt'></i></span></button>
-            </div>
-        </form>
-    </div>
+<?php
+/**
+ * Listagem de clientes e fornecedores (#2841, #2852): primeira tela de módulo
+ * migrada para os componentes da v5 (legacy_assets = false).
+ *
+ * Padrão das listagens:
+ * - cabeçalho com o título e o total encontrado;
+ * - filtros num formulário GET (a URL guarda os filtros; "Limpar" volta à
+ *   listagem sem eles);
+ * - data-table, que vira cartões abaixo de 640px, com empty-state diferente
+ *   para "nada cadastrado" e "nada encontrado com estes filtros";
+ * - paginação que mantém os filtros;
+ * - a ação principal (Novo cliente) na topbar, pelo controller;
+ * - exclusão com modal-confirm: um modal só, preenchido pelo gatilho da linha
+ *   (data-valor-*), e um formulário POST com o token CSRF.
+ *
+ * @var list<object>          $results
+ * @var array<string, string> $filtros
+ * @var int                   $total
+ * @var array                 $paginacao
+ * @var array{adicionar: bool, editar: bool, excluir: bool} $pode
+ */
+$temFiltro = $filtros !== [];
 
-    <div class="widget-box">
-        <h5 style="padding: 3px 0"></h5>
-        <div class="widget-content nopadding tab-content">
-            <table id="tabela" class="table table-bordered ">
-                <thead>
-                    <tr>
-                        <th>Cod.</th>
-                        <th>Nome</th>
-                        <th>Contato</th>
-                        <th>CPF/CNPJ</th>
-                        <th>Telefone</th>
-                        <th>Celular</th>
-                        <th>Email</th>
-                        <th>Tipo</th> <!-- Nova coluna para Fornecedor/Cliente -->
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (!$results) {
-                        echo '<tr>
-                    <td colspan="9">Nenhum Cliente Cadastrado</td>
-                  </tr>';
-                    }
-        foreach ($results as $r) {
-            echo '<tr>';
-            echo '<td>' . $r->idClientes . '</td>';
-            echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%">' . $r->nomeCliente . '</a></td>';
-            echo '<td>' . $r->contato . '</td>';
-            echo '<td>' . $r->documento . '</td>';
-            echo '<td>' . $r->telefone . '</td>';
-            echo '<td>' . $r->celular . '</td>';
-            echo '<td>' . $r->email . '</td>';
+$colunas = [
+    ['key' => 'idClientes', 'label' => 'Cód.', 'align' => 'right', 'nowrap' => true],
+    ['label' => 'Nome', 'render' => fn ($c) => component('link', ['label' => $c->nomeCliente, 'href' => site_url('clientes/visualizar/' . $c->idClientes)])],
+    ['key' => 'documento', 'label' => 'CPF/CNPJ', 'nowrap' => true],
+    ['label' => 'Telefone', 'nowrap' => true, 'render' => fn ($c) => $c->celular ?: $c->telefone],
+    ['key' => 'email', 'label' => 'E-mail'],
+    ['label' => 'Tipo', 'nowrap' => true, 'render' => fn ($c) => component('pill-status', $c->fornecedor ? ['label' => 'Fornecedor', 'variant' => 'info'] : ['label' => 'Cliente', 'variant' => 'neutral'])],
+    ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($c) use ($pode) {
+        $acoes = [
+            component('button', ['label' => 'Ver ' . $c->nomeCliente, 'icon' => 'eye', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('clientes/visualizar/' . $c->idClientes)]),
+        ];
+        if ($c->email) {
+            $acoes[] = component('button', ['label' => 'Área do cliente de ' . $c->nomeCliente, 'icon' => 'key-round', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('mine') . '?' . http_build_query(['e' => $c->email]), 'attrs' => ['target' => '_blank', 'rel' => 'noopener']]);
+        }
+        if ($pode['editar']) {
+            $acoes[] = component('button', ['label' => 'Editar ' . $c->nomeCliente, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('clientes/editar/' . $c->idClientes)]);
+        }
+        if ($pode['excluir']) {
+            $acoes[] = component('button', ['label' => 'Excluir ' . $c->nomeCliente, 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
+                'data-modal-abrir' => 'excluir-cliente',
+                'data-valor-id' => (string) $c->idClientes,
+                'data-valor-nome' => $c->nomeCliente,
+            ]]);
+        }
 
-            // Verifica se é Fornecedor ou Cliente
-            if ($r->fornecedor == 1) {
-                echo '<td><span class="label label-primary">Fornecedor</span></td>';
-            } else {
-                echo '<td><span class="label label-success">Cliente</span></td>';
-            }
+        return $acoes;
+    }],
+];
 
-            echo '<td>';
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
-                echo '<a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" style="margin-right: 1%" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
-                echo '<a href="' . base_url() . 'index.php/mine?e=' . $r->email . '" target="new" style="margin-right: 1%" class="btn-nwe2" title="Área do cliente"><i class="bx bx-key bx-xs"></i></a>';
-            }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                echo '<a href="' . base_url() . 'index.php/clientes/editar/' . $r->idClientes . '" style="margin-right: 1%" class="btn-nwe3" title="Editar Cliente"><i class="bx bx-edit bx-xs"></i></a>';
-            }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCliente')) {
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" cliente="' . $r->idClientes . '" style="margin-right: 1%" class="btn-nwe4" title="Excluir Cliente"><i class="bx bx-trash-alt bx-xs"></i></a>';
-            }
-            echo '</td>';
-            echo '</tr>';
-        } ?>
-                </tbody>
-            </table>
+$vazio = $temFiltro
+    ? component('empty-state', [
+        'title' => 'Nenhum cliente encontrado',
+        'message' => 'Nada corresponde aos filtros. Confira a busca ou limpe os filtros.',
+        'icon' => 'search-x',
+        'action' => component('button', ['label' => 'Limpar filtros', 'variant' => 'outline', 'href' => site_url('clientes')]),
+        'class' => 'border-0',
+    ])
+    : component('empty-state', [
+        'title' => 'Nenhum cliente cadastrado',
+        'message' => 'Os clientes e fornecedores cadastrados aparecem aqui.',
+        'icon' => 'users',
+        'action' => $pode['adicionar'] ? component('button', ['label' => 'Cadastrar cliente', 'icon' => 'plus', 'variant' => 'outline', 'href' => site_url('clientes/adicionar')]) : null,
+        'class' => 'border-0',
+    ]);
+?>
+<div class="flex flex-col gap-4 pt-2 pb-8">
+    <header>
+        <h1 class="font-display text-heading-lg text-text">Clientes e fornecedores</h1>
+        <p class="text-caption text-muted" aria-live="polite">
+            <?= e($total === 1 ? '1 cadastro' : number_format($total, 0, ',', '.') . ' cadastros') ?><?= $temFiltro ? e(' encontrados com os filtros') : '' ?>
+        </p>
+    </header>
 
-        </div>
-    </div>
-</div>
-<?php echo $this->pagination->create_links(); ?>
-
-<!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/clientes/excluir" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Excluir Cliente</h5>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="idCliente" name="id" value="" />
-            <h5 style="text-align: center">Deseja realmente excluir este cliente e os dados associados a ele (OS,
-                Vendas, Receitas)?</h5>
-        </div>
-        <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i
-                        class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span
-                    class="button__text2">Excluir</span></button>
+    <form method="get" action="<?= e(site_url('clientes')) ?>" role="search" aria-label="Filtrar clientes" class="grid items-end gap-3 rounded-xl border border-border bg-surface p-4 sm:grid-cols-[minmax(0,1fr)_12rem_auto]">
+        <?= component('input', [
+            'name' => 'pesquisa',
+            'label' => 'Buscar',
+            'type' => 'search',
+            'value' => $filtros['pesquisa'] ?? null,
+            'placeholder' => 'Nome, documento, e-mail ou telefone',
+            'attrs' => ['maxlength' => 100],
+        ]) ?>
+        <?= component('select', [
+            'name' => 'tipo',
+            'label' => 'Tipo',
+            'placeholder' => 'Todos',
+            'options' => ['cliente' => 'Clientes', 'fornecedor' => 'Fornecedores'],
+            'selected' => $filtros['tipo'] ?? null,
+        ]) ?>
+        <div class="flex gap-2">
+            <?= component('button', ['label' => 'Filtrar', 'icon' => 'search', 'variant' => 'outline', 'type' => 'submit']) ?>
+            <?php if ($temFiltro) { ?>
+                <?= component('button', ['label' => 'Limpar', 'icon' => 'x', 'variant' => 'ghost', 'href' => site_url('clientes')]) ?>
+            <?php } ?>
         </div>
     </form>
+
+    <?= component('data-table', [
+        'columns' => $colunas,
+        'rows' => $results,
+        'empty' => $vazio,
+        'caption' => 'Clientes e fornecedores',
+    ]) ?>
+
+    <?= component('pagination', $paginacao) ?>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(document).on('click', 'a', function (event) {
-            var cliente = $(this).attr('cliente');
-            $('#idCliente').val(cliente);
-        });
-    });
-</script>
+<?php if ($pode['excluir']) { ?>
+    <form id="form-excluir-cliente" method="post" action="<?= e(site_url('clientes/excluir')) ?>" hidden>
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+        <input type="hidden" name="id" value="" data-modal-de="excluir-cliente" data-modal-valor="id">
+    </form>
+    <?= component('modal-confirm', [
+        'id' => 'excluir-cliente',
+        'title' => 'Excluir cliente?',
+        // O nome entra pelo modal.js (textContent) a partir do data-valor-nome
+        // do botão da linha; aqui só o marcador vazio, sem dado do usuário.
+        'message' => [
+            new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="nome"></strong>'),
+            ' e tudo o que estiver ligado a ele (ordens de serviço, vendas e lançamentos) serão removidos. Essa ação não pode ser desfeita.',
+        ],
+        'confirm_label' => 'Excluir',
+        'confirm_attrs' => ['form' => 'form-excluir-cliente'],
+    ]) ?>
+<?php } ?>

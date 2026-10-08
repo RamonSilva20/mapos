@@ -292,6 +292,12 @@ if (! function_exists('componenteEspecificacoes')) {
                     'label' => 'Você está em',
                 ],
             ],
+            'link' => [
+                'obrigatorias' => ['label', 'href'],
+                'padrao' => [
+                    'external' => false,
+                ],
+            ],
         ];
     }
 }
@@ -603,7 +609,9 @@ if (! function_exists('paginacaoProps')) {
      *   negativo vira 0; além do fim, cai na última página;
      * - query_string: nome do parâmetro quando o offset vai na query string
      *   (ex. 'per_page', o padrão do page_query_string do CI). Sem ele, o
-     *   offset vai como último segmento da URL.
+     *   offset vai como último segmento da URL;
+     * - params: filtros da listagem (#2852), levados na query string de cada
+     *   link, para a página 2 continuar filtrada.
      *
      * @return array{total_pages: int, current: int, url: string, per_page: int}
      */
@@ -627,15 +635,20 @@ if (! function_exists('paginacaoProps')) {
 
         $base = $opcoes['base_url'];
         $parametro = $opcoes['query_string'] ?? null;
+        $params = array_filter((array) ($opcoes['params'] ?? []), static fn ($valor) => is_scalar($valor) && (string) $valor !== '');
+        $filtros = $params === [] ? '' : http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
         if ($parametro !== null && $parametro !== '') {
             if (! preg_match('/^[A-Za-z0-9_-]+$/', (string) $parametro)) {
                 throw new InvalidArgumentException('Nome de parâmetro da paginação inválido.');
             }
+            if ($filtros !== '') {
+                $base .= (str_contains($base, '?') ? (preg_match('/[?&]$/', $base) ? '' : '&') : '?') . $filtros;
+            }
             $separador = str_contains($base, '?') ? (preg_match('/[?&]$/', $base) ? '' : '&') : '?';
             $url = $base . $separador . $parametro . '={offset}';
         } else {
-            $url = rtrim($base, '/') . '/{offset}';
+            $url = rtrim($base, '/') . '/{offset}' . ($filtros !== '' ? '?' . $filtros : '');
         }
 
         return [

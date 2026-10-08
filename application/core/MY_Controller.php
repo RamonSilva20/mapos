@@ -192,6 +192,18 @@ class MY_Controller extends CI_Controller
     }
 
     /**
+     * Diz se o usuário logado tem a permissão, para mostrar ou esconder uma
+     * ação na tela (ex. o botão de excluir de cada linha).
+     *
+     * Não protege a rota: quem protege é o mapa de permissões
+     * (config/permissions_map.php) e a checagem no início do método de destino.
+     */
+    protected function permite(string $permissao): bool
+    {
+        return (bool) $this->permission->checkPermission($this->session->userdata('permissao'), $permissao);
+    }
+
+    /**
      * Props do componente pagination para uma listagem nova.
      *
      *     $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $total, $this->uri->segment(3));
@@ -205,8 +217,9 @@ class MY_Controller extends CI_Controller
      * @param  int         $totalLinhas       Total de registros
      * @param  mixed       $offset            Offset atual (segmento da URL ou query)
      * @param  string|null $parametroDaQuery  Nome do parâmetro quando o offset vai na query
+     * @param  array       $filtros           Filtros da listagem (listagemFiltros()), mantidos nos links
      */
-    protected function paginacao($urlBase, $totalLinhas, $offset, $parametroDaQuery = null)
+    protected function paginacao($urlBase, $totalLinhas, $offset, $parametroDaQuery = null, array $filtros = [])
     {
         return paginacaoProps([
             'base_url' => (string) $urlBase,
@@ -214,6 +227,7 @@ class MY_Controller extends CI_Controller
             'per_page' => (int) $this->data['configuration']['per_page'],
             'offset' => $offset,
             'query_string' => $parametroDaQuery,
+            'params' => $filtros,
         ]);
     }
 

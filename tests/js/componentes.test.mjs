@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { deveFecharPeloFundo } from '../../assets/js/modules/componentes/modal.js';
+import { deveFecharPeloFundo, preencher } from '../../assets/js/modules/componentes/modal.js';
 import { criarTemporizador } from '../../assets/js/modules/componentes/toast.js';
 import { aplicarModo } from '../../assets/js/modules/componentes/catalogo.js';
 import { criarToast, regiaoDeToasts, CLASSES_REGIAO } from '../../assets/js/lib/toast.js';
@@ -144,4 +144,18 @@ test('catálogo: aplicarModo liga .dark conforme o modo', () => {
     aplicarModo(html, 'sistema', true);
     assert.ok(classes.has('dark'));
     assert.equal(html.dataset.temaModo, 'sistema');
+});
+
+test('modal: preenche os alvos com os data-valor-* do gatilho, sem HTML', () => {
+    const gatilho = { getAttribute: (nome) => ({ 'data-valor-id': '15', 'data-valor-nome': '<b>Ana</b>' }[nome] ?? null) };
+    const input = { tagName: 'INPUT', dataset: { modalValor: 'id' }, value: '' };
+    const nome = { tagName: 'STRONG', dataset: { modalValor: 'nome' }, textContent: '' };
+    const semValor = { tagName: 'SPAN', dataset: { modalValor: 'telefone' }, textContent: 'antes' };
+
+    preencher([input, nome, semValor], gatilho);
+
+    assert.equal(input.value, '15');
+    assert.equal(nome.textContent, '<b>Ana</b>');
+    assert.equal(nome.innerHTML, undefined);
+    assert.equal(semValor.textContent, 'antes');
 });
