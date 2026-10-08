@@ -22,6 +22,12 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DESIGN.md` como fonte de verdade da UI da v5 (cores, tipografia, componentes, estados, modo escuro e responsividade), referenciado no `AGENTS.md`, no `CONTRIBUTING.md` e no template de PR. #2920 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Changed
+- Produtos migrados para os componentes da v5, completando Clientes, Produtos e Serviços:
+  - listagem com busca e filtro de estoque baixo (pill "Baixo") e etiquetas em modal;
+  - formulário com unidades da tabela de medidas, preços com máscara e cálculo do preço de venda por markup ou margem;
+  - ficha com markup, margem e entrada de estoque.
+
+  A entrada de estoque passa a somar no banco (`estoque = estoque + ?`), em vez de confiar no estoque atual enviado pelo navegador, e não deixa o estoque ficar negativo. #PR_NUM [@RamonSilva20](https://github.com/RamonSilva20)
 - Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
 - Ficha do cliente migrada para os componentes da v5:
   - abas por link (dados, ordens de serviço e vendas), com contadores;
