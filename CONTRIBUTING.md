@@ -242,6 +242,21 @@ Isso tira o `'unsafe-inline'` do caminho da CSP (#2878). O CI roda `php scripts/
 
 Os utilitários de `assets/js` têm testes em `tests/js`, rodados com `npm run test:js`.
 
+### Componentes
+
+Telas novas são montadas com a biblioteca de componentes, em vez de HTML escrito à mão:
+
+```php
+<?= component('input', ['name' => 'nome', 'label' => 'Nome', 'required' => true, 'error' => form_error('nome')]) ?>
+<?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'bx-save']) ?>
+```
+
+Os partials ficam em `application/views/components/` e as props aceitas em `application/helpers/componente_helper.php`. Prop desconhecida, obrigatória faltando ou valor fora das opções gera erro na hora, em vez de ser ignorado. Componentes disponíveis: `button`, `input`, `select`, `textarea`, `card`, `table`, `modal`, `alert`, `toast`, `badge`, `pagination`, `empty-state` e `breadcrumb`.
+
+Todo valor é escapado. Os slots (`body`, `footer`, `actions`, `message`, células da tabela) recebem texto, que também é escapado, ou um `HtmlSeguro`: a saída de outro `component()` ou de `html_purificado()`, que passa HTML do usuário pelo HTMLPurifier. Não crie um `HtmlSeguro` à mão com dado do usuário. Atributos extras vão na prop `attrs`; handlers `on*` são recusados (o JavaScript fica nos módulos).
+
+Para ver todos os componentes e variantes, nos modos claro e escuro e com cada cor de destaque, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
+
 ## Alterações no banco de dados
 
 Alterações de schema **devem** ser feitas por migration — assim quem já usa o sistema consegue atualizar sem perder dados. Não altere o `banco.sql` no lugar de criar uma migration.

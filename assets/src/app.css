@@ -17,6 +17,9 @@
 @import "tailwindcss" source(none);
 
 @source "../../application/views/**/*.php";
+/* Classes montadas no JS (ex.: o toast de assets/js/lib/toast.js). */
+@source "../js/lib/**/*.js";
+@source "../js/modules/**/*.js";
 
 /*
  * Modo escuro por classe: <html class="dark">. O servidor aplica a classe no

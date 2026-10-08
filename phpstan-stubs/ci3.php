@@ -192,6 +192,9 @@ const SELF = 'index.php';
 const VIEWPATH = APPPATH . 'views/';
 const WRITEPATH = FCPATH;
 const SYSDIR = BASEPATH . 'system/';
+// Vem do .env em tempo de execução (ver index.php); define() com valor não
+// literal evita que o PHPStan trate as comparações como sempre verdadeiras.
+define('ENVIRONMENT', (string) ($_ENV['APP_ENVIRONMENT'] ?? 'production'));
 
 // Escrita de arquivo. O valor é só um default; o chamador pode sobrescrever.
 define('DIR_READ_MODE', 0755);
