@@ -1,5 +1,5 @@
 // Controles do catálogo de componentes (views/componentes/catalogo.php):
-// modo claro/escuro/sistema, cor de destaque e demonstração de toast.
+// modo claro/escuro/sistema e demonstração de toast.
 //
 // Só mexe no <html> da página do catálogo, sem gravar nada: a preferência
 // real do sistema continua em Configurações.
@@ -36,11 +36,6 @@ export default function iniciar(barra) {
                 mensagem: `Variante ${variante}, criado por mostrarToast(). Some em 5 segundos.`,
             });
         }
-    });
-
-    const destaque = barra.querySelector('[data-trocar-destaque]');
-    destaque?.addEventListener('change', () => {
-        html.dataset.accent = destaque.value;
     });
 
     consulta?.addEventListener?.('change', () => {

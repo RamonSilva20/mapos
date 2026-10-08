@@ -126,14 +126,17 @@ final class LoginViewTest extends MaposTestCase
 
     public function testTemaDaConfiguracaoVaiParaOHtml(): void
     {
-        $html = $this->renderizar(['configuration' => ['app_tema_modo' => 'escuro', 'app_tema_destaque' => 'verde']]);
+        $html = $this->renderizar(['configuration' => ['app_tema_modo' => 'escuro']]);
 
-        $this->assertStringContainsString('<html lang="pt-br" class="dark" data-tema-modo="escuro" data-accent="verde">', $html);
+        $this->assertStringContainsString('<html lang="pt-br" class="dark" data-tema-modo="escuro">', $html);
         $this->assertStringContainsString('assets/js/tema.js', $html);
     }
 
     public function testSemConfiguracaoUsaOTemaPadrao(): void
     {
-        $this->assertStringContainsString('data-tema-modo="claro" data-accent="laranja"', $this->renderizar());
+        $html = $this->renderizar();
+
+        $this->assertStringContainsString('<html lang="pt-br" data-tema-modo="claro">', $html);
+        $this->assertStringNotContainsString('data-accent', $html);
     }
 }

@@ -11,8 +11,8 @@
  */
 $variantes = [
     'neutral' => 'bg-surface-subtle text-muted ring-border',
-    // No escuro a escala do destaque mistura com a superfície escura e fica
-    // apagada; o texto passa a ser o do tema, e a cor fica no fundo e no anel.
+    // Fundo laranja-claro (primary-tint) com texto do tema: o laranja não
+    // serve como texto no fundo claro (DESIGN.md).
     'accent' => 'bg-primary-tint text-text ring-primary/40',
     'info' => 'bg-info-soft text-info-ink ring-info/30',
     'success' => 'bg-success-soft text-success-ink ring-success/30',
