@@ -72,7 +72,7 @@ $secoes = [
         'label' => 'Seções do cliente',
         'items' => [
             ['label' => 'Dados', 'url' => $url('dados'), 'active' => $aba === 'dados', 'icon' => 'user'],
-            ['label' => 'Ordens de serviço', 'url' => $url('os'), 'active' => $aba === 'os', 'icon' => 'file-text', 'count' => $total_os],
+            ['label' => 'Ordens de serviço', 'short' => 'OS', 'url' => $url('os'), 'active' => $aba === 'os', 'icon' => 'file-text', 'count' => $total_os],
             ['label' => 'Vendas', 'url' => $url('vendas'), 'active' => $aba === 'vendas', 'icon' => 'shopping-cart', 'count' => $total_vendas],
         ],
     ]) ?>
@@ -107,7 +107,7 @@ $secoes = [
                 ['label' => 'Status', 'nowrap' => true, 'render' => fn ($o) => component('pill-status', osStatusPill($o->status))],
                 ['label' => 'Entrada', 'align' => 'right', 'nowrap' => true, 'render' => fn ($o) => dataBr($o->dataInicial)],
                 ['label' => 'Previsão', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'md', 'render' => fn ($o) => dataBr($o->dataFinal)],
-                ['label' => 'Descrição', 'class' => 'min-w-48', 'render' => fn ($o) => $texto($o->descricaoProduto)],
+                ['label' => 'Descrição', 'class' => 'min-w-48', 'hide_until' => 'xl', 'render' => fn ($o) => $texto($o->descricaoProduto)],
                 ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($o) use ($pode) {
                     $acoes = [];
                     if ($pode['ver_os']) {
@@ -161,7 +161,13 @@ $secoes = [
     <?= component('modal-confirm', [
         'id' => 'excluir-cliente',
         'title' => 'Excluir cliente?',
-        'message' => $cliente->nomeCliente . ' e tudo o que estiver ligado a ele (ordens de serviço, vendas e lançamentos) serão removidos. Essa ação não pode ser desfeita.',
+        // Marcação estática; o nome entra como texto (escapado pelo componente).
+        'message' => [
+            new HtmlSeguro('<strong class="font-semibold text-text">'),
+            $cliente->nomeCliente,
+            new HtmlSeguro('</strong>'),
+            ' e tudo o que estiver ligado a ele (ordens de serviço, vendas e lançamentos) serão removidos. Essa ação não pode ser desfeita.',
+        ],
         'confirm_label' => 'Excluir',
         'confirm_attrs' => ['form' => 'form-excluir-cliente'],
     ]) ?>

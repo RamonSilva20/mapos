@@ -6,10 +6,10 @@ if (! defined('BASEPATH')) {
 
 class Clientes extends MY_Controller
 {
-    /** Filtros da listagem, na query string (listagemFiltros()). */
     /** Quantas OS e vendas recentes a ficha do cliente mostra. */
     public const RECENTES = 20;
 
+    /** Filtros da listagem, na query string (listagemFiltros()). */
     public const FILTROS = [
         'pesquisa' => 'texto',
         'tipo' => ['cliente', 'fornecedor'],
