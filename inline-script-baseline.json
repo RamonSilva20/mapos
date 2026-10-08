@@ -31,7 +31,6 @@
     "application/views/os/editarOs.php": 1,
     "application/views/os/imprimirOs.php": 1,
     "application/views/os/imprimirOsTermica.php": 1,
-    "application/views/os/os.php": 1,
     "application/views/os/visualizarOs.php": 1,
     "application/views/permissoes/adicionarPermissao.php": 1,
     "application/views/permissoes/editarPermissao.php": 1,

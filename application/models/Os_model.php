@@ -86,6 +86,111 @@ class Os_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Listagem de OS da v5 (#2842), no padrão das listagens (#2852): os mesmos
+     * filtros em listar() e contar(), para a paginação contar só o que a busca
+     * encontra.
+     *
+     * Cada linha traz os dados da OS, o cliente, o responsável e o total
+     * (produtos + serviços, ou o valor com desconto quando houver), calculado
+     * no SQL para não consultar a OS de novo por linha.
+     *
+     * @param  array<string, string>  $filtros          pesquisa, status, de, ate (já validados)
+     * @param  list<string>|null      $statusVisiveis   Restringe os status quando não há pesquisa nem status
+     */
+    public function listar(array $filtros, int $limite, int $offset, ?array $statusVisiveis = null): array
+    {
+        // Mesma regra de valorTotalOS(): serviço sem preço usa o do cadastro, e
+        // sem quantidade conta 1.
+        $totalProdutos = '(SELECT COALESCE(SUM(produtos_os.subTotal), 0) FROM produtos_os WHERE produtos_os.os_id = os.idOs)';
+        $totalServicos = '(SELECT COALESCE(SUM(COALESCE(NULLIF(servicos_os.preco, 0), servicos.preco, 0) * COALESCE(NULLIF(servicos_os.quantidade, 0), 1)), 0)'
+            . ' FROM servicos_os LEFT JOIN servicos ON servicos.idServicos = servicos_os.servicos_id WHERE servicos_os.os_id = os.idOs)';
+
+        $this->db->select('os.idOs, os.dataInicial, os.dataFinal, os.descricaoProduto, os.status, os.faturado, os.desconto, os.valor_desconto, os.clientes_id, os.usuarios_id');
+        $this->db->select('clientes.nomeCliente, usuarios.nome AS responsavel');
+        $this->db->select($totalProdutos . ' AS totalProdutos', false);
+        $this->db->select($totalServicos . ' AS totalServicos', false);
+
+        $this->aplicarFiltros($filtros, $statusVisiveis);
+
+        $linhas = $this->db
+            ->order_by('os.idOs', 'desc')
+            ->limit($limite, max(0, $offset))
+            ->get()
+            ->result();
+
+        foreach ($linhas as $linha) {
+            $bruto = (float) $linha->totalProdutos + (float) $linha->totalServicos;
+            $linha->total = (float) $linha->valor_desconto > 0 ? (float) $linha->valor_desconto : $bruto;
+        }
+
+        return $linhas;
+    }
+
+    /** Total da listagem com os mesmos filtros de listar(). */
+    public function contar(array $filtros, ?array $statusVisiveis = null): int
+    {
+        $this->aplicarFiltros($filtros, $statusVisiveis);
+
+        return (int) $this->db->count_all_results();
+    }
+
+    /**
+     * pesquisa procura no nome e documento do cliente, na descrição do
+     * equipamento e, se for número, no Nº da OS (o OR fica entre parênteses
+     * para não anular os outros filtros); status é um só; de e ate limitam a
+     * data inicial e a final.
+     *
+     * Sem pesquisa e sem status, a listagem mostra só os status marcados em
+     * Configurações (os_status_list), como na v4, mas agora no SQL: antes as
+     * linhas eram escondidas na view e a paginação contava as escondidas.
+     */
+    private function aplicarFiltros(array $filtros, ?array $statusVisiveis): void
+    {
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id', 'left');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id', 'left');
+
+        $pesquisa = $filtros['pesquisa'] ?? '';
+        if ($pesquisa !== '') {
+            $this->db->group_start()
+                ->like('clientes.nomeCliente', $pesquisa)
+                ->or_like('clientes.documento', $pesquisa)
+                ->or_like('os.descricaoProduto', $pesquisa);
+            if (ctype_digit($pesquisa)) {
+                $this->db->or_where('os.idOs', (int) $pesquisa);
+            }
+            $this->db->group_end();
+        }
+
+        if (($filtros['status'] ?? '') !== '') {
+            $this->db->where('os.status', $filtros['status']);
+        } elseif ($pesquisa === '' && $statusVisiveis !== null) {
+            $this->db->where_in('os.status', $statusVisiveis);
+        }
+
+        if (($filtros['de'] ?? '') !== '') {
+            $this->db->where('os.dataInicial >=', $filtros['de']);
+        }
+        if (($filtros['ate'] ?? '') !== '') {
+            $this->db->where('os.dataFinal <=', $filtros['ate']);
+        }
+    }
+
+    /**
+     * Apaga o lançamento da fatura de uma OS excluída: pelo vínculo os.lancamento
+     * quando existir, e pelas descrições que o faturar grava (ver
+     * osDescricoesDaFatura()).
+     */
+    public function excluirFatura(int $idOs, ?int $idLancamento): void
+    {
+        if ($idLancamento) {
+            $this->db->where('idLancamentos', $idLancamento)->delete('lancamentos');
+        }
+
+        $this->db->where_in('descricao', osDescricoesDaFatura($idOs))->delete('lancamentos');
+    }
+
     public function getById($id)
     {
         $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, clientes.telefone as telefone_cliente, clientes.contato as contato_cliente, garantias.refGarantia, garantias.textoGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
