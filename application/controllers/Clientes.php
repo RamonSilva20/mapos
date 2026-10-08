@@ -7,6 +7,9 @@ if (! defined('BASEPATH')) {
 class Clientes extends MY_Controller
 {
     /** Filtros da listagem, na query string (listagemFiltros()). */
+    /** Quantas OS e vendas recentes a ficha do cliente mostra. */
+    public const RECENTES = 20;
+
     public const FILTROS = [
         'pesquisa' => 'texto',
         'tipo' => ['cliente', 'fornecedor'],
@@ -134,11 +137,16 @@ class Clientes extends MY_Controller
         return $this->layout();
     }
 
+    /**
+     * Ficha do cliente (#2841): dados, ordens de serviço e vendas em abas por
+     * link (?aba=dados|os|vendas), sem JavaScript.
+     */
     public function visualizar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+        $cliente = is_numeric($this->uri->segment(3)) ? $this->clientes_model->getById((int) $this->uri->segment(3)) : null;
+        if (! $cliente) {
+            $this->session->set_flashdata('error', 'Cliente não encontrado ou parâmetro inválido.');
+            redirect('clientes/gerenciar');
         }
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
@@ -146,10 +154,29 @@ class Clientes extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['custom_error'] = '';
-        $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
-        $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3));
-        $this->data['result_vendas'] = $this->clientes_model->getAllVendasByClient($this->uri->segment(3));
+        $id = (int) $cliente->idClientes;
+        $aba = listagemFiltros(['aba' => ['dados', 'os', 'vendas']], $this->input->get())['aba'] ?? 'dados';
+
+        $this->data['cliente'] = $cliente;
+        $this->data['aba'] = $aba;
+        $this->data['total_os'] = $this->clientes_model->contarOsDoCliente($id);
+        $this->data['total_vendas'] = $this->clientes_model->contarVendasDoCliente($id);
+        $this->data['os'] = $aba === 'os' ? $this->clientes_model->osDoCliente($id, self::RECENTES) : [];
+        $this->data['vendas'] = $aba === 'vendas' ? $this->clientes_model->vendasDoCliente($id, self::RECENTES) : [];
+        $this->data['pode'] = [
+            'editar' => $this->permite('eCliente'),
+            'excluir' => $this->permite('dCliente'),
+            'ver_os' => $this->permite('vOs'),
+            'editar_os' => $this->permite('eOs'),
+            'ver_venda' => $this->permite('vVenda'),
+            'editar_venda' => $this->permite('eVenda'),
+        ];
+
+        if ($this->data['pode']['editar']) {
+            $this->data['topbar_acao'] = ['label' => 'Editar cliente', 'icon' => 'pencil', 'href' => site_url('clientes/editar/' . $id)];
+        }
+
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'clientes/visualizar';
 
         return $this->layout();

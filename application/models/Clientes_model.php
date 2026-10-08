@@ -122,6 +122,28 @@ class Clientes_model extends CI_Model
         return $this->db->count_all($table);
     }
 
+    /** OS do cliente, das mais recentes para as mais antigas. */
+    public function osDoCliente(int $id, int $limite): array
+    {
+        return $this->db->where('clientes_id', $id)->order_by('idOs', 'desc')->limit($limite)->get('os')->result();
+    }
+
+    /** Vendas do cliente, das mais recentes para as mais antigas. */
+    public function vendasDoCliente(int $id, int $limite): array
+    {
+        return $this->db->where('clientes_id', $id)->order_by('idVendas', 'desc')->limit($limite)->get('vendas')->result();
+    }
+
+    public function contarOsDoCliente(int $id): int
+    {
+        return (int) $this->db->where('clientes_id', $id)->count_all_results('os');
+    }
+
+    public function contarVendasDoCliente(int $id): int
+    {
+        return (int) $this->db->where('clientes_id', $id)->count_all_results('vendas');
+    }
+
     public function getOsByCliente($id)
     {
         $this->db->where('clientes_id', $id);
