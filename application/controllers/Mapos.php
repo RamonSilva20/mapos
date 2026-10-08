@@ -486,14 +486,12 @@ class Mapos extends MY_Controller
                 'os_status_list' => json_encode($this->input->post('os_status_list')),
                 'control_2vias' => $this->input->post('control_2vias'),
             ];
-            // Enquanto esta tela só oferece os temas da v4, o modo e o destaque
-            // da v5 acompanham a escolha. Sem isso, trocar o tema aqui depois
-            // da migration deixaria o layout novo com o tema antigo. Se as
-            // linhas ainda não existem (migration não rodou), o update não faz
-            // nada e o tema é derivado de app_theme na leitura.
-            $tema = temaDeAppTheme($data['app_theme']);
-            $data['app_tema_modo'] = $tema['modo'];
-            $data['app_tema_destaque'] = $tema['destaque'];
+            // Enquanto esta tela só oferece os temas da v4, o modo da v5
+            // acompanha a escolha. Sem isso, trocar o tema aqui depois da
+            // migration deixaria o layout novo com o modo antigo. Se a linha
+            // ainda não existe (migration não rodou), o update não faz nada e
+            // o modo é derivado de app_theme na leitura.
+            $data['app_tema_modo'] = temaDeAppTheme($data['app_theme'])['modo'];
 
             if ($this->mapos_model->saveConfiguracao($data) == true) {
                 $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');

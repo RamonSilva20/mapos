@@ -27,7 +27,7 @@ class Login extends CI_Controller
         $configuracao = [];
         $linhas = $this->db
             ->select('config, valor')
-            ->where_in('config', ['app_theme', 'app_tema_modo', 'app_tema_destaque'])
+            ->where_in('config', ['app_theme', 'app_tema_modo'])
             ->get('configuracoes')
             ->result();
 

@@ -3,14 +3,14 @@
  * Login do painel (v5).
  *
  * Página avulsa, fora do layout do painel: o usuário ainda não está logado.
- * O tema (modo e cor de destaque) vem da configuração do sistema, que o
+ * O modo de cor (claro, escuro ou sistema) vem da configuração do sistema, que o
  * Login::index() lê do banco.
  *
  * O envio é feito pelo módulo assets/js/modules/login/formulario.js, que
  * valida no navegador e posta em login/verificarLogin. Sem JavaScript o
  * formulário não envia nada: verificarLogin responde JSON, não uma página.
  *
- * @var array       $configuration  Configurações do tema (app_theme, app_tema_*)
+ * @var array       $configuration  Configurações do tema (app_theme, app_tema_modo)
  * @var string|null $erro           Mensagem de erro vinda de um redirect (flashdata)
  *
  * A mensagem de erro fica num alert com um <span data-login-texto>: o texto

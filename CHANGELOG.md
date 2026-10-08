@@ -30,6 +30,9 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Boxicons servido de `assets/vendor` em vez do unpkg. #2909 [@RamonSilva20](https://github.com/RamonSilva20)
 - Tokens do `DESIGN.md` no `tokens.css`: laranja `#F37338` como cor de ação única (rótulo escuro), paleta de status com `-ink`/`-soft` nos modos claro e escuro, modo escuro do painel na paleta violeta, borda de campo com contraste 3:1, escala tipográfica, raios e elevação. A paleta padrão do Tailwind e a escala de cor de destaque foram removidas. #2921 [@RamonSilva20](https://github.com/RamonSilva20)
 
+### Removed
+- Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
+
 ### Fixed
 - Usuário com `permissoes_id` inexistente recebe negação de acesso em vez de erro fatal. #2891 [@RamonSilva20](https://github.com/RamonSilva20)
 - Conta sem data de expiração volta a conseguir entrar. #2892 [@RamonSilva20](https://github.com/RamonSilva20)

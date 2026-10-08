@@ -50,16 +50,6 @@ $statusBadge = [
                         <?= component('button', ['label' => $rotulo, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'aria-pressed:bg-surface aria-pressed:shadow-card', 'attrs' => ['data-tema-modo' => $modo, 'aria-pressed' => 'false']]) ?>
                     <?php } ?>
                 </div>
-                <div class="w-36">
-                    <?= component('select', [
-                        'name' => 'destaque',
-                        'label' => 'Cor de destaque',
-                        'hide_label' => true,
-                        'options' => array_combine(TEMA_DESTAQUES, array_map('ucfirst', TEMA_DESTAQUES)),
-                        'selected' => temaConfiguracao($configuration)['destaque'],
-                        'attrs' => ['data-trocar-destaque' => true],
-                    ]) ?>
-                </div>
             </div>
         </div>
     </header>

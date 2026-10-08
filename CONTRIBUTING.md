@@ -206,9 +206,9 @@ Se o código atual divergir do `DESIGN.md`, vale o documento: a base está sendo
 
 ### Cores e modo escuro
 
-As views novas usam os **tokens semânticos** definidos em `assets/src/app.css`, nunca uma cor fixa: `bg-bg`, `bg-surface`, `bg-surface-2`, `text-text`, `text-muted`, `border-border`, `bg-accent-600`/`text-accent-contrast` (botão primário), `text-success`, `bg-danger-soft` e afins. Assim a tela funciona nos modos claro e escuro sem precisar de `dark:`.
+As views novas usam os **tokens** definidos em `assets/src/tokens.css`, nunca uma cor fixa: `bg-bg`, `bg-surface`, `bg-surface-subtle`, `text-text`, `text-muted`, `border-border`, `border-input`, `bg-primary`/`text-on-primary` (botão primário), `text-success-ink` sobre `bg-success-soft` e afins. A lista completa está no topo do arquivo. A paleta padrão do Tailwind está desligada, então classes como `bg-white` não existem. Assim a tela funciona nos modos claro e escuro sem precisar de `dark:`.
 
-O tema é configurado por `app_tema_modo` (`claro`, `escuro` ou `sistema`). O layout aplica o modo no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". A configuração `app_tema_destaque` (cor de destaque) está sendo removida na #2913, porque o `DESIGN.md` define uma cor de marca única; não a use em código novo. A antiga `app_theme` continua existindo só para as telas legadas.
+O tema é configurado por `app_tema_modo` (`claro`, `escuro` ou `sistema`). O layout aplica o modo no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". Não existe cor de destaque: o `DESIGN.md` define uma cor de marca única, e a configuração `app_tema_destaque` foi removida na #2913. A antiga `app_theme` continua existindo só para as telas legadas.
 
 ### Bibliotecas de JavaScript
 
@@ -277,7 +277,7 @@ $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $tot
 
 O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination.php` até a remoção do frontend legado (#2855).
 
-Para ver todos os componentes e variantes, nos modos claro e escuro e com cada cor de destaque, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
+Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
 
 ### Layout do painel e modo legado
 
