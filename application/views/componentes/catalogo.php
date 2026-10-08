@@ -169,10 +169,10 @@ $statusBadge = [
             ]) ?>
         </div>
 
-        <?= componenteConteudo($secao('Paginação', 'Página 6 de 20, com janela de 1. Os links usam {offset}, como o CI_Pagination.')) ?>
+        <?= componenteConteudo($secao('Paginação', 'Props montadas por paginacaoProps() a partir de total e offset, como faz MY_Controller::paginacao(). 195 registros, 10 por página, offset 50 (página 6); e o mesmo com o offset na query string, como no financeiro.')) ?>
         <div class="flex flex-col gap-3">
-            <?= component('pagination', ['total_pages' => 20, 'current' => 6, 'url' => site_url('componentes/index/{offset}'), 'per_page' => 10]) ?>
-            <?= component('pagination', ['total_pages' => 5, 'current' => 1, 'url' => site_url('componentes?pagina={page}')]) ?>
+            <?= component('pagination', paginacaoProps(['base_url' => site_url('componentes/index'), 'total_rows' => 195, 'per_page' => 10, 'offset' => 50])) ?>
+            <?= component('pagination', paginacaoProps(['base_url' => site_url('componentes?status=1'), 'total_rows' => 45, 'per_page' => 10, 'offset' => 0, 'query_string' => 'per_page'])) ?>
         </div>
 
         <?= componenteConteudo($secao('Modal', 'Abre com data-modal-abrir. Foco preso, Esc fecha, clique no fundo fecha e o foco volta ao botão.')) ?>

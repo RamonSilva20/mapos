@@ -4,25 +4,10 @@ class MY_Controller extends CI_Controller
 {
     public $data = [
         'configuration' => [
+            // Itens por página das listagens. O markup da paginação legada
+            // (create_links) fica em application/config/pagination.php; as
+            // telas novas usam o componente pagination via paginacao().
             'per_page' => 10,
-            'next_link' => 'Próxima',
-            'prev_link' => 'Anterior',
-            'full_tag_open' => '<div class="pagination alternate"><ul>',
-            'full_tag_close' => '</ul></div>',
-            'num_tag_open' => '<li>',
-            'num_tag_close' => '</li>',
-            'cur_tag_open' => '<li><a style="color: #2D335B"><b>',
-            'cur_tag_close' => '</b></a></li>',
-            'prev_tag_open' => '<li>',
-            'prev_tag_close' => '</li>',
-            'next_tag_open' => '<li>',
-            'next_tag_close' => '</li>',
-            'first_link' => 'Primeira',
-            'last_link' => 'Última',
-            'first_tag_open' => '<li>',
-            'first_tag_close' => '</li>',
-            'last_tag_open' => '<li>',
-            'last_tag_close' => '</li>',
             'app_name' => 'Map-OS',
             'app_theme' => 'default',
             'os_notification' => 'cliente',
@@ -204,6 +189,32 @@ class MY_Controller extends CI_Controller
         }
 
         return false;
+    }
+
+    /**
+     * Props do componente pagination para uma listagem nova.
+     *
+     *     $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $total, $this->uri->segment(3));
+     *     // na view: <?= component('pagination', $paginacao) ?>
+     *
+     * O offset na URL é o mesmo do CI_Pagination, então o model continua
+     * recebendo (per_page, offset) como hoje. Com $parametroDaQuery, o offset
+     * vai na query string (ex. 'per_page', como no financeiro).
+     *
+     * @param  string      $urlBase           URL da listagem, sem o offset
+     * @param  int         $totalLinhas       Total de registros
+     * @param  mixed       $offset            Offset atual (segmento da URL ou query)
+     * @param  string|null $parametroDaQuery  Nome do parâmetro quando o offset vai na query
+     */
+    protected function paginacao($urlBase, $totalLinhas, $offset, $parametroDaQuery = null)
+    {
+        return paginacaoProps([
+            'base_url' => (string) $urlBase,
+            'total_rows' => (int) $totalLinhas,
+            'per_page' => (int) $this->data['configuration']['per_page'],
+            'offset' => $offset,
+            'query_string' => $parametroDaQuery,
+        ]);
     }
 
     public function layout()
