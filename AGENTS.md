@@ -12,7 +12,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - **Framework:** CodeIgniter 3 (`application/`)
 - **Database:** MySQL / MariaDB (managed via CodeIgniter Query Builder and Migrations in `application/database/migrations/`)
 - **Dependency Manager:** Composer (vendor directory configured at `application/vendor`)
-- **Front-end Build:** Tailwind CSS v4 via npm (`package.json`, Node >= 22). Only needed to change views or CSS; installing Map-OS never requires Node.
+- **Front-end Build:** Tailwind CSS v4 and the JS libraries (Alpine.js, Tom Select, flatpickr, IMask, SweetAlert2, Chart.js 4, FullCalendar 6) via npm (`package.json`, Node >= 22). Only needed to change views, CSS or JS libraries; installing Map-OS never requires Node.
 
 ## Architecture & Directory Structure
 
@@ -44,6 +44,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - Source CSS lives in `assets/src/app.css`; the compiled output `assets/dist/app.css` **is committed**.
 - After changing any view or CSS, run `npm ci && npm run build` and commit the `assets/dist` changes. CI rebuilds and fails if the committed output is stale.
 - Tailwind scans `application/views/**/*.php`: write full class names in PHP, never build them by string concatenation.
+- JS libraries are copied by `npm run build:vendor` (`scripts/build-vendor.mjs`, part of `npm run build`) into `assets/vendor/<lib>/`, which **is committed** and fully generated: never edit it by hand. To add or update a library, pin it with `npm install --save-exact` and list its files in `scripts/build-vendor.mjs`. Do not add new jQuery-dependent libraries.
 - Never commit `node_modules/`.
 
 ## Security & Integrity Mandates

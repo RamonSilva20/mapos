@@ -125,7 +125,9 @@ application/
 └── views/        Templates das telas
 assets/           CSS, JS, imagens e uploads
 ├── src/          Fontes do CSS (Tailwind), compiladas para dist/
-└── dist/         CSS compilado, commitado
+├── dist/         CSS compilado, commitado
+└── vendor/       Bibliotecas de JS copiadas do npm, commitadas (gerado)
+scripts/          Scripts de build do front-end
 docker/           Ambiente de desenvolvimento com Docker
 install/          Assistente de instalação
 banco.sql         Schema base usado na instalação inicial
@@ -190,6 +192,19 @@ Durante o desenvolvimento, `npm run watch:css` recompila a cada alteração.
 O Tailwind lê as classes de `application/views/**/*.php`. Escreva o nome da classe inteiro no PHP (`'bg-red-500'`), e não montado por concatenação (`'bg-' . $cor . '-500'`), senão ela não é encontrada e não entra no CSS.
 
 O CI refaz o build e falha se o `assets/dist` commitado não for o resultado dele.
+
+### Bibliotecas de JavaScript
+
+As bibliotecas de JS da v5 (Alpine.js, Tom Select, flatpickr, IMask, SweetAlert2, Chart.js e FullCalendar) são instaladas pelo npm, com versão fixa no `package.json`. O `npm run build` também roda o `build:vendor` (`scripts/build-vendor.mjs`), que copia os arquivos de navegador e a licença de cada uma para `assets/vendor/<lib>/`, pasta commitada pelo mesmo motivo do CSS. As versões copiadas ficam em `assets/vendor/versions.json`.
+
+O `assets/vendor` é inteiro gerado pelo script: não edite nada lá dentro à mão. Para atualizar uma biblioteca:
+
+```bash
+npm install --save-exact nome-da-lib@versao
+npm run build
+```
+
+Para adicionar uma nova, ou outro arquivo de uma já existente, inclua-a na lista do `scripts/build-vendor.mjs`. Não adicione bibliotecas novas que dependam de jQuery: ele sai até o fim da Beta.
 
 ## Alterações no banco de dados
 
@@ -320,7 +335,7 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 - [ ] A saída nova nas views passa por `e()` ou `printSafeHtml()` (`php scripts/check-escape.php`).
 - [ ] Não há credenciais, `.env`, dumps de banco ou arquivos de IDE no diff.
 - [ ] As pastas `application/vendor/` e `node_modules/` não foram commitadas.
-- [ ] Se mexeu em view ou CSS, rodou `npm run build` e commitou o `assets/dist`.
+- [ ] Se mexeu em view, CSS ou biblioteca de JS, rodou `npm run build` e commitou o `assets/dist` e o `assets/vendor`.
 - [ ] Alterações de schema têm migration com `up()` e `down()`.
 - [ ] A descrição explica o problema, a solução e como testar.
 - [ ] Há capturas de tela (antes/depois) quando a mudança é visual.

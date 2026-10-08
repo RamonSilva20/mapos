@@ -7,12 +7,23 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "npm run build:css",
+    "build": "npm run build:css && npm run build:vendor",
     "build:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --minify",
+    "build:vendor": "node scripts/build-vendor.mjs",
     "watch:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --watch"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.3",
     "tailwindcss": "4.3.3"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "6.1.21",
+    "alpinejs": "3.17.4",
+    "chart.js": "4.5.1",
+    "flatpickr": "4.6.13",
+    "fullcalendar": "6.1.21",
+    "imask": "7.6.1",
+    "sweetalert2": "11.26.25",
+    "tom-select": "2.6.2"
   }
 }

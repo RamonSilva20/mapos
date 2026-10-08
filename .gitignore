@@ -22,6 +22,8 @@ desktop.ini
 
 application/vendor/
 vendor/
+# As libs de JS copiadas pelo npm run build:vendor são commitadas (#2837).
+!/assets/vendor/
 node_modules/
 .idea/
 .php_cs.cache

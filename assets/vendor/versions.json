@@ -1,0 +1,10 @@
+{
+  "alpinejs": "3.17.4",
+  "tom-select": "2.6.2",
+  "flatpickr": "4.6.13",
+  "imask": "7.6.1",
+  "sweetalert2": "11.26.25",
+  "chart.js": "4.5.1",
+  "fullcalendar": "6.1.21",
+  "@fullcalendar/core": "6.1.21"
+}
