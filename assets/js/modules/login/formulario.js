@@ -1,4 +1,5 @@
-// Formulário de login do painel (views/mapos/login.php).
+// Formulário de login do painel (views/mapos/login.php) e da área do cliente
+// (views/conecte/login.php), que respondem no mesmo contrato.
 //
 // Valida no navegador, posta em login/verificarLogin pelo post() de
 // lib/http.js e mostra o erro no alert da própria página, sem modal. O
@@ -7,6 +8,7 @@
 // é interpretada aqui.
 
 import { ErroHttp, post } from '../../lib/http.js';
+import { criarIcone } from '../../lib/icone.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -90,21 +92,23 @@ function mostrarErroDoCampo(campo, mensagem) {
         aviso?.remove();
         campo.removeAttribute('aria-invalid');
         campo.classList.remove('border-danger');
-        campo.classList.add('border-border');
+        campo.classList.add('border-input');
         descritores.length ? campo.setAttribute('aria-describedby', descritores.join(' ')) : campo.removeAttribute('aria-describedby');
         return;
     }
 
     if (!aviso) {
+        // Mesma marcação do erro do componente input (ícone + texto).
         aviso = document.createElement('p');
         aviso.id = idErro;
-        aviso.className = 'text-xs font-medium text-danger-ink';
+        aviso.className = 'flex items-start gap-1.5 text-caption text-danger-ink';
+        aviso.append(criarIcone('circle-alert', 'mt-0.5 size-4'), document.createElement('span'));
         campo.insertAdjacentElement('afterend', aviso);
     }
 
-    aviso.textContent = mensagem;
+    aviso.querySelector('span').textContent = mensagem;
     campo.setAttribute('aria-invalid', 'true');
-    campo.classList.remove('border-border');
+    campo.classList.remove('border-input');
     campo.classList.add('border-danger');
     campo.setAttribute('aria-describedby', [...descritores, idErro].join(' '));
 }

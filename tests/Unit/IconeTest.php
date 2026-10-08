@@ -110,12 +110,13 @@ final class IconeTest extends MaposTestCase
     {
         $arquivos = [
             MAPOS_ROOT . '/application/views/mapos/login.php',
+            MAPOS_ROOT . '/application/views/conecte/login.php',
             MAPOS_ROOT . '/application/views/componentes/catalogo.php',
             MAPOS_ROOT . '/application/helpers/layout_helper.php',
             MAPOS_ROOT . '/application/helpers/componente_helper.php',
         ];
 
-        foreach (['application/views/components/*.php', 'application/views/tema/*.php', 'assets/js/lib/*.js', 'assets/js/modules/*/*.js'] as $padrao) {
+        foreach (['application/views/components/*.php', 'application/views/tema/*.php', 'application/views/entrada/*.php', 'assets/js/lib/*.js', 'assets/js/modules/*/*.js'] as $padrao) {
             $arquivos = array_merge($arquivos, glob(MAPOS_ROOT . '/' . $padrao) ?: []);
         }
 

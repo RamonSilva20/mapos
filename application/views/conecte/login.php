@@ -1,194 +1,83 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    <title><?php echo $this->config->item('app_name') ?></title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="<?php echo $this->config->item('app_name') . ' - ' . $this->config->item('app_subname') ?>">
-    <meta name="csrf-token-name" content="<?= config_item("csrf_token_name") ?>">
-    <meta name="csrf-cookie-name" content="<?= config_item("csrf_cookie_name") ?>">
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/matrix-login.css" />
-    <link href="<?= base_url('assets/css/particula.css'); ?>" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <script src="<?php echo base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
-    <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
-    <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
-    <link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
-    <!-- Script webeddy.com.br -->
-    <script>
-        function formatar(mascara, documento) {
-            var i = documento.value.length;
-            var saida = mascara.substring(0, 1);
-            var texto = mascara.substring(i)
-
-            if (texto.substring(0, 1) != saida) {
-                documento.value += texto.substring(0, 1);
-            }
-        }
-    </script>
-    <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
-    <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
-</head>
-
 <?php
-$parse_email = $this->input->get('e');
-    $parse_cpfcnpj = $this->input->get('c');
-    ?>
+/**
+ * Login da área do cliente (v5), como superfície de entrada do DESIGN.md
+ * (#2918). Mesma moldura do login do painel (views/entrada/inicio.php e
+ * fim.php), com o acesso da equipe na top nav em button-ghost-on-dark.
+ *
+ * O envio usa o mesmo módulo do painel, assets/js/modules/login/formulario.js:
+ * mine/login responde no mesmo contrato {result, message, MAPOS_TOKEN}.
+ *
+ * @var string|null $erro     Mensagem de erro vinda de um redirect (flashdata)
+ * @var string|null $sucesso  Mensagem de sucesso (cadastro, troca de senha)
+ * @var string      $email    E-mail para preencher o campo (mine?e=...)
+ */
+$entrada = [
+    'titulo' => 'Área do cliente',
+    'secundaria' => ['label' => 'Acesso da equipe', 'href' => site_url('login'), 'icon' => 'log-in'],
+];
+include APPPATH . 'views/entrada/inicio.php';
+?>
+    <main class="mx-auto grid w-full max-w-6xl flex-1 items-center gap-8 px-4 py-6 lg:grid-cols-[1fr_26rem] lg:gap-16 lg:px-8 lg:py-12">
+        <section class="flex flex-col items-start gap-4">
+            <span class="rounded-xs bg-night px-2 py-1 text-caption text-on-dark max-sm:hidden">Área do cliente</span>
+            <h1 class="font-display text-display-hero-sm font-bold text-on-dark sm:text-display-large xl:text-display-hero">
+                Acompanhe suas <span class="rounded-xs bg-accent-lime px-3 text-ink">ordens</span>.
+            </h1>
+            <p class="max-w-xl text-body-lg text-on-dark-muted max-sm:hidden">Consulte o andamento das ordens de serviço, suas compras e cobranças, e abra novos pedidos.</p>
+        </section>
 
-<body>
-    <div class="main-login">
-        <div class="left-login">
-            <h1 class="h-one">Área do Cliente</h1>
-            <img src="<?php echo base_url() ?>assets/img/forms-animate.svg" class="left-login-imagec" alt="Map-OS 5.0">
-        </div>
+        <section class="superficie-entrada w-full rounded-xxl border border-hairline-violet bg-night p-6 text-text sm:p-8" aria-labelledby="titulo-login">
+            <h2 id="titulo-login" class="mb-6 font-display text-heading-md text-text">Entre na sua conta</h2>
 
-        <div id="loginbox">
-            <form class="form-vertical" id="formLogin" method="post" action="<?php echo site_url() ?>/mine/login">
-                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
-                <div class="d-flex flex-column">
-                    <div class="right-login">
-                        <div class="container">
-                            <div class="card card-cad">
-                                <div class="content">
-                                    <div id="newlog">
-                                        <div class="icon2">
-                                            <img src="<?php echo base_url() ?>assets/img/logo-two.png">
-                                        </div>
-                                        <div class="title01">
-                                            <img src="<?php echo base_url() ?>assets/img/logo-mapos-branco.png">
-                                        </div>
-                                    </div>
-                                    <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <div class="main_input_box">
-                                                <span class="add-on bg_lg"><i class='bx bx-user-plus iconU'></i></span>
-                                                <input id="email" name="email" type="text" placeholder="Email" value="<?php echo trim($parse_email); ?>" />
-                                            </div>
-                                        </div>
-                                    </div>
+            <?php if (! empty($sucesso)) { ?>
+                <div class="mb-4"><?= component('alert', ['message' => (string) $sucesso, 'variant' => 'success']) ?></div>
+            <?php } ?>
 
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <div class="main_input_box">
-                                                <span class="add-on bg_ly"><i class='bx bx-id-card iconU'></i></span>
-                                                <input class="" maxlength="18" size="18" name="senha" type="password" placeholder="Senha" value="" />
-                                            </div>
-                                        </div>
-                                    </div>
+            <form id="formLogin" method="post" action="<?= e(site_url('mine/login?ajax=true')) ?>" novalidate class="flex flex-col gap-4" <?= js_module('login/formulario') ?> data-destino="<?= e(site_url('mine/painel')) ?>">
+                <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
 
-                                    <button style="margin: 0" class="btn btn-info btn-large"> Acessar</button>
-                                    <a href="<?= site_url('mine/cadastrar') ?>" class="btn btn-success btn-large">Cadastrar-me</a>
-                                    <div class="links-uteis"><a href="<?= site_url('mine/resetarSenha') ?>">
-                                            <p style="margin:0px 0 18px">Esqueceu a senha?</p>
-                                        </a></div>
-                                    <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
-                                            <p><?= date('Y'); ?> &copy; Ramon Silva</p>
-                                        </a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div data-login-mensagem<?= empty($erro) ? ' hidden' : '' ?>>
+                    <?= component('alert', ['message' => new HtmlSeguro('<span data-login-texto>' . e($erro ?? '') . '</span>'), 'variant' => 'danger']) ?>
                 </div>
-        </div>
-    </div>
 
-    <script src="<?php echo base_url() ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-    <?php if ($this->session->flashdata('success') != null) { ?>
-        <script>
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: '<?php echo $this->session->flashdata('success'); ?>',
-                showConfirmButton: false,
-                timer: 4000
-            })
-        </script>
-    <?php } ?>
+                <?= component('input', [
+                    'name' => 'email',
+                    'id' => 'email',
+                    'label' => 'E-mail',
+                    'type' => 'email',
+                    'value' => ($email ?? '') !== '' ? $email : null,
+                    'required' => true,
+                    'autocomplete' => 'username',
+                    'placeholder' => 'voce@email.com.br',
+                    'attrs' => ['autofocus' => ($email ?? '') === '', 'inputmode' => 'email', 'data-msg-vazio' => 'Informe o e-mail.', 'data-msg-invalido' => 'Informe um e-mail válido.'],
+                ]) ?>
 
-    <?php if ($this->session->flashdata('error') != null) { ?>
-        <script>
-            Swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: '<?php echo $this->session->flashdata('error'); ?>',
-                showConfirmButton: false,
-                timer: 4000
-            })
-        </script>
-    <?php } ?>
+                <?= component('input', [
+                    'name' => 'senha',
+                    'id' => 'senha',
+                    'label' => 'Senha',
+                    'type' => 'password',
+                    'required' => true,
+                    'autocomplete' => 'current-password',
+                    'attrs' => ['autofocus' => ($email ?? '') !== '', 'data-msg-vazio' => 'Informe a senha.'],
+                ]) ?>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
+                <?= component('button', [
+                    'label' => 'Entrar',
+                    'type' => 'submit',
+                    'size' => 'lg',
+                    'icon' => 'log-in',
+                    'id' => 'btn-acessar',
+                    // DESIGN.md: na superfície de entrada o button-primary leva o halo nível 3.
+                    'class' => 'mt-2 w-full shadow-elev-3',
+                    'attrs' => ['data-rotulo-carregando' => 'Entrando…'],
+                ]) ?>
+            </form>
 
-            $("#formLogin").validate({
-                rules: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    senha: {
-                        required: true
-                    }
-                },
-                messages: {
-                    email: {
-                        required: 'Campo Requerido.',
-                        email: 'Insira Email válido'
-                    },
-                    senha: {
-                        required: 'Campo Requerido.'
-                    }
-                },
-                submitHandler: function(form) {
-                    var dados = $(form).serialize();
-
-
-                    $.ajax({
-                        type: "POST",
-                        url: "<?php echo base_url(); ?>index.php/mine/login?ajax=true",
-                        data: dados,
-                        dataType: 'json',
-                        success: function(data) {
-                            if (data.result == true) {
-                                window.location.href = "<?php echo base_url(); ?>index.php/mine/painel";
-                            } else {
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'error',
-                                    title: 'Os dados de acesso estão incorretos.\n Por favor tente novamente!',
-                                    showConfirmButton: false,
-                                    timer: 4000
-                                })
-
-                                var newCsrfToken = data.MAPOS_TOKEN;
-                                $("input[name='<?= $this->security->get_csrf_token_name(); ?>']").val(newCsrfToken);
-                            }
-                        }
-                    });
-
-                    return false;
-                },
-
-                errorClass: "help-inline",
-                errorElement: "span",
-                highlight: function(element, errorClass, validClass) {
-                    $(element).parents('.control-group').addClass('error');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).parents('.control-group').removeClass('error');
-                    $(element).parents('.control-group').addClass('success');
-                }
-            });
-
-        });
-    </script>
-</body>
-
-</html>
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-body-md">
+                <a href="<?= e(site_url('mine/resetarSenha')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Esqueci minha senha</a>
+                <a href="<?= e(site_url('mine/cadastrar')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Criar conta</a>
+            </div>
+        </section>
+    </main>
+<?php include APPPATH . 'views/entrada/fim.php'; ?>
