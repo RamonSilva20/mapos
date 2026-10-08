@@ -39,6 +39,8 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Security
 - Limite de tentativas de login no painel, na área do cliente e nas duas APIs: depois de 5 falhas para o mesmo e-mail (ou 20 do mesmo IP), bloqueio temporário de 1 minuto que dobra a cada nova falha, até 1 hora. A mensagem é a mesma para os dois casos, cada bloqueio vai para a auditoria e a tabela `login_attempts` guarda só um HMAC do e-mail e do IP, com a `encryption_key` da instalação. A API do cliente deixa de responder "Usuário não encontrado", e o painel só informa conta expirada depois da senha certa. #2931 [@RamonSilva20](https://github.com/RamonSilva20)
 
+- Token de recuperação de senha da área do cliente guardado só como hash SHA-256 (busca pelo hash e conferência com `hash_equals`), com 32 bytes aleatórios, validade de 1 hora (antes 24 horas) e uso único; um pedido novo invalida os anteriores do mesmo e-mail. Uma migration invalida os tokens pendentes, que estavam em texto claro. #2934 [@RamonSilva20](https://github.com/RamonSilva20)
+
 ### Removed
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
 

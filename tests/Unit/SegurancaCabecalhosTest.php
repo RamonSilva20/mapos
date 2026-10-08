@@ -312,4 +312,25 @@ final class SegurancaCabecalhosTest extends MaposTestCase
         $this->assertSame([], segurancaCspRegistrar([], $this->arquivo, 1000));
         $this->assertFileDoesNotExist($this->arquivo);
     }
+
+    /**
+     * O caminho da página vai para o log sem query string e sem tokens: o link
+     * de recuperação de senha deixaria o token em claro (#2875).
+     */
+    public function testPaginaDaViolacaoNaoGuardaToken(): void
+    {
+        $token = str_repeat('ab12', 16);
+
+        $this->assertSame('/index.php/mine/verifyTokenSenha/token/{token}', segurancaCspPagina("http://mapos.test/index.php/mine/verifyTokenSenha/token/{$token}"));
+        $this->assertSame('/index.php/mine/verifyTokenSenha/token/{token}', segurancaCspPagina("http://mapos.test/index.php/mine/verifyTokenSenha/token/{$token}?x=1"));
+        $this->assertSame('/index.php/os/editar/15', segurancaCspPagina('http://mapos.test/index.php/os/editar/15?tab=1'));
+        $this->assertSame('/index.php/clientes', segurancaCspPagina('http://mapos.test/index.php/clientes'));
+
+        $violacoes = segurancaCspLerRelatorio(json_encode(['csp-report' => [
+            'document-uri' => "http://mapos.test/index.php/mine/verifyTokenSenha/token/{$token}",
+            'violated-directive' => 'script-src-elem',
+            'blocked-uri' => 'inline',
+        ]]));
+        $this->assertStringNotContainsString($token, json_encode($violacoes));
+    }
 }

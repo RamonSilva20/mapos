@@ -221,12 +221,27 @@ function segurancaCspLerRelatorio($corpo)
             // O violated-directive antigo vem como "script-src-elem 'self'": fica só o nome.
             'diretiva' => segurancaCspCurto(explode(' ', trim($diretiva))[0]),
             'bloqueado' => segurancaCspCurto(segurancaCspOrigem($bloqueado)),
-            'pagina' => segurancaCspCurto((string) parse_url($pagina, PHP_URL_PATH)),
+            'pagina' => segurancaCspCurto(segurancaCspPagina($pagina)),
             'fonte' => segurancaCspCurto($fonte),
         ];
     }
 
     return $violacoes;
+}
+
+/**
+ * Caminho da página da violação, sem query string e com os segmentos que
+ * parecem token (32+ caracteres de [A-Za-z0-9_-]) trocados por "{token}".
+ * O link de recuperação de senha (/mine/verifyTokenSenha/token/<token>)
+ * deixaria o token em claro no log e no JSON agregado (#2875).
+ *
+ * @param  string  $url
+ */
+function segurancaCspPagina($url)
+{
+    $caminho = (string) parse_url((string) $url, PHP_URL_PATH);
+
+    return (string) preg_replace('#(?<=/)[A-Za-z0-9_-]{32,}(?=/|$)#', '{token}', $caminho);
 }
 
 /**
