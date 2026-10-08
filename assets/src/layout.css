@@ -297,14 +297,51 @@ html[data-gaveta="aberta"] .v5-sidebar {
   html[data-sidebar="recolhida"] .v5-sidebar {
     width: var(--spacing-sidebar-recolhida) !important;
   }
+}
 
-  html[data-sidebar="recolhida"] .v5-sidebar .v5-rotulo,
-  html[data-sidebar="recolhida"] .v5-sidebar .v5-subitens {
-    display: none !important;
-  }
+/*
+ * Sidebar recolhida no desktop: trilho só com os ícones. Fica na camada das
+ * utilities porque os elementos escondidos têm utilities de display (.flex,
+ * .inline-flex) e de margem, que são !important; dentro da mesma camada estes
+ * seletores, mais específicos, vencem.
+ */
+@layer utilities {
+  @media (min-width: 64rem) {
+    html[data-sidebar="recolhida"] .v5-sidebar .v5-rotulo,
+    html[data-sidebar="recolhida"] .v5-sidebar .v5-subitens {
+      display: none !important;
+    }
 
-  html[data-sidebar="recolhida"] .v5-sidebar :where(a, summary) {
-    justify-content: center !important;
+    html[data-sidebar="recolhida"] .v5-sidebar :where(a, summary),
+    html[data-sidebar="recolhida"] .v5-sidebar :where(.v5-sidebar-topo, .v5-sidebar-usuario) {
+      justify-content: center !important;
+    }
+
+    /* Sem os rótulos, um fio separa as seções (Operação, Financeiro, Sistema). */
+    html[data-sidebar="recolhida"] .v5-sidebar .v5-grupo + .v5-grupo {
+      border-top: 1px solid var(--color-border) !important;
+      padding-top: 0.75rem !important;
+      margin-top: 0.75rem !important;
+    }
+
+    /*
+     * O subitem ativo some com o grupo fechado: o ícone do grupo leva as
+     * mesmas pistas do item ativo (barra, fundo tint e texto ink).
+     */
+    html[data-sidebar="recolhida"] .v5-sidebar summary[data-atual] {
+      background-color: var(--color-primary-tint) !important;
+      color: var(--color-text) !important;
+    }
+
+    html[data-sidebar="recolhida"] .v5-sidebar summary[data-atual]::before {
+      content: "" !important;
+      position: absolute !important;
+      inset-block: 0.5rem !important;
+      left: -0.75rem !important;
+      width: 3px !important;
+      border-radius: 0 3px 3px 0 !important;
+      background-color: var(--color-primary) !important;
+    }
   }
 }
 

@@ -224,6 +224,9 @@ class MY_Controller extends CI_Controller
      * do Bootstrap 2/jQuery rodam no modo legado, que é o padrão; uma tela
      * migrada para os componentes da v5 desliga com
      * $this->data['legacy_assets'] = false. Ver layout_helper.php.
+     *
+     * A ação principal da tela (o único button-primary, ex. "Nova OS") vai na
+     * topbar: $this->data['topbar_acao'] = component('button', [...]).
      */
     public function layout()
     {
@@ -257,15 +260,26 @@ class MY_Controller extends CI_Controller
             }
         }
 
+        $menu = layoutMenuVisivel(layoutMenu(), $permite, (string) $this->router->class, (string) $this->router->method);
+        $usuario = (string) $this->session->userdata('nome_admin');
+        $avatar = layoutAvatarUrl($this->session->userdata('url_image_user_admin'), FCPATH . 'assets/userImage', base_url());
+        $acao = $this->data['topbar_acao'] ?? null;
+
         return [
             'legado' => $legado,
             'assets' => layoutAssets($legado, (string) ($configuracao['app_theme'] ?? '')),
             'dados_legado' => layoutDadosLegado(base_url(), $siteUrl, $configuracao),
-            'menu' => layoutMenuVisivel(layoutMenu(), $permite, (string) $this->router->class, (string) $this->router->method),
+            'menu' => $menu,
+            'grupos' => layoutMenuGrupos($menu),
             'breadcrumb' => layoutBreadcrumb([$this->uri->segment(1), $this->uri->segment(2), $this->uri->segment(3)], $siteUrl),
             'saudacao' => layoutSaudacao((int) date('G')),
-            'usuario' => (string) $this->session->userdata('nome_admin'),
-            'avatar' => layoutAvatarUrl($this->session->userdata('url_image_user_admin'), FCPATH . 'assets/userImage', base_url()),
+            'usuario' => $usuario,
+            'iniciais' => layoutIniciais($usuario),
+            'avatar' => $avatar,
+            'tem_foto' => $avatar !== base_url() . 'assets/img/User.png',
+            'nome_sistema' => (string) (($configuracao['app_name'] ?? '') ?: 'Map-OS'),
+            'versao' => (string) $this->config->item('app_version'),
+            'acao' => $acao instanceof HtmlSeguro ? $acao : null,
             'flash' => $flash,
         ];
     }

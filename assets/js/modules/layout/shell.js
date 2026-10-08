@@ -36,6 +36,12 @@ function gravar(chave, valor) {
     }
 }
 
+// Ctrl+K (ou ⌘K no Mac) leva à busca global (DESIGN.md topbar). Shift e Alt
+// ficam de fora para não roubar outros atalhos.
+export function ehAtalhoBusca(evento) {
+    return Boolean(evento.ctrlKey || evento.metaKey) && !evento.altKey && !evento.shiftKey && String(evento.key).toLowerCase() === 'k';
+}
+
 export default function iniciar(corpo) {
     const html = document.documentElement;
     const desktop = window.matchMedia?.(CONSULTA_DESKTOP);
@@ -78,6 +84,15 @@ export default function iniciar(corpo) {
         marcarBotoes();
     };
 
+    // Telas legadas que medem a largura em JS (o calendário do Início) só se
+    // ajustam no resize da janela: avisa quando a margem do conteúdo muda.
+    const main = corpo.querySelector('.v5-main');
+    main?.addEventListener('transitionend', (evento) => {
+        if (evento.target === main && evento.propertyName === 'margin-left') {
+            window.dispatchEvent(new Event('resize'));
+        }
+    });
+
     corpo.addEventListener('click', (evento) => {
         const alvo = evento.target;
 
@@ -116,6 +131,20 @@ export default function iniciar(corpo) {
     });
 
     corpo.addEventListener('keydown', (evento) => {
+        if (ehAtalhoBusca(evento)) {
+            evento.preventDefault();
+            // No celular a busca da topbar fica escondida: abre a gaveta, que
+            // tem o próprio campo.
+            let campo = corpo.querySelector('#v5-pesquisa');
+            if (!campo || campo.offsetParent === null) {
+                aplicar({ ...estado(), gavetaAberta: true });
+                campo = corpo.querySelector('#v5-pesquisa-gaveta');
+            }
+            campo?.focus();
+            campo?.select?.();
+            return;
+        }
+
         if (evento.key !== 'Escape') {
             return;
         }

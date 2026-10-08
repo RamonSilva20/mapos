@@ -285,7 +285,13 @@ Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/inde
 
 ### Layout do painel e modo legado
 
-Toda tela do painel passa por `MY_Controller::layout()`, que monta a moldura da v5 (`application/views/tema/`): sidebar recolhível (gaveta no celular), topbar com busca, troca de modo de cor e menu do usuário, breadcrumb e mensagens de flash como toast. O menu sai de `layoutMenu()` (`application/helpers/layout_helper.php`) e cada item só aparece se o mapa de permissões liberar a rota de destino.
+Toda tela do painel passa por `MY_Controller::layout()`, que monta a moldura da v5 (`application/views/tema/`): sidebar recolhível (gaveta no celular), topbar com busca, troca de modo de cor e menu do usuário, breadcrumb e mensagens de flash como toast. O menu sai de `layoutMenu()` (`application/helpers/layout_helper.php`), dividido em seções pela chave `grupo` de cada item (Operação, Financeiro, Sistema), e cada item só aparece se o mapa de permissões liberar a rota de destino.
+
+A ação principal da tela, o único `button-primary` dela, vai na topbar, ao lado da busca:
+
+```php
+$this->data['topbar_acao'] = component('button', ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')]);
+```
 
 Durante a Beta as telas são migradas aos poucos, então o layout tem um **modo legado**, ligado por padrão: ele carrega Bootstrap 2, jQuery, matrix-style e o `tema-*.css`, e a tela fica dentro de `#content` como antes. Uma tela já migrada para os componentes desliga o modo legado e passa a receber o `app.css` completo:
 

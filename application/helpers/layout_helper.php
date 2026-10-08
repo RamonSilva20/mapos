@@ -69,6 +69,8 @@ if (! function_exists('layoutMenu')) {
      * ficavam em menus da topbar sem verificação nenhuma: agora seguem a
      * permissão da rota de destino.
      *
+     * - grupo: seção da sidebar (Operação, Financeiro, Sistema), ver
+     *   layoutMenuGrupos()
      * - url: caminho para site_url() ('' é a página inicial)
      * - rota: [controller, método] conferido no mapa de permissões
      * - ativo: controllers ("Clientes") ou rotas ("Mapos/configurar") que
@@ -79,17 +81,17 @@ if (! function_exists('layoutMenu')) {
     function layoutMenu(): array
     {
         return [
-            ['label' => 'Início', 'icon' => 'house', 'url' => '', 'rota' => ['Mapos', 'index'], 'ativo' => ['Mapos/index']],
-            ['label' => 'Cliente / Fornecedor', 'icon' => 'user', 'url' => 'clientes', 'rota' => ['Clientes', 'index'], 'ativo' => ['Clientes']],
-            ['label' => 'Produtos', 'icon' => 'shopping-basket', 'url' => 'produtos', 'rota' => ['Produtos', 'index'], 'ativo' => ['Produtos']],
-            ['label' => 'Serviços', 'icon' => 'wrench', 'url' => 'servicos', 'rota' => ['Servicos', 'index'], 'ativo' => ['Servicos']],
-            ['label' => 'Vendas', 'icon' => 'shopping-cart', 'url' => 'vendas', 'rota' => ['Vendas', 'index'], 'ativo' => ['Vendas']],
-            ['label' => 'Ordens de Serviço', 'icon' => 'file-text', 'url' => 'os', 'rota' => ['Os', 'index'], 'ativo' => ['Os']],
-            ['label' => 'Termos de Garantias', 'icon' => 'receipt', 'url' => 'garantias', 'rota' => ['Garantias', 'index'], 'ativo' => ['Garantias']],
-            ['label' => 'Arquivos', 'icon' => 'archive', 'url' => 'arquivos', 'rota' => ['Arquivos', 'index'], 'ativo' => ['Arquivos']],
-            ['label' => 'Lançamentos', 'icon' => 'chart-column', 'url' => 'financeiro/lancamentos', 'rota' => ['Financeiro', 'lancamentos'], 'ativo' => ['Financeiro']],
-            ['label' => 'Cobranças', 'icon' => 'circle-dollar-sign', 'url' => 'cobrancas/cobrancas', 'rota' => ['Cobrancas', 'cobrancas'], 'ativo' => ['Cobrancas']],
+            ['grupo' => 'Operação', 'label' => 'Início', 'icon' => 'house', 'url' => '', 'rota' => ['Mapos', 'index'], 'ativo' => ['Mapos/index']],
+            ['grupo' => 'Operação', 'label' => 'Cliente / Fornecedor', 'icon' => 'user', 'url' => 'clientes', 'rota' => ['Clientes', 'index'], 'ativo' => ['Clientes']],
+            ['grupo' => 'Operação', 'label' => 'Produtos', 'icon' => 'shopping-basket', 'url' => 'produtos', 'rota' => ['Produtos', 'index'], 'ativo' => ['Produtos']],
+            ['grupo' => 'Operação', 'label' => 'Serviços', 'icon' => 'wrench', 'url' => 'servicos', 'rota' => ['Servicos', 'index'], 'ativo' => ['Servicos']],
+            ['grupo' => 'Operação', 'label' => 'Vendas', 'icon' => 'shopping-cart', 'url' => 'vendas', 'rota' => ['Vendas', 'index'], 'ativo' => ['Vendas']],
+            ['grupo' => 'Operação', 'label' => 'Ordens de Serviço', 'icon' => 'file-text', 'url' => 'os', 'rota' => ['Os', 'index'], 'ativo' => ['Os']],
+            ['grupo' => 'Operação', 'label' => 'Termos de Garantias', 'icon' => 'receipt', 'url' => 'garantias', 'rota' => ['Garantias', 'index'], 'ativo' => ['Garantias']],
+            ['grupo' => 'Financeiro', 'label' => 'Lançamentos', 'icon' => 'chart-column', 'url' => 'financeiro/lancamentos', 'rota' => ['Financeiro', 'lancamentos'], 'ativo' => ['Financeiro']],
+            ['grupo' => 'Financeiro', 'label' => 'Cobranças', 'icon' => 'circle-dollar-sign', 'url' => 'cobrancas/cobrancas', 'rota' => ['Cobrancas', 'cobrancas'], 'ativo' => ['Cobrancas']],
             [
+                'grupo' => 'Financeiro',
                 'label' => 'Relatórios',
                 'icon' => 'chart-pie',
                 'itens' => [
@@ -103,7 +105,9 @@ if (! function_exists('layoutMenu')) {
                     ['label' => 'Receitas Brutas - MEI', 'url' => 'relatorios/receitasBrutasMei', 'rota' => ['Relatorios', 'receitasBrutasMei'], 'ativo' => ['Relatorios/receitasBrutasMei', 'Relatorios/receitasBrutasCustom', 'Relatorios/receitasBrutasRapid']],
                 ],
             ],
+            ['grupo' => 'Sistema', 'label' => 'Arquivos', 'icon' => 'archive', 'url' => 'arquivos', 'rota' => ['Arquivos', 'index'], 'ativo' => ['Arquivos']],
             [
+                'grupo' => 'Sistema',
                 'label' => 'Configurações',
                 'icon' => 'settings',
                 'itens' => [
@@ -183,6 +187,51 @@ if (! function_exists('layoutMenuVisivel')) {
         }
 
         return $visivel;
+    }
+}
+
+if (! function_exists('layoutMenuGrupos')) {
+    /**
+     * Separa o menu já filtrado (layoutMenuVisivel()) nas seções da sidebar
+     * (DESIGN.md: Operação, Financeiro, Sistema), na ordem em que aparecem.
+     * Seção sem item visível não aparece.
+     *
+     * @param  list<array<string, mixed>>  $menu
+     * @return list<array{label: string, itens: list<array<string, mixed>>}>
+     */
+    function layoutMenuGrupos(array $menu): array
+    {
+        $grupos = [];
+
+        foreach ($menu as $item) {
+            $grupo = (string) ($item['grupo'] ?? '');
+            $grupos[$grupo] ??= ['label' => $grupo, 'itens' => []];
+            $grupos[$grupo]['itens'][] = $item;
+        }
+
+        return array_values($grupos);
+    }
+}
+
+if (! function_exists('layoutIniciais')) {
+    /**
+     * Iniciais do usuário para o avatar sem foto: primeira letra do primeiro
+     * e do último nome ("Ramon da Silva" → "RS"); com um nome só, as duas
+     * primeiras letras.
+     */
+    function layoutIniciais(string $nome): string
+    {
+        $partes = preg_split('/\s+/u', trim($nome), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        if ($partes === []) {
+            return '?';
+        }
+
+        $iniciais = count($partes) === 1
+            ? mb_substr($partes[0], 0, 2)
+            : mb_substr($partes[0], 0, 1) . mb_substr(end($partes), 0, 1);
+
+        return mb_strtoupper($iniciais);
     }
 }
 

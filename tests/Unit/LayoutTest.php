@@ -170,6 +170,9 @@ final class LayoutTest extends MaposTestCase
             $menu = layoutMenuVisivel(layoutMenu(), $this->permite($conjunto), 'Mapos', 'index');
             $principais = array_values(array_filter(self::rotulos($menu), fn ($r) => ! str_contains($r, ' > ')));
 
+            // A ordem segue os grupos da sidebar (#2917); a paridade é de itens.
+            sort($esperado);
+            sort($principais);
             $this->assertSame($esperado, $principais, 'Permissões: ' . implode(', ', $conjunto));
         }
     }
@@ -312,6 +315,53 @@ final class LayoutTest extends MaposTestCase
             unlink($pasta . DIRECTORY_SEPARATOR . 'foto 1.png');
             rmdir($pasta);
         }
+    }
+
+    /**
+     * A sidebar separa os itens em Operação, Financeiro e Sistema (#2917),
+     * na ordem do mapa, e todo item de topo tem um desses grupos.
+     */
+    public function testMenuSeparadoEmGrupos(): void
+    {
+        foreach (layoutMenu() as $item) {
+            $this->assertContains($item['grupo'] ?? null, ['Operação', 'Financeiro', 'Sistema'], "Item {$item['label']} sem grupo da sidebar.");
+        }
+
+        $todas = ['vCliente', 'vProduto', 'vServico', 'vVenda', 'vOs', 'vGarantia', 'vArquivo', 'vLancamento', 'vCobranca',
+            'rCliente', 'rProduto', 'rServico', 'rOs', 'rVenda', 'rFinanceiro',
+            'cSistema', 'cUsuario', 'cEmitente', 'cPermissao', 'cAuditoria', 'cEmail', 'cBackup'];
+        $grupos = layoutMenuGrupos(layoutMenuVisivel(layoutMenu(), $this->permite($todas), 'Mapos', 'index'));
+
+        $this->assertSame(['Operação', 'Financeiro', 'Sistema'], array_column($grupos, 'label'));
+        $this->assertSame('Início', $grupos[0]['itens'][0]['label']);
+        $this->assertSame('Configurações', end($grupos[2]['itens'])['label']);
+    }
+
+    public function testGrupoSemItemVisivelNaoApareceNaSidebar(): void
+    {
+        $grupos = layoutMenuGrupos(layoutMenuVisivel(layoutMenu(), $this->permite(['vCliente']), 'Mapos', 'index'));
+
+        $this->assertSame(['Operação'], array_column($grupos, 'label'));
+        $this->assertSame(['Início', 'Cliente / Fornecedor'], array_column($grupos[0]['itens'], 'label'));
+    }
+
+    public static function nomes(): array
+    {
+        return [
+            ['Ramon da Silva', 'RS'],
+            ['  ramon   silva ', 'RS'],
+            ['Admin', 'AD'],
+            ['ÉRICA', 'ÉR'],
+            ['álvaro óliveira', 'ÁÓ'],
+            ['', '?'],
+            ['   ', '?'],
+        ];
+    }
+
+    #[DataProvider('nomes')]
+    public function testIniciaisDoAvatar(string $nome, string $esperado): void
+    {
+        $this->assertSame($esperado, layoutIniciais($nome));
     }
 
     // ---------------------------------------------------------------------
