@@ -88,9 +88,20 @@ if (! class_exists('CI_Controller', false)) {
     }
 }
 
+// Mesma ideia para as migrations: o CI_Migration real busca o banco na
+// instância do framework. O stub expõe $db para o teste injetar o SQLite.
+if (! class_exists('CI_Migration', false)) {
+    class CI_Migration
+    {
+        /** @var object */
+        public $db;
+    }
+}
+
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'general_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'financeiro_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'escape_helper.php';
+require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'tema_helper.php';
 require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-escape.php';
 require_once APPPATH . 'libraries' . DIRECTORY_SEPARATOR . 'Permission.php';
 require_once APPPATH . 'controllers' . DIRECTORY_SEPARATOR . 'Login.php';

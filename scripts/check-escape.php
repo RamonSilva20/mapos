@@ -35,6 +35,8 @@ const ESCAPE_FUNCOES_SEGURAS = [
     'count',
     'number_format',
     'date',
+    // Monta os atributos do <html> com htmlspecialchars (tema_helper.php).
+    'temaatributoshtml',
 ];
 
 /**
