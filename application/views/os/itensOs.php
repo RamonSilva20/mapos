@@ -2,9 +2,13 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
+<?php
+/*
+ * Itens da OS (os/itens): a tela antiga de edição sem a aba de dados, que
+ * agora é o formulário de os/editar. Provisória: sai quando a tela da OS for
+ * migrada para os componentes da v5 (#2842).
+ */
+?>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
 
@@ -13,7 +17,7 @@
         <div class="widget-box">
             <div class="widget-title" style="margin: -20px 0 0">
                 <span class="icon"><i class="fas fa-diagnoses"></i></span>
-                <h5>Editar Ordem de Serviço</h5>
+                <h5>Itens da Ordem de Serviço</h5>
                 <div class="buttons">
                     <?php if ($result->faturado == 0) { ?>
                         <a href="#modal-faturar" id="btn-faturar" role="button" data-toggle="modal" class="button btn btn-mini btn-danger">
@@ -69,96 +73,18 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab1">
-                            <div class="span12" id="divCadastrarOs">
-                                <form action="<?php echo current_url(); ?>" method="post" id="formOs">
-                                    <?php echo form_hidden('idOs', $result->idOs) ?>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <h3>N° OS: <?php echo $result->idOs; ?></h3>
-                                        <div class="span6" style="margin-left: 0">
-                                            <label for="cliente">Cliente<span class="required">*</span></label>
-                                            <input id="cliente" class="span12" type="text" name="cliente" value="<?php echo $result->nomeCliente ?>" />
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value="<?php echo $result->clientes_id ?>" />
-                                            <input id="valor" type="hidden" name="valor" value="" />
-                                        </div>
-                                        <div class="span6">
-                                            <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
-                                            <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
-                                        </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span3">
-                                            <label for="status">Status<span class="required">*</span></label>
-                                            <select class="span12" name="status" id="status" value="">
-                                                <option <?php if ($result->status == 'Aberto') {
-                                                    echo 'selected';
-                                                } ?> value="Aberto">Aberto</option>
-                                                <option <?php if ($result->status == 'Orçamento') {
-                                                    echo 'selected';
-                                                } ?> value="Orçamento">Orçamento</option>
-                                                <option <?php if ($result->status == 'Negociação') {
-                                                    echo 'selected';
-                                                } ?> value="Negociação">Negociação</option>
-                                                <option <?php if ($result->status == 'Aprovado') {
-                                                    echo 'selected';
-                                                } ?> value="Aprovado">Aprovado</option>
-                                                <option <?php if ($result->status == 'Aguardando Peças') {
-                                                    echo 'selected';
-                                                } ?> value="Aguardando Peças">Aguardando Peças</option>
-                                                <option <?php if ($result->status == 'Em Andamento') {
-                                                    echo 'selected';
-                                                } ?> value="Em Andamento">Em Andamento</option>
-                                                <option <?php if ($result->status == 'Finalizado') {
-                                                    echo 'selected';
-                                                } ?> value="Finalizado">Finalizado</option>
-                                                <option <?php if ($result->status == 'Faturado') {
-                                                    echo 'selected';
-                                                } ?> value="Faturado">Faturado</option>
-                                                <option <?php if ($result->status == 'Cancelado') {
-                                                    echo 'selected';
-                                                } ?> value="Cancelado">Cancelado</option>                                                          
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataInicial">Data Inicial<span class="required">*</span></label>
-                                            <input id="dataInicial" autocomplete="off" class="span12 datepicker" type="text" name="dataInicial" value="<?php echo date('d/m/Y', strtotime($result->dataInicial)); ?>" />
-                                        </div>
-                                        <div class="span3">
-                                            <label for="dataFinal">Data Final<span class="required">*</span></label>
-                                            <input id="dataFinal" autocomplete="off" class="span12 datepicker" type="text" name="dataFinal" value="<?php echo date('d/m/Y', strtotime($result->dataFinal)); ?>" />
-                                        </div>
-                                        <div class="span3">
-                                            <label for="garantia">Garantia (dias)</label>
-                                            <input id="garantia" type="number" placeholder="Status s/g inserir nº/0" min="0" max="9999" class="span12" name="garantia" value="<?php echo $result->garantia ?>" />
-                                            <?php echo form_error('garantia'); ?>
-                                            <label for="termoGarantia">Termo Garantia</label>
-                                            <input id="termoGarantia" class="span12" type="text" name="termoGarantia" value="<?php echo $result->refGarantia ?>" />
-                                            <input id="garantias_id" class="span12" type="hidden" name="garantias_id" value="<?php echo $result->garantias_id ?>" />
-                                        </div>
-                                    </div>
-                                    <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="descricaoProduto"><h4>Descrição Produto/Serviço</h4></label>
-                                        <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
-                                    </div>
-                                    <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="defeito"><h4>Defeito</h4></label>
-                                        <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
-                                    </div>
-                                    <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="observacoes"><h4>Observações</h4></label>
-                                        <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
-                                    </div>
-                                    <div class="span6" style="padding: 1%; margin-left: 0">
-                                        <label for="laudoTecnico"><h4>Laudo Técnico</h4></label>
-                                        <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
-                                    </div>
-                                    <div class="span12" style="padding: 0; margin-left: 0">
-                                        <div class="span12" style="display:flex; justify-content: center;">
-                                            <button class="button btn btn-primary" id="btnContinuar"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/os" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
-                                        </div>
-                                    </div>
-                                </form>
+                            <div class="span12" id="divCadastrarOs" style="padding: 1%; margin-left: 0">
+                                <h3>N° OS: <?= e($result->idOs) ?></h3>
+                                <p>
+                                    <strong>Cliente:</strong> <?= e($result->nomeCliente) ?><br>
+                                    <strong>Técnico / Responsável:</strong> <?= e($result->nome) ?><br>
+                                    <strong>Status:</strong> <?= e($result->status) ?><br>
+                                    <strong>Data inicial:</strong> <?= e(dataBr($result->dataInicial)) ?> &nbsp; <strong>Data final:</strong> <?= e(dataBr($result->dataFinal)) ?><br>
+                                    <strong>Garantia:</strong> <?= e($result->garantia !== '' && $result->garantia !== null ? $result->garantia . ' dias' : '—') ?>
+                                </p>
+                                <p>Cliente, técnico, status, datas, garantia e os textos da OS são alterados no formulário de dados.</p>
+                                <a href="<?= e(site_url('os/editar/' . (int) $result->idOs)) ?>" class="button btn btn-primary"><span class="button__icon"><i class="bx bx-edit"></i></span><span class="button__text2">Editar dados da OS</span></a>
+                                <a href="<?= e(site_url('os')) ?>" class="button btn btn-mini btn-warning"><span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
                             </div>
                         </div>
 
@@ -767,7 +693,7 @@ if (!$anotacoes) {
                             text: response.messages
                         });
                         setTimeout(function () {
-                            window.location.href = window.BaseUrl + 'index.php/os/editar/' + <?php echo $result->idOs ?>;
+                            window.location.href = window.BaseUrl + 'index.php/os/itens/' + <?php echo $result->idOs ?>;
                         }, 2000);
                     } else {
                         Swal.fire({
@@ -873,69 +799,6 @@ if (!$anotacoes) {
             minLength: 2,
             select: function (event, ui) {
                 $("#clientes_id").val(ui.item.id);
-            }
-        });
-
-        $("#tecnico").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteUsuario",
-            minLength: 2,
-            select: function (event, ui) {
-                $("#usuarios_id").val(ui.item.id);
-            }
-        });
-
-        $("#termoGarantia").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteTermoGarantia",
-            minLength: 1,
-            select: function (event, ui) {
-                if (ui.item.id) {
-                    $("#garantias_id").val(ui.item.id);
-                }
-            }
-        });
-
-        $('#termoGarantia').on('change', function () {
-            if (!$(this).val() && $("#garantias_id").val()) {
-                $("#garantias_id").val('');
-                Swal.fire({
-                    type: "success",
-                    title: "Sucesso",
-                    text: "Termo de garantia removido"
-                });
-            }
-        });
-
-        $("#formOs").validate({
-            rules: {
-                cliente: {
-                    required: true
-                },
-                tecnico: {
-                    required: true
-                },
-                dataInicial: {
-                    required: true
-                }
-            },
-            messages: {
-                cliente: {
-                    required: 'Campo Requerido.'
-                },
-                tecnico: {
-                    required: 'Campo Requerido.'
-                },
-                dataInicial: {
-                    required: 'Campo Requerido.'
-                }
-            },
-            errorClass: "help-inline",
-            errorElement: "span",
-            highlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').addClass('error');
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('error');
-                $(element).parents('.control-group').addClass('success');
             }
         });
 
@@ -1258,11 +1121,6 @@ if (!$anotacoes) {
 
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy'
-        });
-
-        $('.editor').trumbowyg({
-            lang: 'pt_br',
-            semantic: { 'strikethrough': 's', }
         });
     });
 </script>
