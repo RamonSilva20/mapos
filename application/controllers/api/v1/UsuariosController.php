@@ -257,10 +257,25 @@ class UsuariosController extends REST_Controller
         $this->load->model('Mapos_model');
         $email = $this->post('email', true);
         $password = $this->post('password', true);
+        $ip = $this->input->ip_address();
+
+        // Limite de tentativas (#2870), no mesmo escopo do login do painel.
+        $this->load->library('Limite_login');
+        $restantes = $this->limite_login->segundosRestantes('usuario', $email, $ip);
+        if ($restantes > 0) {
+            header('Retry-After: ' . $restantes);
+            $this->response([
+                'status' => false,
+                'message' => Limite_login::MENSAGEM,
+            ], REST_Controller::HTTP_TOO_MANY_REQUESTS);
+        }
+
         $user = $this->Mapos_model->check_credentials($email);
 
-        if ($user) {
-            // Verificar se acesso está expirado
+        if ($user && password_verify((string) $password, $user->senha)) {
+            $this->limite_login->registrarSucesso('usuario', $email);
+
+            // Conta expirada: mesma resposta genérica de antes.
             if ($this->chk_date($user->dataExpiracao)) {
                 $this->response([
                     'status' => false,
@@ -268,36 +283,30 @@ class UsuariosController extends REST_Controller
                 ], REST_Controller::HTTP_UNAUTHORIZED);
             }
 
-            // Verificar credenciais do usuário
-            if (password_verify($password, $user->senha)) {
-                $this->log_app('Efetuou login no sistema', $user->nome);
-                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
+            $this->log_app('Efetuou login no sistema', $user->nome);
+            $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
 
-                $token_data = [
-                    'uid' => $user->idUsuarios,
-                    'email' => $user->email,
-                    'permissao' => $user->permissoes_id,
-                    'type' => REST_Controller::TOKEN_TYPE_USER,
-                ];
+            $token_data = [
+                'uid' => $user->idUsuarios,
+                'email' => $user->email,
+                'permissao' => $user->permissoes_id,
+                'type' => REST_Controller::TOKEN_TYPE_USER,
+            ];
 
-                $result = [
-                    'access_token' => $this->authorization_token->generateToken($token_data),
-                    'permissions' => [$permissoes],
-                ];
-
-                $this->response([
-                    'status' => true,
-                    'message' => 'Login realizado com sucesso!',
-                    'result' => $result,
-                ], REST_Controller::HTTP_OK);
-            }
+            $result = [
+                'access_token' => $this->authorization_token->generateToken($token_data),
+                'permissions' => [$permissoes],
+            ];
 
             $this->response([
-                'status' => false,
-                'message' => 'Os dados de acesso estão incorretos!',
-            ], REST_Controller::HTTP_UNAUTHORIZED);
+                'status' => true,
+                'message' => 'Login realizado com sucesso!',
+                'result' => $result,
+            ], REST_Controller::HTTP_OK);
         }
 
+        // E-mail inexistente ou senha errada: mesma resposta, e conta para o limite.
+        $this->limite_login->registrarFalha('usuario', $email, $ip);
         $this->response([
             'status' => false,
             'message' => 'Os dados de acesso estão incorretos!',

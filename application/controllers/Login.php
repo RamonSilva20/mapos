@@ -37,45 +37,57 @@ class Login extends CI_Controller
         $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
         if ($this->form_validation->run() == false) {
-            $json = ['result' => false, 'message' => validation_errors()];
-            echo json_encode($json);
-        } else {
-            $email = $this->input->post('email');
-            $password = $this->input->post('senha');
-            $this->load->model('Mapos_model');
-            $user = $this->Mapos_model->check_credentials($email);
-
-            if ($user) {
-                // Verificar se acesso está expirado
-                if ($this->chk_date($user->dataExpiracao)) {
-                    $json = ['result' => false, 'message' => 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.'];
-                    echo json_encode($json);
-                    exit();
-                }
-
-                // Verificar credenciais do usuário
-                if (password_verify($password, $user->senha)) {
-                    // Novo ID de sessão a cada autenticação, para que um ID
-                    // fixado antes do login não continue válido depois dele.
-                    $this->session->sess_regenerate(true);
-
-                    $session_admin_data = ['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
-                    $this->session->set_userdata($session_admin_data);
-                    log_info('Efetuou login no sistema');
-                    $json = ['result' => true];
-                    echo json_encode($json);
-                } else {
-                    $json = ['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
-                    echo json_encode($json);
-                }
-            } else {
-                // Mesma mensagem do erro de senha: mensagens distintas revelam
-                // quais e-mails possuem conta.
-                $json = ['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
-                echo json_encode($json);
-            }
+            echo json_encode(['result' => false, 'message' => validation_errors()]);
+            exit();
         }
+
+        $email = $this->input->post('email');
+        $password = $this->input->post('senha');
+        $ip = $this->input->ip_address();
+
+        // Limite de tentativas (#2870): bloqueado, nem consulta a senha.
+        $this->load->library('Limite_login');
+        if ($this->limite_login->bloqueado('usuario', $email, $ip)) {
+            echo json_encode($this->falha(Limite_login::MENSAGEM));
+            exit();
+        }
+
+        $this->load->model('Mapos_model');
+        $user = $this->Mapos_model->check_credentials($email);
+
+        // Mesma mensagem para e-mail inexistente e senha errada: mensagens
+        // distintas revelam quais e-mails possuem conta. A expiração só é
+        // informada depois da senha certa, pelo mesmo motivo.
+        if (! $user || ! password_verify($password, $user->senha)) {
+            $this->limite_login->registrarFalha('usuario', $email, $ip);
+            echo json_encode($this->falha('Os dados de acesso estão incorretos.'));
+            exit();
+        }
+
+        $this->limite_login->registrarSucesso('usuario', $email);
+
+        if ($this->chk_date($user->dataExpiracao)) {
+            echo json_encode($this->falha('A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.'));
+            exit();
+        }
+
+        // Novo ID de sessão a cada autenticação, para que um ID
+        // fixado antes do login não continue válido depois dele.
+        $this->session->sess_regenerate(true);
+
+        $session_admin_data = ['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
+        $this->session->set_userdata($session_admin_data);
+        log_info('Efetuou login no sistema');
+        echo json_encode(['result' => true]);
         exit();
+    }
+
+    /**
+     * Resposta de login recusado, com o token CSRF novo para a próxima tentativa.
+     */
+    private function falha(string $mensagem): array
+    {
+        return ['result' => false, 'message' => $mensagem, 'MAPOS_TOKEN' => $this->security->get_csrf_hash()];
     }
 
     /**
