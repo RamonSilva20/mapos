@@ -94,5 +94,6 @@ require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'escape_helper.php';
 require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-escape.php';
 require_once APPPATH . 'libraries' . DIRECTORY_SEPARATOR . 'Permission.php';
 require_once APPPATH . 'controllers' . DIRECTORY_SEPARATOR . 'Login.php';
+require_once APPPATH . 'core' . DIRECTORY_SEPARATOR . 'MY_Controller.php';
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'MaposTestCase.php';
