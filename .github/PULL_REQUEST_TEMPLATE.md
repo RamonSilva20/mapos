@@ -37,6 +37,15 @@ Passos para o revisor reproduzir e validar a mudança. Exemplo:
 
 <!-- Obrigatório para mudanças visuais. Sempre que possível, mostre "antes" e "depois". -->
 
+## Interface
+
+<!-- Remova esta seção se o PR não altera telas, componentes ou CSS. -->
+
+- [ ] Segue o [`DESIGN.md`](https://github.com/RamonSilva20/mapos/blob/v5/DESIGN.md): só tokens (sem cores fixas) e componentes da biblioteca.
+- [ ] Um único botão primário (laranja) por tela; status em `pill-status`; ações destrutivas com `button-danger`.
+- [ ] Campos com os estados de foco, erro e desabilitado; navegação por teclado com foco visível.
+- [ ] Capturas em modo claro **e** escuro, no desktop **e** a 375px.
+
 ## Checklist
 
 - [ ] O PR resolve **um** assunto (correções e refatorações não estão misturadas).

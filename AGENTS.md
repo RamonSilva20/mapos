@@ -39,6 +39,20 @@ Map-OS is an open-source Service Order and Business Management system built in P
 4. **Commit Messages:**
    - Follow [Conventional Commits](https://www.conventionalcommits.org/): `feat`, `fix`, `docs`, `refactor`, `chore`, etc.
 
+## Design System
+
+- **`DESIGN.md` is the source of truth for the v5 UI** — colors, typography, components, states, dark mode, and responsive behavior. Read it before touching any view, component, or CSS, and reference its token and component names (`{colors.primary}`, `button-primary`, `pill-status`, ...).
+- When existing code diverges from `DESIGN.md`, the document wins. The foundation is being aligned in epic #2911 (tokens #2912, no accent picker #2913, fonts #2914, Lucide icons #2915, components #2916, sidebar/topbar #2917, logins #2918); don't build new screens on the parts it replaces.
+- Non-negotiables:
+  - One action color: orange `#F37338` with a dark ink label (`{colors.on-primary}`), never white text on it. One filled `button-primary` per screen; secondary actions use `button-outline`/`button-ghost`.
+  - Orange means "act here" only. States use the semantic status palette (success, warning, danger, info, progress, neutral) as a `pill-status` with its word; red is only for errors and destructive actions (`button-danger` inside `modal-confirm`).
+  - A thin orange indicator (active sidebar item, tab, pagination) always has a second cue: weight 600 text and the `{colors.primary-tint}` background.
+  - Data (table cells, values, typed input text) is weight 400; labels and names are 500 (`{typography.label-md}`).
+  - Form controls use the `{colors.hairline-input}` border and implement the focused, error, and disabled states from the spec.
+  - Dark mode always switches the whole screen (Panel Dark Mode tokens), never a single band.
+  - Only design tokens — no fixed colors, sizes, or fonts outside `assets/src/tokens.css`. Icons are Lucide; fonts (Rubik, Space Grotesk) are served locally.
+- Changing the design system is a PR that edits `DESIGN.md` first — with recalculated WCAG contrast ratios — and then the code.
+
 ## Front-end Build
 
 - Source CSS lives in `assets/src/` (`app.css` for new screens, `layout.css` for the admin shell, shared `tokens.css`); the compiled output in `assets/dist/` **is committed**.
@@ -46,7 +60,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - Tailwind scans `application/views/**/*.php`: write full class names in PHP, never build them by string concatenation.
 - JS libraries are copied by `npm run build:vendor` (`scripts/build-vendor.mjs`, part of `npm run build`) into `assets/vendor/<lib>/`, which **is committed** and fully generated: never edit it by hand. To add or update a library, pin it with `npm install --save-exact` and list its files in `scripts/build-vendor.mjs`. Do not add new jQuery-dependent libraries.
 - Never commit `node_modules/`.
-- New views use only the semantic color tokens from `assets/src/app.css` (`bg-surface`, `text-muted`, `border-border`, `bg-accent-600` + `text-accent-contrast`, `text-danger`, ...), never fixed palette colors, so they work in light/dark mode and with every accent color. Theme settings are `app_tema_modo` and `app_tema_destaque`; the layout prints them with `temaAtributosHtml()` (`tema_helper.php`).
+- New views use only the semantic color tokens from `assets/src/app.css` (`bg-surface`, `text-muted`, `border-border`, `bg-accent-600` + `text-accent-contrast`, `text-danger`, ...), never fixed palette colors, so they work in light and dark mode. The theme setting is `app_tema_modo` (claro/escuro/sistema); the layout prints it with `temaAtributosHtml()` (`tema_helper.php`). The accent-color picker (`app_tema_destaque`, `[data-accent]`, `bg-accent-*`) is being removed in #2913 — the brand has a single primary color — so don't use it in new code.
 - No inline `<script>` code in views. Page JS lives in ES modules under `assets/js/modules/<folder>/<name>.js` (no bundler); the view attaches it with `<?= js_module('folder/name') ?>` on an element and passes data via `data-*` attributes or `<?= page_data('id', $data) ?>` (`application/helpers/js_helper.php`). `assets/js/app.js` loads the modules. AJAX goes through `get()`/`post()` in `assets/js/lib/http.js` (CSRF token, `X-Requested-With`, 403 handling).
 - `php scripts/check-inline-script.php` (run in CI through PHPUnit) fails on new inline `<script>` blocks; legacy ones are counted in `inline-script-baseline.json`. Never raise those counts. JS utilities are tested with `npm run test:js`.
 - New views build UI from the component library instead of hand-written markup: `<?= component('button', ['label' => 'Salvar', 'type' => 'submit']) ?>` (partials in `application/views/components/`, props and validation in `application/helpers/componente_helper.php`). Components escape every value; slots (`body`, `footer`, `actions`, `message`, table cells) only accept HTML as an `HtmlSeguro` (output of `component()` or `html_purificado()`), never as a string. Never build an `HtmlSeguro` by hand from user data. Extra attributes go in the `attrs` prop; `on*` handlers are rejected. The catalog is at `/index.php/componentes` in `development` only.

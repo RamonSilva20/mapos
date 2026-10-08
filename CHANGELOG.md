@@ -19,6 +19,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Cabeçalhos de segurança (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS em HTTPS) e CSP em modo report-only com endpoint de relatório. #2904 [@RamonSilva20](https://github.com/RamonSilva20)
 - Biblioteca de componentes PHP (`application/views/components`) com catálogo visível só em desenvolvimento. #2905 [@RamonSilva20](https://github.com/RamonSilva20)
 - Paginação das telas novas pelo componente `pagination`. #2906 [@RamonSilva20](https://github.com/RamonSilva20)
+- `DESIGN.md` como fonte de verdade da UI da v5 (cores, tipografia, componentes, estados, modo escuro e responsividade), referenciado no `AGENTS.md`, no `CONTRIBUTING.md` e no template de PR. #2920 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Changed
 - Versão mínima do PHP alinhada em 8.5. #2882 [@RamonSilva20](https://github.com/RamonSilva20)

@@ -193,11 +193,22 @@ O Tailwind lê as classes de `application/views/**/*.php`. Escreva o nome da cla
 
 O CI refaz o build e falha se o `assets/dist` commitado não for o resultado dele.
 
+### Design system
+
+A interface da v5 segue o **[`DESIGN.md`](DESIGN.md)**, a fonte de verdade de cores, tipografia, componentes, estados, modo escuro e responsividade. Leia antes de mexer em views ou CSS. Os componentes prontos e todas as variantes ficam no catálogo `/index.php/componentes`, disponível com `APP_ENVIRONMENT=development`.
+
+Em resumo:
+- Há **uma única cor de ação**, o laranja `#F37338`, sempre com texto escuro, e **um único botão primário por tela**.
+- **Status** (aberta, em andamento, finalizada…) usam a paleta semântica em `pill-status`, nunca laranja. O vermelho fica para erros e ações destrutivas.
+- **Dados** (células, valores, texto digitado) usam peso 400; labels e nomes usam 500.
+
+Se o código atual divergir do `DESIGN.md`, vale o documento: a base está sendo ajustada no épico #2911. Para propor uma mudança no design system, altere primeiro o `DESIGN.md`, com os contrastes recalculados, e só depois o código.
+
 ### Cores e modo escuro
 
-As views novas usam os **tokens semânticos** definidos em `assets/src/app.css`, nunca uma cor fixa: `bg-bg`, `bg-surface`, `bg-surface-2`, `text-text`, `text-muted`, `border-border`, `bg-accent-600`/`text-accent-contrast` (botão primário), `text-success`, `bg-danger-soft` e afins. Assim a tela funciona nos modos claro e escuro e com qualquer cor de destaque, sem precisar de `dark:`.
+As views novas usam os **tokens semânticos** definidos em `assets/src/app.css`, nunca uma cor fixa: `bg-bg`, `bg-surface`, `bg-surface-2`, `text-text`, `text-muted`, `border-border`, `bg-accent-600`/`text-accent-contrast` (botão primário), `text-success`, `bg-danger-soft` e afins. Assim a tela funciona nos modos claro e escuro sem precisar de `dark:`.
 
-O tema tem duas configurações, `app_tema_modo` (`claro`, `escuro` ou `sistema`) e `app_tema_destaque` (`laranja`, `azul`, `violeta`, `verde` ou `grafite`). O layout aplica as duas no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". A antiga `app_theme` continua existindo só para as telas legadas.
+O tema é configurado por `app_tema_modo` (`claro`, `escuro` ou `sistema`). O layout aplica o modo no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". A configuração `app_tema_destaque` (cor de destaque) está sendo removida na #2913, porque o `DESIGN.md` define uma cor de marca única; não a use em código novo. A antiga `app_theme` continua existindo só para as telas legadas.
 
 ### Bibliotecas de JavaScript
 
