@@ -78,7 +78,8 @@ function segurancaCspReportUri($baseUrl)
  * Variáveis do .env (todas opcionais):
  * - APP_SECURITY_HEADERS: liga/desliga todos os cabeçalhos (padrão true).
  * - APP_HSTS_MAX_AGE: segundos do Strict-Transport-Security; 0 desliga
- *   (padrão 31536000). Só é enviado quando a requisição chega por HTTPS.
+ *   (padrão 31536000, ou 0 com APP_ENVIRONMENT=development). Só é enviado
+ *   quando a requisição chega por HTTPS.
  * - APP_HSTS_INCLUDE_SUBDOMAINS: inclui includeSubDomains (padrão false).
  * - APP_CSP_REPORT_ONLY: envia a CSP em report-only (padrão true).
  * - APP_CSP_REPORT: envia os relatórios ao endpoint do Map-OS (padrão true).
@@ -102,9 +103,13 @@ function segurancaCabecalhos(array $env, array $server)
         'Permissions-Policy' => 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()',
     ];
 
-    $maxAge = filter_var($env['APP_HSTS_MAX_AGE'] ?? 31536000, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
+    // Em desenvolvimento o HSTS fica desligado por padrão: o navegador guarda
+    // a regra por um ano e passaria a forçar HTTPS num domínio local (ex.:
+    // mapos.test) que também é usado por HTTP. Um valor explícito no .env vale.
+    $padraoMaxAge = ($env['APP_ENVIRONMENT'] ?? '') === 'development' ? 0 : 31536000;
+    $maxAge = filter_var($env['APP_HSTS_MAX_AGE'] ?? $padraoMaxAge, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
     if ($maxAge === false) {
-        $maxAge = 31536000;
+        $maxAge = $padraoMaxAge;
     }
 
     if ($maxAge > 0 && cookieRequisicaoHttps($server, $env['APP_PROXY_IPS'] ?? '')) {

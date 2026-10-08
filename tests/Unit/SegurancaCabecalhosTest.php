@@ -66,6 +66,32 @@ final class SegurancaCabecalhosTest extends MaposTestCase
         $this->assertArrayNotHasKey('Strict-Transport-Security', segurancaCabecalhos(['APP_HSTS_MAX_AGE' => '0'], ['HTTPS' => 'on']));
     }
 
+    /**
+     * Em desenvolvimento o navegador guardaria o HSTS por um ano e passaria a
+     * forçar HTTPS num domínio local que também é usado por HTTP.
+     */
+    public function testHstsDesligadoPorPadraoEmDesenvolvimento(): void
+    {
+        $this->assertArrayNotHasKey(
+            'Strict-Transport-Security',
+            segurancaCabecalhos(['APP_ENVIRONMENT' => 'development'], ['HTTPS' => 'on'])
+        );
+    }
+
+    public function testHstsExplicitoValeEmDesenvolvimento(): void
+    {
+        $h = segurancaCabecalhos(['APP_ENVIRONMENT' => 'development', 'APP_HSTS_MAX_AGE' => '600'], ['HTTPS' => 'on']);
+
+        $this->assertSame('max-age=600', $h['Strict-Transport-Security']);
+    }
+
+    public function testHstsLigadoPorPadraoEmProducao(): void
+    {
+        $h = segurancaCabecalhos(['APP_ENVIRONMENT' => 'production'], ['HTTPS' => 'on']);
+
+        $this->assertSame('max-age=31536000', $h['Strict-Transport-Security']);
+    }
+
     public function testMaxAgeInvalidoUsaOPadrao(): void
     {
         $h = segurancaCabecalhos(['APP_HSTS_MAX_AGE' => 'um ano'], ['HTTPS' => 'on']);

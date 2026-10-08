@@ -22,7 +22,7 @@ frame, e o `nosniff` impede que um anexo seja interpretado como HTML.
 | Variável | Padrão | Efeito |
 |---|---|---|
 | `APP_SECURITY_HEADERS` | `true` | `false` desliga todos os cabeçalhos |
-| `APP_HSTS_MAX_AGE` | `31536000` | duração do HSTS em segundos; `0` desliga |
+| `APP_HSTS_MAX_AGE` | `31536000` (`0` com `APP_ENVIRONMENT=development`) | duração do HSTS em segundos; `0` desliga |
 | `APP_HSTS_INCLUDE_SUBDOMAINS` | `false` | acrescenta `includeSubDomains` |
 | `APP_CSP_REPORT_ONLY` | `true` | envia a CSP em modo report-only |
 | `APP_CSP_REPORT` | `true` | manda os relatórios ao endpoint do Map-OS |
