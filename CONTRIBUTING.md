@@ -307,6 +307,13 @@ O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination
 - **Máscaras:** `data-mascara="documento|telefone|cep"`. Para mostrar a senha, um botão com `data-mostrar-senha="<id do campo>"`.
 - **Layout:** seções com título curto, campos em duas colunas a partir de 640px e um único `button-primary` (Salvar) no fim, com Cancelar em ghost. Formulário de tela inteira não usa `topbar_acao`.
 
+**Partes da tela que mudam sem recarregar** (#2842). A referência é a tela da OS (`Os::visualizar()`, `views/os/visualizar.php`, `views/os/partes/` e `assets/js/modules/os/tela.js`), onde produtos, serviços, anexos, anotações e desconto são alterados na própria tela:
+
+- **Trechos:** cada parte que muda é uma view em `views/<módulo>/partes/`, usada no carregamento da tela e dentro de um elemento `data-os-parte="<parte>"`.
+- **Formulários:** levam `data-os-acao` e são enviados pelo `post()` de `lib/http.js`. Exclusões usam um `modal-confirm` por tipo, que aponta (`form="..."`) para um formulário oculto preenchido pelo `data-valor-*` do botão da linha.
+- **Resposta do servidor:** JSON `{result, message, erros?, html?}`. `html` traz as partes renderizadas de novo, e o módulo troca o conteúdo de cada `data-os-parte`; `erros` traz as mensagens por nome de campo, mostradas como o erro do servidor. Status: 403 sem permissão ou registro fechado, 404 para item de outro registro, 422 para erro de campo.
+- **Servidor:** o registro vem do POST, mas é conferido no banco (existe, pode ser alterado), e cada item precisa pertencer a ele. Valores calculados (totais, desconto, estoque) saem sempre do banco, nunca do navegador.
+
 **Ícones** são do [Lucide](https://lucide.dev/icons), servidos de um sprite SVG (`assets/vendor/lucide/sprite.svg`) que só tem os ícones listados em `assets/src/icones.json`. Nas views use `<?= icon('wrench', ['class' => 'size-4']) ?>` (ou a prop `icon` dos componentes); no JavaScript, `criarIcone('wrench', 'size-4')` de `assets/js/lib/icone.js`. O ícone segue a cor do texto (`currentColor`) e tem 20px por padrão. Para usar um ícone novo, inclua o nome no `icones.json` e rode `npm run build:vendor`; o `IconeTest` falha se uma view citar um ícone fora da lista. O Boxicons (`<i class="bx ...">`) só continua nas telas legadas.
 
 Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.

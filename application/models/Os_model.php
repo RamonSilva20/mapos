@@ -4,6 +4,9 @@ use Piggly\Pix\StaticPayload;
 
 class Os_model extends CI_Model
 {
+    /** Cache de historicoDisponivel(). */
+    private ?bool $historicoDisponivel = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -447,16 +450,6 @@ class Os_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function criarTextoWhats($textoBase, $troca)
-    {
-        $procura = ['{CLIENTE_NOME}', '{NUMERO_OS}', '{STATUS_OS}', '{VALOR_OS}', '{DESCRI_PRODUTOS}', '{EMITENTE}', '{TELEFONE_EMITENTE}', '{OBS_OS}', '{DEFEITO_OS}', '{LAUDO_OS}', '{DATA_FINAL}', '{DATA_INICIAL}', '{DATA_GARANTIA}'];
-        $textoBase = str_replace($procura, $troca, $textoBase);
-        $textoBase = strip_tags($textoBase);
-        $textoBase = htmlentities(urlencode($textoBase));
-
-        return $textoBase;
-    }
-
     public function valorTotalOS($id = null)
     {
         $totalServico = 0;
@@ -497,18 +490,38 @@ class Os_model extends CI_Model
 
     public function getQrCode($id, $pixKey, $emitente)
     {
+        return $this->pix($id, $pixKey, $emitente)?->getQRCode();
+    }
+
+    /**
+     * Código PIX "copia e cola" (BR Code) da OS, o mesmo que o QR Code de
+     * getQrCode() carrega. Na v4 a tela decodificava a imagem do QR no
+     * navegador (jsQR, do rawgit) para obter este texto.
+     */
+    public function getPixPayload($id, $pixKey, $emitente): ?string
+    {
+        return $this->pix($id, $pixKey, $emitente)?->getPixCode();
+    }
+
+    /**
+     * PIX estático com o total da OS (com o desconto, quando houver); null sem
+     * chave, sem emitente ou com total zerado.
+     */
+    private function pix($id, $pixKey, $emitente): ?StaticPayload
+    {
         if (empty($id) || empty($pixKey) || empty($emitente)) {
-            return;
+            return null;
         }
 
         $result = $this->valorTotalOS($id);
         $amount = $result['valor_desconto'] != 0 ? round(floatval($result['valor_desconto']), 2) : round(floatval($result['totalServico'] + $result['totalProdutos']), 2);
 
         if ($amount <= 0) {
-            return;
+            return null;
         }
 
-        $pix = (new StaticPayload())
+        $pix = new StaticPayload();
+        $pix
             ->setAmount($amount)
             ->setTid($id)
             ->setDescription(sprintf('%s OS %s', substr($emitente->nome, 0, 18), $id), true)
@@ -516,6 +529,109 @@ class Os_model extends CI_Model
             ->setMerchantName($emitente->nome)
             ->setMerchantCity($emitente->cidade);
 
-        return $pix->getQRCode();
+        return $pix;
+    }
+
+    /**
+     * Totais da OS para a tela (osTotais()): produtos, serviços, desconto e
+     * total, com a mesma regra de valorTotalOS().
+     */
+    public function totais(object $os): array
+    {
+        $soma = $this->valorTotalOS((int) $os->idOs);
+
+        return osTotais((float) $soma['totalProdutos'], (float) $soma['totalServico'], $os->valor_desconto ?? 0, $os->tipo_desconto ?? null, $os->desconto ?? 0);
+    }
+
+    /** Linha de produtos_os que pertence à OS, ou null. */
+    public function getProdutoDaOs(int $idOs, int $idItem): ?object
+    {
+        return $this->db->where('idProdutos_os', $idItem)->where('os_id', $idOs)->get('produtos_os', 1)->row() ?: null;
+    }
+
+    /** Linha de servicos_os que pertence à OS, ou null. */
+    public function getServicoDaOs(int $idOs, int $idItem): ?object
+    {
+        return $this->db->where('idServicos_os', $idItem)->where('os_id', $idOs)->get('servicos_os', 1)->row() ?: null;
+    }
+
+    /** Anexo que pertence à OS, ou null. */
+    public function getAnexoDaOs(int $idOs, int $idAnexo): ?object
+    {
+        return $this->db->where('idAnexos', $idAnexo)->where('os_id', $idOs)->get('anexos', 1)->row() ?: null;
+    }
+
+    /** Anotação que pertence à OS, ou null. */
+    public function getAnotacaoDaOs(int $idOs, int $idAnotacao): ?object
+    {
+        return $this->db->where('idAnotacoes', $idAnotacao)->where('os_id', $idOs)->get('anotacoes_os', 1)->row() ?: null;
+    }
+
+    /** Produto do cadastro (para conferir o id escolhido e o estoque), ou null. */
+    public function getProdutoCadastro(int $id): ?object
+    {
+        return $this->db->select('idProdutos, descricao, precoVenda, estoque')->where('idProdutos', $id)->get('produtos', 1)->row() ?: null;
+    }
+
+    /** Serviço do cadastro, ou null. */
+    public function getServicoCadastro(int $id): ?object
+    {
+        return $this->db->select('idServicos, nome, preco')->where('idServicos', $id)->get('servicos', 1)->row() ?: null;
+    }
+
+    /**
+     * Tira o desconto da OS. Mudar os itens muda o total, e o desconto antigo
+     * (calculado sobre o total anterior) deixaria de bater, como na v4.
+     */
+    public function zerarDesconto(int $idOs): void
+    {
+        $this->db->set('desconto', 0)->set('valor_desconto', 0)->set('tipo_desconto', null)->where('idOs', $idOs)->update('os');
+    }
+
+    /**
+     * Diz se a tabela do histórico existe. Uma instalação que ainda não rodou
+     * as migrations (Configurações > Atualizar banco) continua funcionando,
+     * só sem histórico.
+     */
+    public function historicoDisponivel(): bool
+    {
+        return $this->historicoDisponivel ??= $this->db->table_exists('os_historico');
+    }
+
+    /**
+     * Registra uma mudança de status da OS. $usuario null = a OS foi aberta
+     * pelo cliente na área do cliente. Status igual ao anterior não registra.
+     */
+    public function registrarStatus(int $idOs, ?string $anterior, string $novo, ?int $usuario): void
+    {
+        if ($anterior === $novo || ! $this->historicoDisponivel()) {
+            return;
+        }
+
+        $this->db->insert('os_historico', [
+            'os_id' => $idOs,
+            'status_anterior' => $anterior,
+            'status_novo' => $novo,
+            'usuarios_id' => $usuario ?: null,
+            'data_hora' => date('Y-m-d H:i:s'),
+        ]);
+    }
+
+    /** Histórico de status da OS, do mais recente ao mais antigo, com o nome de quem mudou. */
+    public function getHistorico(int $idOs): array
+    {
+        if (! $this->historicoDisponivel()) {
+            return [];
+        }
+
+        return $this->db
+            ->select('os_historico.*, usuarios.nome AS autor')
+            ->from('os_historico')
+            ->join('usuarios', 'usuarios.idUsuarios = os_historico.usuarios_id', 'left')
+            ->where('os_historico.os_id', $idOs)
+            ->order_by('os_historico.data_hora', 'desc')
+            ->order_by('os_historico.idHistorico', 'desc')
+            ->get()
+            ->result();
     }
 }

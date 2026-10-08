@@ -122,6 +122,9 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
     campo.setAttribute('aria-controls', idLista);
 
     let itens = [];
+    // Resposta do servidor como veio, para o evento de escolha levar os campos
+    // extras do item (preco, estoque...).
+    let brutos = [];
     let ativo = -1;
     let escolhido = oculto.value ? { id: oculto.value, valor: campo.value } : null;
     let espera = null;
@@ -213,6 +216,12 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
         oculto.dispatchEvent(new Event('change', { bubbles: true }));
         fechar();
         validar();
+        // Quem usa o autocomplete pode completar outros campos com os dados do
+        // item (ex.: o preço do produto na tela da OS).
+        wrapper.dispatchEvent(new CustomEvent('autocomplete-escolha', {
+            bubbles: true,
+            detail: { item, dados: brutos.find((bruto) => bruto && String(bruto.id) === item.id) ?? null },
+        }));
     }
 
     async function pesquisar(termo) {
@@ -224,6 +233,7 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
             if (numero !== pedido) {
                 return;
             }
+            brutos = Array.isArray(resposta) ? resposta : [];
             itens = normalizarItens(resposta);
             renderizar();
             marcarAtivo(-1);

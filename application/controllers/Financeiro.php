@@ -537,6 +537,19 @@ class Financeiro extends MY_Controller
         $this->db->where('lancamentos_id', $id);
         $this->db->update('vendas');
 
+        // O mesmo para a OS faturada (os.lancamento, preenchido pelo faturar
+        // desde a #2842): a chave estrangeira impediria excluir o lançamento.
+        // A OS volta a Finalizado, e a mudança entra no histórico dela.
+        $this->load->model('os_model');
+        foreach ($this->db->select('idOs, status')->where('lancamento', $id)->get('os')->result() as $osFaturada) {
+            $this->os_model->registrarStatus((int) $osFaturada->idOs, $osFaturada->status, 'Finalizado', (int) $this->session->userdata('id_admin'));
+        }
+        $this->db->set('lancamento', null);
+        $this->db->set('faturado', 0);
+        $this->db->set('status', 'Finalizado');
+        $this->db->where('lancamento', $id);
+        $this->db->update('os');
+
         // Exclui o lançamento
         $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
 

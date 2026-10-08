@@ -809,6 +809,10 @@ class Mine extends CI_Controller
                 $idOs = $id;
                 $os = $this->Conecte_model->getById($id);
 
+                // Histórico de status da OS (#2842); sem usuário = aberta pelo cliente.
+                $this->load->model('os_model');
+                $this->os_model->registrarStatus((int) $idOs, null, 'Aberto', null);
+
                 $remetentes = [];
                 $usuarios = $this->usuarios_model->getAll();
 
