@@ -49,7 +49,10 @@
           <?php } ?>
         </div>
 
-        <?php if ($layout['acao'] !== null) { ?><?= componenteConteudo($layout['acao']) ?><?php } ?>
+        <?php if ($layout['acao'] !== null) { ?>
+          <?= component('button', $layout['acao'] + ['class' => 'max-sm:hidden']) ?>
+          <?= component('button', $layout['acao'] + ['icon_only' => true, 'class' => 'sm:hidden']) ?>
+        <?php } ?>
 
         <details class="relative" data-menu-suspenso>
           <summary class="flex cursor-pointer list-none items-center gap-3 rounded-md p-1 hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50 [&::-webkit-details-marker]:hidden" aria-label="Menu do usuário">

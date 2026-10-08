@@ -43,6 +43,7 @@ final class ComponentesTest extends MaposTestCase
             'pagination' => ['pagination', ['total_pages' => 3, 'url' => '/x/{page}']],
             'empty-state' => ['empty-state', ['title' => 'Nada aqui']],
             'breadcrumb' => ['breadcrumb', ['items' => [['label' => 'Início', 'url' => '/'], ['label' => 'Atual']]]],
+            'link' => ['link', ['label' => 'Ana', 'href' => '/clientes/visualizar/1']],
             'pill-status' => ['pill-status', ['label' => 'Aberta', 'variant' => 'info']],
             'kpi-card' => ['kpi-card', ['label' => 'Abertas', 'value' => 18]],
             'tabs' => ['tabs', ['items' => [['label' => 'Detalhes', 'url' => '/os/1', 'active' => true]]]],
@@ -73,7 +74,7 @@ final class ComponentesTest extends MaposTestCase
         sort($especificados);
 
         $this->assertSame($especificados, $partials);
-        $this->assertCount(20, $especificados);
+        $this->assertCount(21, $especificados);
     }
 
     // ------------------------------------------------------------ validação
@@ -256,6 +257,7 @@ final class ComponentesTest extends MaposTestCase
             'empty-state título' => ['empty-state', ['title' => $m]],
             'empty-state mensagem' => ['empty-state', ['title' => 'T', 'message' => $m]],
             'breadcrumb' => ['breadcrumb', ['items' => [['label' => $m]]]],
+            'link rótulo' => ['link', ['label' => $m, 'href' => '/x']],
             'pagination rótulo' => ['pagination', ['total_pages' => 3, 'url' => '/p/{page}', 'next_label' => $m]],
         ];
     }
@@ -682,7 +684,7 @@ final class ComponentesTest extends MaposTestCase
             'rows' => [['id' => 1]],
         ]);
 
-        $this->assertMatchesRegularExpression('#<span class="inline-flex flex-wrap items-center gap-1">\s*<button.*Editar.*<button.*Excluir.*</span>\s*</td>#s', $html);
+        $this->assertMatchesRegularExpression('#<span class="inline-flex items-center gap-1 flex-wrap">\s*<button.*Editar.*<button.*Excluir.*</span>\s*</td>#s', $html);
     }
 
     public function testSelectMultiploMantemAparenciaNativa(): void
@@ -807,5 +809,55 @@ final class ComponentesTest extends MaposTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         component('pagination', ['total_pages' => 3, 'url' => '/p/{offset}']);
+    }
+
+    /**
+     * Grupo de ações em coluna nowrap não quebra em duas linhas: numa tabela
+     * automática, flex-wrap deixaria a coluna na largura de um ícone.
+     */
+    public function testDataTableNaoQuebraGrupoEmColunaNowrap(): void
+    {
+        $html = $this->html('data-table', [
+            'columns' => [['label' => 'Ações', 'nowrap' => true, 'render' => fn () => [component('button', ['label' => 'A', 'icon' => 'pencil', 'icon_only' => true]), component('button', ['label' => 'B', 'icon' => 'x', 'icon_only' => true])]]],
+            'rows' => [['id' => 1]],
+        ]);
+
+        $this->assertStringContainsString('<span class="inline-flex items-center gap-1 flex-nowrap">', $html);
+    }
+
+    public function testLinkDeTextoEExterno(): void
+    {
+        $interno = $this->html('link', ['label' => 'Ana', 'href' => '/clientes/visualizar/1']);
+        $this->assertMatchesRegularExpression('#^<a href="/clientes/visualizar/1" class="[^"]*underline[^"]*">Ana</a>$#', trim($interno));
+        $this->assertStringNotContainsString('target=', $interno);
+
+        $externo = $this->html('link', ['label' => 'Docs', 'href' => 'https://x.test', 'external' => true]);
+        $this->assertStringContainsString('target="_blank" rel="noopener noreferrer"', $externo);
+        $this->assertStringContainsString('<span class="sr-only"> (abre em outra aba)</span>', $externo);
+    }
+
+    public function testBotaoPequenoTem44pxNoCelular(): void
+    {
+        $this->assertStringContainsString('size-9 max-sm:size-11', $this->html('button', ['label' => 'X', 'icon' => 'x', 'icon_only' => true, 'size' => 'sm']));
+        $this->assertStringContainsString('h-8 gap-1.5 px-3 max-sm:h-11', $this->html('button', ['label' => 'X', 'size' => 'sm']));
+    }
+
+    public function testDataTableEscondeColunaSecundariaSoNaTabela(): void
+    {
+        $html = $this->html('data-table', [
+            'columns' => [['key' => 'nome', 'label' => 'Nome'], ['key' => 'email', 'label' => 'E-mail', 'hide_until' => 'xl']],
+            'rows' => [['nome' => 'Ana', 'email' => 'a@x.com']],
+        ]);
+
+        $this->assertMatchesRegularExpression('#<th scope="col" class="[^"]*sm:max-xl:hidden">E-mail</th>#', $html);
+        $this->assertMatchesRegularExpression('#<td data-label="E-mail" class="[^"]*sm:max-xl:hidden[^"]*">a@x.com</td>#', $html);
+        $this->assertDoesNotMatchRegularExpression('#data-label="Nome" class="[^"]*hidden#', $html);
+        $this->assertStringContainsString('max-sm:[overflow-wrap:anywhere]', $html);
+    }
+
+    public function testDataTableRecusaHideUntilInvalido(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->html('data-table', ['columns' => [['key' => 'a', 'label' => 'A', 'hide_until' => 'sm']], 'rows' => []]);
     }
 }

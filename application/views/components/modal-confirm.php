@@ -42,7 +42,7 @@ $atributos = [
     'aria-labelledby' => $id . '-titulo',
     'aria-describedby' => $id . '-mensagem',
     'class' => componenteClasses(
-        'm-auto w-[calc(100%-2rem)] max-w-sm rounded-xl border border-border bg-surface p-6 text-text shadow-overlay',
+        'm-auto w-[calc(100%-2rem)] max-w-[21.25rem] rounded-xl border border-border bg-surface p-6 text-text shadow-overlay',
         'backdrop:bg-backdrop',
         $class
     ),

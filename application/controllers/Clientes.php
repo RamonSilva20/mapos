@@ -6,6 +6,12 @@ if (! defined('BASEPATH')) {
 
 class Clientes extends MY_Controller
 {
+    /** Filtros da listagem, na query string (listagemFiltros()). */
+    public const FILTROS = [
+        'pesquisa' => 'texto',
+        'tipo' => ['cliente', 'fornecedor'],
+    ];
+
     public function __construct()
     {
         parent::__construct();
@@ -19,6 +25,11 @@ class Clientes extends MY_Controller
         $this->gerenciar();
     }
 
+    /**
+     * Listagem de clientes e fornecedores, a primeira tela migrada para os
+     * componentes da v5 (#2841, #2852): filtros na URL, paginação que os
+     * mantém e exclusão confirmada em modal-confirm.
+     */
     public function gerenciar()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
@@ -26,21 +37,25 @@ class Clientes extends MY_Controller
             redirect(base_url());
         }
 
-        $pesquisa = $this->input->get('pesquisa');
+        $filtros = listagemFiltros(self::FILTROS, $this->input->get());
+        $offset = (int) $this->uri->segment(3);
+        $total = $this->clientes_model->contar($filtros);
 
-        $this->load->library('pagination');
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['results'] = $this->clientes_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
+        $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $total, $offset, null, $filtros);
+        $this->data['pode'] = [
+            'adicionar' => $this->permite('aCliente'),
+            'editar' => $this->permite('eCliente'),
+            'excluir' => $this->permite('dCliente'),
+        ];
 
-        $this->data['configuration']['base_url'] = site_url('clientes/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->clientes_model->count('clientes');
-        if ($pesquisa) {
-            $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}";
-            $this->data['configuration']['first_url'] = base_url("index.php/clientes")."\?pesquisa={$pesquisa}";
+        if ($this->data['pode']['adicionar']) {
+            $this->data['topbar_acao'] = ['label' => 'Novo cliente', 'icon' => 'plus', 'href' => site_url('clientes/adicionar')];
         }
 
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->clientes_model->get('clientes', '*', $pesquisa, $this->data['configuration']['per_page'], $this->uri->segment(3));
-
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'clientes/clientes';
 
         return $this->layout();
@@ -236,7 +251,8 @@ class Clientes extends MY_Controller
         $this->clientes_model->delete('clientes', 'idClientes', $id);
         log_info('Removeu um cliente. ID' . $id);
 
-        $this->session->set_flashdata('success', 'Cliente excluido com sucesso!');
-        redirect(site_url('clientes/gerenciar/'));
+        $this->session->set_flashdata('success', 'Cliente excluído com sucesso!');
+        // Volta para a listagem com os mesmos filtros (só os permitidos).
+        redirect(site_url('clientes') . listagemQuery(listagemFiltros(self::FILTROS, $this->input->get())));
     }
 }

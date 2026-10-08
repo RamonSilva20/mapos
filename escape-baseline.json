@@ -4,7 +4,6 @@
     "application/views/arquivos/editarArquivo.php": 4,
     "application/views/auditoria/logs.php": 5,
     "application/views/clientes/adicionarCliente.php": 1,
-    "application/views/clientes/clientes.php": 12,
     "application/views/clientes/editarCliente.php": 15,
     "application/views/clientes/visualizar.php": 19,
     "application/views/cobrancas/cobrancas.php": 15,

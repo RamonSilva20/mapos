@@ -70,6 +70,12 @@ $statusOs = [
             ['label' => 'Editar cliente'],
         ]]) ?>
 
+        <?= componenteConteudo($secao('Links de texto (link)', 'Texto ink com sublinhado permanente (link-on-light); externo abre em outra aba e avisa o leitor de tela.')) ?>
+        <p class="text-body-md text-text">
+            Cliente: <?= component('link', ['label' => 'Ana Souza', 'href' => site_url('clientes')]) ?> ·
+            <?= component('link', ['label' => 'Documentação do Map-OS', 'href' => 'https://github.com/RamonSilva20/mapos', 'external' => true]) ?>
+        </p>
+
         <?= componenteConteudo($secao('Botões', 'Um primary (laranja, rótulo ink) por tela; outline e ghost para o resto; danger só para ação destrutiva. Três tamanhos, com ícone, só ícone, link e desabilitado.')) ?>
         <div class="flex flex-col gap-3">
             <?php foreach (['sm', 'md', 'lg'] as $tamanho) { ?>

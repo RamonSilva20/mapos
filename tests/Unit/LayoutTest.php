@@ -284,7 +284,9 @@ final class LayoutTest extends MaposTestCase
             ],
             layoutBreadcrumb(['clientes', 'editar', '7'], $site)
         );
-        $this->assertSame('http://x/index.php/os/gerenciar', layoutBreadcrumb(['os', 'gerenciar', null], $site)[2]['url']);
+        // A listagem (gerenciar/index), em qualquer página, fica só com o controller.
+        $this->assertSame(['Início', 'Os'], array_column(layoutBreadcrumb(['os', 'gerenciar', null], $site), 'label'));
+        $this->assertSame(['Início', 'Clientes'], array_column(layoutBreadcrumb(['clientes', 'gerenciar', '10'], $site), 'label'));
     }
 
     public static function horas(): array

@@ -279,6 +279,23 @@ $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $tot
 
 O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination.php` até a remoção do frontend legado (#2855).
 
+**Padrão das listagens** (#2852). A referência é a listagem de clientes (`Clientes::gerenciar()` e `views/clientes/clientes.php`):
+
+- **Filtros na URL.** O formulário de filtro é um GET simples. O controller lê os filtros com `listagemFiltros()`, que só aceita os nomes e valores listados (texto livre ou uma lista fechada), e repassa para o model e para a paginação, que leva os filtros nos links:
+
+  ```php
+  $filtros = listagemFiltros(['pesquisa' => 'texto', 'tipo' => ['cliente', 'fornecedor']], $this->input->get());
+  $total = $this->clientes_model->contar($filtros);
+  $this->data['results'] = $this->clientes_model->listar($filtros, $porPagina, $offset);
+  $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $total, $offset, null, $filtros);
+  ```
+
+  O total vem de uma contagem com os **mesmos filtros** da listagem. No model, um OR de busca fica entre `group_start()` e `group_end()`, para não anular os outros filtros.
+- **Estados vazios distintos.** Sem nada cadastrado, um `empty-state` convida a cadastrar. Sem resultado para os filtros, outro oferece "Limpar filtros".
+- **Ações por linha** com botões ghost só de ícone (o `label` vira o nome acessível), na coluna `nowrap` do `data-table`. Cada ação aparece conforme `$this->permite('eCliente')`, que serve só para a interface: quem protege a rota é o mapa de permissões.
+- **Ação principal na topbar** (`topbar_acao`). Na tela fica um único `button-primary`.
+- **Exclusão** com um `modal-confirm` só, para todas as linhas. O botão da linha leva `data-modal-abrir` e os valores em `data-valor-<campo>`; o `modal.js` preenche os elementos com `data-modal-valor="<campo>"`, como o nome na mensagem e o `id` do formulário POST com o token CSRF.
+
 **Ícones** são do [Lucide](https://lucide.dev/icons), servidos de um sprite SVG (`assets/vendor/lucide/sprite.svg`) que só tem os ícones listados em `assets/src/icones.json`. Nas views use `<?= icon('wrench', ['class' => 'size-4']) ?>` (ou a prop `icon` dos componentes); no JavaScript, `criarIcone('wrench', 'size-4')` de `assets/js/lib/icone.js`. O ícone segue a cor do texto (`currentColor`) e tem 20px por padrão. Para usar um ícone novo, inclua o nome no `icones.json` e rode `npm run build:vendor`; o `IconeTest` falha se uma view citar um ícone fora da lista. O Boxicons (`<i class="bx ...">`) só continua nas telas legadas.
 
 Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
@@ -290,8 +307,10 @@ Toda tela do painel passa por `MY_Controller::layout()`, que monta a moldura da 
 A ação principal da tela, o único `button-primary` dela, vai na topbar, ao lado da busca:
 
 ```php
-$this->data['topbar_acao'] = component('button', ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')]);
+$this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')];
 ```
+
+São as props do `button`, e o ícone é obrigatório: no celular a topbar mostra só o ícone, com o rótulo como nome acessível.
 
 Durante a Beta as telas são migradas aos poucos, então o layout tem um **modo legado**, ligado por padrão: ele carrega Bootstrap 2, jQuery, matrix-style e o `tema-*.css`, e a tela fica dentro de `#content` como antes. Uma tela já migrada para os componentes desliga o modo legado e passa a receber o `app.css` completo:
 

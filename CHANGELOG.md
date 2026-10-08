@@ -22,6 +22,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DESIGN.md` como fonte de verdade da UI da v5 (cores, tipografia, componentes, estados, modo escuro e responsividade), referenciado no `AGENTS.md`, no `CONTRIBUTING.md` e no template de PR. #2920 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Changed
+- Listagem de clientes e fornecedores migrada para os componentes da v5, sem o CSS e o JS legados. A busca e o filtro de tipo ficam na URL e são mantidos na paginação, que agora conta só o que a busca encontra. A tela tem estados vazios distintos, ações por linha com ícones e exclusão confirmada em `modal-confirm`. Ela define o padrão das listagens (`listagemFiltros()`, `MY_Controller::permite()`, filtros em `paginacao()` e `data-valor-*` no `modal.js`). Também entram o componente `link` e botões pequenos com 44px no celular. #2935 [@RamonSilva20](https://github.com/RamonSilva20)
 - Versão mínima do PHP alinhada em 8.5. #2882 [@RamonSilva20](https://github.com/RamonSilva20)
 - `release.yml` gera um zip limpo e publica o SHA256. #2889 [@RamonSilva20](https://github.com/RamonSilva20)
 - Cookies e sessão seguros por padrão: `Secure` automático em HTTPS, `HttpOnly`, `SameSite=Lax` e destruição do ID anterior ao regenerar a sessão. Valores explícitos no `.env` continuam valendo. #2900 [@RamonSilva20](https://github.com/RamonSilva20)

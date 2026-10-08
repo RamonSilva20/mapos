@@ -65,4 +65,15 @@ final class Erros500Test extends MaposTestCase
         $this->assertSame(3, substr_count($model, '$row_set = [];'));
         $this->assertSame(0, substr_count($model, 'if ($query->num_rows() > 0)'));
     }
+
+    /**
+     * Colunas de texto opcionais (ex. os.defeito) chegam como null: a view de
+     * visualizar cliente dava erro 500 com printSafeHtml(null).
+     */
+    public function testPrintSafeHtmlAceitaNulo(): void
+    {
+        $this->assertSame('', printSafeHtml(null));
+        $this->assertSame('', printSafeHtml(''));
+        $this->assertSame('<b>ok</b>', printSafeHtml('<b>ok</b><script>x</script>'));
+    }
 }
