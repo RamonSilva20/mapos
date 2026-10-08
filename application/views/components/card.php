@@ -38,6 +38,6 @@ $atributos = [
         <div class="<?= e($padded ? 'px-5 py-4' : '') ?>"><?= componenteConteudo($body) ?></div>
     <?php } ?>
     <?php if ($footer !== null) { ?>
-        <footer class="flex flex-wrap items-center justify-end gap-2 border-t border-border bg-surface-2 px-5 py-3"><?= componenteConteudo($footer) ?></footer>
+        <footer class="flex flex-wrap items-center justify-end gap-2 border-t border-border bg-surface-subtle px-5 py-3"><?= componenteConteudo($footer) ?></footer>
     <?php } ?>
 </section>

@@ -17,11 +17,11 @@
  * @var array       $attrs     Atributos extras (ex. data-modal-abrir)
  */
 $variantes = [
-    'primary' => 'border border-transparent bg-accent-600 text-accent-contrast hover:bg-accent-700',
-    'secondary' => 'border border-border bg-surface text-text hover:bg-surface-2',
-    'ghost' => 'border border-transparent bg-transparent text-text hover:bg-surface-2',
-    'danger' => 'border border-transparent bg-danger text-white hover:opacity-90 dark:text-bg',
-    'link' => 'border border-transparent bg-transparent text-accent-600 underline-offset-4 hover:underline dark:text-accent',
+    'primary' => 'border border-transparent bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-pressed',
+    'secondary' => 'border border-border bg-surface text-text hover:bg-surface-subtle',
+    'ghost' => 'border border-transparent bg-transparent text-text hover:bg-surface-subtle',
+    'danger' => 'border border-transparent bg-danger text-on-dark hover:opacity-90',
+    'link' => 'border border-transparent bg-transparent text-primary-strong underline-offset-4 hover:underline',
 ];
 
 $tamanhos = [

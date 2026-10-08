@@ -22,10 +22,10 @@
  * @var array                   $attrs
  */
 $icones = [
-    'info' => 'bx-info-circle text-info',
-    'success' => 'bx-check-circle text-success',
-    'warning' => 'bx-error text-warning',
-    'danger' => 'bx-error-circle text-danger',
+    'info' => 'bx-info-circle text-info-ink',
+    'success' => 'bx-check-circle text-success-ink',
+    'warning' => 'bx-error text-warning-ink',
+    'danger' => 'bx-error-circle text-danger-ink',
 ];
 
 $atributos = [
@@ -47,7 +47,7 @@ $atributos = [
         <div class="<?= e($title !== null ? 'mt-0.5 text-muted' : '') ?>"><?= componenteConteudo($message) ?></div>
     </div>
     <?php if ($dismissible) { ?>
-        <button type="button" data-dispensar class="-m-1 inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted hover:bg-surface-2 hover:text-text focus-visible:outline-2 focus-visible:outline-ring">
+        <button type="button" data-dispensar class="-m-1 inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-ring">
             <span aria-hidden="true" class="text-lg leading-none">&times;</span>
             <span class="sr-only"><?= e($dismiss_label) ?></span>
         </button>

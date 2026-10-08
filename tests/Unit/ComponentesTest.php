@@ -293,7 +293,7 @@ final class ComponentesTest extends MaposTestCase
         $html = $this->html('button', ['label' => 'Salvar']);
 
         $this->assertMatchesRegularExpression('#^<button type="button"#', preg_replace('/ (id|class)="[^"]*"/', '', $html));
-        $this->assertStringContainsString('bg-accent-600 text-accent-contrast', $html);
+        $this->assertStringContainsString('bg-primary text-on-primary', $html);
         $this->assertStringContainsString('focus-visible:outline-2', $html);
     }
 
@@ -539,7 +539,7 @@ final class ComponentesTest extends MaposTestCase
 
     public function testBadgeVariantes(): void
     {
-        $this->assertStringContainsString('bg-success-soft text-success', $this->html('badge', ['label' => 'Ok', 'variant' => 'success']));
+        $this->assertStringContainsString('bg-success-soft text-success-ink', $this->html('badge', ['label' => 'Ok', 'variant' => 'success']));
         $this->assertStringContainsString('text-[0.6875rem]', $this->html('badge', ['label' => 'Ok', 'size' => 'sm']));
     }
 

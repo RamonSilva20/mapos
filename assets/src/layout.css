@@ -162,7 +162,7 @@
 
   /* O matrix-style tira o outline de tudo (* { outline: none !important }). */
   :where(.v5-shell) :focus-visible {
-    outline: 2px solid var(--mapos-accent) !important;
+    outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent) !important;
     outline-offset: 2px !important;
   }
 }

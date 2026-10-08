@@ -98,7 +98,7 @@ function mostrarErroDoCampo(campo, mensagem) {
     if (!aviso) {
         aviso = document.createElement('p');
         aviso.id = idErro;
-        aviso.className = 'text-xs font-medium text-danger';
+        aviso.className = 'text-xs font-medium text-danger-ink';
         campo.insertAdjacentElement('afterend', aviso);
     }
 
