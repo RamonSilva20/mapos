@@ -47,6 +47,8 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - JS libraries are copied by `npm run build:vendor` (`scripts/build-vendor.mjs`, part of `npm run build`) into `assets/vendor/<lib>/`, which **is committed** and fully generated: never edit it by hand. To add or update a library, pin it with `npm install --save-exact` and list its files in `scripts/build-vendor.mjs`. Do not add new jQuery-dependent libraries.
 - Never commit `node_modules/`.
 - New views use only the semantic color tokens from `assets/src/app.css` (`bg-surface`, `text-muted`, `border-border`, `bg-accent-600` + `text-accent-contrast`, `text-danger`, ...), never fixed palette colors, so they work in light/dark mode and with every accent color. Theme settings are `app_tema_modo` and `app_tema_destaque`; the layout prints them with `temaAtributosHtml()` (`tema_helper.php`).
+- No inline `<script>` code in views. Page JS lives in ES modules under `assets/js/modules/<folder>/<name>.js` (no bundler); the view attaches it with `<?= js_module('folder/name') ?>` on an element and passes data via `data-*` attributes or `<?= page_data('id', $data) ?>` (`application/helpers/js_helper.php`). `assets/js/app.js` loads the modules. AJAX goes through `get()`/`post()` in `assets/js/lib/http.js` (CSRF token, `X-Requested-With`, 403 handling).
+- `php scripts/check-inline-script.php` (run in CI through PHPUnit) fails on new inline `<script>` blocks; legacy ones are counted in `inline-script-baseline.json`. Never raise those counts. JS utilities are tested with `npm run test:js`.
 
 ## Security & Integrity Mandates
 

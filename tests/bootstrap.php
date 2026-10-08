@@ -103,6 +103,8 @@ require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'financeiro_helper.php'
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'escape_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'tema_helper.php';
 require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-escape.php';
+require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'js_helper.php';
+require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-inline-script.php';
 require_once APPPATH . 'libraries' . DIRECTORY_SEPARATOR . 'Permission.php';
 require_once APPPATH . 'controllers' . DIRECTORY_SEPARATOR . 'Login.php';
 require_once APPPATH . 'core' . DIRECTORY_SEPARATOR . 'MY_Controller.php';

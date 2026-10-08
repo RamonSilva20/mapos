@@ -212,6 +212,36 @@ npm run build
 
 Para adicionar uma nova, ou outro arquivo de uma já existente, inclua-a na lista do `scripts/build-vendor.mjs`. Não adicione bibliotecas novas que dependam de jQuery: ele sai até o fim da Beta.
 
+### JavaScript nas views
+
+View nova não tem `<script>` com código. O JavaScript da página fica num ES module em `assets/js/modules/<pasta>/<nome>.js`, sem bundler, e a view só declara qual módulo usa e entrega os dados:
+
+```php
+<div <?= js_module('servicos/listagem') ?>>
+    <a href="#modal-excluir" data-servico="<?= (int) $r->idServicos ?>">Excluir</a>
+</div>
+<?= page_data('dados-servicos', ['porPagina' => $porPagina]) ?>
+```
+
+```js
+// assets/js/modules/servicos/listagem.js
+import { lerJson } from '../../lib/dados.js';
+import { post, ErroHttp } from '../../lib/http.js';
+
+export default function iniciar(elemento) {
+    const { porPagina } = lerJson('dados-servicos');
+    // elemento é o <div data-module="servicos/listagem">
+}
+```
+
+- O `assets/js/app.js`, carregado pelo layout, procura `[data-module]` e chama o `export default` de cada módulo com o elemento.
+- Dado simples vai em atributo `data-*`, lido com `lerDado(elemento, 'chave')`. Estrutura maior vai em `page_data()`, que gera um `<script type="application/json">` com escape seguro, lido com `lerJson(id)`.
+- AJAX usa `get()`/`post()` de `assets/js/lib/http.js`. Eles mandam o token do CSRF e o `X-Requested-With`, e transformam a negação de permissão (JSON 403) em `ErroHttp`.
+
+Isso tira o `'unsafe-inline'` do caminho da CSP (#2878). O CI roda `php scripts/check-inline-script.php` pelo PHPUnit e falha se uma view ganhar `<script>` inline. As views antigas estão contadas por arquivo em `inline-script-baseline.json`; ao migrar uma delas, baixe a contagem com `php scripts/check-inline-script.php --update-baseline`.
+
+Os utilitários de `assets/js` têm testes em `tests/js`, rodados com `npm run test:js`.
+
 ## Alterações no banco de dados
 
 Alterações de schema **devem** ser feitas por migration — assim quem já usa o sistema consegue atualizar sem perder dados. Não altere o `banco.sql` no lugar de criar uma migration.

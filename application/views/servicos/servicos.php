@@ -28,7 +28,7 @@
             </div>
         </form>
     </div>
-    <div class="widget-box">
+    <div class="widget-box" <?= js_module('servicos/listagem') ?>>
         <h5 style="padding: 3px 0"></h5>
         <div class="widget-content nopadding tab-content">
             <table id="tabela" class="table table-bordered ">
@@ -59,7 +59,7 @@
                 echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn-nwe3" title="Editar Serviço"><i class="bx bx-edit bx-xs"></i></a>';
             }
             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dServico')) {
-                echo '<a href="#modal-excluir" role="button" data-toggle="modal" servico="' . $r->idServicos . '" class="btn-nwe4" title="Excluir Serviço"><i class="bx bx-trash-alt bx-xs"></i></a>  ';
+                echo '<a href="#modal-excluir" role="button" data-toggle="modal" data-servico="' . $r->idServicos . '" class="btn-nwe4" title="Excluir Serviço"><i class="bx bx-trash-alt bx-xs"></i></a>  ';
             }
             echo '</td>';
             echo '</tr>';
@@ -88,12 +88,3 @@
         </div>
     </form>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(document).on('click', 'a', function(event) {
-            var servico = $(this).attr('servico');
-            $('#idServico').val(servico);
-        });
-    });
-</script>
