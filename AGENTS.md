@@ -29,7 +29,8 @@ Map-OS is an open-source Service Order and Business Management system built in P
    - Always format PHP code using project standards: `composer format` (which invokes `application/vendor/bin/php-cs-fixer fix`).
 2. **Security & Input/Output Handling:**
    - Always validate user input.
-   - Always escape output in views using `html_escape()`.
+   - Always escape output in views with `e()` (`application/helpers/escape_helper.php`): `<?= e($cliente->nome) ?>`. Trusted HTML goes through `printSafeHtml()` (HTMLPurifier), never raw.
+   - CI runs `php scripts/check-escape.php`, which fails on any new unescaped `<?= $x ?>`/`echo $x` in `application/views/`. Existing occurrences are counted per file in `escape-baseline.json`; never raise those counts to make CI pass — escape the output instead.
    - Never use raw SQL string concatenation; use CodeIgniter Query Builder or query bindings (`?` or `$this->db->where()`) to prevent SQL injection.
    - Never expose sensitive data (e.g., password hashes) in public models or API responses.
 3. **Database Changes:**

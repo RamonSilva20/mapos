@@ -29,6 +29,18 @@ if (! function_exists('show_error')) {
     }
 }
 
+// html_escape() lê o charset por config_item(), que na versão do CI carrega o
+// application/config/config.php inteiro e depende do .env. Sob teste basta o
+// que as funções testadas consultam.
+if (! function_exists('config_item')) {
+    function config_item($item)
+    {
+        $config = ['charset' => 'UTF-8'];
+
+        return $config[$item] ?? null;
+    }
+}
+
 require BASEPATH . 'core' . DIRECTORY_SEPARATOR . 'Common.php';
 require BASEPATH . 'database' . DIRECTORY_SEPARATOR . 'DB.php';
 
@@ -78,6 +90,8 @@ if (! class_exists('CI_Controller', false)) {
 
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'general_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'financeiro_helper.php';
+require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'escape_helper.php';
+require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-escape.php';
 require_once APPPATH . 'libraries' . DIRECTORY_SEPARATOR . 'Permission.php';
 require_once APPPATH . 'controllers' . DIRECTORY_SEPARATOR . 'Login.php';
 

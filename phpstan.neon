@@ -11,6 +11,7 @@ parameters:
         - application/libraries
         - application/models
         - install
+        - scripts
 
     # O CI3 injeta as bibliotecas em $this por assignação dinâmica e expõe
     # funções globais sem assinatura visível. Os stubs declaram esse contrato

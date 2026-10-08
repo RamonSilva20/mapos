@@ -150,11 +150,25 @@ application/vendor/bin/php-cs-fixer fix --dry-run --diff
 
 Boas práticas adicionais:
 
-- Escape a saída nas views para evitar XSS: use `html_escape()` para texto e o helper `printSafeHtml()` (`application/helpers/general_helper.php`, baseado no HTMLPurifier) quando precisar renderizar HTML vindo do usuário.
+- Escape a saída nas views para evitar XSS: use `e()` para texto (`<?= e($cliente->nome) ?>`) e o helper `printSafeHtml()` (`application/helpers/general_helper.php`, baseado no HTMLPurifier) quando precisar renderizar HTML vindo do usuário. Veja [Escape nas views](#escape-nas-views).
 - Use o Query Builder do CodeIgniter ou *query bindings* nos models. **Nunca** concatene entrada do usuário em SQL.
 - Valide e autorize no controller: confira o ID recebido e a permissão do usuário antes de operar sobre o registro.
 - Siga o idioma já usado no arquivo que você está editando (o código do projeto mistura português e inglês; mantenha a consistência local em vez de renomear o entorno).
 - Mantenha o Pull Request focado: evite reformatar arquivos inteiros junto com uma correção funcional, pois isso dificulta muito a revisão.
+
+### Escape nas views
+
+Toda saída dinâmica numa view passa por `e()`, que é o `html_escape()` do CodeIgniter devolvendo sempre string (`null` vira `''`, e array gera erro em vez de imprimir `Array`). HTML confiável, como uma descrição com formatação, passa por `printSafeHtml()`. Nunca imprima HTML cru.
+
+O CI roda `php scripts/check-escape.php`, que acusa `<?= $x ?>`, `echo $x` e `print $x` sem escape em `application/views/`. Números podem sair com cast (`<?= (int) $os->idOs ?>`) ou por `number_format()`, `count()` e `date()`.
+
+As views antigas têm ocorrências conhecidas, contadas por arquivo no `escape-baseline.json`. O CI só falha quando um arquivo passa da contagem. Ao corrigir ocorrências antigas, baixe a contagem com:
+
+```bash
+php scripts/check-escape.php --update-baseline
+```
+
+Para ver todas as ocorrências: `php scripts/check-escape.php --list`. Não suba a contagem do baseline para fazer o CI passar: escape a saída.
 
 ## Alterações no banco de dados
 
@@ -282,6 +296,7 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 
 - [ ] O PR resolve **um** problema (evite juntar assuntos diferentes).
 - [ ] O código está formatado (`composer format`).
+- [ ] A saída nova nas views passa por `e()` ou `printSafeHtml()` (`php scripts/check-escape.php`).
 - [ ] Não há credenciais, `.env`, dumps de banco ou arquivos de IDE no diff.
 - [ ] A pasta `application/vendor/` não foi commitada.
 - [ ] Alterações de schema têm migration com `up()` e `down()`.
