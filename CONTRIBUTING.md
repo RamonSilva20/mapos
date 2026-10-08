@@ -255,6 +255,17 @@ Os partials ficam em `application/views/components/` e as props aceitas em `appl
 
 Todo valor é escapado. Os slots (`body`, `footer`, `actions`, `message`, células da tabela) recebem texto, que também é escapado, ou um `HtmlSeguro`: a saída de outro `component()` ou de `html_purificado()`, que passa HTML do usuário pelo HTMLPurifier. Não crie um `HtmlSeguro` à mão com dado do usuário. Atributos extras vão na prop `attrs`; handlers `on*` são recusados (o JavaScript fica nos módulos).
 
+Listagens novas paginam com o componente `pagination`, e não com o `create_links()` do CodeIgniter. O controller monta as props com `MY_Controller::paginacao()`, que usa o mesmo offset na URL que o `CI_Pagination`, então o model não muda:
+
+```php
+// controller
+$this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $total, $this->uri->segment(3));
+// view
+<?= component('pagination', $paginacao) ?>
+```
+
+O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination.php` até a remoção do frontend legado (#2855).
+
 Para ver todos os componentes e variantes, nos modos claro e escuro e com cada cor de destaque, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
 
 ## Alterações no banco de dados

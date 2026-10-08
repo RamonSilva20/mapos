@@ -528,6 +528,63 @@ if (! function_exists('componentePaginaUrl')) {
     }
 }
 
+if (! function_exists('paginacaoProps')) {
+    /**
+     * Monta as props do componente pagination a partir dos números que as
+     * listagens já usam com o CI_Pagination.
+     *
+     * Opções:
+     * - base_url (obrigatória): URL da listagem, sem o offset;
+     * - total_rows (obrigatória): total de registros;
+     * - per_page: itens por página (padrão 10);
+     * - offset: deslocamento atual, como veio da URL. Valor não numérico ou
+     *   negativo vira 0; além do fim, cai na última página;
+     * - query_string: nome do parâmetro quando o offset vai na query string
+     *   (ex. 'per_page', o padrão do page_query_string do CI). Sem ele, o
+     *   offset vai como último segmento da URL.
+     *
+     * @return array{total_pages: int, current: int, url: string, per_page: int}
+     */
+    function paginacaoProps(array $opcoes): array
+    {
+        if (! isset($opcoes['base_url']) || ! is_string($opcoes['base_url']) || $opcoes['base_url'] === '') {
+            throw new InvalidArgumentException('paginacaoProps precisa de base_url.');
+        }
+
+        $porPagina = (int) ($opcoes['per_page'] ?? 10);
+        if ($porPagina < 1) {
+            throw new InvalidArgumentException('per_page da paginação deve ser maior que zero.');
+        }
+
+        $total = max(0, (int) ($opcoes['total_rows'] ?? 0));
+        $totalPaginas = (int) ceil($total / $porPagina);
+
+        $offset = $opcoes['offset'] ?? 0;
+        $offset = is_numeric($offset) ? max(0, (int) $offset) : 0;
+        $atual = min(intdiv($offset, $porPagina) + 1, max(1, $totalPaginas));
+
+        $base = $opcoes['base_url'];
+        $parametro = $opcoes['query_string'] ?? null;
+
+        if ($parametro !== null && $parametro !== '') {
+            if (! preg_match('/^[A-Za-z0-9_-]+$/', (string) $parametro)) {
+                throw new InvalidArgumentException('Nome de parâmetro da paginação inválido.');
+            }
+            $separador = str_contains($base, '?') ? (preg_match('/[?&]$/', $base) ? '' : '&') : '?';
+            $url = $base . $separador . $parametro . '={offset}';
+        } else {
+            $url = rtrim($base, '/') . '/{offset}';
+        }
+
+        return [
+            'total_pages' => $totalPaginas,
+            'current' => $atual,
+            'url' => $url,
+            'per_page' => $porPagina,
+        ];
+    }
+}
+
 if (! function_exists('html_purificado')) {
     /**
      * HTML de origem não confiável (ex.: descrição com formatação) filtrado
