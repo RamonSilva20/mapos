@@ -33,7 +33,6 @@ $statusBadge = [
     <title>Componentes — Map-OS</title>
     <link rel="icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
     <link rel="stylesheet" href="<?= e(base_url('assets/dist/app.css')) ?>">
-    <link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
     <script src="<?= e(base_url('assets/js/tema.js')) ?>"></script>
     <script type="module" src="<?= e(base_url('assets/js/app.js')) ?>"></script>
 </head>
@@ -72,10 +71,10 @@ $statusBadge = [
                 </div>
             <?php } ?>
             <div class="flex flex-wrap items-center gap-2">
-                <?= component('button', ['label' => 'Novo cliente', 'icon' => 'bx-plus']) ?>
-                <?= component('button', ['label' => 'Editar', 'icon' => 'bx-edit', 'icon_only' => true, 'variant' => 'secondary']) ?>
-                <?= component('button', ['label' => 'Excluir', 'icon' => 'bx-trash', 'icon_only' => true, 'variant' => 'danger']) ?>
-                <?= component('button', ['label' => 'Abrir clientes (link)', 'href' => site_url('clientes'), 'variant' => 'secondary', 'icon' => 'bx-link-external']) ?>
+                <?= component('button', ['label' => 'Novo cliente', 'icon' => 'plus']) ?>
+                <?= component('button', ['label' => 'Editar', 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'secondary']) ?>
+                <?= component('button', ['label' => 'Excluir', 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'danger']) ?>
+                <?= component('button', ['label' => 'Abrir clientes (link)', 'href' => site_url('clientes'), 'variant' => 'secondary', 'icon' => 'external-link']) ?>
                 <?= component('button', ['label' => 'Desabilitado', 'disabled' => true]) ?>
                 <?= component('button', ['label' => 'Link desabilitado', 'href' => site_url('clientes'), 'disabled' => true, 'variant' => 'secondary']) ?>
             </div>
@@ -106,7 +105,7 @@ $statusBadge = [
                 <?= component('textarea', ['name' => 'observacoes', 'label' => 'Observações', 'value' => 'Texto com <b>tags</b> aparece escapado.', 'help' => 'Até 500 caracteres.']) ?>
             </div>
             <div class="flex gap-2 md:col-span-2">
-                <?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'bx-save', 'attrs' => ['data-modal-abrir' => 'modal-salvo']]) ?>
+                <?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'save', 'attrs' => ['data-modal-abrir' => 'modal-salvo']]) ?>
                 <?= component('button', ['label' => 'Cancelar', 'variant' => 'secondary']) ?>
             </div>
         </form>
@@ -117,7 +116,7 @@ $statusBadge = [
                 'id' => 'card-resumo',
                 'title' => 'Resumo do cliente',
                 'subtitle' => 'Atualizado hoje',
-                'actions' => component('button', ['label' => 'Editar', 'size' => 'sm', 'variant' => 'secondary', 'icon' => 'bx-edit']),
+                'actions' => component('button', ['label' => 'Editar', 'size' => 'sm', 'variant' => 'secondary', 'icon' => 'pencil']),
                 'body' => 'O corpo aceita texto (escapado) ou a saída de outros componentes.',
                 'footer' => [
                     component('button', ['label' => 'Cancelar', 'variant' => 'ghost', 'size' => 'sm']),
@@ -144,8 +143,8 @@ $statusBadge = [
                 ['label' => 'Status', 'render' => static fn ($linha) => component('badge', $statusBadge[$linha['status']])],
                 ['key' => 'saldo', 'label' => 'Saldo', 'align' => 'right'],
                 ['label' => 'Ações', 'align' => 'right', 'render' => static fn ($linha) => [
-                    component('button', ['label' => 'Editar ' . $linha['nome'], 'icon' => 'bx-edit', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('clientes/editar/' . $linha['id'])]),
-                    component('button', ['label' => 'Excluir ' . $linha['nome'], 'icon' => 'bx-trash', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'attrs' => ['data-modal-abrir' => 'modal-excluir']]),
+                    component('button', ['label' => 'Editar ' . $linha['nome'], 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('clientes/editar/' . $linha['id'])]),
+                    component('button', ['label' => 'Excluir ' . $linha['nome'], 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'attrs' => ['data-modal-abrir' => 'modal-excluir']]),
                 ]],
             ],
             'rows' => $clientes,
@@ -225,8 +224,8 @@ $statusBadge = [
         <?= component('empty-state', [
             'title' => 'Nenhuma ordem de serviço ainda',
             'message' => 'Cadastre a primeira OS para acompanhar os serviços do cliente.',
-            'icon' => 'bx-wrench',
-            'action' => component('button', ['label' => 'Nova OS', 'icon' => 'bx-plus']),
+            'icon' => 'wrench',
+            'action' => component('button', ['label' => 'Nova OS', 'icon' => 'plus']),
         ]) ?>
     </main>
 

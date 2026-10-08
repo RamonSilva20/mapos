@@ -9,5 +9,6 @@
   "sweetalert2": "11.26.25",
   "chart.js": "4.5.1",
   "fullcalendar": "6.1.21",
-  "@fullcalendar/core": "6.1.21"
+  "@fullcalendar/core": "6.1.21",
+  "lucide-static": "1.53.0"
 }

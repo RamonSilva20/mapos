@@ -118,7 +118,7 @@ final class ComponentesTest extends MaposTestCase
     public function testIconeComFormatoInvalido(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        component('button', ['label' => 'x', 'icon' => 'bx-plus" onmouseover="alert(1)']);
+        component('button', ['label' => 'x', 'icon' => 'plus" onmouseover="alert(1)']);
     }
 
     public function testAttrsPrecisaSerArray(): void
@@ -324,11 +324,12 @@ final class ComponentesTest extends MaposTestCase
 
     public function testBotaoSoIconeMantemTextoAcessivel(): void
     {
-        $html = $this->html('button', ['label' => 'Excluir', 'icon' => 'bx-trash', 'icon_only' => true]);
+        $html = $this->html('button', ['label' => 'Excluir', 'icon' => 'trash-2', 'icon_only' => true]);
 
         $this->assertStringContainsString('class="sr-only">Excluir</span>', $html);
         $this->assertStringContainsString('title="Excluir"', $html);
-        $this->assertStringContainsString('<i class="bx bx-trash" aria-hidden="true"></i>', $html);
+        $this->assertStringContainsString('sprite.svg#trash-2"', $html);
+        $this->assertStringContainsString('aria-hidden="true"', $html);
     }
 
     public function testAttrsExtrasEClasseSomada(): void
@@ -545,11 +546,11 @@ final class ComponentesTest extends MaposTestCase
 
     public function testEmptyStateComAcao(): void
     {
-        $html = $this->html('empty-state', ['title' => 'Vazio', 'icon' => 'bx-wrench', 'action' => component('button', ['label' => 'Nova OS'])]);
+        $html = $this->html('empty-state', ['title' => 'Vazio', 'icon' => 'wrench', 'action' => component('button', ['label' => 'Nova OS'])]);
 
-        $this->assertStringContainsString('bx-wrench', $html);
+        $this->assertStringContainsString('sprite.svg#wrench"', $html);
         $this->assertStringContainsString('Nova OS</span>', $html);
-        $this->assertStringNotContainsString('<i ', $this->html('empty-state', ['title' => 'Vazio', 'icon' => null]));
+        $this->assertStringNotContainsString('<svg', $this->html('empty-state', ['title' => 'Vazio', 'icon' => null]));
     }
 
     public function testBreadcrumb(): void

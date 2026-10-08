@@ -27,7 +27,7 @@ $classeSublink = 'flex min-h-9 items-center rounded-control py-1.5 pr-3 pl-11 te
           <img src="<?= e(base_url('assets/img/logo-mapos-branco.png')) ?>" alt="<?= e($configuration['app_name'] ?: 'Map-OS') ?>" class="hidden h-7 w-auto dark:block">
         </span>
       </a>
-      <?= component('button', ['label' => 'Fechar menu', 'icon' => 'bx-x', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'ml-auto lg:hidden', 'attrs' => ['data-gaveta-fechar' => true]]) ?>
+      <?= component('button', ['label' => 'Fechar menu', 'icon' => 'x', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'ml-auto lg:hidden', 'attrs' => ['data-gaveta-fechar' => true]]) ?>
     </div>
 
     <form action="<?= e(site_url('mapos/pesquisar')) ?>" method="get" role="search" class="border-b border-border p-3 md:hidden">
@@ -41,9 +41,9 @@ $classeSublink = 'flex min-h-9 items-center rounded-control py-1.5 pr-3 pl-11 te
             <li>
               <details class="group/grupo" <?= $item['atual'] ? 'open' : '' ?>>
                 <summary class="<?= e($classeLink) ?> cursor-pointer list-none [&::-webkit-details-marker]:hidden" title="<?= e($item['label']) ?>">
-                  <i class="<?= e('bx ' . $item['icon'] . ' shrink-0 text-xl') ?>" aria-hidden="true"></i>
+                  <?= icon($item['icon'], ['class' => 'size-5']) ?>
                   <span class="v5-rotulo flex-1 truncate"><?= e($item['label']) ?></span>
-                  <i class="v5-rotulo bx bx-chevron-down text-lg transition-transform group-open/grupo:rotate-180" aria-hidden="true"></i>
+                  <?= icon('chevron-down', ['class' => 'v5-rotulo size-4 transition-transform group-open/grupo:rotate-180']) ?>
                 </summary>
                 <div class="v5-subitens">
                   <ul class="mt-1 flex flex-col gap-0.5">
@@ -59,7 +59,7 @@ $classeSublink = 'flex min-h-9 items-center rounded-control py-1.5 pr-3 pl-11 te
           <?php } else { ?>
             <li>
               <a href="<?= e(site_url($item['url'])) ?>" class="<?= e($classeLink) ?>" title="<?= e($item['label']) ?>"<?= $item['atual'] ? ' aria-current="page"' : '' ?>>
-                <i class="<?= e('bx ' . $item['icon'] . ' shrink-0 text-xl') ?>" aria-hidden="true"></i>
+                <?= icon($item['icon'], ['class' => 'size-5']) ?>
                 <span class="v5-rotulo truncate"><?= e($item['label']) ?></span>
               </a>
             </li>
@@ -70,7 +70,7 @@ $classeSublink = 'flex min-h-9 items-center rounded-control py-1.5 pr-3 pl-11 te
 
     <div class="shrink-0 border-t border-border px-3 py-3">
       <a href="<?= e(site_url('login/sair')) ?>" class="<?= e($classeLink) ?>" title="Sair">
-        <i class="bx bx-log-out-circle shrink-0 text-xl" aria-hidden="true"></i>
+        <?= icon('log-out', ['class' => 'size-5']) ?>
         <span class="v5-rotulo truncate">Sair</span>
       </a>
     </div>

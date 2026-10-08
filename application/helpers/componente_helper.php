@@ -50,8 +50,8 @@ if (! class_exists('HtmlSeguro', false)) {
 }
 
 if (! defined('COMPONENTE_ICONE')) {
-    // Nome de ícone do boxicons: bx-plus, bxs-user, bxl-whatsapp.
-    define('COMPONENTE_ICONE', '/^bx[sl]?-[a-z0-9-]+$/');
+    // Nome de ícone Lucide do sprite (icone_helper.php): plus, trash-2, circle-check.
+    define('COMPONENTE_ICONE', '/^[a-z0-9]+(-[a-z0-9]+)*$/');
 }
 
 if (! function_exists('componenteEspecificacoes')) {
@@ -219,7 +219,7 @@ if (! function_exists('componenteEspecificacoes')) {
                 'obrigatorias' => ['title'],
                 'padrao' => [
                     'message' => null,
-                    'icon' => 'bx-folder-open',
+                    'icon' => 'folder-open',
                     'action' => null,
                 ],
                 'formatos' => ['icon' => COMPONENTE_ICONE],

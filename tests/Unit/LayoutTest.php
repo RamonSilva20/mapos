@@ -335,6 +335,7 @@ final class LayoutTest extends MaposTestCase
             array_slice($assets['css'], 0, 7)
         );
         $this->assertNotContains('assets/dist/app.css', $assets['css']);
+        $this->assertContains('assets/vendor/boxicons/css/boxicons.min.css', $assets['css'], 'As telas legadas ainda usam Boxicons.');
         $this->assertContains('assets/js/jquery-1.12.4.min.js', $assets['js_cabecalho']);
         $this->assertContains('assets/js/csrf.js', $assets['js_cabecalho']);
         $this->assertSame('assets/js/legado/globais.js', $assets['js_cabecalho'][0], 'BaseUrl precisa existir antes dos scripts das views.');
@@ -351,6 +352,7 @@ final class LayoutTest extends MaposTestCase
         foreach ($assets['css'] as $css) {
             $this->assertStringNotContainsString('bootstrap', $css);
             $this->assertStringNotContainsString('tema-', $css);
+            $this->assertStringNotContainsString('boxicons', $css, 'Telas migradas usam o sprite Lucide (#2915).');
         }
     }
 

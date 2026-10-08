@@ -22,10 +22,10 @@
  * @var array                   $attrs
  */
 $icones = [
-    'info' => 'bx-info-circle text-info-ink',
-    'success' => 'bx-check-circle text-success-ink',
-    'warning' => 'bx-error text-warning-ink',
-    'danger' => 'bx-error-circle text-danger-ink',
+    'info' => ['info', 'text-info-ink'],
+    'success' => ['circle-check', 'text-success-ink'],
+    'warning' => ['triangle-alert', 'text-warning-ink'],
+    'danger' => ['circle-alert', 'text-danger-ink'],
 ];
 
 $atributos = [
@@ -41,7 +41,7 @@ $atributos = [
 ];
 ?>
 <div<?= componenteAtributos(componenteMesclarAtributos($atributos, $attrs)) ?>>
-    <i class="<?= e('bx ' . $icones[$variant] . ' mt-0.5 text-lg leading-none') ?>" aria-hidden="true"></i>
+    <?= icon($icones[$variant][0], ['class' => 'mt-0.5 size-5 ' . $icones[$variant][1]]) ?>
     <div class="min-w-0 flex-1">
         <?php if ($title !== null) { ?><p class="font-semibold"><?= e($title) ?></p><?php } ?>
         <div class="<?= e($title !== null ? 'mt-0.5 text-muted' : '') ?>"><?= componenteConteudo($message) ?></div>

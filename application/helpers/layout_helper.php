@@ -79,19 +79,19 @@ if (! function_exists('layoutMenu')) {
     function layoutMenu(): array
     {
         return [
-            ['label' => 'Início', 'icon' => 'bx-home-alt', 'url' => '', 'rota' => ['Mapos', 'index'], 'ativo' => ['Mapos/index']],
-            ['label' => 'Cliente / Fornecedor', 'icon' => 'bx-user', 'url' => 'clientes', 'rota' => ['Clientes', 'index'], 'ativo' => ['Clientes']],
-            ['label' => 'Produtos', 'icon' => 'bx-basket', 'url' => 'produtos', 'rota' => ['Produtos', 'index'], 'ativo' => ['Produtos']],
-            ['label' => 'Serviços', 'icon' => 'bx-wrench', 'url' => 'servicos', 'rota' => ['Servicos', 'index'], 'ativo' => ['Servicos']],
-            ['label' => 'Vendas', 'icon' => 'bx-cart-alt', 'url' => 'vendas', 'rota' => ['Vendas', 'index'], 'ativo' => ['Vendas']],
-            ['label' => 'Ordens de Serviço', 'icon' => 'bx-file', 'url' => 'os', 'rota' => ['Os', 'index'], 'ativo' => ['Os']],
-            ['label' => 'Termos de Garantias', 'icon' => 'bx-receipt', 'url' => 'garantias', 'rota' => ['Garantias', 'index'], 'ativo' => ['Garantias']],
-            ['label' => 'Arquivos', 'icon' => 'bx-box', 'url' => 'arquivos', 'rota' => ['Arquivos', 'index'], 'ativo' => ['Arquivos']],
-            ['label' => 'Lançamentos', 'icon' => 'bx-bar-chart-alt-2', 'url' => 'financeiro/lancamentos', 'rota' => ['Financeiro', 'lancamentos'], 'ativo' => ['Financeiro']],
-            ['label' => 'Cobranças', 'icon' => 'bx-dollar-circle', 'url' => 'cobrancas/cobrancas', 'rota' => ['Cobrancas', 'cobrancas'], 'ativo' => ['Cobrancas']],
+            ['label' => 'Início', 'icon' => 'house', 'url' => '', 'rota' => ['Mapos', 'index'], 'ativo' => ['Mapos/index']],
+            ['label' => 'Cliente / Fornecedor', 'icon' => 'user', 'url' => 'clientes', 'rota' => ['Clientes', 'index'], 'ativo' => ['Clientes']],
+            ['label' => 'Produtos', 'icon' => 'shopping-basket', 'url' => 'produtos', 'rota' => ['Produtos', 'index'], 'ativo' => ['Produtos']],
+            ['label' => 'Serviços', 'icon' => 'wrench', 'url' => 'servicos', 'rota' => ['Servicos', 'index'], 'ativo' => ['Servicos']],
+            ['label' => 'Vendas', 'icon' => 'shopping-cart', 'url' => 'vendas', 'rota' => ['Vendas', 'index'], 'ativo' => ['Vendas']],
+            ['label' => 'Ordens de Serviço', 'icon' => 'file-text', 'url' => 'os', 'rota' => ['Os', 'index'], 'ativo' => ['Os']],
+            ['label' => 'Termos de Garantias', 'icon' => 'receipt', 'url' => 'garantias', 'rota' => ['Garantias', 'index'], 'ativo' => ['Garantias']],
+            ['label' => 'Arquivos', 'icon' => 'archive', 'url' => 'arquivos', 'rota' => ['Arquivos', 'index'], 'ativo' => ['Arquivos']],
+            ['label' => 'Lançamentos', 'icon' => 'chart-column', 'url' => 'financeiro/lancamentos', 'rota' => ['Financeiro', 'lancamentos'], 'ativo' => ['Financeiro']],
+            ['label' => 'Cobranças', 'icon' => 'circle-dollar-sign', 'url' => 'cobrancas/cobrancas', 'rota' => ['Cobrancas', 'cobrancas'], 'ativo' => ['Cobrancas']],
             [
                 'label' => 'Relatórios',
-                'icon' => 'bx-pie-chart-alt-2',
+                'icon' => 'chart-pie',
                 'itens' => [
                     ['label' => 'Clientes', 'url' => 'relatorios/clientes', 'rota' => ['Relatorios', 'clientes'], 'ativo' => ['Relatorios/clientes', 'Relatorios/clientesCustom', 'Relatorios/clientesRapid']],
                     ['label' => 'Produtos', 'url' => 'relatorios/produtos', 'rota' => ['Relatorios', 'produtos'], 'ativo' => ['Relatorios/produtos', 'Relatorios/produtosCustom', 'Relatorios/produtosRapid', 'Relatorios/produtosRapidMin', 'Relatorios/produtosEtiquetas']],
@@ -105,7 +105,7 @@ if (! function_exists('layoutMenu')) {
             ],
             [
                 'label' => 'Configurações',
-                'icon' => 'bx-cog',
+                'icon' => 'settings',
                 'itens' => [
                     ['label' => 'Sistema', 'url' => 'mapos/configurar', 'rota' => ['Mapos', 'configurar'], 'ativo' => ['Mapos/configurar']],
                     ['label' => 'Usuários', 'url' => 'usuarios', 'rota' => ['Usuarios', 'index'], 'ativo' => ['Usuarios']],
@@ -273,13 +273,15 @@ if (! function_exists('layoutAssets')) {
                 'assets/js/matrix.js',
                 'assets/js/legado/datatables.js',
             ];
+            // As telas legadas ainda usam ícones do Boxicons (<i class="bx ...">).
+            // A moldura e as telas novas usam o sprite Lucide (icon(), #2915).
+            $css[] = 'assets/vendor/boxicons/css/boxicons.min.css';
         } else {
             $css[] = 'assets/dist/app.css';
         }
 
         // Depois do CSS legado: as regras estruturais do layout.css (sem
         // camada) precisam vencer as do matrix-style com a mesma especificidade.
-        $css[] = 'assets/vendor/boxicons/css/boxicons.min.css';
         $css[] = 'assets/dist/layout.css';
 
         return [

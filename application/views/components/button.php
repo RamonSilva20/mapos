@@ -7,7 +7,7 @@
  * @var string      $size      sm | md | lg
  * @var string      $type      button | submit | reset (ignorado com href)
  * @var string|null $href      Renderiza <a> em vez de <button>
- * @var string|null $icon      Ícone do boxicons, ex. bx-plus
+ * @var string|null $icon      Ícone Lucide do sprite, ex. plus (ver icone_helper.php)
  * @var bool        $icon_only Mostra só o ícone; o label continua acessível
  * @var bool        $disabled
  * @var string|null $name
@@ -60,6 +60,6 @@ if ($href !== null) {
 }
 ?>
 <<?= e($tag) ?><?= componenteAtributos(componenteMesclarAtributos($atributos, $attrs)) ?>>
-    <?php if ($icon !== null) { ?><i class="bx <?= e($icon) ?>" aria-hidden="true"></i><?php } ?>
+    <?php if ($icon !== null) { ?><?= icon($icon, ['class' => 'size-[1.25em]']) ?><?php } ?>
     <span class="<?= e($icon_only ? 'sr-only' : '') ?>"><?= e($label) ?></span>
 </<?= e($tag) ?>>

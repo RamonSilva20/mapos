@@ -56,9 +56,9 @@ $atributos = [
     <ul class="flex flex-wrap items-center gap-1">
         <li>
             <?php if ($atual > 1) { ?>
-                <a<?= componenteAtributos(['href' => $link($atual - 1), 'rel' => 'prev', 'class' => $normal]) ?>><i class="bx bx-chevron-left" aria-hidden="true"></i><?= e($prev_label) ?></a>
+                <a<?= componenteAtributos(['href' => $link($atual - 1), 'rel' => 'prev', 'class' => $normal]) ?>><?= icon('chevron-left', ['class' => 'size-4']) ?><?= e($prev_label) ?></a>
             <?php } else { ?>
-                <span aria-disabled="true" class="<?= e($desligado) ?>"><i class="bx bx-chevron-left" aria-hidden="true"></i><?= e($prev_label) ?></span>
+                <span aria-disabled="true" class="<?= e($desligado) ?>"><?= icon('chevron-left', ['class' => 'size-4']) ?><?= e($prev_label) ?></span>
             <?php } ?>
         </li>
         <?php foreach (componentePaginas($atual, $total, (int) $window) as $pagina) { ?>
@@ -74,9 +74,9 @@ $atributos = [
         <?php } ?>
         <li>
             <?php if ($atual < $total) { ?>
-                <a<?= componenteAtributos(['href' => $link($atual + 1), 'rel' => 'next', 'class' => $normal]) ?>><?= e($next_label) ?><i class="bx bx-chevron-right" aria-hidden="true"></i></a>
+                <a<?= componenteAtributos(['href' => $link($atual + 1), 'rel' => 'next', 'class' => $normal]) ?>><?= e($next_label) ?><?= icon('chevron-right', ['class' => 'size-4']) ?></a>
             <?php } else { ?>
-                <span aria-disabled="true" class="<?= e($desligado) ?>"><?= e($next_label) ?><i class="bx bx-chevron-right" aria-hidden="true"></i></span>
+                <span aria-disabled="true" class="<?= e($desligado) ?>"><?= e($next_label) ?><?= icon('chevron-right', ['class' => 'size-4']) ?></span>
             <?php } ?>
         </li>
     </ul>

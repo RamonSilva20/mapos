@@ -105,6 +105,7 @@ require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'tema_helper.php';
 require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-escape.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'js_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'componente_helper.php';
+require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'icone_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'layout_helper.php';
 require_once MAPOS_ROOT . DIRECTORY_SEPARATOR . 'scripts' . DIRECTORY_SEPARATOR . 'check-inline-script.php';
 require_once APPPATH . 'libraries' . DIRECTORY_SEPARATOR . 'Permission.php';
