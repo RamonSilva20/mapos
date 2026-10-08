@@ -46,6 +46,7 @@
  *              ({colors.ink-muted} / {colors.on-dark-muted}) · text-disabled
  * Bordas       border-border (cards, divisores) · border-input
  *              ({colors.hairline-input}, borda de campo, 3:1)
+ * Campos       bg-field (branco / #1f1633 no escuro) · focus:shadow-field-focus
  * Ação         bg-primary + text-on-primary (rótulo sempre ink, nunca branco)
  *              · hover:bg-primary-hover · active:bg-primary-pressed
  *              · bg-primary-tint (fundo do item ativo) · text-primary-strong
@@ -72,6 +73,7 @@
   --color-muted: var(--mapos-muted);
   --color-border: var(--mapos-border);
   --color-input: var(--mapos-input);
+  --color-field: var(--mapos-field);
   --color-disabled: var(--mapos-disabled);
   --color-disabled-bg: var(--mapos-disabled-bg);
 
@@ -83,6 +85,8 @@
   --color-primary-hover: #f47e48;
   --color-primary-pressed: #db6230;
   --color-on-primary: #1f1633;
+  /* Ink fixo, para texto sobre preenchimentos claros que não mudam com o modo (button-inverted). */
+  --color-ink: #1f1633;
   --color-primary-tint: var(--mapos-primary-tint);
   --color-primary-strong: var(--mapos-primary-strong);
 
@@ -218,6 +222,7 @@
   --shadow-elev-2: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
   --shadow-elev-3: 0 0 8px 6px rgb(21 15 35);
   --shadow-elev-4: 0 0.5rem 1.5rem rgb(0 0 0 / 18%);
+  --shadow-field-focus: inset 0 2px 10px rgb(0 0 0 / 15%);
   --shadow-card: var(--mapos-shadow-card);
   --shadow-overlay: var(--mapos-shadow-overlay);
 
@@ -239,6 +244,7 @@
     --mapos-muted: #5b5470;
     --mapos-border: #e5e7eb;
     --mapos-input: #8a849c;
+    --mapos-field: #ffffff;
     --mapos-disabled: #8a849c;
     --mapos-disabled-bg: #e5e7eb;
     --mapos-primary-tint: #feeee7;
@@ -272,6 +278,7 @@
     --mapos-muted: rgb(255 255 255 / 72%);
     --mapos-border: #362d59;
     --mapos-input: #756d8a;
+    --mapos-field: #1f1633;
     --mapos-disabled: rgb(255 255 255 / 45%);
     --mapos-disabled-bg: rgb(255 255 255 / 8%);
     --mapos-primary-tint: #391f26;

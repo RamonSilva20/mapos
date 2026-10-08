@@ -1,12 +1,13 @@
 <?php
 /**
- * Tabela de dados.
+ * Tabela de dados das telas de listagem (DESIGN.md data-table).
  *
  * columns aceita o formato curto ['chave' => 'Título'] ou uma lista de
  * colunas:
  *
  *     [
  *         ['key' => 'nome', 'label' => 'Nome'],
+ *         ['key' => 'status', 'label' => 'Status', 'nowrap' => true, 'render' => fn ($l) => component('pill-status', [...])],
  *         ['key' => 'valor', 'label' => 'Valor', 'align' => 'right'],
  *         ['label' => 'Ações', 'align' => 'right', 'render' => fn ($linha) => component('button', [...])],
  *     ]
@@ -14,6 +15,10 @@
  * O valor de cada célula vem de $linha[key] (array) ou $linha->key (objeto).
  * render recebe a linha e devolve texto (escapado) ou HtmlSeguro. Sem linhas,
  * a tabela mostra o componente empty-state com a mensagem de empty.
+ *
+ * Coluna com align right usa algarismos tabulares (valores, datas); nowrap
+ * impede quebra (status, técnico, data). Abaixo de 640px cada linha vira um
+ * bloco com "Título: valor" por célula.
  *
  * @var array                  $columns
  * @var iterable               $rows
@@ -26,7 +31,7 @@
  * @var array                  $attrs
  */
 if (! is_array($columns)) {
-    throw new InvalidArgumentException('A prop columns de table deve ser um array.');
+    throw new InvalidArgumentException('A prop columns de data-table deve ser um array.');
 }
 
 $colunas = [];
@@ -35,13 +40,13 @@ foreach ($columns as $chave => $coluna) {
         $coluna = ['key' => (string) $chave, 'label' => $coluna];
     }
     if (! array_key_exists('label', $coluna)) {
-        throw new InvalidArgumentException('Cada coluna de table precisa de label.');
+        throw new InvalidArgumentException('Cada coluna de data-table precisa de label.');
     }
     if (! isset($coluna['key']) && ! isset($coluna['render'])) {
-        throw new InvalidArgumentException('Cada coluna de table precisa de key ou render.');
+        throw new InvalidArgumentException('Cada coluna de data-table precisa de key ou render.');
     }
     if (isset($coluna['render']) && ! is_callable($coluna['render'])) {
-        throw new InvalidArgumentException('O render de uma coluna de table deve ser chamável.');
+        throw new InvalidArgumentException('O render de uma coluna de data-table deve ser chamável.');
     }
     $coluna['align'] ??= 'left';
     if (! in_array($coluna['align'], ['left', 'center', 'right'], true)) {
@@ -50,8 +55,10 @@ foreach ($columns as $chave => $coluna) {
     $colunas[] = $coluna;
 }
 
-$alinhamentos = ['left' => 'text-left', 'center' => 'text-center', 'right' => 'text-right'];
-$celula = $dense ? 'px-3 py-2' : 'px-4 py-3';
+$alinhamentos = ['left' => 'text-left', 'center' => 'text-center', 'right' => 'text-right tabular-nums'];
+$celula = $dense ? 'px-3 py-2' : 'px-4 py-3.5';
+// Abaixo de 640px: linha em bloco e o título da coluna antes do valor.
+$celulaCelular = 'max-sm:flex max-sm:items-baseline max-sm:justify-between max-sm:gap-4 max-sm:py-1 max-sm:text-right max-sm:before:text-left max-sm:before:text-caption max-sm:before:text-muted max-sm:before:content-[attr(data-label)]';
 $linhas = array_values(is_array($rows) ? $rows : iterator_to_array($rows, false));
 
 $valorDaCelula = static function ($linha, array $coluna) {
@@ -70,20 +77,20 @@ $valorDaCelula = static function ($linha, array $coluna) {
 
 $atributos = [
     'id' => $id,
-    'class' => componenteClasses('overflow-x-auto rounded-card border border-border bg-surface', $class),
+    'class' => componenteClasses('overflow-x-auto rounded-xl border border-border bg-surface', $class),
 ];
 ?>
 <div<?= componenteAtributos(componenteMesclarAtributos($atributos, $attrs)) ?>>
-    <table class="w-full border-collapse text-sm text-text">
+    <table class="w-full border-collapse text-body-md text-text max-sm:block">
         <?php if ($caption !== null) { ?><caption class="sr-only"><?= e($caption) ?></caption><?php } ?>
-        <thead class="bg-surface-subtle text-xs font-semibold tracking-wide text-muted uppercase">
+        <thead class="bg-surface-subtle text-xs font-semibold tracking-[0.35px] text-muted uppercase max-sm:sr-only">
             <tr>
                 <?php foreach ($colunas as $coluna) { ?>
-                    <th scope="col" class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], 'border-b border-border')) ?>"><?= e($coluna['label']) ?></th>
+                    <th scope="col" class="<?= e(componenteClasses($dense ? 'px-3 py-2' : 'px-4 py-3', $alinhamentos[$coluna['align']], 'border-b border-border whitespace-nowrap')) ?>"><?= e($coluna['label']) ?></th>
                 <?php } ?>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="max-sm:block">
             <?php if ($linhas === []) { ?>
                 <tr>
                     <td colspan="<?= e(count($colunas)) ?>" class="p-0">
@@ -92,9 +99,9 @@ $atributos = [
                 </tr>
             <?php } ?>
             <?php foreach ($linhas as $i => $linha) { ?>
-                <tr class="<?= e(componenteClasses('border-b border-border last:border-b-0 hover:bg-surface-subtle', ['bg-surface-subtle/60' => $striped && $i % 2 === 1])) ?>">
+                <tr class="<?= e(componenteClasses('border-b border-border last:border-b-0 hover:bg-surface-subtle max-sm:block max-sm:px-4 max-sm:py-3', ['bg-surface-subtle/60' => $striped && $i % 2 === 1])) ?>">
                     <?php foreach ($colunas as $coluna) { ?>
-                        <td class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], $coluna['class'] ?? null)) ?>"><?= componenteConteudo($valorDaCelula($linha, $coluna)) ?></td>
+                        <td data-label="<?= e($coluna['label']) ?>" class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], ['whitespace-nowrap' => ! empty($coluna['nowrap'])], $celulaCelular, $coluna['class'] ?? null)) ?>"><?= componenteConteudo($valorDaCelula($linha, $coluna)) ?></td>
                     <?php } ?>
                 </tr>
             <?php } ?>

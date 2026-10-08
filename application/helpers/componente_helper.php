@@ -88,7 +88,7 @@ if (! function_exists('componenteEspecificacoes')) {
                     'value' => null,
                 ],
                 'opcoes' => [
-                    'variant' => ['primary', 'secondary', 'ghost', 'danger', 'link'],
+                    'variant' => ['primary', 'outline', 'ghost', 'danger', 'inverted', 'ghost-on-dark', 'link'],
                     'size' => ['sm', 'md', 'lg'],
                     'type' => ['button', 'submit', 'reset'],
                 ],
@@ -151,7 +151,7 @@ if (! function_exists('componenteEspecificacoes')) {
                     'padded' => true,
                 ],
             ],
-            'table' => [
+            'data-table' => [
                 'obrigatorias' => ['columns'],
                 'padrao' => [
                     'rows' => [],
@@ -171,6 +171,18 @@ if (! function_exists('componenteEspecificacoes')) {
                     'open' => false,
                 ],
                 'opcoes' => ['size' => ['sm', 'md', 'lg', 'xl']],
+            ],
+            'modal-confirm' => [
+                'obrigatorias' => ['id', 'title', 'message'],
+                'padrao' => [
+                    'confirm_label' => 'Excluir',
+                    'cancel_label' => 'Cancelar',
+                    'confirm_href' => null,
+                    'confirm_attrs' => [],
+                    'icon' => 'trash-2',
+                    'open' => false,
+                ],
+                'formatos' => ['icon' => COMPONENTE_ICONE],
             ],
             'alert' => [
                 'obrigatorias' => ['message'],
@@ -200,8 +212,58 @@ if (! function_exists('componenteEspecificacoes')) {
                     'size' => 'md',
                 ],
                 'opcoes' => [
-                    'variant' => ['neutral', 'accent', 'info', 'success', 'warning', 'danger'],
+                    'variant' => ['neutral', 'accent'],
                     'size' => ['sm', 'md'],
+                ],
+            ],
+            'pill-status' => [
+                'obrigatorias' => ['label'],
+                'padrao' => [
+                    'variant' => 'neutral',
+                    'dot' => true,
+                ],
+                'opcoes' => ['variant' => ['success', 'warning', 'danger', 'info', 'progress', 'neutral']],
+            ],
+            'kpi-card' => [
+                'obrigatorias' => ['label', 'value'],
+                'padrao' => [
+                    'icon' => null,
+                    'caption' => null,
+                ],
+                'formatos' => ['icon' => COMPONENTE_ICONE],
+            ],
+            'tabs' => [
+                'obrigatorias' => ['items'],
+                'padrao' => [
+                    'label' => 'Seções da página',
+                ],
+            ],
+            'checkbox' => [
+                'obrigatorias' => ['name', 'label'],
+                'padrao' => [
+                    'value' => '1',
+                    'checked' => false,
+                    'required' => false,
+                    'disabled' => false,
+                    'help' => null,
+                    'error' => null,
+                ],
+            ],
+            'radio' => [
+                'obrigatorias' => ['name', 'value', 'label'],
+                'padrao' => [
+                    'checked' => false,
+                    'required' => false,
+                    'disabled' => false,
+                ],
+            ],
+            'switch' => [
+                'obrigatorias' => ['name', 'label'],
+                'padrao' => [
+                    'value' => '1',
+                    'checked' => false,
+                    'disabled' => false,
+                    'help' => null,
                 ],
             ],
             'pagination' => [

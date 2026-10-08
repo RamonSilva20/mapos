@@ -21,23 +21,23 @@ $idTitulo = $title !== null && $id !== null ? $id . '-titulo' : null;
 $atributos = [
     'id' => $id,
     'aria-labelledby' => $idTitulo,
-    'class' => componenteClasses('overflow-hidden rounded-card border border-border bg-surface text-text shadow-card', $class),
+    'class' => componenteClasses('overflow-hidden rounded-xl border border-border bg-surface text-text shadow-card', $class),
 ];
 ?>
 <section<?= componenteAtributos(componenteMesclarAtributos($atributos, $attrs)) ?>>
     <?php if ($title !== null || $actions !== null) { ?>
-        <header class="flex flex-wrap items-start justify-between gap-3 border-b border-border px-5 py-4">
+        <header class="flex flex-wrap items-start justify-between gap-3 border-b border-border px-6 py-4">
             <div class="min-w-0">
-                <?php if ($title !== null) { ?><h2<?= componenteAtributos(['id' => $idTitulo]) ?> class="text-base font-semibold text-text"><?= e($title) ?></h2><?php } ?>
-                <?php if ($subtitle !== null) { ?><p class="mt-0.5 text-sm text-muted"><?= e($subtitle) ?></p><?php } ?>
+                <?php if ($title !== null) { ?><h2<?= componenteAtributos(['id' => $idTitulo]) ?> class="text-heading-sm text-text"><?= e($title) ?></h2><?php } ?>
+                <?php if ($subtitle !== null) { ?><p class="mt-1 text-caption text-muted"><?= e($subtitle) ?></p><?php } ?>
             </div>
             <?php if ($actions !== null) { ?><div class="flex flex-wrap items-center gap-2"><?= componenteConteudo($actions) ?></div><?php } ?>
         </header>
     <?php } ?>
     <?php if ($body !== null) { ?>
-        <div class="<?= e($padded ? 'px-5 py-4' : '') ?>"><?= componenteConteudo($body) ?></div>
+        <div class="<?= e($padded ? 'px-6 py-5' : '') ?>"><?= componenteConteudo($body) ?></div>
     <?php } ?>
     <?php if ($footer !== null) { ?>
-        <footer class="flex flex-wrap items-center justify-end gap-2 border-t border-border bg-surface-subtle px-5 py-3"><?= componenteConteudo($footer) ?></footer>
+        <footer class="flex flex-wrap items-center justify-end gap-2 border-t border-border bg-surface-subtle px-6 py-3"><?= componenteConteudo($footer) ?></footer>
     <?php } ?>
 </section>

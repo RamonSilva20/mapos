@@ -262,6 +262,8 @@ Telas novas são montadas com a biblioteca de componentes, em vez de HTML escrit
 <?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'save']) ?>
 ```
 
+Os componentes seguem as specs do `DESIGN.md`: `button` (primary, outline, ghost, danger, inverted, ghost-on-dark e link; um primary por tela), campos (`input`, `select`, `textarea`, `checkbox`, `radio`, `switch`), `pill-status` para estados de OS, venda e cobrança (o `badge` é só para contadores), `alert`, `toast`, `modal`, `modal-confirm` para ações destrutivas, `data-table`, `kpi-card`, `tabs`, `pagination`, `card`, `empty-state` e `breadcrumb`.
+
 Os partials ficam em `application/views/components/` e as props aceitas em `application/helpers/componente_helper.php`. Prop desconhecida, obrigatória faltando ou valor fora das opções gera erro na hora, em vez de ser ignorado. Componentes disponíveis: `button`, `input`, `select`, `textarea`, `card`, `table`, `modal`, `alert`, `toast`, `badge`, `pagination`, `empty-state` e `breadcrumb`.
 
 Todo valor é escapado. Os slots (`body`, `footer`, `actions`, `message`, células da tabela) recebem texto, que também é escapado, ou um `HtmlSeguro`: a saída de outro `component()` ou de `html_purificado()`, que passa HTML do usuário pelo HTMLPurifier. Não crie um `HtmlSeguro` à mão com dado do usuário. Atributos extras vão na prop `attrs`; handlers `on*` são recusados (o JavaScript fica nos módulos).

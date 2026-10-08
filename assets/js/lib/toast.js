@@ -19,7 +19,7 @@ export const VARIANTES = {
 };
 
 export const CLASSES_REGIAO = 'pointer-events-none fixed right-4 bottom-4 z-50 flex flex-col items-end gap-2';
-export const CLASSES_TOAST = 'pointer-events-auto flex w-80 max-w-full items-start gap-3 rounded-card border border-border bg-surface px-4 py-3 text-sm text-text shadow-overlay';
+export const CLASSES_TOAST = 'pointer-events-auto flex w-[340px] max-w-full items-start gap-3 rounded-xl border border-border bg-surface py-3.5 pr-3.5 pl-4 text-caption text-text shadow-overlay';
 
 export function regiaoDeToasts(doc = document) {
     let regiao = doc.querySelector('[data-toast-region]');
@@ -57,7 +57,7 @@ export function criarToast({ mensagem, titulo = null, variante = 'info', duracao
 
     const corpo = el('div', 'min-w-0 flex-1');
     if (titulo) {
-        const t = el('p', 'font-semibold');
+        const t = el('p', 'text-[0.9375rem] leading-snug font-semibold');
         t.textContent = titulo;
         corpo.appendChild(t);
     }
@@ -65,12 +65,10 @@ export function criarToast({ mensagem, titulo = null, variante = 'info', duracao
     texto.textContent = mensagem;
     corpo.appendChild(texto);
 
-    const fechar = el('button', '-m-1 inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-ring');
+    const fechar = el('button', '-m-1 inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-3 focus-visible:outline-ring/50');
     fechar.type = 'button';
     fechar.setAttribute('data-dispensar', '');
-    const x = el('span', 'text-lg leading-none');
-    x.setAttribute('aria-hidden', 'true');
-    x.textContent = '×';
+    const x = criarIcone('x', 'size-4', doc);
     const rotulo = el('span', 'sr-only');
     rotulo.textContent = rotuloFechar;
     fechar.append(x, rotulo);
