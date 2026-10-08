@@ -57,7 +57,6 @@
     "application/views/os/emails/os.php": 26,
     "application/views/os/imprimirOs.php": 67,
     "application/views/os/imprimirOsTermica.php": 52,
-    "application/views/os/os.php": 13,
     "application/views/os/visualizarOs.php": 24,
     "application/views/permissoes/editarPermissao.php": 4,
     "application/views/permissoes/permissoes.php": 5,

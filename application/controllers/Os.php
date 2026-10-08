@@ -6,10 +6,18 @@ if (! defined('BASEPATH')) {
 
 class Os extends MY_Controller
 {
+    /** Filtros da listagem, na query string (listagemFiltros()). */
+    public const FILTROS = [
+        'pesquisa' => 'texto',
+        'status' => ['Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
+        'de' => 'texto',
+        'ate' => 'texto',
+    ];
+
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper('form');
+        $this->load->helper(['form', 'os']);
         $this->load->model('os_model');
         $this->data['menuOs'] = 'OS';
     }
@@ -19,6 +27,11 @@ class Os extends MY_Controller
         $this->gerenciar();
     }
 
+    /**
+     * Listagem de OS migrada para os componentes da v5 (#2842), no padrão das
+     * listagens (#2852): filtros na URL, paginação que os mantém e exclusão
+     * confirmada em modal-confirm.
+     */
     public function gerenciar()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
@@ -26,67 +39,57 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('pagination');
-        $this->load->model('mapos_model');
+        $filtros = $this->filtrosDaListagem();
+        $offset = (int) $this->uri->segment(3);
+        $statusVisiveis = osStatusVisiveis($this->data['configuration']['os_status_list'] ?? null);
+        $total = $this->os_model->contar($filtros, $statusVisiveis);
 
-        $where_array = [];
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['status_ocultos'] = ! isset($filtros['pesquisa']) && ! isset($filtros['status']) && $statusVisiveis !== null
+            && array_diff(array_keys(OS_STATUS_VARIANTES), $statusVisiveis) !== [];
+        $this->data['results'] = $this->os_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset, $statusVisiveis);
+        $this->data['paginacao'] = $this->paginacao(site_url('os/gerenciar'), $total, $offset, null, $filtros);
+        $this->data['pode'] = [
+            'adicionar' => $this->permite('aOs'),
+            'editar' => $this->permite('eOs'),
+            'excluir' => $this->permite('dOs'),
+        ];
+        $this->data['controle_editos'] = ($this->data['configuration']['control_editos'] ?? '0') == '1';
 
-        $pesquisa = $this->input->get('pesquisa');
-        $status = $this->input->get('status');
-        $inputDe = $this->input->get('data');
-        $inputAte = $this->input->get('data2');
-
-        if ($pesquisa) {
-            $where_array['pesquisa'] = $pesquisa;
-        }
-        if ($status) {
-            $where_array['status'] = $status;
-        }
-        if ($inputDe) {
-            $de = explode('/', $inputDe);
-            $de = $de[2] . '-' . $de[1] . '-' . $de[0];
-
-            $where_array['de'] = $de;
-        }
-        if ($inputAte) {
-            $ate = explode('/', $inputAte);
-            $ate = $ate[2] . '-' . $ate[1] . '-' . $ate[0];
-
-            $where_array['ate'] = $ate;
+        if ($this->data['pode']['adicionar']) {
+            $this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')];
         }
 
-        $this->data['configuration']['base_url'] = site_url('os/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->os_model->count('os');
-        if (count($where_array) > 0) {
-            // Estes valores são interpolados no href dos links de paginação.
-            $query = http_build_query([
-                'pesquisa' => $pesquisa,
-                'status' => $status,
-                'data' => $inputDe,
-                'data2' => $inputAte,
-            ]);
-
-            $this->data['configuration']['suffix'] = '?' . $query;
-            $this->data['configuration']['first_url'] = base_url('index.php/os/gerenciar') . '?' . $query;
-        }
-
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->os_model->getOs(
-            'os',
-            'os.*,
-            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos',
-            $where_array,
-            $this->data['configuration']['per_page'],
-            $this->uri->segment(3)
-        );
-
-        $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
-        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'os/os';
 
         return $this->layout();
+    }
+
+    /**
+     * Filtros válidos da listagem: pesquisa (texto), status (um dos status de
+     * OS) e as datas de/ate em AAAA-MM-DD (input type=date); data inválida é
+     * descartada.
+     *
+     * @return array<string, string>
+     */
+    private function filtrosDaListagem(): array
+    {
+        $filtros = listagemFiltros(self::FILTROS, $this->input->get());
+
+        foreach (['de', 'ate'] as $data) {
+            if (isset($filtros[$data])) {
+                $valida = dataIsoParaYmd($filtros[$data]);
+                if ($valida === null) {
+                    unset($filtros[$data]);
+                } else {
+                    $filtros[$data] = $valida;
+                }
+            }
+        }
+
+        return $filtros;
     }
 
     public function adicionar()
@@ -612,13 +615,16 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = (int) $this->input->post('id');
+        // Volta para a listagem com os mesmos filtros (só os permitidos).
+        $listagem = site_url('os/gerenciar') . listagemQuery($this->filtrosDaListagem());
+
         $os = $this->os_model->getByIdCobrancas($id);
         if ($os == null) {
             $os = $this->os_model->getById($id);
             if ($os == null) {
                 $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
-                redirect(base_url() . 'index.php/os/gerenciar/');
+                redirect($listagem);
             }
         }
 
@@ -627,7 +633,7 @@ class Os extends MY_Controller
                 $this->os_model->delete('cobrancas', 'os_id', $id);
             } else {
                 $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta OS, deve cancelar e/ou excluir a cobrança primeiro!');
-                redirect(site_url('os/gerenciar/'));
+                redirect($listagem);
             }
         }
 
@@ -637,17 +643,24 @@ class Os extends MY_Controller
             $this->devolucaoEstoque($id);
         }
 
+        // Os arquivos dos anexos saem do disco junto com os registros (só os que
+        // ficam dentro de assets/anexos; ver osArquivosDosAnexos()).
+        foreach (osArquivosDosAnexos($this->os_model->getAnexos($id), FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos') as $arquivo) {
+            @unlink($arquivo);
+        }
+
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
+        $this->os_model->delete('anotacoes_os', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
-        if ((int) $os->faturado === 1) {
-            $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
+        if ((int) $osStockRefund->faturado === 1) {
+            $this->os_model->excluirFatura($id, isset($osStockRefund->lancamento) ? (int) $osStockRefund->lancamento : null);
         }
 
         log_info('Removeu uma OS. ID: ' . $id);
         $this->session->set_flashdata('success', 'OS excluída com sucesso!');
-        redirect(site_url('os/gerenciar/'));
+        redirect($listagem);
     }
 
     public function autoCompleteProduto()
