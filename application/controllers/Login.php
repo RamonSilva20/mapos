@@ -10,32 +10,11 @@ class Login extends CI_Controller
 
     public function index()
     {
+        // A tela de entrada é sempre escura (DESIGN.md), então não lê o modo
+        // de cor das configurações.
         $this->load->view('mapos/login', [
-            'configuration' => $this->configuracaoDoTema(),
             'erro' => $this->session->flashdata('error'),
         ]);
-    }
-
-    /**
-     * Configurações de tema para a tela de login.
-     *
-     * Login não estende MY_Controller (o usuário não está logado), então não
-     * recebe $this->data['configuration']. Só as chaves do tema são lidas.
-     */
-    private function configuracaoDoTema()
-    {
-        $configuracao = [];
-        $linhas = $this->db
-            ->select('config, valor')
-            ->where_in('config', ['app_theme', 'app_tema_modo'])
-            ->get('configuracoes')
-            ->result();
-
-        foreach ($linhas as $linha) {
-            $configuracao[$linha->config] = $linha->valor;
-        }
-
-        return $configuracao;
     }
 
     public function sair()

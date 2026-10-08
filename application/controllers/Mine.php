@@ -15,7 +15,12 @@ class Mine extends CI_Controller
 
     public function index()
     {
-        $this->load->view('conecte/login');
+        $this->load->view('conecte/login', [
+            'erro' => $this->session->flashdata('error'),
+            'sucesso' => $this->session->flashdata('success'),
+            // O atalho da listagem de clientes abre mine?e=<e-mail> com o campo preenchido.
+            'email' => trim((string) $this->input->get('e')),
+        ]);
     }
 
     public function sair()

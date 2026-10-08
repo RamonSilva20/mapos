@@ -13,7 +13,6 @@
     "application/views/conecte/detalhes_os.php": 1,
     "application/views/conecte/editar_dados.php": 1,
     "application/views/conecte/imprimirVenda.php": 1,
-    "application/views/conecte/login.php": 4,
     "application/views/conecte/minha_os.php": 1,
     "application/views/conecte/nova_senha.php": 1,
     "application/views/conecte/resetar_senha.php": 3,

@@ -267,8 +267,13 @@
     --mapos-shadow-overlay: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
   }
 
-  /* Modo escuro do painel: a paleta violeta do DESIGN.md, na tela inteira. */
-  .dark {
+  /*
+   * Modo escuro do painel: a paleta violeta do DESIGN.md, na tela inteira.
+   * .superficie-entrada é o card escuro das telas de entrada (logins): usa a
+   * mesma paleta, qualquer que seja o modo, para rótulos, textos e alertas.
+   */
+  .dark,
+  .superficie-entrada {
     color-scheme: dark;
 
     --mapos-bg: #1f1633;
@@ -299,5 +304,21 @@
 
     --mapos-shadow-card: none;
     --mapos-shadow-overlay: 0 10px 30px rgb(0 0 0 / 55%);
+  }
+
+  /*
+   * Nas telas de entrada os campos continuam claros (DESIGN.md text-input:
+   * branco com borda hairline-input), também dentro do card escuro.
+   */
+  .superficie-entrada :where(input, select, textarea) {
+    color-scheme: light;
+
+    --mapos-text: #1f1633;
+    --mapos-muted: #5b5470;
+    --mapos-input: #8a849c;
+    --mapos-field: #ffffff;
+    --mapos-surface-subtle: #f6f5f9;
+    --mapos-disabled: #8a849c;
+    --mapos-disabled-bg: #e5e7eb;
   }
 }

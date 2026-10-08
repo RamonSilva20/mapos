@@ -16,12 +16,13 @@ if (! function_exists('site_url')) {
 }
 
 /**
- * Tela de login do painel (views/mapos/login.php), renderizada fora do
- * framework com $this falso.
+ * Telas de login do painel (views/mapos/login.php) e da área do cliente
+ * (views/conecte/login.php), renderizadas fora do framework com $this falso.
+ * As duas são superfícies de entrada do DESIGN.md (#2918).
  */
 final class LoginViewTest extends MaposTestCase
 {
-    private function renderizar(array $dados = [], array $config = []): string
+    private function renderizar(array $dados = [], array $config = [], string $view = 'mapos/login'): string
     {
         $config += ['app_name' => 'Map-OS', 'app_version' => '5.0.0-alpha', 'app_subname' => 'Sistema de Controle de Ordens de Serviço'];
 
@@ -56,15 +57,15 @@ final class LoginViewTest extends MaposTestCase
             }
         };
 
-        $render = function (array $__dados) {
+        $render = function (array $__dados, string $__view) {
             extract($__dados);
             ob_start();
-            include APPPATH . 'views/mapos/login.php';
+            include APPPATH . 'views/' . $__view . '.php';
 
             return ob_get_clean();
         };
 
-        return Closure::bind($render, $contexto, $contexto::class)($dados + ['configuration' => [], 'erro' => null]);
+        return Closure::bind($render, $contexto, $contexto::class)($dados + ['erro' => null, 'sucesso' => null, 'email' => ''], $view);
     }
 
     public function testCamposComLabelAutocompleteEObrigatoriedade(): void
@@ -119,24 +120,62 @@ final class LoginViewTest extends MaposTestCase
         $html = $this->renderizar([], ['app_name' => 'Oficina "<Zé>"', 'app_version' => '5<1']);
 
         $this->assertStringContainsString('<title>Entrar — Oficina &quot;&lt;Zé&gt;&quot;</title>', $html);
-        $this->assertStringContainsString('alt="Oficina &quot;&lt;Zé&gt;&quot;"', $html);
-        $this->assertStringContainsString('Versão: 5&lt;1', $html);
+        $this->assertMatchesRegularExpression('#<span class="[^"]*font-display[^"]*">Oficina &quot;&lt;Zé&gt;&quot;</span>#', $html);
+        $this->assertStringContainsString('Versão 5&lt;1', $html);
         $this->assertStringNotContainsString('<Zé>', $html);
     }
 
-    public function testTemaDaConfiguracaoVaiParaOHtml(): void
+    /**
+     * A superfície de entrada é sempre escura: não segue o modo de cor do
+     * painel (sem .dark, sem tema.js) e o card usa o escopo de tokens
+     * .superficie-entrada, com os campos claros.
+     */
+    public function testSuperficieDeEntradaNaoSegueOModoDoPainel(): void
     {
-        $html = $this->renderizar(['configuration' => ['app_tema_modo' => 'escuro']]);
+        foreach (['mapos/login', 'conecte/login'] as $view) {
+            $html = $this->renderizar([], [], $view);
 
-        $this->assertStringContainsString('<html lang="pt-br" class="dark" data-tema-modo="escuro">', $html);
-        $this->assertStringContainsString('assets/js/tema.js', $html);
+            $this->assertStringContainsString('<html lang="pt-br">', $html, $view);
+            $this->assertStringNotContainsString('tema.js', $html, $view);
+            $this->assertStringContainsString('bg-canvas-dark bg-[url(../img/entrada/estrelas.svg)]', $html, $view);
+            $this->assertMatchesRegularExpression('/<section class="superficie-entrada [^"]*bg-night/', $html, $view);
+            $this->assertMatchesRegularExpression('/<button[^>]*class="[^"]*bg-primary[^"]*shadow-elev-3/', $html, $view);
+            $this->assertStringContainsString('class="rounded-xs bg-accent-lime px-3 text-ink"', $html, $view);
+        }
     }
 
-    public function testSemConfiguracaoUsaOTemaPadrao(): void
+    public function testCadaLoginApontaParaOOutroNaTopNav(): void
     {
-        $html = $this->renderizar();
+        $painel = $this->renderizar();
+        $cliente = $this->renderizar([], [], 'conecte/login');
 
-        $this->assertStringContainsString('<html lang="pt-br" data-tema-modo="claro">', $html);
-        $this->assertStringNotContainsString('data-accent', $html);
+        $this->assertMatchesRegularExpression('#<a(?=[^>]*href="http://mapos.test/index.php/mine")(?=[^>]*bg-on-dark-faint)#', $painel);
+        $this->assertMatchesRegularExpression('#<a(?=[^>]*href="http://mapos.test/index.php/login")(?=[^>]*bg-on-dark-faint)#', $cliente);
+    }
+
+    public function testLoginDoClienteUsaOMesmoModulo(): void
+    {
+        $html = $this->renderizar([], [], 'conecte/login');
+
+        $this->assertStringContainsString('data-module="login/formulario"', $html);
+        $this->assertStringContainsString('action="http://mapos.test/index.php/mine/login?ajax=true"', $html);
+        $this->assertStringContainsString('data-destino="http://mapos.test/index.php/mine/painel"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/mine/resetarSenha"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/mine/cadastrar"', $html);
+        $this->assertSame(0, preg_match('/<script(?![^>]*\bsrc=)[^>]*>/', $html), 'Nenhum <script> sem src.');
+        $this->assertStringNotContainsString('jquery', strtolower($html));
+        $this->assertStringNotContainsString('bx-', $html);
+    }
+
+    public function testLoginDoClienteMostraMensagensEPreencheOEmail(): void
+    {
+        $html = $this->renderizar(['erro' => 'Falhou <b>', 'sucesso' => 'Cadastro <i>feito</i>', 'email' => 'zé@x.com"'], [], 'conecte/login');
+
+        $this->assertStringContainsString('<span data-login-texto>Falhou &lt;b&gt;</span>', $html);
+        $this->assertStringContainsString('Cadastro &lt;i&gt;feito&lt;/i&gt;', $html);
+        $this->assertMatchesRegularExpression('/<input[^>]*id="email"[^>]*value="zé@x.com&quot;"/', $html);
+        // Com o e-mail preenchido, o foco vai para a senha.
+        $this->assertMatchesRegularExpression('/<input[^>]*id="senha"[^>]*autofocus/', $html);
+        $this->assertDoesNotMatchRegularExpression('/<input[^>]*id="email"[^>]*autofocus/', $html);
     }
 }
