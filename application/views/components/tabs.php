@@ -14,7 +14,8 @@
  * @var array       $items Lista de ['label', 'url', 'active' => bool, 'count' => int|null, 'icon' => string|null, 'short' => string|null]
  *
  * No celular (abaixo de sm) os ícones somem e, quando a aba tem short, o
- * rótulo curto entra no lugar do completo, para as abas caberem sem rolagem.
+ * rótulo curto entra no lugar do completo, para as abas caberem sem rolagem
+ * (o completo continua para o leitor de tela, em sr-only).
  * @var string      $label Nome da navegação para leitores de tela
  * @var string|null $id
  * @var string      $class
@@ -55,7 +56,7 @@ $atributos = [
         ]) ?>>
             <?php if (! empty($item['icon'])) { ?><?= icon((string) $item['icon'], ['class' => 'size-4 max-sm:hidden']) ?><?php } ?>
             <?php if (! empty($item['short'])) { ?>
-                <span class="sm:hidden"><?= e($item['short']) ?></span><span class="max-sm:hidden"><?= e($item['label']) ?></span>
+                <span class="sm:hidden" aria-hidden="true"><?= e($item['short']) ?></span><span class="max-sm:sr-only"><?= e($item['label']) ?></span>
             <?php } else { ?>
                 <?= e($item['label']) ?>
             <?php } ?>

@@ -868,7 +868,7 @@ final class ComponentesTest extends MaposTestCase
             ['label' => 'Dados', 'url' => '/dados', 'active' => true],
         ]]);
 
-        $this->assertStringContainsString('<span class="sm:hidden">OS</span><span class="max-sm:hidden">Ordens de serviço</span>', $html);
+        $this->assertStringContainsString('<span class="sm:hidden" aria-hidden="true">OS</span><span class="max-sm:sr-only">Ordens de serviço</span>', $html);
         $this->assertStringContainsString('size-4 max-sm:hidden', $html);
         $this->assertMatchesRegularExpression('#aria-current="page"[^>]*>\s*Dados#', $html);
     }
