@@ -9,8 +9,8 @@
  */
 $secao = static function (string $titulo, string $descricao = ''): HtmlSeguro {
     return new HtmlSeguro(
-        '<h2 class="mt-10 mb-1 text-lg font-semibold text-text">' . e($titulo) . '</h2>'
-        . ($descricao !== '' ? '<p class="mb-4 text-sm text-muted">' . e($descricao) . '</p>' : '<div class="mb-4"></div>')
+        '<h2 class="mt-12 mb-1 text-heading-sm text-text">' . e($titulo) . '</h2>'
+        . ($descricao !== '' ? '<p class="mb-4 text-caption text-muted">' . e($descricao) . '</p>' : '<div class="mb-4"></div>')
     );
 };
 
@@ -20,10 +20,19 @@ $clientes = [
     ['id' => 3, 'nome' => 'Oficina "Aspas" & Cia', 'documento' => '12.345.678/0001-90', 'status' => 'inativo', 'saldo' => 'R$ 89,90'],
 ];
 
-$statusBadge = [
+$statusCliente = [
     'ativo' => ['label' => 'Ativo', 'variant' => 'success'],
     'pendente' => ['label' => 'Pendente', 'variant' => 'warning'],
     'inativo' => ['label' => 'Inativo', 'variant' => 'neutral'],
+];
+
+$statusOs = [
+    ['label' => 'Aberta', 'variant' => 'info'],
+    ['label' => 'Em andamento', 'variant' => 'progress'],
+    ['label' => 'Aguardando peça', 'variant' => 'warning'],
+    ['label' => 'Finalizada', 'variant' => 'success'],
+    ['label' => 'Cancelada', 'variant' => 'danger'],
+    ['label' => 'Orçamento enviado', 'variant' => 'neutral'],
 ];
 ?><!doctype html>
 <html lang="pt-br"<?= temaAtributosHtml($configuration) ?>>
@@ -61,22 +70,28 @@ $statusBadge = [
             ['label' => 'Editar cliente'],
         ]]) ?>
 
-        <?= componenteConteudo($secao('Botões', 'Variantes primary, secondary, ghost, danger e link, em três tamanhos, com ícone, só ícone, link e desabilitado.')) ?>
+        <?= componenteConteudo($secao('Botões', 'Um primary (laranja, rótulo ink) por tela; outline e ghost para o resto; danger só para ação destrutiva. Três tamanhos, com ícone, só ícone, link e desabilitado.')) ?>
         <div class="flex flex-col gap-3">
             <?php foreach (['sm', 'md', 'lg'] as $tamanho) { ?>
                 <div class="flex flex-wrap items-center gap-2">
-                    <?php foreach (['primary', 'secondary', 'ghost', 'danger', 'link'] as $variante) { ?>
+                    <?php foreach (['primary', 'outline', 'ghost', 'danger', 'link'] as $variante) { ?>
                         <?= component('button', ['label' => ucfirst($variante), 'variant' => $variante, 'size' => $tamanho]) ?>
                     <?php } ?>
                 </div>
             <?php } ?>
             <div class="flex flex-wrap items-center gap-2">
                 <?= component('button', ['label' => 'Novo cliente', 'icon' => 'plus']) ?>
-                <?= component('button', ['label' => 'Editar', 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'secondary']) ?>
+                <?= component('button', ['label' => 'Editar', 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'outline']) ?>
                 <?= component('button', ['label' => 'Excluir', 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'danger']) ?>
-                <?= component('button', ['label' => 'Abrir clientes (link)', 'href' => site_url('clientes'), 'variant' => 'secondary', 'icon' => 'external-link']) ?>
+                <?= component('button', ['label' => 'Abrir clientes (link)', 'href' => site_url('clientes'), 'variant' => 'outline', 'icon' => 'external-link']) ?>
                 <?= component('button', ['label' => 'Desabilitado', 'disabled' => true]) ?>
-                <?= component('button', ['label' => 'Link desabilitado', 'href' => site_url('clientes'), 'disabled' => true, 'variant' => 'secondary']) ?>
+                <?= component('button', ['label' => 'Link desabilitado', 'href' => site_url('clientes'), 'disabled' => true, 'variant' => 'outline']) ?>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 rounded-xl bg-canvas-dark p-5">
+                <?= component('button', ['label' => 'Entrar', 'icon' => 'log-in', 'class' => 'shadow-elev-3']) ?>
+                <?= component('button', ['label' => 'Ver demonstração', 'variant' => 'inverted']) ?>
+                <?= component('button', ['label' => 'Área do cliente', 'variant' => 'ghost-on-dark']) ?>
+                <span class="text-caption text-on-dark-muted">inverted e ghost-on-dark só sobre fundo escuro (telas de entrada)</span>
             </div>
         </div>
 
@@ -86,6 +101,8 @@ $statusBadge = [
             <?= component('input', ['name' => 'email', 'type' => 'email', 'label' => 'E-mail', 'help' => 'Usado para enviar a OS ao cliente.']) ?>
             <?= component('input', ['name' => 'documento', 'label' => 'CPF/CNPJ', 'value' => '111.111.111-11', 'error' => 'O campo CPF/CNPJ não é um CPF ou CNPJ válido.']) ?>
             <?= component('input', ['name' => 'codigo', 'label' => 'Código', 'value' => 'CLI-0001', 'readonly' => true]) ?>
+            <?= component('input', ['name' => 'total', 'label' => 'Valor total', 'value' => 'R$ 480,00', 'disabled' => true, 'help' => 'Calculado pelos produtos e serviços.']) ?>
+            <?= component('input', ['name' => 'busca', 'type' => 'search', 'label' => 'Buscar', 'placeholder' => 'Nº da OS, cliente ou equipamento']) ?>
             <?= component('select', [
                 'name' => 'tipo',
                 'label' => 'Tipo de cliente',
@@ -104,9 +121,21 @@ $statusBadge = [
             <div class="md:col-span-2">
                 <?= component('textarea', ['name' => 'observacoes', 'label' => 'Observações', 'value' => 'Texto com <b>tags</b> aparece escapado.', 'help' => 'Até 500 caracteres.']) ?>
             </div>
+            <div class="flex flex-wrap items-start gap-x-8 gap-y-4 md:col-span-2">
+                <?= component('checkbox', ['name' => 'enviar_email', 'label' => 'Enviar e-mail ao cliente', 'checked' => true, 'help' => 'O cliente recebe o link da OS.']) ?>
+                <?= component('checkbox', ['name' => 'termos', 'label' => 'Aceito os termos', 'required' => true, 'error' => 'Marque para continuar.']) ?>
+                <?= component('checkbox', ['name' => 'bloqueado', 'label' => 'Desabilitado', 'disabled' => true]) ?>
+                <fieldset class="flex flex-col gap-2">
+                    <legend class="mb-2 text-label-md">Prioridade</legend>
+                    <?= component('radio', ['name' => 'prioridade', 'value' => 'normal', 'label' => 'Normal', 'checked' => true]) ?>
+                    <?= component('radio', ['name' => 'prioridade', 'value' => 'urgente', 'label' => 'Urgente']) ?>
+                </fieldset>
+                <?= component('switch', ['name' => 'aprovado', 'label' => 'Orçamento aprovado', 'checked' => true]) ?>
+                <?= component('switch', ['name' => 'garantia', 'label' => 'Em garantia', 'help' => 'Desligado por padrão.']) ?>
+            </div>
             <div class="flex gap-2 md:col-span-2">
                 <?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'save', 'attrs' => ['data-modal-abrir' => 'modal-salvo']]) ?>
-                <?= component('button', ['label' => 'Cancelar', 'variant' => 'secondary']) ?>
+                <?= component('button', ['label' => 'Cancelar', 'variant' => 'outline']) ?>
             </div>
         </form>
 
@@ -116,7 +145,7 @@ $statusBadge = [
                 'id' => 'card-resumo',
                 'title' => 'Resumo do cliente',
                 'subtitle' => 'Atualizado hoje',
-                'actions' => component('button', ['label' => 'Editar', 'size' => 'sm', 'variant' => 'secondary', 'icon' => 'pencil']),
+                'actions' => component('button', ['label' => 'Editar', 'size' => 'sm', 'variant' => 'outline', 'icon' => 'pencil']),
                 'body' => 'O corpo aceita texto (escapado) ou a saída de outros componentes.',
                 'footer' => [
                     component('button', ['label' => 'Cancelar', 'variant' => 'ghost', 'size' => 'sm']),
@@ -132,15 +161,39 @@ $statusBadge = [
             ]) ?>
         </div>
 
-        <?= componenteConteudo($secao('Tabela', 'Células escapadas; render devolve texto ou componentes. O segundo cliente tem um <script> no nome.')) ?>
-        <?= component('table', [
+        <?= componenteConteudo($secao('Cartões de resumo (kpi-card)')) ?>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <?= component('kpi-card', ['label' => 'Abertas', 'value' => 18, 'icon' => 'wrench', 'caption' => html_purificado('<span class="font-semibold text-success-ink">+3</span> hoje')]) ?>
+            <?= component('kpi-card', ['label' => 'Em andamento', 'value' => 7, 'icon' => 'file-text', 'caption' => 'tempo médio 2,4 dias']) ?>
+            <?= component('kpi-card', ['label' => 'Aguardando peça', 'value' => 4, 'icon' => 'archive', 'caption' => html_purificado('<span class="font-semibold text-warning-ink">2 há mais de 5 dias</span>')]) ?>
+            <?= component('kpi-card', ['label' => 'Finalizadas no mês', 'value' => 52, 'icon' => 'circle-check', 'caption' => 'R$ 18.430,00 faturados']) ?>
+        </div>
+
+        <?= componenteConteudo($secao('Abas (tabs)', 'Aba ativa com texto ink 600 e sublinhado laranja: o laranja fino nunca marca o estado sozinho.')) ?>
+        <?= component('tabs', ['label' => 'Seções da OS', 'items' => [
+            ['label' => 'Detalhes', 'url' => site_url('componentes'), 'active' => true],
+            ['label' => 'Produtos', 'url' => site_url('componentes'), 'count' => 2],
+            ['label' => 'Serviços', 'url' => site_url('componentes'), 'count' => 1],
+            ['label' => 'Anexos', 'url' => site_url('componentes'), 'icon' => 'folder-open'],
+        ]]) ?>
+
+        <?= componenteConteudo($secao('Status (pill-status)', 'Sempre com a palavra; texto -ink sobre -soft, conferido nos dois modos. O laranja nunca indica status.')) ?>
+        <div class="flex flex-wrap items-center gap-2">
+            <?php foreach ($statusOs as $status) { ?>
+                <?= component('pill-status', $status) ?>
+            <?php } ?>
+            <?= component('pill-status', ['label' => 'Sem ponto', 'variant' => 'info', 'dot' => false]) ?>
+        </div>
+
+        <?= componenteConteudo($secao('Tabela (data-table)', 'Células escapadas; render devolve texto ou componentes. O segundo cliente tem um <script> no nome. Abaixo de 640px cada linha vira um bloco.')) ?>
+        <?= component('data-table', [
             'caption' => 'Clientes de exemplo',
             'striped' => true,
             'columns' => [
                 ['key' => 'id', 'label' => '#'],
                 ['key' => 'nome', 'label' => 'Nome'],
                 ['key' => 'documento', 'label' => 'Documento'],
-                ['label' => 'Status', 'render' => static fn ($linha) => component('badge', $statusBadge[$linha['status']])],
+                ['label' => 'Status', 'nowrap' => true, 'render' => static fn ($linha) => component('pill-status', $statusCliente[$linha['status']])],
                 ['key' => 'saldo', 'label' => 'Saldo', 'align' => 'right'],
                 ['label' => 'Ações', 'align' => 'right', 'render' => static fn ($linha) => [
                     component('button', ['label' => 'Editar ' . $linha['nome'], 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('clientes/editar/' . $linha['id'])]),
@@ -150,7 +203,7 @@ $statusBadge = [
             'rows' => $clientes,
         ]) ?>
         <div class="mt-4">
-            <?= component('table', [
+            <?= component('data-table', [
                 'columns' => ['nome' => 'Nome', 'documento' => 'Documento'],
                 'rows' => [],
                 'empty' => 'Nenhum cliente encontrado para "silva".',
@@ -167,18 +220,18 @@ $statusBadge = [
         <?= componenteConteudo($secao('Modal', 'Abre com data-modal-abrir. Foco preso, Esc fecha, clique no fundo fecha e o foco volta ao botão.')) ?>
         <div class="flex flex-wrap gap-2">
             <?= component('button', ['label' => 'Abrir modal de exclusão', 'variant' => 'danger', 'attrs' => ['data-modal-abrir' => 'modal-excluir']]) ?>
-            <?= component('button', ['label' => 'Abrir modal com formulário', 'variant' => 'secondary', 'attrs' => ['data-modal-abrir' => 'modal-form']]) ?>
+            <?= component('button', ['label' => 'Abrir modal com formulário', 'variant' => 'outline', 'attrs' => ['data-modal-abrir' => 'modal-form']]) ?>
         </div>
-        <?= component('modal', [
+        <?= component('modal-confirm', [
             'id' => 'modal-excluir',
             'title' => 'Excluir cliente?',
-            'size' => 'sm',
-            'body' => 'Esta ação não pode ser desfeita. As OS do cliente continuam no sistema.',
-            'footer' => [
-                component('button', ['label' => 'Cancelar', 'variant' => 'secondary', 'attrs' => ['data-modal-fechar' => true]]),
-                component('button', ['label' => 'Excluir', 'variant' => 'danger', 'attrs' => ['data-modal-fechar' => true]]),
-            ],
+            'message' => 'Esta ação não pode ser desfeita. As OS do cliente continuam no sistema.',
+            // Em uso real, form aponta para o formulário POST (com CSRF) que exclui.
+            // O catálogo não exclui nada: o formulário de exemplo não envia e o
+            // data-modal-fechar fecha o modal.
+            'confirm_attrs' => ['form' => 'form-excluir-exemplo', 'data-modal-fechar' => true],
         ]) ?>
+        <form id="form-excluir-exemplo" method="dialog" class="hidden"></form>
         <?= component('modal', [
             'id' => 'modal-form',
             'title' => 'Novo serviço',
@@ -208,16 +261,15 @@ $statusBadge = [
         </div>
         <div class="mt-3 flex flex-wrap gap-2" <?= js_module('componentes/catalogo') ?>>
             <?php foreach (['info', 'success', 'warning', 'danger'] as $variante) { ?>
-                <?= component('button', ['label' => 'Toast ' . $variante, 'variant' => 'secondary', 'size' => 'sm', 'attrs' => ['data-toast-variante' => $variante]]) ?>
+                <?= component('button', ['label' => 'Toast ' . $variante, 'variant' => 'outline', 'size' => 'sm', 'attrs' => ['data-toast-variante' => $variante]]) ?>
             <?php } ?>
         </div>
 
-        <?= componenteConteudo($secao('Badges')) ?>
+        <?= componenteConteudo($secao('Contadores (badge)', 'Para quantidades e categorias; estados usam pill-status.')) ?>
         <div class="flex flex-wrap items-center gap-2">
-            <?php foreach (['neutral', 'accent', 'info', 'success', 'warning', 'danger'] as $variante) { ?>
-                <?= component('badge', ['label' => ucfirst($variante), 'variant' => $variante]) ?>
-            <?php } ?>
-            <?= component('badge', ['label' => 'Pequeno', 'size' => 'sm', 'variant' => 'accent']) ?>
+            <?= component('badge', ['label' => '18']) ?>
+            <?= component('badge', ['label' => '3', 'size' => 'sm']) ?>
+            <?= component('badge', ['label' => 'Novo', 'variant' => 'accent']) ?>
         </div>
 
         <?= componenteConteudo($secao('Estado vazio')) ?>

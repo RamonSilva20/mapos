@@ -41,10 +41,12 @@ if ($total <= 1) {
 
 $link = static fn (int $pagina): string => componentePaginaUrl($url, $pagina, $porPagina);
 
-$item = 'inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-control px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
-$normal = $item . ' border border-border bg-surface text-text hover:bg-surface-subtle';
-$desligado = $item . ' border border-border bg-surface text-muted opacity-50';
-$ativo = $item . ' border border-transparent bg-primary font-bold text-on-primary';
+// DESIGN.md data-table: itens de 36px; a página atual em laranja com rótulo
+// ink (700), as demais neutras.
+$item = 'inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-md px-2.5 text-[0.9375rem] font-medium tabular-nums focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50';
+$normal = $item . ' text-text hover:bg-surface-subtle';
+$desligado = $item . ' text-muted opacity-50';
+$ativo = $item . ' bg-primary font-bold text-on-primary';
 
 $atributos = [
     'id' => $id,

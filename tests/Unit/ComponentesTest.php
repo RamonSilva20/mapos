@@ -35,7 +35,7 @@ final class ComponentesTest extends MaposTestCase
             'select' => ['select', ['name' => 'tipo', 'label' => 'Tipo', 'options' => ['a' => 'A']]],
             'textarea' => ['textarea', ['name' => 'obs', 'label' => 'Observações']],
             'card' => ['card', ['title' => 'Título', 'body' => 'Corpo']],
-            'table' => ['table', ['columns' => ['nome' => 'Nome'], 'rows' => [['nome' => 'Maria']]]],
+            'data-table' => ['data-table', ['columns' => ['nome' => 'Nome'], 'rows' => [['nome' => 'Maria']]]],
             'modal' => ['modal', ['id' => 'm1', 'title' => 'Título']],
             'alert' => ['alert', ['message' => 'Aviso']],
             'toast' => ['toast', ['message' => 'Feito']],
@@ -43,6 +43,13 @@ final class ComponentesTest extends MaposTestCase
             'pagination' => ['pagination', ['total_pages' => 3, 'url' => '/x/{page}']],
             'empty-state' => ['empty-state', ['title' => 'Nada aqui']],
             'breadcrumb' => ['breadcrumb', ['items' => [['label' => 'Início', 'url' => '/'], ['label' => 'Atual']]]],
+            'pill-status' => ['pill-status', ['label' => 'Aberta', 'variant' => 'info']],
+            'kpi-card' => ['kpi-card', ['label' => 'Abertas', 'value' => 18]],
+            'tabs' => ['tabs', ['items' => [['label' => 'Detalhes', 'url' => '/os/1', 'active' => true]]]],
+            'checkbox' => ['checkbox', ['name' => 'aceite', 'label' => 'Aceito']],
+            'radio' => ['radio', ['name' => 'prioridade', 'value' => 'normal', 'label' => 'Normal']],
+            'switch' => ['switch', ['name' => 'aprovado', 'label' => 'Aprovado']],
+            'modal-confirm' => ['modal-confirm', ['id' => 'excluir', 'title' => 'Excluir?', 'message' => 'Não dá para desfazer.']],
         ];
     }
 
@@ -66,7 +73,7 @@ final class ComponentesTest extends MaposTestCase
         sort($especificados);
 
         $this->assertSame($especificados, $partials);
-        $this->assertCount(13, $especificados);
+        $this->assertCount(20, $especificados);
     }
 
     // ------------------------------------------------------------ validação
@@ -237,9 +244,9 @@ final class ComponentesTest extends MaposTestCase
             'card título' => ['card', ['title' => $m]],
             'card corpo texto' => ['card', ['body' => $m]],
             'card rodapé' => ['card', ['footer' => $m]],
-            'table célula' => ['table', ['columns' => ['n' => 'Nome'], 'rows' => [['n' => $m]]]],
-            'table cabeçalho' => ['table', ['columns' => ['n' => $m], 'rows' => [['n' => 'x']]]],
-            'table vazia' => ['table', ['columns' => ['n' => 'Nome'], 'empty' => $m]],
+            'data-table célula' => ['data-table', ['columns' => ['n' => 'Nome'], 'rows' => [['n' => $m]]]],
+            'data-table cabeçalho' => ['data-table', ['columns' => ['n' => $m], 'rows' => [['n' => 'x']]]],
+            'data-table vazia' => ['data-table', ['columns' => ['n' => 'Nome'], 'empty' => $m]],
             'modal título' => ['modal', ['id' => 'm', 'title' => $m]],
             'modal corpo' => ['modal', ['id' => 'm', 'title' => 'T', 'body' => $m]],
             'alert mensagem' => ['alert', ['message' => $m]],
@@ -294,13 +301,17 @@ final class ComponentesTest extends MaposTestCase
 
         $this->assertMatchesRegularExpression('#^<button type="button"#', preg_replace('/ (id|class)="[^"]*"/', '', $html));
         $this->assertStringContainsString('bg-primary text-on-primary', $html);
-        $this->assertStringContainsString('focus-visible:outline-2', $html);
+        $this->assertStringContainsString('focus-visible:outline-3', $html);
+        $this->assertStringContainsString('text-button-cap uppercase', $html);
     }
 
     public function testBotaoVariantesETamanhos(): void
     {
         $this->assertStringContainsString('bg-danger', $this->html('button', ['label' => 'x', 'variant' => 'danger']));
-        $this->assertStringContainsString('border-border bg-surface', $this->html('button', ['label' => 'x', 'variant' => 'secondary']));
+        $this->assertStringContainsString('border-hairline-cool bg-transparent', $this->html('button', ['label' => 'x', 'variant' => 'outline']));
+        $this->assertStringContainsString('bg-on-dark text-ink', $this->html('button', ['label' => 'x', 'variant' => 'inverted']));
+        $this->assertStringContainsString('bg-on-dark-faint text-on-dark', $this->html('button', ['label' => 'x', 'variant' => 'ghost-on-dark']));
+        $this->assertStringContainsString('disabled:bg-disabled-bg disabled:text-disabled', $this->html('button', ['label' => 'x', 'disabled' => true]));
         $this->assertStringContainsString('h-12', $this->html('button', ['label' => 'x', 'size' => 'lg']));
         $this->assertStringContainsString('type="submit"', $this->html('button', ['label' => 'x', 'type' => 'submit']));
     }
@@ -450,7 +461,7 @@ final class ComponentesTest extends MaposTestCase
     public function testTabelaComObjetosERender(): void
     {
         $linha = (object) ['id' => 7, 'nome' => 'Maria'];
-        $html = $this->html('table', [
+        $html = $this->html('data-table', [
             'caption' => 'Clientes',
             'columns' => [
                 ['key' => 'nome', 'label' => 'Nome'],
@@ -470,7 +481,7 @@ final class ComponentesTest extends MaposTestCase
 
     public function testTabelaVaziaMostraEmptyState(): void
     {
-        $html = $this->html('table', ['columns' => ['a' => 'A', 'b' => 'B'], 'empty' => 'Nada encontrado']);
+        $html = $this->html('data-table', ['columns' => ['a' => 'A', 'b' => 'B'], 'empty' => 'Nada encontrado']);
 
         $this->assertStringContainsString('colspan="2"', $html);
         $this->assertStringContainsString('Nada encontrado', $html);
@@ -479,7 +490,7 @@ final class ComponentesTest extends MaposTestCase
 
     public function testTabelaAceitaIterador(): void
     {
-        $html = $this->html('table', ['columns' => ['a' => 'A'], 'rows' => new ArrayIterator([['a' => 'um'], ['a' => 'dois']])]);
+        $html = $this->html('data-table', ['columns' => ['a' => 'A'], 'rows' => new ArrayIterator([['a' => 'um'], ['a' => 'dois']])]);
 
         $this->assertStringContainsString('>dois</td>', $html);
     }
@@ -487,7 +498,7 @@ final class ComponentesTest extends MaposTestCase
     public function testTabelaColunaSemKeyNemRenderEhErro(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        component('table', ['columns' => [['label' => 'X']]]);
+        component('data-table', ['columns' => [['label' => 'X']]]);
     }
 
     // ------------------------------------------------------------ modal, alert, toast
@@ -540,8 +551,164 @@ final class ComponentesTest extends MaposTestCase
 
     public function testBadgeVariantes(): void
     {
-        $this->assertStringContainsString('bg-success-soft text-success-ink', $this->html('badge', ['label' => 'Ok', 'variant' => 'success']));
+        $this->assertStringContainsString('bg-neutral-soft text-neutral-ink', $this->html('badge', ['label' => '18']));
+        $this->assertStringContainsString('bg-primary-tint text-text', $this->html('badge', ['label' => 'Novo', 'variant' => 'accent']));
         $this->assertStringContainsString('text-[0.6875rem]', $this->html('badge', ['label' => 'Ok', 'size' => 'sm']));
+    }
+
+    /**
+     * Status não é badge: as cores de estado ficam só no pill-status.
+     */
+    public function testBadgeNaoAceitaCorDeStatus(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Valor inválido para badge.variant: success');
+
+        component('badge', ['label' => 'Ok', 'variant' => 'success']);
+    }
+
+    public function testBotaoSecondaryVirouOutline(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Valor inválido para button.variant: secondary');
+
+        component('button', ['label' => 'x', 'variant' => 'secondary']);
+    }
+
+    public function testPillStatusComPontoEPalavra(): void
+    {
+        $html = $this->html('pill-status', ['label' => 'Em andamento', 'variant' => 'progress']);
+
+        $this->assertStringContainsString('bg-progress-soft text-progress-ink', $html);
+        $this->assertStringContainsString('rounded-full bg-current" aria-hidden="true"', $html);
+        $this->assertStringContainsString('Em andamento</span>', $html);
+        $this->assertStringNotContainsString('bg-current', $this->html('pill-status', ['label' => 'x', 'dot' => false]));
+    }
+
+    public function testCampoComErroTemIconeEDescricao(): void
+    {
+        $html = $this->html('input', ['name' => 'imei', 'label' => 'IMEI', 'error' => 'IMEI já cadastrado.', 'help' => 'Só números.']);
+
+        $this->assertStringContainsString('aria-invalid="true"', $html);
+        $this->assertStringContainsString('aria-describedby="campo-imei-ajuda campo-imei-erro"', $html);
+        $this->assertStringContainsString('sprite.svg#circle-alert"', $html);
+        $this->assertStringContainsString('border-danger', $html);
+        $this->assertStringContainsString('focus:shadow-field-focus', $this->html('input', ['name' => 'a', 'label' => 'A']));
+        $this->assertStringContainsString('border-input', $this->html('textarea', ['name' => 'a', 'label' => 'A']));
+    }
+
+    public function testSelectTemChevronMenosNoMultiplo(): void
+    {
+        $this->assertStringContainsString('sprite.svg#chevron-down"', $this->html('select', ['name' => 't', 'label' => 'T', 'options' => ['a' => 'A']]));
+        $this->assertStringNotContainsString('chevron-down', $this->html('select', ['name' => 't', 'label' => 'T', 'options' => ['a' => 'A'], 'multiple' => true]));
+    }
+
+    public function testCheckboxRadioESwitch(): void
+    {
+        $caixa = $this->html('checkbox', ['name' => 'termos', 'label' => 'Aceito', 'checked' => true, 'error' => 'Obrigatório.']);
+        $this->assertStringContainsString('type="checkbox"', $caixa);
+        $this->assertStringContainsString(' checked', $caixa);
+        $this->assertStringContainsString('aria-invalid="true" aria-describedby="campo-termos-erro"', $caixa);
+        $this->assertStringContainsString('sprite.svg#check"', $caixa);
+        $this->assertStringContainsString('text-on-primary peer-checked:visible', $caixa);
+
+        $radio = $this->html('radio', ['name' => 'prioridade', 'value' => 'urgente', 'label' => 'Urgente']);
+        $this->assertStringContainsString('type="radio" id="campo-prioridade-urgente" name="prioridade" value="urgente"', $radio);
+
+        $chave = $this->html('switch', ['name' => 'aprovado', 'label' => 'Aprovado', 'checked' => true]);
+        $this->assertStringContainsString('type="checkbox" role="switch"', $chave);
+        $this->assertStringContainsString('peer-checked:translate-x-4', $chave);
+    }
+
+    public function testKpiCardAceitaZeroELegendaSegura(): void
+    {
+        $html = $this->html('kpi-card', ['label' => 'Canceladas', 'value' => 0, 'icon' => 'x', 'caption' => html_purificado('<span class="text-warning-ink">atenção</span><script>x</script>')]);
+
+        $this->assertStringContainsString('>0</p>', $html);
+        $this->assertStringContainsString('sprite.svg#x"', $html);
+        $this->assertStringContainsString('text-warning-ink', $html);
+        $this->assertStringNotContainsString('<script>', $html);
+    }
+
+    public function testTabsMarcaAAtivaComSegundaPista(): void
+    {
+        $html = $this->html('tabs', ['items' => [
+            ['label' => 'Detalhes', 'url' => '/os/1', 'active' => true],
+            ['label' => 'Produtos', 'url' => '/os/1/produtos', 'count' => 2],
+        ]]);
+
+        $this->assertStringContainsString('aria-current="page"', $html);
+        $this->assertStringContainsString('font-semibold text-text after:absolute', $html);
+        $this->assertSame(1, substr_count($html, 'aria-current'));
+        $this->assertStringContainsString('>2</span>', $html);
+    }
+
+    public function testTabsSemUrlFalha(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cada aba precisa de label e url.');
+
+        component('tabs', ['items' => [['label' => 'Sem link']]]);
+    }
+
+    public function testModalConfirmUsaBotaoDePerigo(): void
+    {
+        $html = $this->html('modal-confirm', [
+            'id' => 'excluir-os',
+            'title' => 'Excluir OS #1042?',
+            'message' => 'Anexos também serão removidos.',
+            'confirm_attrs' => ['form' => 'form-excluir'],
+        ]);
+
+        $this->assertStringContainsString('role="alertdialog"', $html);
+        $this->assertStringContainsString('aria-describedby="excluir-os-mensagem"', $html);
+        $this->assertStringContainsString('data-module="componentes/modal"', $html);
+        $this->assertMatchesRegularExpression('#<button class="[^"]*bg-danger[^"]*" type="submit" form="form-excluir">#', $html);
+        $this->assertStringContainsString('data-modal-fechar autofocus', $html);
+        $this->assertStringNotContainsString('bg-primary', $html);
+    }
+
+    /**
+     * Várias ações numa célula ficam juntas (no celular a célula é flex com o
+     * título à esquerda; sem o agrupamento os botões se espalham).
+     */
+    public function testDataTableAgrupaVariosItensDaCelula(): void
+    {
+        $html = $this->html('data-table', [
+            'columns' => [['label' => 'Ações', 'render' => static fn () => [
+                component('button', ['label' => 'Editar', 'icon' => 'pencil', 'icon_only' => true]),
+                component('button', ['label' => 'Excluir', 'icon' => 'trash-2', 'icon_only' => true]),
+            ]]],
+            'rows' => [['id' => 1]],
+        ]);
+
+        $this->assertMatchesRegularExpression('#<span class="inline-flex flex-wrap items-center gap-1">\s*<button.*Editar.*<button.*Excluir.*</span>\s*</td>#s', $html);
+    }
+
+    public function testSelectMultiploMantemAparenciaNativa(): void
+    {
+        $multiplo = $this->html('select', ['name' => 't', 'label' => 'T', 'options' => ['a' => 'A'], 'multiple' => true]);
+
+        $this->assertStringNotContainsString('appearance-none', $multiplo);
+        $this->assertStringContainsString('[&amp;_option:checked]:bg-primary-tint', $multiplo);
+        $this->assertStringContainsString('appearance-none', $this->html('select', ['name' => 't', 'label' => 'T', 'options' => ['a' => 'A']]));
+    }
+
+    public function testDataTableEmCartaoNoCelularENumerosTabulares(): void
+    {
+        $html = $this->html('data-table', [
+            'columns' => [
+                ['key' => 'cliente', 'label' => 'Cliente'],
+                ['key' => 'status', 'label' => 'Status', 'nowrap' => true],
+                ['key' => 'valor', 'label' => 'Valor', 'align' => 'right'],
+            ],
+            'rows' => [['cliente' => 'Maria', 'status' => 'Aberta', 'valor' => 'R$ 480,00']],
+        ]);
+
+        $this->assertStringContainsString('data-label="Cliente"', $html);
+        $this->assertStringContainsString('max-sm:before:content-[attr(data-label)]', $html);
+        $this->assertStringContainsString('text-right tabular-nums', $html);
+        $this->assertMatchesRegularExpression('#data-label="Status" class="[^"]*whitespace-nowrap#', $html);
     }
 
     public function testEmptyStateComAcao(): void
