@@ -46,6 +46,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - Tailwind scans `application/views/**/*.php`: write full class names in PHP, never build them by string concatenation.
 - JS libraries are copied by `npm run build:vendor` (`scripts/build-vendor.mjs`, part of `npm run build`) into `assets/vendor/<lib>/`, which **is committed** and fully generated: never edit it by hand. To add or update a library, pin it with `npm install --save-exact` and list its files in `scripts/build-vendor.mjs`. Do not add new jQuery-dependent libraries.
 - Never commit `node_modules/`.
+- New views use only the semantic color tokens from `assets/src/app.css` (`bg-surface`, `text-muted`, `border-border`, `bg-accent-600` + `text-accent-contrast`, `text-danger`, ...), never fixed palette colors, so they work in light/dark mode and with every accent color. Theme settings are `app_tema_modo` and `app_tema_destaque`; the layout prints them with `temaAtributosHtml()` (`tema_helper.php`).
 
 ## Security & Integrity Mandates
 

@@ -17,3 +17,161 @@
 @import "tailwindcss" source(none);
 
 @source "../../application/views/**/*.php";
+
+/*
+ * Modo escuro por classe: <html class="dark">. O servidor aplica a classe no
+ * modo escuro, e o assets/js/tema.js no modo "sistema". Ver tema_helper.php.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens
+ * -------------
+ * Duas camadas:
+ *
+ * 1. Variáveis cruas (--mapos-*), definidas em :root e redefinidas em .dark e
+ *    em [data-accent]. Só elas mudam entre modos e cores de destaque.
+ * 2. Tokens do Tailwind (@theme), que apontam para as variáveis cruas. Com
+ *    `inline`, a utility gerada usa var(--mapos-*) direto, então bg-surface
+ *    acompanha o modo sem precisar de dark:bg-...
+ *
+ * Use sempre os nomes semânticos (bg-surface, text-muted, border-border,
+ * bg-accent-600) em vez de cores fixas (bg-white, text-gray-500), para que a
+ * tela funcione nos dois modos e com qualquer cor de destaque.
+ *
+ * `static` faz o Tailwind emitir as variáveis mesmo que nenhuma view use a
+ * utility ainda: o CSS escrito à mão (componentes, layout) pode usar
+ * var(--color-surface) e afins.
+ */
+@theme inline static {
+  /* Superfícies e texto */
+  --color-bg: var(--mapos-bg);
+  --color-surface: var(--mapos-surface);
+  --color-surface-2: var(--mapos-surface-2);
+  --color-text: var(--mapos-text);
+  --color-muted: var(--mapos-muted);
+  --color-border: var(--mapos-border);
+  --color-ring: var(--mapos-accent);
+
+  /*
+   * Destaque. A escala sai de uma só cor por color-mix, então cada tema de
+   * destaque só define --mapos-accent. Botão primário: bg-accent-600 com
+   * text-accent-contrast. O 500 de algumas cores (laranja, verde) não tem
+   * contraste AA com branco; o 600 tem (laranja 4,6:1, verde 5,9:1, violeta
+   * 6,1:1, grafite 12,6:1). O contraste é branco em tudo, menos no grafite do
+   * modo escuro, que clareia e passa a usar texto escuro.
+   */
+  --color-accent: var(--mapos-accent);
+  --color-accent-contrast: var(--mapos-accent-contrast);
+  --color-accent-50: color-mix(in oklab, var(--mapos-accent) 8%, var(--mapos-surface));
+  --color-accent-100: color-mix(in oklab, var(--mapos-accent) 16%, var(--mapos-surface));
+  --color-accent-200: color-mix(in oklab, var(--mapos-accent) 32%, var(--mapos-surface));
+  --color-accent-300: color-mix(in oklab, var(--mapos-accent) 55%, var(--mapos-surface));
+  --color-accent-400: color-mix(in oklab, var(--mapos-accent) 78%, var(--mapos-surface));
+  --color-accent-500: var(--mapos-accent);
+  --color-accent-600: color-mix(in oklab, var(--mapos-accent) 85%, black);
+  --color-accent-700: color-mix(in oklab, var(--mapos-accent) 70%, black);
+  --color-accent-800: color-mix(in oklab, var(--mapos-accent) 55%, black);
+  --color-accent-900: color-mix(in oklab, var(--mapos-accent) 40%, black);
+
+  /* Estados */
+  --color-success: var(--mapos-success);
+  --color-success-soft: color-mix(in oklab, var(--mapos-success) 14%, var(--mapos-surface));
+  --color-warning: var(--mapos-warning);
+  --color-warning-soft: color-mix(in oklab, var(--mapos-warning) 14%, var(--mapos-surface));
+  --color-danger: var(--mapos-danger);
+  --color-danger-soft: color-mix(in oklab, var(--mapos-danger) 14%, var(--mapos-surface));
+  --color-info: var(--mapos-info);
+  --color-info-soft: color-mix(in oklab, var(--mapos-info) 14%, var(--mapos-surface));
+
+  /* Forma */
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-pill: 9999px;
+
+  --shadow-card: var(--mapos-shadow-card);
+  --shadow-overlay: var(--mapos-shadow-overlay);
+
+  /* Medidas do layout (#2835) */
+  --spacing-sidebar: 16rem;
+  --spacing-sidebar-recolhida: 4.5rem;
+  --spacing-topbar: 4rem;
+
+  --font-sans: "Roboto", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  /* Modo claro (padrão). Cores neutras herdadas do tema "Claro" da v4. */
+  :root {
+    color-scheme: light;
+
+    --mapos-bg: #f3f4f6;
+    --mapos-surface: #ffffff;
+    --mapos-surface-2: #f9fafb;
+    --mapos-text: #1f2937;
+    --mapos-muted: #6b7280;
+    --mapos-border: #e5e7eb;
+
+    --mapos-success: #15803d;
+    --mapos-warning: #b45309;
+    --mapos-danger: #dc2626;
+    --mapos-info: #0369a1;
+
+    --mapos-shadow-card: 0 1px 2px rgb(0 0 0 / 5%), 0 1px 3px rgb(0 0 0 / 8%);
+    --mapos-shadow-overlay: 0 10px 30px rgb(0 0 0 / 18%);
+
+    /* Destaque padrão: laranja */
+    --mapos-accent: #de7902;
+    --mapos-accent-contrast: #ffffff;
+  }
+
+  /* Modo escuro. Fundos herdados dos temas escuros da v4 (Pure dark). */
+  .dark {
+    color-scheme: dark;
+
+    --mapos-bg: #14141a;
+    --mapos-surface: #1c1d26;
+    --mapos-surface-2: #272835;
+    --mapos-text: #e5e7eb;
+    --mapos-muted: #9aa6b3;
+    --mapos-border: #2f3140;
+
+    --mapos-success: #22c55e;
+    --mapos-warning: #f59e0b;
+    --mapos-danger: #f87171;
+    --mapos-info: #38bdf8;
+
+    --mapos-shadow-card: 0 1px 2px rgb(0 0 0 / 40%);
+    --mapos-shadow-overlay: 0 10px 30px rgb(0 0 0 / 55%);
+  }
+
+  /*
+   * Cores de destaque. Os valores vêm dos temas da v4, para que a migration
+   * de app_theme (ver tema_helper.php) preserve a identidade visual:
+   *
+   *   laranja  #de7902  Dark orange (e o padrão)
+   *   azul     #1086dd  Pure dark
+   *   violeta  #6b29f8  Dark violet
+   *   verde    #3c8d63  White green (o #6dad8d original escurecido para
+   *                     ter contraste com texto branco)
+   *   grafite  #3c405b  White black
+   *
+   * No modo escuro os destaques muito escuros clareiam para continuar
+   * visíveis sobre o fundo.
+   */
+  [data-accent="laranja"] { --mapos-accent: #de7902; }
+  [data-accent="azul"] { --mapos-accent: #1086dd; }
+  [data-accent="violeta"] { --mapos-accent: #6b29f8; }
+  [data-accent="verde"] { --mapos-accent: #3c8d63; }
+  [data-accent="grafite"] { --mapos-accent: #3c405b; }
+
+  .dark[data-accent="violeta"],
+  .dark [data-accent="violeta"] { --mapos-accent: #8b5cf6; }
+  .dark[data-accent="grafite"],
+  .dark [data-accent="grafite"] { --mapos-accent: #94a3b8; --mapos-accent-contrast: #14141a; }
+
+  html {
+    background-color: var(--mapos-bg);
+    color: var(--mapos-text);
+  }
+}

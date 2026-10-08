@@ -193,6 +193,12 @@ O Tailwind lê as classes de `application/views/**/*.php`. Escreva o nome da cla
 
 O CI refaz o build e falha se o `assets/dist` commitado não for o resultado dele.
 
+### Cores e modo escuro
+
+As views novas usam os **tokens semânticos** definidos em `assets/src/app.css`, nunca uma cor fixa: `bg-bg`, `bg-surface`, `bg-surface-2`, `text-text`, `text-muted`, `border-border`, `bg-accent-600`/`text-accent-contrast` (botão primário), `text-success`, `bg-danger-soft` e afins. Assim a tela funciona nos modos claro e escuro e com qualquer cor de destaque, sem precisar de `dark:`.
+
+O tema tem duas configurações, `app_tema_modo` (`claro`, `escuro` ou `sistema`) e `app_tema_destaque` (`laranja`, `azul`, `violeta`, `verde` ou `grafite`). O layout aplica as duas no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". A antiga `app_theme` continua existindo só para as telas legadas.
+
 ### Bibliotecas de JavaScript
 
 As bibliotecas de JS da v5 (Alpine.js, Tom Select, flatpickr, IMask, SweetAlert2, Chart.js e FullCalendar) são instaladas pelo npm, com versão fixa no `package.json`. O `npm run build` também roda o `build:vendor` (`scripts/build-vendor.mjs`), que copia os arquivos de navegador e a licença de cada uma para `assets/vendor/<lib>/`, pasta commitada pelo mesmo motivo do CSS. As versões copiadas ficam em `assets/vendor/versions.json`.
