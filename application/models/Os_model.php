@@ -86,6 +86,111 @@ class Os_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Listagem de OS da v5 (#2842), no padrão das listagens (#2852): os mesmos
+     * filtros em listar() e contar(), para a paginação contar só o que a busca
+     * encontra.
+     *
+     * Cada linha traz os dados da OS, o cliente, o responsável e o total
+     * (produtos + serviços, ou o valor com desconto quando houver), calculado
+     * no SQL para não consultar a OS de novo por linha.
+     *
+     * @param  array<string, string>  $filtros          pesquisa, status, de, ate (já validados)
+     * @param  list<string>|null      $statusVisiveis   Restringe os status quando não há pesquisa nem status
+     */
+    public function listar(array $filtros, int $limite, int $offset, ?array $statusVisiveis = null): array
+    {
+        // Mesma regra de valorTotalOS(): serviço sem preço usa o do cadastro, e
+        // sem quantidade conta 1.
+        $totalProdutos = '(SELECT COALESCE(SUM(produtos_os.subTotal), 0) FROM produtos_os WHERE produtos_os.os_id = os.idOs)';
+        $totalServicos = '(SELECT COALESCE(SUM(COALESCE(NULLIF(servicos_os.preco, 0), servicos.preco, 0) * COALESCE(NULLIF(servicos_os.quantidade, 0), 1)), 0)'
+            . ' FROM servicos_os LEFT JOIN servicos ON servicos.idServicos = servicos_os.servicos_id WHERE servicos_os.os_id = os.idOs)';
+
+        $this->db->select('os.idOs, os.dataInicial, os.dataFinal, os.descricaoProduto, os.status, os.faturado, os.desconto, os.valor_desconto, os.clientes_id, os.usuarios_id');
+        $this->db->select('clientes.nomeCliente, usuarios.nome AS responsavel');
+        $this->db->select($totalProdutos . ' AS totalProdutos', false);
+        $this->db->select($totalServicos . ' AS totalServicos', false);
+
+        $this->aplicarFiltros($filtros, $statusVisiveis);
+
+        $linhas = $this->db
+            ->order_by('os.idOs', 'desc')
+            ->limit($limite, max(0, $offset))
+            ->get()
+            ->result();
+
+        foreach ($linhas as $linha) {
+            $bruto = (float) $linha->totalProdutos + (float) $linha->totalServicos;
+            $linha->total = (float) $linha->valor_desconto > 0 ? (float) $linha->valor_desconto : $bruto;
+        }
+
+        return $linhas;
+    }
+
+    /** Total da listagem com os mesmos filtros de listar(). */
+    public function contar(array $filtros, ?array $statusVisiveis = null): int
+    {
+        $this->aplicarFiltros($filtros, $statusVisiveis);
+
+        return (int) $this->db->count_all_results();
+    }
+
+    /**
+     * pesquisa procura no nome e documento do cliente, na descrição do
+     * equipamento e, se for número, no Nº da OS (o OR fica entre parênteses
+     * para não anular os outros filtros); status é um só; de e ate limitam a
+     * data inicial e a final.
+     *
+     * Sem pesquisa e sem status, a listagem mostra só os status marcados em
+     * Configurações (os_status_list), como na v4, mas agora no SQL: antes as
+     * linhas eram escondidas na view e a paginação contava as escondidas.
+     */
+    private function aplicarFiltros(array $filtros, ?array $statusVisiveis): void
+    {
+        $this->db->from('os');
+        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id', 'left');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id', 'left');
+
+        $pesquisa = $filtros['pesquisa'] ?? '';
+        if ($pesquisa !== '') {
+            $this->db->group_start()
+                ->like('clientes.nomeCliente', $pesquisa)
+                ->or_like('clientes.documento', $pesquisa)
+                ->or_like('os.descricaoProduto', $pesquisa);
+            if (ctype_digit($pesquisa)) {
+                $this->db->or_where('os.idOs', (int) $pesquisa);
+            }
+            $this->db->group_end();
+        }
+
+        if (($filtros['status'] ?? '') !== '') {
+            $this->db->where('os.status', $filtros['status']);
+        } elseif ($pesquisa === '' && $statusVisiveis !== null) {
+            $this->db->where_in('os.status', $statusVisiveis);
+        }
+
+        if (($filtros['de'] ?? '') !== '') {
+            $this->db->where('os.dataInicial >=', $filtros['de']);
+        }
+        if (($filtros['ate'] ?? '') !== '') {
+            $this->db->where('os.dataFinal <=', $filtros['ate']);
+        }
+    }
+
+    /**
+     * Apaga o lançamento da fatura de uma OS excluída: pelo vínculo os.lancamento
+     * quando existir, e pelas descrições que o faturar grava (ver
+     * osDescricoesDaFatura()).
+     */
+    public function excluirFatura(int $idOs, ?int $idLancamento): void
+    {
+        if ($idLancamento) {
+            $this->db->where('idLancamentos', $idLancamento)->delete('lancamentos');
+        }
+
+        $this->db->where_in('descricao', osDescricoesDaFatura($idOs))->delete('lancamentos');
+    }
+
     public function getById($id)
     {
         $this->db->select('os.*, clientes.*, clientes.celular as celular_cliente, clientes.telefone as telefone_cliente, clientes.contato as contato_cliente, garantias.refGarantia, garantias.textoGarantia, usuarios.telefone as telefone_usuario, usuarios.email as email_usuario, usuarios.nome');
@@ -175,95 +280,136 @@ class Os_model extends CI_Model
         return $this->db->count_all($table);
     }
 
+    // Autocompletes: devolvem a lista (vazia quando nada casa) e o controller
+    // responde em JSON. Cada item mantém label e id, que as telas legadas
+    // (jQuery UI) usam, e traz valor (o texto que fica no campo ao escolher) e
+    // detalhe (a linha secundária da lista) para o combobox da v5
+    // (assets/js/lib/autocomplete.js).
+
     public function autoCompleteProduto($q)
     {
-        $this->db->select('*');
-        $this->db->limit(25);
-        $this->db->like('codDeBarra', $q);
-        $this->db->or_like('descricao', $q);
-        $query = $this->db->get('produtos');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
-            }
-            echo json_encode($row_set);
-        }
+        return $this->produtosParaAutocomplete($q, false);
     }
 
     public function autoCompleteProdutoSaida($q)
     {
-        $this->db->select('*');
+        return $this->produtosParaAutocomplete($q, true);
+    }
+
+    private function produtosParaAutocomplete($q, bool $saida): array
+    {
+        $this->db->select('idProdutos, descricao, precoVenda, estoque');
         $this->db->limit(25);
-        $this->db->like('codDeBarra', $q);
-        $this->db->or_like('descricao', $q);
-        $this->db->where('saida', 1);
-        $query = $this->db->get('produtos');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
-            }
-            echo json_encode($row_set);
+        // O OR entre parênteses, para não anular o filtro de saída.
+        $this->db->group_start()->like('codDeBarra', $q)->or_like('descricao', $q)->group_end();
+        if ($saida) {
+            $this->db->where('saida', 1);
         }
+
+        $itens = [];
+        foreach ($this->db->get('produtos')->result_array() as $row) {
+            $itens[] = [
+                'label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'],
+                'valor' => $row['descricao'],
+                'detalhe' => 'Preço: R$ ' . $row['precoVenda'] . ' · Estoque: ' . $row['estoque'],
+                'estoque' => $row['estoque'],
+                'id' => $row['idProdutos'],
+                'preco' => $row['precoVenda'],
+            ];
+        }
+
+        return $itens;
     }
 
     public function autoCompleteCliente($q)
     {
-        $this->db->select('*');
+        $this->db->select('idClientes, nomeCliente, telefone, celular, documento');
         $this->db->limit(25);
         $this->db->like('nomeCliente', $q);
         $this->db->or_like('telefone', $q);
         $this->db->or_like('celular', $q);
         $this->db->or_like('documento', $q);
-        $query = $this->db->get('clientes');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'] . ' | Documento: ' . $row['documento'], 'id' => $row['idClientes']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('clientes')->result_array() as $row) {
+            $detalhe = array_filter([$row['documento'], $row['celular'] ?: $row['telefone']], static fn ($v) => (string) $v !== '');
+            $itens[] = [
+                'label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'] . ' | Celular: ' . $row['celular'] . ' | Documento: ' . $row['documento'],
+                'valor' => $row['nomeCliente'],
+                'detalhe' => implode(' · ', $detalhe),
+                'id' => $row['idClientes'],
+            ];
         }
+
+        return $itens;
     }
 
     public function autoCompleteUsuario($q)
     {
-        $this->db->select('*');
+        $this->db->select('idUsuarios, nome, telefone');
         $this->db->limit(25);
         $this->db->like('nome', $q);
         $this->db->where('situacao', 1);
-        $query = $this->db->get('usuarios');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('usuarios')->result_array() as $row) {
+            $itens[] = [
+                'label' => $row['nome'] . ' | Telefone: ' . $row['telefone'],
+                'valor' => $row['nome'],
+                'detalhe' => (string) $row['telefone'],
+                'id' => $row['idUsuarios'],
+            ];
         }
+
+        return $itens;
     }
 
     public function autoCompleteTermoGarantia($q)
     {
-        $this->db->select('*');
+        $this->db->select('idGarantias, refGarantia');
         $this->db->limit(25);
         $this->db->like('LOWER(refGarantia)', $q);
-        $query = $this->db->get('garantias');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['refGarantia'], 'id' => $row['idGarantias']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('garantias')->result_array() as $row) {
+            $itens[] = ['label' => $row['refGarantia'], 'valor' => $row['refGarantia'], 'detalhe' => '', 'id' => $row['idGarantias']];
         }
+
+        return $itens;
     }
 
     public function autoCompleteServico($q)
     {
-        $this->db->select('*');
+        $this->db->select('idServicos, nome, preco');
         $this->db->limit(25);
         $this->db->like('nome', $q);
-        $query = $this->db->get('servicos');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'] . ' | Preço: R$ ' . $row['preco'], 'id' => $row['idServicos'], 'preco' => $row['preco']];
-            }
-            echo json_encode($row_set);
+
+        $itens = [];
+        foreach ($this->db->get('servicos')->result_array() as $row) {
+            $itens[] = [
+                'label' => $row['nome'] . ' | Preço: R$ ' . $row['preco'],
+                'valor' => $row['nome'],
+                'detalhe' => 'Preço: R$ ' . $row['preco'],
+                'id' => $row['idServicos'],
+                'preco' => $row['preco'],
+            ];
         }
+
+        return $itens;
+    }
+
+    /**
+     * Diz se existe o registro com o id, para conferir os ids escolhidos nos
+     * autocompletes antes de gravar a OS. Com $ativo, só usuários ativos.
+     */
+    public function existe(string $tabela, string $chave, int $id, bool $ativo = false): bool
+    {
+        $this->db->where($chave, $id);
+        if ($ativo) {
+            $this->db->where('situacao', 1);
+        }
+
+        return $this->db->count_all_results($tabela) > 0;
     }
 
     public function anexar($os, $anexo, $url, $thumb, $path)

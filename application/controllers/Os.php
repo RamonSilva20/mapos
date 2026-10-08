@@ -6,10 +6,18 @@ if (! defined('BASEPATH')) {
 
 class Os extends MY_Controller
 {
+    /** Filtros da listagem, na query string (listagemFiltros()). */
+    public const FILTROS = [
+        'pesquisa' => 'texto',
+        'status' => ['Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
+        'de' => 'texto',
+        'ate' => 'texto',
+    ];
+
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper('form');
+        $this->load->helper(['form', 'os']);
         $this->load->model('os_model');
         $this->data['menuOs'] = 'OS';
     }
@@ -19,6 +27,11 @@ class Os extends MY_Controller
         $this->gerenciar();
     }
 
+    /**
+     * Listagem de OS migrada para os componentes da v5 (#2842), no padrão das
+     * listagens (#2852): filtros na URL, paginação que os mantém e exclusão
+     * confirmada em modal-confirm.
+     */
     public function gerenciar()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
@@ -26,67 +39,57 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('pagination');
-        $this->load->model('mapos_model');
+        $filtros = $this->filtrosDaListagem();
+        $offset = (int) $this->uri->segment(3);
+        $statusVisiveis = osStatusVisiveis($this->data['configuration']['os_status_list'] ?? null);
+        $total = $this->os_model->contar($filtros, $statusVisiveis);
 
-        $where_array = [];
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['status_ocultos'] = ! isset($filtros['pesquisa']) && ! isset($filtros['status']) && $statusVisiveis !== null
+            && array_diff(array_keys(OS_STATUS_VARIANTES), $statusVisiveis) !== [];
+        $this->data['results'] = $this->os_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset, $statusVisiveis);
+        $this->data['paginacao'] = $this->paginacao(site_url('os/gerenciar'), $total, $offset, null, $filtros);
+        $this->data['pode'] = [
+            'adicionar' => $this->permite('aOs'),
+            'editar' => $this->permite('eOs'),
+            'excluir' => $this->permite('dOs'),
+        ];
+        $this->data['controle_editos'] = ($this->data['configuration']['control_editos'] ?? '0') == '1';
 
-        $pesquisa = $this->input->get('pesquisa');
-        $status = $this->input->get('status');
-        $inputDe = $this->input->get('data');
-        $inputAte = $this->input->get('data2');
-
-        if ($pesquisa) {
-            $where_array['pesquisa'] = $pesquisa;
-        }
-        if ($status) {
-            $where_array['status'] = $status;
-        }
-        if ($inputDe) {
-            $de = explode('/', $inputDe);
-            $de = $de[2] . '-' . $de[1] . '-' . $de[0];
-
-            $where_array['de'] = $de;
-        }
-        if ($inputAte) {
-            $ate = explode('/', $inputAte);
-            $ate = $ate[2] . '-' . $ate[1] . '-' . $ate[0];
-
-            $where_array['ate'] = $ate;
+        if ($this->data['pode']['adicionar']) {
+            $this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')];
         }
 
-        $this->data['configuration']['base_url'] = site_url('os/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->os_model->count('os');
-        if (count($where_array) > 0) {
-            // Estes valores são interpolados no href dos links de paginação.
-            $query = http_build_query([
-                'pesquisa' => $pesquisa,
-                'status' => $status,
-                'data' => $inputDe,
-                'data2' => $inputAte,
-            ]);
-
-            $this->data['configuration']['suffix'] = '?' . $query;
-            $this->data['configuration']['first_url'] = base_url('index.php/os/gerenciar') . '?' . $query;
-        }
-
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->os_model->getOs(
-            'os',
-            'os.*,
-            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos',
-            $where_array,
-            $this->data['configuration']['per_page'],
-            $this->uri->segment(3)
-        );
-
-        $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
-        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'os/os';
 
         return $this->layout();
+    }
+
+    /**
+     * Filtros válidos da listagem: pesquisa (texto), status (um dos status de
+     * OS) e as datas de/ate em AAAA-MM-DD (input type=date); data inválida é
+     * descartada.
+     *
+     * @return array<string, string>
+     */
+    private function filtrosDaListagem(): array
+    {
+        $filtros = listagemFiltros(self::FILTROS, $this->input->get());
+
+        foreach (['de', 'ate'] as $data) {
+            if (isset($filtros[$data])) {
+                $valida = dataIsoParaYmd($filtros[$data]);
+                if ($valida === null) {
+                    unset($filtros[$data]);
+                } else {
+                    $filtros[$data] = $valida;
+                }
+            }
+        }
+
+        return $filtros;
     }
 
     public function adicionar()
@@ -96,101 +99,13 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-
-        if ($this->form_validation->run('os') == false) {
-            $this->data['custom_error'] = (validation_errors() ? true : false);
-        } else {
-            $dataInicial = $this->input->post('dataInicial');
-            $dataFinal = $this->input->post('dataFinal');
-            $termoGarantiaId = $this->input->post('termoGarantia');
-
-            try {
-                $dataInicial = explode('/', $dataInicial);
-                $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
-
-                if ($dataFinal) {
-                    $dataFinal = explode('/', $dataFinal);
-                    $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-                } else {
-                    $dataFinal = date('Y/m/d');
-                }
-
-                $termoGarantiaId = (! $termoGarantiaId == null || ! $termoGarantiaId == '')
-                    ? $this->input->post('garantias_id')
-                    : null;
-            } catch (Exception $e) {
-                $dataInicial = date('Y/m/d');
-                $dataFinal = date('Y/m/d');
-            }
-
-            $data = [
-                'dataInicial' => $dataInicial,
-                'clientes_id' => $this->input->post('clientes_id'), //set_value('idCliente'),
-                'usuarios_id' => $this->input->post('usuarios_id'), //set_value('idUsuario'),
-                'dataFinal' => $dataFinal,
-                'garantia' => set_value('garantia'),
-                'garantias_id' => $termoGarantiaId,
-                'descricaoProduto' => $this->input->post('descricaoProduto'),
-                'defeito' => $this->input->post('defeito'),
-                'status' => set_value('status'),
-                'observacoes' => $this->input->post('observacoes'),
-                'laudoTecnico' => $this->input->post('laudoTecnico'),
-                'faturado' => 0,
-            ];
-
-            if (is_numeric($id = $this->os_model->add('os', $data, true))) {
-                $this->load->model('mapos_model');
-                $this->load->model('usuarios_model');
-
-                $idOs = $id;
-                $os = $this->os_model->getById($idOs);
-                $emitente = $this->mapos_model->getEmitente();
-
-                $tecnico = $this->usuarios_model->getById($os->usuarios_id);
-
-                // Verificar configuração de notificação
-                if ($this->data['configuration']['os_notification'] != 'nenhum' && $this->data['configuration']['email_automatico'] == 1) {
-                    $remetentes = [];
-                    switch ($this->data['configuration']['os_notification']) {
-                        case 'todos':
-                            array_push($remetentes, $os->email);
-                            array_push($remetentes, $tecnico->email);
-                            array_push($remetentes, $emitente->email);
-                            break;
-                        case 'cliente':
-                            array_push($remetentes, $os->email);
-                            break;
-                        case 'tecnico':
-                            array_push($remetentes, $tecnico->email);
-                            break;
-                        case 'emitente':
-                            array_push($remetentes, $emitente->email);
-                            break;
-                        default:
-                            array_push($remetentes, $os->email);
-                            break;
-                    }
-                    $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Criada');
-                }
-
-                $this->session->set_flashdata('success', 'OS adicionada com sucesso, você pode adicionar produtos ou serviços a essa OS nas abas de Produtos e Serviços!');
-                log_info('Adicionou uma OS. ID: ' . $id);
-                redirect(site_url('os/editar/') . $id);
-            } else {
-                $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
-            }
-        }
-
-        $this->data['view'] = 'os/adicionarOs';
-
-        return $this->layout();
+        return $this->formulario(null);
     }
 
     public function editar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->os_model->getById($this->uri->segment(3))) {
+        $os = is_numeric($this->uri->segment(3)) ? $this->os_model->getById((int) $this->uri->segment(3)) : null;
+        if (! $os) {
             $this->session->set_flashdata('error', 'OS não encontrada ou parâmetro inválido.');
             redirect('os/gerenciar');
         }
@@ -200,118 +115,198 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-        $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
-
-        $this->data['editavel'] = $this->os_model->isEditable($this->input->post('idOs'));
-        if (! $this->data['editavel']) {
-            $this->session->set_flashdata('error', 'Esta OS já e seu status não pode ser alterado e nem suas informações atualizadas. Por favor abrir uma nova OS.');
-
+        // Pelo id da URL: na v4 a checagem usava o POST, e o GET de uma OS
+        // faturada ou cancelada abria a tela de edição.
+        if (! $this->os_model->isEditable((int) $os->idOs)) {
+            $this->session->set_flashdata('error', 'Esta OS está faturada ou cancelada e não pode mais ser alterada. Se precisar, abra uma nova OS.');
             redirect(site_url('os'));
         }
 
-        if ($this->form_validation->run('os') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $dataInicial = $this->input->post('dataInicial');
-            $dataFinal = $this->input->post('dataFinal');
-            $termoGarantiaId = $this->input->post('garantias_id') ?: null;
+        return $this->formulario($os);
+    }
 
-            try {
-                $dataInicial = explode('/', $dataInicial);
-                $dataInicial = $dataInicial[2] . '-' . $dataInicial[1] . '-' . $dataInicial[0];
+    /**
+     * Formulário de OS, para cadastrar e editar os dados (#2842), no padrão
+     * dos formulários da v5 (#2851): POST comum, validação no servidor com os
+     * erros em cada campo e redirecionamento com toast.
+     *
+     * Produtos, serviços, anexos, anotações, desconto e faturamento ficam na
+     * tela de itens (os/itens) até a tela da OS ser migrada.
+     */
+    private function formulario(?object $os)
+    {
+        $erros = [];
+        $dados = [];
 
-                $dataFinal = explode('/', $dataFinal);
-                $dataFinal = $dataFinal[2] . '-' . $dataFinal[1] . '-' . $dataFinal[0];
-            } catch (Exception $e) {
-                $dataInicial = date('Y/m/d');
+        if ($this->input->method() === 'post') {
+            $erros = $this->validarFormulario('os');
+            // As regras do grupo "os" checam os ids ocultos; o erro aparece no
+            // campo visível do autocomplete.
+            foreach (['clientes_id' => 'cliente', 'usuarios_id' => 'tecnico'] as $oculto => $visivel) {
+                if (isset($erros[$oculto])) {
+                    $erros[$visivel] = $erros[$oculto];
+                    unset($erros[$oculto]);
+                }
             }
 
-            $data = [
-                'dataInicial' => $dataInicial,
-                'dataFinal' => $dataFinal,
-                'garantia' => $this->input->post('garantia'),
-                'garantias_id' => $termoGarantiaId,
-                'descricaoProduto' => $this->input->post('descricaoProduto'),
-                'defeito' => $this->input->post('defeito'),
-                'status' => $this->input->post('status'),
-                'observacoes' => $this->input->post('observacoes'),
-                'laudoTecnico' => $this->input->post('laudoTecnico'),
-                'usuarios_id' => $this->input->post('usuarios_id'),
-                'clientes_id' => $this->input->post('clientes_id'),
-            ];
-            $os = $this->os_model->getById($this->input->post('idOs'));
-
-            //Verifica para poder fazer a devolução do produto para o estoque caso OS seja cancelada.
-
-            if (strtolower($this->input->post('status')) == 'cancelado' && strtolower($os->status) != 'cancelado') {
-                $this->devolucaoEstoque($this->input->post('idOs'));
+            if ($erros === []) {
+                [$dados, $erros] = osDadosDoFormulario($this->input->post());
             }
 
-            if (strtolower($os->status) == 'cancelado' && strtolower($this->input->post('status')) != 'cancelado') {
-                $this->debitarEstoque($this->input->post('idOs'));
+            if ($erros === []) {
+                if (! $this->os_model->existe('clientes', 'idClientes', $dados['clientes_id'])) {
+                    $erros['cliente'] = 'Escolha um cliente da lista.';
+                }
+                if (! $this->os_model->existe('usuarios', 'idUsuarios', $dados['usuarios_id'], true)) {
+                    $erros['tecnico'] = 'Escolha um técnico ativo da lista.';
+                }
+                if ($dados['garantias_id'] !== null && ! $this->os_model->existe('garantias', 'idGarantias', $dados['garantias_id'])) {
+                    $erros['termoGarantia'] = 'Escolha um termo da lista ou deixe o campo em branco.';
+                }
             }
 
-            if ($this->os_model->edit('os', $data, 'idOs', $this->input->post('idOs')) == true) {
-                $this->load->model('mapos_model');
-                $this->load->model('usuarios_model');
+            if ($erros === []) {
+                $idOs = $os === null ? $this->criarOs($dados) : $this->salvarOs($os, $dados);
 
-                $idOs = $this->input->post('idOs');
+                if ($idOs !== null) {
+                    $this->notificarOs($idOs, $os === null ? 'Ordem de Serviço - Criada' : 'Ordem de Serviço - Editada');
 
-                $os = $this->os_model->getById($idOs);
-                $emitente = $this->mapos_model->getEmitente();
-                $tecnico = $this->usuarios_model->getById($os->usuarios_id);
+                    if ($os === null) {
+                        log_info('Adicionou uma OS. ID: ' . $idOs);
+                        $this->session->set_flashdata('success', 'OS #' . $idOs . ' criada. Agora adicione os produtos e serviços.');
 
-                // Verificar configuração de notificação
-                if ($this->data['configuration']['os_notification'] != 'nenhum' && $this->data['configuration']['email_automatico'] == 1) {
-                    $remetentes = [];
-                    switch ($this->data['configuration']['os_notification']) {
-                        case 'todos':
-                            array_push($remetentes, $os->email);
-                            array_push($remetentes, $tecnico->email);
-                            array_push($remetentes, $emitente->email);
-                            break;
-                        case 'cliente':
-                            array_push($remetentes, $os->email);
-                            break;
-                        case 'tecnico':
-                            array_push($remetentes, $tecnico->email);
-                            break;
-                        case 'emitente':
-                            array_push($remetentes, $emitente->email);
-                            break;
-                        default:
-                            array_push($remetentes, $os->email);
-                            break;
+                        return redirect($this->permite('eOs') ? 'os/itens/' . $idOs : 'os/visualizar/' . $idOs);
                     }
-                    $this->enviarOsPorEmail($idOs, $remetentes, 'Ordem de Serviço - Editada');
+
+                    log_info('Alterou uma OS. ID: ' . $idOs);
+                    $this->session->set_flashdata('success', 'Alterações da OS #' . $idOs . ' salvas.');
+
+                    return redirect('os/editar/' . $idOs);
                 }
 
-                $this->session->set_flashdata('success', 'Os editada com sucesso!');
-                log_info('Alterou uma OS. ID: ' . $this->input->post('idOs'));
-                redirect(site_url('os/editar/') . $this->input->post('idOs'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+                $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
             }
         }
 
-        $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+        $this->data['os'] = $os;
+        $this->data['valores'] = osValoresDoFormulario(
+            $this->input->method() === 'post' ? $this->input->post() : null,
+            $os,
+            [
+                'tecnico' => (string) $this->session->userdata('nome_admin'),
+                'usuarios_id' => (string) $this->session->userdata('id_admin'),
+                'status' => 'Aberto',
+                'dataInicial' => date('Y-m-d'),
+            ]
+        );
+        $this->data['erros'] = $erros;
+        // Campos com formatação do editor antigo (Trumbowyg), que sai ao salvar.
+        $this->data['formatados'] = $os === null ? [] : array_values(array_filter(OS_CAMPOS_TEXTO, static fn ($campo) => osTemFormatacao($os->{$campo} ?? null)));
+        $this->data['pode'] = [
+            'cadastrar_cliente' => $this->permite('aCliente'),
+            'itens' => $os !== null,
+        ];
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'os/formulario';
 
-        $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
-        $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $this->data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
-        $this->data['anotacoes'] = $this->os_model->getAnotacoes($this->uri->segment(3));
+        return $this->layout();
+    }
 
-        if ($return = $this->os_model->valorTotalOS($this->uri->segment(3))) {
+    /** Cria a OS e devolve o id, ou null se não gravou. */
+    private function criarOs(array $dados): ?int
+    {
+        $id = $this->os_model->add('os', $dados + ['faturado' => 0], true);
+
+        return is_numeric($id) ? (int) $id : null;
+    }
+
+    /**
+     * Grava os dados da OS. Cancelar devolve os produtos ao estoque, e sair de
+     * Cancelado volta a debitá-los, como na v4.
+     */
+    private function salvarOs(object $os, array $dados): ?int
+    {
+        $idOs = (int) $os->idOs;
+        $antes = strtolower((string) $os->status);
+        $depois = strtolower((string) $dados['status']);
+
+        if ($depois === 'cancelado' && $antes !== 'cancelado') {
+            $this->devolucaoEstoque($idOs);
+        }
+        if ($antes === 'cancelado' && $depois !== 'cancelado') {
+            $this->debitarEstoque($idOs);
+        }
+
+        return $this->os_model->edit('os', $dados, 'idOs', $idOs) ? $idOs : null;
+    }
+
+    /**
+     * E-mail automático da OS, conforme as configurações os_notification e
+     * email_automatico.
+     */
+    private function notificarOs(int $idOs, string $assunto): void
+    {
+        $configuracao = $this->data['configuration'];
+        if (($configuracao['os_notification'] ?? 'nenhum') === 'nenhum' || ($configuracao['email_automatico'] ?? 0) != 1) {
+            return;
+        }
+
+        $this->load->model('mapos_model');
+        $this->load->model('usuarios_model');
+
+        $os = $this->os_model->getById($idOs);
+        $emitente = $this->mapos_model->getEmitente();
+        $tecnico = $this->usuarios_model->getById($os->usuarios_id);
+
+        $remetentes = match ($configuracao['os_notification']) {
+            'todos' => [$os->email, $tecnico->email ?? null, $emitente->email ?? null],
+            'tecnico' => [$tecnico->email ?? null],
+            'emitente' => [$emitente->email ?? null],
+            default => [$os->email],
+        };
+
+        $this->enviarOsPorEmail($idOs, array_values(array_filter($remetentes)), $assunto);
+    }
+
+    /**
+     * Produtos, serviços, anexos, anotações, desconto e faturamento da OS: a
+     * tela antiga de edição, sem a aba de dados (que agora é o formulário de
+     * os/editar). É provisória e sai quando a tela da OS for migrada (#2842).
+     */
+    public function itens()
+    {
+        $os = is_numeric($this->uri->segment(3)) ? $this->os_model->getById((int) $this->uri->segment(3)) : null;
+        if (! $os) {
+            $this->session->set_flashdata('error', 'OS não encontrada ou parâmetro inválido.');
+            redirect('os/gerenciar');
+        }
+
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar O.S.');
+            redirect(base_url());
+        }
+
+        $idOs = (int) $os->idOs;
+        if (! $this->os_model->isEditable($idOs)) {
+            $this->session->set_flashdata('error', 'Esta OS está faturada ou cancelada e não pode mais ser alterada. Se precisar, abra uma nova OS.');
+            redirect(site_url('os'));
+        }
+
+        $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
+        $this->data['result'] = $os;
+        $this->data['produtos'] = $this->os_model->getProdutos($idOs);
+        $this->data['servicos'] = $this->os_model->getServicos($idOs);
+        $this->data['anexos'] = $this->os_model->getAnexos($idOs);
+        $this->data['anotacoes'] = $this->os_model->getAnotacoes($idOs);
+
+        if ($return = $this->os_model->valorTotalOS($idOs)) {
             $this->data['totalServico'] = $return['totalServico'];
             $this->data['totalProdutos'] = $return['totalProdutos'];
         }
 
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
-
-        $this->data['view'] = 'os/editarOs';
+        $this->data['view'] = 'os/itensOs';
 
         return $this->layout();
     }
@@ -612,13 +607,16 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = (int) $this->input->post('id');
+        // Volta para a listagem com os mesmos filtros (só os permitidos).
+        $listagem = site_url('os/gerenciar') . listagemQuery($this->filtrosDaListagem());
+
         $os = $this->os_model->getByIdCobrancas($id);
         if ($os == null) {
             $os = $this->os_model->getById($id);
             if ($os == null) {
                 $this->session->set_flashdata('error', 'Erro ao tentar excluir OS.');
-                redirect(base_url() . 'index.php/os/gerenciar/');
+                redirect($listagem);
             }
         }
 
@@ -627,7 +625,7 @@ class Os extends MY_Controller
                 $this->os_model->delete('cobrancas', 'os_id', $id);
             } else {
                 $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta OS, deve cancelar e/ou excluir a cobrança primeiro!');
-                redirect(site_url('os/gerenciar/'));
+                redirect($listagem);
             }
         }
 
@@ -637,101 +635,73 @@ class Os extends MY_Controller
             $this->devolucaoEstoque($id);
         }
 
+        // Os arquivos dos anexos saem do disco junto com os registros (só os que
+        // ficam dentro de assets/anexos; ver osArquivosDosAnexos()).
+        foreach (osArquivosDosAnexos($this->os_model->getAnexos($id), FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos') as $arquivo) {
+            @unlink($arquivo);
+        }
+
         $this->os_model->delete('servicos_os', 'os_id', $id);
         $this->os_model->delete('produtos_os', 'os_id', $id);
         $this->os_model->delete('anexos', 'os_id', $id);
+        $this->os_model->delete('anotacoes_os', 'os_id', $id);
         $this->os_model->delete('os', 'idOs', $id);
-        if ((int) $os->faturado === 1) {
-            $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
+        if ((int) $osStockRefund->faturado === 1) {
+            $this->os_model->excluirFatura($id, isset($osStockRefund->lancamento) ? (int) $osStockRefund->lancamento : null);
         }
 
         log_info('Removeu uma OS. ID: ' . $id);
         $this->session->set_flashdata('success', 'OS excluída com sucesso!');
-        redirect(site_url('os/gerenciar/'));
+        redirect($listagem);
     }
 
     public function autoCompleteProduto()
     {
-        if (! $this->hasAnyPermission(['aOs', 'eOs'])) {
-            echo json_encode([]);
-
-            return;
-        }
-
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->os_model->autoCompleteProduto($q);
-        }
+        $this->responderAutocomplete($this->hasAnyPermission(['aOs', 'eOs']), 'autoCompleteProduto');
     }
 
     public function autoCompleteProdutoSaida()
     {
-        if (! $this->hasAnyPermission(['aOs', 'eOs', 'aVenda', 'eVenda'])) {
-            echo json_encode([]);
-
-            return;
-        }
-
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->os_model->autoCompleteProdutoSaida($q);
-        }
+        $this->responderAutocomplete($this->hasAnyPermission(['aOs', 'eOs', 'aVenda', 'eVenda']), 'autoCompleteProdutoSaida');
     }
 
     public function autoCompleteCliente()
     {
-        if (! $this->hasAnyPermission(['aOs', 'eOs', 'rOs', 'aVenda', 'eVenda', 'rVenda'])) {
-            echo json_encode([]);
-
-            return;
-        }
-
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->os_model->autoCompleteCliente($q);
-        }
+        $this->responderAutocomplete($this->hasAnyPermission(['aOs', 'eOs', 'rOs', 'aVenda', 'eVenda', 'rVenda']), 'autoCompleteCliente');
     }
 
     public function autoCompleteUsuario()
     {
-        if (! $this->hasAnyPermission(['aOs', 'eOs', 'rOs', 'aVenda', 'eVenda', 'rVenda'])) {
-            echo json_encode([]);
-
-            return;
-        }
-
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->os_model->autoCompleteUsuario($q);
-        }
+        $this->responderAutocomplete($this->hasAnyPermission(['aOs', 'eOs', 'rOs', 'aVenda', 'eVenda', 'rVenda']), 'autoCompleteUsuario');
     }
 
     public function autoCompleteTermoGarantia()
     {
-        if (! $this->hasAnyPermission(['aOs', 'eOs'])) {
-            echo json_encode([]);
-
-            return;
-        }
-
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->os_model->autoCompleteTermoGarantia($q);
-        }
+        $this->responderAutocomplete($this->hasAnyPermission(['aOs', 'eOs']), 'autoCompleteTermoGarantia');
     }
 
     public function autoCompleteServico()
     {
-        if (! $this->hasAnyPermission(['aOs', 'eOs'])) {
-            echo json_encode([]);
+        $this->responderAutocomplete($this->hasAnyPermission(['aOs', 'eOs']), 'autoCompleteServico');
+    }
 
-            return;
-        }
+    /**
+     * Resposta dos autocompletes: sempre um array JSON, vazio sem permissão,
+     * sem termo ou sem resultado (na v4 a resposta vinha vazia, sem corpo).
+     *
+     * A permissão é conferida em cada método público (o PermissionsMapTest
+     * confere a regra do mapa com a checagem de cada um).
+     */
+    private function responderAutocomplete(bool $permitido, string $metodo): void
+    {
+        $termo = $this->input->get('term');
+        $itens = $permitido && is_string($termo) && trim($termo) !== ''
+            ? $this->os_model->{$metodo}(mb_strtolower(trim($termo)))
+            : [];
 
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->os_model->autoCompleteServico($q);
-        }
+        $this->output
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($itens));
     }
 
     public function adicionarProduto()
