@@ -4,6 +4,36 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - v5 (5.0.0-alpha)
+
+### Added
+- CI com lint, php-cs-fixer, PHPStan (com baseline) e `composer audit`. #2887 [@RamonSilva20](https://github.com/RamonSilva20)
+- PHPUnit com harness para o CodeIgniter 3 e testes iniciais. #2886 [@RamonSilva20](https://github.com/RamonSilva20)
+- Dependabot para GitHub Actions e Composer. #2890 [@RamonSilva20](https://github.com/RamonSilva20)
+- Helper `e()` para escape de saída nas views e checagem no CI que impede saída sem escape nova. #2897 [@RamonSilva20](https://github.com/RamonSilva20)
+- Tailwind CSS v4 com build via npm; o CSS compilado é commitado e quem só instala não precisa de Node. #2896 [@RamonSilva20](https://github.com/RamonSilva20)
+- Stack de JS da v5 em `assets/vendor` (Alpine.js, Tom Select, flatpickr, IMask, SweetAlert2, Chart.js 4 e FullCalendar 6). #2899 [@RamonSilva20](https://github.com/RamonSilva20)
+- Mapa central de permissões das rotas do painel (`config/permissions_map.php`), negando por padrão o que não estiver mapeado. #2898 [@RamonSilva20](https://github.com/RamonSilva20)
+- Design tokens, modo claro/escuro/sistema e cor de destaque, com migration que converte o `app_theme` atual. #2902 [@RamonSilva20](https://github.com/RamonSilva20)
+- Padrão de JS em módulos ES fora das views (`assets/js/modules`) e checagem de `<script>` inline novo. #2903 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cabeçalhos de segurança (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS em HTTPS) e CSP em modo report-only com endpoint de relatório. #2904 [@RamonSilva20](https://github.com/RamonSilva20)
+- Biblioteca de componentes PHP (`application/views/components`) com catálogo visível só em desenvolvimento. #2905 [@RamonSilva20](https://github.com/RamonSilva20)
+- Paginação das telas novas pelo componente `pagination`. #2906 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Changed
+- Versão mínima do PHP alinhada em 8.5. #2882 [@RamonSilva20](https://github.com/RamonSilva20)
+- `release.yml` gera um zip limpo e publica o SHA256. #2889 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cookies e sessão seguros por padrão: `Secure` automático em HTTPS, `HttpOnly`, `SameSite=Lax` e destruição do ID anterior ao regenerar a sessão. Valores explícitos no `.env` continuam valendo. #2900 [@RamonSilva20](https://github.com/RamonSilva20)
+- Novo login do painel com Tailwind, componentes e módulo JS, sem jQuery e sem particles. #2907 [@RamonSilva20](https://github.com/RamonSilva20)
+- Novo layout do painel (sidebar recolhível, topbar com busca e alternância de tema, flash como toast), com modo legado para as telas ainda não migradas. #2908 [@RamonSilva20](https://github.com/RamonSilva20)
+- Boxicons servido de `assets/vendor` em vez do unpkg. #2909 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Fixed
+- Usuário com `permissoes_id` inexistente recebe negação de acesso em vez de erro fatal. #2891 [@RamonSilva20](https://github.com/RamonSilva20)
+- Conta sem data de expiração volta a conseguir entrar. #2892 [@RamonSilva20](https://github.com/RamonSilva20)
+- `date_format()` sem argumento e data inválida na entrada de receita parcelada. #2893 [@RamonSilva20](https://github.com/RamonSilva20)
+- Data com estouro no filtro de vencimento não consulta mais a janela errada. #2894 [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [4.55.1] - 2026-10-06
 
 ### Added
