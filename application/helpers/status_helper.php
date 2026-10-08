@@ -68,3 +68,32 @@ if (! function_exists('dataBr')) {
         return $instante === false ? '' : date('d/m/Y', $instante);
     }
 }
+
+if (! function_exists('valorDecimal')) {
+    /**
+     * Valor digitado ("1.234,56", "1234,56" ou "1234.56") em decimal para o
+     * banco ("1234.56"), ou null se não for um valor válido. Com vírgula, o
+     * ponto é separador de milhar; sem vírgula, o ponto é o decimal.
+     *
+     * $digitosInteiros é o limite da coluna: DECIMAL(10,2) guarda 8 dígitos
+     * antes da vírgula (até 99.999.999,99). Acima disso o MySQL sem modo
+     * estrito cortaria o valor em silêncio, então ele é recusado aqui.
+     */
+    function valorDecimal($valor, int $digitosInteiros = 8): ?string
+    {
+        if (! is_string($valor) && ! is_numeric($valor)) {
+            return null;
+        }
+
+        $texto = str_replace(['R$', ' ', "\u{00A0}"], '', trim((string) $valor));
+        if (str_contains($texto, ',')) {
+            $texto = str_replace(['.', ','], ['', '.'], $texto);
+        }
+
+        if (! preg_match('/^(\d+)(\.\d{1,2})?$/', $texto, $partes) || strlen(ltrim($partes[1], '0')) > $digitosInteiros) {
+            return null;
+        }
+
+        return number_format((float) $texto, 2, '.', '');
+    }
+}

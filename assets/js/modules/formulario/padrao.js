@@ -21,9 +21,16 @@ import { MASCARAS } from '../../lib/mascaras.js';
 
 const CAMPOS = 'input:not([type=hidden]):not([type=button]):not([type=submit]), select, textarea';
 
-export function aplicarMascara(campo) {
+export function aplicarMascara(campo, evento = null) {
     const formatar = MASCARAS[campo.dataset.mascara];
     if (!formatar) {
+        return;
+    }
+
+    // Apagando, o dinheiro chega a "0,00" e não sairia mais disso: quando só
+    // sobram zeros, o campo fica vazio.
+    if (campo.dataset.mascara === 'dinheiro' && evento?.inputType?.startsWith('delete') && /^0*$/.test(campo.value.replace(/\D/g, ''))) {
+        campo.value = '';
         return;
     }
 
@@ -38,7 +45,7 @@ export default function iniciar(formulario) {
 
     for (const campo of formulario.querySelectorAll('[data-mascara]')) {
         aplicarMascara(campo);
-        campo.addEventListener('input', () => aplicarMascara(campo));
+        campo.addEventListener('input', (evento) => aplicarMascara(campo, evento));
     }
 
     formulario.addEventListener('input', (evento) => {

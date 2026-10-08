@@ -5,6 +5,7 @@
 //     <input data-mascara="documento">   CPF ou CNPJ (inclusive o alfanumérico)
 //     <input data-mascara="telefone">    fixo ou celular, com DDD
 //     <input data-mascara="cep">
+//     <input data-mascara="dinheiro">    1.234,56 (digita da direita: centavos)
 //
 // O servidor continua validando: a máscara só ajuda a digitar.
 
@@ -53,7 +54,25 @@ export function formatarCep(valor) {
     return aplicarModelo(somenteDigitos(valor).slice(0, 8), '#####-###');
 }
 
+/**
+ * Valor em reais sem o símbolo: os dígitos viram centavos ("123456" →
+ * "1.234,56"). Um valor do banco ("1234.50") também sai formatado.
+ */
+export function formatarDinheiro(valor, maxDigitos = 10) {
+    // 10 dígitos: o máximo de DECIMAL(10,2), 99.999.999,99.
+    const digitos = somenteDigitos(valor).replace(/^0+(?=\d)/, '').slice(0, maxDigitos);
+    if (digitos === '') {
+        return '';
+    }
+
+    const centavos = digitos.padStart(3, '0');
+    const inteiro = centavos.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return `${inteiro},${centavos.slice(-2)}`;
+}
+
 export const MASCARAS = {
+    dinheiro: formatarDinheiro,
     documento: formatarDocumento,
     telefone: formatarTelefone,
     cep: formatarCep,

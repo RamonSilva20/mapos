@@ -235,6 +235,19 @@ if (! function_exists('layoutIniciais')) {
     }
 }
 
+if (! defined('LAYOUT_ROTULOS')) {
+    // Nome dos módulos no breadcrumb, com acento (o segmento da URL não tem).
+    define('LAYOUT_ROTULOS', [
+        'servicos' => 'Serviços',
+        'os' => 'Ordens de serviço',
+        'cobrancas' => 'Cobranças',
+        'relatorios' => 'Relatórios',
+        'usuarios' => 'Usuários',
+        'permissoes' => 'Permissões',
+        'mapos' => 'Sistema',
+    ]);
+}
+
 if (! function_exists('layoutBreadcrumb')) {
     /**
      * Itens do breadcrumb a partir dos segmentos da URL, com os mesmos rótulos
@@ -251,7 +264,7 @@ if (! function_exists('layoutBreadcrumb')) {
         $itens = [['label' => 'Início', 'url' => $siteUrl('')]];
 
         if ($controller !== '') {
-            $itens[] = ['label' => ucfirst($controller), 'url' => $siteUrl($controller)];
+            $itens[] = ['label' => LAYOUT_ROTULOS[strtolower($controller)] ?? ucfirst($controller), 'url' => $siteUrl($controller)];
         }
 
         // gerenciar e index são a própria listagem do controller: a página 2

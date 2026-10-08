@@ -118,7 +118,8 @@ final class CheckInlineScriptTest extends MaposTestCase
         $view = (string) file_get_contents(APPPATH . 'views/servicos/servicos.php');
 
         $this->assertSame([], inlineScriptOcorrencias($view));
-        $this->assertStringContainsString("js_module('servicos/listagem')", $view);
-        $this->assertFileExists(MAPOS_ROOT . '/assets/js/modules/servicos/listagem.js');
+        // A exclusão usa o modal-confirm, preenchido pelo modal.js (data-valor-*), no lugar do antigo módulo servicos/listagem.
+        $this->assertStringContainsString("'data-modal-abrir' => 'excluir-servico'", $view);
+        $this->assertFileDoesNotExist(MAPOS_ROOT . '/assets/js/modules/servicos/listagem.js');
     }
 }

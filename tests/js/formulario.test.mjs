@@ -3,9 +3,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { formatarCep, formatarDocumento, formatarTelefone, somenteDigitos } from '../../assets/js/lib/mascaras.js';
+import { formatarCep, formatarDinheiro, formatarDocumento, formatarTelefone, somenteDigitos } from '../../assets/js/lib/mascaras.js';
 import { MENSAGENS, marcarCarregando, mensagemDoCampo, semDescritor } from '../../assets/js/lib/formulario.js';
 import { dadosDoCnpj, enderecoDoCep, preencherVazios } from '../../assets/js/modules/clientes/formulario.js';
+import { aplicarMascara } from '../../assets/js/modules/formulario/padrao.js';
 
 test('máscara de CPF, CNPJ e CNPJ alfanumérico', () => {
     assert.equal(formatarDocumento('12345678909'), '123.456.789-09');
@@ -105,4 +106,29 @@ test('preenche só os campos vazios', () => {
     assert.equal(campos.nomeCliente.value, 'Digitado');
     assert.equal(campos.cidade.value, 'Brasília');
     assert.equal(campos.estado.value, 'DF');
+});
+
+test('máscara de dinheiro: centavos da direita, milhar com ponto', () => {
+    assert.equal(formatarDinheiro('1'), '0,01');
+    assert.equal(formatarDinheiro('123456'), '1.234,56');
+    assert.equal(formatarDinheiro('1234.50'), '1.234,50');
+    assert.equal(formatarDinheiro('0,00'), '0,00');
+    assert.equal(formatarDinheiro('R$ 1.000.000,00'), '1.000.000,00');
+    assert.equal(formatarDinheiro(''), '');
+    // Até 10 dígitos (DECIMAL(10,2)): o 11º é ignorado.
+    assert.equal(formatarDinheiro('99999999999'), '99.999.999,99');
+});
+
+test('dinheiro: apagar até só sobrar zero esvazia o campo', () => {
+    const campo = { dataset: { mascara: 'dinheiro' }, value: '0,0' };
+    aplicarMascara(campo, { inputType: 'deleteContentBackward' });
+    assert.equal(campo.value, '');
+
+    const digitando = { dataset: { mascara: 'dinheiro' }, value: '0' };
+    aplicarMascara(digitando, { inputType: 'insertText' });
+    assert.equal(digitando.value, '0,00');
+
+    const parcial = { dataset: { mascara: 'dinheiro' }, value: '1.234,5' };
+    aplicarMascara(parcial, { inputType: 'deleteContentBackward' });
+    assert.equal(parcial.value, '123,45');
 });

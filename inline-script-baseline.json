@@ -44,8 +44,6 @@
     "application/views/relatorios/rel_servicos.php": 1,
     "application/views/relatorios/rel_sku.php": 1,
     "application/views/relatorios/rel_vendas.php": 1,
-    "application/views/servicos/adicionarServico.php": 1,
-    "application/views/servicos/editarServico.php": 1,
     "application/views/usuarios/adicionarUsuario.php": 1,
     "application/views/usuarios/editarUsuario.php": 1,
     "application/views/vendas/adicionarVenda.php": 1,
