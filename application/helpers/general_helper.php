@@ -127,3 +127,24 @@ if (! function_exists('protegerDiretorioUpload')) {
         }
     }
 }
+
+if (! function_exists('dataIsoParaYmd')) {
+    /**
+     * Data em AAAA-MM-DD a partir de um parâmetro de requisição, ou null se
+     * faltar ou for inválida. Aceita a data pura ou um ISO 8601 com hora e fuso
+     * (2026-10-01T00:00:00-03:00, como o FullCalendar envia), do qual só a
+     * data interessa.
+     */
+    function dataIsoParaYmd($valor): ?string
+    {
+        if (! is_string($valor) || ! preg_match('/^(\d{4})-(\d{2})-(\d{2})(?:$|T)/', $valor, $partes)) {
+            return null;
+        }
+
+        if (! checkdate((int) $partes[2], (int) $partes[3], (int) $partes[1])) {
+            return null;
+        }
+
+        return "{$partes[1]}-{$partes[2]}-{$partes[3]}";
+    }
+}
