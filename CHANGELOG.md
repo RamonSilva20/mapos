@@ -43,7 +43,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Fixed
-- Backup do banco não tenta mais gravar o arquivo numa URL (`base_url() . 'backup/backup.zip'`), o que falhava sempre e, se funcionasse, deixaria o dump numa pasta pública: agora só é baixado, com nome `backup-AAAA-MM-DD-HHhMM.zip` (antes usava o mês no lugar dos minutos e `:`, inválido no Windows). #PR_NUM [@RamonSilva20](https://github.com/RamonSilva20)
+- Backup do banco não tenta mais gravar o arquivo numa URL (`base_url() . 'backup/backup.zip'`), o que falhava sempre e, se funcionasse, deixaria o dump numa pasta pública: agora só é baixado, com nome `backup-AAAA-MM-DD-HHhMM.zip` (antes usava o mês no lugar dos minutos e `:`, inválido no Windows). #2933 [@RamonSilva20](https://github.com/RamonSilva20)
 - Erros 500 do calendário do painel sem datas (agora valida `start`/`end` e responde 400 em JSON), de `os/visualizar` com OS inexistente (agora redireciona com aviso, como o `editar`) e dos autocompletes de Garantias (chamavam um model não carregado e não devolviam JSON sem resultados). #2932 [@RamonSilva20](https://github.com/RamonSilva20)
 - Usuário com `permissoes_id` inexistente recebe negação de acesso em vez de erro fatal. #2891 [@RamonSilva20](https://github.com/RamonSilva20)
 - Conta sem data de expiração volta a conseguir entrar. #2892 [@RamonSilva20](https://github.com/RamonSilva20)
