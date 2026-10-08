@@ -271,8 +271,27 @@ class Vendas_model extends CI_Model
 
     public function getQrCode($id, $pixKey, $emitente)
     {
+        return $this->pix($id, $pixKey, $emitente)?->getQRCode();
+    }
+
+    /**
+     * Código PIX "copia e cola" (BR Code) da venda: o mesmo payload do QR Code
+     * de getQrCode(). Na v4 a tela decodificava a imagem do QR no navegador
+     * (jsQR, do rawgit) para obter este texto.
+     */
+    public function getPixPayload($id, $pixKey, $emitente): ?string
+    {
+        return $this->pix($id, $pixKey, $emitente)?->getPixCode();
+    }
+
+    /**
+     * PIX estático com o total da venda (com o desconto, quando houver); null
+     * sem chave, sem emitente ou com total zerado.
+     */
+    private function pix($id, $pixKey, $emitente): ?StaticPayload
+    {
         if (empty($id) || empty($pixKey) || empty($emitente)) {
-            return;
+            return null;
         }
 
         $produtos = $this->getProdutos($id);
@@ -287,10 +306,11 @@ class Vendas_model extends CI_Model
         $amount = $valorDesconto->valor_desconto != 0 ? round(floatval($valorDesconto->valor_desconto), 2) : round(floatval($totalProdutos), 2);
 
         if ($amount <= 0) {
-            return;
+            return null;
         }
 
-        $pix = (new StaticPayload())
+        $pix = new StaticPayload();
+        $pix
             ->setAmount($amount)
             ->setTid($id)
             ->setDescription(sprintf('%s Venda %s', substr($emitente->nome, 0, 18), $id), true)
@@ -298,7 +318,7 @@ class Vendas_model extends CI_Model
             ->setMerchantName($emitente->nome)
             ->setMerchantCity($emitente->cidade);
 
-        return $pix->getQRCode();
+        return $pix;
     }
 
     public function getTotalVendas($idVendas)

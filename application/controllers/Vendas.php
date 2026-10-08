@@ -201,6 +201,13 @@ class Vendas extends MY_Controller
             $this->data['configuration']['pix_key'],
             $this->data['emitente']
         );
+        // Copia e cola do PIX gerado no servidor (antes a tela decodificava o
+        // QR Code com o jsQR do rawgit, #2842).
+        $this->data['pixPayload'] = $this->vendas_model->getPixPayload(
+            $this->uri->segment(3),
+            $this->data['configuration']['pix_key'],
+            $this->data['emitente']
+        );
         $this->data['chaveFormatada'] = $this->formatarChave($this->data['configuration']['pix_key']);
         $this->data['modalGerarPagamento'] = $this->load->view(
             'cobrancas/modalGerarPagamento',
