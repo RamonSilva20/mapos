@@ -13,7 +13,9 @@
  * fecham sem JavaScript.
  *
  * Item ativo: barra laranja de 3px na borda, fundo primary-tint e texto ink
- * 600 — o laranja fino nunca marca o estado sozinho (DESIGN.md).
+ * 600 — o laranja fino nunca marca o estado sozinho (DESIGN.md). Na sidebar
+ * recolhida, o grupo do subitem ativo (data-atual) leva as mesmas pistas.
+ * O selo da versão some na gaveta do celular, onde não cabe com o nome.
  *
  * @var array $layout
  * @var array $configuration
@@ -34,7 +36,7 @@ $classeSublink = 'relative flex min-h-9 items-center rounded-md py-1.5 pr-2.5 pl
         <span class="v5-rotulo flex min-w-0 items-center gap-2">
           <span class="truncate font-display text-[1.3125rem] leading-none font-bold tracking-[-0.2px] text-text"><?= e($layout['nome_sistema']) ?></span>
           <?php if ($layout['versao'] !== '') { ?>
-            <span class="shrink-0 rounded-xs bg-surface-subtle px-1.5 text-micro-cap text-muted uppercase">v<?= e($layout['versao']) ?></span>
+            <span class="shrink-0 rounded-xs bg-surface-subtle px-1.5 text-micro-cap text-muted max-lg:hidden">v<?= e($layout['versao']) ?></span>
           <?php } ?>
         </span>
       </a>
@@ -45,7 +47,7 @@ $classeSublink = 'relative flex min-h-9 items-center rounded-md py-1.5 pr-2.5 pl
       <?= component('input', ['name' => 'termo', 'id' => 'v5-pesquisa-gaveta', 'label' => 'Pesquisar', 'hide_label' => true, 'type' => 'search', 'placeholder' => 'Pesquisar...']) ?>
     </form>
 
-    <nav class="flex-1 overflow-y-auto overscroll-contain px-3 py-4" aria-label="Navegação">
+    <nav class="flex-1 overflow-y-auto overscroll-contain px-3 py-4 [scrollbar-color:var(--color-input)_transparent] [scrollbar-width:thin]" aria-label="Navegação">
       <?php foreach ($layout['grupos'] as $grupo) { ?>
         <div class="v5-grupo mt-4.5 first:mt-0">
           <?php if ($grupo['label'] !== '') { ?>
@@ -56,7 +58,7 @@ $classeSublink = 'relative flex min-h-9 items-center rounded-md py-1.5 pr-2.5 pl
               <?php if (isset($item['itens'])) { ?>
                 <li>
                   <details class="group/grupo" <?= $item['atual'] ? 'open' : '' ?>>
-                    <summary class="<?= e($classeLink) ?> cursor-pointer list-none [&::-webkit-details-marker]:hidden" title="<?= e($item['label']) ?>">
+                    <summary class="<?= e($classeLink) ?> cursor-pointer list-none [&::-webkit-details-marker]:hidden" title="<?= e($item['label']) ?>"<?= $item['atual'] ? ' data-atual' : '' ?>>
                       <?= icon($item['icon'], ['class' => 'size-5']) ?>
                       <span class="v5-rotulo flex-1 truncate"><?= e($item['label']) ?></span>
                       <?= icon('chevron-down', ['class' => 'v5-rotulo size-4 transition-transform group-open/grupo:rotate-180']) ?>

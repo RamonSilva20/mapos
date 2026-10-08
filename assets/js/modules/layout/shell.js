@@ -84,6 +84,15 @@ export default function iniciar(corpo) {
         marcarBotoes();
     };
 
+    // Telas legadas que medem a largura em JS (o calendário do Início) só se
+    // ajustam no resize da janela: avisa quando a margem do conteúdo muda.
+    const main = corpo.querySelector('.v5-main');
+    main?.addEventListener('transitionend', (evento) => {
+        if (evento.target === main && evento.propertyName === 'margin-left') {
+            window.dispatchEvent(new Event('resize'));
+        }
+    });
+
     corpo.addEventListener('click', (evento) => {
         const alvo = evento.target;
 
