@@ -1,180 +1,100 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
+<?php
+/**
+ * Login do painel (v5).
+ *
+ * Página avulsa, fora do layout do painel: o usuário ainda não está logado.
+ * O tema (modo e cor de destaque) vem da configuração do sistema, que o
+ * Login::index() lê do banco.
+ *
+ * O envio é feito pelo módulo assets/js/modules/login/formulario.js, que
+ * valida no navegador e posta em login/verificarLogin. Sem JavaScript o
+ * formulário não envia nada: verificarLogin responde JSON, não uma página.
+ *
+ * @var array       $configuration  Configurações do tema (app_theme, app_tema_*)
+ * @var string|null $erro           Mensagem de erro vinda de um redirect (flashdata)
+ *
+ * A mensagem de erro fica num alert com um <span data-login-texto>: o texto
+ * entra escapado com e() e é ali que o módulo troca a mensagem depois.
+ */
+$hora = (int) date('H');
+$saudacao = $hora < 12 ? 'Bom dia' : ($hora < 18 ? 'Boa tarde' : 'Boa noite');
+$nomeSistema = (string) $this->config->item('app_name');
+$versao = (string) $this->config->item('app_version');
+?><!doctype html>
+<html lang="pt-br"<?= temaAtributosHtml($configuration ?? []) ?>>
 <head>
-  <title><?= $this->config->item('app_name') ?> </title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/matrix-login.css" />
-  <link href="<?= base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-  <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/img/favicon.png" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token-name" content="<?= e($this->security->get_csrf_token_name()) ?>">
+    <meta name="csrf-cookie-name" content="<?= e(config_item('csrf_cookie_name')) ?>">
+    <title><?= e('Entrar — ' . $nomeSistema) ?></title>
+    <link rel="icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
+    <link rel="stylesheet" href="<?= e(base_url('assets/dist/app.css')) ?>">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+    <script src="<?= e(base_url('assets/js/tema.js')) ?>"></script>
+    <script type="module" src="<?= e(base_url('assets/js/app.js')) ?>"></script>
 </head>
+<body class="min-h-screen bg-bg font-sans text-text antialiased">
+    <main class="mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-4 py-8 lg:grid-cols-2 lg:px-8">
+        <section class="hidden flex-col items-start gap-3 lg:flex" aria-hidden="true">
+            <p class="text-3xl font-semibold text-text"><?= e('Olá! ' . $saudacao . ', bem-vindo') ?></p>
+            <p class="text-lg text-muted"><?= e('Ao ' . $this->config->item('app_subname')) ?></p>
+            <img src="<?= e(base_url('assets/img/dashboard-animate.svg')) ?>" alt="" class="mt-4 w-full max-w-lg">
+        </section>
 
-<body>
-  <div class="main-login">
-    <div class="left-login">
-      <!-- Saudação -->
-      <h1 class="h-one">
-        <?php
-        function saudacao($nome = '')
-        {
-            $hora = date('H');
-            if ($hora >= 00 && $hora < 12) {
-                return 'Olá! Bom dia' . (empty($nome) ? '' : ', ' . $nome);
-            } elseif ($hora >= 12 && $hora < 18) {
-                return 'Olá! Boa tarde' . (empty($nome) ? '' : ', ' . $nome);
-            } else {
-                return 'Olá! Boa noite' . (empty($nome) ? '' : ', ' . $nome);
-            }
-        }
-  $login = 'bem-vindo';
-  echo saudacao($login);
-  // Irá retornar conforme o horário:
-  ?>
-      </h1>
-      <h2 class="h-two"> Ao Sistema de Controle de Ordens de Serviço</h2>
-      <img src="<?php echo base_url() ?>assets/img/dashboard-animate.svg" class="left-login-image" alt="Map-OS - Versão: <?= $this->config->item('app_version'); ?>">
-    </div>
-    <form class="form-vertical" id="formLogin" method="post" action="<?= site_url('login/verificarLogin') ?>">
-      <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
-      <?php if ($this->session->flashdata('error') != null) { ?>
-        <div id="loginbox">
-          <div class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <?= $this->session->flashdata('error'); ?>
-          </div>
-        </div>
-      <?php } ?>
-      <div class="d-flex flex-column">
-        <div class="right-login">
-          <div class="container">
-            <div class="card">
-              <div class="content">
-                <div id="newlog">
-                  <div class="icon2">
-                    <img src="<?php echo base_url() ?>assets/img/logo-two.png">
-                  </div>
-                  <div class="title01">
-                    <?= '<img src="' . base_url() . 'assets/img/logo-mapos-branco.png">'; ?>
-                  </div>
+        <section class="mx-auto w-full max-w-sm">
+            <div class="rounded-card border border-border bg-surface p-6 shadow-card sm:p-8">
+                <div class="mb-6 flex flex-col items-center gap-2 text-center">
+                    <img src="<?= e(base_url('assets/img/logo-mapos-laranja-grande.png')) ?>" alt="<?= e($nomeSistema) ?>" class="h-9 w-auto dark:hidden">
+                    <img src="<?= e(base_url('assets/img/logo-mapos-branco-laranja-grande.png')) ?>" alt="<?= e($nomeSistema) ?>" class="hidden h-9 w-auto dark:block">
+                    <p class="text-xs text-muted"><?= e('Versão: ' . $versao) ?></p>
+                    <h1 class="mt-2 text-lg font-semibold text-text lg:sr-only"><?= e($saudacao . '! Entre na sua conta') ?></h1>
                 </div>
-                <div id="mcell">Versão: <?= $this->config->item('app_version'); ?></div>
-                <div class="input-field">
-                  <label class="fas fa-user" for="nome"></label>
-                  <input id="email" name="email" type="text" placeholder="Email">
-                </div>
-                <div class="input-field">
-                  <label class="fas fa-lock" for="senha"></label>
-                  <input name="senha" type="password" placeholder="Senha">
-                </div>
-                <div class="center">
-                  <button id="btn-acessar">Acessar</button>
-                </div>
-                <div class="links-uteis"><a href="https://github.com/RamonSilva20/mapos">
-                    <p><?= date('Y'); ?> &copy; Ramon Silva</p>
-                  </a>
-                </div>
-                <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
-                <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-header">
-                    <h4 id="myModalLabel">Map-OS</h4>
-                  </div>
-                  <div class="modal-body">
-                    <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-                  </div>
-                </div>
-              </div>
+
+                <form id="formLogin" method="post" action="<?= e(site_url('login/verificarLogin?ajax=true')) ?>" novalidate class="flex flex-col gap-4" <?= js_module('login/formulario') ?> data-destino="<?= e(site_url('mapos')) ?>">
+                    <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+
+                    <div data-login-mensagem<?= empty($erro) ? ' hidden' : '' ?>>
+                        <?= component('alert', ['message' => new HtmlSeguro('<span data-login-texto>' . e($erro ?? '') . '</span>'), 'variant' => 'danger']) ?>
+                    </div>
+
+                    <?= component('input', [
+                        'name' => 'email',
+                        'id' => 'email',
+                        'label' => 'E-mail',
+                        'type' => 'email',
+                        'required' => true,
+                        'autocomplete' => 'username',
+                        'placeholder' => 'voce@empresa.com.br',
+                        'attrs' => ['autofocus' => true, 'inputmode' => 'email', 'data-msg-vazio' => 'Informe o e-mail.', 'data-msg-invalido' => 'Informe um e-mail válido.'],
+                    ]) ?>
+
+                    <?= component('input', [
+                        'name' => 'senha',
+                        'id' => 'senha',
+                        'label' => 'Senha',
+                        'type' => 'password',
+                        'required' => true,
+                        'autocomplete' => 'current-password',
+                        'attrs' => ['data-msg-vazio' => 'Informe a senha.'],
+                    ]) ?>
+
+                    <?= component('button', [
+                        'label' => 'Acessar',
+                        'type' => 'submit',
+                        'size' => 'lg',
+                        'icon' => 'bx-log-in',
+                        'id' => 'btn-acessar',
+                        'class' => 'w-full',
+                        'attrs' => ['data-rotulo-carregando' => 'Entrando…'],
+                    ]) ?>
+                </form>
             </div>
-          </div>
-        </div>
-      </div>
-      <a href="#notification" id="call-modal" role="button" class="btn" data-toggle="modal" style="display: none ">notification</a>
-      <div id="notification" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-          <h4 id="myModalLabel">Map-OS</h4>
-        </div>
-        <div class="modal-body">
-          <h5 style="text-align: center" id="message">Os dados de acesso estão incorretos, por favor tente novamente!</h5>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
-        </div>
-      </div>
-    </form>
-  </div>
 
-  <script src="<?= base_url() ?>assets/js/jquery-1.12.4.min.js"></script>
-  <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
-  <script src="<?= base_url() ?>assets/js/validate.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('#email').focus();
-      $("#formLogin").validate({
-        rules: {
-          email: {
-            required: true,
-            email: true
-          },
-          senha: {
-            required: true
-          }
-        },
-        messages: {
-          email: {
-            required: '',
-            email: 'Insira Email válido'
-          },
-          senha: {
-            required: 'Campos Requeridos.'
-          }
-        },
-        submitHandler: function(form) {
-          var dados = $(form).serialize();
-          $('#btn-acessar').addClass('disabled');
-          $('#progress-acessar').removeClass('hide');
-
-          $.ajax({
-            type: "POST",
-            url: "<?= site_url('login/verificarLogin?ajax=true'); ?>",
-            data: dados,
-            dataType: 'json',
-            success: function(data) {
-                if (data.result == true) {
-                    window.location.href = "<?= site_url('mapos'); ?>";
-                } else {
-                    $('#btn-acessar').removeClass('disabled');
-                    $('#progress-acessar').addClass('hide');
-                    $('#message').text(data.message || 'Os dados de acesso estão incorretos, por favor tente novamente!');
-                    $('#call-modal').trigger('click');
-
-                    // Atualiza o token a cada requisição
-                    var newCsrfToken = data.MAPOS_TOKEN; 
-                    $("input[name='<?= $this->security->get_csrf_token_name(); ?>']").val(newCsrfToken);
-                    
-                }
-            }
-          });
-
-          return false;
-        },
-
-        errorClass: "help-inline",
-        errorElement: "span",
-        highlight: function(element, errorClass, validClass) {
-          $(element).parents('.control-group').addClass('error');
-        },
-        unhighlight: function(element, errorClass, validClass) {
-          $(element).parents('.control-group').removeClass('error');
-          $(element).parents('.control-group').addClass('success');
-        }
-      });
-    });
-  </script>
+            <p class="mt-6 text-center text-xs text-muted">
+                <a href="https://github.com/RamonSilva20/mapos" class="hover:text-text hover:underline"><?= e(date('Y') . ' © Ramon Silva') ?></a>
+            </p>
+        </section>
+    </main>
 </body>
-
 </html>
