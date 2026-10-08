@@ -197,6 +197,27 @@ const SYSDIR = BASEPATH . 'system/';
 define('DIR_READ_MODE', 0755);
 define('DIR_WRITE_MODE', 0755);
 
+// CI_Security é a classe que MY_Security estende. Só as propriedades do CSRF
+// que a subclasse usa.
+class CI_Security
+{
+    /** @var string */
+    protected $_csrf_hash;
+
+    /** @var int */
+    protected $_csrf_expire = 7200;
+
+    /** @var string */
+    protected $_csrf_cookie_name = 'ci_csrf_token';
+}
+
+/**
+ * @return mixed
+ */
+function config_item($item)
+{
+}
+
 // CI_Email é a classe que MY_Email estende. Vazia porque o PHPStan só precisa
 // que o nome exista paraMY_Email resolver.
 class CI_Email
