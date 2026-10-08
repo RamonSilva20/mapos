@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
-
 <div class="quick-actions_homepage">
     <ul class="cardBox">
         <li class="card">
