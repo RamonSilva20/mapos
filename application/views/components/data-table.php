@@ -13,6 +13,9 @@
  *         ['label' => 'Ações', 'align' => 'right', 'render' => fn ($linha) => component('button', [...])],
  *     ]
  *
+ * truncate corta o texto da célula com reticências (até 12rem) e põe o valor
+ * completo no title; nos cartões do celular o texto quebra inteiro.
+ *
  * hide_until (md, lg, xl ou 2xl) esconde uma coluna secundária na tabela até o
  * breakpoint, para as colunas principais e as ações caberem sem rolagem; nos
  * cartões do celular a coluna continua aparecendo.
@@ -120,7 +123,7 @@ $atributos = [
             <?php foreach ($linhas as $i => $linha) { ?>
                 <tr class="<?= e(componenteClasses('border-b border-border last:border-b-0 hover:bg-surface-subtle max-sm:block max-sm:px-4 max-sm:py-3', ['bg-surface-subtle/60' => $striped && $i % 2 === 1])) ?>">
                     <?php foreach ($colunas as $coluna) { ?>
-                        <td data-label="<?= e($coluna['label']) ?>" class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], ['whitespace-nowrap' => ! empty($coluna['nowrap'])], $celulaCelular, DATA_TABLE_ESCONDER[$coluna['hide_until'] ?? ''] ?? null, $coluna['class'] ?? null)) ?>"><?php $valor = $valorDaCelula($linha, $coluna); ?><?php if (is_array($valor)) { ?><span class="<?= e(componenteClasses('inline-flex items-center gap-1', empty($coluna['nowrap']) ? 'flex-wrap' : 'flex-nowrap')) ?>"><?= componenteConteudo($valor) ?></span><?php } else { ?><?= componenteConteudo($valor) ?><?php } ?></td>
+                        <td data-label="<?= e($coluna['label']) ?>" class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], ['whitespace-nowrap' => ! empty($coluna['nowrap'])], $celulaCelular, DATA_TABLE_ESCONDER[$coluna['hide_until'] ?? ''] ?? null, $coluna['class'] ?? null)) ?>"><?php $valor = $valorDaCelula($linha, $coluna); ?><?php if (! empty($coluna['truncate']) && is_scalar($valor)) { ?><span class="block max-w-48 truncate max-sm:max-w-none max-sm:whitespace-normal" title="<?= e($valor) ?>"><?= e($valor) ?></span><?php } elseif (is_array($valor)) { ?><span class="<?= e(componenteClasses('inline-flex items-center gap-1', empty($coluna['nowrap']) ? 'flex-wrap' : 'flex-nowrap')) ?>"><?= componenteConteudo($valor) ?></span><?php } else { ?><?= componenteConteudo($valor) ?><?php } ?></td>
                     <?php } ?>
                 </tr>
             <?php } ?>

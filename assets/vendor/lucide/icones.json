@@ -1,5 +1,6 @@
 [
   "archive",
+  "barcode",
   "chart-column",
   "chart-pie",
   "check",
@@ -23,6 +24,7 @@
   "menu",
   "monitor",
   "moon",
+  "package-plus",
   "pencil",
   "plus",
   "receipt",

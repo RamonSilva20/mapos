@@ -132,3 +132,16 @@ test('dinheiro: apagar até só sobrar zero esvazia o campo', () => {
     aplicarMascara(parcial, { inputType: 'deleteContentBackward' });
     assert.equal(parcial.value, '123,45');
 });
+
+import { numeroParaReais, precoDeVenda, reaisParaNumero } from '../../assets/js/modules/produtos/formulario.js';
+
+test('preço de venda por markup e por margem', () => {
+    assert.equal(reaisParaNumero('1.234,56'), 1234.56);
+    assert.equal(reaisParaNumero(''), null);
+    assert.equal(numeroParaReais(450), '450,00');
+    assert.equal(numeroParaReais(precoDeVenda(300, 50, 'markup')), '450,00');
+    assert.equal(numeroParaReais(precoDeVenda(300, 40, 'margem')), '500,00');
+    assert.equal(precoDeVenda(300, 100, 'margem'), null);
+    assert.equal(precoDeVenda(null, 10, 'markup'), null);
+    assert.equal(precoDeVenda(300, -1, 'markup'), null);
+});

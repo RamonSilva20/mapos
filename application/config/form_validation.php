@@ -77,34 +77,39 @@ $config = [
     ],
     'produtos' => [
         [
+            'field' => 'codDeBarra',
+            'label' => 'Código de barras',
+            'rules' => 'trim|max_length[70]',
+        ],
+        [
             'field' => 'descricao',
-            'label' => '',
-            'rules' => 'required|trim',
+            'label' => 'Descrição',
+            'rules' => 'required|trim|max_length[80]',
         ],
         [
             'field' => 'unidade',
             'label' => 'Unidade',
-            'rules' => 'required|trim',
+            'rules' => 'required|trim|max_length[10]',
         ],
         [
             'field' => 'precoCompra',
-            'label' => 'Preço de Compra',
+            'label' => 'Preço de compra',
             'rules' => 'required|trim',
         ],
         [
             'field' => 'precoVenda',
-            'label' => 'Preço de Venda',
+            'label' => 'Preço de venda',
             'rules' => 'required|trim',
         ],
         [
             'field' => 'estoque',
             'label' => 'Estoque',
-            'rules' => 'required|trim',
+            'rules' => 'required|trim|integer|greater_than_equal_to[0]|less_than_equal_to[99999999]',
         ],
         [
             'field' => 'estoqueMinimo',
-            'label' => 'Estoque Minimo',
-            'rules' => 'trim',
+            'label' => 'Estoque mínimo',
+            'rules' => 'trim|integer|greater_than_equal_to[0]|less_than_equal_to[99999999]',
         ],
     ],
     'usuarios' => [
