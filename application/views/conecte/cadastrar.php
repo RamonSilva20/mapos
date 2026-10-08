@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/fullcalendar.css" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+    <link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
 </head>
 
 <body>

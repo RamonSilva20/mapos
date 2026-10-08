@@ -19,7 +19,7 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/funcoesGlobal.js"></script>
     <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
 </head>

@@ -16,7 +16,7 @@
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/fullcalendar.css" />
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.12.4.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>

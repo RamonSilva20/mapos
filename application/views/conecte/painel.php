@@ -1,5 +1,3 @@
-<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-
 <div class="quick-actions_homepage">
     <ul class="cardBox">
         <li class="card">

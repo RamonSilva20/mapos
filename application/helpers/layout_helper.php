@@ -279,7 +279,7 @@ if (! function_exists('layoutAssets')) {
 
         // Depois do CSS legado: as regras estruturais do layout.css (sem
         // camada) precisam vencer as do matrix-style com a mesma especificidade.
-        $css[] = 'https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css';
+        $css[] = 'assets/vendor/boxicons/css/boxicons.min.css';
         $css[] = 'assets/dist/layout.css';
 
         return [
