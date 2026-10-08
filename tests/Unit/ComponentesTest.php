@@ -668,6 +668,32 @@ final class ComponentesTest extends MaposTestCase
         $this->assertStringNotContainsString('bg-primary', $html);
     }
 
+    /**
+     * Várias ações numa célula ficam juntas (no celular a célula é flex com o
+     * título à esquerda; sem o agrupamento os botões se espalham).
+     */
+    public function testDataTableAgrupaVariosItensDaCelula(): void
+    {
+        $html = $this->html('data-table', [
+            'columns' => [['label' => 'Ações', 'render' => static fn () => [
+                component('button', ['label' => 'Editar', 'icon' => 'pencil', 'icon_only' => true]),
+                component('button', ['label' => 'Excluir', 'icon' => 'trash-2', 'icon_only' => true]),
+            ]]],
+            'rows' => [['id' => 1]],
+        ]);
+
+        $this->assertMatchesRegularExpression('#<span class="inline-flex flex-wrap items-center gap-1">\s*<button.*Editar.*<button.*Excluir.*</span>\s*</td>#s', $html);
+    }
+
+    public function testSelectMultiploMantemAparenciaNativa(): void
+    {
+        $multiplo = $this->html('select', ['name' => 't', 'label' => 'T', 'options' => ['a' => 'A'], 'multiple' => true]);
+
+        $this->assertStringNotContainsString('appearance-none', $multiplo);
+        $this->assertStringContainsString('[&amp;_option:checked]:bg-primary-tint', $multiplo);
+        $this->assertStringContainsString('appearance-none', $this->html('select', ['name' => 't', 'label' => 'T', 'options' => ['a' => 'A']]));
+    }
+
     public function testDataTableEmCartaoNoCelularENumerosTabulares(): void
     {
         $html = $this->html('data-table', [

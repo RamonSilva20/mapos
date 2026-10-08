@@ -48,8 +48,10 @@ $atributos = [
     'aria-invalid' => $error !== null ? 'true' : null,
     'aria-describedby' => trim(($idAjuda ?? '') . ' ' . ($idErro ?? '')) ?: null,
     'class' => componenteClasses(
-        'block w-full appearance-none rounded-sm border bg-field px-3 py-2 text-body-md text-text',
-        $multiple ? 'min-h-24' : 'pr-10 max-sm:min-h-11',
+        'block w-full rounded-sm border bg-field px-3 py-2 text-body-md text-text',
+        // O múltiplo mantém a aparência nativa (lista com rolagem); a opção
+        // marcada usa o tint do item ativo em vez do azul do sistema.
+        $multiple ? 'min-h-24 [&_option:checked]:bg-primary-tint [&_option:checked]:text-text' : 'appearance-none pr-10 max-sm:min-h-11',
         // DESIGN.md text-input: borda hairline-input (3:1), texto body-md 400,
         // foco com sombra interna e anel azul de 3px, erro em danger.
         'focus:outline-3 focus:outline-offset-0 focus:outline-ring/50 focus:shadow-field-focus',

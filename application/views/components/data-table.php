@@ -101,7 +101,7 @@ $atributos = [
             <?php foreach ($linhas as $i => $linha) { ?>
                 <tr class="<?= e(componenteClasses('border-b border-border last:border-b-0 hover:bg-surface-subtle max-sm:block max-sm:px-4 max-sm:py-3', ['bg-surface-subtle/60' => $striped && $i % 2 === 1])) ?>">
                     <?php foreach ($colunas as $coluna) { ?>
-                        <td data-label="<?= e($coluna['label']) ?>" class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], ['whitespace-nowrap' => ! empty($coluna['nowrap'])], $celulaCelular, $coluna['class'] ?? null)) ?>"><?= componenteConteudo($valorDaCelula($linha, $coluna)) ?></td>
+                        <td data-label="<?= e($coluna['label']) ?>" class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], ['whitespace-nowrap' => ! empty($coluna['nowrap'])], $celulaCelular, $coluna['class'] ?? null)) ?>"><?php $valor = $valorDaCelula($linha, $coluna); ?><?php if (is_array($valor)) { ?><span class="inline-flex flex-wrap items-center gap-1"><?= componenteConteudo($valor) ?></span><?php } else { ?><?= componenteConteudo($valor) ?><?php } ?></td>
                     <?php } ?>
                 </tr>
             <?php } ?>
