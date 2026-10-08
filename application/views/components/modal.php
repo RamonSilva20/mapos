@@ -31,7 +31,7 @@ $atributos = [
     'aria-labelledby' => $id . '-titulo',
     'class' => componenteClasses(
         'm-auto w-[calc(100%-2rem)] rounded-card border border-border bg-surface p-0 text-text shadow-overlay',
-        'backdrop:bg-black/50 backdrop:backdrop-blur-[1px]',
+        'backdrop:bg-backdrop backdrop:backdrop-blur-[1px]',
         $larguras[$size],
         $class
     ),
@@ -40,13 +40,13 @@ $atributos = [
 <dialog<?= componenteAtributos(componenteMesclarAtributos($atributos, $attrs)) ?>>
     <div class="flex items-start justify-between gap-4 border-b border-border px-5 py-4">
         <h2 id="<?= e($id . '-titulo') ?>" class="text-base font-semibold text-text"><?= e($title) ?></h2>
-        <button type="button" data-modal-fechar class="-m-1 inline-flex size-8 items-center justify-center rounded-control text-muted hover:bg-surface-2 hover:text-text focus-visible:outline-2 focus-visible:outline-ring">
+        <button type="button" data-modal-fechar class="-m-1 inline-flex size-8 items-center justify-center rounded-control text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-ring">
             <span aria-hidden="true" class="text-xl leading-none">&times;</span>
             <span class="sr-only"><?= e($close_label) ?></span>
         </button>
     </div>
     <?php if ($body !== null) { ?><div class="px-5 py-4 text-sm"><?= componenteConteudo($body) ?></div><?php } ?>
     <?php if ($footer !== null) { ?>
-        <div class="flex flex-wrap items-center justify-end gap-2 border-t border-border bg-surface-2 px-5 py-3"><?= componenteConteudo($footer) ?></div>
+        <div class="flex flex-wrap items-center justify-end gap-2 border-t border-border bg-surface-subtle px-5 py-3"><?= componenteConteudo($footer) ?></div>
     <?php } ?>
 </dialog>

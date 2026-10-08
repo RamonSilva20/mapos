@@ -16,10 +16,10 @@
  * @var array                   $attrs
  */
 $variantes = [
-    'info' => ['caixa' => 'border-info/40 bg-info-soft', 'icone' => 'bx-info-circle text-info'],
-    'success' => ['caixa' => 'border-success/40 bg-success-soft', 'icone' => 'bx-check-circle text-success'],
-    'warning' => ['caixa' => 'border-warning/40 bg-warning-soft', 'icone' => 'bx-error text-warning'],
-    'danger' => ['caixa' => 'border-danger/40 bg-danger-soft', 'icone' => 'bx-error-circle text-danger'],
+    'info' => ['caixa' => 'border-info/40 bg-info-soft', 'icone' => 'bx-info-circle text-info-ink'],
+    'success' => ['caixa' => 'border-success/40 bg-success-soft', 'icone' => 'bx-check-circle text-success-ink'],
+    'warning' => ['caixa' => 'border-warning/40 bg-warning-soft', 'icone' => 'bx-error text-warning-ink'],
+    'danger' => ['caixa' => 'border-danger/40 bg-danger-soft', 'icone' => 'bx-error-circle text-danger-ink'],
 ];
 
 $atributos = [

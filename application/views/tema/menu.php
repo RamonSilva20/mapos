@@ -12,11 +12,11 @@
  *
  * @var array $layout
  */
-$classeLink = 'flex h-10 items-center gap-3 rounded-control px-3 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=page]:bg-accent-50 aria-[current=page]:text-accent-700 dark:aria-[current=page]:bg-surface-2 dark:aria-[current=page]:text-accent';
-$classeSublink = 'flex min-h-9 items-center rounded-control py-1.5 pr-3 pl-11 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=page]:font-medium aria-[current=page]:text-accent-700 dark:aria-[current=page]:text-accent';
+$classeLink = 'flex h-10 items-center gap-3 rounded-control px-3 text-sm font-medium text-muted transition-colors hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=page]:bg-primary-tint aria-[current=page]:font-semibold aria-[current=page]:text-text';
+$classeSublink = 'flex min-h-9 items-center rounded-control py-1.5 pr-3 pl-11 text-sm text-muted transition-colors hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=page]:font-semibold aria-[current=page]:text-text';
 ?>
 <div class="v5-shell">
-  <div class="v5-gaveta-fundo fixed inset-0 z-40 bg-black/50 lg:hidden" data-gaveta-fechar aria-hidden="true"></div>
+  <div class="v5-gaveta-fundo fixed inset-0 z-40 bg-backdrop lg:hidden" data-gaveta-fechar aria-hidden="true"></div>
 
   <aside id="v5-sidebar" class="v5-sidebar fixed inset-y-0 left-0 z-50 flex flex-col border-r border-border bg-surface" data-sidebar aria-label="Menu principal">
     <div class="flex h-topbar shrink-0 items-center gap-3 border-b border-border px-4">

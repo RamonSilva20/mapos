@@ -10,14 +10,14 @@
  * @var array       $attrs
  */
 $variantes = [
-    'neutral' => 'bg-surface-2 text-muted ring-border',
+    'neutral' => 'bg-surface-subtle text-muted ring-border',
     // No escuro a escala do destaque mistura com a superfície escura e fica
     // apagada; o texto passa a ser o do tema, e a cor fica no fundo e no anel.
-    'accent' => 'bg-accent-100 text-accent-800 ring-accent-300 dark:text-text',
-    'info' => 'bg-info-soft text-info ring-info/30',
-    'success' => 'bg-success-soft text-success ring-success/30',
-    'warning' => 'bg-warning-soft text-warning ring-warning/30',
-    'danger' => 'bg-danger-soft text-danger ring-danger/30',
+    'accent' => 'bg-primary-tint text-text ring-primary/40',
+    'info' => 'bg-info-soft text-info-ink ring-info/30',
+    'success' => 'bg-success-soft text-success-ink ring-success/30',
+    'warning' => 'bg-warning-soft text-warning-ink ring-warning/30',
+    'danger' => 'bg-danger-soft text-danger-ink ring-danger/30',
 ];
 
 $tamanhos = ['sm' => 'px-1.5 py-0.5 text-[0.6875rem]', 'md' => 'px-2 py-0.5 text-xs'];

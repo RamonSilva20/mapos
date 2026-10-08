@@ -10,10 +10,10 @@
 import iniciarToast from '../modules/componentes/toast.js';
 
 export const VARIANTES = {
-    info: 'bx-info-circle text-info',
-    success: 'bx-check-circle text-success',
-    warning: 'bx-error text-warning',
-    danger: 'bx-error-circle text-danger',
+    info: 'bx-info-circle text-info-ink',
+    success: 'bx-check-circle text-success-ink',
+    warning: 'bx-error text-warning-ink',
+    danger: 'bx-error-circle text-danger-ink',
 };
 
 export const CLASSES_REGIAO = 'pointer-events-none fixed right-4 bottom-4 z-50 flex flex-col items-end gap-2';
@@ -63,7 +63,7 @@ export function criarToast({ mensagem, titulo = null, variante = 'info', duracao
     texto.textContent = mensagem;
     corpo.appendChild(texto);
 
-    const fechar = el('button', '-m-1 inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted hover:bg-surface-2 hover:text-text focus-visible:outline-2 focus-visible:outline-ring');
+    const fechar = el('button', '-m-1 inline-flex size-7 shrink-0 items-center justify-center rounded-control text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-ring');
     fechar.type = 'button';
     fechar.setAttribute('data-dispensar', '');
     const x = el('span', 'text-lg leading-none');

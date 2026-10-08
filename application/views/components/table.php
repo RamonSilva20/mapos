@@ -76,7 +76,7 @@ $atributos = [
 <div<?= componenteAtributos(componenteMesclarAtributos($atributos, $attrs)) ?>>
     <table class="w-full border-collapse text-sm text-text">
         <?php if ($caption !== null) { ?><caption class="sr-only"><?= e($caption) ?></caption><?php } ?>
-        <thead class="bg-surface-2 text-xs font-semibold tracking-wide text-muted uppercase">
+        <thead class="bg-surface-subtle text-xs font-semibold tracking-wide text-muted uppercase">
             <tr>
                 <?php foreach ($colunas as $coluna) { ?>
                     <th scope="col" class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], 'border-b border-border')) ?>"><?= e($coluna['label']) ?></th>
@@ -92,7 +92,7 @@ $atributos = [
                 </tr>
             <?php } ?>
             <?php foreach ($linhas as $i => $linha) { ?>
-                <tr class="<?= e(componenteClasses('border-b border-border last:border-b-0 hover:bg-surface-2', ['bg-surface-2/60' => $striped && $i % 2 === 1])) ?>">
+                <tr class="<?= e(componenteClasses('border-b border-border last:border-b-0 hover:bg-surface-subtle', ['bg-surface-subtle/60' => $striped && $i % 2 === 1])) ?>">
                     <?php foreach ($colunas as $coluna) { ?>
                         <td class="<?= e(componenteClasses($celula, $alinhamentos[$coluna['align']], $coluna['class'] ?? null)) ?>"><?= componenteConteudo($valorDaCelula($linha, $coluna)) ?></td>
                     <?php } ?>

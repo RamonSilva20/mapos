@@ -28,7 +28,7 @@
       </form>
 
       <div class="ml-auto flex items-center gap-2 sm:gap-3">
-        <div class="inline-flex rounded-control border border-border bg-surface-2 p-0.5" role="group" aria-label="Modo de cor">
+        <div class="inline-flex rounded-control border border-border bg-surface-subtle p-0.5" role="group" aria-label="Modo de cor">
           <?php foreach (['claro' => ['Modo claro', 'bx-sun'], 'escuro' => ['Modo escuro', 'bx-moon'], 'sistema' => ['Seguir o sistema', 'bx-desktop']] as $modo => [$rotulo, $icone]) { ?>
             <?= component('button', [
                 'label' => $rotulo,
@@ -36,14 +36,14 @@
                 'icon_only' => true,
                 'variant' => 'ghost',
                 'size' => 'sm',
-                'class' => 'aria-pressed:bg-surface aria-pressed:text-accent-700 aria-pressed:shadow-card dark:aria-pressed:text-accent',
+                'class' => 'aria-pressed:bg-surface aria-pressed:font-semibold aria-pressed:text-text aria-pressed:shadow-elev-1',
                 'attrs' => ['data-tema-escolher' => $modo, 'aria-pressed' => 'false'],
             ]) ?>
           <?php } ?>
         </div>
 
         <details class="relative" data-menu-suspenso>
-          <summary class="flex cursor-pointer list-none items-center gap-3 rounded-control p-1 hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden" aria-label="Menu do usuário">
+          <summary class="flex cursor-pointer list-none items-center gap-3 rounded-control p-1 hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden" aria-label="Menu do usuário">
             <span class="hidden text-right leading-tight sm:block">
               <span class="block text-xs text-muted"><?= e($layout['saudacao']) ?>,</span>
               <span class="block max-w-40 truncate text-sm font-medium text-text"><?= e($layout['usuario']) ?></span>
@@ -52,10 +52,10 @@
           </summary>
           <div class="absolute right-0 z-40 mt-2 w-56 rounded-card border border-border bg-surface p-1.5 shadow-overlay">
             <p class="truncate px-3 py-2 text-sm font-medium text-text sm:hidden"><?= e($layout['usuario']) ?></p>
-            <a href="<?= e(site_url('mine')) ?>" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-user-circle text-lg text-muted" aria-hidden="true"></i>Área do Cliente</a>
-            <a href="<?= e(site_url('mapos/minhaConta')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-id-card text-lg text-muted" aria-hidden="true"></i>Meu Perfil</a>
+            <a href="<?= e(site_url('mine')) ?>" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-user-circle text-lg text-muted" aria-hidden="true"></i>Área do Cliente</a>
+            <a href="<?= e(site_url('mapos/minhaConta')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-id-card text-lg text-muted" aria-hidden="true"></i>Meu Perfil</a>
             <div class="my-1 border-t border-border" role="separator"></div>
-            <a href="<?= e(site_url('login/sair')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-log-out-circle text-lg text-muted" aria-hidden="true"></i>Sair do Sistema</a>
+            <a href="<?= e(site_url('login/sair')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-log-out-circle text-lg text-muted" aria-hidden="true"></i>Sair do Sistema</a>
           </div>
         </details>
       </div>

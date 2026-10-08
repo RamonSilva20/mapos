@@ -45,7 +45,7 @@ $statusBadge = [
                 <p class="text-xs text-muted">application/views/components · visível só em development</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-                <div class="inline-flex rounded-control border border-border bg-surface-2 p-0.5" role="group" aria-label="Modo de cor">
+                <div class="inline-flex rounded-control border border-border bg-surface-subtle p-0.5" role="group" aria-label="Modo de cor">
                     <?php foreach (['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Sistema'] as $modo => $rotulo) { ?>
                         <?= component('button', ['label' => $rotulo, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'aria-pressed:bg-surface aria-pressed:shadow-card', 'attrs' => ['data-tema-modo' => $modo, 'aria-pressed' => 'false']]) ?>
                     <?php } ?>
