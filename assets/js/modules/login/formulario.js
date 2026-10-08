@@ -8,7 +8,7 @@
 // é interpretada aqui.
 
 import { ErroHttp, post } from '../../lib/http.js';
-import { criarIcone } from '../../lib/icone.js';
+import { marcarCarregando, mostrarErroDoCampo } from '../../lib/formulario.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -83,44 +83,12 @@ export function mensagemDeFalha(erro) {
     return MENSAGEM_REDE;
 }
 
-function mostrarErroDoCampo(campo, mensagem) {
-    const idErro = `${campo.id}-erro-js`;
-    let aviso = document.getElementById(idErro);
-    const descritores = (campo.getAttribute('aria-describedby') ?? '').split(' ').filter((id) => id && id !== idErro);
-
-    if (!mensagem) {
-        aviso?.remove();
-        campo.removeAttribute('aria-invalid');
-        campo.classList.remove('border-danger');
-        campo.classList.add('border-input');
-        descritores.length ? campo.setAttribute('aria-describedby', descritores.join(' ')) : campo.removeAttribute('aria-describedby');
-        return;
-    }
-
-    if (!aviso) {
-        // Mesma marcação do erro do componente input (ícone + texto).
-        aviso = document.createElement('p');
-        aviso.id = idErro;
-        aviso.className = 'flex items-start gap-1.5 text-caption text-danger-ink';
-        aviso.append(criarIcone('circle-alert', 'mt-0.5 size-4'), document.createElement('span'));
-        campo.insertAdjacentElement('afterend', aviso);
-    }
-
-    aviso.querySelector('span').textContent = mensagem;
-    campo.setAttribute('aria-invalid', 'true');
-    campo.classList.remove('border-input');
-    campo.classList.add('border-danger');
-    campo.setAttribute('aria-describedby', [...descritores, idErro].join(' '));
-}
-
 export default function iniciar(formulario) {
     const email = formulario.querySelector('[name="email"]');
     const senha = formulario.querySelector('[name="senha"]');
     const botao = formulario.querySelector('[type="submit"]');
     const caixa = formulario.querySelector('[data-login-mensagem]');
     const texto = formulario.querySelector('[data-login-texto]');
-    const rotulo = botao?.querySelector('span:not(.sr-only)') ?? botao?.querySelector('span');
-    const rotuloOriginal = rotulo?.textContent ?? '';
 
     const textos = {
         emailVazio: email?.dataset.msgVazio,
@@ -134,12 +102,7 @@ export default function iniciar(formulario) {
         caixa.hidden = !mensagem;
     }
 
-    function carregando(ativo) {
-        if (!botao) return;
-        botao.disabled = ativo;
-        botao.setAttribute('aria-busy', ativo ? 'true' : 'false');
-        if (rotulo) rotulo.textContent = ativo ? (botao.dataset.rotuloCarregando || rotuloOriginal) : rotuloOriginal;
-    }
+    const carregando = (ativo) => marcarCarregando(botao, ativo);
 
     [email, senha].forEach((campo) => {
         campo?.addEventListener('input', () => {

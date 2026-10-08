@@ -296,6 +296,17 @@ O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination
 - **Ação principal na topbar** (`topbar_acao`). Na tela fica um único `button-primary`.
 - **Exclusão** com um `modal-confirm` só, para todas as linhas. O botão da linha leva `data-modal-abrir` e os valores em `data-valor-<campo>`; o `modal.js` preenche os elementos com `data-modal-valor="<campo>"`, como o nome na mensagem e o `id` do formulário POST com o token CSRF.
 
+**Padrão dos formulários** (#2851). A referência é o formulário de cliente (`Clientes::formulario()` e `views/clientes/formulario.php`), o mesmo para cadastrar e editar:
+
+- **Envio:** é um POST comum, com o token CSRF. O `<form>` leva `novalidate` e `js_module('formulario/padrao')`.
+  - O módulo valida no navegador com as regras do próprio HTML (`required`, `type`, `maxlength`, `pattern`) e com os textos de `data-msg-vazio` e `data-msg-invalido`.
+  - Cada erro aparece no campo, com a mesma marcação do erro do servidor (`assets/js/lib/formulario.js`), e o foco vai para o primeiro campo com erro.
+  - Ao enviar, o botão fica em carregamento (`data-rotulo-carregando`).
+- **Validação no servidor**, sempre: `$erros = $this->validarFormulario('clientes')` roda o `form_validation` com mensagens em português e devolve os erros por campo. A view passa `'error' => $erros['campo'] ?? null` para cada componente. Com erro, a tela volta com os valores enviados e um `alert-danger` resumindo quantos campos conferir. Com sucesso, a tela redireciona com o flash de sucesso, que vira toast.
+- **Id editado:** é sempre o da URL, nunca um campo do POST. Os dados a salvar vêm de uma função que só lê os campos do formulário (ex.: `clienteDadosDoFormulario()`), testável fora do controller.
+- **Máscaras:** `data-mascara="documento|telefone|cep"`. Para mostrar a senha, um botão com `data-mostrar-senha="<id do campo>"`.
+- **Layout:** seções com título curto, campos em duas colunas a partir de 640px e um único `button-primary` (Salvar) no fim, com Cancelar em ghost. Formulário de tela inteira não usa `topbar_acao`.
+
 **Ícones** são do [Lucide](https://lucide.dev/icons), servidos de um sprite SVG (`assets/vendor/lucide/sprite.svg`) que só tem os ícones listados em `assets/src/icones.json`. Nas views use `<?= icon('wrench', ['class' => 'size-4']) ?>` (ou a prop `icon` dos componentes); no JavaScript, `criarIcone('wrench', 'size-4')` de `assets/js/lib/icone.js`. O ícone segue a cor do texto (`currentColor`) e tem 20px por padrão. Para usar um ícone novo, inclua o nome no `icones.json` e rode `npm run build:vendor`; o `IconeTest` falha se uma view citar um ícone fora da lista. O Boxicons (`<i class="bx ...">`) só continua nas telas legadas.
 
 Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.

@@ -192,6 +192,32 @@ class MY_Controller extends CI_Controller
     }
 
     /**
+     * Roda o form_validation com as regras de config/form_validation.php e
+     * devolve os erros por campo (vazio quando passou), para a view mostrar
+     * cada erro no seu campo (#2851).
+     *
+     * As mensagens saem em português: o idioma global continua english (o
+     * pt-br não tem todos os arquivos, como o da paginação), então ele só é
+     * trocado durante a validação.
+     *
+     * @return array<string, string>
+     */
+    protected function validarFormulario(string $regras): array
+    {
+        $this->load->library('form_validation');
+
+        $idioma = $this->config->item('language');
+        $this->config->set_item('language', 'pt-br');
+        try {
+            $valido = $this->form_validation->run($regras);
+        } finally {
+            $this->config->set_item('language', $idioma);
+        }
+
+        return $valido ? [] : $this->form_validation->error_array();
+    }
+
+    /**
      * Diz se o usuário logado tem a permissão, para mostrar ou esconder uma
      * ação na tela (ex. o botão de excluir de cada linha).
      *

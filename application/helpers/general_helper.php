@@ -197,3 +197,23 @@ if (! function_exists('tokenRecuperacaoHash')) {
         return hash('sha256', $token);
     }
 }
+
+if (! function_exists('ufsDoBrasil')) {
+    /**
+     * Unidades federativas, sigla => nome, para selects de endereço.
+     *
+     * @return array<string, string>
+     */
+    function ufsDoBrasil(): array
+    {
+        return [
+            'AC' => 'Acre', 'AL' => 'Alagoas', 'AP' => 'Amapá', 'AM' => 'Amazonas', 'BA' => 'Bahia',
+            'CE' => 'Ceará', 'DF' => 'Distrito Federal', 'ES' => 'Espírito Santo', 'GO' => 'Goiás',
+            'MA' => 'Maranhão', 'MT' => 'Mato Grosso', 'MS' => 'Mato Grosso do Sul', 'MG' => 'Minas Gerais',
+            'PA' => 'Pará', 'PB' => 'Paraíba', 'PR' => 'Paraná', 'PE' => 'Pernambuco', 'PI' => 'Piauí',
+            'RJ' => 'Rio de Janeiro', 'RN' => 'Rio Grande do Norte', 'RS' => 'Rio Grande do Sul',
+            'RO' => 'Rondônia', 'RR' => 'Roraima', 'SC' => 'Santa Catarina', 'SP' => 'São Paulo',
+            'SE' => 'Sergipe', 'TO' => 'Tocantins',
+        ];
+    }
+}

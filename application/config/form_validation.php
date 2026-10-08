@@ -6,12 +6,12 @@ $config = [
     'clientes' => [
         [
             'field' => 'nomeCliente',
-            'label' => 'Nome',
+            'label' => 'Nome ou razão social',
             'rules' => 'required|trim',
         ],
         [
             'field' => 'documento',
-            'label' => 'CPF/CNPJ',
+            'label' => 'CPF ou CNPJ',
             'rules' => 'trim|verific_cpf_cnpj|unique[clientes.documento.' . get_instance()->uri->segment(3) . '.idClientes]',
             'errors' => [
                 'verific_cpf_cnpj' => 'O campo %s não é um CPF ou CNPJ válido.',
@@ -24,7 +24,7 @@ $config = [
         ],
         [
             'field' => 'email',
-            'label' => 'Email',
+            'label' => 'E-mail',
             'rules' => 'trim|valid_email|unique[clientes.email.' . get_instance()->uri->segment(3) . '.idClientes]',
         ],
         [
