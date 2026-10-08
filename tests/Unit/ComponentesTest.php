@@ -860,4 +860,16 @@ final class ComponentesTest extends MaposTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->html('data-table', ['columns' => [['key' => 'a', 'label' => 'A', 'hide_until' => 'sm']], 'rows' => []]);
     }
+
+    public function testAbaComRotuloCurtoNoCelular(): void
+    {
+        $html = $this->html('tabs', ['items' => [
+            ['label' => 'Ordens de serviço', 'short' => 'OS', 'url' => '/os', 'icon' => 'file-text'],
+            ['label' => 'Dados', 'url' => '/dados', 'active' => true],
+        ]]);
+
+        $this->assertStringContainsString('<span class="sm:hidden" aria-hidden="true">OS</span><span class="max-sm:sr-only">Ordens de serviço</span>', $html);
+        $this->assertStringContainsString('size-4 max-sm:hidden', $html);
+        $this->assertMatchesRegularExpression('#aria-current="page"[^>]*>\s*Dados#', $html);
+    }
 }
