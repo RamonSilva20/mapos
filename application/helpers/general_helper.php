@@ -148,3 +148,15 @@ if (! function_exists('dataIsoParaYmd')) {
         return "{$partes[1]}-{$partes[2]}-{$partes[3]}";
     }
 }
+
+if (! function_exists('backupNomeArquivo')) {
+    /**
+     * Nome do arquivo de download do backup: backup-AAAA-MM-DD-HHhMM.zip.
+     * Sem ":" (inválido em nomes de arquivo no Windows) e com minutos, e não o
+     * mês, depois da hora.
+     */
+    function backupNomeArquivo(int $instante): string
+    {
+        return 'backup-' . date('Y-m-d-H\\hi', $instante) . '.zip';
+    }
+}

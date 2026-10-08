@@ -102,13 +102,14 @@ class Mapos extends MY_Controller
 
         $backup = $this->dbutil->backup($prefs);
 
-        $this->load->helper('file');
-        write_file(base_url() . 'backup/backup.zip', $backup);
-
+        // O backup só é entregue como download. Antes ele também era "gravado"
+        // em base_url() . 'backup/backup.zip': uma URL, então a gravação falhava
+        // sempre; e, se funcionasse, deixaria o dump do banco numa pasta
+        // pública (#2856).
         log_info('Efetuou backup do banco de dados.');
 
         $this->load->helper('download');
-        force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
+        force_download(backupNomeArquivo(time()), $backup);
     }
 
     public function emitente()
