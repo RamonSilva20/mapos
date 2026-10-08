@@ -135,7 +135,7 @@ final class LoginViewTest extends MaposTestCase
         foreach (['mapos/login', 'conecte/login'] as $view) {
             $html = $this->renderizar([], [], $view);
 
-            $this->assertStringContainsString('<html lang="pt-br">', $html, $view);
+            $this->assertStringContainsString('<html lang="pt-br" class="scheme-dark">', $html, $view);
             $this->assertStringNotContainsString('tema.js', $html, $view);
             $this->assertStringContainsString('bg-canvas-dark bg-[url(../img/entrada/estrelas.svg)]', $html, $view);
             $this->assertMatchesRegularExpression('/<section class="superficie-entrada [^"]*bg-night/', $html, $view);
@@ -151,6 +151,10 @@ final class LoginViewTest extends MaposTestCase
 
         $this->assertMatchesRegularExpression('#<a(?=[^>]*href="http://mapos.test/index.php/mine")(?=[^>]*bg-on-dark-faint)#', $painel);
         $this->assertMatchesRegularExpression('#<a(?=[^>]*href="http://mapos.test/index.php/login")(?=[^>]*bg-on-dark-faint)#', $cliente);
+
+        // No celular o botão vira só ícone, com 44px (max-sm:size-11).
+        $this->assertMatchesRegularExpression('#<a(?=[^>]*href="http://mapos.test/index.php/mine")(?=[^>]*max-sm:hidden)#', $painel);
+        $this->assertMatchesRegularExpression('#<a(?=[^>]*href="http://mapos.test/index.php/mine")(?=[^>]*max-sm:size-11)(?=[^>]*sm:hidden)(?=[^>]*title="Área do cliente")#', $painel);
     }
 
     public function testLoginDoClienteUsaOMesmoModulo(): void

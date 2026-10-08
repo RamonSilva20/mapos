@@ -20,7 +20,7 @@ include APPPATH . 'views/entrada/inicio.php';
     <main class="mx-auto grid w-full max-w-6xl flex-1 items-center gap-8 px-4 py-6 lg:grid-cols-[1fr_26rem] lg:gap-16 lg:px-8 lg:py-12">
         <section class="flex flex-col items-start gap-4">
             <span class="rounded-xs bg-night px-2 py-1 text-caption text-on-dark max-sm:hidden">Área do cliente</span>
-            <h1 class="font-display text-heading-xl font-bold text-on-dark sm:text-display-large xl:text-display-hero">
+            <h1 class="font-display text-display-hero-sm font-bold text-on-dark sm:text-display-large xl:text-display-hero">
                 Acompanhe suas <span class="rounded-xs bg-accent-lime px-3 text-ink">ordens</span>.
             </h1>
             <p class="max-w-xl text-body-lg text-on-dark-muted max-sm:hidden">Consulte o andamento das ordens de serviço, suas compras e cobranças, e abra novos pedidos.</p>
@@ -75,8 +75,8 @@ include APPPATH . 'views/entrada/inicio.php';
             </form>
 
             <div class="mt-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-body-md">
-                <a href="<?= e(site_url('mine/resetarSenha')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50">Esqueci minha senha</a>
-                <a href="<?= e(site_url('mine/cadastrar')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50">Criar conta</a>
+                <a href="<?= e(site_url('mine/resetarSenha')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Esqueci minha senha</a>
+                <a href="<?= e(site_url('mine/cadastrar')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Criar conta</a>
             </div>
         </section>
     </main>

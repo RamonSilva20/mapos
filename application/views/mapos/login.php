@@ -31,7 +31,7 @@ include APPPATH . 'views/entrada/inicio.php';
             <?php if ($versao !== '') { ?>
                 <span class="rounded-xs bg-night px-2 py-1 text-caption text-on-dark max-sm:hidden"><?= e('Versão ' . $versao) ?></span>
             <?php } ?>
-            <h1 class="font-display text-heading-xl font-bold text-on-dark sm:text-display-large xl:text-display-hero">
+            <h1 class="font-display text-display-hero-sm font-bold text-on-dark sm:text-display-large xl:text-display-hero">
                 Sua oficina em <span class="rounded-xs bg-accent-lime px-3 text-ink">ordem</span>.
             </h1>
             <?php if ($subtitulo !== '') { ?>

@@ -149,6 +149,10 @@
   --text-display-hero: 5.5rem;
   --text-display-hero--line-height: 1.2;
   --text-display-hero--font-weight: 700;
+  /* Degrau do display-hero no celular (DESIGN.md: 88px → 60px → 48px). */
+  --text-display-hero-sm: 3rem;
+  --text-display-hero-sm--line-height: 1.2;
+  --text-display-hero-sm--font-weight: 700;
   --text-display-large: 3.75rem;
   --text-display-large--line-height: 1.1;
   --text-display-large--font-weight: 500;

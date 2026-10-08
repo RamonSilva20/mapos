@@ -11,13 +11,15 @@
  * Superfície de entrada: fundo canvas-dark com a textura de estrelas
  * (imagem, não CSS), top nav escura com a marca e a ação secundária em
  * button-ghost-on-dark. É sempre escura, qualquer que seja o modo de cor do
- * painel, por isso não carrega o tema.js nem a classe .dark.
+ * painel, por isso não carrega o tema.js nem a classe .dark (só o
+ * color-scheme escuro, para a barra de rolagem; os campos voltam ao claro no
+ * escopo .superficie-entrada).
  *
  * @var array{titulo: string, secundaria?: array} $entrada
  */
 $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
 ?><!doctype html>
-<html lang="pt-br">
+<html lang="pt-br" class="scheme-dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,6 +37,8 @@ $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
             <span class="truncate font-display text-[1.375rem] leading-none font-bold tracking-[-0.2px]"><?= e($nomeSistema) ?></span>
         </a>
         <?php if (! empty($entrada['secundaria'])) { ?>
-            <?= component('button', $entrada['secundaria'] + ['variant' => 'ghost-on-dark', 'size' => 'sm']) ?>
+            <?php // 44px no celular (DESIGN.md); abaixo de sm só o ícone, para a marca caber em 320px. ?>
+            <?= component('button', $entrada['secundaria'] + ['variant' => 'ghost-on-dark', 'class' => 'max-sm:hidden']) ?>
+            <?= component('button', $entrada['secundaria'] + ['variant' => 'ghost-on-dark', 'icon_only' => true, 'class' => 'sm:hidden']) ?>
         <?php } ?>
     </header>
