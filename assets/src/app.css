@@ -14,6 +14,7 @@
  */
 @import "tailwindcss" source(none);
 @import "./tokens.css";
+@import "./fonts.css";
 
 @source "../../application/views/**/*.php";
 /* Classes montadas no JS (ex.: o toast de assets/js/lib/toast.js). */

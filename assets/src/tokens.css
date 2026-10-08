@@ -132,7 +132,7 @@
   --color-accent-violet-mid: #79628c;
   --color-backdrop: rgb(21 15 35 / 55%);
 
-  /* Tipografia (fontes servidas localmente na #2914) */
+  /* Tipografia (@font-face em assets/src/fonts.css, arquivos em assets/vendor/fonts) */
   --font-sans: "Rubik", -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-display: "Space Grotesk", "Rubik", system-ui, sans-serif;
   --font-mono: Monaco, Menlo, "Ubuntu Mono", monospace;

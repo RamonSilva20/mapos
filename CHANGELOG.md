@@ -29,6 +29,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Novo layout do painel (sidebar recolhível, topbar com busca e alternância de tema, flash como toast), com modo legado para as telas ainda não migradas. #2908 [@RamonSilva20](https://github.com/RamonSilva20)
 - Boxicons servido de `assets/vendor` em vez do unpkg. #2909 [@RamonSilva20](https://github.com/RamonSilva20)
 - Tokens do `DESIGN.md` no `tokens.css`: laranja `#F37338` como cor de ação única (rótulo escuro), paleta de status com `-ink`/`-soft` nos modos claro e escuro, modo escuro do painel na paleta violeta, borda de campo com contraste 3:1, escala tipográfica, raios e elevação. A paleta padrão do Tailwind e a escala de cor de destaque foram removidas. #2921 [@RamonSilva20](https://github.com/RamonSilva20)
+- Fontes Rubik (interface) e Space Grotesk (títulos de destaque) servidas de `assets/vendor/fonts` via `@fontsource`, sem CDN, nos subconjuntos latin e latin-ext. #2923 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Removed
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
