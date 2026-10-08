@@ -23,9 +23,10 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'cookie_seguro_helper.php';
  * - style-src sem 'unsafe-inline': as views novas não usam style= (#2825).
  * - img-src aceita https: e data: por causa dos QR Codes de PIX e boletos,
  *   que vêm dos gateways como URL externa ou base64.
- * - connect-src libera as consultas de CEP e CNPJ do assets/js/funcoes.js.
- *   Hoje a de CEP é JSONP (vira script-src e será relatada); a migração para
- *   fetch é o caminho para não precisar liberar script externo.
+ * - connect-src libera as consultas de CEP e CNPJ: ViaCEP e BrasilAPI, por
+ *   fetch, no formulário de cliente da v5 (modules/clientes/formulario.js), e
+ *   a ReceitaWS do assets/js/funcoes.js legado. A ReceitaWS não manda CORS e
+ *   lá é JSONP (vira script-src e será relatada); sai com o frontend legado.
  *
  * @param  string  $reportUri  Caminho do endpoint de relatórios, ou '' para não relatar
  */
@@ -37,7 +38,7 @@ function segurancaPoliticaCsp($reportUri)
         'style-src' => "'self'",
         'img-src' => "'self' data: blob: https:",
         'font-src' => "'self' data:",
-        'connect-src' => "'self' https://viacep.com.br https://www.receitaws.com.br",
+        'connect-src' => "'self' https://viacep.com.br https://brasilapi.com.br https://www.receitaws.com.br",
         'object-src' => "'none'",
         'base-uri' => "'self'",
         'form-action' => "'self'",

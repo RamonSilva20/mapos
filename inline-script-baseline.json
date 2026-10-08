@@ -2,8 +2,6 @@
     "application/views/arquivos/adicionarArquivo.php": 1,
     "application/views/arquivos/arquivos.php": 1,
     "application/views/arquivos/editarArquivo.php": 1,
-    "application/views/clientes/adicionarCliente.php": 1,
-    "application/views/clientes/editarCliente.php": 1,
     "application/views/cobrancas/cobrancas.php": 1,
     "application/views/cobrancas/modalGerarPagamento.php": 2,
     "application/views/conecte/adicionarOs.php": 1,
