@@ -217,12 +217,56 @@ class MY_Controller extends CI_Controller
         ]);
     }
 
+    /**
+     * Renderiza a tela dentro do layout do painel (views/tema/).
+     *
+     * A tela informa a view em $this->data['view']. Telas que ainda dependem
+     * do Bootstrap 2/jQuery rodam no modo legado, que é o padrão; uma tela
+     * migrada para os componentes da v5 desliga com
+     * $this->data['legacy_assets'] = false. Ver layout_helper.php.
+     */
     public function layout()
     {
-        // load views
+        $this->data['layout'] = $this->dadosDoLayout();
+
         $this->load->view('tema/topo', $this->data);
         $this->load->view('tema/menu');
         $this->load->view('tema/conteudo');
         $this->load->view('tema/rodape');
+    }
+
+    /**
+     * Dados que as views do layout imprimem: menu, breadcrumb, usuário,
+     * notificações e assets.
+     */
+    protected function dadosDoLayout()
+    {
+        $legado = (bool) ($this->data['legacy_assets'] ?? true);
+        $configuracao = $this->data['configuration'];
+        $siteUrl = static fn ($caminho) => site_url($caminho);
+
+        $this->config->load('permissions_map', false, true);
+        $mapa = (array) $this->config->item('permissions_map');
+        $permite = fn ($controller, $metodo) => $this->regraPermite($this->regraDaRota($mapa, $controller, $metodo));
+
+        $flash = [];
+        foreach (['success' => ['success', 'Sucesso!', 5000], 'error' => ['danger', 'Falha!', 8000]] as $chave => [$variante, $titulo, $duracao]) {
+            $mensagem = $this->session->flashdata($chave);
+            if (is_string($mensagem) && trim($mensagem) !== '') {
+                $flash[] = ['variant' => $variante, 'title' => $titulo, 'duration' => $duracao, 'message' => $mensagem];
+            }
+        }
+
+        return [
+            'legado' => $legado,
+            'assets' => layoutAssets($legado, (string) ($configuracao['app_theme'] ?? '')),
+            'dados_legado' => layoutDadosLegado(base_url(), $siteUrl, $configuracao),
+            'menu' => layoutMenuVisivel(layoutMenu(), $permite, (string) $this->router->class, (string) $this->router->method),
+            'breadcrumb' => layoutBreadcrumb([$this->uri->segment(1), $this->uri->segment(2), $this->uri->segment(3)], $siteUrl),
+            'saudacao' => layoutSaudacao((int) date('G')),
+            'usuario' => (string) $this->session->userdata('nome_admin'),
+            'avatar' => layoutAvatarUrl($this->session->userdata('url_image_user_admin'), FCPATH . 'assets/userImage', base_url()),
+            'flash' => $flash,
+        ];
     }
 }

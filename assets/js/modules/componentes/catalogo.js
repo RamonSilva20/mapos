@@ -5,11 +5,9 @@
 // real do sistema continua em Configurações.
 
 import { mostrarToast } from '../../lib/toast.js';
+import { aplicarModo } from '../../lib/tema.js';
 
-export function aplicarModo(html, modo, prefereEscuro) {
-    html.dataset.temaModo = modo;
-    html.classList.toggle('dark', modo === 'escuro' || (modo === 'sistema' && prefereEscuro));
-}
+export { aplicarModo };
 
 export default function iniciar(barra) {
     const html = document.documentElement;

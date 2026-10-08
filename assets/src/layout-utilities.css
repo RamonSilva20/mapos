@@ -1,0 +1,17 @@
+/*
+ * Utilities do Tailwind para a moldura do painel, importadas com `important`
+ * por assets/src/layout.css.
+ *
+ * O aninhamento em :where(.v5-shell) faz cada utility valer só dentro de um
+ * elemento .v5-shell: `.flex` sai como `:where(.v5-shell) .flex`. O :where()
+ * não soma especificidade. O conteúdo legado fica fora de .v5-shell, então uma
+ * classe como .collapse ou .table no HTML de uma tela antiga continua sendo só
+ * do Bootstrap.
+ *
+ * source(none): as classes vêm só dos @source declarados no layout.css.
+ */
+@layer utilities {
+  :where(.v5-shell) {
+    @tailwind utilities source(none);
+  }
+}
