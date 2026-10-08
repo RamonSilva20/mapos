@@ -2,16 +2,16 @@
   <!-- Map-OS, adesivo "técnico". Apache-2.0, ver assets/src/stickers/README.md -->
   <defs>
     <g id="arte">
-      <path fill="#fa7faa" d="M28 150C28 120 50 106 80 106C110 106 132 120 132 150Z"/>
+      <path fill="#fa7faa" d="M30 142C30 116 52 104 80 104C108 104 130 116 130 142Z"/>
       <circle cx="80" cy="74" r="30" fill="#fff"/>
       <path fill="#c2ef4e" d="M50 68C50 46 62 36 80 36C98 36 110 46 110 66Z"/>
       <path fill="#c2ef4e" d="M50 64L120 62C130 62 131 70 124 71L50 72Z"/>
-      <circle cx="108" cy="132" r="8" fill="#79628c"/>
+      <circle cx="106" cy="126" r="7" fill="#79628c"/>
     </g>
   </defs>
   <g transform="rotate(-4 80 80)">
     <!-- Contorno branco de recorte -->
-    <use href="#arte" fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round"/>
+    <use href="#arte" fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
     <!-- Arte com traço ink -->
     <g stroke="#1f1633" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
       <use href="#arte"/>
@@ -23,7 +23,7 @@
       <path d="M70 95C76 101 86 101 92 95"/>
       <circle cx="62" cy="93" r="4" fill="#fa7faa" stroke="none"/>
       <circle cx="100" cy="93" r="4" fill="#fa7faa" stroke="none"/>
-      <path d="M68 107L80 122L92 107"/>
+      <path d="M68 105L80 118L92 105"/>
       <path d="M80 44L80 62"/>
     </g>
   </g>

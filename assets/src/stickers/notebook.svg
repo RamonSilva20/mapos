@@ -10,7 +10,7 @@
   </defs>
   <g transform="rotate(-6 80 80)">
     <!-- Contorno branco de recorte -->
-    <use href="#arte" fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round"/>
+    <use href="#arte" fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
     <!-- Arte com traço ink -->
     <g stroke="#1f1633" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
       <use href="#arte"/>

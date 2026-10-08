@@ -28,7 +28,7 @@ $entrada = [
 include APPPATH . 'views/entrada/inicio.php';
 ?>
     <main class="mx-auto grid w-full max-w-6xl flex-1 items-center gap-8 px-4 py-6 lg:grid-cols-[1fr_26rem] lg:gap-16 lg:px-8 lg:py-12">
-        <section class="relative flex flex-col items-start gap-4">
+        <section class="relative flex flex-col items-start gap-4 sm:max-lg:pr-28">
             <img src="<?= e(base_url('assets/img/stickers/chave.svg')) ?>" alt="" aria-hidden="true" class="pointer-events-none absolute top-4 right-0 w-24 select-none max-sm:hidden lg:-top-24 lg:right-4 lg:w-32">
             <img src="<?= e(base_url('assets/img/stickers/notebook.svg')) ?>" alt="" aria-hidden="true" class="pointer-events-none absolute -bottom-40 right-16 w-36 select-none max-lg:hidden">
             <?php if ($versao !== '') { ?>
