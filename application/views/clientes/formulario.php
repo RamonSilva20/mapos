@@ -29,7 +29,7 @@ $campo = static fn (string $nome, array $props) => component('input', $props + [
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 $grade = 'mt-4 grid gap-4 sm:grid-cols-2';
 ?>
-<div class="mx-auto flex max-w-4xl flex-col gap-4 pt-2 pb-8" <?= js_module('clientes/formulario') ?>>
+<div class="flex max-w-4xl flex-col gap-4 pt-2 pb-8" <?= js_module('clientes/formulario') ?>>
     <header>
         <h1 class="font-display text-heading-xl text-text"><?= e($editando ? 'Editar cliente' : 'Novo cliente') ?></h1>
         <p class="text-caption text-muted"><?= e($editando ? $cliente->nomeCliente : 'Cliente ou fornecedor. Só o nome é obrigatório.') ?></p>
@@ -87,7 +87,8 @@ $grade = 'mt-4 grid gap-4 sm:grid-cols-2';
                     'type' => 'email',
                     'autocomplete' => 'email',
                     'help' => 'Também é o login da área do cliente.',
-                    'attrs' => ['maxlength' => 100, 'data-msg-invalido' => 'Informe um e-mail válido, como nome@empresa.com.br.'],
+                    // O type=email do navegador aceita "a@b"; o pattern exige o ponto no domínio, como o servidor.
+                    'attrs' => ['maxlength' => 100, 'pattern' => '[^@\\s]+@[^@\\s]+\\.[^@\\s]+', 'data-msg-invalido' => 'Informe um e-mail válido, como nome@empresa.com.br.'],
                 ]) ?>
             </div>
         </section>
