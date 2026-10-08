@@ -178,7 +178,7 @@ Para ver todas as ocorrências: `php scripts/check-escape.php --list`. Não suba
 
 ## Front-end
 
-O CSS da v5 usa **[Tailwind CSS v4](https://tailwindcss.com/)**, compilado pela CLI do Tailwind. A fonte fica em `assets/src/app.css` e o resultado em `assets/dist/app.css`, que **é commitado**. Por isso quem só instala ou atualiza o Map-OS não precisa de Node.
+O CSS da v5 usa **[Tailwind CSS v4](https://tailwindcss.com/)**, compilado pela CLI do Tailwind. As fontes ficam em `assets/src/` (`app.css` para as telas novas, `layout.css` para a moldura do painel, `tokens.css` compartilhado) e o resultado em `assets/dist/`, que **é commitado**. Por isso quem só instala ou atualiza o Map-OS não precisa de Node.
 
 Se você alterar uma view ou o CSS, rode o build e commite o resultado junto:
 
@@ -267,6 +267,20 @@ $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $tot
 O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination.php` até a remoção do frontend legado (#2855).
 
 Para ver todos os componentes e variantes, nos modos claro e escuro e com cada cor de destaque, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
+
+### Layout do painel e modo legado
+
+Toda tela do painel passa por `MY_Controller::layout()`, que monta a moldura da v5 (`application/views/tema/`): sidebar recolhível (gaveta no celular), topbar com busca, troca de modo de cor e menu do usuário, breadcrumb e mensagens de flash como toast. O menu sai de `layoutMenu()` (`application/helpers/layout_helper.php`) e cada item só aparece se o mapa de permissões liberar a rota de destino.
+
+Durante a Beta as telas são migradas aos poucos, então o layout tem um **modo legado**, ligado por padrão: ele carrega Bootstrap 2, jQuery, matrix-style e o `tema-*.css`, e a tela fica dentro de `#content` como antes. Uma tela já migrada para os componentes desliga o modo legado e passa a receber o `app.css` completo:
+
+```php
+$this->data['legacy_assets'] = false;
+$this->data['view'] = 'clientes/clientes';
+return $this->layout();
+```
+
+A moldura usa um CSS próprio, `assets/src/layout.css` → `assets/dist/layout.css`, montado para não interferir nas telas antigas: as utilities e o reset só valem dentro de elementos `.v5-shell`, e são `!important` para que o CSS legado também não interfira na moldura. Use `npm run watch:layout` ao mexer nela. HTML novo da moldura fica dentro de um wrapper `.v5-shell`; o conteúdo da tela nunca.
 
 ## Alterações no banco de dados
 

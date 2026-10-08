@@ -1,30 +1,36 @@
-<div class="row-fluid">
-    <div id="footer" class="span12">
-        <a class="pecolor" href="https://github.com/RamonSilva20/mapos" target="_blank">
-            <?= date('Y') ?> &copy; Ramon Silva - Map-OS - Versão: <?= $this->config->item('app_version') ?>
-        </a>
-    </div>
+<?php
+/**
+ * Layout do painel (#2835): rodapé, notificações e scripts do fim da página.
+ *
+ * As mensagens de flash (success/error da sessão) viram toasts do componente
+ * da #2834, no lugar do sweetalert da v4. Algumas mensagens antigas trazem
+ * <br> ou <b>; elas passam pelo HTMLPurifier (html_purificado()) em vez de
+ * serem impressas cruas.
+ *
+ * @var array $configuration
+ * @var array $layout
+ */
+?>
+  <div class="v5-shell">
+    <footer class="px-4 py-6 text-center text-xs text-muted lg:px-6">
+      <a href="https://github.com/RamonSilva20/mapos" target="_blank" rel="noopener" class="rounded-sm hover:text-text focus-visible:outline-2 focus-visible:outline-ring">
+        <?= e(date('Y')) ?> &copy; Ramon Silva - Map-OS - Versão: <?= e($this->config->item('app_version')) ?>
+      </a>
+    </footer>
+  </div>
 </div>
-<!--end-Footer-part-->
-<script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
-<script src="<?= base_url() ?>assets/js/matrix.js"></script>
+
+<div class="v5-shell">
+  <div data-toast-region class="pointer-events-none fixed right-4 bottom-4 z-50 flex flex-col items-end gap-2">
+    <?php foreach ($layout['flash'] as $mensagem) { ?>
+      <?= component('toast', ['variant' => $mensagem['variant'], 'title' => $mensagem['title'], 'duration' => $mensagem['duration'], 'message' => html_purificado($mensagem['message'])]) ?>
+    <?php } ?>
+  </div>
+</div>
+
+<?php foreach ($layout['assets']['js_rodape'] as $arquivo) { ?>
+<script src="<?= e(layoutUrlAsset($arquivo, base_url())) ?>"></script>
+<?php } ?>
 </body>
-<script type="text/javascript">
-    $(document).ready(function() {
-        var dataTableEnabled = '<?= $configuration['control_datatable'] ?>';
-        if(dataTableEnabled == '1') {
-            $('#tabela').dataTable( {
-                "pageLength": <?= $configuration['per_page'] ?>,
-                "ordering": false,
-                "info": false,
-                "language": {
-                    "url": "<?= base_url() ?>assets/js/dataTable_pt-br.json",
-                },
-                "oLanguage": {
-                    "sSearch": "Pesquisa rápida na tabela abaixo:"
-                }
-            } );
-        }
-    } );
-</script>
+
 </html>

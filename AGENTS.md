@@ -41,7 +41,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 
 ## Front-end Build
 
-- Source CSS lives in `assets/src/app.css`; the compiled output `assets/dist/app.css` **is committed**.
+- Source CSS lives in `assets/src/` (`app.css` for new screens, `layout.css` for the admin shell, shared `tokens.css`); the compiled output in `assets/dist/` **is committed**.
 - After changing any view or CSS, run `npm ci && npm run build` and commit the `assets/dist` changes. CI rebuilds and fails if the committed output is stale.
 - Tailwind scans `application/views/**/*.php`: write full class names in PHP, never build them by string concatenation.
 - JS libraries are copied by `npm run build:vendor` (`scripts/build-vendor.mjs`, part of `npm run build`) into `assets/vendor/<lib>/`, which **is committed** and fully generated: never edit it by hand. To add or update a library, pin it with `npm install --save-exact` and list its files in `scripts/build-vendor.mjs`. Do not add new jQuery-dependent libraries.
@@ -51,6 +51,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
 - `php scripts/check-inline-script.php` (run in CI through PHPUnit) fails on new inline `<script>` blocks; legacy ones are counted in `inline-script-baseline.json`. Never raise those counts. JS utilities are tested with `npm run test:js`.
 - New views build UI from the component library instead of hand-written markup: `<?= component('button', ['label' => 'Salvar', 'type' => 'submit']) ?>` (partials in `application/views/components/`, props and validation in `application/helpers/componente_helper.php`). Components escape every value; slots (`body`, `footer`, `actions`, `message`, table cells) only accept HTML as an `HtmlSeguro` (output of `component()` or `html_purificado()`), never as a string. Never build an `HtmlSeguro` by hand from user data. Extra attributes go in the `attrs` prop; `on*` handlers are rejected. The catalog is at `/index.php/componentes` in `development` only.
 - New listings paginate with `component('pagination', $this->paginacao($baseUrl, $total, $offset))` (`MY_Controller::paginacao()`, same URL offset as `CI_Pagination`). The legacy Bootstrap 2 pagination markup lives in `application/config/pagination.php` for the not-yet-migrated screens; do not add markup back to `MY_Controller`.
+- Admin screens render through `MY_Controller::layout()` (views in `application/views/tema/`, data from `application/helpers/layout_helper.php`). The menu comes from `layoutMenu()` and each item is shown only if `permissions_map.php` allows its target route. `$this->data['legacy_assets']` defaults to `true` (legacy mode: Bootstrap 2, jQuery, matrix-style and `tema-*.css` are loaded and the screen renders inside `#content`); a screen migrated to the components sets it to `false` and gets `assets/dist/app.css` instead. Shell markup goes inside a `.v5-shell` wrapper, whose Tailwind utilities and reset (`assets/dist/layout.css`) are scoped there and `!important` so legacy CSS and the shell never affect each other; never put screen content inside `.v5-shell`.
 
 ## Security & Integrity Mandates
 

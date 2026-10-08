@@ -8,10 +8,11 @@
   },
   "scripts": {
     "build": "npm run build:css && npm run build:vendor",
-    "build:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --minify",
+    "build:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --minify && tailwindcss -i assets/src/layout.css -o assets/dist/layout.css --minify",
     "build:vendor": "node scripts/build-vendor.mjs",
     "test:js": "node --test tests/js/",
-    "watch:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --watch"
+    "watch:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --watch",
+    "watch:layout": "tailwindcss -i assets/src/layout.css -o assets/dist/layout.css --watch"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.3",
