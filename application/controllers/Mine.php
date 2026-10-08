@@ -155,7 +155,8 @@ class Mine extends CI_Controller
             // Mesma resposta de sucesso quando o e-mail não existe, para não
             // permitir enumeração de contas.
             log_info('Cliente solicitou alteração de senha para um e-mail inexistente.');
-            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . html_escape($emailSolicitado));
+            // Texto puro: o alert da tela de login já escapa a mensagem.
+            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para ' . $emailSolicitado . '.');
             redirect(base_url() . 'index.php/mine');
         } else {
             $this->load->model('resetSenhas_model', '', true);
@@ -176,7 +177,7 @@ class Mine extends CI_Controller
                 $session_mine_data = ['nome' => $cliente->nomeCliente];
                 $this->session->set_userdata($session_mine_data);
                 log_info('Cliente solicitou alteração de senha.');
-                $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . $cliente->email);
+                $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para ' . $cliente->email . '.');
                 redirect(base_url() . 'index.php/mine');
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar solicitação!');

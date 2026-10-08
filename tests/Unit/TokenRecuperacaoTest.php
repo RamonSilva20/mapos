@@ -93,5 +93,10 @@ final class TokenRecuperacaoTest extends MaposTestCase
         $this->assertMatchesRegularExpression("/where\\('email', \\\$cliente->email\\)->where\\('token_utilizado', 0\\)->update\\('resets_de_senha', \\['token_utilizado' => 1\\]\\)/", $trecho[0]);
         $this->assertStringNotContainsString('random_bytes(16)', $codigo);
         $this->assertSame(3600, Mine::TOKEN_VALIDADE_SEGUNDOS);
+
+        // Mensagem em texto puro: o alert escapa, então <br> e html_escape()
+        // apareceriam literalmente.
+        $this->assertStringNotContainsString('<br>', $trecho[0]);
+        $this->assertStringNotContainsString('html_escape(', $trecho[0]);
     }
 }
