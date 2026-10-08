@@ -160,3 +160,35 @@ if (! function_exists('backupNomeArquivo')) {
         return 'backup-' . date('Y-m-d-H\\hi', $instante) . '.zip';
     }
 }
+
+if (! function_exists('tokenRecuperacaoGerar')) {
+    /**
+     * Token de recuperação de senha da área do cliente (#2875): 32 bytes
+     * aleatórios em hexadecimal. Devolve [token em claro, hash para o banco];
+     * o token em claro só vai no e-mail.
+     *
+     * @return array{0: string, 1: string}
+     */
+    function tokenRecuperacaoGerar(): array
+    {
+        $token = bin2hex(random_bytes(32));
+
+        return [$token, tokenRecuperacaoHash($token)];
+    }
+}
+
+if (! function_exists('tokenRecuperacaoHash')) {
+    /**
+     * SHA-256 do token de recuperação, como guardado em resets_de_senha.token,
+     * ou null se o valor não tiver o formato de um token (64 hex). Recusar o
+     * formato antes evita consultar o banco com qualquer coisa vinda da URL.
+     */
+    function tokenRecuperacaoHash($token): ?string
+    {
+        if (! is_string($token) || ! preg_match('/^[0-9a-f]{64}$/', $token)) {
+            return null;
+        }
+
+        return hash('sha256', $token);
+    }
+}

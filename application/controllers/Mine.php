@@ -6,6 +6,9 @@ if (! defined('BASEPATH')) {
 
 class Mine extends CI_Controller
 {
+    /** Validade do token de recuperação de senha (#2875). */
+    public const TOKEN_VALIDADE_SEGUNDOS = 3600;
+
     public function __construct()
     {
         parent::__construct();
@@ -51,7 +54,7 @@ class Mine extends CI_Controller
 
             // O token precisa existir, estar dentro da validade, ainda não ter
             // sido utilizado e corresponder a um cliente existente.
-            if ($token == null || $cliente == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
+            if ($token == null || $cliente == null || ! $this->tokenVigente($token)) {
                 log_info('Alteração de senha. Porém, o token é inválido, expirado ou já utilizado.');
                 echo json_encode(['result' => false, 'message' => 'Token inválido ou expirado. Solicite uma nova recuperação de senha.']);
             } else {
@@ -97,7 +100,7 @@ class Mine extends CI_Controller
 
             // Um token inexistente, expirado ou já utilizado recebe sempre a
             // mesma resposta genérica, para não revelar quais tokens existem.
-            if ($token == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
+            if ($token == null || ! $this->tokenVigente($token)) {
                 $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
                 log_info('Digitou Token. Porém, o token é inválido, expirado ou já utilizado.');
 
@@ -113,7 +116,7 @@ class Mine extends CI_Controller
                 return redirect(base_url() . 'index.php/mine');
             }
 
-            return $this->load->view('conecte/nova_senha', $token);
+            return $this->load->view('conecte/nova_senha', ['token' => $this->input->post('token')]);
         }
         $this->load->view('conecte/token_digita');
     }
@@ -125,7 +128,7 @@ class Mine extends CI_Controller
 
         // Um token inexistente, expirado ou já utilizado recebe sempre a mesma
         // resposta genérica, para não revelar quais tokens existem.
-        if ($token == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
+        if ($token == null || ! $this->tokenVigente($token)) {
             $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
             log_info('Acesso via link do email (Token). Porém, o token é inválido, expirado ou já utilizado.');
 
@@ -141,7 +144,7 @@ class Mine extends CI_Controller
             return redirect(base_url() . 'index.php/mine');
         }
 
-        return $this->load->view('conecte/nova_senha', $token);
+        return $this->load->view('conecte/nova_senha', ['token' => $segment['token']]);
     }
 
     public function gerarTokenResetarSenha()
@@ -156,13 +159,20 @@ class Mine extends CI_Controller
             redirect(base_url() . 'index.php/mine');
         } else {
             $this->load->model('resetSenhas_model', '', true);
+
+            // Só o hash do token vai para o banco; o token em claro vai só no
+            // e-mail. Um pedido novo invalida os anteriores do mesmo e-mail (#2875).
+            [$tokenEmClaro, $tokenHash] = tokenRecuperacaoGerar();
+            $this->db->where('email', $cliente->email)->where('token_utilizado', 0)->update('resets_de_senha', ['token_utilizado' => 1]);
+
             $data = [
                 'email' => $cliente->email,
-                'token' => bin2hex(random_bytes(16)),
-                'data_expiracao' => date('Y-m-d H:i:s'),
+                'token' => $tokenHash,
+                'data_expiracao' => date('Y-m-d H:i:s', time() + self::TOKEN_VALIDADE_SEGUNDOS),
+                'token_utilizado' => 0,
             ];
             if ($this->resetSenhas_model->add('resets_de_senha', $data) == true) {
-                $this->enviarRecuperarSenha($cliente->idClientes, $cliente->email, 'Recuperar Senha', json_encode($data));
+                $this->enviarRecuperarSenha($cliente->idClientes, $cliente->email, 'Recuperar Senha', json_encode(['token' => $tokenEmClaro] + $data));
                 $session_mine_data = ['nome' => $cliente->nomeCliente];
                 $this->session->set_userdata($session_mine_data);
                 log_info('Cliente solicitou alteração de senha.');
@@ -944,32 +954,29 @@ class Mine extends CI_Controller
         return $this->db->get('clientes')->row();
     }
 
+    /**
+     * Linha de resets_de_senha do token em claro, buscada pelo hash (#2875).
+     * Token fora do formato (64 hex) nem consulta o banco.
+     */
     private function check_token($token)
     {
-        // Sem essa guarda, um token nulo vira "WHERE token IS NULL" e pode
-        // casar com uma linha da tabela.
-        if ($token === null || $token === '') {
+        $hash = tokenRecuperacaoHash($token);
+        if ($hash === null) {
             return null;
         }
 
-        $this->db->where('token', $token);
-        $this->db->limit(1);
+        $linha = $this->db->where('token', $hash)->limit(1)->get('resets_de_senha')->row();
 
-        return $this->db->get('resets_de_senha')->row();
+        return ($linha && hash_equals((string) $linha->token, $hash)) ? $linha : null;
     }
 
-    private function validateDate($date, $format = 'Y-m-d H:i:s')
+    /**
+     * Token ainda não usado e dentro da validade. data_expiracao guarda o
+     * instante em que o token expira.
+     */
+    private function tokenVigente(object $token): bool
     {
-        $dateStart = new \DateTime($date);
-        $dateNow = new \DateTime(date($format));
-
-        $dateDiff = $dateStart->diff($dateNow);
-
-        if ($dateDiff->days >= 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return ! $token->token_utilizado && strtotime((string) $token->data_expiracao) > time();
     }
 
     private function enviarRecuperarSenha($idClientes, $clienteEmail, $assunto, $token)

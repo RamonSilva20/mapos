@@ -18,7 +18,7 @@
     "application/views/conecte/conta.php": 14,
     "application/views/conecte/detalhes_os.php": 18,
     "application/views/conecte/editar_dados.php": 17,
-    "application/views/conecte/emails/clientenovasenha.php": 7,
+    "application/views/conecte/emails/clientenovasenha.php": 5,
     "application/views/conecte/imprimirOs.php": 30,
     "application/views/conecte/imprimirVenda.php": 29,
     "application/views/conecte/minha_os.php": 21,
