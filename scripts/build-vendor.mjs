@@ -16,10 +16,35 @@ const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
 const modulos = join(raiz, 'node_modules');
 const destino = join(raiz, 'assets', 'vendor');
 
+// Fontes do DESIGN.md (#2914): woff2 dos subconjuntos latin e latin-ext, só
+// nos pesos usados. O @font-face fica em assets/src/fonts.css.
+function arquivosDaFonte(familia, pesos) {
+  const arquivos = {};
+  for (const subconjunto of ['latin', 'latin-ext']) {
+    for (const peso of pesos) {
+      const nome = `${familia}-${subconjunto}-${peso}-normal.woff2`;
+      arquivos[`files/${nome}`] = `${familia}/${nome}`;
+    }
+  }
+  return arquivos;
+}
+
 // pasta em assets/vendor → pacote npm e arquivos copiados (origem → nome final).
 // Só os arquivos de navegador: build UMD/global minificado e o CSS próprio de
 // cada lib. Nada de .map, ESM ou CommonJS.
 const bibliotecas = {
+  // Rubik (interface) e Space Grotesk (títulos de destaque), servidas daqui e
+  // não do Google Fonts, para a CSP não liberar origem externa de fonte.
+  fonts: {
+    pacote: '@fontsource/rubik',
+    arquivos: arquivosDaFonte('rubik', [400, 500, 600, 700]),
+    extras: [
+      {
+        pacote: '@fontsource/space-grotesk',
+        arquivos: arquivosDaFonte('space-grotesk', [500, 600, 700]),
+      },
+    ],
+  },
   alpinejs: {
     pacote: 'alpinejs',
     arquivos: { 'dist/cdn.min.js': 'alpine.min.js' },

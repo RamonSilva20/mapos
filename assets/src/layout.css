@@ -41,6 +41,7 @@
 
 @import "tailwindcss/theme.css" layer(theme);
 @import "./tokens.css";
+@import "./fonts.css";
 @import "./layout-utilities.css" important;
 
 /* Só os arquivos da moldura: views do layout, componentes e o JS deles. */

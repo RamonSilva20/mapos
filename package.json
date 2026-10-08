@@ -19,6 +19,8 @@
     "tailwindcss": "4.3.3"
   },
   "dependencies": {
+    "@fontsource/rubik": "5.3.0",
+    "@fontsource/space-grotesk": "5.3.0",
     "@fullcalendar/core": "6.1.21",
     "alpinejs": "3.17.4",
     "boxicons": "2.1.1",
