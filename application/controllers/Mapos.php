@@ -558,8 +558,17 @@ class Mapos extends MY_Controller
         }
         $this->load->model('os_model');
         $status = $this->input->get('status') ?: null;
-        $start = $this->input->get('start') ?: null;
-        $end = $this->input->get('end') ?: null;
+        // O FullCalendar manda start/end em ISO 8601; sem eles (ou com lixo) a
+        // consulta virava `dataFinal >= NULL` e quebrava com erro 500 (#2901).
+        $start = dataIsoParaYmd($this->input->get('start'));
+        $end = dataIsoParaYmd($this->input->get('end'));
+
+        if ($start === null || $end === null || $start > $end) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode(['error' => 'Informe start e end válidos (AAAA-MM-DD).']));
+        }
 
         $allOs = $this->mapos_model->calendario(
             $start,

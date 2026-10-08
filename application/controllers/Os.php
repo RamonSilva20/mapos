@@ -333,6 +333,14 @@ class Os extends MY_Controller
 
         $this->load->model('mapos_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
+
+        // OS inexistente: mesmo tratamento do editar(), em vez de renderizar a
+        // view com $result nulo (#2901).
+        if (! $this->data['result']) {
+            $this->session->set_flashdata('error', 'OS não encontrada ou parâmetro inválido.');
+            redirect('os/gerenciar');
+        }
+
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();

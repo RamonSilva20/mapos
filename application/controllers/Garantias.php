@@ -209,7 +209,7 @@ class Garantias extends MY_Controller
 
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->vendas_model->autoCompleteProduto($q);
+            $this->garantias_model->autoCompleteProduto($q);
         }
     }
 
@@ -223,7 +223,7 @@ class Garantias extends MY_Controller
 
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->vendas_model->autoCompleteCliente($q);
+            $this->garantias_model->autoCompleteCliente($q);
         }
     }
 
@@ -237,7 +237,7 @@ class Garantias extends MY_Controller
 
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->vendas_model->autoCompleteUsuario($q);
+            $this->garantias_model->autoCompleteUsuario($q);
         }
     }
 }
