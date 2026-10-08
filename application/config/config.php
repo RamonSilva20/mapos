@@ -2,6 +2,8 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require_once __DIR__ . '/../helpers/cookie_seguro_helper.php';
+
 /**
  * App current version
  */
@@ -405,7 +407,9 @@ $config['sess_expiration'] = $_ENV['APP_SESS_EXPIRATION'] ?? 7200;
 $config['sess_save_path'] = $_ENV['APP_SESS_SAVE_PATH'] ?? 'ci_sessions';
 $config['sess_match_ip'] = isset($_ENV['APP_SESS_MATCH_IP']) ? filter_var($_ENV['APP_SESS_MATCH_IP'], FILTER_VALIDATE_BOOLEAN) : false;
 $config['sess_time_to_update'] = $_ENV['APP_SESS_TIME_TO_UPDATE'] ?? 300;
-$config['sess_regenerate_destroy'] = isset($_ENV['APP_SESS_REGENERATE_DESTROY']) ? filter_var($_ENV['APP_SESS_REGENERATE_DESTROY'], FILTER_VALIDATE_BOOLEAN) : false;
+// Ao regenerar o ID, o anterior é apagado na hora: um ID vazado deixa de
+// valer na próxima regeneração, em vez de esperar o garbage collector.
+$config['sess_regenerate_destroy'] = cookieEnvFlag($_ENV['APP_SESS_REGENERATE_DESTROY'] ?? null, true);
 
 /*
 |--------------------------------------------------------------------------
@@ -417,6 +421,7 @@ $config['sess_regenerate_destroy'] = isset($_ENV['APP_SESS_REGENERATE_DESTROY'])
 | 'cookie_path'     = Typically will be a forward slash
 | 'cookie_secure'   = Cookie will only be set if a secure HTTPS connection exists.
 | 'cookie_httponly' = Cookie will only be accessible via HTTP(S) (no javascript)
+| 'cookie_samesite' = Cookie's samesite attribute (Lax, Strict or None)
 |
 | Note: These settings (with the exception of 'cookie_prefix' and
 |       'cookie_httponly') will also affect sessions.
@@ -425,8 +430,18 @@ $config['sess_regenerate_destroy'] = isset($_ENV['APP_SESS_REGENERATE_DESTROY'])
 $config['cookie_prefix'] = $_ENV['APP_COOKIE_PREFIX'] ?? '';
 $config['cookie_domain'] = $_ENV['APP_COOKIE_DOMAIN'] ?? '';
 $config['cookie_path'] = $_ENV['APP_COOKIE_PATH'] ?? '/';
-$config['cookie_secure'] = isset($_ENV['APP_COOKIE_SECURE']) ? filter_var($_ENV['APP_COOKIE_SECURE'], FILTER_VALIDATE_BOOLEAN) : false;
-$config['cookie_httponly'] = isset($_ENV['APP_COOKIE_HTTPONLY']) ? filter_var($_ENV['APP_COOKIE_HTTPONLY'], FILTER_VALIDATE_BOOLEAN) : false;
+// Os padrões ficam em cookie_seguro_helper.php. Resumo, com a variável ausente
+// do .env:
+// - cookie_secure: Secure só quando a requisição chega por HTTPS
+//   (APP_COOKIE_SECURE=auto). X-Forwarded-Proto só vale vindo de APP_PROXY_IPS.
+// - cookie_httponly: ligado. O cookie do CSRF é a exceção, porque o
+//   assets/js/csrf.js precisa lê-lo (ver MY_Security).
+// - cookie_samesite / sess_samesite: Lax.
+// Valores explícitos no .env são respeitados. Ver docs/cookies-e-sessao.md.
+$config['cookie_secure'] = cookieSecure($_ENV['APP_COOKIE_SECURE'] ?? null, $_SERVER, $_ENV['APP_PROXY_IPS'] ?? '');
+$config['cookie_httponly'] = cookieEnvFlag($_ENV['APP_COOKIE_HTTPONLY'] ?? null, true);
+$config['cookie_samesite'] = cookieSameSite($_ENV['APP_COOKIE_SAMESITE'] ?? 'Lax', $config['cookie_secure']);
+$config['sess_samesite'] = $config['cookie_samesite'];
 
 /*
 |--------------------------------------------------------------------------
