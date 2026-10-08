@@ -196,6 +196,11 @@ class Relatorios extends MY_Controller
 
     public function produtosEtiquetas()
     {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar etiquetas de produtos.');
+            redirect(base_url());
+        }
+
         $de = $this->input->get('de_id');
         $ate = $this->input->get('ate_id');
         try {

@@ -872,4 +872,14 @@ final class ComponentesTest extends MaposTestCase
         $this->assertStringContainsString('size-4 max-sm:hidden', $html);
         $this->assertMatchesRegularExpression('#aria-current="page"[^>]*>\s*Dados#', $html);
     }
+
+    public function testDataTableTruncaComOValorNoTitle(): void
+    {
+        $html = $this->html('data-table', [
+            'columns' => [['key' => 'cod', 'label' => 'Código', 'truncate' => true, 'nowrap' => true]],
+            'rows' => [['cod' => '1234567890<b>']],
+        ]);
+
+        $this->assertStringContainsString('<span class="block max-w-48 truncate max-sm:max-w-none max-sm:whitespace-normal" title="1234567890&lt;b&gt;">1234567890&lt;b&gt;</span>', $html);
+    }
 }

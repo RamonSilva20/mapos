@@ -186,7 +186,7 @@ $config['permissions_map'] = [
         'produtosCustom' => 'rProduto',
         // Hoje não verifica permissão nenhuma. Mantido como está para não
         // mudar comportamento neste PR; ver a descrição do #2866.
-        'produtosEtiquetas' => '*',
+        'produtosEtiquetas' => 'rProduto',
         'sku' => ['todas' => ['rVenda', 'rOs']],
         'skuRapid' => ['todas' => ['rVenda', 'rOs']],
         'skuCustom' => ['todas' => ['rVenda', 'rOs']],

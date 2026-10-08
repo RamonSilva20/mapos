@@ -20,8 +20,8 @@ $csrf = [$this->security->get_csrf_token_name(), $this->security->get_csrf_hash(
 
 $colunas = [
     ['key' => 'idProdutos', 'label' => 'Cód.', 'align' => 'right', 'nowrap' => true],
-    ['key' => 'codDeBarra', 'label' => 'Cód. de barras', 'nowrap' => true, 'hide_until' => 'xl'],
-    ['label' => 'Descrição', 'class' => 'min-w-32', 'render' => fn ($p) => component('link', ['label' => $p->descricao, 'href' => site_url('produtos/visualizar/' . $p->idProdutos), 'class' => 'font-medium'])],
+    ['key' => 'codDeBarra', 'label' => 'Cód. de barras', 'nowrap' => true, 'truncate' => true, 'hide_until' => 'xl'],
+    ['label' => 'Descrição', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($p) => component('link', ['label' => $p->descricao, 'href' => site_url('produtos/visualizar/' . $p->idProdutos), 'class' => 'font-medium'])],
     ['label' => 'Estoque', 'align' => 'right', 'nowrap' => true, 'render' => fn ($p) => produtoEstoqueBaixo($p)
         ? [component('pill-status', ['label' => 'Baixo', 'variant' => 'warning']), (string) (int) $p->estoque]
         : (string) (int) $p->estoque],
@@ -119,7 +119,7 @@ $vazio = $temFiltro
         'title' => 'Entrada de estoque',
         'body' => [
             new HtmlSeguro('<p class="mb-4 text-caption text-muted"><strong class="font-semibold text-text" data-modal-valor="nome"></strong> · em estoque: <span data-modal-valor="atual"></span></p>'),
-            new HtmlSeguro('<form id="form-estoque-produto" method="post" action="' . e(site_url('produtos/atualizar_estoque')) . '" novalidate ' . js_module('formulario/padrao') . '>'),
+            new HtmlSeguro('<form id="form-estoque-produto" method="post" action="' . e(site_url('produtos/atualizar_estoque') . listagemQuery($filtros)) . '" novalidate ' . js_module('formulario/padrao') . '>'),
             new HtmlSeguro('<input type="hidden" name="' . e($csrf[0]) . '" value="' . e($csrf[1]) . '"><input type="hidden" name="voltar" value="lista">'),
             new HtmlSeguro('<input type="hidden" name="id" value="" data-modal-valor="id">'),
             component('input', [

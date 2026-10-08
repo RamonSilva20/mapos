@@ -88,8 +88,9 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                 <?= component('select', [
                     'name' => 'lucro_tipo',
                     'label' => 'Lucro por',
-                    'options' => ['markup' => 'Markup (sobre a compra)', 'margem' => 'Margem (sobre a venda)'],
+                    'options' => ['markup' => 'Markup', 'margem' => 'Margem'],
                     'selected' => 'markup',
+                    'help' => 'Markup: sobre a compra. Margem: sobre a venda.',
                 ]) ?>
                 <?= component('input', [
                     'name' => 'lucro',
@@ -115,13 +116,13 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                     'type' => 'number',
                     'required' => true,
                     'help' => $editando ? 'Para entradas e saídas do dia a dia, use "Entrada de estoque" na ficha do produto.' : null,
-                    'attrs' => ['min' => 0, 'step' => 1, 'inputmode' => 'numeric', 'data-msg-vazio' => 'Informe a quantidade em estoque.'],
+                    'attrs' => ['min' => 0, 'max' => 99999999, 'step' => 1, 'inputmode' => 'numeric', 'data-msg-vazio' => 'Informe a quantidade em estoque.'],
                 ]) ?>
                 <?= $campo('estoqueMinimo', [
                     'label' => 'Estoque mínimo',
                     'type' => 'number',
                     'help' => 'Abaixo disso, o produto aparece como estoque baixo.',
-                    'attrs' => ['min' => 0, 'step' => 1, 'inputmode' => 'numeric'],
+                    'attrs' => ['min' => 0, 'max' => 99999999, 'step' => 1, 'inputmode' => 'numeric'],
                 ]) ?>
             </div>
         </section>

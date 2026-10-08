@@ -211,7 +211,10 @@ class Produtos extends MY_Controller
         }
 
         $quantidade = filter_var($this->input->post('quantidade'), FILTER_VALIDATE_INT);
-        $destino = $this->input->post('voltar') === 'lista' ? site_url('produtos') : site_url('produtos/visualizar/' . (int) $produto->idProdutos);
+        // Da listagem, volta para ela com os mesmos filtros (vêm na query string).
+        $destino = $this->input->post('voltar') === 'lista'
+            ? site_url('produtos') . listagemQuery(listagemFiltros(self::FILTROS, $this->input->get()))
+            : site_url('produtos/visualizar/' . (int) $produto->idProdutos);
 
         if ($quantidade === false || $quantidade === 0 || abs($quantidade) > 1000000) {
             $this->session->set_flashdata('error', 'Informe uma quantidade inteira diferente de zero (negativa para retirar).');
