@@ -1,0 +1,19 @@
+/*
+ * Ponto de entrada do CSS da v5.
+ *
+ * Gera assets/dist/app.css com `npm run build:css`. O arquivo compilado é
+ * commitado: quem só instala ou atualiza o Map-OS não precisa de Node.
+ *
+ * Este CSS ainda não é carregado por nenhuma view. Ele entra com o layout novo
+ * (#2835), que decide como conviver com o CSS legado nas páginas ainda não
+ * migradas. O preflight (reset do Tailwind) está incluído aqui; se o modo
+ * legado precisar dele isolado, troque o import abaixo pelas camadas
+ * separadas (tailwindcss/theme.css e tailwindcss/utilities.css) e aplique o
+ * preflight só no container das páginas novas.
+ *
+ * source(none) desliga a detecção automática de arquivos, que varreria
+ * application/vendor e node_modules. As classes vêm só das views.
+ */
+@import "tailwindcss" source(none);
+
+@source "../../application/views/**/*.php";

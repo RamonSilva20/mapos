@@ -15,6 +15,7 @@ Ao participar deste projeto, você concorda em seguir o nosso [Código de Condut
 - [Ambiente de desenvolvimento](#ambiente-de-desenvolvimento)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Padrão de código](#padrão-de-código)
+- [Front-end](#front-end)
 - [Alterações no banco de dados](#alterações-no-banco-de-dados)
 - [Comandos de terminal](#comandos-de-terminal)
 - [Mensagens de commit](#mensagens-de-commit)
@@ -59,6 +60,7 @@ Descreva **o problema** que você quer resolver, não apenas a solução imagina
 - PHP >= 8.5, com as extensões `curl` e `gd`
 - MySQL >= 5.7 (recomendado 8.0+)
 - Composer >= 2
+- Node.js >= 22, só se você for mexer em views ou em CSS (veja [Front-end](#front-end))
 
 ### 1. Fork e clone
 
@@ -122,6 +124,8 @@ application/
 ├── models/       Acesso a dados
 └── views/        Templates das telas
 assets/           CSS, JS, imagens e uploads
+├── src/          Fontes do CSS (Tailwind), compiladas para dist/
+└── dist/         CSS compilado, commitado
 docker/           Ambiente de desenvolvimento com Docker
 install/          Assistente de instalação
 banco.sql         Schema base usado na instalação inicial
@@ -169,6 +173,23 @@ php scripts/check-escape.php --update-baseline
 ```
 
 Para ver todas as ocorrências: `php scripts/check-escape.php --list`. Não suba a contagem do baseline para fazer o CI passar: escape a saída.
+
+## Front-end
+
+O CSS da v5 usa **[Tailwind CSS v4](https://tailwindcss.com/)**, compilado pela CLI do Tailwind. A fonte fica em `assets/src/app.css` e o resultado em `assets/dist/app.css`, que **é commitado**. Por isso quem só instala ou atualiza o Map-OS não precisa de Node.
+
+Se você alterar uma view ou o CSS, rode o build e commite o resultado junto:
+
+```bash
+npm ci
+npm run build
+```
+
+Durante o desenvolvimento, `npm run watch:css` recompila a cada alteração.
+
+O Tailwind lê as classes de `application/views/**/*.php`. Escreva o nome da classe inteiro no PHP (`'bg-red-500'`), e não montado por concatenação (`'bg-' . $cor . '-500'`), senão ela não é encontrada e não entra no CSS.
+
+O CI refaz o build e falha se o `assets/dist` commitado não for o resultado dele.
 
 ## Alterações no banco de dados
 
@@ -298,7 +319,8 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 - [ ] O código está formatado (`composer format`).
 - [ ] A saída nova nas views passa por `e()` ou `printSafeHtml()` (`php scripts/check-escape.php`).
 - [ ] Não há credenciais, `.env`, dumps de banco ou arquivos de IDE no diff.
-- [ ] A pasta `application/vendor/` não foi commitada.
+- [ ] As pastas `application/vendor/` e `node_modules/` não foram commitadas.
+- [ ] Se mexeu em view ou CSS, rodou `npm run build` e commitou o `assets/dist`.
 - [ ] Alterações de schema têm migration com `up()` e `down()`.
 - [ ] A descrição explica o problema, a solução e como testar.
 - [ ] Há capturas de tela (antes/depois) quando a mudança é visual.
