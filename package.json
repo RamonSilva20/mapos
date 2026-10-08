@@ -10,6 +10,7 @@
     "build": "npm run build:css && npm run build:vendor",
     "build:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --minify",
     "build:vendor": "node scripts/build-vendor.mjs",
+    "test:js": "node --test tests/js/",
     "watch:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --watch"
   },
   "devDependencies": {

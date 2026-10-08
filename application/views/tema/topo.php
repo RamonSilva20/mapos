@@ -41,6 +41,7 @@
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/datatables.min.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/sweetalert.min.js"></script>
   <script type="text/javascript" src="<?= base_url(); ?>assets/js/csrf.js"></script>
+  <script type="module" src="<?= base_url(); ?>assets/js/app.js"></script>
   <script type="text/javascript">
     shortcut.add("escape", function() {
       location.href = '<?= base_url(); ?>';

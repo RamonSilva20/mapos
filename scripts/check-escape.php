@@ -30,6 +30,10 @@ const ESCAPE_FUNCOES_SEGURAS = [
     'html_escape',
     'htmlspecialchars',
     'printsafehtml',
+    // js_helper.php: o nome do módulo é validado por regex e o JSON sai com
+    // os flags JSON_HEX_*, seguro dentro de <script>.
+    'js_module',
+    'page_data',
     'intval',
     'floatval',
     'count',
