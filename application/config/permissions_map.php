@@ -56,6 +56,12 @@ $config['permissions_map'] = [
         'excluir' => 'dCliente',
     ],
 
+    // Catálogo da biblioteca de componentes. O construtor responde 404 fora
+    // de development, antes da checagem de login.
+    'Componentes' => [
+        'index' => '*',
+    ],
+
     'Cobrancas' => [
         'index' => 'vCobranca',
         'cobrancas' => 'vCobranca',

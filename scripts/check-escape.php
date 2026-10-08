@@ -41,6 +41,13 @@ const ESCAPE_FUNCOES_SEGURAS = [
     'date',
     // Monta os atributos do <html> com htmlspecialchars (tema_helper.php).
     'temaatributoshtml',
+    // componente_helper.php: component() devolve o HtmlSeguro montado pelos
+    // partials de views/components, que escapam tudo; componenteAtributos()
+    // escapa nome e valor; componenteConteudo() escapa texto e só deixa
+    // passar HtmlSeguro.
+    'component',
+    'componenteatributos',
+    'componenteconteudo',
 ];
 
 /**
