@@ -180,33 +180,40 @@ final class FinanceiroFiltrosTest extends MaposTestCase
         ];
     }
 
+    /**
+     * Data com estouro de campo não pode ser normalizada em outra data.
+     *
+     * Antes da correção, createFromFormat devolvia um DateTime já
+     * normalizado em vez de false, então o fallback nunca rodava:
+     * "31/02/2026" virava 2026-03-03 e o filtro por período listava o conjunto
+     * errado de lançamentos em silêncio. Agora a conversão também confere o
+     * getLastErrors e a data impossível cai no dia de hoje.
+     */
     #[DataProvider('datasComOverflow')]
-    public function testDataComOverflowSilenciosamenteUmaDataErrada(string $data, string $resultado): void
+    public function testDataComOverflowCaiParaODiaDeHoje(string $data): void
     {
-        // knownIssue: createFromFormat não devolve false para datas com
-        // estouro de campo; ele devolve um DateTime já normalizado. Então o
-        // fallback para o dia de hoje nunca roda e uma data digitada errada
-        // consulta a janela errada sem avisar: "32/13/2026" vira 2027-02-01 e
-        // "31/02/2026" vira 2026-03-03. O filtro por período passa a listar o
-        // conjunto errado de lançamentos em silêncio. A correção é validar com
-        // DateTime::getLastErrors() (#2835).
-        //
-        // O teste fixa o comportamento atual. Quando for corrigido, deve passar a
-        // esperar o dia de hoje e a KnownIssue sai daqui.
         $where = financeiroLancamentosWhere($this->db, [
             'vencimento_de' => $data,
             'vencimento_ate' => $data,
         ]);
 
-        $this->assertStringContainsString("'" . $resultado . "'", $where);
-        $this->assertStringNotContainsString("'" . (new DateTime())->format('Y-m-d') . "'", $where);
+        $hoje = (new DateTime())->format('Y-m-d');
+
+        $this->assertStringContainsString("'" . $hoje . "'", $where);
+        $this->assertSame(
+            2,
+            substr_count($where, "'" . $hoje . "'"),
+            'A janela deve ficar limitada ao dia de hoje, o que não casa com nenhum lançamento.'
+        );
     }
 
     public static function datasComOverflow(): array
     {
         return [
-            'dia e mes fora de faixa' => ['32/13/2026', '2027-02-01'],
-            'dia inexistente no mes' => ['31/02/2026', '2026-03-03'],
+            'dia e mes fora de faixa' => ['32/13/2026'],
+            'dia inexistente no mes' => ['31/02/2026'],
+            'mes fora de faixa' => ['07/13/2026'],
+            'dia fora de faixa' => ['32/01/2026'],
         ];
     }
 
