@@ -43,3 +43,28 @@ function financeiroLancamentosWhere($db, array $filtros = [])
 
     return implode(' AND ', $conditions);
 }
+
+/**
+ * Converte dd/mm/aaaa em aaaa-mm-dd, que é o formato das colunas date.
+ *
+ * @param  string|null  $valor        Data vinda do formulário
+ * @param  bool         $fallbackHoje Devolve a data de hoje quando o campo não
+ *                                   veio preenchido ou não é uma data válida
+ */
+function financeiroDataBrada($valor, $fallbackHoje = true)
+{
+    $data = DateTime::createFromFormat('!d/m/Y', trim((string) $valor));
+
+    // createFromFormat só devolve false quando não dá para interpretar. Data
+    // com estouro de campo volta normalizada e com warning: 31/02 viraria
+    // 2027-03-03 e a gravação usaria uma data que ninguém digitou. Por isso o
+    // getLastErrors também é conferido.
+    $erros = DateTime::getLastErrors();
+    $estourou = is_array($erros) && ($erros['warning_count'] > 0 || $erros['error_count'] > 0);
+
+    if ($data === false || $estourou) {
+        return $fallbackHoje ? date('Y-m-d') : '';
+    }
+
+    return $data->format('Y-m-d');
+}

@@ -178,28 +178,16 @@ class Financeiro extends MY_Controller
                 redirect($urlAtual);
             }
 
-            $dia_pgto = $this->input->post('dia_pgto');
-            $dia_base_pgto = $this->input->post('dia_base_pgto');
+            // As datas vêm em dd/mm/aaaa e vão para o banco em aaaa-mm-dd. O try/catch
+            // que existia aqui não protegia nada: explode() não lança exceção e
+            // o índice [2] inexistente só gera warning, então o campo vazio
+            // virava a string '-' em vez de cair no fallback.
+            $dia_pgto = financeiroDataBrada($this->input->post('dia_pgto'));
+            $dia_base_pgto = financeiroDataBrada($this->input->post('dia_base_pgto'));
             $recebimento = $this->input->post('recebimento');
 
-            try {
-                $dia_pgto = explode('/', $dia_pgto);
-                $dia_pgto = $dia_pgto[2] . '-' . $dia_pgto[1] . '-' . $dia_pgto[0];
-
-                $dia_base_pgto = explode('/', $dia_base_pgto);
-                $dia_base_pgto = $dia_base_pgto[2] . '-' . $dia_base_pgto[1] . '-' . $dia_base_pgto[0];
-            } catch (Exception $e) {
-                $dia_pgto = date('Y/m/d');
-                $dia_base_pgto = date('Y/m/d');
-            }
-
-            if ($recebimento) {
-                try {
-
-                    $recebimento = explode('/', $recebimento);
-                    $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
-                } catch (Exception) {
-                }
+            if (! empty($recebimento)) {
+                $recebimento = financeiroDataBrada($recebimento, false);
             }
 
             $comissao = $this->input->post('comissao');
@@ -261,7 +249,7 @@ class Financeiro extends MY_Controller
                     'valor_desconto' => $entrada,
                     'tipo_desconto' => 'real',
                     'data_vencimento' => $dia_pgto,
-                    'data_pagamento' => $dia_pgto != null ? $dia_pgto : date_format('Y-m-d'),
+                    'data_pagamento' => $dia_pgto,
                     'baixado' => 1,
                     'cliente_fornecedor' => $this->input->post('cliente_parc'),
                     'clientes_id' => $this->input->post('idCliente_parc'),
