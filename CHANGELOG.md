@@ -22,7 +22,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DESIGN.md` como fonte de verdade da UI da v5 (cores, tipografia, componentes, estados, modo escuro e responsividade), referenciado no `AGENTS.md`, no `CONTRIBUTING.md` e no template de PR. #2920 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Changed
-- Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #PR_NUM [@RamonSilva20](https://github.com/RamonSilva20)
+- Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
 - Ficha do cliente migrada para os componentes da v5:
   - abas por link (dados, ordens de serviço e vendas), com contadores;
   - status das OS e das vendas em `pill-status` (`status_helper`: `osStatusPill()`, `vendaFaturadaPill()`, `dinheiro()`, `dataBr()`);
@@ -54,7 +54,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Fixed
-- Instalações criadas pelas migrations tinham preço de produtos e serviços e saldo das contas sem casas decimais (`DECIMAL(10)`), porque a migration base declarava `'constraint' => 10, 2`. A base foi corrigida, e uma migration nova ajusta as colunas para `DECIMAL(10,2)`. #PR_NUM [@RamonSilva20](https://github.com/RamonSilva20)
+- Instalações criadas pelas migrations tinham preço de produtos e serviços e saldo das contas sem casas decimais (`DECIMAL(10)`), porque a migration base declarava `'constraint' => 10, 2`. A base foi corrigida, e uma migration nova ajusta as colunas para `DECIMAL(10,2)`. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
 - Backup do banco não tenta mais gravar o arquivo numa URL (`base_url() . 'backup/backup.zip'`), o que falhava sempre e, se funcionasse, deixaria o dump numa pasta pública: agora só é baixado, com nome `backup-AAAA-MM-DD-HHhMM.zip` (antes usava o mês no lugar dos minutos e `:`, inválido no Windows). #2933 [@RamonSilva20](https://github.com/RamonSilva20)
 - Erros 500 do calendário do painel sem datas (agora valida `start`/`end` e responde 400 em JSON), de `os/visualizar` com OS inexistente (agora redireciona com aviso, como o `editar`) e dos autocompletes de Garantias (chamavam um model não carregado e não devolviam JSON sem resultados). #2932 [@RamonSilva20](https://github.com/RamonSilva20)
 - Usuário com `permissoes_id` inexistente recebe negação de acesso em vez de erro fatal. #2891 [@RamonSilva20](https://github.com/RamonSilva20)
