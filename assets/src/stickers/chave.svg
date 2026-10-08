@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <!-- Map-OS, adesivo "chave". Apache-2.0, ver assets/src/stickers/README.md -->
+  <defs>
+    <g id="arte">
+      <path fill="#c2ef4e" d="M71 134C70 112 72 88 71 67C60 62 54 52 55 40C56 28 64 20 72 17L72 35L88 35L88 17C96 20 104 28 105 40C106 52 100 62 89 67C88 90 90 112 89 134C89 143 71 143 71 134Z"/>
+      <path fill="#fa7faa" d="M124 51Q126.9 61.1 137 64Q126.9 66.9 124 77Q121.1 66.9 111 64Q121.1 61.1 124 51Z"/>
+      <path fill="#79628c" d="M36 83Q38.0 90.0 45 92Q38.0 94.0 36 101Q34.0 94.0 27 92Q34.0 90.0 36 83Z"/>
+    </g>
+  </defs>
+  <g transform="rotate(-35 80 80)">
+    <!-- Contorno branco de recorte -->
+    <use href="#arte" fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round"/>
+    <!-- Arte com traço ink -->
+    <g stroke="#1f1633" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <use href="#arte"/>
+    </g>
+    <!-- Detalhes -->
+    <g stroke="#1f1633" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+      <path d="M80 76C79 88 81 100 80 112"/>
+      <circle cx="80" cy="126" r="4" fill="#fff"/>
+    </g>
+  </g>
+</svg>

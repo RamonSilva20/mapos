@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <!-- Map-OS, adesivo "caixa de entrega". Apache-2.0, ver assets/src/stickers/README.md -->
+  <defs>
+    <g id="arte">
+      <path fill="#fa7faa" d="M42 66L84 48L126 66L84 84Z"/>
+      <path fill="#fa7faa" d="M42 66L84 84L84 138L42 120Z"/>
+      <path fill="#79628c" d="M84 84L126 66L126 120L84 138Z"/>
+      <path fill="#c2ef4e" d="M58 59L68 55L110 73L100 77Z"/>
+      <path fill="#c2ef4e" d="M100 77L110 73L110 125L100 129Z"/>
+      <path fill="none" d="M14 82L30 82M8 96L28 96M16 110L30 110"/>
+      <path fill="#c2ef4e" d="M136 26Q138.2 33.8 146 36Q138.2 38.2 136 46Q133.8 38.2 126 36Q133.8 33.8 136 26Z"/>
+    </g>
+  </defs>
+  <g transform="rotate(6 80 80)">
+    <!-- Contorno branco de recorte -->
+    <use href="#arte" fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round"/>
+    <!-- Arte com traço ink -->
+    <g stroke="#1f1633" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <use href="#arte"/>
+    </g>
+    <!-- Detalhes -->
+    <g stroke="#1f1633" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+      <path fill="#fff" d="M50 90L74 100L74 114L50 104Z"/>
+      <path d="M55 97L68 102M55 103L64 107"/>
+    </g>
+  </g>
+</svg>

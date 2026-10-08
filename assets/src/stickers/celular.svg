@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <!-- Map-OS, adesivo "celular". Apache-2.0, ver assets/src/stickers/README.md -->
+  <defs>
+    <g id="arte">
+      <rect x="48" y="18" width="64" height="120" rx="13" fill="#fa7faa"/>
+      <rect x="56" y="32" width="48" height="84" rx="5" fill="#79628c"/>
+      <rect x="44" y="64" width="72" height="22" rx="11" fill="#c2ef4e" transform="rotate(-28 80 75)"/>
+    </g>
+  </defs>
+  <g transform="rotate(10 80 80)">
+    <!-- Contorno branco de recorte -->
+    <use href="#arte" fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round"/>
+    <!-- Arte com traço ink -->
+    <g stroke="#1f1633" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <use href="#arte"/>
+    </g>
+    <!-- Detalhes -->
+    <g stroke="#1f1633" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+      <path d="M74 25L86 25"/>
+      <circle cx="80" cy="127" r="4" fill="#fff"/>
+      <path stroke="#fff" d="M64 40L72 50L66 56L74 62"/>
+      <path stroke="#fff" d="M98 92L90 100L95 106L88 110"/>
+      <g fill="#1f1633" stroke="none" transform="rotate(-28 80 75)">
+        <circle cx="72" cy="71" r="1.6"/><circle cx="80" cy="71" r="1.6"/><circle cx="88" cy="71" r="1.6"/>
+        <circle cx="72" cy="79" r="1.6"/><circle cx="80" cy="79" r="1.6"/><circle cx="88" cy="79" r="1.6"/>
+      </g>
+      <path d="M62 71L62 79M98 71L98 79" transform="rotate(-28 80 75)"/>
+    </g>
+  </g>
+</svg>
