@@ -39,6 +39,20 @@ const bibliotecas = {
       'dist/l10n/pt.js': 'l10n/pt.js',
     },
   },
+  // Ícones do layout e das telas novas. Servidos daqui, e não do unpkg, para
+  // que a CSP não precise liberar uma origem externa de estilo e de fonte. O
+  // CSS aponta para ../fonts/, por isso a estrutura css/ + fonts/ é mantida.
+  boxicons: {
+    pacote: 'boxicons',
+    arquivos: {
+      'css/boxicons.min.css': 'css/boxicons.min.css',
+      'fonts/boxicons.woff2': 'fonts/boxicons.woff2',
+      'fonts/boxicons.woff': 'fonts/boxicons.woff',
+      'fonts/boxicons.ttf': 'fonts/boxicons.ttf',
+      'fonts/boxicons.eot': 'fonts/boxicons.eot',
+      'fonts/boxicons.svg': 'fonts/boxicons.svg',
+    },
+  },
   imask: {
     pacote: 'imask',
     arquivos: { 'dist/imask.min.js': 'imask.min.js' },

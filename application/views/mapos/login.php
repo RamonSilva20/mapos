@@ -30,7 +30,7 @@ $versao = (string) $this->config->item('app_version');
     <title><?= e('Entrar — ' . $nomeSistema) ?></title>
     <link rel="icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
     <link rel="stylesheet" href="<?= e(base_url('assets/dist/app.css')) ?>">
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+    <link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
     <script src="<?= e(base_url('assets/js/tema.js')) ?>"></script>
     <script type="module" src="<?= e(base_url('assets/js/app.js')) ?>"></script>
 </head>

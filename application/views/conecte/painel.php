@@ -1,4 +1,4 @@
-<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
 
 <div class="quick-actions_homepage">
     <ul class="cardBox">

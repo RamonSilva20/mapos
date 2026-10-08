@@ -21,6 +21,7 @@
   "dependencies": {
     "@fullcalendar/core": "6.1.21",
     "alpinejs": "3.17.4",
+    "boxicons": "2.1.1",
     "chart.js": "4.5.1",
     "flatpickr": "4.6.13",
     "fullcalendar": "6.1.21",

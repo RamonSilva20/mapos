@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/favicon.png">
     <script src="<?php echo base_url() ?>assets/js/jquery.mask.min.js"></script>
     <script src="<?php echo base_url() ?>assets/js/funcoes.js"></script>
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="<?= e(base_url('assets/vendor/boxicons/css/boxicons.min.css')) ?>">
     <!-- Script webeddy.com.br -->
     <script>
         function formatar(mascara, documento) {
