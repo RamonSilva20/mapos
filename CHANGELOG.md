@@ -43,7 +43,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Fixed
-- Erros 500 do calendário do painel sem datas (agora valida `start`/`end` e responde 400 em JSON), de `os/visualizar` com OS inexistente (agora redireciona com aviso, como o `editar`) e dos autocompletes de Garantias (chamavam um model não carregado e não devolviam JSON sem resultados). #PR_NUM [@RamonSilva20](https://github.com/RamonSilva20)
+- Erros 500 do calendário do painel sem datas (agora valida `start`/`end` e responde 400 em JSON), de `os/visualizar` com OS inexistente (agora redireciona com aviso, como o `editar`) e dos autocompletes de Garantias (chamavam um model não carregado e não devolviam JSON sem resultados). #2932 [@RamonSilva20](https://github.com/RamonSilva20)
 - Usuário com `permissoes_id` inexistente recebe negação de acesso em vez de erro fatal. #2891 [@RamonSilva20](https://github.com/RamonSilva20)
 - Conta sem data de expiração volta a conseguir entrar. #2892 [@RamonSilva20](https://github.com/RamonSilva20)
 - `date_format()` sem argumento e data inválida na entrada de receita parcelada. #2893 [@RamonSilva20](https://github.com/RamonSilva20)
