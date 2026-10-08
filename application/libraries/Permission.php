@@ -69,9 +69,13 @@ class Permission
             $this->CI->db->select($this->table . '.' . $this->select);
             $this->CI->db->where($this->pk, $id);
             $this->CI->db->limit(1);
+            // row_array() devolve null quando a consulta não traz linha, e
+            // count(null) é TypeError fatal no PHP 8. Um usuário cujo
+            // permissoes_id aponta para uma linha removida derrubava a tela
+            // em vez de receber a negação de acesso.
             $array = $this->CI->db->get($this->table)->row_array();
 
-            if (count($array) > 0) {
+            if (! empty($array)) {
                 $raw = $array[$this->select];
                 $array = json_decode_legacy($raw);
                 $this->permissions = [$array];

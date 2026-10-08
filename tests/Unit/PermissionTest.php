@@ -69,25 +69,61 @@ final class PermissionTest extends MaposTestCase
         $this->assertFalse($permission->checkPermission(1, null));
     }
 
-    public function testIdDePermissaoInexistenteCausaTypeErrorEmVezDeNegar(): void
+    /**
+     * Um permissoes_id que não existe mais na tabela tem de virar negação de
+     * acesso, não erro fatal.
+     *
+     * Antes da correção, loadPermission() fazia count() sobre o retorno de
+     * row_array(), que é null quando a consulta não traz linha, e count(null)
+     * é TypeError no PHP 8. Como checkPermission() é chamado em praticamente
+     * todo controller, o efeito era tela branca no admin inteiro para aquele
+     * usuário.
+     */
+    public function testIdDePermissaoInexistenteRetornaFalso(): void
     {
-        // knownIssue: loadPermission() faz count($array) sobre o retorno de
-        // row_array(), que é null quando a consulta não traz linha. No PHP 8
-        // count(null) é TypeError fatal, então um usuario com permissoes_id
-        // apontando para uma linha removida quebra a tela em vez de receber a
-        // negação. A correção é tratar o null como "sem permissões" (#2834).
-        //
-        // O teste fixa o comportamento atual para documentar a falha. Quando for
-        // corrigida, deve passar a esperar false e a KnownIssue sai daqui.
         $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
 
         $permission = $this->makeInstance(Permission::class);
         $this->setPrivateProperty($permission, 'permissions', null);
         $this->setPrivateProperty($permission, 'CI', $this->fakeCiInstance($this->db));
 
-        $this->expectException(TypeError::class);
+        $this->assertFalse($permission->checkPermission(999, 'vOs'));
+    }
+
+    /**
+     * O mesmo caminho com a tabela vazia, que é o caso de um conjunto de
+     * permissões recém-removido.
+     */
+    public function testTabelaDePermissoesVaziaRetornaFalso(): void
+    {
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
+
+        $permission = $this->makeInstance(Permission::class);
+        $this->setPrivateProperty($permission, 'permissions', null);
+        $this->setPrivateProperty($permission, 'CI', $this->fakeCiInstance($this->db));
+
+        $this->assertFalse($permission->checkPermission(1, 'vOs'));
+    }
+
+    /**
+     * Negar por falta de permissões é diferente de carregar permissões vazias:
+     * na negação a propriedade fica como estava, o que impede que uma
+     * consulta sem resultado contamine decisões seguintes.
+     */
+    public function testNegacaoNaoPopulaAListaDePermissoes(): void
+    {
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
+
+        $permission = $this->makeInstance(Permission::class);
+        $this->setPrivateProperty($permission, 'permissions', null);
+        $this->setPrivateProperty($permission, 'CI', $this->fakeCiInstance($this->db));
 
         $permission->checkPermission(999, 'vOs');
+
+        $this->assertNull(
+            $this->readPrivateProperty($permission, 'permissions'),
+            'Uma negação não deve preencher a lista de permissões.'
+        );
     }
 
     public function testCarregaPermissoesDoBancoNaPrimeiraConsulta(): void
