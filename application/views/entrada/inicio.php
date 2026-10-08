@@ -15,6 +15,9 @@
  * color-scheme escuro, para a barra de rolagem; os campos voltam ao claro no
  * escopo .superficie-entrada).
  *
+ * A ação secundária tem 44px no celular (DESIGN.md) e, abaixo de sm, mostra
+ * só o ícone, para a marca caber em 320px.
+ *
  * @var array{titulo: string, secundaria?: array} $entrada
  */
 $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
@@ -37,7 +40,6 @@ $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
             <span class="truncate font-display text-[1.375rem] leading-none font-bold tracking-[-0.2px]"><?= e($nomeSistema) ?></span>
         </a>
         <?php if (! empty($entrada['secundaria'])) { ?>
-            <?php // 44px no celular (DESIGN.md); abaixo de sm só o ícone, para a marca caber em 320px. ?>
             <?= component('button', $entrada['secundaria'] + ['variant' => 'ghost-on-dark', 'class' => 'max-sm:hidden']) ?>
             <?= component('button', $entrada['secundaria'] + ['variant' => 'ghost-on-dark', 'icon_only' => true, 'class' => 'sm:hidden']) ?>
         <?php } ?>
