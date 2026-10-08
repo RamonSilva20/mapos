@@ -226,9 +226,11 @@ $statusOs = [
             'id' => 'modal-excluir',
             'title' => 'Excluir cliente?',
             'message' => 'Esta ação não pode ser desfeita. As OS do cliente continuam no sistema.',
-            'confirm_attrs' => ['form' => 'form-excluir-exemplo'],
+            // Em uso real, form aponta para o formulário POST (com CSRF) que exclui.
+            // O catálogo não exclui nada: o formulário de exemplo não envia e o
+            // data-modal-fechar fecha o modal.
+            'confirm_attrs' => ['form' => 'form-excluir-exemplo', 'data-modal-fechar' => true],
         ]) ?>
-        <?php /* O catálogo não exclui nada: o formulário de exemplo só fecha o modal. */ ?>
         <form id="form-excluir-exemplo" method="dialog" class="hidden"></form>
         <?= component('modal', [
             'id' => 'modal-form',
