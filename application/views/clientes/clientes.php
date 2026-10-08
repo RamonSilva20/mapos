@@ -24,10 +24,17 @@ $temFiltro = $filtros !== [];
 
 $colunas = [
     ['key' => 'idClientes', 'label' => 'Cód.', 'align' => 'right', 'nowrap' => true],
-    ['label' => 'Nome', 'render' => fn ($c) => component('link', ['label' => $c->nomeCliente, 'href' => site_url('clientes/visualizar/' . $c->idClientes)])],
-    ['key' => 'documento', 'label' => 'CPF/CNPJ', 'nowrap' => true],
+    ['label' => 'Nome', 'class' => 'min-w-40', 'render' => fn ($c) => component('link', ['label' => $c->nomeCliente, 'href' => site_url('clientes/visualizar/' . $c->idClientes), 'class' => 'font-medium'])],
+    ['key' => 'documento', 'label' => 'CPF/CNPJ', 'nowrap' => true, 'hide_until' => '2xl'],
     ['label' => 'Telefone', 'nowrap' => true, 'render' => fn ($c) => $c->celular ?: $c->telefone],
-    ['key' => 'email', 'label' => 'E-mail'],
+    // E-mail longo trunca com reticências na tabela (o valor completo fica no
+    // title); no cartão do celular, quebra.
+    ['label' => 'E-mail', 'hide_until' => 'xl', 'render' => fn ($c) => $c->email ? component('link', [
+        'label' => $c->email,
+        'href' => 'mailto:' . $c->email,
+        'class' => 'block max-w-52 truncate max-sm:max-w-none max-sm:whitespace-normal',
+        'attrs' => ['title' => $c->email],
+    ]) : ''],
     ['label' => 'Tipo', 'nowrap' => true, 'render' => fn ($c) => component('pill-status', $c->fornecedor ? ['label' => 'Fornecedor', 'variant' => 'info'] : ['label' => 'Cliente', 'variant' => 'neutral'])],
     ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($c) use ($pode) {
         $acoes = [
@@ -69,9 +76,9 @@ $vazio = $temFiltro
 ?>
 <div class="flex flex-col gap-4 pt-2 pb-8">
     <header>
-        <h1 class="font-display text-heading-lg text-text">Clientes e fornecedores</h1>
+        <h1 class="font-display text-heading-xl text-text">Clientes e fornecedores</h1>
         <p class="text-caption text-muted" aria-live="polite">
-            <?= e($total === 1 ? '1 cadastro' : number_format($total, 0, ',', '.') . ' cadastros') ?><?= $temFiltro ? e(' encontrados com os filtros') : '' ?>
+            <?= e(($total === 1 ? '1 cadastro' : number_format($total, 0, ',', '.') . ' cadastros') . ($temFiltro ? ($total === 1 ? ' encontrado' : ' encontrados') . ' com os filtros' : '')) ?>
         </p>
     </header>
 
@@ -110,7 +117,7 @@ $vazio = $temFiltro
 </div>
 
 <?php if ($pode['excluir']) { ?>
-    <form id="form-excluir-cliente" method="post" action="<?= e(site_url('clientes/excluir')) ?>" hidden>
+    <form id="form-excluir-cliente" method="post" action="<?= e(site_url('clientes/excluir') . listagemQuery($filtros)) ?>" hidden>
         <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
         <input type="hidden" name="id" value="" data-modal-de="excluir-cliente" data-modal-valor="id">
     </form>

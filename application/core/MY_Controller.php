@@ -240,7 +240,9 @@ class MY_Controller extends CI_Controller
      * $this->data['legacy_assets'] = false. Ver layout_helper.php.
      *
      * A ação principal da tela (o único button-primary, ex. "Nova OS") vai na
-     * topbar: $this->data['topbar_acao'] = component('button', [...]).
+     * topbar, com as props do button (ícone obrigatório: no celular ele fica
+     * só com o ícone, para caber na topbar):
+     * $this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')].
      */
     public function layout()
     {
@@ -293,7 +295,7 @@ class MY_Controller extends CI_Controller
             'tem_foto' => $avatar !== base_url() . 'assets/img/User.png',
             'nome_sistema' => (string) (($configuracao['app_name'] ?? '') ?: 'Map-OS'),
             'versao' => (string) $this->config->item('app_version'),
-            'acao' => $acao instanceof HtmlSeguro ? $acao : null,
+            'acao' => is_array($acao) ? $acao : null,
             'flash' => $flash,
         ];
     }

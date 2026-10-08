@@ -838,7 +838,26 @@ final class ComponentesTest extends MaposTestCase
 
     public function testBotaoPequenoTem44pxNoCelular(): void
     {
-        $this->assertStringContainsString('size-8 max-sm:size-11', $this->html('button', ['label' => 'X', 'icon' => 'x', 'icon_only' => true, 'size' => 'sm']));
+        $this->assertStringContainsString('size-9 max-sm:size-11', $this->html('button', ['label' => 'X', 'icon' => 'x', 'icon_only' => true, 'size' => 'sm']));
         $this->assertStringContainsString('h-8 gap-1.5 px-3 max-sm:h-11', $this->html('button', ['label' => 'X', 'size' => 'sm']));
+    }
+
+    public function testDataTableEscondeColunaSecundariaSoNaTabela(): void
+    {
+        $html = $this->html('data-table', [
+            'columns' => [['key' => 'nome', 'label' => 'Nome'], ['key' => 'email', 'label' => 'E-mail', 'hide_until' => 'xl']],
+            'rows' => [['nome' => 'Ana', 'email' => 'a@x.com']],
+        ]);
+
+        $this->assertMatchesRegularExpression('#<th scope="col" class="[^"]*sm:max-xl:hidden">E-mail</th>#', $html);
+        $this->assertMatchesRegularExpression('#<td data-label="E-mail" class="[^"]*sm:max-xl:hidden[^"]*">a@x.com</td>#', $html);
+        $this->assertDoesNotMatchRegularExpression('#data-label="Nome" class="[^"]*hidden#', $html);
+        $this->assertStringContainsString('max-sm:[overflow-wrap:anywhere]', $html);
+    }
+
+    public function testDataTableRecusaHideUntilInvalido(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->html('data-table', ['columns' => [['key' => 'a', 'label' => 'A', 'hide_until' => 'sm']], 'rows' => []]);
     }
 }

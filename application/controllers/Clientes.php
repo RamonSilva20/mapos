@@ -52,7 +52,7 @@ class Clientes extends MY_Controller
         ];
 
         if ($this->data['pode']['adicionar']) {
-            $this->data['topbar_acao'] = component('button', ['label' => 'Novo cliente', 'icon' => 'plus', 'href' => site_url('clientes/adicionar')]);
+            $this->data['topbar_acao'] = ['label' => 'Novo cliente', 'icon' => 'plus', 'href' => site_url('clientes/adicionar')];
         }
 
         $this->data['legacy_assets'] = false;
@@ -251,7 +251,8 @@ class Clientes extends MY_Controller
         $this->clientes_model->delete('clientes', 'idClientes', $id);
         log_info('Removeu um cliente. ID' . $id);
 
-        $this->session->set_flashdata('success', 'Cliente excluido com sucesso!');
-        redirect(site_url('clientes/gerenciar/'));
+        $this->session->set_flashdata('success', 'Cliente excluído com sucesso!');
+        // Volta para a listagem com os mesmos filtros (só os permitidos).
+        redirect(site_url('clientes') . listagemQuery(listagemFiltros(self::FILTROS, $this->input->get())));
     }
 }

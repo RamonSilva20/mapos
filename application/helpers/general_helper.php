@@ -98,9 +98,14 @@ if (! function_exists('json_decode_legacy')) {
 }
 
 if (! function_exists('printSafeHtml')) {
-    function printSafeHtml(string $html): string
+    function printSafeHtml(?string $html): string
     {
         static $purifier = null;
+
+        // Colunas de texto opcionais (ex. os.defeito) chegam como null.
+        if ($html === null || $html === '') {
+            return '';
+        }
 
         if ($purifier === null) {
             $config = HTMLPurifier_Config::createDefault();

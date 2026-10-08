@@ -307,8 +307,10 @@ Toda tela do painel passa por `MY_Controller::layout()`, que monta a moldura da 
 A ação principal da tela, o único `button-primary` dela, vai na topbar, ao lado da busca:
 
 ```php
-$this->data['topbar_acao'] = component('button', ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')]);
+$this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')];
 ```
+
+São as props do `button`, e o ícone é obrigatório: no celular a topbar mostra só o ícone, com o rótulo como nome acessível.
 
 Durante a Beta as telas são migradas aos poucos, então o layout tem um **modo legado**, ligado por padrão: ele carrega Bootstrap 2, jQuery, matrix-style e o `tema-*.css`, e a tela fica dentro de `#content` como antes. Uma tela já migrada para os componentes desliga o modo legado e passa a receber o `app.css` completo:
 
