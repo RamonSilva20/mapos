@@ -7,6 +7,7 @@ import { deveFecharPeloFundo } from '../../assets/js/modules/componentes/modal.j
 import { criarTemporizador } from '../../assets/js/modules/componentes/toast.js';
 import { aplicarModo } from '../../assets/js/modules/componentes/catalogo.js';
 import { criarToast, regiaoDeToasts, CLASSES_REGIAO } from '../../assets/js/lib/toast.js';
+import { criarIcone, URL_SPRITE } from '../../assets/js/lib/icone.js';
 
 function documentoFalso() {
     const criar = (tag) => {
@@ -40,6 +41,7 @@ function documentoFalso() {
     return {
         body,
         createElement: criar,
+        createElementNS: (namespace, tag) => Object.assign(criar(tag), { namespaceURI: namespace }),
         querySelector: (seletor) => (seletor === '[data-toast-region]' ? body.filhos.find((f) => 'data-toast-region' in f.atributos) ?? null : null),
     };
 }
@@ -98,6 +100,28 @@ test('criarToast: texto entra como texto, papel segue a variante', () => {
     assert.equal(fechar.getAttribute('data-dispensar'), '');
     assert.equal(criarToast({ mensagem: 'ok' }, doc).getAttribute('role'), 'status');
     assert.throws(() => criarToast({ mensagem: 'x', variante: 'roxo' }, doc), /Variante de toast inválida/);
+});
+
+test('criarIcone: SVG do sprite Lucide, decorativo, com a classe pedida', () => {
+    const doc = documentoFalso();
+    const svg = criarIcone('plus', 'size-4 text-muted', doc);
+
+    assert.equal(svg.namespaceURI, 'http://www.w3.org/2000/svg');
+    assert.equal(svg.getAttribute('class'), 'shrink-0 size-4 text-muted');
+    assert.equal(svg.getAttribute('aria-hidden'), 'true');
+    assert.equal(svg.getAttribute('stroke'), 'currentColor');
+    assert.equal(svg.filhos[0].getAttribute('href'), `${URL_SPRITE}#plus`);
+    assert.match(URL_SPRITE, /\/assets\/vendor\/lucide\/sprite\.svg$/);
+    assert.throws(() => criarIcone('plus" onload="x', '', doc), /Nome de ícone inválido/);
+});
+
+test('criarToast: ícone Lucide da variante', () => {
+    const doc = documentoFalso();
+    const [icone] = criarToast({ mensagem: 'ok', variante: 'success' }, doc).filhos;
+
+    assert.equal(icone.namespaceURI, 'http://www.w3.org/2000/svg');
+    assert.match(icone.getAttribute('class'), /text-success-ink/);
+    assert.match(icone.filhos[0].getAttribute('href'), /#circle-check$/);
 });
 
 test('regiaoDeToasts: cria uma vez e reaproveita', () => {

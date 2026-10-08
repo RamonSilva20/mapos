@@ -162,6 +162,43 @@ for (const [nome, lib] of Object.entries(bibliotecas)) {
   }
 }
 
+// Ícones Lucide (#2915): em vez de copiar os ~1.600 SVGs do lucide-static,
+// monta um sprite só com os ícones listados em assets/src/icones.json. O
+// helper icon() (application/helpers/icone_helper.php) aponta para
+// sprite.svg#nome e valida o nome contra a cópia da lista gravada junto.
+function gerarSpriteLucide() {
+  const pacote = 'lucide-static';
+  const pasta = join(destino, 'lucide');
+  const icones = JSON.parse(readFileSync(join(raiz, 'assets', 'src', 'icones.json'), 'utf8'));
+
+  const simbolos = icones.map((nome) => {
+    if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(nome)) {
+      throw new Error(`assets/src/icones.json: nome de ícone inválido "${nome}".`);
+    }
+    const arquivo = join(modulos, pacote, 'icons', `${nome}.svg`);
+    if (!existsSync(arquivo)) {
+      throw new Error(`lucide-static: o ícone "${nome}" não existe. Confira o nome em https://lucide.dev/icons.`);
+    }
+    // Só o conteúdo de dentro do <svg>: os atributos de traço ficam no <svg>
+    // que o icon() imprime, para o ícone herdar currentColor.
+    const svg = readFileSync(arquivo, 'utf8');
+    const interno = svg.slice(svg.indexOf('>', svg.indexOf('<svg')) + 1, svg.lastIndexOf('</svg>'));
+    const compacto = interno.replace(/\s*\n\s*/g, '').trim();
+    return `<symbol id="${nome}" viewBox="0 0 24 24">${compacto}</symbol>`;
+  });
+
+  mkdirSync(pasta, { recursive: true });
+  writeFileSync(
+    join(pasta, 'sprite.svg'),
+    `<svg xmlns="http://www.w3.org/2000/svg">${simbolos.join('')}</svg>\n`
+  );
+  writeFileSync(join(pasta, 'icones.json'), JSON.stringify(icones, null, 2) + '\n');
+  copiarLicenca(pacote, pasta);
+  versoes[pacote] = lerPacote(pacote).version;
+}
+
+gerarSpriteLucide();
+
 // Registra a versão de cada lib copiada, para quem olha o assets/vendor sem
 // abrir o package-lock.json.
 writeFileSync(join(destino, 'versions.json'), JSON.stringify(versoes, null, 2) + '\n');

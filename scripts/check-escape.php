@@ -48,6 +48,9 @@ const ESCAPE_FUNCOES_SEGURAS = [
     'component',
     'componenteatributos',
     'componenteconteudo',
+    // icone_helper.php: icon() só aceita nomes da lista do sprite e escapa
+    // os atributos com componenteAtributos().
+    'icon',
 ];
 
 /**

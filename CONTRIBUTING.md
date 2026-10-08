@@ -259,7 +259,7 @@ Telas novas são montadas com a biblioteca de componentes, em vez de HTML escrit
 
 ```php
 <?= component('input', ['name' => 'nome', 'label' => 'Nome', 'required' => true, 'error' => form_error('nome')]) ?>
-<?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'bx-save']) ?>
+<?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'save']) ?>
 ```
 
 Os partials ficam em `application/views/components/` e as props aceitas em `application/helpers/componente_helper.php`. Prop desconhecida, obrigatória faltando ou valor fora das opções gera erro na hora, em vez de ser ignorado. Componentes disponíveis: `button`, `input`, `select`, `textarea`, `card`, `table`, `modal`, `alert`, `toast`, `badge`, `pagination`, `empty-state` e `breadcrumb`.
@@ -276,6 +276,8 @@ $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $tot
 ```
 
 O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination.php` até a remoção do frontend legado (#2855).
+
+**Ícones** são do [Lucide](https://lucide.dev/icons), servidos de um sprite SVG (`assets/vendor/lucide/sprite.svg`) que só tem os ícones listados em `assets/src/icones.json`. Nas views use `<?= icon('wrench', ['class' => 'size-4']) ?>` (ou a prop `icon` dos componentes); no JavaScript, `criarIcone('wrench', 'size-4')` de `assets/js/lib/icone.js`. O ícone segue a cor do texto (`currentColor`) e tem 20px por padrão. Para usar um ícone novo, inclua o nome no `icones.json` e rode `npm run build:vendor`; o `IconeTest` falha se uma view citar um ícone fora da lista. O Boxicons (`<i class="bx ...">`) só continua nas telas legadas.
 
 Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
 

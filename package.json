@@ -28,6 +28,7 @@
     "flatpickr": "4.6.13",
     "fullcalendar": "6.1.21",
     "imask": "7.6.1",
+    "lucide-static": "1.53.0",
     "sweetalert2": "11.26.25",
     "tom-select": "2.6.2"
   }

@@ -8,12 +8,14 @@
 // As classes repetem as do partial PHP: se mudar uma, mude a outra.
 
 import iniciarToast from '../modules/componentes/toast.js';
+import { criarIcone } from './icone.js';
 
+// variante → [ícone Lucide, cor]
 export const VARIANTES = {
-    info: 'bx-info-circle text-info-ink',
-    success: 'bx-check-circle text-success-ink',
-    warning: 'bx-error text-warning-ink',
-    danger: 'bx-error-circle text-danger-ink',
+    info: ['info', 'text-info-ink'],
+    success: ['circle-check', 'text-success-ink'],
+    warning: ['triangle-alert', 'text-warning-ink'],
+    danger: ['circle-alert', 'text-danger-ink'],
 };
 
 export const CLASSES_REGIAO = 'pointer-events-none fixed right-4 bottom-4 z-50 flex flex-col items-end gap-2';
@@ -50,8 +52,8 @@ export function criarToast({ mensagem, titulo = null, variante = 'info', duracao
     toast.setAttribute('aria-atomic', 'true');
     toast.dataset.duracao = String(Math.max(0, Number(duracao) || 0));
 
-    const icone = el('i', `bx ${VARIANTES[variante]} mt-0.5 text-lg leading-none`);
-    icone.setAttribute('aria-hidden', 'true');
+    const [nomeIcone, corIcone] = VARIANTES[variante];
+    const icone = criarIcone(nomeIcone, `mt-0.5 size-5 ${corIcone}`, doc);
 
     const corpo = el('div', 'min-w-0 flex-1');
     if (titulo) {

@@ -17,7 +17,7 @@
     <header class="sticky top-0 z-30 flex h-topbar items-center gap-2 border-b border-border bg-surface px-3 sm:gap-3 lg:px-6">
       <?= component('button', [
           'label' => 'Menu',
-          'icon' => 'bx-menu',
+          'icon' => 'menu',
           'icon_only' => true,
           'variant' => 'ghost',
           'attrs' => ['data-sidebar-alternar' => true, 'aria-controls' => 'v5-sidebar', 'aria-expanded' => 'true'],
@@ -29,7 +29,7 @@
 
       <div class="ml-auto flex items-center gap-2 sm:gap-3">
         <div class="inline-flex rounded-control border border-border bg-surface-subtle p-0.5" role="group" aria-label="Modo de cor">
-          <?php foreach (['claro' => ['Modo claro', 'bx-sun'], 'escuro' => ['Modo escuro', 'bx-moon'], 'sistema' => ['Seguir o sistema', 'bx-desktop']] as $modo => [$rotulo, $icone]) { ?>
+          <?php foreach (['claro' => ['Modo claro', 'sun'], 'escuro' => ['Modo escuro', 'moon'], 'sistema' => ['Seguir o sistema', 'monitor']] as $modo => [$rotulo, $icone]) { ?>
             <?= component('button', [
                 'label' => $rotulo,
                 'icon' => $icone,
@@ -52,10 +52,10 @@
           </summary>
           <div class="absolute right-0 z-40 mt-2 w-56 rounded-card border border-border bg-surface p-1.5 shadow-overlay">
             <p class="truncate px-3 py-2 text-sm font-medium text-text sm:hidden"><?= e($layout['usuario']) ?></p>
-            <a href="<?= e(site_url('mine')) ?>" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-user-circle text-lg text-muted" aria-hidden="true"></i>Área do Cliente</a>
-            <a href="<?= e(site_url('mapos/minhaConta')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-id-card text-lg text-muted" aria-hidden="true"></i>Meu Perfil</a>
+            <a href="<?= e(site_url('mine')) ?>" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><?= icon('circle-user', ['class' => 'size-[18px] text-muted']) ?>Área do Cliente</a>
+            <a href="<?= e(site_url('mapos/minhaConta')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><?= icon('id-card', ['class' => 'size-[18px] text-muted']) ?>Meu Perfil</a>
             <div class="my-1 border-t border-border" role="separator"></div>
-            <a href="<?= e(site_url('login/sair')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><i class="bx bx-log-out-circle text-lg text-muted" aria-hidden="true"></i>Sair do Sistema</a>
+            <a href="<?= e(site_url('login/sair')) ?>" class="flex items-center gap-2 rounded-control px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-ring"><?= icon('log-out', ['class' => 'size-[18px] text-muted']) ?>Sair do Sistema</a>
           </div>
         </details>
       </div>
