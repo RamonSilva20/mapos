@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { proximoEstado, CONSULTA_DESKTOP } from '../../assets/js/modules/layout/shell.js';
+import { proximoEstado, CONSULTA_DESKTOP, ehAtalhoBusca } from '../../assets/js/modules/layout/shell.js';
 import { aplicarModo, salvarModo, CHAVE_MODO } from '../../assets/js/lib/tema.js';
 
 test('no desktop o botão de menu recolhe e expande a sidebar', () => {
@@ -65,4 +65,13 @@ test('salvarModo não quebra com localStorage bloqueado', () => {
     const bloqueado = { setItem: () => { throw new Error('SecurityError'); } };
 
     assert.doesNotThrow(() => salvarModo('claro', bloqueado));
+});
+
+test('Ctrl+K e ⌘K levam à busca; com Shift, Alt ou outra tecla, não', () => {
+    assert.equal(ehAtalhoBusca({ ctrlKey: true, key: 'k' }), true);
+    assert.equal(ehAtalhoBusca({ metaKey: true, key: 'K' }), true);
+    assert.equal(ehAtalhoBusca({ ctrlKey: true, shiftKey: true, key: 'k' }), false);
+    assert.equal(ehAtalhoBusca({ ctrlKey: true, altKey: true, key: 'k' }), false);
+    assert.equal(ehAtalhoBusca({ ctrlKey: true, key: 'j' }), false);
+    assert.equal(ehAtalhoBusca({ key: 'k' }), false);
 });

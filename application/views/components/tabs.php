@@ -33,7 +33,7 @@ foreach ($items as $item) {
 $atributos = [
     'id' => $id,
     'aria-label' => $label,
-    'class' => componenteClasses('flex gap-1 overflow-x-auto shadow-[inset_0_-1px_0_var(--color-border)] [scrollbar-width:none]', $class),
+    'class' => componenteClasses('abas-rolagem flex gap-1 overflow-x-auto shadow-[inset_0_-1px_0_var(--color-border)] [scrollbar-width:none]', $class),
 ];
 ?>
 <nav<?= componenteAtributos(componenteMesclarAtributos($atributos, $attrs)) ?>>

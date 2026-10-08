@@ -303,8 +303,16 @@ html[data-gaveta="aberta"] .v5-sidebar {
     display: none !important;
   }
 
-  html[data-sidebar="recolhida"] .v5-sidebar :where(a, summary) {
+  html[data-sidebar="recolhida"] .v5-sidebar :where(a, summary),
+  html[data-sidebar="recolhida"] .v5-sidebar :where(.v5-sidebar-topo, .v5-sidebar-usuario) {
     justify-content: center !important;
+  }
+
+  /* Sem os rótulos, um fio separa as seções (Operação, Financeiro, Sistema). */
+  html[data-sidebar="recolhida"] .v5-sidebar .v5-grupo + .v5-grupo {
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+    margin-top: 0.75rem !important;
   }
 }
 

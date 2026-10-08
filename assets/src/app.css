@@ -27,3 +27,35 @@
     color: var(--mapos-text);
   }
 }
+
+/*
+ * Abas que rolam (component tabs): a borda esmaece do lado em que ainda há
+ * aba escondida, para o celular mostrar que a faixa rola. Usa scroll-driven
+ * animation; sem suporte, ou sem nada para rolar, as abas ficam como estão.
+ */
+@property --abas-fade-esq {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --abas-fade-dir {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes abas-esmaecer {
+  0% { --abas-fade-esq: 0px; --abas-fade-dir: 2.5rem; }
+  8% { --abas-fade-esq: 2.5rem; }
+  92% { --abas-fade-dir: 2.5rem; }
+  100% { --abas-fade-esq: 2.5rem; --abas-fade-dir: 0px; }
+}
+
+@utility abas-rolagem {
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(to right, transparent, #000 var(--abas-fade-esq), #000 calc(100% - var(--abas-fade-dir)), transparent);
+    animation: abas-esmaecer linear both;
+    animation-timeline: scroll(self inline);
+  }
+}
