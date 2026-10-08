@@ -68,3 +68,28 @@ if (! function_exists('dataBr')) {
         return $instante === false ? '' : date('d/m/Y', $instante);
     }
 }
+
+if (! function_exists('valorDecimal')) {
+    /**
+     * Valor digitado ("1.234,56", "1234,56" ou "1234.56") em decimal para o
+     * banco ("1234.56"), ou null se não for um valor válido. Com vírgula, o
+     * ponto é separador de milhar; sem vírgula, o ponto é o decimal.
+     */
+    function valorDecimal($valor): ?string
+    {
+        if (! is_string($valor) && ! is_numeric($valor)) {
+            return null;
+        }
+
+        $texto = str_replace(['R$', ' ', "\u{00A0}"], '', trim((string) $valor));
+        if (str_contains($texto, ',')) {
+            $texto = str_replace(['.', ','], ['', '.'], $texto);
+        }
+
+        if (! preg_match('/^\d{1,13}(\.\d{1,2})?$/', $texto)) {
+            return null;
+        }
+
+        return number_format((float) $texto, 2, '.', '');
+    }
+}

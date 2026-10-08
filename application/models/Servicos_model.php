@@ -25,6 +25,32 @@ class Servicos_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Serviços da listagem (#2841), do mais recente para o mais antigo.
+     *
+     * @param  array{pesquisa?: string}  $filtros  Saída de listagemFiltros()
+     */
+    public function listar(array $filtros, int $limite, int $offset): array
+    {
+        $this->aplicarFiltros($filtros);
+
+        return $this->db->order_by('idServicos', 'desc')->limit($limite, max(0, $offset))->get('servicos')->result();
+    }
+
+    public function contar(array $filtros): int
+    {
+        $this->aplicarFiltros($filtros);
+
+        return (int) $this->db->count_all_results('servicos');
+    }
+
+    private function aplicarFiltros(array $filtros): void
+    {
+        if (($filtros['pesquisa'] ?? '') !== '') {
+            $this->db->group_start()->like('nome', $filtros['pesquisa'])->or_like('descricao', $filtros['pesquisa'])->group_end();
+        }
+    }
+
     public function getById($id)
     {
         $this->db->where('idServicos', $id);

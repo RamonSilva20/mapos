@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { formatarCep, formatarDocumento, formatarTelefone, somenteDigitos } from '../../assets/js/lib/mascaras.js';
+import { formatarCep, formatarDinheiro, formatarDocumento, formatarTelefone, somenteDigitos } from '../../assets/js/lib/mascaras.js';
 import { MENSAGENS, marcarCarregando, mensagemDoCampo, semDescritor } from '../../assets/js/lib/formulario.js';
 import { dadosDoCnpj, enderecoDoCep, preencherVazios } from '../../assets/js/modules/clientes/formulario.js';
 
@@ -105,4 +105,13 @@ test('preenche só os campos vazios', () => {
     assert.equal(campos.nomeCliente.value, 'Digitado');
     assert.equal(campos.cidade.value, 'Brasília');
     assert.equal(campos.estado.value, 'DF');
+});
+
+test('máscara de dinheiro: centavos da direita, milhar com ponto', () => {
+    assert.equal(formatarDinheiro('1'), '0,01');
+    assert.equal(formatarDinheiro('123456'), '1.234,56');
+    assert.equal(formatarDinheiro('1234.50'), '1.234,50');
+    assert.equal(formatarDinheiro('0,00'), '0,00');
+    assert.equal(formatarDinheiro('R$ 1.000.000,00'), '1.000.000,00');
+    assert.equal(formatarDinheiro(''), '');
 });

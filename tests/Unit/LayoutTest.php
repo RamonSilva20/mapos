@@ -285,7 +285,8 @@ final class LayoutTest extends MaposTestCase
             layoutBreadcrumb(['clientes', 'editar', '7'], $site)
         );
         // A listagem (gerenciar/index), em qualquer página, fica só com o controller.
-        $this->assertSame(['Início', 'Os'], array_column(layoutBreadcrumb(['os', 'gerenciar', null], $site), 'label'));
+        $this->assertSame(['Início', 'Ordens de serviço'], array_column(layoutBreadcrumb(['os', 'gerenciar', null], $site), 'label'));
+        $this->assertSame(['Início', 'Serviços', 'Editar'], array_column(layoutBreadcrumb(['servicos', 'editar', '3'], $site), 'label'));
         $this->assertSame(['Início', 'Clientes'], array_column(layoutBreadcrumb(['clientes', 'gerenciar', '10'], $site), 'label'));
     }
 
