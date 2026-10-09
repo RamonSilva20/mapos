@@ -113,7 +113,7 @@ if (! function_exists('layoutMenu')) {
                 'itens' => [
                     ['label' => 'Sistema', 'url' => 'mapos/configurar', 'rota' => ['Mapos', 'configurar'], 'ativo' => ['Mapos/configurar']],
                     ['label' => 'Usuários', 'url' => 'usuarios', 'rota' => ['Usuarios', 'index'], 'ativo' => ['Usuarios']],
-                    ['label' => 'Emitente', 'url' => 'mapos/emitente', 'rota' => ['Mapos', 'emitente'], 'ativo' => ['Mapos/emitente', 'Mapos/cadastrarEmitente', 'Mapos/editarEmitente', 'Mapos/editarLogo']],
+                    ['label' => 'Emitente', 'url' => 'mapos/emitente', 'rota' => ['Mapos', 'emitente'], 'ativo' => ['Mapos/emitente']],
                     ['label' => 'Permissões', 'url' => 'permissoes', 'rota' => ['Permissoes', 'index'], 'ativo' => ['Permissoes']],
                     ['label' => 'Auditoria', 'url' => 'auditoria', 'rota' => ['Auditoria', 'index'], 'ativo' => ['Auditoria']],
                     ['label' => 'E-mails', 'url' => 'mapos/emails', 'rota' => ['Mapos', 'emails'], 'ativo' => ['Mapos/emails']],
@@ -245,6 +245,8 @@ if (! defined('LAYOUT_ROTULOS')) {
         'usuarios' => 'Usuários',
         'permissoes' => 'Permissões',
         'mapos' => 'Sistema',
+        'emails' => 'E-mails',
+        'configurar' => 'Configurações',
     ]);
 }
 
@@ -270,7 +272,7 @@ if (! function_exists('layoutBreadcrumb')) {
         // gerenciar e index são a própria listagem do controller: a página 2
         // (clientes/gerenciar/10) tem o mesmo breadcrumb da página 1 (clientes).
         if ($controller !== '' && $metodo !== '' && ! in_array(strtolower($metodo), ['gerenciar', 'index'], true)) {
-            $itens[] = ['label' => ucfirst($metodo), 'url' => $siteUrl(trim($controller . '/' . $metodo . '/' . $parametro, '/'))];
+            $itens[] = ['label' => LAYOUT_ROTULOS[strtolower($metodo)] ?? ucfirst($metodo), 'url' => $siteUrl(trim($controller . '/' . $metodo . '/' . $parametro, '/'))];
         }
 
         return $itens;

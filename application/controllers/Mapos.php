@@ -160,6 +160,12 @@ class Mapos extends MY_Controller
         force_download(backupNomeArquivo(time()), $backup);
     }
 
+    /**
+     * Emitente (#2846): dados da empresa nas impressões, nos e-mails e no PIX,
+     * num formulário só (cadastra quando ainda não há, senão edita o que
+     * existe; o id nunca vem do POST). O logo é opcional e troca só o arquivo
+     * dele (na v4 trocar o logo apagava a pasta de uploads inteira).
+     */
     public function emitente()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
@@ -167,212 +173,108 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
 
+        $this->load->helper('configuracoes');
+        $emitente = $this->mapos_model->getEmitente();
+        $erros = [];
+
+        if ($this->input->method() === 'post') {
+            [$dados, $erros] = emitenteDadosDoFormulario($this->input->post());
+
+            $enviouLogo = isset($_FILES['userfile']) && ($_FILES['userfile']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE;
+            if ($erros === [] && $enviouLogo) {
+                [$arquivo, $erroLogo] = $this->enviarImagem(FCPATH . 'assets/uploads');
+                if ($arquivo === null) {
+                    $erros['userfile'] = $erroLogo;
+                } else {
+                    $anterior = $emitente ? emitenteArquivoDoLogo($emitente->url_logo, FCPATH . 'assets/uploads') : null;
+                    $dados['url_logo'] = base_url('assets/uploads/' . $arquivo);
+                }
+            } elseif ($erros === [] && ! $emitente) {
+                $dados['url_logo'] = '';
+            }
+
+            if ($erros === []) {
+                $salvou = $emitente
+                    ? $this->mapos_model->edit('emitente', $dados, 'id', (int) $emitente->id)
+                    : $this->mapos_model->add('emitente', $dados);
+
+                if ($salvou) {
+                    if (! empty($anterior)) {
+                        @unlink($anterior);
+                    }
+                    log_info($emitente ? 'Alterou informações de emitente.' : 'Adicionou informações de emitente.');
+                    $this->session->set_flashdata('success', 'Dados do emitente salvos.');
+
+                    return redirect('mapos/emitente');
+                }
+
+                $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
+            }
+        }
+
+        $post = $this->input->method() === 'post' ? $this->input->post() : null;
+        $campos = ['nome', 'cnpj', 'ie', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'telefone', 'email'];
+        $valores = [];
+        foreach ($campos as $campo) {
+            $valores[$campo] = $post !== null
+                ? (is_scalar($post[$campo] ?? null) ? trim((string) $post[$campo]) : '')
+                : (string) ($emitente->{$campo === 'estado' ? 'uf' : $campo} ?? '');
+        }
+
         $this->data['menuConfiguracoes'] = 'Configuracoes';
-        $this->data['dados'] = $this->mapos_model->getEmitente();
+        $this->data['emitente'] = $emitente;
+        $this->data['valores'] = $valores;
+        $this->data['erros'] = $erros;
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/emitente';
 
         return $this->layout();
     }
 
-    // Auxiliar interno: como método público seria acessível via /mapos/do_upload.
-    protected function do_upload()
+    /**
+     * Grava a imagem enviada em userfile (png, jpg, bmp até 2 MB, nome
+     * aleatório) e devolve [nome do arquivo, null] ou [null, mensagem]. Na
+     * v4 o erro de upload aparecia cru na tela e a página parava.
+     *
+     * @return array{0: string|null, 1: string|null}
+     */
+    private function enviarImagem(string $pasta): array
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
+        if (!is_dir($pasta) && !@mkdir($pasta, DIR_WRITE_MODE, true)) {
+            return [null, 'Não foi possível criar a pasta de uploads no servidor.'];
+        }
+
+        // Acima do limite do PHP o arquivo nem chega: a mensagem do CI fala em
+        // "configuração do PHP", que não ajuda quem está enviando.
+        if (in_array($_FILES['userfile']['error'] ?? UPLOAD_ERR_OK, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true)) {
+            return [null, 'A imagem passa de 2 MB. Reduza o tamanho e envie de novo.'];
         }
 
         $this->load->library('upload');
 
-        $image_upload_folder = FCPATH . 'assets/uploads';
-
-        if (!file_exists($image_upload_folder)) {
-            mkdir($image_upload_folder, DIR_WRITE_MODE, true);
-        }
-
-        $this->upload_config = [
+        $this->upload->initialize([
             // SVG fora da lista: é um documento XML que pode carregar script e
             // seria servido a partir da própria origem da aplicação.
-            'upload_path' => $image_upload_folder,
+            'upload_path' => $pasta,
             'allowed_types' => 'png|jpg|jpeg|bmp',
             'max_size' => 2048,
             'remove_space' => true,
             'encrypt_name' => true,
-        ];
+        ]);
 
-        $this->upload->initialize($this->upload_config);
-
-        if (!$this->upload->do_upload()) {
-            $upload_error = $this->upload->display_errors();
-            print_r($upload_error);
-            exit();
-        } else {
-            $file_info = [$this->upload->data()];
-
-            return $file_info[0]['file_name'];
-        }
-    }
-
-    // Auxiliar interno: como método público seria acessível via /mapos/do_upload_user.
-    protected function do_upload_user()
-    {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
+        // Mensagens do upload em português: o idioma global é english, e a
+        // biblioteca carrega o arquivo de idioma ao registrar cada erro (como
+        // em validarFormulario()).
+        $idioma = $this->config->item('language');
+        $this->config->set_item('language', 'pt-br');
+        try {
+            $enviou = $this->upload->do_upload('userfile');
+            $erro = $enviou ? null : (trim(strip_tags($this->upload->display_errors('', ''))) ?: 'Não foi possível enviar a imagem.');
+        } finally {
+            $this->config->set_item('language', $idioma);
         }
 
-        $this->load->library('upload');
-
-        $image_upload_folder = FCPATH . 'assets/userImage/';
-
-        if (!file_exists($image_upload_folder)) {
-            mkdir($image_upload_folder, DIR_WRITE_MODE, true);
-        }
-
-        $this->upload_config = [
-            'upload_path' => $image_upload_folder,
-            'allowed_types' => 'png|jpg|jpeg|bmp',
-            'max_size' => 2048,
-            'remove_space' => true,
-            'encrypt_name' => true,
-        ];
-
-        $this->upload->initialize($this->upload_config);
-
-        if (!$this->upload->do_upload()) {
-            $upload_error = $this->upload->display_errors();
-            print_r($upload_error);
-            exit();
-        } else {
-            $file_info = [$this->upload->data()];
-
-            return $file_info[0]['file_name'];
-        }
-    }
-
-    public function cadastrarEmitente()
-    {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
-        }
-
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('nome', 'Razão Social', 'required|trim');
-        $this->form_validation->set_rules('cnpj', 'CNPJ', 'required|trim');
-        $this->form_validation->set_rules('ie', 'IE', 'trim');
-        $this->form_validation->set_rules('cep', 'CEP', 'required|trim');
-        $this->form_validation->set_rules('logradouro', 'Logradouro', 'required|trim');
-        $this->form_validation->set_rules('numero', 'Número', 'required|trim');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'required|trim');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'required|trim');
-        $this->form_validation->set_rules('uf', 'UF', 'required|trim');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'required|trim');
-        $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
-
-        if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(site_url('mapos/emitente'));
-        } else {
-            $nome = $this->input->post('nome');
-            $cnpj = $this->input->post('cnpj');
-            $ie = $this->input->post('ie');
-            $cep = $this->input->post('cep');
-            $logradouro = $this->input->post('logradouro');
-            $numero = $this->input->post('numero');
-            $bairro = $this->input->post('bairro');
-            $cidade = $this->input->post('cidade');
-            $uf = $this->input->post('uf');
-            $telefone = $this->input->post('telefone');
-            $email = $this->input->post('email');
-            $image = $this->do_upload();
-            $logo = base_url() . 'assets/uploads/' . $image;
-
-            $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
-            if ($retorno) {
-                $this->session->set_flashdata('success', 'As informações foram inseridas com sucesso.');
-                log_info('Adicionou informações de emitente.');
-            } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
-            }
-            redirect(site_url('mapos/emitente'));
-        }
-    }
-
-    public function editarEmitente()
-    {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
-        }
-
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('nome', 'Razão Social', 'required|trim');
-        $this->form_validation->set_rules('cnpj', 'CNPJ', 'required|trim');
-        $this->form_validation->set_rules('ie', 'IE', 'trim');
-        $this->form_validation->set_rules('cep', 'CEP', 'required|trim');
-        $this->form_validation->set_rules('logradouro', 'Logradouro', 'required|trim');
-        $this->form_validation->set_rules('numero', 'Número', 'required|trim');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'required|trim');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'required|trim');
-        $this->form_validation->set_rules('uf', 'UF', 'required|trim');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'required|trim');
-        $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
-
-        if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(site_url('mapos/emitente'));
-        } else {
-            $nome = $this->input->post('nome');
-            $cnpj = $this->input->post('cnpj');
-            $ie = $this->input->post('ie');
-            $cep = $this->input->post('cep');
-            $logradouro = $this->input->post('logradouro');
-            $numero = $this->input->post('numero');
-            $bairro = $this->input->post('bairro');
-            $cidade = $this->input->post('cidade');
-            $uf = $this->input->post('uf');
-            $telefone = $this->input->post('telefone');
-            $email = $this->input->post('email');
-            $id = $this->input->post('id');
-
-            $retorno = $this->mapos_model->editEmitente($id, $nome, $cnpj, $ie, $cep, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email);
-            if ($retorno) {
-                $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-                log_info('Alterou informações de emitente.');
-            } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-            }
-            redirect(site_url('mapos/emitente'));
-        }
-    }
-
-    public function editarLogo()
-    {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
-        }
-
-        $id = $this->input->post('id');
-        if ($id == null || !is_numeric($id)) {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
-            redirect(site_url('mapos/emitente'));
-        }
-        $this->load->helper('file');
-        delete_files(FCPATH . 'assets/uploads/');
-
-        $image = $this->do_upload();
-        $logo = base_url() . 'assets/uploads/' . $image;
-
-        $retorno = $this->mapos_model->editLogo($id, $logo);
-        if ($retorno) {
-            $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-            log_info('Alterou a logomarca do emitente.');
-        } else {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-        }
-        redirect(site_url('mapos/emitente'));
+        return $enviou ? [$this->upload->data('file_name'), null] : [null, $erro];
     }
 
     public function uploadUserImage()
@@ -390,11 +292,17 @@ class Mapos extends MY_Controller
 
         $usuario = $this->mapos_model->getById($id);
 
-        if (is_file(FCPATH . 'assets/userImage/' . $usuario->url_image_user)) {
-            unlink(FCPATH . 'assets/userImage/' . $usuario->url_image_user);
+        [$image, $erroUpload] = $this->enviarImagem(FCPATH . 'assets/userImage');
+        if ($image === null) {
+            $this->session->set_flashdata('error', $erroUpload);
+            redirect(site_url('mapos/minhaConta'));
         }
 
-        $image = $this->do_upload_user();
+        // A foto antiga sai só depois que a nova foi gravada.
+        $antiga = FCPATH . 'assets/userImage/' . basename((string) $usuario->url_image_user);
+        if ((string) $usuario->url_image_user !== '' && is_file($antiga)) {
+            unlink($antiga);
+        }
         $imageUserPath = $image;
         $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
 
@@ -408,6 +316,10 @@ class Mapos extends MY_Controller
         redirect(site_url('mapos/minhaConta'));
     }
 
+    /**
+     * Fila de e-mails (#2846), no padrão das listagens (#2852): filtro de
+     * situação na URL e exclusão em modal-confirm.
+     */
     public function emails()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmail')) {
@@ -415,18 +327,19 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['menuConfiguracoes'] = 'Email';
-
-        $this->load->library('pagination');
+        $this->load->helper('configuracoes');
         $this->load->model('email_model');
 
-        $this->data['configuration']['base_url'] = site_url('mapos/emails/');
-        $this->data['configuration']['total_rows'] = $this->email_model->count('email_queue');
+        $filtros = listagemFiltros(['status' => ['pending', 'sending', 'sent', 'failed']], $this->input->get());
+        $offset = (int) $this->uri->segment(3);
+        $total = $this->email_model->contar($filtros);
 
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->email_model->get('email_queue', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
-
+        $this->data['menuConfiguracoes'] = 'Email';
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['results'] = $this->email_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
+        $this->data['paginacao'] = $this->paginacao(site_url('mapos/emails'), $total, $offset, null, $filtros);
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'emails/emails';
 
         return $this->layout();
@@ -439,120 +352,75 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
-        if ($id == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir e-mail da fila.');
-            redirect(site_url('mapos/emails/'));
-        }
+        $id = (int) $this->input->post('id');
+        $voltar = site_url('mapos/emails') . listagemQuery(listagemFiltros(['status' => ['pending', 'sending', 'sent', 'failed']], $this->input->get()));
 
         $this->load->model('email_model');
-        $this->email_model->delete('email_queue', 'id', $id);
+        if ($id <= 0 || !$this->email_model->getById($id)) {
+            $this->session->set_flashdata('error', 'E-mail não encontrado na fila.');
+            redirect($voltar);
+        }
 
+        $this->email_model->delete('email_queue', 'id', $id);
         log_info('Removeu um e-mail da fila de envio. ID: ' . $id);
 
-        $this->session->set_flashdata('success', 'E-mail removido da fila de envio!');
-        redirect(site_url('mapos/emails/'));
+        $this->session->set_flashdata('success', 'E-mail removido da fila.');
+        redirect($voltar);
     }
 
+    /**
+     * Configurações do sistema (#2846), em abas por link (?aba=). Cada aba é
+     * um formulário que grava só os campos dela, na tabela configuracoes ou
+     * no .env (configuracaoCampos()). Segredos do .env não voltam para a tela
+     * e, em branco, ficam como estão.
+     */
     public function configurar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
             redirect(base_url());
         }
-        $this->data['menuConfiguracoes'] = 'Sistema';
 
-        $this->load->library('form_validation');
-        $this->load->model('mapos_model');
+        $this->load->helper(['configuracoes', 'os']);
+        $aba = listagemFiltros(['aba' => array_keys(CONFIG_ABAS)], $this->input->get())['aba'] ?? 'geral';
+        $erros = [];
 
-        $this->data['custom_error'] = '';
+        if ($this->input->method() === 'post' && $aba !== 'sistema') {
+            [$config, $env, $erros] = configuracaoDadosDoFormulario($aba, $this->input->post());
 
-        $this->form_validation->set_rules('app_name', 'Nome do Sistema', 'required|trim');
-        $this->form_validation->set_rules('per_page', 'Registros por página', 'required|numeric|trim');
-        $this->form_validation->set_rules('app_theme', 'Tema do Sistema', 'required|trim');
-        $this->form_validation->set_rules('os_notification', 'Notificação de OS', 'required|trim');
-        $this->form_validation->set_rules('email_automatico', 'Enviar Email Automático', 'required|trim');
-        $this->form_validation->set_rules('control_estoque', 'Controle de Estoque', 'required|trim');
-        $this->form_validation->set_rules('notifica_whats', 'Notificação Whatsapp', 'required|trim');
-        $this->form_validation->set_rules('control_baixa', 'Controle de Baixa', 'required|trim');
-        $this->form_validation->set_rules('control_editos', 'Controle de Edição de OS', 'required|trim');
-        $this->form_validation->set_rules('control_edit_vendas', 'Controle de Edição de Vendas', 'required|trim');
-        $this->form_validation->set_rules('control_datatable', 'Controle de Visualização em DataTables', 'required|trim');
-        $this->form_validation->set_rules('os_status_list[]', 'Controle de visualização de OS', 'required|trim', ['required' => 'Selecione ao menos uma das opções!']);
-        $this->form_validation->set_rules('control_2vias', 'Controle Impressão 2 Vias', 'required|trim');
-        $this->form_validation->set_rules('pix_key', 'Chave Pix', 'trim|valid_pix_key', [
-            'valid_pix_key' => 'Chave Pix inválida!',
-        ]);
-
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="alert">' . validation_errors() . '</div>' : false);
-        } else {
-            // Edição do .env
-            $dataDotEnv = [
-                'IMPRIMIR_ANEXOS' => $this->input->post('imprmirAnexos'),
-                'PAYMENT_GATEWAYS_EFI_PRODUCTION' => $this->input->post('PAYMENT_GATEWAYS_EFI_PRODUCTION'),
-                'PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID' => $this->input->post('PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID'),
-                'PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET' => $this->input->post('PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET'),
-                'PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION' => $this->input->post('PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION'),
-                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY'),
-                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN'),
-                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID'),
-                'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_SECRET'),
-                'PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION' => $this->input->post('PAYMENT_GATEWAYS_MERCADO_PAGO_BOLETO_EXPIRATION'),
-                'PAYMENT_GATEWAYS_ASAAS_PRODUCTION' => $this->input->post('PAYMENT_GATEWAYS_ASAAS_PRODUCTION'),
-                'PAYMENT_GATEWAYS_ASAAS_NOTIFY' => $this->input->post('PAYMENT_GATEWAYS_ASAAS_NOTIFY'),
-                'PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY' => $this->input->post('PAYMENT_GATEWAYS_ASAAS_CREDENTIAIS_API_KEY'),
-                'PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION' => $this->input->post('PAYMENT_GATEWAYS_ASAAS_BOLETO_EXPIRATION'),
-                'API_ENABLED' => $this->input->post('apiEnabled'),
-                'API_TOKEN_EXPIRE_TIME' => $this->input->post('apiExpireTime'),
-                'API_JWT_KEY' => $this->input->post('resetJwtToken'),
-                'EMAIL_PROTOCOL' => $this->input->post('EMAIL_PROTOCOL'),
-                'EMAIL_SMTP_HOST' => $this->input->post('EMAIL_SMTP_HOST'),
-                'EMAIL_SMTP_CRYPTO' => $this->input->post('EMAIL_SMTP_CRYPTO'),
-                'EMAIL_SMTP_PORT' => $this->input->post('EMAIL_SMTP_PORT'),
-                'EMAIL_SMTP_USER' => $this->input->post('EMAIL_SMTP_USER'),
-                'EMAIL_SMTP_PASS' => $this->input->post('EMAIL_SMTP_PASS'),
-            ];
-
-            if (!$this->editDontEnv($dataDotEnv)) {
-                $this->data['custom_error'] = '<div class="alert">Falha ao editar o .env</div>';
+            if ($erros === [] && $env !== [] && !$this->gravarEnv($env)) {
+                $erros['_geral'] = 'Não foi possível gravar o arquivo application/.env. Confira a permissão de escrita.';
             }
-            // FIM Edição do .env
 
-            $data = [
-                'app_name' => $this->input->post('app_name'),
-                'per_page' => $this->input->post('per_page'),
-                'app_theme' => $this->input->post('app_theme'),
-                'os_notification' => $this->input->post('os_notification'),
-                'email_automatico' => $this->input->post('email_automatico'),
-                'control_estoque' => $this->input->post('control_estoque'),
-                'notifica_whats' => $this->input->post('notifica_whats'),
-                'control_baixa' => $this->input->post('control_baixa'),
-                'control_editos' => $this->input->post('control_editos'),
-                'control_edit_vendas' => $this->input->post('control_edit_vendas'),
-                'control_datatable' => $this->input->post('control_datatable'),
-                'pix_key' => $this->input->post('pix_key'),
-                'os_status_list' => json_encode($this->input->post('os_status_list')),
-                'control_2vias' => $this->input->post('control_2vias'),
-            ];
-            // Enquanto esta tela só oferece os temas da v4, o modo da v5
-            // acompanha a escolha. Sem isso, trocar o tema aqui depois da
-            // migration deixaria o layout novo com o modo antigo. Se a linha
-            // ainda não existe (migration não rodou), o update não faz nada e
-            // o modo é derivado de app_theme na leitura.
-            $data['app_tema_modo'] = temaDeAppTheme($data['app_theme'])['modo'];
+            if ($erros === [] && ($config === [] || $this->mapos_model->saveConfiguracao($config))) {
+                log_info('Alterou as configurações do sistema (' . CONFIG_ABAS[$aba] . ').');
+                $this->session->set_flashdata('success', 'Configurações salvas.');
 
-            if ($this->mapos_model->saveConfiguracao($data) == true) {
-                $this->session->set_flashdata('success', 'Configurações do sistema atualizadas com sucesso!');
-                redirect(site_url('mapos/configurar'));
-            } else {
-                $this->data['custom_error'] = '<div class="alert">Ocorreu um errro.</div>';
+                return redirect('mapos/configurar' . ($aba === 'geral' ? '' : listagemQuery(['aba' => $aba])));
             }
+
+            $erros['_geral'] ??= 'Não foi possível salvar. Tente de novo.';
         }
 
+        $this->data['menuConfiguracoes'] = 'Sistema';
+        $this->data['aba'] = $aba;
+        $this->data['campos'] = configuracaoCampos($aba);
+        $this->data['valores'] = configuracaoValores($aba, $this->input->method() === 'post' ? $this->input->post() : null, $this->data['configuration'], $_ENV);
+        $this->data['erros'] = $erros;
+        $this->data['pode_backup'] = $this->permite('cBackup');
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/configurar';
 
         return $this->layout();
+    }
+
+    /** Grava as chaves no application/.env (configuracaoEnvAtualizado()). */
+    private function gravarEnv(array $valores): bool
+    {
+        $arquivo = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . '.env';
+        $conteudo = is_readable($arquivo) ? (string) file_get_contents($arquivo) : '';
+
+        return is_writable($arquivo) && file_put_contents($arquivo, configuracaoEnvAtualizado($conteudo, $valores)) !== false;
     }
 
     public function atualizarBanco()
@@ -560,6 +428,11 @@ class Mapos extends MY_Controller
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar o sistema');
             redirect(base_url());
+        }
+
+        // Só por POST (com o token CSRF): na v4 bastava abrir o link.
+        if ($this->input->method() !== 'post') {
+            return redirect(site_url('mapos/configurar?aba=sistema'));
         }
 
         $this->load->library('migration');
@@ -570,7 +443,7 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('success', 'Banco de dados atualizado com sucesso!');
         }
 
-        return redirect(site_url('mapos/configurar'));
+        return redirect(site_url('mapos/configurar?aba=sistema'));
     }
 
     public function atualizarMapos()
@@ -580,12 +453,16 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
 
+        if ($this->input->method() !== 'post') {
+            return redirect(site_url('mapos/configurar?aba=sistema'));
+        }
+
         $this->load->library('github_updater');
 
         if (!$this->github_updater->has_update()) {
             $this->session->set_flashdata('success', 'Seu mapos já está atualizado!');
 
-            return redirect(site_url('mapos/configurar'));
+            return redirect(site_url('mapos/configurar?aba=sistema'));
         }
 
         $success = $this->github_updater->update();
@@ -596,7 +473,7 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', 'Erro ao atualizar mapos!');
         }
 
-        return redirect(site_url('mapos/configurar'));
+        return redirect(site_url('mapos/configurar?aba=sistema'));
     }
 
     public function calendario()
@@ -638,31 +515,5 @@ class Mapos extends MY_Controller
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode($events));
-    }
-
-    private function editDontEnv(array $data)
-    {
-        $env_file_path = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . '.env';
-        $env_file = file_get_contents($env_file_path);
-
-        foreach ($data as $constante => $valor) {
-            // Cada valor vira uma linha do .env. Uma quebra de linha no POST
-            // permitiria acrescentar outras variáveis de ambiente à vontade.
-            $valor = str_replace(["\r", "\n"], '', (string) $valor);
-
-            if ($constante == 'API_JWT_KEY' && $valor == 'sim') {
-                $base64 = base64_encode(openssl_random_pseudo_bytes(32));
-                $valor = '"' . $base64 . '"';
-                $env_file = str_replace("$constante=" . '"' . $_ENV[$constante] . '"', "$constante={$valor}", $env_file);
-            } else {
-                if (isset($_ENV[$constante])) {
-                    $env_file = str_replace("$constante={$_ENV[$constante]}", "$constante={$valor}", $env_file);
-                } else {
-                    file_put_contents($env_file_path, $env_file . "\n{$constante}={$valor}\n");
-                    $env_file = file_get_contents($env_file_path);
-                }
-            }
-        }
-        return file_put_contents($env_file_path, $env_file) ? true : false;
     }
 }
