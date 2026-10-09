@@ -115,17 +115,6 @@ class Mapos_model extends CI_Model
     {
         return $this->db->count_all($table);
     }
-
-    public function getOsOrcamentos()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Orçamento');
-        $this->db->limit(10);
-
-        return $this->db->get()->result();
-    }
     
     public function getOsAbertas()
     {
@@ -133,40 +122,6 @@ class Mapos_model extends CI_Model
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->where('os.status', 'Aberto');
-        $this->db->limit(10);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsFinalizadas()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Finalizado');
-        $this->db->order_by('os.idOs', 'DESC');
-        $this->db->limit(10);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsAprovadas()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Aprovado');
-        $this->db->limit(10);
-
-        return $this->db->get()->result();
-    }
-
-    public function getOsAguardandoPecas()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Aguardando Peças');
         $this->db->limit(10);
 
         return $this->db->get()->result();
@@ -182,41 +137,79 @@ class Mapos_model extends CI_Model
 
         return $this->db->get()->result();
     }
-
-    public function getOsStatus($status)
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where_in('os.status', $status);
-        $this->db->order_by('os.idOs', 'DESC');
-        $this->db->limit(10);
-
-        return $this->db->get()->result();
-    }
     
-    public function getVendasStatus($vstatus)
-    {
-        $this->db->select('vendas.*, clientes.nomeCliente');
-        $this->db->from('vendas');
-        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
-        $this->db->where_in('vendas.status', $vstatus);
-        $this->db->order_by('vendas.idVendas', 'DESC');
-        $this->db->limit(10);
+    /*
+     * Painel inicial da v5 (#2847).
+     */
 
-        return $this->db->get()->result();
+    /**
+     * Quantidade de OS ou de vendas por status.
+     *
+     * @return array<string, int>  status => quantidade
+     */
+    public function contarPorStatus(string $tabela): array
+    {
+        if (! in_array($tabela, ['os', 'vendas'], true)) {
+            throw new InvalidArgumentException("Tabela sem status no painel: {$tabela}");
+        }
+
+        $contagem = [];
+        foreach ($this->db->select('status, COUNT(*) AS total')->group_by('status')->get($tabela)->result() as $linha) {
+            $contagem[(string) $linha->status] = (int) $linha->total;
+        }
+
+        return $contagem;
     }
 
-    public function getLancamentos()
+    /**
+     * OS nos status pedidos, da entrega mais próxima para a mais distante (sem
+     * data de entrega no fim), para a lista do painel.
+     */
+    public function osParaPainel(array $status, int $limite): array
     {
-        $this->db->select('idLancamentos, tipo, cliente_fornecedor, descricao, data_vencimento, forma_pgto, valor_desconto, baixado');
-        $this->db->from('lancamentos');
-        $this->db->where('baixado', 0);
-        $this->db->order_by('idLancamentos', 'DESC');
-        $this->db->limit(10);
+        return $this->db
+            ->select('os.idOs, os.status, os.dataFinal, os.clientes_id, clientes.nomeCliente')
+            ->from('os')
+            ->join('clientes', 'clientes.idClientes = os.clientes_id', 'left')
+            ->where_in('os.status', $status)
+            ->order_by('os.dataFinal IS NULL', 'ASC', false)
+            ->order_by('os.dataFinal', 'ASC')
+            ->order_by('os.idOs', 'DESC')
+            ->limit($limite)
+            ->get()
+            ->result();
+    }
 
-        $query = $this->db->get();
-        return $query->result();
+    /** Vendas nos status pedidos, da mais recente para a mais antiga. */
+    public function vendasParaPainel(array $status, int $limite): array
+    {
+        return $this->db
+            ->select('vendas.idVendas, vendas.status, vendas.dataVenda, vendas.clientes_id, clientes.nomeCliente')
+            ->from('vendas')
+            ->join('clientes', 'clientes.idClientes = vendas.clientes_id', 'left')
+            ->where_in('vendas.status', $status)
+            ->order_by('vendas.idVendas', 'DESC')
+            ->limit($limite)
+            ->get()
+            ->result();
+    }
+
+    /**
+     * Produtos no estoque mínimo ou abaixo dele (só os que têm mínimo), os que
+     * estão mais abaixo primeiro.
+     */
+    public function produtosEstoqueBaixo(int $limite): array
+    {
+        return $this->db
+            ->select('idProdutos, descricao, estoque, estoqueMinimo')
+            ->from('produtos')
+            ->where('estoqueMinimo >', 0)
+            ->where('estoque <= estoqueMinimo', null, false)
+            ->order_by('(estoque - estoqueMinimo)', 'ASC', false)
+            ->order_by('descricao', 'ASC')
+            ->limit($limite)
+            ->get()
+            ->result();
     }
 
     public function calendario($start, $end, $status = null)
@@ -247,134 +240,6 @@ class Mapos_model extends CI_Model
         $sql = 'SELECT * FROM produtos WHERE estoque <= estoqueMinimo AND estoqueMinimo > 0 LIMIT 10';
 
         return $this->db->query($sql)->result();
-    }
-
-    public function getOsEstatisticas()
-    {
-        $sql = 'SELECT status, COUNT(status) as total FROM os GROUP BY status ORDER BY status';
-
-        return $this->db->query($sql)->result();
-    }
-
-    public function getEstatisticasFinanceiro()
-    {
-        $sql = "SELECT SUM(CASE WHEN baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) as total_receita,
-                       SUM(CASE WHEN baixado = 1 AND tipo = 'despesa' THEN valor END) as total_despesa,
-                       SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) as total_receita_pendente,
-                       SUM(CASE WHEN baixado = 0 AND tipo = 'despesa' THEN valor END) as total_despesa_pendente FROM lancamentos";
-        if ($this->db->query($sql) !== false) {
-            return $this->db->query($sql)->row();
-        }
-
-        return false;
-    }
-
-    public function getEstatisticasFinanceiroMes($year)
-    {
-        $numbersOnly = preg_replace('/[^0-9]/', '', $year);
-
-        if (! $numbersOnly) {
-            $numbersOnly = date('Y');
-        }
-
-        $sql = "
-            SELECT
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 1) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_JAN_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 1) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_JAN_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 2) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_FEV_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 2) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_FEV_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 3) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_MAR_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 3) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_MAR_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 4) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_ABR_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 4) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_ABR_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 5) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_MAI_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 5) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_MAI_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 6) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_JUN_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 6) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_JUN_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 7) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_JUL_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 7) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_JUL_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 8) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_AGO_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 8) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_AGO_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 9) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_SET_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 9) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_SET_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 10) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_OUT_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 10) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_OUT_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 11) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_NOV_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 11) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_NOV_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 12) AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_DEZ_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 12) AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_DEZ_DES
-            FROM lancamentos
-            WHERE EXTRACT(YEAR FROM data_pagamento) = ?
-        ";
-        if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
-            return $this->db->query($sql, [intval($numbersOnly)])->row();
-        }
-
-        return false;
-    }
-
-    public function getEstatisticasFinanceiroDia($year)
-    {
-        $numbersOnly = preg_replace('/[^0-9]/', '', $year);
-        if (! $numbersOnly) {
-            $numbersOnly = date('Y');
-        }
-        $sql = '
-            SELECT
-                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = ' . date('d') . ') AND EXTRACT(MONTH FROM data_pagamento) = ' . date('m') . " AND baixado = 1 AND tipo = 'receita' THEN valor - (IF(tipo_desconto = 'real', desconto, (desconto * valor) / 100))  END) AS VALOR_" . date('m') . '_REC,
-                SUM(CASE WHEN (EXTRACT(DAY FROM data_pagamento) = ' . date('d') . ') AND EXTRACT(MONTH FROM data_pagamento) = ' . date('m') . " AND baixado = 1 AND tipo = 'despesa' THEN valor END) AS VALOR_" . date('m') . '_DES
-            FROM lancamentos
-            WHERE EXTRACT(YEAR FROM data_pagamento) = ?
-        ';
-        if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
-            return $this->db->query($sql, [intval($numbersOnly)])->row();
-        }
-
-        return false;
-    }
-
-    public function getEstatisticasFinanceiroMesInadimplencia($year)
-    {
-        $numbersOnly = preg_replace('/[^0-9]/', '', $year);
-
-        if (! $numbersOnly) {
-            $numbersOnly = date('Y');
-        }
-
-        $sql = "
-            SELECT
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 1) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_JAN_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 1) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_JAN_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 2) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_FEV_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 2) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_FEV_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 3) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_MAR_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 3) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_MAR_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 4) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_ABR_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 4) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_ABR_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 5) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_MAI_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 5) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_MAI_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 6) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_JUN_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 6) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_JUN_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 7) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_JUL_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 7) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_JUL_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 8) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_AGO_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 8) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_AGO_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 9) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_SET_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 9) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_SET_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 10) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_OUT_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 10) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_OUT_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 11) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_NOV_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 11) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_NOV_DES,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 12) AND baixado = 0 AND tipo = 'receita' THEN valor END) AS VALOR_DEZ_REC,
-                SUM(CASE WHEN (EXTRACT(MONTH FROM data_pagamento) = 12) AND baixado = 0 AND tipo = 'despesa' THEN valor END) AS VALOR_DEZ_DES
-            FROM lancamentos
-            WHERE EXTRACT(YEAR FROM data_pagamento) = ?
-        ";
-        if ($this->db->query($sql, [intval($numbersOnly)]) !== false) {
-            return $this->db->query($sql, [intval($numbersOnly)])->row();
-        }
-
-        return false;
     }
 
     public function getEmitente()

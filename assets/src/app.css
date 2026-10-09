@@ -59,3 +59,121 @@
     animation-timeline: scroll(self inline);
   }
 }
+
+/*
+ * Agenda do painel (FullCalendar 6, #2847). O FullCalendar injeta o CSS dele
+ * com cores fixas em :root; aqui as variáveis --fc-* passam a apontar para os
+ * tokens, então a agenda acompanha os modos claro e escuro. Os botões seguem
+ * o button-outline, e o ativo ganha o primary-tint com peso 600 (DESIGN.md).
+ * Cada evento recebe a classe evento-<variante> do status (pill-status).
+ * O FullCalendar põe a classe fc no próprio .painel-agenda (daí &.fc).
+ */
+.painel-agenda {
+  --fc-page-bg-color: var(--color-surface);
+  --fc-neutral-bg-color: var(--color-surface-subtle);
+  --fc-neutral-text-color: var(--color-muted);
+  --fc-border-color: var(--color-border);
+  --fc-button-text-color: var(--color-text);
+  --fc-button-bg-color: var(--color-surface);
+  --fc-button-border-color: var(--color-input);
+  --fc-button-hover-bg-color: var(--color-surface-subtle);
+  --fc-button-hover-border-color: var(--color-input);
+  --fc-button-active-bg-color: var(--color-primary-tint);
+  --fc-button-active-border-color: var(--color-primary);
+  --fc-today-bg-color: var(--color-primary-tint);
+  --fc-more-link-bg-color: var(--color-surface-subtle);
+  --fc-list-event-hover-bg-color: var(--color-surface-subtle);
+  --fc-event-text-color: var(--color-text);
+
+  color: var(--color-text);
+  font-size: var(--text-caption);
+
+  &.fc .fc-toolbar {
+    flex-wrap: wrap;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  &.fc .fc-toolbar-title {
+    font-family: var(--font-display);
+    font-size: var(--text-heading-sm);
+    font-weight: 500;
+  }
+
+  /* "outubro de 2026" → "Outubro de 2026" (capitalize faria "De"). */
+  &.fc .fc-toolbar-title::first-letter {
+    text-transform: uppercase;
+  }
+
+  &.fc .fc-button {
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    padding: calc(var(--spacing) * 1) calc(var(--spacing) * 3);
+  }
+
+  &.fc .fc-button-primary:not(:disabled).fc-button-active {
+    font-weight: 600;
+  }
+
+  /* O anel de foco do FullCalendar é um box-shadow fixo, quase invisível no
+     escuro; fica o do design system ({colors.ring-focus}, 3px). */
+  &.fc .fc-button:focus,
+  &.fc .fc-button:focus-visible {
+    box-shadow: none !important;
+  }
+
+  &.fc .fc-button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent);
+    outline-offset: 1px;
+  }
+
+  &.fc a {
+    color: inherit;
+  }
+
+  &.fc .fc-daygrid-event,
+  &.fc .fc-list-event {
+    cursor: pointer;
+  }
+}
+
+.painel-agenda .evento-success {
+  --fc-event-bg-color: var(--color-success-soft);
+  --fc-event-border-color: var(--color-success);
+  --fc-event-text-color: var(--color-success-ink);
+  color: var(--color-success-ink);
+}
+
+.painel-agenda .evento-warning {
+  --fc-event-bg-color: var(--color-warning-soft);
+  --fc-event-border-color: var(--color-warning);
+  --fc-event-text-color: var(--color-warning-ink);
+  color: var(--color-warning-ink);
+}
+
+.painel-agenda .evento-danger {
+  --fc-event-bg-color: var(--color-danger-soft);
+  --fc-event-border-color: var(--color-danger);
+  --fc-event-text-color: var(--color-danger-ink);
+  color: var(--color-danger-ink);
+}
+
+.painel-agenda .evento-info {
+  --fc-event-bg-color: var(--color-info-soft);
+  --fc-event-border-color: var(--color-info);
+  --fc-event-text-color: var(--color-info-ink);
+  color: var(--color-info-ink);
+}
+
+.painel-agenda .evento-progress {
+  --fc-event-bg-color: var(--color-progress-soft);
+  --fc-event-border-color: var(--color-progress);
+  --fc-event-text-color: var(--color-progress-ink);
+  color: var(--color-progress-ink);
+}
+
+.painel-agenda .evento-neutral {
+  --fc-event-bg-color: var(--color-neutral-soft);
+  --fc-event-border-color: var(--color-neutral);
+  --fc-event-text-color: var(--color-neutral-ink);
+  color: var(--color-neutral-ink);
+}
