@@ -424,9 +424,12 @@ if (! function_exists('osCalcularDesconto')) {
      * Desconto da OS calculado no servidor (na v4 o total com desconto vinha
      * pronto do navegador). Valor 0 remove o desconto.
      *
+     * $documento e $itens ajustam as mensagens quando a venda usa a mesma
+     * regra (vendaCalcularDesconto()).
+     *
      * @return array{0: array{tipo_desconto: string|null, desconto: float, valor_desconto: float}|null, 1: array<string, string>}
      */
-    function osCalcularDesconto(float $bruto, $tipo, $valor): array
+    function osCalcularDesconto(float $bruto, $tipo, $valor, string $documento = 'OS', string $itens = 'produtos ou serviços'): array
     {
         if (! in_array($tipo, ['real', 'porcento'], true)) {
             return [null, ['tipoDesconto' => 'Escolha o tipo de desconto.']];
@@ -443,7 +446,7 @@ if (! function_exists('osCalcularDesconto')) {
         }
 
         if ($bruto <= 0) {
-            return [null, ['desconto' => 'Adicione produtos ou serviços antes de dar desconto.']];
+            return [null, ['desconto' => "Adicione {$itens} antes de dar desconto."]];
         }
 
         if ($tipo === 'porcento' && $numero > 100) {
@@ -456,7 +459,7 @@ if (! function_exists('osCalcularDesconto')) {
         // O banco usa valor_desconto = 0 para "sem desconto": um desconto que
         // zera (ou passa) o total não tem como ser gravado.
         if ($total <= 0) {
-            return [null, ['desconto' => 'O desconto tem de ser menor que o total da OS (' . dinheiro($bruto) . ').']];
+            return [null, ['desconto' => "O desconto tem de ser menor que o total da {$documento} (" . dinheiro($bruto) . ').']];
         }
 
         return [['tipo_desconto' => $tipo, 'desconto' => round($numero, 2), 'valor_desconto' => $total], []];
@@ -469,17 +472,20 @@ if (! function_exists('osFaturaDoFormulario')) {
      * vêm da OS e dos totais calculados no servidor; do formulário só saem a
      * descrição, as datas, a forma de pagamento e as observações.
      *
+     * $itens ajusta a mensagem quando a venda usa a mesma regra
+     * (vendaFaturaDoFormulario()).
+     *
      * @param  array<string, mixed>  $post
      * @param  array{bruto: float, desconto: float, total: float}  $totais
      * @return array{0: array<string, mixed>, 1: array<string, string>}
      */
-    function osFaturaDoFormulario(array $post, object $os, array $totais, ?int $usuario): array
+    function osFaturaDoFormulario(array $post, object $os, array $totais, ?int $usuario, string $itens = 'produtos ou serviços'): array
     {
         $texto = static fn (string $campo): string => is_scalar($post[$campo] ?? null) ? trim((string) $post[$campo]) : '';
         $erros = [];
 
         if ($totais['total'] <= 0) {
-            $erros['_geral'] = 'Adicione produtos ou serviços antes de faturar.';
+            $erros['_geral'] = "Adicione {$itens} antes de faturar.";
         }
 
         $descricao = $texto('descricao');

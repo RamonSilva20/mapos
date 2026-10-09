@@ -11,6 +11,9 @@ class Vendas_model extends CI_Model
     public function __construct()
     {
         parent::__construct();
+
+        // totais() e o PIX usam as regras de valores da OS e da venda.
+        $this->load->helper(['os', 'vendas']);
     }
 
     /**
@@ -204,51 +207,54 @@ class Vendas_model extends CI_Model
         return false;
     }
 
-    public function autoCompleteProduto($q)
+    /**
+     * Totais da venda para a tela (osTotais(), sem serviços): produtos,
+     * desconto e total, calculados pelos itens e pelo desconto gravado.
+     */
+    public function totais(object $venda): array
     {
-        $this->db->select('*');
-        $this->db->limit(25);
-        $this->db->like('descricao', $q);
-        $query = $this->db->get('produtos');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
-            }
-            echo json_encode($row_set);
-        }
+        $soma = (float) ($this->db
+            ->select_sum('subTotal')
+            ->where('vendas_id', (int) $venda->idVendas)
+            ->get('itens_de_vendas')
+            ->row()->subTotal ?? 0);
+
+        return osTotais($soma, 0.0, $venda->valor_desconto ?? 0, $venda->tipo_desconto ?? null, $venda->desconto ?? 0);
     }
 
-    public function autoCompleteCliente($q)
+    /** Linha de itens_de_vendas que pertence à venda, ou null. */
+    public function getProdutoDaVenda(int $idVenda, int $idItem): ?object
     {
-        $this->db->select('*');
-        $this->db->limit(25);
-        $this->db->like('nomeCliente', $q);
-        $this->db->or_like('documento', $q);
-        $query = $this->db->get('clientes');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label'=>$row['nomeCliente'].' | Celular: '.$row['celular'].' | Documento: '.$row['documento'],'id'=>$row['idClientes']];
-            }
-            echo json_encode($row_set);
-        } else {
-            $row_set[] = ['label' => 'Adicionar cliente...', 'id' => null];
-            echo json_encode($row_set);
-        }
+        return $this->db->where('idItens', $idItem)->where('vendas_id', $idVenda)->get('itens_de_vendas', 1)->row() ?: null;
     }
 
-    public function autoCompleteUsuario($q)
+    /** Produto do cadastro (para conferir o id escolhido e o estoque), ou null. */
+    public function getProdutoCadastro(int $id): ?object
     {
-        $this->db->select('*');
-        $this->db->limit(25);
-        $this->db->like('nome', $q);
-        $this->db->where('situacao', 1);
-        $query = $this->db->get('usuarios');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
-            }
-            echo json_encode($row_set);
+        return $this->db->select('idProdutos, descricao, precoVenda, estoque')->where('idProdutos', $id)->get('produtos', 1)->row() ?: null;
+    }
+
+    /**
+     * Diz se existe o registro com o id, para conferir os ids escolhidos nos
+     * autocompletes antes de gravar a venda. Com $ativo, só usuários ativos.
+     */
+    public function existe(string $tabela, string $chave, int $id, bool $ativo = false): bool
+    {
+        $this->db->where($chave, $id);
+        if ($ativo) {
+            $this->db->where('situacao', 1);
         }
+
+        return $this->db->count_all_results($tabela) > 0;
+    }
+
+    /**
+     * Tira o desconto da venda. Mudar os itens muda o total, e o desconto
+     * antigo (calculado sobre o total anterior) deixaria de bater, como na v4.
+     */
+    public function zerarDesconto(int $idVenda): void
+    {
+        $this->db->set('desconto', 0)->set('valor_desconto', 0)->set('tipo_desconto', null)->where('idVendas', $idVenda)->update('vendas');
     }
 
     public function getQrCode($id, $pixKey, $emitente)
@@ -276,16 +282,8 @@ class Vendas_model extends CI_Model
             return null;
         }
 
-        $produtos = $this->getProdutos($id);
-        $valorDesconto = $this->getById($id);
-        $totalProdutos = array_reduce(
-            $produtos,
-            function ($carry, $produto) {
-                return $carry + ($produto->quantidade * $produto->preco);
-            },
-            0
-        );
-        $amount = $valorDesconto->valor_desconto != 0 ? round(floatval($valorDesconto->valor_desconto), 2) : round(floatval($totalProdutos), 2);
+        $venda = $this->getById($id);
+        $amount = $venda ? round($this->totais($venda)['total'], 2) : 0.0;
 
         if ($amount <= 0) {
             return null;
@@ -301,18 +299,6 @@ class Vendas_model extends CI_Model
             ->setMerchantCity($emitente->cidade);
 
         return $pix;
-    }
-
-    public function getTotalVendas($idVendas)
-    {
-        $produtos = $this->getProdutos($idVendas);
-        $total = 0;
-
-        foreach ($produtos as $produto) {
-            $total += $produto->quantidade * $produto->preco;
-        }
-
-        return $total;
     }
 }
 

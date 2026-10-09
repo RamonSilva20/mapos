@@ -361,22 +361,40 @@ $config = [
     'vendas' => [
         [
             'field' => 'dataVenda',
-            'label' => 'Data da Venda',
+            'label' => 'Data da venda',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'garantia',
+            'label' => 'Garantia',
+            'rules' => 'trim|numeric',
+            'errors' => [
+                'numeric' => 'Informe a garantia em dias, só com números.',
+            ],
+        ],
+        [
+            'field' => 'status',
+            'label' => 'Status',
             'rules' => 'required|trim',
         ],
         [
             'field' => 'observacoes',
-            'label' => 'Observacoes',
+            'label' => 'Observações internas',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'observacoes_cliente',
+            'label' => 'Observações ao cliente',
             'rules' => 'trim',
         ],
         [
             'field' => 'clientes_id',
-            'label' => 'clientes',
+            'label' => 'Cliente',
             'rules' => 'trim|required',
         ],
         [
             'field' => 'usuarios_id',
-            'label' => 'usuarios_id',
+            'label' => 'Vendedor',
             'rules' => 'trim|required',
         ],
     ],

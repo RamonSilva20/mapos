@@ -229,20 +229,19 @@ $config['permissions_map'] = [
         'index' => 'vVenda',
         'gerenciar' => 'vVenda',
         'visualizar' => 'vVenda',
-        'visualizarVenda' => 'vVenda',
         'imprimir' => 'vVenda',
         'imprimirTermica' => 'vVenda',
         'imprimirVendaOrcamento' => 'vVenda',
         'adicionar' => 'aVenda',
         'editar' => 'eVenda',
+        // Produtos, desconto e faturamento da tela da venda (JSON). Os
+        // autocompletes de produto, cliente e vendedor são os de
+        // os/autoComplete*, que aceitam aVenda e eVenda.
         'adicionarProduto' => 'eVenda',
         'excluirProduto' => 'eVenda',
         'adicionarDesconto' => 'eVenda',
         'faturar' => 'eVenda',
         'excluir' => 'dVenda',
-        'autoCompleteProduto' => ['aVenda', 'eVenda'],
-        'autoCompleteCliente' => ['aVenda', 'eVenda'],
-        'autoCompleteUsuario' => ['aVenda', 'eVenda'],
         // Auxiliares da geração do QR Code do PIX. Não são rotas.
         'validarCPF' => false,
         'validarCNPJ' => false,
