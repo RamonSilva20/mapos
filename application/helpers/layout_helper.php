@@ -113,7 +113,7 @@ if (! function_exists('layoutMenu')) {
                 'itens' => [
                     ['label' => 'Sistema', 'url' => 'mapos/configurar', 'rota' => ['Mapos', 'configurar'], 'ativo' => ['Mapos/configurar']],
                     ['label' => 'Usuários', 'url' => 'usuarios', 'rota' => ['Usuarios', 'index'], 'ativo' => ['Usuarios']],
-                    ['label' => 'Emitente', 'url' => 'mapos/emitente', 'rota' => ['Mapos', 'emitente'], 'ativo' => ['Mapos/emitente', 'Mapos/cadastrarEmitente', 'Mapos/editarEmitente', 'Mapos/editarLogo']],
+                    ['label' => 'Emitente', 'url' => 'mapos/emitente', 'rota' => ['Mapos', 'emitente'], 'ativo' => ['Mapos/emitente']],
                     ['label' => 'Permissões', 'url' => 'permissoes', 'rota' => ['Permissoes', 'index'], 'ativo' => ['Permissoes']],
                     ['label' => 'Auditoria', 'url' => 'auditoria', 'rota' => ['Auditoria', 'index'], 'ativo' => ['Auditoria']],
                     ['label' => 'E-mails', 'url' => 'mapos/emails', 'rota' => ['Mapos', 'emails'], 'ativo' => ['Mapos/emails']],

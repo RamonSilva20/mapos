@@ -126,6 +126,7 @@ require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'produtos_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'os_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'vendas_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'painel_helper.php';
+require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'configuracoes_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'usuarios_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'icone_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'layout_helper.php';
