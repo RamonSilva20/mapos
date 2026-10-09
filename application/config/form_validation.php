@@ -282,33 +282,6 @@ $config = [
             'rules' => 'required|trim',
         ],
     ],
-    'despesa' => [
-        [
-            'field' => 'descricao',
-            'label' => 'Descrição',
-            'rules' => 'required|trim',
-        ],
-        [
-            'field' => 'valor',
-            'label' => 'Valor',
-            'rules' => 'required|trim',
-        ],
-        [
-            'field' => 'vencimento',
-            'label' => 'Data Vencimento',
-            'rules' => 'required|trim',
-        ],
-        [
-            'field' => 'fornecedor',
-            'label' => 'Fornecedor',
-            'rules' => 'required|trim',
-        ],
-        [
-            'field' => 'tipo',
-            'label' => 'Tipo',
-            'rules' => 'required|trim',
-        ],
-    ],
     'garantias' => [
         [
             'field' => 'dataGarantia',

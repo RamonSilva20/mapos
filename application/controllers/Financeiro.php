@@ -6,12 +6,21 @@ if (! defined('BASEPATH')) {
 
 class Financeiro extends MY_Controller
 {
+    /** Filtros da listagem, na query string (listagemFiltros()). */
+    public const FILTROS = [
+        'pesquisa' => 'texto',
+        'tipo' => ['receita', 'despesa'],
+        'status' => ['pendente', 'pago', 'vencido'],
+        'periodo' => ['dia', 'semana', 'mes_anterior', 'mes', 'mes_posterior', 'ano', 'personalizado'],
+        'de' => 'texto',
+        'ate' => 'texto',
+    ];
+
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper(['form', 'financeiro']);
         $this->load->model('financeiro_model');
-        $this->load->helper('codegen_helper');
-        $this->load->helper('financeiro_helper');
         $this->data['menuLancamentos'] = 'financeiro';
     }
 
@@ -20,6 +29,12 @@ class Financeiro extends MY_Controller
         $this->lancamentos();
     }
 
+    /**
+     * Listagem de lançamentos da v5 (#2844), no padrão das listagens (#2852):
+     * filtros na URL (período, vencimento, tipo, situação e busca), cards de
+     * resumo do que o filtro encontra, paginação que mantém os filtros e
+     * exclusão confirmada em modal-confirm.
+     */
     public function lancamentos()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
@@ -27,491 +42,225 @@ class Financeiro extends MY_Controller
             redirect(base_url());
         }
 
-        $vencimento_de = $this->input->get('vencimento_de') ?: date('d/m/Y');
-        $vencimento_ate = $this->input->get('vencimento_ate') ?: date('d/m/Y');
-        $cliente = $this->input->get('cliente');
-        $tipo = $this->input->get('tipo');
-        $status = $this->input->get('status');
+        $hoje = date('Y-m-d');
+        $filtros = $this->filtrosDaListagem();
+        $offset = (int) $this->uri->segment(3);
+        $total = $this->financeiro_model->contar($filtros, $hoje);
 
-        $periodo = $this->input->get('periodo');
+        $this->data['hoje'] = $hoje;
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['results'] = $this->financeiro_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset, $hoje);
+        $this->data['totais'] = $this->financeiro_model->totais($filtros, $hoje);
+        $this->data['visao_geral'] = $this->financeiro_model->visaoGeral();
+        $this->data['paginacao'] = $this->paginacao(site_url('financeiro/lancamentos'), $total, $offset, null, $filtros);
+        $this->data['pode'] = [
+            'adicionar' => $this->permite('aLancamento'),
+            'editar' => $this->permite('eLancamento'),
+            'excluir' => $this->permite('dLancamento'),
+            'ver_cliente' => $this->permite('vCliente'),
+        ];
 
-        // Todos os valores vindos do GET são validados ou escapados em
-        // financeiroLancamentosWhere, antes de entrarem no WHERE.
-        $where = financeiroLancamentosWhere($this->db, [
-            'vencimento_de' => $vencimento_de,
-            'vencimento_ate' => $vencimento_ate,
-            'cliente' => $cliente,
-            'tipo' => $tipo,
-            'status' => $status,
-        ]);
+        if ($this->data['pode']['adicionar']) {
+            $this->data['topbar_acao'] = ['label' => 'Novo lançamento', 'icon' => 'plus', 'href' => site_url('financeiro/adicionar') . listagemQuery($filtros)];
+        }
 
-        $this->load->library('pagination');
-
-        $this->data['configuration']['base_url'] = site_url('financeiro/lancamentos/?' . http_build_query([
-            'vencimento_de' => $vencimento_de,
-            'vencimento_ate' => $vencimento_ate,
-            'cliente' => $cliente,
-            'tipo' => $tipo,
-            'status' => $status,
-            'periodo' => $periodo,
-        ]));
-        $this->data['configuration']['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
-        $this->data['configuration']['page_query_string'] = true;
-
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->financeiro_model->get('lancamentos', '*', $where, $this->data['configuration']['per_page'], $this->input->get('per_page'));
-        $this->data['totals'] = $this->financeiro_model->getTotals($where);
-
-        $this->data['estatisticas_financeiro'] = $this->financeiro_model->getEstatisticasFinanceiro2();
-
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'financeiro/lancamentos';
 
         return $this->layout();
     }
 
-    public function adicionarReceita()
+    /**
+     * Filtros válidos da listagem. O período predefinido escolhido (dia,
+     * semana, mês...) vale mais que as datas da URL, que então são calculadas
+     * dele; "personalizado" usa as datas de/ate (AAAA-MM-DD, de input
+     * type=date), e data inválida ou ausente volta ao mês atual. Sem nada na
+     * URL, a listagem mostra o mês atual (a v4 mostrava só o dia).
+     *
+     * @param  array<string, string>|null  $entrada  Filtros a normalizar; sem eles, a query string
+     * @return array<string, string>
+     */
+    private function filtrosDaListagem(?array $entrada = null): array
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar lançamentos.');
-            redirect(base_url());
+        $filtros = listagemFiltros(self::FILTROS, $entrada ?? $this->input->get());
+        $hoje = new DateTimeImmutable('today');
+
+        $de = dataIsoParaYmd($filtros['de'] ?? null);
+        $ate = dataIsoParaYmd($filtros['ate'] ?? null);
+        $periodo = $filtros['periodo'] ?? ($de !== null && $ate !== null ? 'personalizado' : 'mes');
+
+        $intervalo = $periodo === 'personalizado' ? null : financeiroPeriodo($periodo, $hoje);
+        if ($intervalo === null && $de !== null && $ate !== null) {
+            $intervalo = $de <= $ate ? [$de, $ate] : [$ate, $de];
+            $periodo = 'personalizado';
+        } elseif ($intervalo === null) {
+            $intervalo = financeiroPeriodo('mes', $hoje);
+            $periodo = 'mes';
         }
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
-        if ($this->form_validation->run('receita') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $vencimento = $this->input->post('vencimento');
-            $recebimento = $this->input->post('recebimento');
-            if ($recebimento != null) {
-                $recebimento = explode('/', $recebimento);
-                $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
-            }
-            if ($vencimento == null) {
-                $vencimento = date('d/m/Y');
-            }
-            try {
-                $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
-            } catch (Exception $e) {
-                $vencimento = date('Y/m/d');
-            }
-            // Formatação correta dos valores
-            $valor = str_replace(',', '.', $this->input->post('valor'));
-            $valor_desconto = floatval(str_replace(',', '.', $this->input->post('valor_desconto')));
-            $desconto = $valor_desconto;
-            $total_sem_desconto = $valor + $valor_desconto;
-            $valor = $total_sem_desconto;
-            $total_com_desconto = $valor - $valor_desconto;
-            $valor_desconto = $total_com_desconto;
-            // Verifica se o valor está em formato monetário
-            if (!is_numeric($valor_desconto)) {
-                $valor_desconto = str_replace([',', '.'], ['', ''], $valor_desconto);
-            }
-            if (!is_numeric($valor)) {
-                $valor = str_replace([',', '.'], ['', ''], $valor);
-            }
-            // Criação do array de dados
-            $data = [
-                'descricao' => set_value('descricao'),
-                'valor' => number_format($valor, 2, '.', ''), // Formatação para garantir 2 casas decimais
-                'valor_desconto' => number_format($valor_desconto, 2, '.', ''), // Formatação para garantir 2 casas decimais
-                'desconto' => $desconto,
-                'tipo_desconto' => 'real',
-                'data_vencimento' => $vencimento,
-                'data_pagamento' => $recebimento != null ? $recebimento : date('Y-m-d'),
-                'baixado' => $this->input->post('recebido') ?: 0,
-                'cliente_fornecedor' => set_value('cliente'),
-                'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => set_value('tipo'),
-                'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id_admin'),
-            ];
-            if (set_value('idFornecedor')) {
-                $data['clientes_id'] = set_value('idFornecedor');
-            }
-            if (set_value('idCliente')) {
-                $data['clientes_id'] = set_value('idCliente');
-            }
-            // Inserção dos dados no banco
-            if ($this->financeiro_model->add('lancamentos', $data) == true) {
-                $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
-                log_info('Adicionou um lançamento em Financeiro');
-                redirect($urlAtual);
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-            }
-        }
-        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar o lançamento.');
-        redirect($urlAtual);
+
+        // Período e datas primeiro, nessa ordem, como ficam na URL.
+        return ['periodo' => $periodo, 'de' => $intervalo[0], 'ate' => $intervalo[1]]
+            + array_diff_key($filtros, ['periodo' => true, 'de' => true, 'ate' => true]);
     }
 
-    public function adicionarReceita_parc()
+    /**
+     * Filtros de volta da listagem, vindos da URL do formulário. Valem só os
+     * da lista de FILTROS (nada de URL digitada), e voltam como query string.
+     *
+     * @return array<string, string>
+     */
+    private function filtrosDeRetorno(): array
     {
-        //$this->load->library('form_validation');
-        //$this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar lançamentos.');
-            redirect(base_url());
-        } else {
-
-            $valor_desconto = $this->input->post('desconto_parc') ?: 0;
-            $entrada = $this->input->post('entrada') ?: 0;
-            $valor_desconto = str_replace(',', '.', $valor_desconto);
-
-            $qtdparcelas_parc = $this->input->post('qtdparcelas_parc') ?: 1; //4x
-            $valor_parc = $this->input->post('valor_parc'); //450
-            $valorparcelas = ($valor_parc - $entrada) / $qtdparcelas_parc;
-
-            $desconto_por_parcela = $valor_desconto > 0 ? ($valor_desconto / $qtdparcelas_parc) : 0;
-
-            //para por na descrição, valor total sem desconto e sem parcelamento
-            $descricao_parc_valor = $valor_parc + $valor_desconto;
-
-            //cria variavel para pegar o valor total ja com o desconto e diminui com o desconto
-            $total_com_desconto = $valorparcelas + $desconto_por_parcela;
-
-            if ($entrada >= $valor_parc) {
-                $this->session->set_flashdata('error', 'O valor da entrada não pode ser maior ou igual ao valor total da receita/Despesa!');
-                redirect($urlAtual);
-            }
-
-            // As datas vêm em dd/mm/aaaa e vão para o banco em aaaa-mm-dd. O try/catch
-            // que existia aqui não protegia nada: explode() não lança exceção e
-            // o índice [2] inexistente só gera warning, então o campo vazio
-            // virava a string '-' em vez de cair no fallback.
-            $dia_pgto = financeiroDataBrada($this->input->post('dia_pgto'));
-            $dia_base_pgto = financeiroDataBrada($this->input->post('dia_base_pgto'));
-            $recebimento = $this->input->post('recebimento');
-
-            if (! empty($recebimento)) {
-                $recebimento = financeiroDataBrada($recebimento, false);
-            }
-
-            $comissao = $this->input->post('comissao');
-
-            if (! validate_money($comissao)) {
-                $comissao = str_replace([',', '.'], ['', ''], $comissao);
-            }
-
-            if ($entrada == 0) {
-                $loops = 1;
-                while ($loops <= $qtdparcelas_parc) {
-                    $myDateTimeISO = $dia_base_pgto;
-                    $loopsmes = $loops - 1;
-                    $addThese = $loopsmes;
-                    $myDateTime = new DateTime($myDateTimeISO);
-                    $myDayOfMonth = date_format($myDateTime, 'j');
-                    date_modify($myDateTime, "+$addThese months");
-
-                    //Descobre se o dia do mês caiu
-                    $myNewDayOfMonth = date_format($myDateTime, 'j');
-                    if ($myDayOfMonth > 28 && $myNewDayOfMonth < 4) {
-                        //Em caso afirmativo, corrija voltando o número de dias que transbordaram
-                        date_modify($myDateTime, "-$myNewDayOfMonth days");
-                    }
-
-                    $data = [
-                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor . '  [' . $loops . '/' . $qtdparcelas_parc . ']',
-                        'valor' => $total_com_desconto,
-                        'desconto' => $desconto_por_parcela,
-                        'tipo_desconto' => 'real',
-                        'valor_desconto' => $valorparcelas,
-                        'data_vencimento' => date_format($myDateTime, 'Y-m-d'),
-                        'data_pagamento' => $recebimento ?: date_format($myDateTime, 'Y-m-d'),
-                        'baixado' => 0,
-                        'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                        'clientes_id' => $this->input->post('idCliente_parc'),
-                        'observacoes' => $this->input->post('observacoes_parc'),
-                        'forma_pgto' => $this->input->post('formaPgto_parc'),
-                        'tipo' => $this->input->post('tipo_parc'),
-                        'usuarios_id' => $this->session->userdata('id_admin'),
-                    ];
-
-                    if ($this->financeiro_model->add('lancamentos', $data) == true) {
-                        $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
-                        log_info('Adicionou um lançamento em Financeiro');
-                    } else {
-                        $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-                    }
-                    $loops++;
-                }
-
-                redirect($urlAtual);
-            } else {
-                $desconto_entrada = '0';
-                $data1 = [
-                    'descricao' => $this->input->post('descricao_parc') . ' - Entrada do parc. de R$' . $descricao_parc_valor . ' ',
-                    'valor' => $entrada,
-                    'desconto' => $desconto_entrada,
-                    'valor_desconto' => $entrada,
-                    'tipo_desconto' => 'real',
-                    'data_vencimento' => $dia_pgto,
-                    'data_pagamento' => $dia_pgto,
-                    'baixado' => 1,
-                    'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                    'clientes_id' => $this->input->post('idCliente_parc'),
-                    'observacoes' => $this->input->post('observacoes_parc'),
-                    'forma_pgto' => $this->input->post('formaPgto_parc'),
-                    'tipo' => $this->input->post('tipo_parc'),
-                    'usuarios_id' => $this->session->userdata('id_admin'),
-                ];
-                // if (empty($data['valor_desconto'])) {
-                //     $data['valor_desconto'] =  "0";
-                // }
-
-                $this->financeiro_model->add1('lancamentos', $data1);
-
-                $loops = 1;
-                while ($loops <= $qtdparcelas_parc) {
-                    $myDateTimeISO = $dia_base_pgto;
-                    $loopsmes = $loops - 1;
-                    $addThese = $loopsmes;
-                    $myDateTime = new DateTime($myDateTimeISO);
-                    $myDayOfMonth = date_format($myDateTime, 'j');
-                    date_modify($myDateTime, "+$addThese months");
-
-                    //Find out if the day-of-month has dropped
-                    $myNewDayOfMonth = date_format($myDateTime, 'j');
-                    if ($myDayOfMonth > 28 && $myNewDayOfMonth < 4) {
-                        //If so, fix by going back the number of days that have spilled over
-                        date_modify($myDateTime, "-$myNewDayOfMonth days");
-                    }
-
-                    $data = [
-                        'descricao' => $this->input->post('descricao_parc') . ' - Parcelamento de R$' . $descricao_parc_valor . ' [' . $loops . '/' . $qtdparcelas_parc . ']',
-                        'valor' => $total_com_desconto,
-                        'desconto' => $desconto_por_parcela,
-                        'tipo_desconto' => 'real',
-                        'valor_desconto' => $valorparcelas,
-                        'data_vencimento' => date_format($myDateTime, 'Y-m-d'),
-                        'data_pagamento' => date_format($myDateTime, 'Y-m-d'),
-                        'baixado' => 0,
-                        'cliente_fornecedor' => $this->input->post('cliente_parc'),
-                        'observacoes' => $this->input->post('observacoes_parc'),
-                        'forma_pgto' => $this->input->post('formaPgto_parc'),
-                        'tipo' => $this->input->post('tipo_parc'),
-                        'usuarios_id' => $this->session->userdata('id_admin'),
-
-                    ];
-
-                    // if (empty($data['valor_desconto'])) {
-                    //     $data['valor_desconto'] =  "0";
-                    // }
-
-                    if ($this->financeiro_model->add('lancamentos', $data) == true) {
-                        $this->session->set_flashdata('success', 'Lançamento adicionado com sucesso!');
-                        log_info('Adicionou um lançamento em Financeiro');
-                    } else {
-                        $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-                    }
-                    $loops++;
-                }
-
-                redirect($urlAtual);
+        $filtros = listagemFiltros(self::FILTROS, $this->input->get());
+        foreach (['de', 'ate'] as $data) {
+            if (isset($filtros[$data]) && dataIsoParaYmd($filtros[$data]) === null) {
+                unset($filtros[$data]);
             }
         }
 
-        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar o lançamento');
-        redirect($urlAtual);
+        return $filtros;
     }
 
-    public function adicionarDespesa()
+    public function adicionar()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
-        if ($this->form_validation->run('despesa') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $vencimento = $this->input->post('vencimento');
-            $pagamento = $this->input->post('pagamento');
-
-            if ($pagamento != null) {
-                $pagamento = explode('/', $pagamento);
-                $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
-            }
-
-            if ($vencimento == null) {
-                $vencimento = date('d/m/Y');
-            }
-
-            try {
-                $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
-            } catch (Exception $e) {
-                $vencimento = date('Y/m/d');
-            }
-
-            $valor = $this->input->post('valor');
-
-            if (! validate_money($valor)) {
-                $valor = str_replace([',', '.'], ['', ''], $valor);
-            }
-
-            $data = [
-                'descricao' => set_value('descricao'),
-                'valor' => $valor,
-                'data_vencimento' => $vencimento,
-                'data_pagamento' => $pagamento != null ? $pagamento : date('Y-m-d'),
-                'baixado' => $this->input->post('pago') ?: 0,
-                'cliente_fornecedor' => set_value('fornecedor'),
-                'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => set_value('tipo'),
-                'observacoes' => set_value('observacoes'),
-                'usuarios_id' => $this->session->userdata('id_admin'),
-            ];
-
-            if (set_value('idFornecedor')) {
-                $data['clientes_id'] = set_value('idFornecedor');
-            }
-            if (set_value('idCliente')) {
-                $data['clientes_id'] = set_value('idCliente');
-            }
-            if ($this->financeiro_model->add('lancamentos', $data) == true) {
-                $this->session->set_flashdata('success', 'Despesa adicionada com sucesso!');
-                log_info('Adicionou uma despesa');
-                redirect($urlAtual);
-            } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar despesa!');
-                redirect($urlAtual);
-            }
-        }
-
-        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar adicionar despesa.');
-        redirect($urlAtual);
+        return $this->formulario(null);
     }
 
     public function editar()
     {
+        $lancamento = is_numeric($this->uri->segment(3)) ? $this->financeiro_model->getLancamento((int) $this->uri->segment(3)) : null;
+        if (! $lancamento) {
+            $this->session->set_flashdata('error', 'Lançamento não encontrado ou parâmetro inválido.');
+            redirect('financeiro/lancamentos');
+        }
+
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar lançamentos.');
             redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-        $urlAtual = $this->input->post('urlAtual');
-
-        $this->form_validation->set_rules('descricao', '', 'trim|required');
-        $this->form_validation->set_rules('fornecedor', '', 'trim|required');
-        $this->form_validation->set_rules('valor', '', 'trim|required');
-        $this->form_validation->set_rules('vencimento', '', 'trim|required');
-        $this->form_validation->set_rules('pagamento', '', 'trim');
-
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $vencimento = $this->input->post('vencimento');
-            $pagamento = $this->input->post('pagamento');
-
-            try {
-                $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
-
-                if ($pagamento) {
-                    $pagamento = explode('/', $pagamento);
-                    $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
-                }
-            } catch (Exception $e) {
-                $vencimento = date('Y/m/d');
-            }
-
-            $parseMoney = static function ($value) {
-                if ($value === null || $value === '') {
-                    return 0.0;
-                }
-                return (float) str_replace(',', '.', $value);
-            };
-
-            // Regra dos campos no modal:
-            // valor = total sem desconto | descontos_editar = desconto aplicado | valor_desconto_editar = total com desconto
-            $valor_total = $parseMoney($this->input->post('valor'));
-            $desconto = $parseMoney($this->input->post('descontos_editar'));
-            $valor_com_desconto = $parseMoney($this->input->post('valor_desconto_editar'));
-
-            if ($valor_com_desconto <= 0) {
-                $valor_com_desconto = $valor_total - $desconto;
-            }
-            if ($desconto <= 0 && $valor_total > $valor_com_desconto) {
-                $desconto = $valor_total - $valor_com_desconto;
-            }
-            if ($valor_com_desconto < 0) {
-                $valor_com_desconto = 0;
-            }
-
-            $data = [
-                'descricao' => $this->input->post('descricao'),
-                'data_vencimento' => $vencimento,
-                'data_pagamento' => $pagamento,
-                'valor' => $valor_total,
-                'desconto' => $desconto,
-                'tipo_desconto' => 'real',
-                'valor_desconto' => $valor_com_desconto,
-                'baixado' => $this->input->post('pago') ?: 0,
-                'cliente_fornecedor' => $this->input->post('fornecedor'),
-                'forma_pgto' => $this->input->post('formaPgto'),
-                'tipo' => $this->input->post('tipo'),
-                'observacoes' => $this->input->post('observacoes'),
-                'usuarios_id' => $this->session->userdata('id_admin'),
-            ];
-
-            if (set_value('idFornecedor')) {
-                $data['clientes_id'] = set_value('idFornecedor');
-            }
-            if (empty($data['valor_desconto'])) {
-                $data['valor_desconto'] = '0';
-            }
-
-            if (set_value('idCliente')) {
-                $data['clientes_id'] = set_value('idCliente');
-            }
-            if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
-                $this->session->set_flashdata('success', 'lançamento editado com sucesso!');
-                log_info('Alterou um lançamento no financeiro. ID' . $this->input->post('id'));
-                redirect($urlAtual);
-            } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar editar lançamento!');
-                redirect($urlAtual);
-            }
-        }
-
-        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar editar lançamento.');
-        redirect($urlAtual);
-
-        $data = [
-            'descricao' => $this->input->post('descricao'),
-            'data_vencimento' => $this->input->post('vencimento'),
-            'data_pagamento' => $pagamento,
-            'valor' => $this->input->post('valor'),
-            'valor_desconto' => $this->input->post('valor_desconto_editar'),
-            'tipo_desconto' => 'real',
-            'baixado' => $this->input->post('pago'),
-            'cliente_fornecedor' => set_value('fornecedor'),
-            'forma_pgto' => $this->input->post('formaPgto'),
-            'tipo' => $this->input->post('tipo'),
-            'usuarios_id' => $this->session->userdata('id_admin'),
-        ];
-        if (set_value('idFornecedor')) {
-            $data['clientes_id'] = set_value('idFornecedor');
-        }
-        if (empty($data['valor_desconto'])) {
-            $data['valor_desconto'] = '0';
-        }
-        if (set_value('idCliente')) {
-            $data['clientes_id'] = set_value('idCliente');
-        }
-
-        print_r($data);
+        return $this->formulario($lancamento);
     }
 
+    /**
+     * Formulário de lançamento da v5 (#2844), para cadastrar e editar, no
+     * padrão dos formulários (#2851): POST comum, validação no servidor com os
+     * erros em cada campo e redirecionamento com toast. O id editado vem da
+     * URL, nunca do POST.
+     *
+     * Valor líquido, parcelas e datas são calculados aqui (na v4 o navegador
+     * mandava o total com desconto). Ao cadastrar, um lançamento parcelado
+     * vira uma linha por parcela (mais a entrada, se houver).
+     */
+    private function formulario(?object $lancamento)
+    {
+        $editando = $lancamento !== null;
+        $erros = [];
+        $retorno = $this->filtrosDeRetorno();
+
+        if ($this->input->method() === 'post') {
+            $post = $this->input->post();
+            $idCliente = is_scalar($post['clientes_id'] ?? null) && ctype_digit((string) $post['clientes_id']) ? (int) $post['clientes_id'] : 0;
+
+            [$dados, $erros] = financeiroLancamentoDoFormulario(
+                $post,
+                [
+                    'hoje' => date('Y-m-d'),
+                    'controle_baixa' => ($this->data['configuration']['control_baixa'] ?? '0') == '1',
+                    'pagamento_atual' => $editando ? substr((string) $lancamento->data_pagamento, 0, 10) : null,
+                ],
+                $idCliente > 0 ? $this->financeiro_model->getCliente($idCliente) : null
+            );
+
+            $parcelamento = ['parcelas' => 1, 'entrada' => 0, 'data_entrada' => null];
+            if (! $editando) {
+                [$parcelamento, $errosParcelas] = financeiroParcelamentoDoFormulario($post, $dados);
+                $erros += $errosParcelas;
+            }
+
+            if ($erros === []) {
+                $dados['usuarios_id'] = $this->usuarioLogado();
+
+                if ($editando) {
+                    $salvou = $this->financeiro_model->atualizar((int) $lancamento->idLancamentos, $dados);
+                    $mensagem = 'Lançamento #' . (int) $lancamento->idLancamentos . ' salvo.';
+                } elseif ($parcelamento['parcelas'] > 1) {
+                    $linhas = financeiroLinhasDoParcelamento($dados, $parcelamento, $dados['usuarios_id']);
+                    $salvou = $this->financeiro_model->adicionarVarios($linhas);
+                    $mensagem = ucfirst(FINANCEIRO_TIPOS[$dados['tipo']]) . ' parcelada em ' . $parcelamento['parcelas'] . 'x: ' . count($linhas) . ' lançamentos criados.';
+                } else {
+                    $salvou = $this->financeiro_model->adicionar($dados) !== null;
+                    $mensagem = ucfirst(FINANCEIRO_TIPOS[$dados['tipo']]) . ' lançada com vencimento em ' . dataBr($dados['data_vencimento']) . '.';
+                }
+
+                if ($salvou) {
+                    log_info(($editando ? 'Alterou um lançamento no financeiro. ID ' . (int) $lancamento->idLancamentos : 'Adicionou um lançamento em Financeiro'));
+                    $this->session->set_flashdata('success', $mensagem);
+
+                    return redirect($this->urlDaListagemApos($retorno, (string) $dados['data_vencimento'], (string) $dados['tipo']));
+                }
+
+                $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
+            }
+        }
+
+        $tipoPadrao = ($retorno['tipo'] ?? 'receita');
+        $this->data['lancamento'] = $lancamento;
+        $this->data['valores'] = financeiroValoresDoFormulario(
+            $this->input->method() === 'post' ? $this->input->post() : null,
+            $lancamento,
+            ['tipo' => $tipoPadrao, 'data_vencimento' => date('Y-m-d'), 'data_entrada' => date('Y-m-d'), 'data_pagamento' => date('Y-m-d')]
+        );
+        $this->data['erros'] = $erros;
+        $this->data['retorno'] = $retorno;
+        $this->data['controle_baixa'] = ($this->data['configuration']['control_baixa'] ?? '0') == '1';
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'financeiro/formulario';
+
+        return $this->layout();
+    }
+
+    /**
+     * Listagem para onde o formulário volta, com os filtros de onde veio. O
+     * filtro de tipo sai quando o lançamento salvo é do outro tipo, e o
+     * período passa a ser o mês do vencimento quando ele fica fora do período
+     * da listagem (senão a pessoa não veria o que acabou de lançar).
+     *
+     * @param  array<string, string>  $retorno
+     */
+    private function urlDaListagemApos(array $retorno, string $vencimento, string $tipo): string
+    {
+        if (isset($retorno['tipo']) && $retorno['tipo'] !== $tipo) {
+            unset($retorno['tipo']);
+        }
+
+        $periodo = $this->filtrosDaListagem($retorno);
+        if ($vencimento < $periodo['de'] || $vencimento > $periodo['ate']) {
+            $mes = financeiroPeriodo('mes', new DateTimeImmutable($vencimento));
+            [$retorno['de'], $retorno['ate']] = $mes;
+            $retorno['periodo'] = 'personalizado';
+        }
+
+        return site_url('financeiro/lancamentos') . listagemQuery($retorno);
+    }
+
+    private function usuarioLogado(): ?int
+    {
+        $id = (int) $this->session->userdata('id_admin');
+
+        return $id > 0 ? $id : null;
+    }
+
+    /**
+     * Exclui o lançamento (id no POST). Se ele era a fatura de uma venda ou de
+     * uma OS, a venda ou a OS volta a não faturada (Financeiro_model::excluir()).
+     */
     public function excluirLancamento()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
@@ -520,117 +269,46 @@ class Financeiro extends MY_Controller
         }
 
         $id = $this->input->post('id');
+        // Volta para a listagem com os mesmos filtros (só os permitidos).
+        $listagem = site_url('financeiro/lancamentos') . listagemQuery($this->filtrosDeRetorno());
 
-        if ($id == null || ! is_numeric($id)) {
-            $json = ['result' => false, 'message' => 'ID inválido'];
-            echo json_encode($json);
-            exit();
+        if (! is_scalar($id) || ! ctype_digit((string) $id) || ! $this->financeiro_model->getLancamento((int) $id)) {
+            $this->session->set_flashdata('error', 'Lançamento não encontrado.');
+            redirect($listagem);
         }
 
-        // Começa a transação
-        $this->db->trans_start();
-
-        // Atualiza a tabela vendas, removendo o ID do lançamento e alterando o faturado e status
-        $this->db->set('lancamentos_id', null);
-        $this->db->set('faturado', 0);
-        $this->db->set('status', 'Finalizado');
-        $this->db->where('lancamentos_id', $id);
-        $this->db->update('vendas');
-
-        // O mesmo para a OS faturada (os.lancamento, preenchido pelo faturar
-        // desde a #2842): a chave estrangeira impediria excluir o lançamento.
-        // A OS volta a Finalizado, e a mudança entra no histórico dela.
-        $this->load->model('os_model');
-        foreach ($this->db->select('idOs, status')->where('lancamento', $id)->get('os')->result() as $osFaturada) {
-            $this->os_model->registrarStatus((int) $osFaturada->idOs, $osFaturada->status, 'Finalizado', (int) $this->session->userdata('id_admin'));
-        }
-        $this->db->set('lancamento', null);
-        $this->db->set('faturado', 0);
-        $this->db->set('status', 'Finalizado');
-        $this->db->where('lancamento', $id);
-        $this->db->update('os');
-
-        // Exclui o lançamento
-        $result = $this->financeiro_model->delete('lancamentos', 'idLancamentos', $id);
-
-        if ($result) {
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === false) {
-                $this->db->trans_rollback();
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
-                $json = ['result' => false, 'message' => 'Erro na transação'];
-            } else {
-                log_info('Excluiu um lançamento. ID: ' . $id);
-                $this->session->set_flashdata('success', 'Lançamento excluído com sucesso!');
-                $json = ['result' => true];
-            }
-        } else {
-            $this->db->trans_rollback();
+        if (! $this->financeiro_model->excluir((int) $id, $this->usuarioLogado())) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o lançamento.');
-            $json = ['result' => false, 'message' => 'Erro ao excluir lançamento'];
+            redirect($listagem);
         }
 
-        echo json_encode($json);
-        exit();
+        log_info('Excluiu um lançamento. ID: ' . (int) $id);
+        $this->session->set_flashdata('success', 'Lançamento #' . (int) $id . ' excluído.');
+        redirect($listagem);
     }
-    
+
+    /**
+     * Sugestões do campo Cliente / Fornecedor: clientes do cadastro (com id,
+     * que vincula o lançamento ao cliente) e nomes já usados em lançamentos.
+     * Sempre uma lista JSON, vazia sem permissão ou sem termo.
+     */
     public function autoCompleteClienteFornecedor()
     {
-        if (! $this->hasAnyPermission(['vLancamento'])) {
-            echo json_encode([]);
+        $termo = $this->input->get('term');
+        $itens = [];
 
-            return;
+        if ($this->hasAnyPermission(['vLancamento', 'aLancamento', 'eLancamento']) && is_string($termo) && trim($termo) !== '') {
+            $termo = trim($termo);
+            $clientes = $this->financeiro_model->sugerirClientes($termo);
+            $nomes = array_filter(
+                $this->financeiro_model->sugerirNomesUsados($termo),
+                static fn ($nome) => ! in_array(mb_strtolower($nome['valor']), array_map(static fn ($c) => mb_strtolower($c['valor']), $clientes), true)
+            );
+            $itens = array_slice(array_merge($clientes, array_values($nomes)), 0, 10);
         }
 
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->financeiro_model->autoCompleteClienteFornecedor($q);
-        }
-    }
-
-    public function autoCompleteClienteAddReceita()
-    {
-        if (! $this->hasAnyPermission(['vLancamento'])) {
-            echo json_encode([]);
-
-            return;
-        }
-
-        if (isset($_GET['term'])) {
-            $q = strtolower($_GET['term']);
-            $this->financeiro_model->autoCompleteClienteReceita($q);
-        }
-    }
-
-    protected function getThisYear()
-    {
-        $dias = date('z');
-        $primeiro = date('Y-m-d', strtotime('-' . ($dias) . ' day'));
-        $ultimo = date('Y-m-d', strtotime('+' . (364 - $dias) . ' day'));
-
-        return [$primeiro, $ultimo];
-    }
-
-    protected function getThisWeek()
-    {
-        return [date('Y/m/d', strtotime('last sunday', strtotime('now'))), date('Y/m/d', strtotime('next saturday', strtotime('now')))];
-    }
-
-    protected function getLastSevenDays()
-    {
-        return [date('Y-m-d', strtotime('-7 day', strtotime('now'))), date('Y-m-d', strtotime('now'))];
-    }
-
-    protected function getThisMonth()
-    {
-        $mes = date('m');
-        $ano = date('Y');
-        $qtdDiasMes = date('t');
-        $inicia = $ano . '-' . $mes . '-01';
-
-        $ate = $ano . '-' . $mes . '-' . $qtdDiasMes;
-
-        return [$inicia, $ate];
+        $this->output
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($itens));
     }
 }

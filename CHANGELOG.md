@@ -40,6 +40,11 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Módulo de Vendas migrado para os componentes da v5 (#2843):
   - listagem com filtros na URL, total da paginação que conta com os filtros (na v4 contava todas as vendas), total por linha calculado no SQL, garantia em `pill-status` e exclusão em `modal-confirm`, que apaga também o lançamento da fatura (a busca antiga nunca o encontrava). Venda cancelada passa a seguir a regra da faturada: só edita e exclui com `control_edit_vendas`, como na OS. #2945 [@RamonSilva20](https://github.com/RamonSilva20)
   - formulário único para cadastrar e editar os dados e tela da venda numa página, com produtos e desconto sem recarregar, faturamento e cobrança em modal, PIX copia e cola gerado no servidor e impressões. Os endpoints conferem no banco a venda, os itens, a quantidade devolvida ao estoque e o desconto (na v4 vinham do navegador), e a venda faturada ou cancelada é barrada também no GET. Cancelar ou excluir a venda passa a devolver os produtos ao estoque (e reabrir baixa de novo), como na OS. O faturamento grava o lançamento e os dois vínculos (`vendas.lancamentos_id` e `lancamentos.vendas_id`). A regra `vendas` de validação exigia o campo `situacao`, que nenhuma tela enviava. #2947 [@RamonSilva20](https://github.com/RamonSilva20)
+- Lançamentos financeiros migrados para os componentes da v5 (#2844):
+  - listagem com período (dia, semana, mês...), vencimento, tipo, situação (pendente, pago, vencido) e busca na URL, cards de resumo e exclusão em `modal-confirm`;
+  - formulário único para receita e despesa, com desconto, baixa e parcelamento com entrada. O valor líquido, as parcelas (em centavos, sem sobra) e os vencimentos mensais são calculados no servidor.
+
+  Receitas e despesas passam a somar pelo mesmo critério de líquido, e a listagem mostra o mês atual por padrão (antes, só o dia). #2944 [@RamonSilva20](https://github.com/RamonSilva20)
 - Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
 - Ficha do cliente migrada para os componentes da v5:
   - abas por link (dados, ordens de serviço e vendas), com contadores;

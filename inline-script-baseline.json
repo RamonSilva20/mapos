@@ -16,7 +16,6 @@
     "application/views/conecte/token_digita.php": 2,
     "application/views/conecte/visualizar_os.php": 2,
     "application/views/emails/emails.php": 1,
-    "application/views/financeiro/lancamentos.php": 1,
     "application/views/garantias/adicionarGarantia.php": 1,
     "application/views/garantias/editarGarantia.php": 1,
     "application/views/garantias/garantias.php": 1,
