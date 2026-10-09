@@ -458,3 +458,59 @@ if (! function_exists('financeiroValoresDoFormulario')) {
         return array_merge(array_fill_keys($campos, ''), ['parcelas' => '1'], $padrao);
     }
 }
+
+/*
+ * Cobranças (#2844).
+ */
+
+if (! function_exists('cobrancaStatusPill')) {
+    /**
+     * Props do pill-status de uma cobrança. Os gateways devolvem o status em
+     * vocabulários diferentes (paid, approved, RECEIVED...), e a descrição
+     * deles é uma frase longa demais para a pílula: aqui cada status vira uma
+     * palavra e uma variante. Status desconhecido aparece como veio, em neutral.
+     *
+     * @return array{label: string, variant: string}
+     */
+    function cobrancaStatusPill(?string $status): array
+    {
+        $grupos = [
+            ['Paga', 'success', ['paid', 'approved', 'settled', 'received', 'confirmed', 'received_in_cash', 'dunning_received']],
+            ['Gerada', 'info', ['new', 'link', 'active', 'up_to_date', 'finished']],
+            ['Aguardando', 'warning', ['waiting', 'pending', 'identified', 'in_process', 'authorized', 'awaiting_risk_analysis', 'dunning_requested']],
+            ['Vencida', 'danger', ['overdue', 'expired', 'unpaid', 'rejected']],
+            ['Cancelada', 'neutral', ['canceled', 'cancelled', 'deleted']],
+            ['Estornada', 'neutral', ['refunded', 'refund_requested']],
+            ['Em disputa', 'danger', ['contested', 'in_mediation', 'charged_back', 'chargeback_requested', 'chargeback_dispute', 'awaiting_chargeback_reversal']],
+        ];
+
+        $chave = strtolower(trim((string) $status));
+        foreach ($grupos as [$rotulo, $variante, $chaves]) {
+            if (in_array($chave, $chaves, true)) {
+                return ['label' => $rotulo, 'variant' => $variante];
+            }
+        }
+
+        return ['label' => $chave !== '' ? (string) $status : 'Sem status', 'variant' => 'neutral'];
+    }
+}
+
+if (! function_exists('cobrancaDescricaoDoStatus')) {
+    /** Descrição do status no config dos gateways, ou o próprio status quando não houver. */
+    function cobrancaDescricaoDoStatus($gateways, ?string $gateway, ?string $status): string
+    {
+        $descricao = is_array($gateways) ? ($gateways[(string) $gateway]['transaction_status'][(string) $status] ?? null) : null;
+
+        return trim((string) ($descricao ?? $status));
+    }
+}
+
+if (! function_exists('cobrancaUrlSegura')) {
+    /** URL de boleto, link ou PDF que vem do gateway: só http(s) vira link; o resto, null. */
+    function cobrancaUrlSegura(?string $url): ?string
+    {
+        $url = trim((string) $url);
+
+        return preg_match('#^https?://\S+$#i', $url) ? $url : null;
+    }
+}
