@@ -6,7 +6,6 @@
     "application/views/clientes/formulario.php": 12,
     "application/views/cobrancas/cobrancas.php": 15,
     "application/views/cobrancas/emails/cobranca.php": 13,
-    "application/views/cobrancas/modalGerarPagamento.php": 5,
     "application/views/cobrancas/visualizarCobranca.php": 15,
     "application/views/conecte/adicionarOs.php": 2,
     "application/views/conecte/cadastrar.php": 8,
