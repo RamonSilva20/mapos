@@ -44,7 +44,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - listagem com período (dia, semana, mês...), vencimento, tipo, situação (pendente, pago, vencido) e busca na URL, cards de resumo e exclusão em `modal-confirm`;
   - formulário único para receita e despesa, com desconto, baixa e parcelamento com entrada. O valor líquido, as parcelas (em centavos, sem sobra) e os vencimentos mensais são calculados no servidor.
 
-  Receitas e despesas passam a somar pelo mesmo critério de líquido, e a listagem mostra o mês atual por padrão (antes, só o dia). #2944 [@RamonSilva20](https://github.com/RamonSilva20)
+  Receitas e despesas passam a somar pelo mesmo critério de líquido, e a listagem mostra o mês atual por padrão (antes, só o dia). #2946 [@RamonSilva20](https://github.com/RamonSilva20)
 - Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
 - Ficha do cliente migrada para os componentes da v5:
   - abas por link (dados, ordens de serviço e vendas), com contadores;
