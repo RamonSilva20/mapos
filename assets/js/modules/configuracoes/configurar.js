@@ -10,6 +10,10 @@ export function inserirMarcador(texto, marcador, inicio = texto.length, fim = in
 }
 
 export default function iniciar(raiz, { doc = document } = {}) {
+    // A barra de abas rola na horizontal: a aba aberta pode ficar fora da
+    // área visível (celular, ou as últimas abas a 1280px).
+    raiz.querySelector('nav [aria-current="page"]')?.scrollIntoView?.({ block: 'nearest', inline: 'center' });
+
     raiz.addEventListener('click', (evento) => {
         const botao = evento.target.closest?.('[data-marcador]');
         const campo = botao ? doc.getElementById(botao.dataset.marcadorAlvo) : null;

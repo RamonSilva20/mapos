@@ -329,7 +329,7 @@ if (! function_exists('emitenteDadosDoFormulario')) {
             'numero' => ['Informe o número.', 15],
             'bairro' => ['Informe o bairro.', 45],
             'cidade' => ['Informe a cidade.', 45],
-            'uf' => ['Escolha a UF.', 20],
+            'estado' => ['Escolha a UF.', 20],
             'telefone' => ['Informe o telefone.', 20],
             'email' => ['Informe o e-mail.', 255],
         ];
@@ -346,9 +346,12 @@ if (! function_exists('emitenteDadosDoFormulario')) {
             $dados[$nome] = $valor;
         }
 
-        $dados['uf'] = strtoupper($dados['uf']);
+        // O campo da tela chama "estado", como nos clientes e usuários (o
+        // módulo do CEP preenche esse nome); a coluna é emitente.uf.
+        $dados['uf'] = strtoupper($dados['estado']);
+        unset($dados['estado']);
         if ($dados['uf'] !== '' && ! array_key_exists($dados['uf'], ufsDoBrasil())) {
-            $erros['uf'] = 'Escolha a UF da lista.';
+            $erros['estado'] = 'Escolha a UF da lista.';
         }
         if ($dados['email'] !== '' && ! filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
             $erros['email'] = 'Informe um e-mail válido.';
@@ -405,6 +408,20 @@ if (! function_exists('emailFilaAssunto')) {
     {
         $dados = json_decode((string) $headers, true);
 
-        return is_array($dados) && is_scalar($dados['Subject'] ?? null) ? trim((string) $dados['Subject']) : '';
+        if (! is_array($dados) || ! is_scalar($dados['Subject'] ?? null)) {
+            return '';
+        }
+
+        // O CI_Email grava o Subject codificado (=?UTF-8?Q?...?=).
+        // Texto que já está puro (com acento) passa direto: o iconv descartaria
+        // os caracteres fora do ASCII.
+        $assunto = (string) $dados['Subject'];
+        if (! str_contains($assunto, '=?')) {
+            return trim($assunto);
+        }
+
+        $decodificado = function_exists('iconv_mime_decode') ? @iconv_mime_decode($assunto, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8') : mb_decode_mimeheader($assunto);
+
+        return trim($decodificado !== false ? $decodificado : $assunto);
     }
 }

@@ -245,6 +245,8 @@ if (! defined('LAYOUT_ROTULOS')) {
         'usuarios' => 'Usuários',
         'permissoes' => 'Permissões',
         'mapos' => 'Sistema',
+        'emails' => 'E-mails',
+        'configurar' => 'Configurações',
     ]);
 }
 

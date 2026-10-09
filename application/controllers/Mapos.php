@@ -213,12 +213,12 @@ class Mapos extends MY_Controller
         }
 
         $post = $this->input->method() === 'post' ? $this->input->post() : null;
-        $campos = ['nome', 'cnpj', 'ie', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf', 'telefone', 'email'];
+        $campos = ['nome', 'cnpj', 'ie', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'telefone', 'email'];
         $valores = [];
         foreach ($campos as $campo) {
             $valores[$campo] = $post !== null
                 ? (is_scalar($post[$campo] ?? null) ? trim((string) $post[$campo]) : '')
-                : (string) ($emitente->{$campo} ?? '');
+                : (string) ($emitente->{$campo === 'estado' ? 'uf' : $campo} ?? '');
         }
 
         $this->data['menuConfiguracoes'] = 'Configuracoes';
@@ -242,6 +242,12 @@ class Mapos extends MY_Controller
     {
         if (!is_dir($pasta) && !@mkdir($pasta, DIR_WRITE_MODE, true)) {
             return [null, 'Não foi possível criar a pasta de uploads no servidor.'];
+        }
+
+        // Acima do limite do PHP o arquivo nem chega: a mensagem do CI fala em
+        // "configuração do PHP", que não ajuda quem está enviando.
+        if (in_array($_FILES['userfile']['error'] ?? UPLOAD_ERR_OK, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true)) {
+            return [null, 'A imagem passa de 2 MB. Reduza o tamanho e envie de novo.'];
         }
 
         $this->load->library('upload');

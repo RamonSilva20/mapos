@@ -68,13 +68,13 @@ $logo = (string) ($emitente->url_logo ?? '');
                 <div class="grid grid-cols-[minmax(0,1fr)_7rem] gap-4">
                     <?= component('input', $campo('cidade', ['label' => 'Cidade', 'required' => true, 'autocomplete' => 'address-level2', 'attrs' => ['maxlength' => 45, 'data-msg-vazio' => 'Informe a cidade.']])) ?>
                     <?= component('select', [
-                        'name' => 'uf',
+                        'name' => 'estado',
                         'label' => 'UF',
                         'required' => true,
                         'placeholder' => '—',
                         'options' => array_combine(array_keys(ufsDoBrasil()), array_keys(ufsDoBrasil())),
-                        'selected' => $valores['uf'] !== '' ? strtoupper($valores['uf']) : null,
-                        'error' => $errosDeCampo['uf'] ?? null,
+                        'selected' => $valores['estado'] !== '' ? strtoupper($valores['estado']) : null,
+                        'error' => $errosDeCampo['estado'] ?? null,
                         'attrs' => ['data-msg-vazio' => 'Escolha a UF.'],
                     ]) ?>
                 </div>

@@ -12,7 +12,7 @@
 $temFiltro = $filtros !== [];
 $colunas = [
     ['key' => 'id', 'label' => 'Nº', 'align' => 'right', 'nowrap' => true],
-    ['label' => 'Para', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($m) => (string) $m->to],
+    ['label' => 'Para', 'class' => 'min-w-56 [overflow-wrap:anywhere]', 'render' => fn ($m) => (string) $m->to],
     ['label' => 'Assunto', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'hide_until' => 'md', 'render' => fn ($m) => emailFilaAssunto($m->headers) ?: '—'],
     ['label' => 'Criado em', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'lg', 'render' => fn ($m) => $m->date ? date('d/m/Y H:i', strtotime((string) $m->date)) : '—'],
     ['label' => 'Situação', 'nowrap' => true, 'render' => fn ($m) => component('pill-status', emailFilaPill($m->status))],

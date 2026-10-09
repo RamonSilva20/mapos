@@ -148,15 +148,16 @@ final class ConfiguracoesTest extends MaposTestCase
 
     public function testDadosDoEmitente(): void
     {
-        $post = ['nome' => 'Oficina', 'cnpj' => '11.222.333/0001-81', 'cep' => '01001-000', 'rua' => 'Praça da Sé', 'numero' => '1', 'bairro' => 'Sé', 'cidade' => 'São Paulo', 'uf' => 'sp', 'telefone' => '1133334444', 'email' => 'a@b.com', 'id' => '9'];
+        $post = ['nome' => 'Oficina', 'cnpj' => '11.222.333/0001-81', 'cep' => '01001-000', 'rua' => 'Praça da Sé', 'numero' => '1', 'bairro' => 'Sé', 'cidade' => 'São Paulo', 'estado' => 'sp', 'telefone' => '1133334444', 'email' => 'a@b.com', 'id' => '9'];
 
         [$dados, $erros] = emitenteDadosDoFormulario($post);
         $this->assertSame([], $erros);
-        $this->assertSame('SP', $dados['uf']);
+        $this->assertSame('SP', $dados['uf'], 'O campo da tela é "estado" (o módulo do CEP o preenche); a coluna é uf.');
+        $this->assertArrayNotHasKey('estado', $dados);
         $this->assertArrayNotHasKey('id', $dados, 'O id nunca vem do POST.');
 
-        [, $erros] = emitenteDadosDoFormulario(['cnpj' => '123', 'uf' => 'XX', 'email' => 'x'] + $post);
-        $this->assertEqualsCanonicalizing(['cnpj', 'uf', 'email'], array_keys($erros));
+        [, $erros] = emitenteDadosDoFormulario(['cnpj' => '123', 'estado' => 'XX', 'email' => 'x'] + $post);
+        $this->assertEqualsCanonicalizing(['cnpj', 'estado', 'email'], array_keys($erros));
 
         [, $erros] = emitenteDadosDoFormulario(['nome' => ''] + $post);
         $this->assertArrayHasKey('nome', $erros);
@@ -192,6 +193,7 @@ final class ConfiguracoesTest extends MaposTestCase
         $this->assertSame('Sem status', emailFilaPill(null)['label']);
         $this->assertSame('Ordem de Serviço', emailFilaAssunto('{"From":"a@b","Subject":"Ordem de Serviço"}'));
         $this->assertSame('', emailFilaAssunto('lixo'));
+        $this->assertSame('Ordem de Serviço', emailFilaAssunto((string) json_encode(['Subject' => '=?UTF-8?Q?Ordem=20de=20Servi=C3=A7o?='])), 'O CI_Email grava o assunto codificado.');
     }
 
     public function testListagensDaFilaEDaAuditoria(): void
