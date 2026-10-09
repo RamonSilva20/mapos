@@ -6,6 +6,12 @@ if (! defined('BASEPATH')) {
 
 class Usuarios extends MY_Controller
 {
+    /** Filtros da listagem, na query string (listagemFiltros()). */
+    public const FILTROS = [
+        'pesquisa' => 'texto',
+        'situacao' => ['ativo', 'inativo'],
+    ];
+
     public function __construct()
     {
         parent::__construct();
@@ -15,7 +21,7 @@ class Usuarios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->helper('form');
+        $this->load->helper(['form', 'usuarios']);
         $this->load->model('usuarios_model');
         $this->data['menuUsuarios'] = 'Usuários';
         $this->data['menuConfiguracoes'] = 'Configurações';
@@ -26,17 +32,24 @@ class Usuarios extends MY_Controller
         $this->gerenciar();
     }
 
+    /**
+     * Listagem de usuários migrada para os componentes da v5 (#2846), no
+     * padrão das listagens (#2852).
+     */
     public function gerenciar()
     {
-        $this->load->library('pagination');
+        $filtros = listagemFiltros(self::FILTROS, $this->input->get());
+        $offset = (int) $this->uri->segment(3);
+        $total = $this->usuarios_model->contar($filtros);
 
-        $this->data['configuration']['base_url'] = base_url() . 'index.php/usuarios/gerenciar/';
-        $this->data['configuration']['total_rows'] = $this->usuarios_model->count('usuarios');
-
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->usuarios_model->get($this->data['configuration']['per_page'], $this->uri->segment(3));
-
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['results'] = $this->usuarios_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
+        $this->data['paginacao'] = $this->paginacao(site_url('usuarios/gerenciar'), $total, $offset, null, $filtros);
+        $this->data['logado'] = (int) $this->session->userdata('id_admin');
+        $this->data['hoje'] = date('Y-m-d');
+        $this->data['topbar_acao'] = ['label' => 'Novo usuário', 'icon' => 'plus', 'href' => site_url('usuarios/adicionar')];
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'usuarios/usuarios';
 
         return $this->layout();
@@ -44,146 +57,149 @@ class Usuarios extends MY_Controller
 
     public function adicionar()
     {
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-
-        if ($this->form_validation->run('usuarios') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">' . validation_errors() . '</div>' : false);
-        } else {
-            $data = [
-                'nome' => set_value('nome'),
-                'rg' => set_value('rg'),
-                'cpf' => set_value('cpf'),
-                'cep' => set_value('cep'),
-                'rua' => set_value('rua'),
-                'numero' => set_value('numero'),
-                'bairro' => set_value('bairro'),
-                'cidade' => set_value('cidade'),
-                'estado' => set_value('estado'),
-                'email' => set_value('email'),
-                'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
-                'telefone' => set_value('telefone'),
-                'celular' => set_value('celular'),
-                'dataExpiracao' => set_value('dataExpiracao'),
-                'situacao' => set_value('situacao'),
-                'permissoes_id' => $this->input->post('permissoes_id'),
-                'dataCadastro' => date('Y-m-d'),
-            ];
-
-            if ($this->usuarios_model->add('usuarios', $data) == true) {
-                $this->session->set_flashdata('success', 'Usuário cadastrado com sucesso!');
-                log_info('Adicionou um usuário.');
-                redirect(site_url('usuarios/adicionar/'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-            }
-        }
-
-        $this->load->model('permissoes_model');
-        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome');
-        $this->data['view'] = 'usuarios/adicionarUsuario';
-
-        return $this->layout();
+        return $this->formulario(null);
     }
 
     public function editar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->usuarios_model->getById($this->uri->segment(3))) {
+        $usuario = is_numeric($this->uri->segment(3)) ? $this->usuarios_model->getById((int) $this->uri->segment(3)) : null;
+        if (! $usuario) {
             $this->session->set_flashdata('error', 'Usuário não encontrado ou parâmetro inválido.');
             redirect('usuarios/gerenciar');
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
-        $this->form_validation->set_rules('rg', 'RG', 'trim|required');
-        $this->form_validation->set_rules('cpf', 'CPF', 'trim|required');
-        $this->form_validation->set_rules('cep', 'CEP', 'trim|required');
-        $this->form_validation->set_rules('rua', 'Rua', 'trim|required');
-        $this->form_validation->set_rules('numero', 'Número', 'trim|required');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'trim|required');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'trim|required');
-        $this->form_validation->set_rules('estado', 'Estado', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'trim|required');
-        $this->form_validation->set_rules('situacao', 'Situação', 'trim|required');
-        $this->form_validation->set_rules('permissoes_id', 'Permissão', 'trim|required');
+        $motivo = usuarioPodeSerEditadoPor((int) $usuario->idUsuarios, (int) $this->session->userdata('id_admin'));
+        if ($motivo !== null) {
+            $this->session->set_flashdata('error', $motivo);
+            redirect('usuarios/gerenciar');
+        }
 
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            if ($this->input->post('idUsuarios') == 1 && $this->input->post('situacao') == 0) {
-                $this->session->set_flashdata('error', 'O usuário super admin não pode ser desativado!');
-                redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('idUsuarios'));
+        return $this->formulario($usuario);
+    }
+
+    /**
+     * Formulário de usuário (#2846), no padrão dos formulários da v5 (#2851).
+     * O usuário editado vem da URL (na v4 vinha do idUsuarios do POST).
+     */
+    private function formulario(?object $usuario)
+    {
+        $erros = [];
+        $logado = (int) $this->session->userdata('id_admin');
+
+        if ($this->input->method() === 'post') {
+            $erros = $this->validarFormulario('usuarios_formulario');
+            [$dados, $errosDoFormulario, $senha] = usuarioDadosDoFormulario($this->input->post(), $usuario === null);
+            $erros += $errosDoFormulario;
+
+            if (! isset($erros['cpf']) && $this->usuarios_model->cpfEmUso($dados['cpf'], $usuario !== null ? (int) $usuario->idUsuarios : null)) {
+                $erros['cpf'] = 'Este CPF já está cadastrado para outro usuário.';
             }
 
-            $senha = $this->input->post('senha');
-            if ($senha != null) {
-                $senha = password_hash($senha, PASSWORD_DEFAULT);
-
-                $data = [
-                    'nome' => $this->input->post('nome'),
-                    'rg' => $this->input->post('rg'),
-                    'cpf' => $this->input->post('cpf'),
-                    'cep' => $this->input->post('cep'),
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'email' => $this->input->post('email'),
-                    'senha' => $senha,
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'dataExpiracao' => set_value('dataExpiracao'),
-                    'situacao' => $this->input->post('situacao'),
-                    'permissoes_id' => $this->input->post('permissoes_id'),
-                ];
-            } else {
-                $data = [
-                    'nome' => $this->input->post('nome'),
-                    'rg' => $this->input->post('rg'),
-                    'cpf' => $this->input->post('cpf'),
-                    'cep' => $this->input->post('cep'),
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'email' => $this->input->post('email'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'dataExpiracao' => set_value('dataExpiracao'),
-                    'situacao' => $this->input->post('situacao'),
-                    'permissoes_id' => $this->input->post('permissoes_id'),
-                ];
+            if ($erros === [] && $usuario !== null && $dados['situacao'] === 0 && ($motivo = usuarioPodeSerRemovido((int) $usuario->idUsuarios, $logado)) !== null) {
+                $erros['situacao'] = $motivo;
             }
 
-            if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $this->input->post('idUsuarios')) == true) {
-                $this->session->set_flashdata('success', 'Usuário editado com sucesso!');
-                log_info('Alterou um usuário. ID: ' . $this->input->post('idUsuarios'));
-                redirect(site_url('usuarios/editar/') . $this->input->post('idUsuarios'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+            // Trocar o próprio grupo pode tirar o acesso a esta tela.
+            if ($erros === [] && $usuario !== null && (int) $usuario->idUsuarios === $logado && $dados['permissoes_id'] !== (int) $usuario->permissoes_id) {
+                $erros['permissoes_id'] = 'Você não pode trocar o grupo do seu próprio usuário.';
+            }
+
+            if ($erros === []) {
+                $this->load->model('permissoes_model');
+                $grupo = $this->permissoes_model->getById($dados['permissoes_id']);
+                // Grupo inativo só fica se o usuário já estava nele.
+                if (! $grupo || ((int) $grupo->situacao !== 1 && (int) ($usuario->permissoes_id ?? 0) !== (int) $grupo->idPermissao)) {
+                    $erros['permissoes_id'] = 'Escolha um grupo de permissão ativo.';
+                }
+            }
+
+            if ($erros === []) {
+                if ($senha !== null) {
+                    $dados['senha'] = password_hash($senha, PASSWORD_DEFAULT);
+                }
+
+                $salvou = $usuario === null
+                    ? $this->usuarios_model->add('usuarios', $dados + ['dataCadastro' => date('Y-m-d')])
+                    : $this->usuarios_model->edit('usuarios', $dados, 'idUsuarios', (int) $usuario->idUsuarios);
+
+                if ($salvou) {
+                    log_info($usuario === null ? 'Adicionou um usuário.' : 'Alterou um usuário. ID: ' . (int) $usuario->idUsuarios);
+                    $this->session->set_flashdata('success', $usuario === null ? 'Usuário cadastrado.' : 'Alterações salvas.');
+
+                    return redirect($usuario === null ? 'usuarios' : 'usuarios/editar/' . (int) $usuario->idUsuarios);
+                }
+
+                $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
             }
         }
 
-        $this->data['result'] = $this->usuarios_model->getById($this->uri->segment(3));
         $this->load->model('permissoes_model');
-        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome');
-
-        $this->data['view'] = 'usuarios/editarUsuario';
+        $this->data['usuario'] = $usuario;
+        $this->data['valores'] = usuarioValoresDoFormulario($this->input->method() === 'post' ? $this->input->post() : null, $usuario);
+        $this->data['erros'] = $erros;
+        $this->data['grupos'] = $this->gruposParaEscolher($usuario);
+        $this->data['protegido'] = $usuario !== null && usuarioPodeSerRemovido((int) $usuario->idUsuarios, $logado) !== null;
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'usuarios/formulario';
 
         return $this->layout();
     }
 
+    /**
+     * Grupos ativos e, ao editar, o grupo atual do usuário mesmo inativo
+     * (para o select não trocar de grupo sem ninguém pedir).
+     *
+     * @return array<string, string> id => nome
+     */
+    private function gruposParaEscolher(?object $usuario): array
+    {
+        $grupos = [];
+        foreach ($this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome') as $grupo) {
+            $grupos[(string) $grupo->idPermissao] = (string) $grupo->nome;
+        }
+
+        if ($usuario !== null && ! isset($grupos[(string) $usuario->permissoes_id])) {
+            $atual = $this->permissoes_model->getById((int) $usuario->permissoes_id);
+            if ($atual) {
+                $grupos[(string) $atual->idPermissao] = $atual->nome . ' (inativo)';
+            }
+        }
+
+        return $grupos;
+    }
+
+    /**
+     * Exclui um usuário (POST com o token CSRF; na v4 era um link GET). O
+     * super admin, o próprio usuário logado e quem tem OS, vendas,
+     * lançamentos ou garantias não são excluídos: o caminho é desativar.
+     */
     public function excluir()
     {
-        $id = $this->uri->segment(3);
-        $this->usuarios_model->delete('usuarios', 'idUsuarios', $id);
+        $id = (int) $this->input->post('id');
+        $listagem = site_url('usuarios/gerenciar') . listagemQuery(listagemFiltros(self::FILTROS, $this->input->get()));
 
-        log_info('Removeu um usuário. ID: ' . $id);
+        if ($this->input->method() !== 'post' || $id <= 0 || ! $this->usuarios_model->getById($id)) {
+            $this->session->set_flashdata('error', 'Usuário não encontrado.');
+            redirect($listagem);
+        }
 
-        redirect(site_url('usuarios/gerenciar/'));
+        $motivo = usuarioPodeSerRemovido($id, (int) $this->session->userdata('id_admin'));
+        if ($motivo === null && $this->usuarios_model->referencias($id) > 0) {
+            $motivo = 'Este usuário tem OS, vendas, lançamentos ou termos de garantia. Desative-o em vez de excluir.';
+        }
+
+        if ($motivo !== null) {
+            $this->session->set_flashdata('error', $motivo);
+            redirect($listagem);
+        }
+
+        if ($this->usuarios_model->delete('usuarios', 'idUsuarios', $id)) {
+            log_info('Removeu um usuário. ID: ' . $id);
+            $this->session->set_flashdata('success', 'Usuário excluído.');
+        } else {
+            $this->session->set_flashdata('error', 'Não foi possível excluir o usuário.');
+        }
+
+        redirect($listagem);
     }
 }

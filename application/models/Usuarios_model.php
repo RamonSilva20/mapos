@@ -33,6 +33,80 @@ class Usuarios_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Listagem de usuários da v5 (#2846): os mesmos filtros em listar() e
+     * contar(). pesquisa procura no nome, e-mail, CPF e telefone; situacao é
+     * ativo ou inativo.
+     *
+     * @param  array<string, string>  $filtros
+     */
+    public function listar(array $filtros, int $limite, int $offset): array
+    {
+        $this->db->select(self::CAMPOS_PUBLICOS . ', permissoes.nome AS permissao');
+        $this->aplicarFiltros($filtros);
+
+        return $this->db->order_by('usuarios.nome', 'ASC')->limit($limite, max(0, $offset))->get()->result();
+    }
+
+    public function contar(array $filtros): int
+    {
+        $this->aplicarFiltros($filtros);
+
+        return (int) $this->db->count_all_results();
+    }
+
+    private function aplicarFiltros(array $filtros): void
+    {
+        $this->db->from('usuarios');
+        $this->db->join('permissoes', 'usuarios.permissoes_id = permissoes.idPermissao', 'left');
+
+        $pesquisa = $filtros['pesquisa'] ?? '';
+        if ($pesquisa !== '') {
+            $this->db->group_start()
+                ->like('usuarios.nome', $pesquisa)
+                ->or_like('usuarios.email', $pesquisa)
+                ->or_like('usuarios.cpf', $pesquisa)
+                ->or_like('usuarios.telefone', $pesquisa)
+                ->group_end();
+        }
+
+        if (($filtros['situacao'] ?? '') === 'ativo') {
+            $this->db->where('usuarios.situacao', 1);
+        } elseif (($filtros['situacao'] ?? '') === 'inativo') {
+            $this->db->where('usuarios.situacao', 0);
+        }
+    }
+
+    /**
+     * Diz se outro usuário já usa o CPF, com ou sem a máscara (cadastros
+     * antigos podem ter só os números).
+     */
+    public function cpfEmUso(string $cpf, ?int $exceto): bool
+    {
+        $digitos = (string) preg_replace('/\D/', '', $cpf);
+        $this->db->group_start()->where('cpf', $cpf)->or_where('cpf', $digitos)->group_end();
+        if ($exceto !== null) {
+            $this->db->where('idUsuarios !=', $exceto);
+        }
+
+        return $this->db->count_all_results('usuarios') > 0;
+    }
+
+    /**
+     * Quantos registros apontam para o usuário (OS, vendas, lançamentos e
+     * termos de garantia, todos com chave estrangeira): com algum, a exclusão
+     * falharia no banco, e o caminho é desativar.
+     */
+    public function referencias(int $id): int
+    {
+        $total = 0;
+        foreach (['os', 'vendas', 'lancamentos', 'garantias'] as $tabela) {
+            $total += (int) $this->db->where('usuarios_id', $id)->count_all_results($tabela);
+        }
+
+        return $total;
+    }
+
     public function getAllTipos()
     {
         $this->db->where('situacao', 1);

@@ -68,6 +68,9 @@ class Permission
         if ($id != null) {
             $this->CI->db->select($this->table . '.' . $this->select);
             $this->CI->db->where($this->pk, $id);
+            // Grupo desativado não concede nada (#2846): até a v4 a situação
+            // do grupo era só informativa.
+            $this->CI->db->where('situacao', 1);
             $this->CI->db->limit(1);
             // row_array() devolve null quando a consulta não traz linha, e
             // count(null) é TypeError fatal no PHP 8. Um usuário cujo

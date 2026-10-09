@@ -15,7 +15,7 @@ class Permissoes extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->helper(['form', 'codegen_helper']);
+        $this->load->helper(['form', 'usuarios']);
         $this->load->model('permissoes_model');
         $this->data['menuConfiguracoes'] = 'Permissões';
     }
@@ -25,17 +25,16 @@ class Permissoes extends MY_Controller
         $this->gerenciar();
     }
 
+    /**
+     * Grupos de permissão (#2846), com quantos usuários usam cada um. São
+     * poucos: sem filtro nem paginação.
+     */
     public function gerenciar()
     {
-        $this->load->library('pagination');
-
-        $this->data['configuration']['base_url'] = site_url('permissoes/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->permissoes_model->count('permissoes');
-
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
-
+        $this->data['results'] = $this->permissoes_model->listarComUsuarios();
+        $this->data['grupo_logado'] = (int) $this->session->userdata('permissao');
+        $this->data['topbar_acao'] = ['label' => 'Novo grupo', 'icon' => 'plus', 'href' => site_url('permissoes/adicionar')];
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'permissoes/permissoes';
 
         return $this->layout();
@@ -43,230 +42,103 @@ class Permissoes extends MY_Controller
 
     public function adicionar()
     {
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $nomePermissao = $this->input->post('nome');
-            $cadastro = date('Y-m-d');
-            $situacao = 1;
-
-            $permissoes = [
-
-                'aCliente' => $this->input->post('aCliente'),
-                'eCliente' => $this->input->post('eCliente'),
-                'dCliente' => $this->input->post('dCliente'),
-                'vCliente' => $this->input->post('vCliente'),
-
-                'aProduto' => $this->input->post('aProduto'),
-                'eProduto' => $this->input->post('eProduto'),
-                'dProduto' => $this->input->post('dProduto'),
-                'vProduto' => $this->input->post('vProduto'),
-
-                'aServico' => $this->input->post('aServico'),
-                'eServico' => $this->input->post('eServico'),
-                'dServico' => $this->input->post('dServico'),
-                'vServico' => $this->input->post('vServico'),
-
-                'aOs' => $this->input->post('aOs'),
-                'eOs' => $this->input->post('eOs'),
-                'dOs' => $this->input->post('dOs'),
-                'vOs' => $this->input->post('vOs'),
-
-                'aVenda' => $this->input->post('aVenda'),
-                'eVenda' => $this->input->post('eVenda'),
-                'dVenda' => $this->input->post('dVenda'),
-                'vVenda' => $this->input->post('vVenda'),
-
-                'aGarantia' => $this->input->post('aGarantia'),
-                'eGarantia' => $this->input->post('eGarantia'),
-                'dGarantia' => $this->input->post('dGarantia'),
-                'vGarantia' => $this->input->post('vGarantia'),
-
-                'aArquivo' => $this->input->post('aArquivo'),
-                'eArquivo' => $this->input->post('eArquivo'),
-                'dArquivo' => $this->input->post('dArquivo'),
-                'vArquivo' => $this->input->post('vArquivo'),
-
-                'aPagamento' => $this->input->post('aPagamento'),
-                'ePagamento' => $this->input->post('ePagamento'),
-                'dPagamento' => $this->input->post('dPagamento'),
-                'vPagamento' => $this->input->post('vPagamento'),
-
-                'aLancamento' => $this->input->post('aLancamento'),
-                'eLancamento' => $this->input->post('eLancamento'),
-                'dLancamento' => $this->input->post('dLancamento'),
-                'vLancamento' => $this->input->post('vLancamento'),
-
-                'cUsuario' => $this->input->post('cUsuario'),
-                'cEmitente' => $this->input->post('cEmitente'),
-                'cPermissao' => $this->input->post('cPermissao'),
-                'cBackup' => $this->input->post('cBackup'),
-                'cAuditoria' => $this->input->post('cAuditoria'),
-                'cEmail' => $this->input->post('cEmail'),
-                'cSistema' => $this->input->post('cSistema'),
-
-                'rCliente' => $this->input->post('rCliente'),
-                'rProduto' => $this->input->post('rProduto'),
-                'rServico' => $this->input->post('rServico'),
-                'rOs' => $this->input->post('rOs'),
-                'rVenda' => $this->input->post('rVenda'),
-                'rFinanceiro' => $this->input->post('rFinanceiro'),
-
-                'aCobranca' => $this->input->post('aCobranca'),
-                'eCobranca' => $this->input->post('eCobranca'),
-                'dCobranca' => $this->input->post('dCobranca'),
-                'vCobranca' => $this->input->post('vCobranca'),
-            ];
-            $permissoes = json_encode($permissoes);
-
-            $data = [
-                'nome' => $nomePermissao,
-                'data' => $cadastro,
-                'permissoes' => $permissoes,
-                'situacao' => $situacao,
-            ];
-
-            if ($this->permissoes_model->add('permissoes', $data) == true) {
-                $this->session->set_flashdata('success', 'Permissão adicionada com sucesso!');
-                log_info('Adicionou uma permissão');
-                redirect(site_url('permissoes/adicionar/'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-            }
-        }
-
-        $this->data['view'] = 'permissoes/adicionarPermissao';
-
-        return $this->layout();
+        return $this->formulario(null);
     }
 
     public function editar()
     {
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
+        $grupo = is_numeric($this->uri->segment(3)) ? $this->permissoes_model->getById((int) $this->uri->segment(3)) : null;
+        if (! $grupo) {
+            $this->session->set_flashdata('error', 'Grupo de permissão não encontrado.');
+            redirect('permissoes/gerenciar');
+        }
 
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $nomePermissao = $this->input->post('nome');
-            $situacao = $this->input->post('situacao');
-            $permissoes = [
+        return $this->formulario($grupo);
+    }
 
-                'aCliente' => $this->input->post('aCliente'),
-                'eCliente' => $this->input->post('eCliente'),
-                'dCliente' => $this->input->post('dCliente'),
-                'vCliente' => $this->input->post('vCliente'),
+    /**
+     * Formulário do grupo (#2846): nome e a matriz de permissões (ver,
+     * adicionar, editar e excluir por módulo), relatórios e sistema. O grupo
+     * editado vem da URL (na v4 vinha do idPermissao do POST).
+     */
+    private function formulario(?object $grupo)
+    {
+        $erros = [];
+        $doLogado = $grupo !== null && (int) $grupo->idPermissao === (int) $this->session->userdata('permissao');
+        // O grupo Administrador (instalação) e o do usuário logado não podem
+        // ser desativados nem perder o acesso a usuários e permissões.
+        $protegido = $doLogado || ($grupo !== null && (int) $grupo->idPermissao === PERMISSAO_ADMIN);
 
-                'aProduto' => $this->input->post('aProduto'),
-                'eProduto' => $this->input->post('eProduto'),
-                'dProduto' => $this->input->post('dProduto'),
-                'vProduto' => $this->input->post('vProduto'),
+        if ($this->input->method() === 'post') {
+            [$dados, $erros] = permissaoDadosDoFormulario($this->input->post(), $grupo === null);
 
-                'aServico' => $this->input->post('aServico'),
-                'eServico' => $this->input->post('eServico'),
-                'dServico' => $this->input->post('dServico'),
-                'vServico' => $this->input->post('vServico'),
+            if ($protegido && $dados['situacao'] !== 1) {
+                $erros['situacao'] = 'Este grupo não pode ser desativado.';
+            }
+            if ($protegido && array_diff(['cPermissao', 'cUsuario'], permissoesMarcadas($dados['permissoes'])) !== []) {
+                $erros['_geral'] = ($doLogado ? 'Este é o grupo do seu usuário' : 'Este é o grupo Administrador') . ': mantenha "Usuários" e "Permissões" marcados para não perder o acesso a estas telas.';
+            }
 
-                'aOs' => $this->input->post('aOs'),
-                'eOs' => $this->input->post('eOs'),
-                'dOs' => $this->input->post('dOs'),
-                'vOs' => $this->input->post('vOs'),
+            if ($erros === []) {
+                $salvou = $grupo === null
+                    ? $this->permissoes_model->add('permissoes', $dados + ['data' => date('Y-m-d')])
+                    : $this->permissoes_model->edit('permissoes', $dados, 'idPermissao', (int) $grupo->idPermissao);
 
-                'aVenda' => $this->input->post('aVenda'),
-                'eVenda' => $this->input->post('eVenda'),
-                'dVenda' => $this->input->post('dVenda'),
-                'vVenda' => $this->input->post('vVenda'),
+                if ($salvou) {
+                    log_info($grupo === null ? 'Adicionou uma permissão' : 'Alterou uma permissão. ID: ' . (int) $grupo->idPermissao);
+                    $this->session->set_flashdata('success', $grupo === null ? 'Grupo de permissão criado.' : 'Alterações salvas.');
 
-                'aGarantia' => $this->input->post('aGarantia'),
-                'eGarantia' => $this->input->post('eGarantia'),
-                'dGarantia' => $this->input->post('dGarantia'),
-                'vGarantia' => $this->input->post('vGarantia'),
+                    return redirect($grupo === null ? 'permissoes' : 'permissoes/editar/' . (int) $grupo->idPermissao);
+                }
 
-                'aArquivo' => $this->input->post('aArquivo'),
-                'eArquivo' => $this->input->post('eArquivo'),
-                'dArquivo' => $this->input->post('dArquivo'),
-                'vArquivo' => $this->input->post('vArquivo'),
-
-                'aPagamento' => $this->input->post('aPagamento'),
-                'ePagamento' => $this->input->post('ePagamento'),
-                'dPagamento' => $this->input->post('dPagamento'),
-                'vPagamento' => $this->input->post('vPagamento'),
-
-                'aLancamento' => $this->input->post('aLancamento'),
-                'eLancamento' => $this->input->post('eLancamento'),
-                'dLancamento' => $this->input->post('dLancamento'),
-                'vLancamento' => $this->input->post('vLancamento'),
-
-                'cUsuario' => $this->input->post('cUsuario'),
-                'cEmitente' => $this->input->post('cEmitente'),
-                'cPermissao' => $this->input->post('cPermissao'),
-                'cBackup' => $this->input->post('cBackup'),
-                'cAuditoria' => $this->input->post('cAuditoria'),
-                'cEmail' => $this->input->post('cEmail'),
-                'cSistema' => $this->input->post('cSistema'),
-
-                'rCliente' => $this->input->post('rCliente'),
-                'rProduto' => $this->input->post('rProduto'),
-                'rServico' => $this->input->post('rServico'),
-                'rOs' => $this->input->post('rOs'),
-                'rVenda' => $this->input->post('rVenda'),
-                'rFinanceiro' => $this->input->post('rFinanceiro'),
-
-                'aCobranca' => $this->input->post('aCobranca'),
-                'eCobranca' => $this->input->post('eCobranca'),
-                'dCobranca' => $this->input->post('dCobranca'),
-                'vCobranca' => $this->input->post('vCobranca'),
-
-            ];
-            $permissoes = json_encode($permissoes);
-
-            $data = [
-                'nome' => $nomePermissao,
-                'permissoes' => $permissoes,
-                'situacao' => $situacao,
-            ];
-
-            if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == true) {
-                $this->session->set_flashdata('success', 'Permissão editada com sucesso!');
-                log_info('Alterou uma permissão. ID: ' . $this->input->post('idPermissao'));
-                redirect(site_url('permissoes/editar/') . $this->input->post('idPermissao'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um errro.</p></div>';
+                $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
             }
         }
 
-        $this->data['result'] = $this->permissoes_model->getById($this->uri->segment(3));
-
-        $this->data['view'] = 'permissoes/editarPermissao';
+        $post = $this->input->method() === 'post' ? $this->input->post() : null;
+        $this->data['grupo'] = $grupo;
+        $this->data['valores'] = [
+            'nome' => $post !== null ? (is_scalar($post['nome'] ?? null) ? trim((string) $post['nome']) : '') : (string) ($grupo->nome ?? ''),
+            'situacao' => $post !== null ? in_array($post['situacao'] ?? null, ['1', 'on'], true) : (int) ($grupo->situacao ?? 1) === 1,
+            'marcadas' => $post !== null
+                ? permissoesMarcadas(json_encode(permissoesDoFormulario($post['permissoes'] ?? [])))
+                : permissoesMarcadas($grupo->permissoes ?? null),
+        ];
+        $this->data['erros'] = $erros;
+        $this->data['do_logado'] = $doLogado;
+        $this->data['protegido'] = $protegido;
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'permissoes/formulario';
 
         return $this->layout();
     }
 
+    /**
+     * Desativa um grupo (POST com o token CSRF). O grupo do usuário logado
+     * fica de fora; os usuários de um grupo inativo perdem o acesso.
+     */
     public function desativar()
     {
-        $id = $this->input->post('id');
-        if (! $id) {
-            $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
+        $id = (int) $this->input->post('id');
+        $grupo = $id > 0 ? $this->permissoes_model->getById($id) : null;
+
+        if (! $grupo) {
+            $this->session->set_flashdata('error', 'Grupo de permissão não encontrado.');
             redirect(site_url('permissoes/gerenciar/'));
         }
-        $data = [
-            'situacao' => false,
-        ];
-        if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $id)) {
+
+        if ($id === (int) $this->session->userdata('permissao') || $id === PERMISSAO_ADMIN) {
+            $this->session->set_flashdata('error', $id === PERMISSAO_ADMIN ? 'O grupo Administrador não pode ser desativado.' : 'Este é o grupo do seu usuário: ele não pode ser desativado.');
+            redirect(site_url('permissoes/gerenciar/'));
+        }
+
+        if ($this->permissoes_model->edit('permissoes', ['situacao' => 0], 'idPermissao', $id)) {
             log_info('Desativou uma permissão. ID: ' . $id);
-            $this->session->set_flashdata('success', 'Permissão desativada com sucesso!');
+            $this->session->set_flashdata('success', 'Grupo "' . $grupo->nome . '" desativado.');
         } else {
-            $this->session->set_flashdata('error', 'Erro ao desativar permissão!');
+            $this->session->set_flashdata('error', 'Erro ao desativar o grupo.');
         }
 
         redirect(site_url('permissoes/gerenciar/'));
     }
 }
-
-/* End of file permissoes.php */
-/* Location: ./application/controllers/permissoes.php */

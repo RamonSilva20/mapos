@@ -81,7 +81,7 @@ final class PermissionTest extends MaposTestCase
      */
     public function testIdDePermissaoInexistenteRetornaFalso(): void
     {
-        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT, situacao INTEGER DEFAULT 1)');
 
         $permission = $this->makeInstance(Permission::class);
         $this->setPrivateProperty($permission, 'permissions', null);
@@ -96,7 +96,7 @@ final class PermissionTest extends MaposTestCase
      */
     public function testTabelaDePermissoesVaziaRetornaFalso(): void
     {
-        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT, situacao INTEGER DEFAULT 1)');
 
         $permission = $this->makeInstance(Permission::class);
         $this->setPrivateProperty($permission, 'permissions', null);
@@ -112,7 +112,7 @@ final class PermissionTest extends MaposTestCase
      */
     public function testNegacaoNaoPopulaAListaDePermissoes(): void
     {
-        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT, situacao INTEGER DEFAULT 1)');
 
         $permission = $this->makeInstance(Permission::class);
         $this->setPrivateProperty($permission, 'permissions', null);
@@ -128,7 +128,7 @@ final class PermissionTest extends MaposTestCase
 
     public function testCarregaPermissoesDoBancoNaPrimeiraConsulta(): void
     {
-        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT, situacao INTEGER DEFAULT 1)');
         $this->db->query(
             'INSERT INTO permissoes (idPermissao, permissoes) VALUES (7, ?)',
             [json_encode(['vOs' => 1, 'aOs' => 1, 'eOs' => 0, 'dOs' => 0, 'rOs' => 1])]
@@ -144,9 +144,25 @@ final class PermissionTest extends MaposTestCase
         $this->assertFalse($permission->checkPermission(7, 'eOs'));
     }
 
+    /**
+     * Grupo desativado não concede nada (#2846): até a v4 a situação do grupo
+     * era só informativa, e os usuários dele continuavam com tudo.
+     */
+    public function testGrupoDesativadoNaoConcedeNada(): void
+    {
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT, situacao INTEGER DEFAULT 1)');
+        $this->db->query('INSERT INTO permissoes (idPermissao, permissoes, situacao) VALUES (8, ?, 0)', [json_encode(['vOs' => 1])]);
+
+        $permission = $this->makeInstance(Permission::class);
+        $this->setPrivateProperty($permission, 'permissions', null);
+        $this->setPrivateProperty($permission, 'CI', $this->fakeCiInstance($this->db));
+
+        $this->assertFalse($permission->checkPermission(8, 'vOs'));
+    }
+
     public function testAposACargaAsPermissoesFicamEmMemoria(): void
     {
-        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT)');
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, permissoes TEXT, situacao INTEGER DEFAULT 1)');
         $this->db->query('INSERT INTO permissoes (idPermissao, permissoes) VALUES (1, ?)', [json_encode(['vOs' => 1])]);
 
         $permission = $this->makeInstance(Permission::class);
