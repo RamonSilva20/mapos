@@ -71,6 +71,13 @@ class Login extends CI_Controller
             exit();
         }
 
+        // Grupo de permissão desativado (#2846): a conta não entra, como a
+        // expirada (até a v4 a situação do grupo era só informativa).
+        if (! $this->Mapos_model->grupoAtivo((int) $user->permissoes_id)) {
+            echo json_encode($this->falha('O grupo de permissão desta conta está desativado. Fale com o administrador do sistema.'));
+            exit();
+        }
+
         // Novo ID de sessão a cada autenticação, para que um ID
         // fixado antes do login não continue válido depois dele.
         $this->session->sess_regenerate(true);

@@ -13,7 +13,8 @@
  * @var object|null $grupo     null ao criar
  * @var array{nome: string, situacao: bool, marcadas: list<string>} $valores
  * @var array<string, string> $erros
- * @var bool        $do_logado Grupo do usuário logado (não pode ser desativado)
+ * @var bool        $do_logado Grupo do usuário logado
+ * @var bool        $protegido Grupo do logado ou o Administrador: não pode ser desativado
  */
 $editando = $grupo !== null;
 $erroGeral = $erros['_geral'] ?? null;
@@ -46,8 +47,8 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                 <?= component('input', ['name' => 'nome', 'label' => 'Nome do grupo', 'required' => true, 'value' => $valores['nome'] !== '' ? $valores['nome'] : null, 'error' => $errosDeCampo['nome'] ?? null, 'attrs' => ['maxlength' => 80, 'autofocus' => ! $editando, 'data-msg-vazio' => 'Informe o nome do grupo.']]) ?>
                 <?php if ($editando) { ?>
                     <div class="sm:pb-2">
-                        <?= component('switch', ['name' => 'situacao', 'value' => '1', 'label' => 'Grupo ativo', 'checked' => $valores['situacao'], 'disabled' => $do_logado, 'help' => $do_logado ? 'O grupo do seu usuário não pode ser desativado.' : 'Inativo: os usuários do grupo não entram no painel.']) ?>
-                        <?php if ($do_logado) { ?><input type="hidden" name="situacao" value="1"><?php } ?>
+                        <?= component('switch', ['name' => 'situacao', 'value' => '1', 'label' => 'Grupo ativo', 'checked' => $valores['situacao'], 'disabled' => $protegido, 'help' => $protegido ? 'Este grupo não pode ser desativado.' : 'Inativo: os usuários do grupo não entram no painel.']) ?>
+                        <?php if ($protegido) { ?><input type="hidden" name="situacao" value="1"><?php } ?>
                         <?php if (isset($errosDeCampo['situacao'])) { ?><p class="mt-1 text-caption text-danger-ink"><?= e($errosDeCampo['situacao']) ?></p><?php } ?>
                     </div>
                 <?php } ?>
@@ -79,10 +80,10 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                     <tbody>
                         <?php foreach (PERMISSOES_MODULOS as $modulo => $nomeModulo) { ?>
                             <tr class="border-b border-border last:border-0" data-permissoes-modulo>
-                                <th scope="row" class="py-2.5 pr-4 text-left font-medium text-text"><?= e($nomeModulo) ?></th>
+                                <th scope="row" class="relative py-2.5 pr-4 text-left font-medium text-text"><?= e($nomeModulo) ?></th>
                                 <?php foreach (PERMISSOES_ACOES as $acao => $rotulo) { ?>
                                     <?php $codigo = $acao . $modulo; ?>
-                                    <td class="px-2 py-2.5">
+                                    <td class="relative px-2 py-2.5">
                                         <div class="flex justify-center">
                                             <?= component('checkbox', [
                                                 'name' => 'permissoes[]',

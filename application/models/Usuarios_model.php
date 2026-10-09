@@ -78,6 +78,21 @@ class Usuarios_model extends CI_Model
     }
 
     /**
+     * Diz se outro usuário já usa o CPF, com ou sem a máscara (cadastros
+     * antigos podem ter só os números).
+     */
+    public function cpfEmUso(string $cpf, ?int $exceto): bool
+    {
+        $digitos = (string) preg_replace('/\D/', '', $cpf);
+        $this->db->group_start()->where('cpf', $cpf)->or_where('cpf', $digitos)->group_end();
+        if ($exceto !== null) {
+            $this->db->where('idUsuarios !=', $exceto);
+        }
+
+        return $this->db->count_all_results('usuarios') > 0;
+    }
+
+    /**
      * Quantos registros apontam para o usuário (OS, vendas, lançamentos e
      * termos de garantia, todos com chave estrangeira): com algum, a exclusão
      * falharia no banco, e o caminho é desativar.

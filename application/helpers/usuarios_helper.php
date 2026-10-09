@@ -9,6 +9,12 @@ if (! defined('USUARIO_SUPER_ADMIN')) {
     define('USUARIO_SUPER_ADMIN', 1);
 }
 
+if (! defined('PERMISSAO_ADMIN')) {
+    // O grupo Administrador (instalação): não pode ser desativado nem perder
+    // o acesso a usuários e permissões.
+    define('PERMISSAO_ADMIN', 1);
+}
+
 if (! defined('USUARIO_SENHA_MINIMA')) {
     define('USUARIO_SENHA_MINIMA', 8);
 }
@@ -92,6 +98,14 @@ if (! function_exists('permissoesDoFormulario')) {
         $mapa = [];
         foreach (permissoesCodigos() as $codigo) {
             $mapa[$codigo] = in_array($codigo, $marcadas, true) ? 1 : 0;
+        }
+
+        // Adicionar, editar ou excluir sem ver não leva a lugar nenhum: ver
+        // entra junto (a tela faz o mesmo; aqui vale também para POST direto).
+        foreach (array_keys(PERMISSOES_MODULOS) as $modulo) {
+            if ($mapa['a' . $modulo] || $mapa['e' . $modulo] || $mapa['d' . $modulo]) {
+                $mapa['v' . $modulo] = 1;
+            }
         }
 
         return $mapa;
@@ -195,7 +209,7 @@ if (! function_exists('usuarioDadosDoFormulario')) {
         $dados = [
             'nome' => $texto('nome'),
             'rg' => $texto('rg'),
-            'cpf' => $texto('cpf'),
+            'cpf' => usuarioCpfFormatado($texto('cpf')),
             'email' => mb_strtolower($texto('email')),
             'telefone' => $texto('telefone'),
             'celular' => $texto('celular'),
@@ -211,6 +225,22 @@ if (! function_exists('usuarioDadosDoFormulario')) {
         ];
 
         return [$dados, $erros, $senha === '' ? null : $senha];
+    }
+}
+
+if (! function_exists('usuarioCpfFormatado')) {
+    /**
+     * CPF sempre como 000.000.000-00 quando tem 11 dígitos, para a regra de
+     * CPF único não ser contornada digitando só os números (o banco guarda
+     * com a máscara). Outro formato fica como veio (a validação recusa).
+     */
+    function usuarioCpfFormatado(string $cpf): string
+    {
+        $digitos = (string) preg_replace('/\D/', '', $cpf);
+
+        return strlen($digitos) === 11
+            ? substr($digitos, 0, 3) . '.' . substr($digitos, 3, 3) . '.' . substr($digitos, 6, 3) . '-' . substr($digitos, 9)
+            : trim($cpf);
     }
 }
 
@@ -267,6 +297,20 @@ if (! function_exists('usuarioSituacaoPill')) {
         }
 
         return ['label' => 'Ativo', 'variant' => 'success'];
+    }
+}
+
+if (! function_exists('usuarioPodeSerEditadoPor')) {
+    /**
+     * Motivo para o usuário logado não abrir a edição de um usuário, ou null:
+     * só o próprio administrador principal altera os dados dele (senha,
+     * grupo, e-mail), mesmo que outro usuário tenha cUsuario.
+     */
+    function usuarioPodeSerEditadoPor(int $id, int $logado): ?string
+    {
+        return $id === USUARIO_SUPER_ADMIN && $logado !== USUARIO_SUPER_ADMIN
+            ? 'Só o próprio administrador principal altera os dados dele.'
+            : null;
     }
 }
 

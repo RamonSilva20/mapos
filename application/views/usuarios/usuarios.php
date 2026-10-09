@@ -15,7 +15,9 @@
 $temFiltro = $filtros !== [];
 
 $colunas = [
-    ['label' => 'Nome', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($u) => component('link', ['label' => (string) $u->nome, 'href' => site_url('usuarios/editar/' . (int) $u->idUsuarios), 'class' => 'font-medium'])],
+    ['label' => 'Nome', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($u) => usuarioPodeSerEditadoPor((int) $u->idUsuarios, $logado) === null
+        ? component('link', ['label' => (string) $u->nome, 'href' => site_url('usuarios/editar/' . (int) $u->idUsuarios), 'class' => 'font-medium'])
+        : (string) $u->nome],
     ['key' => 'email', 'label' => 'E-mail', 'class' => 'min-w-48 [overflow-wrap:anywhere]', 'hide_until' => 'lg'],
     ['key' => 'telefone', 'label' => 'Telefone', 'nowrap' => true, 'hide_until' => 'xl'],
     ['label' => 'Grupo', 'nowrap' => true, 'render' => fn ($u) => (string) ($u->permissao ?? 'Grupo removido')],
@@ -26,7 +28,10 @@ $colunas = [
         return [component('pill-status', $pill), $pill['label'] === 'Ativo' && $expira !== '' ? ' até ' . $expira : ''];
     }],
     ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($u) use ($logado) {
-        $acoes = [component('button', ['label' => 'Editar ' . $u->nome, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('usuarios/editar/' . (int) $u->idUsuarios)])];
+        $acoes = [];
+        if (usuarioPodeSerEditadoPor((int) $u->idUsuarios, $logado) === null) {
+            $acoes[] = component('button', ['label' => 'Editar ' . $u->nome, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('usuarios/editar/' . (int) $u->idUsuarios)]);
+        }
         if (usuarioPodeSerRemovido((int) $u->idUsuarios, $logado) === null) {
             $acoes[] = component('button', ['label' => 'Excluir ' . $u->nome, 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
                 'data-modal-abrir' => 'excluir-usuario',

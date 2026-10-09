@@ -68,6 +68,12 @@ class Usuarios extends MY_Controller
             redirect('usuarios/gerenciar');
         }
 
+        $motivo = usuarioPodeSerEditadoPor((int) $usuario->idUsuarios, (int) $this->session->userdata('id_admin'));
+        if ($motivo !== null) {
+            $this->session->set_flashdata('error', $motivo);
+            redirect('usuarios/gerenciar');
+        }
+
         return $this->formulario($usuario);
     }
 
@@ -85,8 +91,17 @@ class Usuarios extends MY_Controller
             [$dados, $errosDoFormulario, $senha] = usuarioDadosDoFormulario($this->input->post(), $usuario === null);
             $erros += $errosDoFormulario;
 
+            if (! isset($erros['cpf']) && $this->usuarios_model->cpfEmUso($dados['cpf'], $usuario !== null ? (int) $usuario->idUsuarios : null)) {
+                $erros['cpf'] = 'Este CPF já está cadastrado para outro usuário.';
+            }
+
             if ($erros === [] && $usuario !== null && $dados['situacao'] === 0 && ($motivo = usuarioPodeSerRemovido((int) $usuario->idUsuarios, $logado)) !== null) {
                 $erros['situacao'] = $motivo;
+            }
+
+            // Trocar o próprio grupo pode tirar o acesso a esta tela.
+            if ($erros === [] && $usuario !== null && (int) $usuario->idUsuarios === $logado && $dados['permissoes_id'] !== (int) $usuario->permissoes_id) {
+                $erros['permissoes_id'] = 'Você não pode trocar o grupo do seu próprio usuário.';
             }
 
             if ($erros === []) {

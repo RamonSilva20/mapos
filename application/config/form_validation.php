@@ -343,7 +343,9 @@ $config = [
         [
             'field' => 'cpf',
             'label' => 'CPF',
-            'rules' => 'required|trim|max_length[20]|verific_cpf_cnpj|unique[usuarios.cpf.' . get_instance()->uri->segment(3) . '.idUsuarios]',
+            // CPF único é conferido no controller, com o CPF já normalizado
+            // (usuarioCpfFormatado()): o banco guarda com a máscara.
+            'rules' => 'required|trim|max_length[20]|verific_cpf_cnpj',
             'errors' => [
                 'verific_cpf_cnpj' => 'Informe um CPF válido.',
             ],

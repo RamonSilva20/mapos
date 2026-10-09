@@ -167,6 +167,44 @@ final class UsuariosPermissoesTest extends MaposTestCase
         $this->assertNull(usuarioPodeSerRemovido(6, 5));
     }
 
+    public function testVerEntraJuntoComAsOutrasAcoesNoServidor(): void
+    {
+        $mapa = permissoesDoFormulario(['eProduto', 'dOs']);
+
+        $this->assertSame(1, $mapa['vProduto']);
+        $this->assertSame(1, $mapa['vOs']);
+        $this->assertSame(0, $mapa['vCliente']);
+    }
+
+    public function testCpfNormalizadoParaAUnicidade(): void
+    {
+        $this->assertSame('529.982.247-25', usuarioCpfFormatado('52998224725'));
+        $this->assertSame('529.982.247-25', usuarioCpfFormatado(' 529.982.247-25 '));
+        $this->assertSame('123', usuarioCpfFormatado('123'));
+
+        [$dados] = usuarioDadosDoFormulario($this->post(['cpf' => '52998224725']), true);
+        $this->assertSame('529.982.247-25', $dados['cpf']);
+    }
+
+    public function testSoOAdminEditaOAdmin(): void
+    {
+        $this->assertNotNull(usuarioPodeSerEditadoPor(1, 5));
+        $this->assertNull(usuarioPodeSerEditadoPor(1, 1));
+        $this->assertNull(usuarioPodeSerEditadoPor(6, 5));
+    }
+
+    public function testCpfEmUsoComOuSemMascara(): void
+    {
+        $this->banco();
+        $this->db->query("UPDATE usuarios SET cpf = '529.982.247-25' WHERE idUsuarios = 2");
+        $this->db->query("UPDATE usuarios SET cpf = '11144477735' WHERE idUsuarios = 3");
+        $model = $this->usuarios();
+
+        $this->assertTrue($model->cpfEmUso('529.982.247-25', null));
+        $this->assertFalse($model->cpfEmUso('529.982.247-25', 2), 'O próprio usuário não conta.');
+        $this->assertTrue($model->cpfEmUso('111.444.777-35', null), 'Cadastro antigo só com números.');
+    }
+
     // --- Consultas ----------------------------------------------------------
 
     private function banco(): void
@@ -306,6 +344,7 @@ final class UsuariosPermissoesTest extends MaposTestCase
             'valores' => ['nome' => 'Vendas <b>', 'situacao' => true, 'marcadas' => ['vVenda', 'cEmail']],
             'erros' => [],
             'do_logado' => false,
+            'protegido' => false,
         ]);
 
         $this->assertStringNotContainsString('Vendas <b>', $html);
@@ -320,9 +359,14 @@ final class UsuariosPermissoesTest extends MaposTestCase
             (object) ['idPermissao' => 1, 'nome' => 'Admin', 'data' => '2026-01-01', 'situacao' => 1, 'usuarios' => 1],
             (object) ['idPermissao' => 2, 'nome' => 'Vendas', 'data' => '2026-01-01', 'situacao' => 1, 'usuarios' => 3],
             (object) ['idPermissao' => 3, 'nome' => 'Antigo', 'data' => '2026-01-01', 'situacao' => 0, 'usuarios' => 0],
-        ], 'grupo_logado' => 1]);
-        $this->assertStringContainsString('data-valor-id="2"', $lista);
-        $this->assertStringNotContainsString('data-valor-id="1"', $lista, 'O grupo do logado não pode ser desativado.');
+        ], 'grupo_logado' => 2]);
+        $this->assertStringNotContainsString('data-valor-id="2"', $lista, 'Grupo do logado.');
+        $lista = $this->renderizar('permissoes/permissoes', ['results' => [
+            (object) ['idPermissao' => 1, 'nome' => 'Admin', 'data' => '2026-01-01', 'situacao' => 1, 'usuarios' => 1],
+            (object) ['idPermissao' => 4, 'nome' => 'Outro', 'data' => '2026-01-01', 'situacao' => 1, 'usuarios' => 0],
+        ], 'grupo_logado' => 4]);
+        $this->assertStringNotContainsString('data-valor-id="4"', $lista);
+        $this->assertStringNotContainsString('data-valor-id="1"', $lista, 'O grupo Administrador e o do logado não podem ser desativados.');
         $this->assertStringNotContainsString('data-valor-id="3"', $lista, 'Grupo inativo não tem o botão de desativar.');
     }
 
@@ -335,6 +379,11 @@ final class UsuariosPermissoesTest extends MaposTestCase
         $this->assertStringNotContainsString("post('idPermissao')", $permissoes);
         $this->assertStringContainsString("\$this->input->method() !== 'post'", $usuarios);
         $this->assertStringContainsString("validarFormulario('usuarios_formulario')", $usuarios);
+        $this->assertStringContainsString('cpfEmUso(', $usuarios);
+        $this->assertStringContainsString('usuarioPodeSerEditadoPor(', $usuarios);
+        $this->assertStringContainsString('PERMISSAO_ADMIN', $permissoes);
+        $login = (string) file_get_contents(APPPATH . 'controllers/Login.php');
+        $this->assertStringContainsString('grupoAtivo(', $login, 'Grupo desativado não entra no painel.');
         $this->assertStringContainsString('password_hash($senha, PASSWORD_DEFAULT)', $usuarios);
         $this->assertStringNotContainsString('uri->segment(3);' . "\n" . '        $this->usuarios_model->delete', $usuarios);
     }

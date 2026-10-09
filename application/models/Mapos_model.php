@@ -299,6 +299,12 @@ class Mapos_model extends CI_Model
         return $this->db->update('usuarios');
     }
 
+    /** Diz se o grupo de permissão existe e está ativo (login, #2846). */
+    public function grupoAtivo(int $idPermissao): bool
+    {
+        return $this->db->where('idPermissao', $idPermissao)->where('situacao', 1)->count_all_results('permissoes') > 0;
+    }
+
     public function check_credentials($email)
     {
         $this->db->where('email', $email);

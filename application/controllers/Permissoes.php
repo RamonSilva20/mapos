@@ -65,17 +65,18 @@ class Permissoes extends MY_Controller
     {
         $erros = [];
         $doLogado = $grupo !== null && (int) $grupo->idPermissao === (int) $this->session->userdata('permissao');
+        // O grupo Administrador (instalação) e o do usuário logado não podem
+        // ser desativados nem perder o acesso a usuários e permissões.
+        $protegido = $doLogado || ($grupo !== null && (int) $grupo->idPermissao === PERMISSAO_ADMIN);
 
         if ($this->input->method() === 'post') {
             [$dados, $erros] = permissaoDadosDoFormulario($this->input->post(), $grupo === null);
 
-            // O próprio grupo não pode ser desativado nem perder o acesso a
-            // esta tela: quem edita ficaria trancado para fora.
-            if ($doLogado && $dados['situacao'] !== 1) {
-                $erros['situacao'] = 'Este é o grupo do seu usuário: ele não pode ser desativado.';
+            if ($protegido && $dados['situacao'] !== 1) {
+                $erros['situacao'] = 'Este grupo não pode ser desativado.';
             }
-            if ($doLogado && ! in_array('cPermissao', permissoesMarcadas($dados['permissoes']), true)) {
-                $erros['_geral'] = 'Este é o grupo do seu usuário: mantenha "Permissões" marcado para não perder o acesso a esta tela.';
+            if ($protegido && array_diff(['cPermissao', 'cUsuario'], permissoesMarcadas($dados['permissoes'])) !== []) {
+                $erros['_geral'] = ($doLogado ? 'Este é o grupo do seu usuário' : 'Este é o grupo Administrador') . ': mantenha "Usuários" e "Permissões" marcados para não perder o acesso a estas telas.';
             }
 
             if ($erros === []) {
@@ -105,6 +106,7 @@ class Permissoes extends MY_Controller
         ];
         $this->data['erros'] = $erros;
         $this->data['do_logado'] = $doLogado;
+        $this->data['protegido'] = $protegido;
         $this->data['legacy_assets'] = false;
         $this->data['view'] = 'permissoes/formulario';
 
@@ -125,8 +127,8 @@ class Permissoes extends MY_Controller
             redirect(site_url('permissoes/gerenciar/'));
         }
 
-        if ($id === (int) $this->session->userdata('permissao')) {
-            $this->session->set_flashdata('error', 'Este é o grupo do seu usuário: ele não pode ser desativado.');
+        if ($id === (int) $this->session->userdata('permissao') || $id === PERMISSAO_ADMIN) {
+            $this->session->set_flashdata('error', $id === PERMISSAO_ADMIN ? 'O grupo Administrador não pode ser desativado.' : 'Este é o grupo do seu usuário: ele não pode ser desativado.');
             redirect(site_url('permissoes/gerenciar/'));
         }
 

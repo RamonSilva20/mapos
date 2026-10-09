@@ -15,7 +15,7 @@ $colunas = [
     ['label' => 'Situação', 'nowrap' => true, 'render' => fn ($g) => component('pill-status', (int) $g->situacao === 1 ? ['label' => 'Ativo', 'variant' => 'success'] : ['label' => 'Inativo', 'variant' => 'neutral'])],
     ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($g) use ($grupo_logado) {
         $acoes = [component('button', ['label' => 'Editar ' . $g->nome, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('permissoes/editar/' . (int) $g->idPermissao)])];
-        if ((int) $g->situacao === 1 && (int) $g->idPermissao !== $grupo_logado) {
+        if ((int) $g->situacao === 1 && (int) $g->idPermissao !== $grupo_logado && (int) $g->idPermissao !== PERMISSAO_ADMIN) {
             $acoes[] = component('button', ['label' => 'Desativar ' . $g->nome, 'icon' => 'x', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
                 'data-modal-abrir' => 'desativar-grupo',
                 'data-valor-id' => (string) $g->idPermissao,
