@@ -37,6 +37,8 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     - PIX copia e cola gerado no servidor, sem o jsQR do rawgit, também na venda.
 
     Os endpoints conferem no banco a OS, os itens, a quantidade devolvida ao estoque e o desconto. #2943 [@RamonSilva20](https://github.com/RamonSilva20)
+- Módulo de Vendas migrado para os componentes da v5 (#2843):
+  - listagem com filtros na URL, total da paginação que conta com os filtros (na v4 contava todas as vendas), total por linha calculado no SQL, garantia em `pill-status` e exclusão em `modal-confirm`, que apaga também o lançamento da fatura (a busca antiga nunca o encontrava). Venda cancelada passa a seguir a regra da faturada: só edita e exclui com `control_edit_vendas`, como na OS. #2945 [@RamonSilva20](https://github.com/RamonSilva20)
 - Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
 - Ficha do cliente migrada para os componentes da v5:
   - abas por link (dados, ordens de serviço e vendas), com contadores;
