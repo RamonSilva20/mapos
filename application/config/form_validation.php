@@ -331,6 +331,79 @@ $config = [
             'rules' => 'trim',
         ],
     ],
+    // Formulário de usuário da v5 (#2846). O grupo "usuarios", com is_unique,
+    // continua para a API. Endereço e RG passam a ser opcionais; a senha é
+    // conferida em usuarioDadosDoFormulario() (obrigatória só ao cadastrar).
+    'usuarios_formulario' => [
+        [
+            'field' => 'nome',
+            'label' => 'Nome',
+            'rules' => 'required|trim|max_length[80]',
+        ],
+        [
+            'field' => 'cpf',
+            'label' => 'CPF',
+            'rules' => 'required|trim|max_length[20]|verific_cpf_cnpj|unique[usuarios.cpf.' . get_instance()->uri->segment(3) . '.idUsuarios]',
+            'errors' => [
+                'verific_cpf_cnpj' => 'Informe um CPF válido.',
+            ],
+        ],
+        [
+            'field' => 'email',
+            'label' => 'E-mail',
+            'rules' => 'required|trim|max_length[80]|valid_email|unique[usuarios.email.' . get_instance()->uri->segment(3) . '.idUsuarios]',
+        ],
+        [
+            'field' => 'telefone',
+            'label' => 'Telefone',
+            'rules' => 'required|trim|max_length[20]',
+        ],
+        [
+            'field' => 'celular',
+            'label' => 'Celular',
+            'rules' => 'trim|max_length[20]',
+        ],
+        [
+            'field' => 'rg',
+            'label' => 'RG',
+            'rules' => 'trim|max_length[20]',
+        ],
+        [
+            'field' => 'cep',
+            'label' => 'CEP',
+            'rules' => 'trim|max_length[9]',
+        ],
+        [
+            'field' => 'rua',
+            'label' => 'Rua',
+            'rules' => 'trim|max_length[70]',
+        ],
+        [
+            'field' => 'numero',
+            'label' => 'Número',
+            'rules' => 'trim|max_length[15]',
+        ],
+        [
+            'field' => 'bairro',
+            'label' => 'Bairro',
+            'rules' => 'trim|max_length[45]',
+        ],
+        [
+            'field' => 'cidade',
+            'label' => 'Cidade',
+            'rules' => 'trim|max_length[45]',
+        ],
+        [
+            'field' => 'situacao',
+            'label' => 'Situação',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'permissoes_id',
+            'label' => 'Grupo de permissão',
+            'rules' => 'required|trim',
+        ],
+    ],
     'vendas' => [
         [
             'field' => 'dataVenda',

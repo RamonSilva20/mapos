@@ -1,88 +1,61 @@
-<style>
-  select {
-    width: 70px;
-  }
-</style>
-<div class="new122" style="margin-top: 0; min-height: 100vh">
-<div class="widget-title" style="margin: -20px 0 0">
-        <span class="icon">
-            <i class="fas fa-lock"></i>
-        </span>
-        <h5>Permissões</h5>
-    </div>
+<?php
+/**
+ * Grupos de permissão (#2846): data-table com o nome, quantos usuários usam
+ * cada grupo, a criação e a situação em pill-status. "Novo grupo" na topbar;
+ * desativar confirma em modal-confirm (os usuários do grupo perdem o acesso).
+ * O grupo do usuário logado não pode ser desativado.
+ *
+ * @var list<object> $results
+ * @var int          $grupo_logado
+ */
+$colunas = [
+    ['label' => 'Grupo', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($g) => component('link', ['label' => (string) $g->nome, 'href' => site_url('permissoes/editar/' . (int) $g->idPermissao), 'class' => 'font-medium'])],
+    ['label' => 'Usuários', 'align' => 'right', 'nowrap' => true, 'render' => fn ($g) => (string) (int) $g->usuarios],
+    ['label' => 'Criado em', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'md', 'render' => fn ($g) => dataBr($g->data)],
+    ['label' => 'Situação', 'nowrap' => true, 'render' => fn ($g) => component('pill-status', (int) $g->situacao === 1 ? ['label' => 'Ativo', 'variant' => 'success'] : ['label' => 'Inativo', 'variant' => 'neutral'])],
+    ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($g) use ($grupo_logado) {
+        $acoes = [component('button', ['label' => 'Editar ' . $g->nome, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('permissoes/editar/' . (int) $g->idPermissao)])];
+        if ((int) $g->situacao === 1 && (int) $g->idPermissao !== $grupo_logado) {
+            $acoes[] = component('button', ['label' => 'Desativar ' . $g->nome, 'icon' => 'x', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
+                'data-modal-abrir' => 'desativar-grupo',
+                'data-valor-id' => (string) $g->idPermissao,
+                'data-valor-nome' => (string) $g->nome,
+                'data-valor-usuarios' => (string) (int) $g->usuarios,
+            ]]);
+        }
 
-  <a href="<?php echo base_url(); ?>index.php/permissoes/adicionar" class="button btn btn-success"style="max-width: 150px">
-  <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Adicionar</span></a>
+        return $acoes;
+    }],
+];
+?>
+<div class="flex max-w-4xl flex-col gap-4 pt-2 pb-8">
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Permissões</h1>
+        <p class="text-caption text-muted">Cada usuário pertence a um grupo, que define o que ele pode ver e fazer.</p>
+    </header>
 
-<div class="widget-box">
-<h5 style="padding: 3px 0"></h5>
-    <div class="widget-content nopadding tab-content">
-        <table id="tabela" class="table table-bordered ">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Data de Criação</th>
-                    <th>Situação</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-
-                    if (!$results) {
-                        echo '<tr>
-                                <td colspan="5">Nenhuma Permissão foi cadastrada</td>
-                                </tr>';
-                    }
-  foreach ($results as $r) {
-      if ($r->situacao == 1) {
-          $situacao = 'Ativo';
-      } else {
-          $situacao = 'Inativo';
-      }
-      echo '<tr>';
-      echo '<td>' . $r->idPermissao . '</td>';
-      echo '<td>' . $r->nome . '</td>';
-      echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
-      echo '<td>' . $situacao . '</td>';
-      echo '<td>
-                                <a href="' . base_url() . 'index.php/permissoes/editar/' . $r->idPermissao . '" class="btn-nwe3" title="Editar permissões"><i class="bx bx-edit"></i></a>
-                                <a href="#modal-excluir" role="button" data-toggle="modal" permissao="' . $r->idPermissao . '" class="btn-nwe4" title="Desativar Permissão"><i class="bx bx-notification-off" ></i></a>
-                              </td>';
-      echo '</tr>';
-  } ?>
-            </tbody>
-        </table>
-    </div>
-</div>
-<?php echo $this->pagination->create_links(); ?>
-
-<!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/permissoes/desativar" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Desativar Permissão</h5>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="idPermissao" name="id" value="" />
-            <h5 style="text-align: center">Deseja realmente desativar esta permissão?</h5>
-        </div>
-        <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
-        </div>
-    </form>
-</div>
+    <?= component('data-table', [
+        'columns' => $colunas,
+        'rows' => $results,
+        'caption' => 'Grupos de permissão',
+        'empty' => component('empty-state', ['title' => 'Nenhum grupo de permissão', 'message' => 'Crie um grupo para cadastrar usuários.', 'icon' => 'key-round', 'class' => 'border-0']),
+    ]) ?>
 </div>
 
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(document).on('click', 'a', function(event) {
-            var permissao = $(this).attr('permissao');
-            $('#idPermissao').val(permissao);
-        });
-    });
-</script>
+<form id="form-desativar-grupo" method="post" action="<?= e(site_url('permissoes/desativar')) ?>" hidden>
+    <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+    <input type="hidden" name="id" value="" data-modal-de="desativar-grupo" data-modal-valor="id">
+</form>
+<?= component('modal-confirm', [
+    'id' => 'desativar-grupo',
+    'title' => 'Desativar grupo?',
+    'message' => [
+        'O grupo ',
+        new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="nome"></strong>'),
+        ' sai da lista de grupos dos usuários, e quem está nele (',
+        new HtmlSeguro('<span data-modal-valor="usuarios"></span>'),
+        ' usuário(s)) perde o acesso ao painel. Dá para reativar em Editar.',
+    ],
+    'confirm_label' => 'Desativar',
+    'confirm_attrs' => ['form' => 'form-desativar-grupo'],
+]) ?>
