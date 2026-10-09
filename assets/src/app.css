@@ -66,6 +66,7 @@
  * tokens, então a agenda acompanha os modos claro e escuro. Os botões seguem
  * o button-outline, e o ativo ganha o primary-tint com peso 600 (DESIGN.md).
  * Cada evento recebe a classe evento-<variante> do status (pill-status).
+ * O FullCalendar põe a classe fc no próprio .painel-agenda (daí &.fc).
  */
 .painel-agenda {
   --fc-page-bg-color: var(--color-surface);
@@ -87,47 +88,47 @@
   color: var(--color-text);
   font-size: var(--text-caption);
 
-  & .fc .fc-toolbar {
+  &.fc .fc-toolbar {
     flex-wrap: wrap;
     gap: calc(var(--spacing) * 2);
   }
 
-  & .fc .fc-toolbar-title {
+  &.fc .fc-toolbar-title {
     font-family: var(--font-display);
     font-size: var(--text-heading-sm);
     font-weight: 500;
     text-transform: capitalize;
   }
 
-  & .fc .fc-button {
+  &.fc .fc-button {
     border-radius: var(--radius-md);
     font-weight: 500;
     padding: calc(var(--spacing) * 1) calc(var(--spacing) * 3);
     text-transform: capitalize;
   }
 
-  & .fc .fc-button-primary:not(:disabled).fc-button-active {
+  &.fc .fc-button-primary:not(:disabled).fc-button-active {
     font-weight: 600;
   }
 
   /* O anel de foco do FullCalendar é um box-shadow fixo, quase invisível no
      escuro; fica o do design system ({colors.ring-focus}, 3px). */
-  & .fc .fc-button:focus,
-  & .fc .fc-button:focus-visible {
+  &.fc .fc-button:focus,
+  &.fc .fc-button:focus-visible {
     box-shadow: none !important;
   }
 
-  & .fc .fc-button:focus-visible {
+  &.fc .fc-button:focus-visible {
     outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent);
     outline-offset: 1px;
   }
 
-  & .fc a {
+  &.fc a {
     color: inherit;
   }
 
-  & .fc .fc-daygrid-event,
-  & .fc .fc-list-event {
+  &.fc .fc-daygrid-event,
+  &.fc .fc-list-event {
     cursor: pointer;
   }
 }
