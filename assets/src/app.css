@@ -97,14 +97,17 @@
     font-family: var(--font-display);
     font-size: var(--text-heading-sm);
     font-weight: 500;
-    text-transform: capitalize;
+  }
+
+  /* "outubro de 2026" → "Outubro de 2026" (capitalize faria "De"). */
+  &.fc .fc-toolbar-title::first-letter {
+    text-transform: uppercase;
   }
 
   &.fc .fc-button {
     border-radius: var(--radius-md);
     font-weight: 500;
     padding: calc(var(--spacing) * 1) calc(var(--spacing) * 3);
-    text-transform: capitalize;
   }
 
   &.fc .fc-button-primary:not(:disabled).fc-button-active {
