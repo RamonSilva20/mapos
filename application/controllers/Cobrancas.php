@@ -10,7 +10,7 @@ class Cobrancas extends MY_Controller
     {
         parent::__construct();
 
-        $this->load->helper('form');
+        $this->load->helper(['form', 'financeiro']);
         $this->load->model('cobrancas_model');
         $this->data['menuCobrancas'] = 'financeiro';
     }
@@ -53,6 +53,14 @@ class Cobrancas extends MY_Controller
                     ->set_output(json_encode(['message' => 'Já existe cobrança!']));
             }
 
+            $this->load->config('payment_gateways');
+            if (! cobrancaGatewayValido($gatewayDePagamento, $this->config->item('payment_gateways'))) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['message' => 'Gateway de pagamento inválido.']));
+            }
+
             $this->load->library("Gateways/$gatewayDePagamento", null, 'PaymentGateway');
 
             try {
@@ -80,6 +88,12 @@ class Cobrancas extends MY_Controller
         }
     }
 
+    /**
+     * Listagem de cobranças da v5 (#2844), no padrão das listagens (#2852):
+     * filtros na URL (busca, status do gateway e tipo), paginação que os
+     * mantém e as ações de cada linha (atualizar, confirmar, cancelar, enviar
+     * por e-mail e excluir) por POST, com confirmação em modal-confirm.
+     */
     public function cobrancas()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
@@ -87,19 +101,107 @@ class Cobrancas extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('pagination');
         $this->load->config('payment_gateways');
 
-        $this->data['configuration']['base_url'] = site_url('cobrancas/cobrancas/');
-        $this->data['configuration']['total_rows'] = $this->cobrancas_model->count('cobrancas');
+        $filtros = $this->filtrosDaListagem();
+        $offset = (int) $this->uri->segment(3);
+        $total = $this->cobrancas_model->contar($filtros);
 
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->cobrancas_model->get('cobrancas', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
-
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['results'] = $this->cobrancas_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
+        $this->data['paginacao'] = $this->paginacao(site_url('cobrancas/cobrancas'), $total, $offset, null, $filtros);
+        $this->data['status_opcoes'] = $this->statusDosGateways();
+        $this->data['gateways'] = $this->config->item('payment_gateways');
+        $this->data['pode'] = [
+            'editar' => $this->permite('eCobranca'),
+            'excluir' => $this->permite('dCobranca'),
+        ];
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'cobrancas/cobrancas';
 
         return $this->layout();
+    }
+
+    /**
+     * Status que os gateways configurados informam, como lista de valores
+     * aceitos no filtro e opções do select.
+     *
+     * @return array<string, string>
+     */
+    protected function statusDosGateways(): array
+    {
+        $this->load->config('payment_gateways');
+        $status = [];
+        foreach ((array) $this->config->item('payment_gateways') as $gateway) {
+            foreach (array_keys((array) ($gateway['transaction_status'] ?? [])) as $chave) {
+                $status[(string) $chave] = cobrancaStatusPill((string) $chave)['label'] . ' (' . $chave . ')';
+            }
+        }
+        asort($status);
+
+        return $status;
+    }
+
+    /** @return array<string, string> */
+    private function filtrosDaListagem(): array
+    {
+        return listagemFiltros([
+            'pesquisa' => 'texto',
+            'status' => array_map('strval', array_keys($this->statusDosGateways())),
+            'tipo' => ['os', 'venda'],
+        ], $this->input->get());
+    }
+
+    /**
+     * Para onde voltar depois de uma ação: o detalhe da cobrança, quando ela
+     * saiu de lá (campo voltar), ou a listagem com os mesmos filtros. Nunca
+     * uma URL vinda do navegador (a v4 usava o Referer).
+     */
+    private function destinoDaAcao(int $id): string
+    {
+        if ($this->input->post('voltar') === 'detalhe') {
+            return site_url('cobrancas/visualizar/' . $id);
+        }
+
+        return site_url('cobrancas/cobrancas') . listagemQuery($this->filtrosDaListagem());
+    }
+
+    /**
+     * Roda uma ação do model sobre a cobrança. Só por POST (com o token CSRF):
+     * na v4 atualizar e enviar por e-mail mudavam dados num GET. Erros do
+     * gateway voltam como mensagem.
+     */
+    private function agirSobreCobranca(int $id, string $metodo, string $sucesso, string $erro): void
+    {
+        $destino = $this->destinoDaAcao($id);
+
+        if ($this->input->method() !== 'post') {
+            $this->session->set_flashdata('error', 'Use o botão da tela para esta ação.');
+            redirect($destino);
+        }
+
+        if ($id <= 0 || ! $this->cobrancas_model->getById($id)) {
+            $this->session->set_flashdata('error', 'Cobrança não encontrada.');
+            redirect(site_url('cobrancas/cobrancas'));
+        }
+
+        try {
+            $this->cobrancas_model->{$metodo}($id);
+            $this->session->set_flashdata('success', $sucesso);
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', $e->getMessage() !== '' ? $e->getMessage() : $erro);
+        }
+
+        redirect($destino);
+    }
+
+    /** Id da cobrança no POST (formulários dos modais), ou 0. */
+    private function idDoPost(): int
+    {
+        $id = $this->input->post('id');
+
+        return is_scalar($id) && ctype_digit((string) $id) ? (int) $id : 0;
     }
 
     public function excluir()
@@ -108,19 +210,31 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir cobranças');
             redirect(site_url('cobrancas/cobrancas/'));
         }
-        try {
-            $this->cobrancas_model->cancelarPagamento($this->input->post('excluir_id'));
 
-            if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $this->input->post('excluir_id')) == true) {
-                log_info('Removeu uma cobrança. ID' . $this->input->post('excluir_id'));
-                $this->session->set_flashdata('success', 'Cobrança excluida com sucesso!');
+        $id = $this->idDoPost();
+        $destino = $this->destinoDaAcao($id);
+
+        if ($this->input->method() !== 'post' || $id <= 0 || ! $this->cobrancas_model->getById($id)) {
+            $this->session->set_flashdata('error', 'Cobrança não encontrada.');
+            redirect(site_url('cobrancas/cobrancas'));
+        }
+
+        try {
+            $this->cobrancas_model->cancelarPagamento($id);
+
+            if ($this->cobrancas_model->delete('cobrancas', 'idCobranca', $id) == true) {
+                log_info('Removeu uma cobrança. ID' . $id);
+                $this->session->set_flashdata('success', 'Cobrança excluída.');
+                // O detalhe da cobrança excluída não existe mais.
+                $destino = site_url('cobrancas/cobrancas') . listagemQuery($this->filtrosDaListagem());
             } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+                $this->session->set_flashdata('error', 'Não foi possível excluir a cobrança.');
             }
         } catch (Exception $e) {
             $this->session->set_flashdata('error', $e->getMessage());
         }
-        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
+
+        redirect($destino);
     }
 
     public function atualizar()
@@ -134,13 +248,8 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
             redirect(base_url());
         }
-        try {
-            $this->load->model('cobrancas_model');
-            $this->cobrancas_model->atualizarStatus($this->uri->segment(3));
-        } catch (Exception $e) {
-            $this->session->set_flashdata('error', $e->getMessage());
-        }
-        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
+
+        $this->agirSobreCobranca((int) $this->uri->segment(3), 'atualizarStatus', 'Status da cobrança atualizado.', 'Não foi possível atualizar a cobrança.');
     }
 
     public function confirmarPagamento()
@@ -149,13 +258,8 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para confirmar pagamento da cobrança.');
             redirect(base_url());
         }
-        try {
-            $this->load->model('cobrancas_model');
-            $this->cobrancas_model->confirmarPagamento($this->input->post('confirma_id'));
-        } catch (Exception $e) {
-            $this->session->set_flashdata('error', $e->getMessage());
-        }
-        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
+
+        $this->agirSobreCobranca($this->idDoPost(), 'confirmarPagamento', 'Pagamento confirmado.', 'Não foi possível confirmar o pagamento.');
     }
 
     public function cancelar()
@@ -164,13 +268,8 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para cancelar cobrança.');
             redirect(base_url());
         }
-        try {
-            $this->load->model('cobrancas_model');
-            $this->cobrancas_model->cancelarPagamento($this->input->post('cancela_id'));
-        } catch (Exception $e) {
-            $this->session->set_flashdata('error', $e->getMessage());
-        }
-        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
+
+        $this->agirSobreCobranca($this->idDoPost(), 'cancelarPagamento', 'Cobrança cancelada.', 'Não foi possível cancelar a cobrança.');
     }
 
     public function visualizar()
@@ -184,15 +283,24 @@ class Cobrancas extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar cobranças.');
             redirect(base_url());
         }
-        $this->load->model('cobrancas_model');
+
         $this->load->config('payment_gateways');
 
-        $this->data['result'] = $this->cobrancas_model->getById($this->uri->segment(3));
+        $this->data['result'] = $this->cobrancas_model->getById((int) $this->uri->segment(3));
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Cobrança não encontrada.');
             redirect(site_url('cobrancas/'));
         }
 
+        $this->data['gateways'] = $this->config->item('payment_gateways');
+        $this->data['pode'] = [
+            'editar' => $this->permite('eCobranca'),
+            'excluir' => $this->permite('dCobranca'),
+            'ver_os' => $this->permite('vOs'),
+            'ver_venda' => $this->permite('vVenda'),
+            'ver_cliente' => $this->permite('vCliente'),
+        ];
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'cobrancas/visualizarCobranca';
 
         return $this->layout();
@@ -205,15 +313,11 @@ class Cobrancas extends MY_Controller
             redirect('cobrancas');
         }
 
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar cobranças.');
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para enviar cobranças por e-mail.');
             redirect(base_url());
         }
 
-        $this->load->model('cobrancas_model');
-        $this->cobrancas_model->enviarEmail($this->uri->segment(3));
-        $this->session->set_flashdata('success', 'Email adicionado na fila.');
-
-        redirect($_SERVER['HTTP_REFERER'] ?? site_url('cobrancas/cobrancas/'));
+        $this->agirSobreCobranca((int) $this->uri->segment(3), 'enviarEmail', 'E-mail adicionado na fila.', 'Não foi possível enviar o e-mail.');
     }
 }

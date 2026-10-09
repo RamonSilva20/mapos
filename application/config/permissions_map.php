@@ -66,7 +66,7 @@ $config['permissions_map'] = [
         'index' => 'vCobranca',
         'cobrancas' => 'vCobranca',
         'visualizar' => 'vCobranca',
-        'enviarEmail' => 'vCobranca',
+        'enviarEmail' => 'eCobranca',
         'adicionar' => 'aCobranca',
         'atualizar' => 'eCobranca',
         'confirmarPagamento' => 'eCobranca',
@@ -77,13 +77,10 @@ $config['permissions_map'] = [
     'Financeiro' => [
         'index' => 'vLancamento',
         'lancamentos' => 'vLancamento',
-        'autoCompleteClienteFornecedor' => ['vLancamento'],
-        'autoCompleteClienteAddReceita' => ['vLancamento'],
-        'adicionarReceita' => 'aLancamento',
-        'adicionarReceita_parc' => 'aLancamento',
-        'adicionarDespesa' => 'aLancamento',
+        'adicionar' => 'aLancamento',
         'editar' => 'eLancamento',
         'excluirLancamento' => 'dLancamento',
+        'autoCompleteClienteFornecedor' => ['vLancamento', 'aLancamento', 'eLancamento'],
     ],
 
     'Garantias' => [

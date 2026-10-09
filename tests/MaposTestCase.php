@@ -65,39 +65,4 @@ abstract class MaposTestCase extends PHPUnitTestCase
     {
         return (object) ['db' => $db];
     }
-
-    /**
-     * Cria a tabela de lançamentos com um conjunto pequeno e conhecido de dados.
-     */
-    protected function seedLancamentos(): void
-    {
-        $this->db->query('CREATE TABLE lancamentos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            cliente_fornecedor TEXT,
-            tipo TEXT,
-            baixado INTEGER,
-            data_vencimento DATE
-        )');
-
-        $linhas = [
-            ['Acme Ltda', 'receita', 1, '2026-01-10'],
-            ['Acme Ltda', 'despesa', 0, '2026-01-20'],
-            ['Outro Fornecedor', 'despesa', 0, '2026-02-15'],
-            ['Beta SA', 'receita', 0, '2026-03-05'],
-        ];
-
-        foreach ($linhas as $linha) {
-            $this->db->query('INSERT INTO lancamentos (cliente_fornecedor, tipo, baixado, data_vencimento) VALUES (?, ?, ?, ?)', $linha);
-        }
-    }
-
-    /**
-     * Roda o WHERE montado contra a tabela de lançamentos e devolve a contagem.
-     */
-    protected function countLancamentosWhere(string $where): int
-    {
-        $resultado = $this->db->query('SELECT COUNT(*) AS total FROM lancamentos WHERE ' . $where)->row();
-
-        return (int) $resultado->total;
-    }
 }
