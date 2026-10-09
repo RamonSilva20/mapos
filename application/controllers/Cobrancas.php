@@ -53,6 +53,14 @@ class Cobrancas extends MY_Controller
                     ->set_output(json_encode(['message' => 'Já existe cobrança!']));
             }
 
+            $this->load->config('payment_gateways');
+            if (! cobrancaGatewayValido($gatewayDePagamento, $this->config->item('payment_gateways'))) {
+                return $this->output
+                    ->set_content_type('application/json')
+                    ->set_status_header(400)
+                    ->set_output(json_encode(['message' => 'Gateway de pagamento inválido.']));
+            }
+
             $this->load->library("Gateways/$gatewayDePagamento", null, 'PaymentGateway');
 
             try {
@@ -305,8 +313,8 @@ class Cobrancas extends MY_Controller
             redirect('cobrancas');
         }
 
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar cobranças.');
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para enviar cobranças por e-mail.');
             redirect(base_url());
         }
 

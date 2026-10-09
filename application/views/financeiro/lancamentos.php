@@ -33,7 +33,7 @@ $colunas = [
     ['label' => 'Vencimento', 'align' => 'right', 'nowrap' => true, 'render' => fn ($l) => dataBr($l->data_vencimento)],
     ['label' => 'Tipo', 'nowrap' => true, 'render' => fn ($l) => component('pill-status', $l->tipo === 'receita' ? ['label' => 'Receita', 'variant' => 'info'] : ['label' => 'Despesa', 'variant' => 'neutral'])],
     ['label' => 'Descrição', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($l) => (string) $l->descricao],
-    ['label' => 'Cliente / fornecedor', 'class' => 'min-w-36 [overflow-wrap:anywhere]', 'hide_until' => 'xl', 'render' => fn ($l) => $l->clientes_id && $pode['ver_cliente']
+    ['label' => 'Cliente / fornecedor', 'class' => 'min-w-36 [overflow-wrap:anywhere]', 'hide_until' => '2xl', 'render' => fn ($l) => $l->clientes_id && $pode['ver_cliente']
         ? component('link', ['label' => (string) $l->cliente_fornecedor, 'href' => site_url('clientes/visualizar/' . (int) $l->clientes_id)])
         : (string) $l->cliente_fornecedor],
     ['key' => 'forma_pgto', 'label' => 'Forma', 'nowrap' => true, 'hide_until' => '2xl'],
@@ -85,7 +85,7 @@ $resumo = ($total === 1 ? '1 lançamento' : number_format($total, 0, ',', '.') .
         <p class="text-caption text-muted" aria-live="polite"><?= e($resumo) ?></p>
     </header>
 
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
         <?= component('kpi-card', [
             'label' => 'Receitas',
             'value' => dinheiro($totais['receitas']),
@@ -149,7 +149,7 @@ $resumo = ($total === 1 ? '1 lançamento' : number_format($total, 0, ',', '.') .
             'options' => FINANCEIRO_STATUS,
             'selected' => $filtros['status'] ?? null,
         ]) ?>
-        <div class="sm:col-span-2 lg:col-span-4">
+        <div class="sm:col-span-2 lg:col-span-3">
             <?= component('input', [
                 'name' => 'pesquisa',
                 'label' => 'Buscar',
@@ -159,7 +159,7 @@ $resumo = ($total === 1 ? '1 lançamento' : number_format($total, 0, ',', '.') .
                 'attrs' => ['maxlength' => 100],
             ]) ?>
         </div>
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2 lg:col-span-2">
             <?= component('button', ['label' => 'Filtrar', 'icon' => 'search', 'variant' => 'outline', 'type' => 'submit']) ?>
             <?php if ($temFiltro) { ?>
                 <?= component('button', ['label' => 'Limpar', 'icon' => 'x', 'variant' => 'ghost', 'href' => site_url('financeiro/lancamentos') . $queryDoPeriodo]) ?>

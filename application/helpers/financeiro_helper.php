@@ -514,3 +514,26 @@ if (! function_exists('cobrancaUrlSegura')) {
         return preg_match('#^https?://\S+$#i', $url) ? $url : null;
     }
 }
+
+if (! function_exists('cobrancaGatewayValido')) {
+    /**
+     * Diz se o nome é de um gateway configurado (config/payment_gateways.php) e
+     * seguro para virar nome de biblioteca: só letras, números e "_".
+     *
+     * @param  mixed  $gateways  O array de configuração dos gateways
+     */
+    function cobrancaGatewayValido($nome, $gateways): bool
+    {
+        if (! is_string($nome) || ! preg_match('/^[A-Za-z0-9_]+$/', $nome) || ! is_array($gateways)) {
+            return false;
+        }
+
+        foreach ($gateways as $gateway) {
+            if (is_array($gateway) && ($gateway['library_name'] ?? null) === $nome) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

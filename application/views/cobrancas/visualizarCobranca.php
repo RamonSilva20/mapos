@@ -65,8 +65,8 @@ $dados = $campos([
         </div>
         <div class="flex flex-wrap gap-2">
             <?= component('button', ['label' => 'Voltar', 'icon' => 'chevron-left', 'variant' => 'ghost', 'href' => site_url('cobrancas/cobrancas')]) ?>
-            <?= component('button', ['label' => 'E-mail', 'icon' => 'mail', 'variant' => 'outline', 'type' => 'submit', 'attrs' => ['form' => 'form-acao-cobranca', 'formaction' => site_url('cobrancas/enviarEmail/' . $id)]]) ?>
             <?php if ($pode['editar']) { ?>
+                <?= component('button', ['label' => 'E-mail', 'icon' => 'mail', 'variant' => 'outline', 'type' => 'submit', 'attrs' => ['form' => 'form-acao-cobranca', 'formaction' => site_url('cobrancas/enviarEmail/' . $id)]]) ?>
                 <?= component('button', ['label' => 'Atualizar status', 'icon' => 'history', 'variant' => 'outline', 'type' => 'submit', 'attrs' => ['form' => 'form-acao-cobranca', 'formaction' => site_url('cobrancas/atualizar/' . $id)]]) ?>
                 <?= component('button', ['label' => 'Cancelar cobrança', 'icon' => 'x', 'variant' => 'ghost', 'class' => 'hover:text-danger-ink', 'attrs' => ['data-modal-abrir' => 'cancelar-cobranca']]) ?>
             <?php } ?>
@@ -79,6 +79,9 @@ $dados = $campos([
     <div class="grid gap-4 lg:grid-cols-3">
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-cliente">
             <h2 id="secao-cliente" class="text-heading-sm text-text">Cliente</h2>
+            <?php if ($cliente === []) { ?>
+                <p class="mt-3 text-caption text-muted">Sem cliente vinculado a esta cobrança.</p>
+            <?php } ?>
             <dl class="mt-3 flex flex-col gap-3">
                 <?php foreach ($cliente as $rotulo => $valor) { ?>
                     <div>

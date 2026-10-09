@@ -154,7 +154,7 @@ class Cobrancas_model extends CI_Model
         }
 
         $gatewayDePagamento = $cobranca->payment_gateway;
-        $this->load->library("Gateways/$gatewayDePagamento", null, 'PaymentGateway');
+        $this->carregarGateway($gatewayDePagamento);
 
         $result = $this->PaymentGateway->atualizarDados($cobranca->idCobranca);
 
@@ -169,7 +169,7 @@ class Cobrancas_model extends CI_Model
         }
 
         $gatewayDePagamento = $cobranca->payment_gateway;
-        $this->load->library("Gateways/$gatewayDePagamento", null, 'PaymentGateway');
+        $this->carregarGateway($gatewayDePagamento);
 
         $result = $this->PaymentGateway->confirmarPagamento($cobranca->idCobranca);
 
@@ -184,7 +184,7 @@ class Cobrancas_model extends CI_Model
         }
 
         $gatewayDePagamento = $cobranca->payment_gateway;
-        $this->load->library("Gateways/$gatewayDePagamento", null, 'PaymentGateway');
+        $this->carregarGateway($gatewayDePagamento);
 
         $result = $this->PaymentGateway->cancelar($cobranca->idCobranca);
 
@@ -199,10 +199,28 @@ class Cobrancas_model extends CI_Model
         }
 
         $gatewayDePagamento = $cobranca->payment_gateway;
-        $this->load->library("Gateways/$gatewayDePagamento", null, 'PaymentGateway');
+        $this->carregarGateway($gatewayDePagamento);
 
         $result = $this->PaymentGateway->enviarPorEmail($cobranca->idCobranca);
 
         return $result;
+    }
+
+    /**
+     * Carrega a biblioteca do gateway da cobrança como PaymentGateway. O nome
+     * vem do banco e tem de ser um dos gateways configurados; senão (gateway
+     * removido da configuração, registro adulterado) é uma exceção que a tela
+     * mostra como aviso, e não um erro 500 do carregador de bibliotecas.
+     *
+     * @throws Exception
+     */
+    private function carregarGateway($nome): void
+    {
+        $this->load->config('payment_gateways');
+        if (! cobrancaGatewayValido($nome, $this->config->item('payment_gateways'))) {
+            throw new Exception('O gateway de pagamento desta cobrança (' . (is_scalar($nome) && $nome !== '' ? $nome : 'não informado') . ') não está configurado.');
+        }
+
+        $this->load->library("Gateways/$nome", null, 'PaymentGateway');
     }
 }

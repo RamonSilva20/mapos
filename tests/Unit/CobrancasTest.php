@@ -76,6 +76,41 @@ final class CobrancasTest extends MaposTestCase
         $this->assertNull(cobrancaUrlSegura(null));
     }
 
+    public function testGatewaySoValeSeConfigurado(): void
+    {
+        $config = ['Asaas' => ['library_name' => 'Asaas'], 'MercadoPago' => ['library_name' => 'MercadoPago']];
+
+        $this->assertTrue(cobrancaGatewayValido('Asaas', $config));
+        $this->assertFalse(cobrancaGatewayValido('Inexistente', $config));
+        $this->assertFalse(cobrancaGatewayValido('../Asaas', $config));
+        $this->assertFalse(cobrancaGatewayValido('Asaas ', $config));
+        $this->assertFalse(cobrancaGatewayValido('', $config));
+        $this->assertFalse(cobrancaGatewayValido(null, $config));
+        $this->assertFalse(cobrancaGatewayValido('Asaas', null));
+    }
+
+    public function testDetalheSemClienteAvisa(): void
+    {
+        $html = $this->renderizar('cobrancas/visualizarCobranca', [
+            'result' => $this->cobranca(['clientes_id' => null, 'nomeCliente' => null, 'documento' => null, 'telefone' => null, 'celular' => null, 'email' => null]),
+            'gateways' => $this->gateways(),
+            'pode' => ['editar' => true, 'excluir' => true, 'ver_os' => true, 'ver_venda' => true, 'ver_cliente' => true],
+        ]);
+
+        $this->assertStringContainsString('Sem cliente vinculado a esta cobrança.', $html);
+    }
+
+    public function testEmailSoComPermissaoDeEditar(): void
+    {
+        $dados = [
+            'results' => [$this->cobranca()], 'filtros' => [], 'total' => 1, 'paginacao' => ['total_pages' => 1, 'current' => 1, 'url' => 'x/{offset}', 'per_page' => 10],
+            'status_opcoes' => [], 'gateways' => $this->gateways(),
+        ];
+
+        $this->assertStringContainsString('cobrancas/enviarEmail/3', $this->renderizar('cobrancas/cobrancas', $dados + ['pode' => ['editar' => true, 'excluir' => false]]));
+        $this->assertStringNotContainsString('cobrancas/enviarEmail/3', $this->renderizar('cobrancas/cobrancas', $dados + ['pode' => ['editar' => false, 'excluir' => false]]));
+    }
+
     // --- Model -----------------------------------------------------------------
 
     private function model(): Cobrancas_model

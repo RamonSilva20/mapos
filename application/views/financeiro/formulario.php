@@ -138,10 +138,10 @@ for ($i = 1; $i <= FINANCEIRO_PARCELAS_MAX; $i++) {
             </div>
         </section>
 
-        <section class="<?= e($caixa) ?>" aria-labelledby="secao-pagamento">
+        <section class="<?= e($caixa) ?>" aria-labelledby="secao-pagamento" data-financeiro-baixa-opcao<?= $parcelado ? ' hidden' : '' ?>>
             <h2 id="secao-pagamento" class="text-heading-sm text-text">Pagamento</h2>
             <div class="<?= e($grade) ?>">
-                <div class="sm:col-span-2" data-financeiro-baixa-opcao<?= $parcelado ? ' hidden' : '' ?>>
+                <div class="sm:col-span-2">
                     <?= component('checkbox', [
                         'name' => 'baixado',
                         'label' => 'Já foi recebido ou pago',

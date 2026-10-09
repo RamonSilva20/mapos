@@ -38,13 +38,13 @@ $colunas = [
         return '—';
     }],
     ['label' => 'Gateway', 'nowrap' => true, 'hide_until' => '2xl', 'render' => fn ($c) => (string) $c->payment_gateway],
-    ['label' => 'Método', 'nowrap' => true, 'hide_until' => 'xl', 'render' => fn ($c) => (string) $c->payment_method],
+    ['label' => 'Método', 'nowrap' => true, 'hide_until' => '2xl', 'render' => fn ($c) => (string) $c->payment_method],
     ['label' => 'Vencimento', 'align' => 'right', 'nowrap' => true, 'render' => fn ($c) => dataBr($c->expire_at)],
     ['label' => 'Situação', 'nowrap' => true, 'render' => fn ($c) => component('pill-status', cobrancaStatusPill($c->status) + [
         'attrs' => ['title' => cobrancaDescricaoDoStatus($gateways, $c->payment_gateway, $c->status)],
     ])],
     ['label' => 'Valor', 'align' => 'right', 'nowrap' => true, 'render' => fn ($c) => dinheiro((float) $c->total / 100)],
-    ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($c) use ($pode, $query) {
+    ['label' => 'Ações', 'align' => 'right', 'class' => 'max-w-44 sm:min-w-44', 'render' => function ($c) use ($pode, $query) {
         $nome = 'cobrança ' . $c->idCobranca;
         $acoes = [
             component('button', ['label' => 'Ver ' . $nome, 'icon' => 'eye', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('cobrancas/visualizar/' . $c->idCobranca)]),
@@ -53,11 +53,11 @@ $colunas = [
         if ($link !== null && $c->barcode !== null && $c->barcode !== '') {
             $acoes[] = component('button', ['label' => 'Abrir boleto da ' . $nome, 'icon' => 'barcode', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => $link, 'attrs' => ['target' => '_blank', 'rel' => 'noopener']]);
         }
-        $acoes[] = component('button', ['label' => 'Enviar ' . $nome . ' por e-mail', 'icon' => 'mail', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'type' => 'submit', 'attrs' => [
-            'form' => 'form-acao-cobranca',
-            'formaction' => site_url('cobrancas/enviarEmail/' . $c->idCobranca) . $query,
-        ]]);
         if ($pode['editar']) {
+            $acoes[] = component('button', ['label' => 'Enviar ' . $nome . ' por e-mail', 'icon' => 'mail', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'type' => 'submit', 'attrs' => [
+                'form' => 'form-acao-cobranca',
+                'formaction' => site_url('cobrancas/enviarEmail/' . $c->idCobranca) . $query,
+            ]]);
             $acoes[] = component('button', ['label' => 'Atualizar status da ' . $nome, 'icon' => 'history', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'type' => 'submit', 'attrs' => [
                 'form' => 'form-acao-cobranca',
                 'formaction' => site_url('cobrancas/atualizar/' . $c->idCobranca) . $query,
