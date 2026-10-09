@@ -72,10 +72,7 @@
     "application/views/usuarios/adicionarUsuario.php": 2,
     "application/views/usuarios/editarUsuario.php": 18,
     "application/views/usuarios/usuarios.php": 10,
-    "application/views/vendas/adicionarVenda.php": 2,
-    "application/views/vendas/editarVenda.php": 22,
     "application/views/vendas/imprimirVenda.php": 29,
     "application/views/vendas/imprimirVendaOrcamento.php": 28,
-    "application/views/vendas/imprimirVendaTermica.php": 20,
-    "application/views/vendas/visualizarVenda.php": 16
+    "application/views/vendas/imprimirVendaTermica.php": 20
 }

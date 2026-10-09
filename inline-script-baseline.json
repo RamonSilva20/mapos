@@ -39,10 +39,7 @@
     "application/views/relatorios/rel_vendas.php": 1,
     "application/views/usuarios/adicionarUsuario.php": 1,
     "application/views/usuarios/editarUsuario.php": 1,
-    "application/views/vendas/adicionarVenda.php": 1,
-    "application/views/vendas/editarVenda.php": 1,
     "application/views/vendas/imprimirVenda.php": 1,
     "application/views/vendas/imprimirVendaOrcamento.php": 1,
-    "application/views/vendas/imprimirVendaTermica.php": 1,
-    "application/views/vendas/visualizarVenda.php": 1
+    "application/views/vendas/imprimirVendaTermica.php": 1
 }

@@ -23,7 +23,7 @@ $colunas = [
         : 'Cliente removido'],
     ['key' => 'vendedor', 'label' => 'Vendedor', 'nowrap' => true, 'hide_until' => '2xl'],
     ['label' => 'Data', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'lg', 'render' => fn ($v) => dataBr($v->dataVenda)],
-    ['label' => 'Garantia', 'nowrap' => true, 'hide_until' => 'xl', 'render' => function ($v) {
+    ['label' => 'Garantia', 'nowrap' => true, 'hide_until' => '2xl', 'render' => function ($v) {
         $garantia = vendaGarantiaPill(vendaGarantiaAte($v->dataVenda, $v->garantia));
 
         return $garantia !== null ? component('pill-status', $garantia) : 'Sem garantia';
@@ -40,8 +40,8 @@ $colunas = [
         if ($editavel) {
             $acoes[] = component('button', ['label' => 'Editar ' . $numero, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('vendas/editar/' . $v->idVendas)]);
         }
-        // Como na v4: excluir exige dVenda e uma venda que ainda pode ser editada.
-        if ($pode['excluir'] && $editavel) {
+        // Como na v4: excluir exige dVenda e uma venda que ainda pode ser alterada (eVenda não entra).
+        if ($pode['excluir'] && osEditavel($v, true, $controle_edicao)) {
             $acoes[] = component('button', ['label' => 'Excluir ' . $numero, 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
                 'data-modal-abrir' => 'excluir-venda',
                 'data-valor-id' => (string) $v->idVendas,
