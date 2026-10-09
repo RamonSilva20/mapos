@@ -6,11 +6,19 @@ if (! defined('BASEPATH')) {
 
 class Vendas extends MY_Controller
 {
+    /** Filtros da listagem, na query string (listagemFiltros()). */
+    public const FILTROS = [
+        'pesquisa' => 'texto',
+        'status' => ['Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
+        'de' => 'texto',
+        'ate' => 'texto',
+    ];
+
     public function __construct()
     {
         parent::__construct();
 
-        $this->load->helper('form');
+        $this->load->helper(['form', 'os', 'vendas']);
         $this->load->model('vendas_model');
         $this->data['menuVendas'] = 'Vendas';
     }
@@ -20,54 +28,66 @@ class Vendas extends MY_Controller
         $this->gerenciar();
     }
 
+    /**
+     * Listagem de vendas migrada para os componentes da v5 (#2843), no padrão
+     * das listagens (#2852): filtros na URL, paginação que os mantém e
+     * exclusão confirmada em modal-confirm.
+     */
     public function gerenciar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar vendas.');
             redirect(base_url());
         }
 
-        $this->load->library('pagination');
+        $filtros = $this->filtrosDaListagem();
+        $offset = (int) $this->uri->segment(3);
+        $total = $this->vendas_model->contar($filtros);
 
-        $where_array = [];
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['results'] = $this->vendas_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
+        $this->data['paginacao'] = $this->paginacao(site_url('vendas/gerenciar'), $total, $offset, null, $filtros);
+        $this->data['pode'] = [
+            'adicionar' => $this->permite('aVenda'),
+            'editar' => $this->permite('eVenda'),
+            'excluir' => $this->permite('dVenda'),
+        ];
+        $this->data['controle_edicao'] = ($this->data['configuration']['control_edit_vendas'] ?? '0') == '1';
 
-        $pesquisa = $this->input->get('pesquisa');
-        $status = $this->input->get('status');
-        $de = $this->input->get('data');
-        $ate = $this->input->get('data2');
-
-        if ($pesquisa) {
-            $where_array['pesquisa'] = $pesquisa;
-        }
-        if ($status) {
-            $where_array['status'] = $status;
-        }
-        if ($de) {
-            $where_array['de'] = $de;
-        }
-        if ($ate) {
-            $where_array['ate'] = $ate;
+        if ($this->data['pode']['adicionar']) {
+            $this->data['topbar_acao'] = ['label' => 'Nova venda', 'icon' => 'plus', 'href' => site_url('vendas/adicionar')];
         }
 
-        $this->data['configuration']['base_url'] = site_url('vendas/gerenciar/');
-        $this->data['configuration']['total_rows'] = $this->vendas_model->count('vendas');
-        
-        if (count($where_array) > 0) {
-            $this->data['configuration']['suffix'] = "?pesquisa={$pesquisa}&status={$status}&data={$de}&data2={$ate}";
-            $this->data['configuration']['first_url'] = base_url("index.php/vendas/gerenciar")."?pesquisa={$pesquisa}&status={$status}&data={$de}&data2={$ate}";
-        }
-
-        $this->pagination->initialize($this->data['configuration']);
-
-        $this->data['results'] = $this->vendas_model->get('vendas', '*', $where_array, $this->data['configuration']['per_page'], $this->uri->segment(3));
-
-        foreach ($this->data['results'] as $key => $venda) {
-            $this->data['results'][$key]->totalProdutos = $this->vendas_model->getTotalVendas($venda->idVendas);
-        }
-
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'vendas/vendas';
 
         return $this->layout();
+    }
+
+    /**
+     * Filtros válidos da listagem: pesquisa (texto), status (um dos status) e
+     * as datas de/ate em AAAA-MM-DD (input type=date); data inválida é
+     * descartada.
+     *
+     * @return array<string, string>
+     */
+    private function filtrosDaListagem(): array
+    {
+        $filtros = listagemFiltros(self::FILTROS, $this->input->get());
+
+        foreach (['de', 'ate'] as $data) {
+            if (isset($filtros[$data])) {
+                $valida = dataIsoParaYmd($filtros[$data]);
+                if ($valida === null) {
+                    unset($filtros[$data]);
+                } else {
+                    $filtros[$data] = $valida;
+                }
+            }
+        }
+
+        return $filtros;
     }
 
     public function adicionar()
@@ -318,14 +338,13 @@ class Vendas extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->model('vendas_model');
+        $id = (int) $this->input->post('id');
+        // Volta para a listagem com os mesmos filtros (só os permitidos).
+        $listagem = site_url('vendas/gerenciar') . listagemQuery($this->filtrosDaListagem());
 
-        $id = $this->input->post('id');
-
-        $editavel = $this->vendas_model->isEditable($id);
-        if (! $editavel) {
+        if (! $this->vendas_model->isEditable($id)) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir. Venda já faturada');
-            redirect(site_url('vendas/gerenciar/'));
+            redirect($listagem);
         }
 
         $venda = $this->vendas_model->getByIdCobrancas($id);
@@ -333,7 +352,7 @@ class Vendas extends MY_Controller
             $venda = $this->vendas_model->getById($id);
             if ($venda == null) {
                 $this->session->set_flashdata('error', 'Erro ao tentar excluir venda.');
-                redirect(site_url('vendas/gerenciar/'));
+                redirect($listagem);
             }
         }
 
@@ -342,20 +361,20 @@ class Vendas extends MY_Controller
                 $this->vendas_model->delete('cobrancas', 'vendas_id', $id);
             } else {
                 $this->session->set_flashdata('error', 'Existe uma cobrança associada a esta venda, deve cancelar e/ou excluir a cobrança primeiro!');
-                redirect(site_url('vendas/gerenciar/'));
+                redirect($listagem);
             }
         }
 
         $this->vendas_model->delete('itens_de_vendas', 'vendas_id', $id);
         $this->vendas_model->delete('vendas', 'idVendas', $id);
         if ((int) $venda->faturado === 1) {
-            $this->vendas_model->delete('lancamentos', 'descricao', "Fatura de Venda - #${id}");
+            $this->vendas_model->excluirFatura($id, isset($venda->lancamentos_id) ? (int) $venda->lancamentos_id : null);
         }
 
         log_info('Removeu uma venda. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'Venda excluída com sucesso!');
-        redirect(site_url('vendas/gerenciar/'));
+        redirect($listagem);
     }
 
     public function autoCompleteProduto()

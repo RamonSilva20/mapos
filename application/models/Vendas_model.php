@@ -13,114 +13,95 @@ class Vendas_model extends CI_Model
         parent::__construct();
     }
 
-    public function get($table, $fields, $where = [], $perpage = 0, $start = 0, $one = false, $array = 'array')
+    /**
+     * Listagem de vendas da v5 (#2843), no padrão das listagens (#2852): os
+     * mesmos filtros em listar() e contar(), para a paginação contar só o que
+     * a busca encontra (na v4 o total ignorava os filtros).
+     *
+     * Cada linha traz a venda, o cliente, o vendedor e o total, calculado no
+     * SQL para não consultar a venda de novo por linha: o valor com desconto,
+     * quando houver, ou a soma dos itens.
+     *
+     * @param  array<string, string>  $filtros  pesquisa, status, de, ate (já validados)
+     */
+    public function listar(array $filtros, int $limite, int $offset): array
     {
-        $lista_clientes = [];
-        if ($where) {
-            if (array_key_exists('pesquisa', $where)) {
-                $this->db->select('idClientes');
-                $this->db->like('nomeCliente', $where['pesquisa']);
-                $this->db->limit(25);
-                $clientes = $this->db->get('clientes')->result();
+        $totalItens = '(SELECT COALESCE(SUM(itens_de_vendas.subTotal), 0) FROM itens_de_vendas WHERE itens_de_vendas.vendas_id = vendas.idVendas)';
 
-                foreach ($clientes as $c) {
-                    array_push($lista_clientes, $c->idClientes);
-                }
-            }
+        $this->db->select('vendas.idVendas, vendas.dataVenda, vendas.status, vendas.faturado, vendas.garantia, vendas.desconto, vendas.valor_desconto, vendas.clientes_id, vendas.usuarios_id');
+        $this->db->select('clientes.nomeCliente, usuarios.nome AS vendedor');
+        $this->db->select($totalItens . ' AS totalItens', false);
+
+        $this->aplicarFiltros($filtros);
+
+        $linhas = $this->db
+            ->order_by('vendas.idVendas', 'desc')
+            ->limit($limite, max(0, $offset))
+            ->get()
+            ->result();
+
+        foreach ($linhas as $linha) {
+            $linha->total = (float) $linha->valor_desconto > 0 ? (float) $linha->valor_desconto : (float) $linha->totalItens;
         }
-        $this->db->select($fields . ', clientes.nomeCliente, clientes.idClientes');
-        $this->db->from($table);
-        $this->db->limit($perpage, $start);
-        $this->db->join('clientes', 'clientes.idClientes = ' . $table . '.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = ' . $table . '.usuarios_id');
-        $this->db->order_by('idVendas', 'desc');
-        
-        // condicionais da pesquisa
-        if ($where) {
-            // condicional de status
-            if (array_key_exists('status', $where)) {
-                $this->db->where_in('vendas.status', $where['status']);
-            }
 
-            // condicional de clientes
-            if (array_key_exists('pesquisa', $where)) {
-                if ($lista_clientes != null) {
-                    $this->db->where_in('vendas.clientes_id', $lista_clientes);
-                }
-            }
-
-            // condicional data Venda
-            if (array_key_exists('de', $where)) {
-                $this->db->where('vendas.dataVenda >=', $where['de']);
-            }
-            // condicional data final
-            if (array_key_exists('ate', $where)) {
-                $this->db->where('vendas.dataVenda <=', $where['ate']);
-            }
-        }
-        $query = $this->db->get();
-
-        $result = !$one ? $query->result() : $query->row();
-
-        return $result;
+        return $linhas;
     }
 
-    public function getVendas($table, $fields, $where = [], $perpage = 0, $start = 0, $one = false, $array = 'array')
+    /** Total da listagem com os mesmos filtros de listar(). */
+    public function contar(array $filtros): int
     {
-        $lista_clientes = [];
-        if ($where) {
-            if (array_key_exists('pesquisa', $where)) {
-                $this->db->select('idClientes');
-                $this->db->like('nomeCliente', $where['pesquisa']);
-                $this->db->limit(25);
-                $clientes = $this->db->get('clientes')->result();
+        $this->aplicarFiltros($filtros);
 
-                foreach ($clientes as $c) {
-                    array_push($lista_clientes, $c->idClientes);
-                }
+        return (int) $this->db->count_all_results();
+    }
+
+    /**
+     * pesquisa procura no nome e documento do cliente e, se for número, no Nº
+     * da venda (o OR fica entre parênteses para não anular os outros filtros);
+     * status é um só; de e ate limitam a data da venda, inclusive.
+     */
+    private function aplicarFiltros(array $filtros): void
+    {
+        $this->db->from('vendas');
+        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id', 'left');
+        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id', 'left');
+
+        $pesquisa = $filtros['pesquisa'] ?? '';
+        if ($pesquisa !== '') {
+            $this->db->group_start()
+                ->like('clientes.nomeCliente', $pesquisa)
+                ->or_like('clientes.documento', $pesquisa);
+            if (ctype_digit($pesquisa)) {
+                $this->db->or_where('vendas.idVendas', (int) $pesquisa);
             }
+            $this->db->group_end();
         }
 
-        $this->db->select($fields . ',clientes.idClientes, clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
-        $this->db->from($table);
-        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
-        $this->db->join('garantias', 'garantias.idGarantias = vendas.garantias_id', 'left');
-        $this->db->join('produtos_vendas', 'produtos_vendas.vendas_id = vendas.idVendas', 'left');
-        $this->db->join('servicos_vendas', 'servicos_vendas.vendas_id = vendas.idVendas', 'left');
-
-        // condicionais da pesquisa
-
-        // condicional de status
-        if (array_key_exists('status', $where)) {
-            $this->db->where_in('status', $where['status']);
+        if (($filtros['status'] ?? '') !== '') {
+            $this->db->where('vendas.status', $filtros['status']);
         }
 
-        // condicional de clientes
-        if (array_key_exists('pesquisa', $where)) {
-            if ($lista_clientes != null) {
-                $this->db->where_in('vendas.clientes_id', $lista_clientes);
-            }
+        if (($filtros['de'] ?? '') !== '') {
+            $this->db->where('vendas.dataVenda >=', $filtros['de']);
+        }
+        if (($filtros['ate'] ?? '') !== '') {
+            $this->db->where('vendas.dataVenda <=', $filtros['ate']);
+        }
+    }
+
+    /**
+     * Apaga o lançamento da fatura de uma venda excluída: pelo vínculo
+     * vendas.lancamentos_id (que o faturar sempre gravou) e pelas descrições
+     * conhecidas (ver vendaDescricoesDaFatura()). Chamar depois de apagar a
+     * venda: vendas.lancamentos_id tem chave estrangeira para o lançamento.
+     */
+    public function excluirFatura(int $idVenda, ?int $idLancamento): void
+    {
+        if ($idLancamento) {
+            $this->db->where('idLancamentos', $idLancamento)->delete('lancamentos');
         }
 
-        // condicional data inicial
-        if (array_key_exists('de', $where)) {
-            $this->db->where('dataInicial >=', $where['de']);
-        }
-        // condicional data final
-        if (array_key_exists('ate', $where)) {
-            $this->db->where('dataFinal <=', $where['ate']);
-        }
-
-        $this->db->limit($perpage, $start);
-        $this->db->order_by('vendas.idVendas', 'desc');
-        $this->db->group_by('vendas.idVendas');
-
-        $query = $this->db->get();
-
-        $result = !$one ? $query->result() : $query->row();
-
-        return $result;
+        $this->db->where('vendas_id', $idVenda)->where_in('descricao', vendaDescricoesDaFatura($idVenda))->delete('lancamentos');
     }
 
     public function getById($id)
@@ -136,10 +117,16 @@ class Vendas_model extends CI_Model
         return $this->db->get()->row();
     }
 
+    /**
+     * Venda faturada ou cancelada só pode ser alterada com a configuração
+     * control_edit_vendas ligada, a mesma regra da OS (Os_model::isEditable()).
+     * Na v4 só a faturada era barrada. A permissão (eVenda, dVenda) é do
+     * controller.
+     */
     public function isEditable($id = null)
     {
-        if ($vendas = $this->getById($id)) {
-            if ($vendas->faturado) {
+        if ($venda = $this->getById($id)) {
+            if ($venda->status === 'Faturado' || $venda->status === 'Cancelado' || $venda->faturado == 1) {
                 return $this->data['configuration']['control_edit_vendas'] == '1';
             }
         }
@@ -215,11 +202,6 @@ class Vendas_model extends CI_Model
         }
 
         return false;
-    }
-
-    public function count($table)
-    {
-        return $this->db->count_all($table);
     }
 
     public function autoCompleteProduto($q)
