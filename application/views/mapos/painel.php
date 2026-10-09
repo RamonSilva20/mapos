@@ -106,7 +106,7 @@ if ($pode['os']) {
                     <div class="relative mx-auto mt-4 aspect-square max-w-72">
                         <canvas data-grafico="os" role="img" aria-label="Gráfico de OS por status"></canvas>
                     </div>
-                    <table class="sr-only">
+                    <div class="sr-only"><table>
                         <caption>OS por status</caption>
                         <thead><tr><th scope="col">Status</th><th scope="col">OS</th></tr></thead>
                         <tbody>
@@ -114,7 +114,7 @@ if ($pode['os']) {
                                 <tr><td><?= e($fatia['status']) ?></td><td><?= e($fatia['total']) ?></td></tr>
                             <?php } ?>
                         </tbody>
-                    </table>
+                    </table></div>
                 <?php } ?>
             </section>
         </div>
@@ -146,7 +146,7 @@ if ($pode['os']) {
                 <div class="relative mt-4 h-72">
                     <canvas data-grafico="balanco" role="img" aria-label="<?= e('Gráfico do balanço de ' . $ano) ?>"></canvas>
                 </div>
-                <table class="sr-only">
+                <div class="sr-only"><table>
                     <caption><?= e('Balanço de ' . $ano) ?></caption>
                     <thead><tr><th scope="col">Mês</th><th scope="col">Receitas</th><th scope="col">Despesas</th><th scope="col">Saldo</th></tr></thead>
                     <tbody>
@@ -154,12 +154,12 @@ if ($pode['os']) {
                             <tr><td><?= e($mesNome) ?></td><td><?= e(dinheiro($balanco['receitas'][$i])) ?></td><td><?= e(dinheiro($balanco['despesas'][$i])) ?></td><td><?= e(dinheiro($balanco['saldo'][$i])) ?></td></tr>
                         <?php } ?>
                     </tbody>
-                </table>
+                </table></div>
             <?php } ?>
         </section>
     <?php } ?>
 
-    <div class="grid gap-4 xl:grid-cols-2">
+    <div class="grid gap-4 2xl:grid-cols-2">
         <?php if ($pode['os']) { ?>
             <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-lista-os">
                 <div class="flex flex-wrap items-center justify-between gap-2">
@@ -176,7 +176,7 @@ if ($pode['os']) {
                             ['label' => 'Cliente', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($o) => (string) ($o->nomeCliente ?? 'Cliente removido')],
                             ['label' => 'Entrega', 'align' => 'right', 'nowrap' => true, 'render' => fn ($o) => $o->dataFinal !== null && substr((string) $o->dataFinal, 0, 10) < $hoje
                                 ? component('pill-status', ['label' => 'Atrasada · ' . dataBr($o->dataFinal), 'variant' => 'warning'])
-                                : dataBr($o->dataFinal)],
+                                : ($o->dataFinal !== null ? dataBr($o->dataFinal) : '—')],
                             ['label' => 'Status', 'nowrap' => true, 'render' => fn ($o) => component('pill-status', osStatusPill($o->status))],
                         ],
                         'empty' => component('empty-state', ['title' => 'Nenhuma OS em andamento', 'message' => 'OS abertas, aprovadas, em andamento ou aguardando peças aparecem aqui.', 'icon' => 'wrench', 'class' => 'border-0']),

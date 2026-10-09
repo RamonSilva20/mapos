@@ -110,10 +110,16 @@
     font-weight: 600;
   }
 
-  & .fc .fc-button:focus-visible,
-  & .fc .fc-button-primary:focus {
-    box-shadow: none;
+  /* O anel de foco do FullCalendar é um box-shadow fixo, quase invisível no
+     escuro; fica o do design system ({colors.ring-focus}, 3px). */
+  & .fc .fc-button:focus,
+  & .fc .fc-button:focus-visible {
+    box-shadow: none !important;
+  }
+
+  & .fc .fc-button:focus-visible {
     outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent);
+    outline-offset: 1px;
   }
 
   & .fc a {

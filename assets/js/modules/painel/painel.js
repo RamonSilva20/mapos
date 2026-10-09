@@ -56,7 +56,7 @@ export function configuracaoBalanco(balanco, cores) {
             datasets: [
                 { type: 'bar', label: 'Receitas', data: balanco.receitas, backgroundColor: cores.receitas, borderRadius: 4, order: 2 },
                 { type: 'bar', label: 'Despesas', data: balanco.despesas, backgroundColor: cores.despesas, borderRadius: 4, order: 2 },
-                { type: 'line', label: 'Saldo', data: balanco.saldo, borderColor: cores.saldo, backgroundColor: cores.saldo, pointRadius: 3, tension: 0.25, order: 1 },
+                { type: 'line', label: 'Saldo', data: balanco.saldo, borderColor: cores.saldo, backgroundColor: cores.saldo, pointRadius: 3, tension: 0, order: 1 },
             ],
         },
         options: {
@@ -173,6 +173,7 @@ async function iniciarAgenda(raiz, { doc, get }) {
         initialView: celular ? 'listMonth' : 'dayGridMonth',
         headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listMonth' },
         buttonText: { today: 'Hoje', month: 'Mês', list: 'Lista' },
+        buttonHints: { prev: 'Mês anterior', next: 'Próximo mês', today: 'Ir para hoje', dayGridMonth: 'Ver o mês', listMonth: 'Ver a lista do mês' },
         height: 'auto',
         dayMaxEvents: 3,
         displayEventTime: false,
