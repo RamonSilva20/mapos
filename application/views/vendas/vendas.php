@@ -1,188 +1,148 @@
-<style>
-    select {
-        width: 70px;
-    }
-</style>
+<?php
+/**
+ * Listagem de vendas (#2843), no padrão das listagens da v5 (#2852, ver
+ * views/clientes/clientes.php e views/os/os.php): filtros em GET, data-table
+ * que vira cartões abaixo de 640px, empty-state para "nada cadastrado" e
+ * "nada encontrado", paginação que mantém os filtros, "Nova venda" na topbar
+ * e exclusão com um modal-confirm só, preenchido pelo gatilho da linha
+ * (data-valor-*).
+ *
+ * @var list<object>          $results
+ * @var array<string, string> $filtros
+ * @var int                   $total
+ * @var bool                  $controle_edicao Venda faturada/cancelada continua editável
+ * @var array                 $paginacao
+ * @var array{adicionar: bool, editar: bool, excluir: bool} $pode
+ */
+$temFiltro = $filtros !== [];
 
-<div class="new122">
-    <div class="widget-title" style="margin: -20px 0 0">
-        <span class="icon">
-            <i class="fas fa-cash-register"></i>
-        </span>
-        <h5>Vendas</h5>
-    </div>
-    <div class="span12" style="margin-left: 0">
-        <form method="get" action="<?php echo base_url(); ?>index.php/vendas/gerenciar">
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aVenda')) { ?>
-                <div class="span3">
-                    <a href="<?php echo base_url(); ?>index.php/vendas/adicionar" class="button btn btn-mini btn-success" style="max-width: 160px">
-                        <span class="button__icon"><i class='bx bx-plus-circle'></i></span>
-                        <span class="button__text2">Nova Venda</span>
-                    </a>
-                </div>
+$colunas = [
+    ['key' => 'idVendas', 'label' => 'Nº', 'align' => 'right', 'nowrap' => true],
+    ['label' => 'Cliente', 'class' => 'min-w-40', 'render' => fn ($v) => $v->nomeCliente !== null
+        ? component('link', ['label' => $v->nomeCliente, 'href' => site_url('clientes/visualizar/' . $v->clientes_id), 'class' => 'font-medium'])
+        : 'Cliente removido'],
+    ['key' => 'vendedor', 'label' => 'Vendedor', 'nowrap' => true, 'hide_until' => '2xl'],
+    ['label' => 'Data', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'lg', 'render' => fn ($v) => dataBr($v->dataVenda)],
+    ['label' => 'Garantia', 'nowrap' => true, 'hide_until' => 'xl', 'render' => function ($v) {
+        $garantia = vendaGarantiaPill(vendaGarantiaAte($v->dataVenda, $v->garantia));
+
+        return $garantia !== null ? component('pill-status', $garantia) : 'Sem garantia';
+    }],
+    ['label' => 'Status', 'nowrap' => true, 'render' => fn ($v) => component('pill-status', osStatusPill($v->status))],
+    ['label' => 'Total', 'align' => 'right', 'nowrap' => true, 'render' => fn ($v) => dinheiro($v->total)],
+    ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($v) use ($pode, $controle_edicao) {
+        $numero = 'venda ' . $v->idVendas;
+        // Mesma regra da OS: faturada ou cancelada só edita com a configuração ligada.
+        $editavel = osEditavel($v, $pode['editar'], $controle_edicao);
+        $acoes = [
+            component('button', ['label' => 'Ver ' . $numero, 'icon' => 'eye', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('vendas/visualizar/' . $v->idVendas)]),
+        ];
+        if ($editavel) {
+            $acoes[] = component('button', ['label' => 'Editar ' . $numero, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('vendas/editar/' . $v->idVendas)]);
+        }
+        // Como na v4: excluir exige dVenda e uma venda que ainda pode ser editada.
+        if ($pode['excluir'] && $editavel) {
+            $acoes[] = component('button', ['label' => 'Excluir ' . $numero, 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
+                'data-modal-abrir' => 'excluir-venda',
+                'data-valor-id' => (string) $v->idVendas,
+                'data-valor-numero' => (string) $v->idVendas,
+                'data-valor-cliente' => (string) ($v->nomeCliente ?? 'cliente removido'),
+            ]]);
+        }
+
+        return $acoes;
+    }],
+];
+
+$vazio = $temFiltro
+    ? component('empty-state', [
+        'title' => 'Nenhuma venda encontrada',
+        'message' => 'Nada corresponde aos filtros. Confira a busca ou limpe os filtros.',
+        'icon' => 'search-x',
+        'action' => component('button', ['label' => 'Limpar filtros', 'variant' => 'outline', 'href' => site_url('vendas')]),
+        'class' => 'border-0',
+    ])
+    : component('empty-state', [
+        'title' => 'Nenhuma venda cadastrada',
+        'message' => 'As vendas de produtos cadastradas aparecem aqui.',
+        'icon' => 'shopping-cart',
+        'action' => $pode['adicionar'] ? component('button', ['label' => 'Cadastrar venda', 'icon' => 'plus', 'variant' => 'outline', 'href' => site_url('vendas/adicionar')]) : null,
+        'class' => 'border-0',
+    ]);
+
+$resumo = ($total === 1 ? '1 venda' : number_format($total, 0, ',', '.') . ' vendas')
+    . ($temFiltro ? ($total === 1 ? ' encontrada' : ' encontradas') . ' com os filtros' : '');
+?>
+<div class="flex flex-col gap-4 pt-2 pb-8">
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Vendas</h1>
+        <p class="text-caption text-muted" aria-live="polite"><?= e($resumo) ?></p>
+    </header>
+
+    <form method="get" action="<?= e(site_url('vendas')) ?>" role="search" aria-label="Filtrar vendas" class="grid items-end gap-3 rounded-xl border border-border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_12rem_10rem_10rem_auto]">
+        <?= component('input', [
+            'name' => 'pesquisa',
+            'label' => 'Buscar',
+            'type' => 'search',
+            'value' => $filtros['pesquisa'] ?? null,
+            'placeholder' => 'Nº, cliente ou documento',
+            'attrs' => ['maxlength' => 100],
+        ]) ?>
+        <?= component('select', [
+            'name' => 'status',
+            'label' => 'Status',
+            'placeholder' => 'Todos',
+            'options' => array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
+            'selected' => $filtros['status'] ?? null,
+        ]) ?>
+        <?= component('input', [
+            'name' => 'de',
+            'label' => 'Venda a partir de',
+            'type' => 'date',
+            'value' => $filtros['de'] ?? null,
+        ]) ?>
+        <?= component('input', [
+            'name' => 'ate',
+            'label' => 'Venda até',
+            'type' => 'date',
+            'value' => $filtros['ate'] ?? null,
+        ]) ?>
+        <div class="flex gap-2">
+            <?= component('button', ['label' => 'Filtrar', 'icon' => 'search', 'variant' => 'outline', 'type' => 'submit']) ?>
+            <?php if ($temFiltro) { ?>
+                <?= component('button', ['label' => 'Limpar', 'icon' => 'x', 'variant' => 'ghost', 'href' => site_url('vendas')]) ?>
             <?php } ?>
-            <div class="span3">
-                <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
-            </div>
-            <div class="span2">
-                <select name="status" class="span12">
-                    <option value="">Selecione status</option>
-                    <option value="Aberto">Aberto</option>
-                    <option value="Faturado">Faturado</option>
-                    <option value="Negociação">Negociação</option>
-                    <option value="Em Andamento">Em Andamento</option>
-                    <option value="Orçamento">Orçamento</option>
-                    <option value="Finalizado">Finalizado</option>
-                    <option value="Cancelado">Cancelado</option>
-                    <option value="Aguardando Peças">Aguardando Peças</option>
-                    <option value="Aprovado">Aprovado</option>
-                </select>
-            </div>
-            <div class="span3">
-                <input type="date" name="data" id="data" placeholder="De" class="span6 datepicker" autocomplete="off" value="">
-                <input type="date" name="data2" id="data2" placeholder="Até" class="span6 datepicker" autocomplete="off" value="">
-            </div>
-            <div class="span1">
-                <button class="button btn btn-mini btn-warning" style="min-width: 30px">
-                    <span class="button__icon"><i class='bx bx-search-alt'></i></span>
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <div class="widget-box">
-        <div class="widget-content nopadding tab-content">
-            <table id="tabela" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Nº</th>
-                        <th>Cliente</th>
-                        <th>Vendedor</th>
-                        <th>Data da Venda</th>
-                        <th>Venc. da Garantia</th>
-                        <th>Valor Total</th>
-                        <th>Desconto</th>
-                        <th>Valor com Desconto</th>
-                        <th>V. T. (Faturado)</th>
-                        <th>Status</th>
-                        <th>Faturado</th>
-                        <th style="text-align:center">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        if (!$results) {
-                            echo '<tr>
-                                    <td colspan="12">Nenhuma Venda Cadastrada</td>
-                                </tr>';
-                        }
-        foreach ($results as $r) {
-            $dataVenda = date(('d/m/Y'), strtotime($r->dataVenda));
-            $vencGarantia = '';
-                            
-            if ($r->garantia && is_numeric($r->garantia)) {
-                $vencGarantia = dateInterval($r->dataVenda, $r->garantia);
-            }
-            $corGarantia = '';
-            if (!empty($vencGarantia)) {
-                $dataGarantia = explode('/', $vencGarantia);
-                $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                $corGarantia = (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) ? '#4d9c79' : '#f24c6f';
-            } elseif ($r->garantia == "0") {
-                $vencGarantia = 'Sem Garantia';
-            }
-
-            $faturado = ($r->faturado == 1) ? 'Sim' : 'Não';
-            $corStatus = match($r->status) {
-                'Aberto' => '#00cd00',
-                'Em Andamento' => '#436eee',
-                'Orçamento' => '#CDB380',
-                'Negociação' => '#AEB404',
-                'Cancelado' => '#CD0000',
-                'Finalizado' => '#256',
-                'Faturado' => '#B266FF',
-                'Aguardando Peças' => '#FF7F00',
-                'Aprovado' => '#808080',
-                default => '#E0E4CC',
-            };
-
-            echo '<tr>';
-            echo '<td>' . $r->idVendas . '</td>';
-            echo '<td><a href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '">' . $r->nomeCliente . '</a></td>';
-            echo '<td class="ph1">' . $r->nome . '</td>';
-            echo '<td>' . $dataVenda . '</td>';
-            echo '<td class="ph3"><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-
-            if ($r->faturado == 1) {
-                echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
-                echo '<td>R$ ' . number_format($r->desconto, 2, ',', '.') . '</td>';
-                echo '<td>R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>';
-                echo '<td>R$ ' . number_format($r->valor_desconto, 2, ',', '.') . '</td>';
-            } else {
-                $valorProdutos = isset($r->totalProdutos) ? $r->totalProdutos : 0.00;
-                $desconto = isset($r->desconto) ? $r->desconto : 0.00;
-                $valorComDesconto = $valorProdutos - $desconto;
-                            
-                echo '<td>R$ ' . number_format($valorProdutos, 2, ',', '.') . '</td>';
-                echo '<td>R$ ' . number_format($desconto, 2, ',', '.') . '</td>';
-                echo '<td>R$ ' . number_format($valorComDesconto, 2, ',', '.') . '</td>';
-                echo '<td>R$ 0,00</td>';
-            }
-
-            echo '<td><span class="badge" style="background-color: ' . $corStatus . '; border-color: ' . $corStatus . '">' . $r->status . '</span> </td>';
-            echo '<td>' . $faturado . '</td>';
-            echo '<td style="text-align:left">';
-
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/visualizar/' . $r->idVendas . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show bx-xs"></i></a>';
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimir/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir A4"><i class="bx bx-printer bx-xs"></i></a>';
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/imprimirTermica/' . $r->idVendas . '" target="_blank" class="btn-nwe6" title="Imprimir Não Fiscal"><i class="bx bx-printer bx-xs"></i></a>';
-            }
-
-            $editavel = $this->vendas_model->isEditable($r->idVendas);
-
-            if ($r->faturado != 1 || $editavel) {
-                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
-                    echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/vendas/editar/' . $r->idVendas . '" class="btn-nwe3" title="Editar venda"><i class="bx bx-edit bx-xs"></i></a>';
-                }
-                if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dVenda')) {
-                    echo '<a href="#modal-excluir" role="button" data-toggle="modal" venda="' . $r->idVendas . '" class="btn-nwe4" title="Excluir Venda"><i class="bx bx-trash-alt bx-xs"></i></a>';
-                }
-            }
-            echo '</td>';
-            echo '</tr>';
-        } ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <?php echo $this->pagination->create_links(); ?>
-</div>
-
-<!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/vendas/excluir" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Excluir Venda</h5>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="idVenda" name="id" value="" />
-            <h5 style="text-align: center">Deseja realmente excluir esta Venda?</h5>
-        </div>
-        <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true">
-              <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
         </div>
     </form>
+
+    <?= component('data-table', [
+        'columns' => $colunas,
+        'rows' => $results,
+        'empty' => $vazio,
+        'caption' => 'Vendas',
+    ]) ?>
+
+    <?= component('pagination', $paginacao) ?>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(document).on('click', 'a', function(event) {
-            var venda = $(this).attr('venda');
-            $('#idVenda').val(venda);
-        });
-    });
-</script>
+<?php if ($pode['excluir']) { ?>
+    <form id="form-excluir-venda" method="post" action="<?= e(site_url('vendas/excluir') . listagemQuery($filtros)) ?>" hidden>
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+        <input type="hidden" name="id" value="" data-modal-de="excluir-venda" data-modal-valor="id">
+    </form>
+    <?= component('modal-confirm', [
+        'id' => 'excluir-venda',
+        'title' => 'Excluir venda?',
+        // Nº e cliente entram pelo modal.js (textContent) a partir do
+        // data-valor-* do botão da linha; aqui só os marcadores vazios.
+        'message' => [
+            'A venda ',
+            new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="numero"></strong>'),
+            ' de ',
+            new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="cliente"></strong>'),
+            ' será removida com os produtos, e a fatura, se houver, é excluída. Essa ação não pode ser desfeita.',
+        ],
+        'confirm_label' => 'Excluir',
+        'confirm_attrs' => ['form' => 'form-excluir-venda'],
+    ]) ?>
+<?php } ?>

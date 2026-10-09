@@ -44,6 +44,5 @@
     "application/views/vendas/imprimirVenda.php": 1,
     "application/views/vendas/imprimirVendaOrcamento.php": 1,
     "application/views/vendas/imprimirVendaTermica.php": 1,
-    "application/views/vendas/vendas.php": 1,
     "application/views/vendas/visualizarVenda.php": 1
 }
