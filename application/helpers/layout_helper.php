@@ -272,7 +272,7 @@ if (! function_exists('layoutBreadcrumb')) {
         // gerenciar e index são a própria listagem do controller: a página 2
         // (clientes/gerenciar/10) tem o mesmo breadcrumb da página 1 (clientes).
         if ($controller !== '' && $metodo !== '' && ! in_array(strtolower($metodo), ['gerenciar', 'index'], true)) {
-            $itens[] = ['label' => ucfirst($metodo), 'url' => $siteUrl(trim($controller . '/' . $metodo . '/' . $parametro, '/'))];
+            $itens[] = ['label' => LAYOUT_ROTULOS[strtolower($metodo)] ?? ucfirst($metodo), 'url' => $siteUrl(trim($controller . '/' . $metodo . '/' . $parametro, '/'))];
         }
 
         return $itens;
