@@ -163,6 +163,44 @@ class Financeiro_model extends CI_Model
         ];
     }
 
+    /**
+     * Lançamentos em aberto do vencimento mais antigo para o mais novo, com o
+     * líquido, para a lista do painel inicial (#2847).
+     */
+    public function proximosPendentes(int $limite): array
+    {
+        return $this->db
+            ->select('lancamentos.idLancamentos, lancamentos.tipo, lancamentos.descricao, lancamentos.cliente_fornecedor, lancamentos.data_vencimento')
+            ->select('(' . self::LIQUIDO . ') AS liquido', false)
+            ->from('lancamentos')
+            ->group_start()->where('lancamentos.baixado', 0)->or_where('lancamentos.baixado IS NULL', null, false)->group_end()
+            ->order_by('lancamentos.data_vencimento', 'ASC')
+            ->order_by('lancamentos.idLancamentos', 'ASC')
+            ->limit($limite)
+            ->get()
+            ->result();
+    }
+
+    /**
+     * Receitas e despesas pagas de um ano, pelo mês do pagamento, com o mesmo
+     * líquido da listagem (na v4 o painel descontava só das receitas e
+     * calculava o desconto em % de novo). Linhas: mes (AAAA-MM), tipo, total.
+     * O painel monta os 12 meses com painelBalanco().
+     */
+    public function balancoAnual(int $ano): array
+    {
+        return $this->db
+            ->select('SUBSTR(lancamentos.data_pagamento, 1, 7) AS mes, lancamentos.tipo', false)
+            ->select('SUM(' . self::LIQUIDO . ') AS total', false)
+            ->from('lancamentos')
+            ->where('lancamentos.baixado', 1)
+            ->where('lancamentos.data_pagamento >=', $ano . '-01-01')
+            ->where('lancamentos.data_pagamento <=', $ano . '-12-31')
+            ->group_by(['mes', 'lancamentos.tipo'])
+            ->get()
+            ->result();
+    }
+
     /** Lançamento com o nome de quem o alterou por último, ou null. */
     public function getLancamento(int $id): ?object
     {

@@ -9,26 +9,74 @@ class Mapos extends MY_Controller
         $this->load->model('mapos_model');
     }
 
+    /**
+     * Painel inicial (#2847), com os componentes da v5: cards de resumo,
+     * agenda das entregas de OS (FullCalendar 6), balanço do ano e OS por
+     * status (Chart.js 4) e as listas do que pede atenção. Cada bloco só
+     * aparece com a permissão de ver o módulo dele (na v4 as listas de OS e
+     * de lançamentos apareciam para todos).
+     */
     public function index()
     {
-        $status = ['Em Andamento', 'Aguardando Peças'];
-        $this->data['ordens_status'] = $this->mapos_model->getOsStatus($status);
-        $vstatus = ['Aberto', 'Em Andamento', 'Aguardando Peças', 'Aprovado', 'Orçamento'];
-        $this->data['vendasstatus'] = $this->mapos_model->getVendasStatus($vstatus);
-        $this->data['lancamentos'] = $this->mapos_model->getLancamentos();
-        $this->data['ordens_orcamentos'] = $this->mapos_model->getOsOrcamentos();
-        $this->data['ordens_abertas'] = $this->mapos_model->getOsAbertas();
-        $this->data['ordens_aprovadas'] = $this->mapos_model->getOsAprovadas();
-        $this->data['ordens_finalizadas'] = $this->mapos_model->getOsFinalizadas();
-        $this->data['ordens_aguardando'] = $this->mapos_model->getOsAguardandoPecas();
-        $this->data['ordens_andamento'] = $this->mapos_model->getOsAndamento();
-        $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
-        $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
-        $this->data['financeiro_mes_dia'] = $this->mapos_model->getEstatisticasFinanceiroDia($this->input->get('year'));
-        $this->data['financeiro_mes'] = $this->mapos_model->getEstatisticasFinanceiroMes($this->input->get('year'));
-        $this->data['financeiro_mesinadipl'] = $this->mapos_model->getEstatisticasFinanceiroMesInadimplencia($this->input->get('year'));
+        $this->load->helper(['os', 'painel']);
+
+        $hoje = date('Y-m-d');
+        $anoAtual = (int) date('Y');
+        $pode = [
+            'os' => $this->permite('vOs'),
+            'vendas' => $this->permite('vVenda'),
+            'lancamentos' => $this->permite('vLancamento'),
+            'balanco' => $this->permite('rFinanceiro'),
+            'produtos' => $this->permite('vProduto'),
+        ];
+
+        $painel = ['hoje' => $hoje, 'pode' => $pode];
+
+        if ($pode['os']) {
+            $osPorStatus = $this->mapos_model->contarPorStatus('os');
+            $painel['os_por_status'] = $osPorStatus;
+            $painel['os_grafico'] = painelOsPorStatus($osPorStatus);
+            $painel['os_lista'] = $this->mapos_model->osParaPainel(PAINEL_OS_ANDAMENTO, 8);
+        }
+
+        if ($pode['vendas']) {
+            $painel['vendas_por_status'] = $this->mapos_model->contarPorStatus('vendas');
+            $painel['vendas_lista'] = $this->mapos_model->vendasParaPainel(PAINEL_VENDAS_ABERTAS, 8);
+        }
+
+        if ($pode['lancamentos'] || $pode['balanco']) {
+            $this->load->model('financeiro_model');
+        }
+
+        if ($pode['lancamentos']) {
+            $mesAtual = painelBalanco($this->financeiro_model->balancoAnual($anoAtual), $anoAtual);
+            $indice = (int) date('n') - 1;
+            $painel['mes'] = ['receitas' => $mesAtual['receitas'][$indice], 'despesas' => $mesAtual['despesas'][$indice], 'saldo' => $mesAtual['saldo'][$indice]];
+            $painel['visao_geral'] = $this->financeiro_model->visaoGeral();
+            $painel['lancamentos_lista'] = $this->financeiro_model->proximosPendentes(8);
+        }
+
+        if ($pode['balanco']) {
+            $ano = painelAno($this->input->get('ano'), $anoAtual);
+            $painel['ano'] = $ano;
+            $painel['anos'] = range($anoAtual + 1, max(2000, $anoAtual - 5));
+            $painel['balanco'] = painelBalanco($this->financeiro_model->balancoAnual($ano), $ano);
+        }
+
+        if ($pode['produtos']) {
+            $painel['estoque_lista'] = $this->mapos_model->produtosEstoqueBaixo(8);
+        }
+
+        $this->data = array_merge($this->data, $painel);
+
+        if ($this->permite('aOs')) {
+            $this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')];
+        } elseif ($this->permite('aVenda')) {
+            $this->data['topbar_acao'] = ['label' => 'Nova venda', 'icon' => 'plus', 'href' => site_url('vendas/adicionar')];
+        }
+
         $this->data['menuPainel'] = 'Painel';
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/painel';
 
         return $this->layout();
@@ -558,7 +606,8 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
         $this->load->model('os_model');
-        $status = $this->input->get('status') ?: null;
+        // Status fora da lista é ignorado (mostra todos).
+        $status = listagemFiltros(['status' => array_keys(OS_STATUS_VARIANTES)], $this->input->get())['status'] ?? null;
         // O FullCalendar manda start/end em ISO 8601; sem eles (ou com lixo) a
         // consulta virava `dataFinal >= NULL` e quebrava com erro 500 (#2901).
         $start = dataIsoParaYmd($this->input->get('start'));
@@ -576,63 +625,14 @@ class Mapos extends MY_Controller
             $end,
             $status
         );
-        $events = array_map(function ($os) {
-            switch ($os->status) {
-                case 'Aberto':
-                    $cor = '#00cd00';
-                    break;
-                case 'Negociação':
-                    $cor = '#AEB404';
-                    break;
-                case 'Em Andamento':
-                    $cor = '#436eee';
-                    break;
-                case 'Orçamento':
-                    $cor = '#CDB380';
-                    break;
-                case 'Cancelado':
-                    $cor = '#CD0000';
-                    break;
-                case 'Finalizado':
-                    $cor = '#256';
-                    break;
-                case 'Faturado':
-                    $cor = '#B266FF';
-                    break;
-                case 'Aguardando Peças':
-                    $cor = '#FF7F00';
-                    break;
-                case 'Aprovado':
-                    $cor = '#808080';
-                    break;
-                default:
-                    $cor = '#E0E4CC';
-                    break;
-            }
-
-            return [
-                'title' => "OS: {$os->idOs}, Cliente: {$os->nomeCliente}",
-                'start' => $os->dataFinal,
-                'end' => $os->dataFinal,
-                'color' => $cor,
-                'extendedProps' => [
-                    'id' => $os->idOs,
-                    'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
-                    'dataInicial' => '<b>Data Inicial:</b> ' . date('d/m/Y', strtotime($os->dataInicial)),
-                    'dataFinal' => '<b>Data Final:</b> ' . date('d/m/Y', strtotime($os->dataFinal)),
-                    'garantia' => '<b>Garantia:</b> ' . $os->garantia . ' dias',
-                    'status' => '<b>Status da OS:</b> ' . $os->status,
-                    'description' => '<b>Descrição/Produto:</b> ' . strip_tags(html_entity_decode($os->descricaoProduto)),
-                    'defeito' => '<b>Defeito:</b> ' . strip_tags(html_entity_decode($os->defeito)),
-                    'observacoes' => '<b>Observações:</b> ' . strip_tags(html_entity_decode($os->observacoes)),
-                    'subtotal' => '<br><b>Subtotal:</b> R$ ' . number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.'),
-                    'desconto' => '<b>Desconto:</b> -R$ ' . ($os->desconto > 0 ? number_format(($os->totalProdutos + $os->totalServicos) - $os->valor_desconto, 2, ',', '.') : number_format($os->desconto, 2, ',', '.')),
-                    'total' => '<b>Total:</b> R$ ' . ($os->valor_desconto == 0 ? number_format($os->totalProdutos + $os->totalServicos, 2, ',', '.') : number_format($os->valor_desconto, 2, ',', '.')),
-                    'faturado' => '<br><b>Faturado:</b> ' . ($os->faturado ? 'SIM' : 'PENDENTE'),
-                    'editar' => $this->os_model->isEditable($os->idOs),
-                ],
-            ];
-        }, $allOs);
+        // Só texto e URLs (painelEventoDaOs()); o painel monta o modal.
+        $this->load->helper(['os', 'painel']);
+        $podeEditar = $this->permite('eOs');
+        $events = array_map(fn ($os) => painelEventoDaOs(
+            $os,
+            site_url('os/visualizar/' . (int) $os->idOs),
+            $podeEditar && $this->os_model->isEditable($os->idOs) ? site_url('os/editar/' . (int) $os->idOs) : null
+        ), $allOs);
 
         return $this->output
             ->set_content_type('application/json')

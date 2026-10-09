@@ -1,1292 +1,296 @@
-<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/dist/excanvas.min.js"></script><![endif]-->
-
-<script language="javascript" type="text/javascript" src="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.js"></script>
-<script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.pieRenderer.min.js"></script>
-<script type="text/javascript" src="<?= base_url(); ?>assets/js/dist/plugins/jqplot.donutRenderer.min.js"></script>
-<script src='<?= base_url(); ?>assets/js/fullcalendar.min.js'></script>
-<script src='<?= base_url(); ?>assets/js/fullcalendar/locales/pt-br.js'></script>
-
-<link href='<?= base_url(); ?>assets/css/fullcalendar.min.css' rel='stylesheet' />
-<link rel="stylesheet" type="text/css" href="<?= base_url(); ?>assets/js/dist/jquery.jqplot.min.css" />
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/custom.css" />
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-
-<!-- New Bem-vindos -->
-<div id="content-bemv">
-    <div class="bemv">Dashboard</div>
-    <div></div>
-</div>
-
-<!-- Action boxes -->
-<ul class="cardBox">
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
-        <li class="card">
-            <a class="cardLink" href="<?= site_url('clientes') ?>">
-                <div class="grid-blak">
-                    <div class="numbers">Clientes</div>
-                    <div class="cardName">F1</div>
-                </div>
-                <div class="lord-icon02">
-                    <i class='bx bx-user iconBx02'></i>
-                </div>
-            </a>
-        </li>
-    <?php endif ?>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) : ?>
-        <li class="card">
-            <a class="cardLink" href="<?= site_url('produtos') ?>">
-                <div class="grid-blak">
-                    <div class="numbers">Produtos</div>
-                    <div class="cardName">F2</div>
-                </div>
-                <div class="lord-icon02">
-                    <i class='bx bx-basket iconBx02'></i>
-                </div>
-            </a>
-        </li>
-    <?php endif ?>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
-        <li class="card">
-            <a class="cardLink" href="<?= site_url('servicos') ?>">
-                <div class="grid-blak">
-                    <div class="numbers">Serviços</div>
-                    <div class="cardName">F3</div>
-                </div>
-                <div class="lord-icon03">
-                    <i class='bx bx-wrench iconBx03'></i>
-                </div>
-            </a>
-        </li>
-    <?php endif ?>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-        <li class="card">
-            <a class="cardLink" href="<?= site_url('os') ?>">
-                <div class="grid-blak">
-                    <div class="numbers N-tittle">Ordens</div>
-                    <div class="cardName">F4</div>
-                </div>
-                <div class="lord-icon04">
-                    <i class='bx bx-file iconBx04'></i>
-                </div>
-            </a>
-        </li>
-    <?php endif ?>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
-        <li class="card">
-            <a class="cardLink" href="<?= site_url('vendas/') ?>">
-                <div class="grid-blak">
-                    <div class="numbers N-tittle">Vendas</div>
-                    <div class="cardName">F6</div>
-                </div>
-                <div class="lord-icon05">
-                    <i class='bx bx-cart-alt iconBx05'></i>
-                </div>
-            </a>
-        </li>
-    <?php endif ?>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
-        <li class="card">
-            <a class="cardLink" href="<?= site_url('financeiro/lancamentos') ?>">
-                <div class="grid-blak">
-                    <div class="numbers N-tittle">Lançamentos</div>
-                    <div class="cardName">F7</div>
-                </div>
-                <div class="lord-icon06">
-                    <i class="bx bx-bar-chart-alt-2 iconBx06"></i>
-                </div>
-            </a>
-        </li>
-    <?php endif ?>
-</ul>
-<!-- End-Action boxes -->
-
-<div class="row-fluid" style="margin-top: 0; display: flex">
-    <div class="Sspan12">
-        <div class="widget-box2">
-            <div>
-                <h5 class="cardHeader">Agenda</h5>
-            </div>
-            <div class="widget-content">
-                <table>
-                    <div id='source-calendar'>
-                        <form method="post">
-                            <select style="padding-left: 30px" class="span12" name="statusOsGet" id="statusOsGet" value="">
-                                <option value="">Todos os Status</option>
-                                <option value="Aberto">Aberto</option>
-                                <option value="Faturado">Faturado</option>
-                                <option value="Negociação">Negociação</option>
-                                <option value="Orçamento">Orçamento</option>
-                                <option value="Em Andamento">Em Andamento</option>
-                                <option value="Finalizado">Finalizado</option>
-                                <option value="Cancelado">Cancelado</option>
-                                <option value="Aguardando Peças">Aguardando Peças</option>
-                                <option value="Aprovado">Aprovado</option>
-                            </select>
-                            <button type="button" class="btn-xs" id="btn-calendar"><i class="bx bx-search iconX2"></i></button>
-                        </form>
-                    </div>
-                </table>
-            </div>
-        </div>
-
-        <!-- New widget right -->
-        <div class="new-statisc">
-            <div class="widget-box-new widbox-blak" style="height:100%">
-                <div>
-                    <h5 class="cardHeader">Estatísticas do Sistema</h5>
-                </div>
-
-                <div class="new-bottons">
-                    <a href="<?php echo base_url(); ?>index.php/clientes/adicionar" class="card tip-top" title="Add Clientes e Fornecedores">
-                        <div><i class='bx bxs-group iconBx'></i></div>
-                        <div>
-                            <div class="cardName2"><?= $this->db->count_all('clientes'); ?></div>
-                            <div class="cardName">Clientes</div>
-                        </div>
-                    </a>
-
-                    <a href="<?php echo base_url(); ?>index.php/produtos/adicionar" class="card tip-top" title="Adicionar Produtos">
-                        <div><i class='bx bxs-package iconBx2'></i></div>
-                        <div>
-                            <div class="cardName2"><?= $this->db->count_all('produtos'); ?></div>
-                            <div class="cardName">Produtos</div>
-                        </div>
-                    </a>
-
-                    <a href="<?php echo base_url() ?>index.php/servicos/adicionar" class="card tip-top" title="Adicionar serviços">
-                        <div><i class='bx bxs-stopwatch iconBx3'></i></div>
-                        <div>
-                            <div class="cardName2"><?= $this->db->count_all('servicos'); ?></div>
-                            <div class="cardName">Serviços</div>
-                        </div>
-                    </a>
-
-                    <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="card tip-top" title="Adicionar OS">
-                        <div><i class='bx bxs-spreadsheet iconBx4'></i></div>
-                        <div>
-                            <div class="cardName2"><?= $this->db->count_all('os'); ?></div>
-                            <div class="cardName">Ordens</div>
-                        </div>
-                    </a>
-
-                    <a href="<?php echo base_url(); ?>index.php/garantias" class="card tip-top" title="Adicionar garantia">
-                        <div><i class='bx bxs-receipt iconBx6'></i></div>
-                        <div>
-                            <div class="cardName2"><?= $this->db->count_all('garantias'); ?></div>
-                            <div class="cardName">Garantias</div>
-                        </div>
-                    </a>
-
-                    <a href="<?php echo base_url() ?>index.php/vendas/adicionar" class="card tip-top" title="Adicionar Vendas">
-                        <div><i class='bx bxs-cart-alt iconBx5'></i></div>
-                        <div>
-                            <div class="cardName2"><?= $this->db->count_all('vendas'); ?></div>
-                            <div class="cardName">Vendas</div>
-                        </div>
-                    </a>
-
-                    <!-- responsavel por fazer complementar a variavel "$financeiro_mes_dia->" de receita e despesa -->
-                    <?php if ($estatisticas_financeiro != null) {
-                        if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
-
-                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
-                                <?php $diaRec = "VALOR_" . date('m') . "_REC";
-                                $diaDes = "VALOR_" . date('m') . "_DES"; ?>
-
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adicionar receita">
-                                    <div><i class='bx bxs-up-arrow-circle iconBx7'></i></div>
-                                    <div>
-                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaRec - $financeiro_mes_dia->$diaDes), 2, ',', '.'); ?></div>
-                                        <div class="cardName">Receita do dia</div>
-                                    </div>
-                                </a>
-
-                                <a href="<?php echo base_url() ?>index.php/financeiro/lancamentos" class="card tip-top" title="Adiciona despesa">
-                                    <div><i class='bx bxs-down-arrow-circle iconBx8'></i></div>
-                                    <div>
-                                        <div class="cardName1 cardName2">R$ <?php echo number_format(($financeiro_mes_dia->$diaDes ? $financeiro_mes_dia->$diaDes : 0), 2, ',', '.'); ?></div>
-                                        <div class="cardName">Despesa do dia</div>
-                                    </div>
-                                </a>
-                            <?php endif ?>
-
-                    <?php  }
-                    } ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Fim new widget right -->
-
-<?php if ($estatisticas_financeiro != null) {
-    if ($estatisticas_financeiro->total_receita != null || $estatisticas_financeiro->total_despesa != null || $estatisticas_financeiro->total_receita_pendente != null || $estatisticas_financeiro->total_despesa_pendente != null) {  ?>
-
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) : ?>
-            <!-- Start Charts -->
-            <div class="new-balance">
-                <div class="widget-box0">
-                    <div class="widget-title2">
-                        <h5 class="cardHeader">Balanço Mensal do Ano</h5>
-                        <form method="get" style="display:flex;margin-right:18px;justify-content:flex-end">
-                            <input type="number" name="year" style="width:65px;margin-left:17px;margin-bottom:25px;margin-top:10px;padding-left: 35px" value="<?php echo intval(preg_replace('/[^0-9]/', '', $this->input->get('year'))) ?: date('Y') ?>">
-                            <button type="submit" class="btn-xsx"><i class='bx bx-search iconX'></i></button>
-                        </form>
-                    </div>
-                    <div class="widget-content" style="padding:10px 25px 5px 25px">
-                        <div class="row-fluid" style="margin-top:-35px;">
-                            <div class="span12">
-                                <canvas id="myChart" style="overflow-x: scroll;margin-left: -14px"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="widget-box-statist">
-                    <h5 class="cardHeader">Estatísticas Financeira</h5>
-                    <div class="widget-content" style="padding:10px;margin:25px 0 0">
-                        <canvas id="statusOS"> </canvas>
-                    </div>
-                </div>
-            </div>
-        <?php endif ?>
-
-<script type="text/javascript">
-    if (window.outerWidth > 2000) {
-        Chart.defaults.font.size = 15;
-    };
-    if (window.outerWidth < 2000 && window.outerWidth > 1367) {
-        Chart.defaults.font.size = 11;
-    };
-    if (window.outerWidth < 1367 && window.outerWidth > 480) {
-        Chart.defaults.font.size = 9.5;
-    };
-    if (window.outerWidth < 480) {
-        Chart.defaults.font.size = 8.5;
-    };
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var StatusOS = document.getElementById('statusOS').getContext('2d');
-
-    var myChart = new Chart(ctx, {
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            datasets: [{
-                    label: 'Receita Líquida',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC - $financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_REC - $financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_REC - $financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_REC - $financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_REC - $financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_REC - $financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_REC - $financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_REC - $financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_REC - $financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_REC - $financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_REC - $financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_REC - $financeiro_mes->VALOR_DEZ_DES); ?>
-                    ],
-
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderRadius: 15,
-                },
-
-                {
-                    label: 'Receita Bruta',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_REC); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_REC); ?>
-                    ],
-
-                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                    borderRadius: 15,
-                },
-
-                {
-                    label: 'Despesas',
-                    data: [<?php echo($financeiro_mes->VALOR_JAN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_FEV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_ABR_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_MAI_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUN_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_JUL_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_AGO_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_SET_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_OUT_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_NOV_DES); ?>,
-                        <?php echo($financeiro_mes->VALOR_DEZ_DES); ?>
-                    ],
-
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderRadius: 15,
-                },
-
-                {
-                    label: 'Inadimplência',
-                    data: [<?php echo($financeiro_mesinadipl->VALOR_JAN_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_FEV_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_MAR_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_ABR_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_MAI_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_JUN_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_JUL_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_AGO_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_SET_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_OUT_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_NOV_REC); ?>,
-                        <?php echo($financeiro_mesinadipl->VALOR_DEZ_REC); ?>
-                    ],
-
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderRadius: 15,
-                }
-            ]
-
-        },
-        // configuração
-        type: 'bar',
-        options: {
-            locale: 'pt-BR',
-            scales: {
-                y: {
-                    ticks: {
-                        callback: (value, index, values) => {
-                            return new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                maximumSignificantDidits: 1
-                            }).format(value);
-                        }
-                    }
-                },
-                x: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Meses'
-                    }
-                }
-            },
-
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        beforeTitle: function(context) {
-                            return 'Referente ao mês de';
-                        }
-                    }
-                },
-
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        usePointStyle: true,
-                    }
-                }
-            }
-        }
-    });
-
-    var myChart = new Chart(statusOS, {
-        data: {
-            labels: [
-                'Receita total', 'Receita pendente',
-                'Previsto em caixa', 'Despesa total',
-                'Despesa pendente', 'Previsto a entrar'
-            ],
-            datasets: [{
-                label: 'Total',
-                data: [
-                    <?php echo ($estatisticas_financeiro->total_receita != null) ?  $estatisticas_financeiro->total_receita : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_receita_pendente != null) ?  $estatisticas_financeiro->total_receita_pendente : '0.00'; ?>,
-                    <?php echo($estatisticas_financeiro->total_receita - $estatisticas_financeiro->total_despesa); ?>,
-                    <?php echo ($estatisticas_financeiro->total_despesa != null) ?  $estatisticas_financeiro->total_despesa : '0.00'; ?>,
-                    <?php echo ($estatisticas_financeiro->total_despesa_pendente != null) ?  $estatisticas_financeiro->total_despesa_pendente : '0.00'; ?>,
-                    <?php echo($estatisticas_financeiro->total_receita_pendente - $estatisticas_financeiro->total_despesa_pendente); ?>
-                ],
-
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                    'rgba(153, 102, 255, 0.5)'
-                ],
-                borderWidth: 1
-            }]
-        },
-
-        // configuração
-        type: 'polarArea',
-        options: {
-            locale: 'pt-BR',
-            scales: {
-                r: {
-                    ticks: {
-                        callback: (value, index, values) => {
-                            return new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                                maximumSignificantDidits: 1
-                            }).format(value);
-                        }
-                    },
-                    beginAtZero: true,
-                }
-            },
-            plugins: {
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        usePointStyle: true,
-
-                    }
-                }
-            }
-        }
-    });
-
-    function responsiveFonts() {
-        myChart.update();
-    }
-</script>
-<?php  }
-} ?>
-</div>
-</div>
-
-<!-- Start Staus OS -->
-<div class="span12A" style="margin-left: 0">
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Em Orçamento.</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th>Data Final</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_orcamentos != null) : ?>
-                        <?php foreach ($ordens_orcamentos as $o) : ?>
-                            <?php
-                                    switch ($o->status) {
-                                        case 'Aberto':
-                                            $cor = '#00cd00';
-                                            break;
-                                        case 'Em Andamento':
-                                            $cor = '#436eee';
-                                            break;
-                                        case 'Orçamento':
-                                            $cor = '#CDB380';
-                                            break;
-                                        case 'Negociação':
-                                            $cor = '#AEB404';
-                                            break;
-                                        case 'Cancelado':
-                                            $cor = '#CD0000';
-                                            break;
-                                        case 'Finalizado':
-                                            $cor = '#256';
-                                            break;
-                                        case 'Faturado':
-                                            $cor = '#B266FF';
-                                            break;
-                                        case 'Aguardando Peças':
-                                            $cor = '#FF7F00';
-                                            break;
-                                        case 'Aprovado':
-                                            $cor = '#808080';
-                                            break;
-                                        default:
-                                            $cor = '#E0E4CC';
-                                            break;
-                                    }
-                            ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-
-                                <td><?php if ($o->dataFinal != null) {
-                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                } else {
-                                    echo "";
-                                } ?></td>
-
-                                <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
-                                </td>
-
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS em Orçamento.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Em Aberto</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th>Data Final</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_abertas != null) : ?>
-                        <?php foreach ($ordens_abertas as $o) : ?>
-                            <?php
-                                    switch ($o->status) {
-                                        case 'Aberto':
-                                            $cor = '#00cd00';
-                                            break;
-                                        case 'Em Andamento':
-                                            $cor = '#436eee';
-                                            break;
-                                        case 'Orçamento':
-                                            $cor = '#CDB380';
-                                            break;
-                                        case 'Negociação':
-                                            $cor = '#AEB404';
-                                            break;
-                                        case 'Cancelado':
-                                            $cor = '#CD0000';
-                                            break;
-                                        case 'Finalizado':
-                                            $cor = '#256';
-                                            break;
-                                        case 'Faturado':
-                                            $cor = '#B266FF';
-                                            break;
-                                        case 'Aguardando Peças':
-                                            $cor = '#FF7F00';
-                                            break;
-                                        case 'Aprovado':
-                                            $cor = '#808080';
-                                            break;
-                                        default:
-                                            $cor = '#E0E4CC';
-                                            break;
-                                    }
-                            ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-
-                                <td><?php if ($o->dataFinal != null) {
-                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                } else {
-                                    echo "";
-                                } ?></td>
-                                
-                                <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
-                                </td>
-
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS em aberto.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Aprovadas</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th>Data Final</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_aprovadas != null) : ?>
-                        <?php foreach ($ordens_aprovadas as $o) : ?>
-                            <?php
-                                    switch ($o->status) {
-                                        case 'Aberto':
-                                            $cor = '#00cd00';
-                                            break;
-                                        case 'Em Andamento':
-                                            $cor = '#436eee';
-                                            break;
-                                        case 'Orçamento':
-                                            $cor = '#CDB380';
-                                            break;
-                                        case 'Negociação':
-                                            $cor = '#AEB404';
-                                            break;
-                                        case 'Cancelado':
-                                            $cor = '#CD0000';
-                                            break;
-                                        case 'Finalizado':
-                                            $cor = '#256';
-                                            break;
-                                        case 'Faturado':
-                                            $cor = '#B266FF';
-                                            break;
-                                        case 'Aguardando Peças':
-                                            $cor = '#FF7F00';
-                                            break;
-                                        case 'Aprovado':
-                                            $cor = '#808080';
-                                            break;
-                                        default:
-                                            $cor = '#E0E4CC';
-                                            break;
-                                    }
-                            ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-
-                                <td><?php if ($o->dataFinal != null) {
-                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                } else {
-                                    echo "";
-                                } ?></td>
-                                
-                                <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
-                                </td>
-
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS Aprovada.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Finalizadas</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th>Data Final</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_finalizadas != null) : ?>
-                        <?php foreach ($ordens_finalizadas as $o) : ?>
-                            <?php
-                                    switch ($o->status) {
-                                        case 'Aberto':
-                                            $cor = '#00cd00';
-                                            break;
-                                        case 'Em Andamento':
-                                            $cor = '#436eee';
-                                            break;
-                                        case 'Orçamento':
-                                            $cor = '#CDB380';
-                                            break;
-                                        case 'Negociação':
-                                            $cor = '#AEB404';
-                                            break;
-                                        case 'Cancelado':
-                                            $cor = '#CD0000';
-                                            break;
-                                        case 'Finalizado':
-                                            $cor = '#256';
-                                            break;
-                                        case 'Faturado':
-                                            $cor = '#B266FF';
-                                            break;
-                                        case 'Aguardando Peças':
-                                            $cor = '#FF7F00';
-                                            break;
-                                        case 'Aprovado':
-                                            $cor = '#808080';
-                                            break;
-                                        default:
-                                            $cor = '#E0E4CC';
-                                            break;
-                                    }
-                            ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-
-                                <td><?php if ($o->dataFinal != null) {
-                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                } else {
-                                    echo "";
-                                } ?></td>
-                                
-                                <td>
-                                    <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
-                                </td>
-
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS Finalizada.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Ordens de Serviços Em Andamento e Aguardando Peças</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Cliente</th>
-                        <th>Data Final</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($ordens_status != null) : ?>
-                        <?php foreach ($ordens_status as $o) : ?>
-                                <?php
-                                    switch ($o->status) {
-                                        case 'Aberto':
-                                            $cor = '#00cd00';
-                                            break;
-                                        case 'Em Andamento':
-                                            $cor = '#436eee';
-                                            break;
-                                        case 'Orçamento':
-                                            $cor = '#CDB380';
-                                            break;
-                                        case 'Negociação':
-                                            $cor = '#AEB404';
-                                            break;
-                                        case 'Cancelado':
-                                            $cor = '#CD0000';
-                                            break;
-                                        case 'Finalizado':
-                                            $cor = '#256';
-                                            break;
-                                        case 'Faturado':
-                                            $cor = '#B266FF';
-                                            break;
-                                        case 'Aguardando Peças':
-                                            $cor = '#FF7F00';
-                                            break;
-                                        case 'Aprovado':
-                                            $cor = '#808080';
-                                            break;
-                                        default:
-                                            $cor = '#E0E4CC';
-                                            break;
-                                    }
-                            ?>
-                            <tr>
-                                <td>
-                                    <?= $o->idOs ?>
-                                </td>
-                                <td class="cli1">
-                                    <?= $o->nomeCliente ?>
-                                </td>
-
-                                <td><?php if ($o->dataFinal != null) {
-                                    echo date('d/m/Y', strtotime($o->dataFinal));
-                                } else {
-                                    echo "";
-                                } ?></td>
-
-                                    <td>
-                                        <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $o->status ?></span>
-                                    </td>
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                                        <a href="<?= base_url() ?>index.php/os/visualizar/<?= $o->idOs ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i> </a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma OS em Orçamento.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Status de Vendas</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered lanc-table">
-                <thead>
-                    <tr>
-                        <th class="numero-col">N°</th>
-                        <th class="cliente-col">Cliente</th>
-                        <th class="data-final-col">Data da Venda</th>
-                        <th class="status-col">Status</th>
-                        <th class="acoes-col">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($vendasstatus != null) : ?>
-                        <?php foreach ($vendasstatus as $v) : ?>
-                            <?php
-                                    switch ($v->status) {
-                                        case 'Aberto':
-                                            $cor = '#00cd00';
-                                            break;
-                                        case 'Em Andamento':
-                                            $cor = '#436eee';
-                                            break;
-                                        case 'Orçamento':
-                                            $cor = '#CDB380';
-                                            break;
-                                        case 'Negociação':
-                                            $cor = '#AEB404';
-                                            break;
-                                        case 'Cancelado':
-                                            $cor = '#CD0000';
-                                            break;
-                                        case 'Finalizado':
-                                            $cor = '#256';
-                                            break;
-                                        case 'Faturado':
-                                            $cor = '#B266FF';
-                                            break;
-                                        case 'Aguardando Peças':
-                                            $cor = '#FF7F00';
-                                            break;
-                                        case 'Aprovado':
-                                            $cor = '#808080';
-                                            break;
-                                        default:
-                                            $cor = '#E0E4CC';
-                                            break;
-                                    }
-                            ?>
-                            <tr>
-                                <td>
-                                    <?= $v->idVendas ?>
-                                </td>
-
-                                <td class="cli1">
-                                    <?= $v->nomeCliente ?>
-                                </td>
-                                <td>
-                                    <?= date('d/m/Y', strtotime($v->dataVenda)) ?>
-                                </td>
-                                
-                                    <td>
-                                        <span class="badge" style="background-color: <?= $cor ?>; border-color: <?= $cor ?>;"><?= $v->status ?></span>
-                                    </td>
-                                <td>
-                                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
-                                        <a href="<?= base_url() ?>index.php/vendas/visualizar/<?= $v->idVendas ?>" class="btn-nwe tip-top" title="Visualizar">
-                                            <i class="bx bx-show"></i> </a>
-                                   
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="5">Nenhuma Venda.</td>
-                        </tr>
-                    <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Últimos Lançamentos Pendentes</h5>
-        </div>
-        <div class="widget-content">
-            <table class="table table-bordered lanc-table">
-                <thead>
-                    <tr>
-                        <th class="tipo-col">Tipo</th>
-                        <th class="cliente-col">Cliente/Fornecedor</th>
-                        <th class="descricao-col">Descrição</th>
-                        <th class="vencimento-col">Vencimento</th>
-                        <th class="valor-col">V.T. Faturado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($lancamentos)): ?>
-                        <?php foreach ($lancamentos as $lancamento): ?>
-                            <tr>
-                                <td>
-                                    <?php if ($lancamento->tipo == 'receita'): ?>
-                                        <span class="label label-success"><b><?php echo ucfirst($lancamento->tipo); ?></b></span>
-                                    <?php elseif ($lancamento->tipo == 'despesa'): ?>
-                                        <span class="label label-important"><b><?php echo ucfirst($lancamento->tipo); ?></b></span>
-                                    <?php else: ?>
-                                        <?php echo ucfirst($lancamento->tipo); ?>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="text-truncate"><?php echo $lancamento->cliente_fornecedor; ?></td>
-                                <td class="text-truncate"><?php echo $lancamento->descricao; ?></td>
-                                <td><?php echo date_format(date_create($lancamento->data_vencimento), 'd/m/Y'); ?></td>
-                                <td>R$ <?php echo number_format($lancamento->valor_desconto, 2, ',', '.'); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5">Nenhum lançamento encontrado.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="widget-box0 widbox-blak">
-        <div>
-            <h5 class="cardHeader">Produtos Com Estoque Mínimo</h5>
-        </div>
-            <div class="widget-content">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Cod.</th>
-                            <th>Produto</th>
-                            <th>Preço de Venda</th>
-                            <th>Estoque</th>
-                            <th class="ph3">Estoque Mínimo</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($produtos != null) : ?>
-                            <?php foreach ($produtos as $p) : ?>
-                                <tr>
-                                    <td>
-                                        <?= $p->idProdutos ?>
-                                    </td>
-                                    <td class="cli1">
-                                        <?= $p->descricao ?>
-                                    </td>
-                                    <td>R$
-                                        <?= $p->precoVenda ?>
-                                    </td>
-                                    <td>
-                                        <?= $p->estoque ?>
-                                    </td>
-                                    <td class="ph3">
-                                        <?= $p->estoqueMinimo ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) : ?>
-                                            <a href="<?= base_url() ?>index.php/produtos/editar/<?= $p->idProdutos ?>" class="btn-nwe3 tip-top" title="Editar">
-                                                <i class="bx bx-edit"></i>
-                                            </a>
-                                            <a href="#atualizar-estoque" role="button" data-toggle="modal" produto="<?= $p->idProdutos ?>" estoque="<?= $p->estoque ?>" class="btn-nwe5 tip-top" title="Atualizar Estoque">
-                                                <i class="bx bx-plus-circle"></i></a>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach ?>
-                        <?php else : ?>
-                            <tr>
-                                <td colspan="6">Nenhum produto com estoque baixo.</td>
-                            </tr>
-                        <?php endif ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-</div>
-<!-- Fim Staus OS -->
-
-<!-- Modal Status OS Calendar -->
-<div id="calendarModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Status OS Detalhada</h3>
-    </div>
-    <div class="modal-body">
-        <div class="span5" id="divFormStatusOS" style="margin-left: 0"></div>
-        <h4><b>OS:</b> <span id="modalId" class="modal-id"></span></h4>
-        <h5 id="modalCliente" class="modal-cliente"></h5>
-        <div id="modalDataInicial" class="modal-DataInicial"></div>
-        <div id="modalDataFinal" class="modal-DataFinal"></div>
-        <div id="modalGarantia" class="modal-Garantia"></div>
-        <div id="modalStatus" class="modal-Status"></div>
-        <div id="modalDescription" class="modal-Description"></div>
-        <div id="modalDefeito" class="modal-Defeito"></div>
-        <div id="modalObservacoes" class="modal-Observacoes"></div>
-        <div id="modalSubtotal" class="modal-Subtotal"></div>
-        <div id="modalDesconto" class="modal-Desconto"></div>
-        <div id="modalTotal" class="modal-Total"></div>
-        <div id="modalFaturado" class="modal-Faturado"></div>
-    </div>
-    <div class="modal-footer">
-        <?php
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                echo '<a id="modalIdVisualizar" style="margin-right: 1%" href="" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-            }
-if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-    echo '<a id="modalIdEditar" style="margin-right: 1%" href="" class="btn btn-info tip-top" title="Editar OS"><i class="fas fa-edit"></i></a>';
+<?php
+/**
+ * Painel inicial (#2847), com os componentes da v5.
+ *
+ * - Cards de resumo (kpi-card): OS em andamento, orçamentos, vendas em aberto
+ *   e saldo do mês. Cada um só com a permissão de ver o módulo.
+ * - Agenda das entregas de OS (FullCalendar 6), com filtro de status; o
+ *   evento abre um modal com os dados da OS.
+ * - Balanço do ano (receitas, despesas e saldo por mês) e OS por status,
+ *   em Chart.js 4. Os números vão para o módulo em page_data e também numa
+ *   tabela para leitores de tela.
+ * - Listas do que pede atenção: OS em andamento, vendas em aberto,
+ *   lançamentos a vencer e estoque baixo.
+ *
+ * O módulo painel/painel carrega o Chart.js e o FullCalendar de
+ * assets/vendor só quando a tela tem gráfico ou agenda.
+ *
+ * @var string              $hoje
+ * @var array<string, bool> $pode
+ */
+$caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
+
+$kpis = [];
+if ($pode['os']) {
+    $aguardando = (int) ($os_por_status['Aguardando Peças'] ?? 0);
+    $kpis[] = component('kpi-card', [
+        'label' => 'OS em andamento',
+        'value' => painelSomar($os_por_status, PAINEL_OS_ANDAMENTO),
+        'icon' => 'wrench',
+        'caption' => $aguardando === 0 ? 'Nenhuma aguardando peças' : $aguardando . ' aguardando peças',
+    ]);
+    $kpis[] = component('kpi-card', [
+        'label' => 'Orçamentos',
+        'value' => painelSomar($os_por_status, PAINEL_OS_ORCAMENTO),
+        'icon' => 'file-text',
+        'caption' => 'Em orçamento ou negociação',
+    ]);
 }
-if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
-    echo '<a id="linkExcluir" href="#modal-excluir-os" role="button" data-toggle="modal" os="" class="btn btn-danger tip-top" title="Excluir OS"><i class="fas fa-trash-alt"></i></a>  ';
+if ($pode['vendas']) {
+    $kpis[] = component('kpi-card', [
+        'label' => 'Vendas em aberto',
+        'value' => painelSomar($vendas_por_status, PAINEL_VENDAS_ABERTAS),
+        'icon' => 'shopping-cart',
+        'caption' => 'Ainda não faturadas',
+    ]);
+}
+if ($pode['lancamentos']) {
+    $kpis[] = component('kpi-card', [
+        'label' => 'Saldo do mês',
+        'value' => dinheiro($mes['saldo']),
+        'icon' => 'circle-dollar-sign',
+        'caption' => 'A receber: ' . dinheiro($visao_geral['a_receber']),
+    ]);
+}
+
+$dadosDoModulo = [];
+if ($pode['balanco']) {
+    $dadosDoModulo['balanco'] = $balanco;
+}
+if ($pode['os']) {
+    $dadosDoModulo['os'] = $os_grafico;
 }
 ?>
+<div class="flex flex-col gap-4 pt-2 pb-8" <?= js_module('painel/painel') ?>>
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Painel</h1>
+        <p class="text-caption text-muted"><?= e(ucfirst(painelDataPorExtenso($hoje))) ?></p>
+    </header>
+
+    <?php if ($kpis !== []) { ?>
+        <div class="grid grid-cols-2 gap-4 xl:grid-cols-4"><?= componenteConteudo($kpis) ?></div>
+    <?php } ?>
+
+    <?php if ($pode['os']) { ?>
+        <div class="grid gap-4 xl:grid-cols-3">
+            <section class="<?= e($caixa) ?> min-w-0 xl:col-span-2" aria-labelledby="titulo-agenda">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h2 id="titulo-agenda" class="text-heading-sm text-text">Agenda de entregas</h2>
+                        <p class="text-caption text-muted">OS pela data final. Clique numa OS para ver os detalhes.</p>
+                    </div>
+                    <div class="sm:w-56">
+                        <?= component('select', [
+                            'name' => 'status',
+                            'id' => 'agenda-status',
+                            'label' => 'Status',
+                            'placeholder' => 'Todos os status',
+                            'options' => array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
+                            'attrs' => ['data-agenda-status' => true],
+                        ]) ?>
+                    </div>
+                </div>
+                <div class="painel-agenda mt-4 min-h-96" data-agenda="<?= e(site_url('mapos/calendario')) ?>" aria-live="polite">
+                    <p class="text-caption text-muted" data-agenda-carregando>Carregando a agenda…</p>
+                </div>
+            </section>
+
+            <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-os-status">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="titulo-os-status" class="text-heading-sm text-text">OS por status</h2>
+                    <?= component('button', ['label' => 'Ver OS', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os')]) ?>
+                </div>
+                <?php if ($os_grafico === []) { ?>
+                    <?= component('empty-state', ['title' => 'Nenhuma OS cadastrada', 'message' => 'As OS aparecem aqui por status.', 'icon' => 'chart-pie', 'class' => 'border-0']) ?>
+                <?php } else { ?>
+                    <div class="relative mx-auto mt-4 aspect-square max-w-72">
+                        <canvas data-grafico="os" role="img" aria-label="Gráfico de OS por status"></canvas>
+                    </div>
+                    <table class="sr-only">
+                        <caption>OS por status</caption>
+                        <thead><tr><th scope="col">Status</th><th scope="col">OS</th></tr></thead>
+                        <tbody>
+                            <?php foreach ($os_grafico as $fatia) { ?>
+                                <tr><td><?= e($fatia['status']) ?></td><td><?= e($fatia['total']) ?></td></tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                <?php } ?>
+            </section>
+        </div>
+    <?php } ?>
+
+    <?php if ($pode['balanco']) { ?>
+        <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-balanco">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <h2 id="titulo-balanco" class="text-heading-sm text-text"><?= e('Balanço de ' . $ano) ?></h2>
+                    <p class="text-caption text-muted">Receitas e despesas pagas, pelo mês do pagamento.</p>
+                </div>
+                <form method="get" action="<?= e(site_url('mapos')) ?>" class="flex items-end gap-2">
+                    <div class="w-32">
+                        <?= component('select', [
+                            'name' => 'ano',
+                            'id' => 'balanco-ano',
+                            'label' => 'Ano',
+                            'options' => array_combine(array_map('strval', $anos), array_map('strval', $anos)),
+                            'selected' => (string) $ano,
+                        ]) ?>
+                    </div>
+                    <?= component('button', ['label' => 'Ver', 'variant' => 'outline', 'type' => 'submit']) ?>
+                </form>
+            </div>
+            <?php if (array_sum($balanco['receitas']) + array_sum($balanco['despesas']) == 0) { ?>
+                <?= component('empty-state', ['title' => 'Nada pago em ' . $ano, 'message' => 'Os lançamentos pagos do ano aparecem aqui, mês a mês.', 'icon' => 'chart-column', 'class' => 'border-0']) ?>
+            <?php } else { ?>
+                <div class="relative mt-4 h-72">
+                    <canvas data-grafico="balanco" role="img" aria-label="<?= e('Gráfico do balanço de ' . $ano) ?>"></canvas>
+                </div>
+                <table class="sr-only">
+                    <caption><?= e('Balanço de ' . $ano) ?></caption>
+                    <thead><tr><th scope="col">Mês</th><th scope="col">Receitas</th><th scope="col">Despesas</th><th scope="col">Saldo</th></tr></thead>
+                    <tbody>
+                        <?php foreach ($balanco['meses'] as $i => $mesNome) { ?>
+                            <tr><td><?= e($mesNome) ?></td><td><?= e(dinheiro($balanco['receitas'][$i])) ?></td><td><?= e(dinheiro($balanco['despesas'][$i])) ?></td><td><?= e(dinheiro($balanco['saldo'][$i])) ?></td></tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            <?php } ?>
+        </section>
+    <?php } ?>
+
+    <div class="grid gap-4 xl:grid-cols-2">
+        <?php if ($pode['os']) { ?>
+            <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-lista-os">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="titulo-lista-os" class="text-heading-sm text-text">OS em andamento</h2>
+                    <?= component('button', ['label' => 'Ver todas', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os')]) ?>
+                </div>
+                <div class="mt-3">
+                    <?= component('data-table', [
+                        'caption' => 'OS em andamento, pela data de entrega',
+                        'dense' => true,
+                        'rows' => $os_lista,
+                        'columns' => [
+                            ['label' => 'Nº', 'align' => 'right', 'nowrap' => true, 'render' => fn ($o) => component('link', ['label' => (string) $o->idOs, 'href' => site_url('os/visualizar/' . (int) $o->idOs)])],
+                            ['label' => 'Cliente', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($o) => (string) ($o->nomeCliente ?? 'Cliente removido')],
+                            ['label' => 'Entrega', 'align' => 'right', 'nowrap' => true, 'render' => fn ($o) => $o->dataFinal !== null && substr((string) $o->dataFinal, 0, 10) < $hoje
+                                ? component('pill-status', ['label' => 'Atrasada · ' . dataBr($o->dataFinal), 'variant' => 'warning'])
+                                : dataBr($o->dataFinal)],
+                            ['label' => 'Status', 'nowrap' => true, 'render' => fn ($o) => component('pill-status', osStatusPill($o->status))],
+                        ],
+                        'empty' => component('empty-state', ['title' => 'Nenhuma OS em andamento', 'message' => 'OS abertas, aprovadas, em andamento ou aguardando peças aparecem aqui.', 'icon' => 'wrench', 'class' => 'border-0']),
+                    ]) ?>
+                </div>
+            </section>
+        <?php } ?>
+
+        <?php if ($pode['vendas']) { ?>
+            <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-lista-vendas">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="titulo-lista-vendas" class="text-heading-sm text-text">Vendas em aberto</h2>
+                    <?= component('button', ['label' => 'Ver todas', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('vendas')]) ?>
+                </div>
+                <div class="mt-3">
+                    <?= component('data-table', [
+                        'caption' => 'Vendas em aberto, da mais recente',
+                        'dense' => true,
+                        'rows' => $vendas_lista,
+                        'columns' => [
+                            ['label' => 'Nº', 'align' => 'right', 'nowrap' => true, 'render' => fn ($v) => component('link', ['label' => (string) $v->idVendas, 'href' => site_url('vendas/visualizar/' . (int) $v->idVendas)])],
+                            ['label' => 'Cliente', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($v) => (string) ($v->nomeCliente ?? 'Cliente removido')],
+                            ['label' => 'Data', 'align' => 'right', 'nowrap' => true, 'render' => fn ($v) => dataBr($v->dataVenda)],
+                            ['label' => 'Status', 'nowrap' => true, 'render' => fn ($v) => component('pill-status', osStatusPill($v->status))],
+                        ],
+                        'empty' => component('empty-state', ['title' => 'Nenhuma venda em aberto', 'message' => 'Vendas ainda não faturadas aparecem aqui.', 'icon' => 'shopping-cart', 'class' => 'border-0']),
+                    ]) ?>
+                </div>
+            </section>
+        <?php } ?>
+
+        <?php if ($pode['lancamentos']) { ?>
+            <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-lista-lancamentos">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="titulo-lista-lancamentos" class="text-heading-sm text-text">Lançamentos a vencer</h2>
+                    <?= component('button', ['label' => 'Ver todos', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('financeiro/lancamentos') . listagemQuery(['periodo' => 'ano', 'status' => 'pendente'])]) ?>
+                </div>
+                <div class="mt-3">
+                    <?= component('data-table', [
+                        'caption' => 'Lançamentos em aberto, do vencimento mais antigo',
+                        'dense' => true,
+                        'rows' => $lancamentos_lista,
+                        'columns' => [
+                            ['label' => 'Vencimento', 'align' => 'right', 'nowrap' => true, 'render' => fn ($l) => substr((string) $l->data_vencimento, 0, 10) < $hoje
+                                ? component('pill-status', ['label' => 'Vencido · ' . dataBr($l->data_vencimento), 'variant' => 'warning'])
+                                : dataBr($l->data_vencimento)],
+                            ['label' => 'Descrição', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($l) => trim((string) $l->descricao . ((string) $l->cliente_fornecedor !== '' ? ' · ' . $l->cliente_fornecedor : ''))],
+                            ['label' => 'Tipo', 'nowrap' => true, 'render' => fn ($l) => component('pill-status', $l->tipo === 'receita' ? ['label' => 'Receita', 'variant' => 'info'] : ['label' => 'Despesa', 'variant' => 'neutral'])],
+                            ['label' => 'Valor', 'align' => 'right', 'nowrap' => true, 'render' => fn ($l) => dinheiro($l->liquido)],
+                        ],
+                        'empty' => component('empty-state', ['title' => 'Nenhum lançamento em aberto', 'message' => 'Receitas a receber e despesas a pagar aparecem aqui.', 'icon' => 'circle-dollar-sign', 'class' => 'border-0']),
+                    ]) ?>
+                </div>
+            </section>
+        <?php } ?>
+
+        <?php if ($pode['produtos']) { ?>
+            <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-lista-estoque">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="titulo-lista-estoque" class="text-heading-sm text-text">Estoque baixo</h2>
+                    <?= component('button', ['label' => 'Ver todos', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('produtos') . listagemQuery(['estoque' => 'baixo'])]) ?>
+                </div>
+                <div class="mt-3">
+                    <?= component('data-table', [
+                        'caption' => 'Produtos no estoque mínimo ou abaixo',
+                        'dense' => true,
+                        'rows' => $estoque_lista,
+                        'columns' => [
+                            ['label' => 'Produto', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($p) => component('link', ['label' => (string) $p->descricao, 'href' => site_url('produtos/visualizar/' . (int) $p->idProdutos)])],
+                            ['label' => 'Estoque', 'align' => 'right', 'nowrap' => true, 'render' => fn ($p) => (string) (int) $p->estoque],
+                            ['label' => 'Mínimo', 'align' => 'right', 'nowrap' => true, 'render' => fn ($p) => (string) (int) $p->estoqueMinimo],
+                            ['label' => 'Situação', 'nowrap' => true, 'render' => fn ($p) => component('pill-status', (int) $p->estoque <= 0 ? ['label' => 'Sem estoque', 'variant' => 'warning'] : ['label' => 'Baixo', 'variant' => 'warning'])],
+                        ],
+                        'empty' => component('empty-state', ['title' => 'Nenhum produto com estoque baixo', 'message' => 'Produtos no estoque mínimo ou abaixo aparecem aqui.', 'icon' => 'package', 'class' => 'border-0']),
+                    ]) ?>
+                </div>
+            </section>
+        <?php } ?>
     </div>
+
+    <?php if ($pode === array_fill_keys(array_keys($pode), false)) { ?>
+        <?= component('empty-state', ['title' => 'Bem-vindo ao Map-OS', 'message' => 'Seu usuário ainda não tem permissão para ver os módulos do painel. Fale com o administrador.', 'icon' => 'house']) ?>
+    <?php } ?>
 </div>
 
-<!-- Modal Excluir Os -->
-<div id="modal-excluir-os" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Excluir OS</h5>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="modalIdExcluir" name="id" value="" />
-            <h5 style="text-align: center">Deseja realmente excluir esta OS?</h5>
-        </div>
-        <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
-        </div>
-    </form>
-</div>
+<?php if ($dadosDoModulo !== []) { ?>
+    <?= page_data('painel-dados', $dadosDoModulo) ?>
+<?php } ?>
 
-<!-- Modal Estoque -->
-<div id="atualizar-estoque" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/produtos/atualizar_estoque" method="post" id="formEstoque">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel"><i class="fas fa-plus-square"></i> Atualizar Estoque</h5>
-        </div>
-        <div class="modal-body">
-            <div class="control-group">
-                <label for="estoqueAtual" class="control-label">Estoque Atual</label>
-                <div class="controls">
-                    <input id="estoqueAtual" type="text" name="estoqueAtual" value="" readonly />
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="estoque" class="control-label">Adicionar Produtos<span class="required">*</span></label>
-                <div class="controls">
-                    <input type="hidden" id="idProduto" class="idProduto" name="id" value="" />
-                    <input id="estoque" type="text" name="estoque" value="" />
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer" style="display:flex;justify-content: center">
-            <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-            <button class="button btn btn-primary"><span class="button__icon"><i class="bx bx-sync"></i></span><span class="button__text2">Atualizar</span></button>
-        </div>
-    </form>
-</div>
-
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-<!-- Modal Estoque-->
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(document).on('click', 'a', function(event) {
-            var produto = $(this).attr('produto');
-            var estoque = $(this).attr('estoque');
-            $('.idProduto').val(produto);
-            $('#estoqueAtual').val(estoque);
-        });
-
-        $('#formEstoque').validate({
-            rules: {
-                estoque: {
-                    required: true,
-                    number: true
-                }
-            },
-            messages: {
-                estoque: {
-                    required: 'Campo Requerido.',
-                    number: 'Informe um número válido.'
-                }
-            },
-            errorClass: "help-inline",
-            errorElement: "span",
-            highlight: function(element, errorClass, validClass) {
-                $(element).parents('.control-group').addClass('error');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('error');
-                $(element).parents('.control-group').addClass('success');
-            }
-        });
-
-        var srcCalendarEl = document.getElementById('source-calendar');
-        var srcCalendar = new FullCalendar.Calendar(srcCalendarEl, {
-            locale: 'pt-br',
-            height: 500,
-            editable: false,
-            selectable: false,
-            businessHours: true,
-            dayMaxEvents: true, // allow "more" link when too many events
-            displayEventTime: false,
-            events: {
-                url: "<?= base_url() . "index.php/mapos/calendario"; ?>",
-                method: 'GET',
-                extraParams: function() { // a function that returns an object
-                    return {
-                        status: $("#statusOsGet").val(),
-                    };
-                },
-                failure: function() {
-                    alert('Falha ao buscar OS de calendário!');
-                },
-            },
-            eventClick: function(info) {
-                var eventObj = info.event.extendedProps;
-                $('#modalId').html(eventObj.id);
-                $('#modalIdVisualizar').attr("href", "<?php echo base_url(); ?>index.php/os/visualizar/" + eventObj.id);
-                if (eventObj.editar) {
-                    $('#modalIdEditar').show();
-                    $('#linkExcluir').show();
-                    $('#modalIdEditar').attr("href", "<?php echo base_url(); ?>index.php/os/editar/" + eventObj.id);
-                    $('#modalIdExcluir').val(eventObj.id);
-                } else {
-                    $('#modalIdEditar').hide();
-                    $('#linkExcluir').hide();
-                }
-                $('#modalCliente').html(eventObj.cliente);
-                $('#modalDataInicial').html(eventObj.dataInicial);
-                $('#modalDataFinal').html(eventObj.dataFinal);
-                $('#modalGarantia').html(eventObj.garantia);
-                $('#modalStatus').html(eventObj.status);
-                $('#modalDescription').html(eventObj.description);
-                $('#modalDefeito').html(eventObj.defeito);
-                $('#modalObservacoes').html(eventObj.observacoes);
-                $('#modalSubtotal').html(eventObj.subtotal);
-                $('#modalDesconto').html(eventObj.desconto);
-                $('#modalTotal').html(eventObj.total);
-                $('#modalFaturado').html(eventObj.faturado);
-                $('#eventUrl').attr('href', event.url);
-                $('#calendarModal').modal();
-            },
-        });
-
-        srcCalendar.render();
-
-        $('#btn-calendar').on('click', function() {
-            srcCalendar.refetchEvents();
-        });
-    });
-</script>
+<?php if ($pode['os']) { ?>
+    <?= component('modal', [
+        'id' => 'agenda-os',
+        'title' => 'OS',
+        'size' => 'md',
+        // Marcação estática; os dados entram por textContent (módulo
+        // painel/painel). Um pill-status por status, escondidos: o módulo
+        // mostra o da OS clicada.
+        'body' => [
+            new HtmlSeguro('<div class="flex flex-col gap-3"><div>'),
+            array_map(static fn ($status) => component('pill-status', osStatusPill($status) + ['attrs' => ['data-agenda-pill' => $status, 'hidden' => true]]), array_keys(OS_STATUS_VARIANTES)),
+            new HtmlSeguro('</div>'
+            . '<dl class="grid gap-3 sm:grid-cols-2">'
+            . '<div class="sm:col-span-2"><dt class="text-caption text-muted">Cliente</dt><dd class="text-body-md [overflow-wrap:anywhere] text-text" data-agenda-campo="cliente"></dd></div>'
+            . '<div><dt class="text-caption text-muted">Entrada</dt><dd class="text-body-md tabular-nums text-text" data-agenda-campo="dataInicial"></dd></div>'
+            . '<div><dt class="text-caption text-muted">Entrega</dt><dd class="text-body-md tabular-nums text-text" data-agenda-campo="dataFinal"></dd></div>'
+            . '<div class="sm:col-span-2"><dt class="text-caption text-muted">Equipamento</dt><dd class="text-body-md [overflow-wrap:anywhere] text-text" data-agenda-campo="equipamento"></dd></div>'
+            . '<div><dt class="text-caption text-muted">Total</dt><dd class="text-body-md tabular-nums text-text" data-agenda-campo="total"></dd></div>'
+            . '<div><dt class="text-caption text-muted">Faturada</dt><dd class="text-body-md text-text" data-agenda-campo="faturado"></dd></div>'
+            . '</dl></div>'),
+        ],
+        'footer' => [
+            component('button', ['label' => 'Fechar', 'variant' => 'ghost', 'attrs' => ['data-modal-fechar' => true]]),
+            component('button', ['label' => 'Editar OS', 'icon' => 'pencil', 'variant' => 'outline', 'href' => site_url('os'), 'attrs' => ['data-agenda-link' => 'urlEditar', 'hidden' => true]]),
+            component('button', ['label' => 'Ver OS', 'icon' => 'eye', 'variant' => 'outline', 'href' => site_url('os'), 'attrs' => ['data-agenda-link' => 'url']]),
+        ],
+    ]) ?>
+<?php } ?>
