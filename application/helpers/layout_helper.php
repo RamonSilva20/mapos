@@ -242,6 +242,7 @@ if (! defined('LAYOUT_ROTULOS')) {
         'os' => 'Ordens de serviço',
         'cobrancas' => 'Cobranças',
         'relatorios' => 'Relatórios',
+        'sku' => 'SKU',
         'usuarios' => 'Usuários',
         'permissoes' => 'Permissões',
         'mapos' => 'Sistema',

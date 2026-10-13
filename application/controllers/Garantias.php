@@ -220,11 +220,17 @@ class Garantias extends MY_Controller
             redirect(site_url('garantias/gerenciar/'));
         }
 
+        $emUso = $this->garantias_model->osVinculadas((int) $id);
+        if ($emUso > 0) {
+            $this->session->set_flashdata('error', 'Você não pode excluir esse termo de garantia: ' . ($emUso === 1 ? '1 OS usa' : $emUso . ' OS usam') . ' este termo. Troque o termo dela e tente de novo.');
+            redirect(site_url('garantias') . listagemQuery(listagemFiltros(self::FILTROS, $this->input->get())));
+        }
+
         if ($this->garantias_model->delete('garantias', 'idGarantias', $id) == true) {
             $this->session->set_flashdata('success', 'Termo de garantia excluído com sucesso!');
             log_info('Removeu uma garantia. ID: ' . $id);
         } else {
-            $this->session->set_flashdata('error', 'Você não pode excluir esse termo de garantia. Verifique se tem alguma OS vinculada a ele e remova antes de tentar de novo.');
+            $this->session->set_flashdata('error', 'Não foi possível excluir o termo de garantia.');
         }
 
         redirect(site_url('garantias') . listagemQuery(listagemFiltros(self::FILTROS, $this->input->get())));

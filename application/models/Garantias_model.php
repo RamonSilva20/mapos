@@ -48,6 +48,15 @@ class Garantias_model extends CI_Model
             ->get()->result();
     }
 
+    /**
+     * Quantas OS usam o termo. O banco não tem a chave estrangeira
+     * os.garantias_id (só o índice), então o DELETE não é recusado sozinho.
+     */
+    public function osVinculadas(int $id): int
+    {
+        return (int) $this->db->where('garantias_id', $id)->count_all_results('os');
+    }
+
     public function contar(array $filtros): int
     {
         $this->aplicarFiltros($filtros);

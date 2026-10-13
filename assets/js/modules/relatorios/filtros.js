@@ -23,10 +23,32 @@ export function aplicarMascara(campo, mascaras = MASCARAS) {
     }
 }
 
+/**
+ * "Limpar" (reset) também esvazia o cliente e o responsável escolhidos. O
+ * valor de um <input type=hidden> é o próprio atributo, então o reset do
+ * navegador não o desfaz: sem isto o relatório sairia filtrado pela escolha
+ * anterior, com o campo de texto já vazio.
+ */
+export function limparAutocompletes(formulario) {
+    for (const wrapper of formulario.querySelectorAll('[data-autocomplete]')) {
+        const oculto = wrapper.querySelector('input[type=hidden]');
+        if (oculto) {
+            oculto.value = '';
+        }
+
+        const visivel = wrapper.querySelector('input:not([type=hidden])');
+        visivel?.setCustomValidity?.('');
+        visivel?.removeAttribute?.('aria-invalid');
+    }
+}
+
 export default function iniciar(raiz) {
     for (const campo of raiz.querySelectorAll('[data-mascara]')) {
         campo.addEventListener('input', () => aplicarMascara(campo));
     }
 
     iniciarAutocompletes(raiz);
+
+    const formulario = raiz.querySelector('form');
+    formulario?.addEventListener('reset', () => limparAutocompletes(formulario));
 }

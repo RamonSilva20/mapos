@@ -101,7 +101,7 @@ $vazio = $temFiltro
         // O nome entra pelo modal.js (textContent); aqui só o marcador vazio.
         'message' => [
             new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="nome"></strong>'),
-            ' será removido. Se alguma OS ou venda usa este termo, a exclusão é recusada. Essa ação não pode ser desfeita.',
+            ' será removido. Se alguma OS usa este termo, a exclusão é recusada. Essa ação não pode ser desfeita.',
         ],
         'confirm_label' => 'Excluir',
         'confirm_attrs' => ['form' => 'form-excluir-garantia'],

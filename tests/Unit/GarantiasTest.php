@@ -46,6 +46,27 @@ final class GarantiasTest extends MaposTestCase
         $this->assertSame(['90 dias'], array_column($model->listar([], 1, 1), 'refGarantia'));
     }
 
+    public function testOsVinculadasContaSoAsOsDoTermo(): void
+    {
+        $this->criarBanco();
+        $this->db->query('CREATE TABLE os (idOs INTEGER PRIMARY KEY AUTOINCREMENT, garantias_id INTEGER)');
+        $this->db->query('INSERT INTO os (garantias_id) VALUES (2), (2), (1), (NULL)');
+        $model = $this->model();
+
+        $this->assertSame(2, $model->osVinculadas(2));
+        $this->assertSame(1, $model->osVinculadas(1));
+        $this->assertSame(0, $model->osVinculadas(3));
+    }
+
+    public function testExcluirConferePeloModelEmVezDeConfiarNoBanco(): void
+    {
+        $codigo = (string) file_get_contents(APPPATH . 'controllers/Garantias.php');
+        preg_match('/function excluir\(\).*?\n    }\n/s', $codigo, $trecho);
+
+        $this->assertNotEmpty($trecho);
+        $this->assertLessThan(strpos($trecho[0], "->delete('garantias'"), strpos($trecho[0], 'osVinculadas('), 'A checagem vem antes do delete.');
+    }
+
     public function testBuscaTrataCaracteresEspeciaisComoTexto(): void
     {
         $this->criarBanco();
