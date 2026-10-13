@@ -2,7 +2,6 @@
     "application/views/conecte/imprimirVenda.php": 1,
     "application/views/garantias/imprimirGarantia.php": 1,
     "application/views/garantias/imprimirGarantiaOs.php": 1,
-    "application/views/mapos/minhaConta.php": 1,
     "application/views/os/imprimirOs.php": 1,
     "application/views/os/imprimirOsTermica.php": 1,
     "application/views/vendas/imprimirVenda.php": 1,
