@@ -26,7 +26,7 @@
                     <div class="span12">
                         <div class="span2">
                             <label for="dataGarantia">Data</label>
-                            <?php echo e(form_hidden('idGarantias', $result->idGarantias));?>
+                            <input type="hidden" name="idGarantias" value="<?= e($result->idGarantias) ?>">
                             <input id="dataGarantia" class="span12 datepicker" type="text" name="dataGarantia" value="<?php echo date('d/m/Y', strtotime($result->dataGarantia)); ?>" disabled />
                         </div>
                         <div class="span5">
