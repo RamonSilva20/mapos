@@ -25,7 +25,7 @@ $errosDeCampo = array_diff_key($erros, ['_geral' => true]);
         <?= component('alert', ['variant' => 'danger', 'message' => count($errosDeCampo) === 1 ? 'Confira o campo destacado.' : 'Confira os ' . count($errosDeCampo) . ' campos destacados.']) ?>
     <?php } ?>
 
-    <form method="post" action="<?= e(current_url()) ?>" novalidate class="flex flex-col gap-4" <?= js_module('formulario/padrao') ?>>
+    <form method="post" action="<?= e($editando ? site_url('garantias/editar/' . (int) $garantia->idGarantias) : site_url('garantias/adicionar')) ?>" novalidate class="flex flex-col gap-4" <?= js_module('formulario/padrao') ?>>
         <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
 
         <section class="flex flex-col gap-4 rounded-xl border border-border bg-surface p-4 sm:p-6" aria-label="Dados do termo">

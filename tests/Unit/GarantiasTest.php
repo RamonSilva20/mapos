@@ -101,7 +101,14 @@ final class GarantiasTest extends MaposTestCase
                 return (function () use ($arquivo, $variaveis) {
                     extract($variaveis);
                     ob_start();
-                    include $arquivo;
+
+                    try {
+                        include $arquivo;
+                    } catch (Throwable $erro) {
+                        ob_end_clean();
+
+                        throw $erro;
+                    }
 
                     return (string) ob_get_clean();
                 })();
@@ -142,6 +149,7 @@ final class GarantiasTest extends MaposTestCase
             'erros' => ['textoGarantia' => 'O campo Termo de garantia é obrigatório.'],
         ]);
 
+        $this->assertStringContainsString('action="http://mapos.test/index.php/garantias/adicionar"', $html);
         $this->assertStringContainsString('data-module="formulario/padrao"', $html);
         $this->assertStringContainsString('name="MAPOS_TOKEN" value="hash-csrf"', $html);
         $this->assertStringContainsString('value="Ref &quot;A&quot;"', $html);
@@ -154,6 +162,7 @@ final class GarantiasTest extends MaposTestCase
             'valores' => ['refGarantia' => '90 dias', 'textoGarantia' => "Linha 1\n\nLinha 2"],
             'erros' => [],
         ]);
+        $this->assertStringContainsString('action="http://mapos.test/index.php/garantias/editar/7"', $edicao);
         $this->assertStringContainsString('Termo #7', $edicao);
         $this->assertStringContainsString("Linha 1\n\nLinha 2</textarea>", $edicao);
     }

@@ -282,6 +282,18 @@ $config = [
             'rules' => 'required|trim',
         ],
     ],
+    'arquivos' => [
+        [
+            'field' => 'nome',
+            'label' => 'Nome',
+            'rules' => 'required|trim|max_length[70]',
+        ],
+        [
+            'field' => 'descricao',
+            'label' => 'Descrição',
+            'rules' => 'trim|max_length[2000]',
+        ],
+    ],
     'garantias' => [
         [
             'field' => 'dataGarantia',

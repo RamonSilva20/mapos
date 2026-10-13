@@ -1,7 +1,4 @@
 {
-    "application/views/arquivos/adicionarArquivo.php": 1,
-    "application/views/arquivos/arquivos.php": 1,
-    "application/views/arquivos/editarArquivo.php": 1,
     "application/views/conecte/imprimirVenda.php": 1,
     "application/views/garantias/imprimirGarantia.php": 1,
     "application/views/garantias/imprimirGarantiaOs.php": 1,
