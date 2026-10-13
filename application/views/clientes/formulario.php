@@ -20,11 +20,12 @@ $editando = $cliente !== null;
 $erroGeral = $erros['_geral'] ?? null;
 $errosDeCampo = array_diff_key($erros, ['_geral' => true]);
 
-$campo = static fn (string $nome, array $props) => component('input', $props + [
+// Props do input com o valor e o erro do campo, para component('input', $campo(...)).
+$campo = static fn (string $nome, array $props) => $props + [
     'name' => $nome,
     'value' => ($valores[$nome] ?? '') !== '' ? $valores[$nome] : null,
     'error' => $errosDeCampo[$nome] ?? null,
-]);
+];
 
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 $grade = 'mt-4 grid gap-4 sm:grid-cols-2';
@@ -56,40 +57,40 @@ $grade = 'mt-4 grid gap-4 sm:grid-cols-2';
                 </fieldset>
 
                 <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
-                    <?= $campo('documento', [
+                    <?= component('input', $campo('documento', [
                         'label' => 'CPF ou CNPJ',
                         'help' => 'Com ou sem pontuação.',
                         'attrs' => ['data-mascara' => 'documento', 'maxlength' => 20, 'autocomplete' => 'off'],
-                    ]) ?>
+                    ])) ?>
                     <?= component('button', ['label' => 'Buscar CNPJ', 'icon' => 'search', 'variant' => 'outline', 'class' => 'mt-7', 'attrs' => ['data-buscar-cnpj' => true, 'title' => 'Preenche os dados da empresa pela Receita']]) ?>
                 </div>
-                <?= $campo('nomeCliente', [
+                <?= component('input', $campo('nomeCliente', [
                     'label' => 'Nome ou razão social',
                     'required' => true,
                     'autocomplete' => 'name',
                     'attrs' => ['maxlength' => 255, 'autofocus' => ! $editando, 'data-msg-vazio' => 'Informe o nome do cliente.'],
-                ]) ?>
-                <?= $campo('contato', [
+                ])) ?>
+                <?= component('input', $campo('contato', [
                     'label' => 'Pessoa de contato',
                     'help' => 'Em empresas, quem atende pelo cliente.',
                     'attrs' => ['maxlength' => 45],
-                ]) ?>
+                ])) ?>
             </div>
         </section>
 
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-contato">
             <h2 id="secao-contato" class="text-heading-sm text-text">Contato</h2>
             <div class="<?= e($grade) ?>">
-                <?= $campo('telefone', ['label' => 'Telefone', 'type' => 'tel', 'autocomplete' => 'tel', 'attrs' => ['data-mascara' => 'telefone', 'maxlength' => 20]]) ?>
-                <?= $campo('celular', ['label' => 'Celular', 'type' => 'tel', 'autocomplete' => 'tel', 'attrs' => ['data-mascara' => 'telefone', 'maxlength' => 20]]) ?>
-                <?= $campo('email', [
+                <?= component('input', $campo('telefone', ['label' => 'Telefone', 'type' => 'tel', 'autocomplete' => 'tel', 'attrs' => ['data-mascara' => 'telefone', 'maxlength' => 20]])) ?>
+                <?= component('input', $campo('celular', ['label' => 'Celular', 'type' => 'tel', 'autocomplete' => 'tel', 'attrs' => ['data-mascara' => 'telefone', 'maxlength' => 20]])) ?>
+                <?= component('input', $campo('email', [
                     'label' => 'E-mail',
                     'type' => 'email',
                     'autocomplete' => 'email',
                     'help' => 'Também é o login da área do cliente.',
                     // O type=email do navegador aceita "a@b"; o pattern exige o ponto no domínio, como o servidor.
                     'attrs' => ['maxlength' => 100, 'pattern' => '[^@\\s]+@[^@\\s]+\\.[^@\\s]+', 'data-msg-invalido' => 'Informe um e-mail válido, como nome@empresa.com.br.'],
-                ]) ?>
+                ])) ?>
             </div>
         </section>
 
@@ -115,16 +116,16 @@ $grade = 'mt-4 grid gap-4 sm:grid-cols-2';
             <h2 id="secao-endereco" class="text-heading-sm text-text">Endereço</h2>
             <p class="mt-0.5 text-caption text-muted">Digite o CEP para preencher o resto.</p>
             <div class="<?= e($grade) ?>">
-                <?= $campo('cep', ['label' => 'CEP', 'autocomplete' => 'postal-code', 'attrs' => ['data-mascara' => 'cep', 'inputmode' => 'numeric', 'maxlength' => 9]]) ?>
+                <?= component('input', $campo('cep', ['label' => 'CEP', 'autocomplete' => 'postal-code', 'attrs' => ['data-mascara' => 'cep', 'inputmode' => 'numeric', 'maxlength' => 9]])) ?>
                 <div class="hidden sm:block" aria-hidden="true"></div>
-                <?= $campo('rua', ['label' => 'Rua', 'autocomplete' => 'address-line1', 'attrs' => ['maxlength' => 70]]) ?>
+                <?= component('input', $campo('rua', ['label' => 'Rua', 'autocomplete' => 'address-line1', 'attrs' => ['maxlength' => 70]])) ?>
                 <div class="grid grid-cols-2 gap-4">
-                    <?= $campo('numero', ['label' => 'Número', 'attrs' => ['maxlength' => 15]]) ?>
-                    <?= $campo('complemento', ['label' => 'Complemento', 'autocomplete' => 'address-line2', 'attrs' => ['maxlength' => 45]]) ?>
+                    <?= component('input', $campo('numero', ['label' => 'Número', 'attrs' => ['maxlength' => 15]])) ?>
+                    <?= component('input', $campo('complemento', ['label' => 'Complemento', 'autocomplete' => 'address-line2', 'attrs' => ['maxlength' => 45]])) ?>
                 </div>
-                <?= $campo('bairro', ['label' => 'Bairro', 'attrs' => ['maxlength' => 45]]) ?>
+                <?= component('input', $campo('bairro', ['label' => 'Bairro', 'attrs' => ['maxlength' => 45]])) ?>
                 <div class="grid grid-cols-[minmax(0,1fr)_7rem] gap-4">
-                    <?= $campo('cidade', ['label' => 'Cidade', 'autocomplete' => 'address-level2', 'attrs' => ['maxlength' => 45]]) ?>
+                    <?= component('input', $campo('cidade', ['label' => 'Cidade', 'autocomplete' => 'address-level2', 'attrs' => ['maxlength' => 45]])) ?>
                     <?= component('select', [
                         'name' => 'estado',
                         'label' => 'UF',
