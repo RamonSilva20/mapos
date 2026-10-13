@@ -34,7 +34,7 @@ include APPPATH . 'views/entrada/inicio.php';
             <form method="post" action="<?= e(site_url('mine/cadastrar')) ?>" novalidate class="flex flex-col gap-6" <?= js_module('formulario/padrao') ?>>
                 <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
 
-                <?php $this->load->view('conecte/partes/campos_cliente', ['erros' => $errosDeCampo, 'novo' => true, 'caixa' => 'border-t border-border pt-6 first:border-t-0 first:pt-0']); ?>
+                <?php $this->load->view('conecte/partes/campos_cliente', ['erros' => $errosDeCampo, 'novo' => true, 'caixa' => 'border-t border-border pt-6', 'caixa_primeira' => '']); ?>
 
                 <section class="border-t border-border pt-6" aria-labelledby="secao-captcha">
                     <h2 id="secao-captcha" class="text-heading-sm text-text">Confirme que você não é um robô</h2>

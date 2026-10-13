@@ -7,7 +7,7 @@
  */
 if (! function_exists('conecteMenu')) {
     /**
-     * Itens da navegação da área do cliente. Os quatro primeiros formam a
+     * Itens da navegação da área do cliente. Os marcados com tabbar formam a
      * tabbar-mobile do DESIGN.md (Início, Minhas OS, Compras, Conta); a Top
      * Nav do desktop mostra também as cobranças, que no celular ficam no
      * início e na conta.
@@ -107,10 +107,10 @@ if (! function_exists('conecteRegrasDoCliente')) {
             ['field' => 'nomeCliente', 'label' => 'Nome', 'rules' => 'required|trim|max_length[255]'],
             ['field' => 'documento', 'label' => 'CPF ou CNPJ', 'rules' => 'trim|verific_cpf_cnpj|unique[clientes.documento.' . $id . '.idClientes]', 'errors' => [
                 'verific_cpf_cnpj' => 'Informe um CPF ou CNPJ válido.',
-                'unique' => 'Este CPF ou CNPJ já tem cadastro. Entre com o e-mail dele ou recupere a senha.',
+                'unique' => $idCliente === null ? 'Este CPF ou CNPJ já tem cadastro. Entre com o e-mail dele ou recupere a senha.' : 'Este CPF ou CNPJ não pode ser usado. Confira o número ou fale com a assistência.',
             ]],
             ['field' => 'email', 'label' => 'E-mail', 'rules' => 'required|trim|valid_email|max_length[100]|unique[clientes.email.' . $id . '.idClientes]', 'errors' => [
-                'unique' => 'Este e-mail já tem cadastro. Entre com ele ou recupere a senha.',
+                'unique' => $idCliente === null ? 'Este e-mail já tem cadastro. Entre com ele ou recupere a senha.' : 'Este e-mail não pode ser usado. Informe outro.',
             ]],
             ['field' => 'telefone', 'label' => 'Telefone', 'rules' => 'trim|max_length[20]'],
             ['field' => 'celular', 'label' => 'Celular', 'rules' => 'trim|max_length[20]'],

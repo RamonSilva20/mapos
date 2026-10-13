@@ -1,7 +1,7 @@
 <?php
 /**
  * Conta do cliente (#2848): os dados do cadastro, "Editar dados" como ação
- * principal e, no celular, os atalhos que não cabem na tabbar (cobranças e
+ * principal e, abaixo de lg (com a tabbar), os atalhos que não cabem na tabbar (cobranças e
  * sair).
  *
  * @var object $cliente
@@ -46,7 +46,7 @@ $classeAtalho = 'flex min-h-12 items-center gap-3 rounded-md px-3 text-body-md t
         <?php } ?>
     </div>
 
-    <nav class="rounded-xl border border-border bg-surface p-2 md:hidden" aria-label="Atalhos da conta">
+    <nav class="rounded-xl border border-border bg-surface p-2 lg:hidden" aria-label="Atalhos da conta">
         <a href="<?= e(site_url('mine/cobrancas')) ?>" class="<?= e($classeAtalho) ?>"><?= icon('receipt', ['class' => 'size-5 text-muted']) ?><span class="flex-1">Cobranças</span><?= icon('chevron-right', ['class' => 'size-4 text-muted']) ?></a>
         <a href="<?= e(site_url('mine/sair')) ?>" class="<?= e($classeAtalho) ?>"><?= icon('log-out', ['class' => 'size-5 text-muted']) ?><span class="flex-1">Sair</span></a>
     </nav>

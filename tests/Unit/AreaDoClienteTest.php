@@ -230,9 +230,12 @@ final class AreaDoClienteTest extends MaposTestCase
         $this->assertStringContainsString('<html lang="pt-br" class="dark" data-tema-modo="escuro">', $html, 'Segue o modo de cor das Configurações.');
         $this->assertStringContainsString('assets/js/tema.js', $html);
         $this->assertStringContainsString('<header class="bg-canvas-dark text-on-dark">', $html, 'Top Nav escura.');
-        $this->assertMatchesRegularExpression('#<nav class="fixed inset-x-0 bottom-0[^"]*md:hidden" aria-label="Área do cliente">#', $html, 'tabbar-mobile no celular.');
+        $this->assertMatchesRegularExpression('#<nav class="fixed inset-x-0 bottom-0[^"]*lg:hidden" aria-label="Área do cliente">#', $html, 'tabbar-mobile no celular.');
         $this->assertSame(2, preg_match_all('#href="http://mapos.test/index.php/mine/painel"\s+class="relative#', $html), 'Início na Top Nav e na tabbar.');
         $this->assertSame(2, substr_count($html, 'aria-current="page"'), 'O item ativo nos dois menus.');
+        $this->assertMatchesRegularExpression('#<nav class="ml-2 hidden lg:block"#', $html, 'Top Nav a partir de lg; abaixo, a tabbar.');
+        $this->assertDoesNotMatchRegularExpression('#rounded-md px-3(?! whitespace-nowrap)[^"]*text-on-dark-muted#', $html, 'Rótulos da Top Nav numa linha só.');
+        $this->assertStringNotContainsString('>Ordens de serviço</a>', $html, 'Top Nav com os rótulos curtos.');
         $this->assertStringContainsString('href="http://mapos.test/index.php/mine/sair"', $html);
         $this->assertStringNotContainsString('login/sair', $html, 'Sair da área do cliente, não do painel.');
         $this->assertSame(2, substr_count($html, 'bg-primary text-on-primary text-button-cap'), 'Só "Abrir OS" é button-primary (texto e só ícone).');
@@ -346,6 +349,7 @@ final class AreaDoClienteTest extends MaposTestCase
         $this->assertStringContainsString('name="MAPOS_TOKEN" value="hash-csrf"', $html);
         $this->assertStringContainsString('value="Ana &quot;A&quot;"', $html);
         $this->assertStringContainsString('Este e-mail já tem cadastro.', $html);
+        $this->assertStringNotContainsString('recupere a senha', conecteRegrasDoCliente(7)[2]['errors']['unique'], 'Logado, a mensagem não manda recuperar a senha.');
         $this->assertStringContainsString('Confira os 2 campos destacados.', $html);
         $this->assertStringNotContainsString('name="fornecedor"', $html);
         $this->assertStringNotContainsString('name="idClientes"', $html, 'O cadastro editado vem da sessão.');
@@ -392,6 +396,7 @@ final class AreaDoClienteTest extends MaposTestCase
         $this->assertStringContainsString('Os caracteres não conferem.', $cadastro);
         $this->assertMatchesRegularExpression('/<input[^>]*name="senha"[^>]*required/', $cadastro);
         $this->assertStringNotContainsString('name="fornecedor"', $cadastro);
+        $this->assertStringContainsString('<section class="" aria-labelledby="secao-identificacao">', $cadastro, 'Sem divisor antes da primeira seção.');
 
         $novaSenha = $this->renderizar('conecte/nova_senha', $telas['conecte/nova_senha']);
         $this->assertStringContainsString('action="http://mapos.test/index.php/mine/senhaSalvar"', $novaSenha);

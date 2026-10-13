@@ -12,6 +12,7 @@
  * @var array<string, string>      $erros
  * @var bool                       $novo     Cadastro (senha obrigatória)
  * @var string                     $caixa    Classes de cada seção
+ * @var string|null                $caixa_primeira  Classes da primeira seção, se diferentes
  */
 // Props do input com o valor e o erro do campo, para component('input', $campo(...)).
 $campo = static fn (string $nome, array $props) => $props + [
@@ -21,7 +22,7 @@ $campo = static fn (string $nome, array $props) => $props + [
 ];
 $grade = 'mt-4 grid gap-4 sm:grid-cols-2';
 ?>
-<section class="<?= e($caixa) ?>" aria-labelledby="secao-identificacao">
+<section class="<?= e($caixa_primeira ?? $caixa) ?>" aria-labelledby="secao-identificacao">
     <h2 id="secao-identificacao" class="text-heading-sm text-text">Identificação</h2>
     <div class="<?= e($grade) ?>">
         <div class="sm:col-span-2">

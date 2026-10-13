@@ -1,7 +1,7 @@
 <?php
 /**
  * OS do cliente (#2848): substitui as telas visualizar_os e detalhes_os da
- * v4. Só leitura: status, valores (os/partes/totais), dados e textos da OS,
+ * v4. Só leitura: status, valores em kpi-card, dados e textos da OS,
  * produtos e serviços (os/partes/*, sem as ações do painel), anexos e o PIX.
  *
  * @var object      $os
@@ -48,7 +48,12 @@ $textos = $campos([
         <?= component('button', ['label' => 'Imprimir', 'icon' => 'printer', 'variant' => 'outline', 'href' => site_url('mine/imprimirOs/' . $idOs), 'attrs' => ['target' => '_blank', 'rel' => 'noopener']]) ?>
     </header>
 
-    <?php $this->load->view('os/partes/totais'); ?>
+    <?php // Uma coluna no celular: em duas, o valor em reais não cabe na linha do kpi-card.?>
+    <div class="grid gap-4 sm:grid-cols-3">
+        <?= component('kpi-card', ['label' => 'Produtos', 'value' => dinheiro($totais['produtos']), 'icon' => 'package']) ?>
+        <?= component('kpi-card', ['label' => 'Serviços', 'value' => dinheiro($totais['servicos']), 'icon' => 'wrench']) ?>
+        <?= component('kpi-card', ['label' => 'Total', 'value' => dinheiro($totais['total']), 'icon' => 'circle-dollar-sign', 'caption' => $totais['desconto'] > 0 ? 'Com ' . dinheiro($totais['desconto']) . ' de desconto' : null]) ?>
+    </div>
 
     <div class="grid gap-4 lg:grid-cols-3">
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-dados">
