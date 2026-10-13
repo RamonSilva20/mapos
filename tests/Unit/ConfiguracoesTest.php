@@ -46,11 +46,11 @@ final class ConfiguracoesTest extends MaposTestCase
 
         $this->assertSame([], $erros);
         $this->assertSame([], $env);
-        $this->assertSame(['app_name' => 'Minha Oficina', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'control_datatable' => '1', 'app_theme' => 'puredark'], $config, 'Só os campos da aba; app_theme acompanha o modo para as telas antigas.');
+        $this->assertSame(['app_name' => 'Minha Oficina', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'control_datatable' => '1'], $config, 'Só os campos da aba.');
 
         [$config] = configuracaoDadosDoFormulario('geral', ['app_name' => 'X', 'per_page' => '10', 'app_tema_modo' => 'sistema']);
         $this->assertSame('0', $config['control_datatable'], 'Switch desmarcado não vem no POST: vale 0.');
-        $this->assertSame('white', $config['app_theme']);
+        $this->assertArrayNotHasKey('app_theme', $config, 'O app_theme não é mais gravado (os tema-*.css saíram na #2855).');
     }
 
     public function testErrosPorCampo(): void

@@ -214,11 +214,6 @@ if (! function_exists('configuracaoDadosDoFormulario')) {
             $erros['pix_key'] = 'Chave PIX inválida. Use CPF, CNPJ, e-mail, telefone com DDD ou a chave aleatória.';
         }
 
-        // As telas antigas ainda leem app_theme (tema-*.css): acompanha o modo.
-        if (isset($config['app_tema_modo'])) {
-            $config['app_theme'] = $config['app_tema_modo'] === 'escuro' ? 'puredark' : 'white';
-        }
-
         return [$config, $env, $erros];
     }
 }
