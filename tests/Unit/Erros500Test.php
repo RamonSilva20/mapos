@@ -50,20 +50,14 @@ final class Erros500Test extends MaposTestCase
     }
 
     /**
-     * Os autocompletes de Garantias chamavam o vendas_model, que o controller
-     * nunca carrega, e sem resultado não devolviam JSON.
+     * Garantias chamava o vendas_model, que o controller nunca carrega. Os
+     * autocompletes que dependiam dele saíram na #2845 (nenhuma tela os usava).
      */
-    public function testAutocompletesDeGarantiasUsamOProprioModelEDevolvemJson(): void
+    public function testGarantiasNaoUsaOVendasModel(): void
     {
         $controller = (string) file_get_contents(APPPATH . 'controllers/Garantias.php');
         $this->assertStringNotContainsString('vendas_model', $controller);
-        foreach (['Produto', 'Cliente', 'Usuario'] as $tipo) {
-            $this->assertStringContainsString("\$this->garantias_model->autoComplete{$tipo}(\$q)", $controller);
-        }
-
-        $model = (string) file_get_contents(APPPATH . 'models/Garantias_model.php');
-        $this->assertSame(3, substr_count($model, '$row_set = [];'));
-        $this->assertSame(0, substr_count($model, 'if ($query->num_rows() > 0)'));
+        $this->assertStringNotContainsString('autoComplete', $controller);
     }
 
     /**

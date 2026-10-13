@@ -6,6 +6,9 @@ if (! defined('BASEPATH')) {
 
 class Arquivos extends MY_Controller
 {
+    /** Filtros da listagem, na query string: busca no texto e período (AAAA-MM-DD). */
+    public const FILTROS = ['pesquisa' => 'texto', 'de' => 'texto', 'ate' => 'texto'];
+
     public function __construct()
     {
         parent::__construct();
@@ -19,6 +22,10 @@ class Arquivos extends MY_Controller
         $this->gerenciar();
     }
 
+    /**
+     * Listagem de arquivos (#2845), no padrão das listagens (#2852). As datas
+     * do período que não forem AAAA-MM-DD válidas são descartadas.
+     */
     public function gerenciar()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) {
@@ -26,35 +33,34 @@ class Arquivos extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('pagination');
-
-        $pesquisa = $this->input->get('pesquisa');
-        $de = $this->input->get('data');
-        $ate = $this->input->get('data2');
-
-        if ($pesquisa == null && $de == null && $ate == null) {
-            $this->data['configuration']['base_url'] = site_url('arquivos/gerenciar');
-            $this->data['configuration']['total_rows'] = $this->arquivos_model->count('documentos');
-
-            $this->pagination->initialize($this->data['configuration']);
-
-            $this->data['results'] = $this->arquivos_model->get('documentos', '*', '', $this->data['configuration']['per_page'], $this->uri->segment(3));
-        } else {
-            if ($de != null) {
-                $de = explode('/', $de);
-                $de = $de[2] . '-' . $de[1] . '-' . $de[0];
-
-                if ($ate != null) {
-                    $ate = explode('/', $ate);
-                    $ate = $ate[2] . '-' . $ate[1] . '-' . $ate[0];
-                } else {
-                    $ate = $de;
-                }
+        $filtros = listagemFiltros(self::FILTROS, $this->input->get());
+        foreach (['de', 'ate'] as $periodo) {
+            $data = isset($filtros[$periodo]) ? dataIsoParaYmd($filtros[$periodo]) : null;
+            if ($data === null) {
+                unset($filtros[$periodo]);
+            } else {
+                $filtros[$periodo] = $data;
             }
-
-            $this->data['results'] = $this->arquivos_model->search($pesquisa, $de, $ate);
         }
 
+        $offset = (int) $this->uri->segment(3);
+        $total = $this->arquivos_model->contar($filtros);
+
+        $this->data['filtros'] = $filtros;
+        $this->data['total'] = $total;
+        $this->data['results'] = $this->arquivos_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
+        $this->data['paginacao'] = $this->paginacao(site_url('arquivos/gerenciar'), $total, $offset, null, $filtros);
+        $this->data['pode'] = [
+            'adicionar' => $this->permite('aArquivo'),
+            'editar' => $this->permite('eArquivo'),
+            'excluir' => $this->permite('dArquivo'),
+        ];
+
+        if ($this->data['pode']['adicionar']) {
+            $this->data['topbar_acao'] = ['label' => 'Novo arquivo', 'icon' => 'plus', 'href' => site_url('arquivos/adicionar')];
+        }
+
+        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'arquivos/arquivos';
 
         return $this->layout();
@@ -67,61 +73,13 @@ class Arquivos extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-
-        $this->form_validation->set_rules('nome', '', 'trim|required');
-
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $arquivo = $this->do_upload();
-
-            $file = $arquivo['file_name'];
-            $path = $arquivo['full_path'];
-            $url = base_url() . 'assets/arquivos/' . date('d-m-Y') . '/' . $file;
-            $tamanho = $arquivo['file_size'];
-            $tipo = $arquivo['file_ext'];
-
-            $data = $this->input->post('data');
-
-            if ($data == null) {
-                $data = date('Y-m-d');
-            } else {
-                $data = explode('/', $data);
-                $data = $data[2] . '-' . $data[1] . '-' . $data[0];
-            }
-
-            $data = [
-                'documento' => $this->input->post('nome'),
-                'descricao' => $this->input->post('descricao'),
-                'file' => $file,
-                'path' => $path,
-                'url' => $url,
-                'cadastro' => $data,
-                'tamanho' => $tamanho,
-                'tipo' => $tipo,
-            ];
-
-            if ($this->arquivos_model->add('documentos', $data) == true) {
-                $this->session->set_flashdata('success', 'Arquivo adicionado com sucesso!');
-
-                log_info('Adicionou um arquivo');
-
-                redirect(site_url('arquivos/adicionar/'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-            }
-        }
-
-        $this->data['view'] = 'arquivos/adicionarArquivo';
-
-        return $this->layout();
+        return $this->formulario(null);
     }
 
     public function editar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->arquivos_model->getById($this->uri->segment(3))) {
+        $arquivo = is_numeric($this->uri->segment(3)) ? $this->arquivos_model->getById((int) $this->uri->segment(3)) : null;
+        if (! $arquivo) {
             $this->session->set_flashdata('error', 'Arquivo não encontrado ou parâmetro inválido.');
             redirect('arquivos');
         }
@@ -131,38 +89,78 @@ class Arquivos extends MY_Controller
             redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
+        return $this->formulario($arquivo);
+    }
 
-        $this->form_validation->set_rules('nome', '', 'trim|required');
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $data = $this->input->post('data');
-            if ($data == null) {
-                $data = date('Y-m-d');
-            } else {
-                $data = explode('/', $data);
-                $data = $data[2] . '-' . $data[1] . '-' . $data[0];
+    /**
+     * Formulário de arquivo, para enviar e editar (#2845), no padrão dos
+     * formulários (#2851). Ao enviar, o arquivo só é gravado depois de a
+     * validação passar; na edição só mudam nome, descrição e data. O id
+     * editado é o da URL.
+     */
+    private function formulario(?object $arquivo)
+    {
+        $erros = [];
+
+        if ($this->input->method() === 'post') {
+            $erros = $this->validarFormulario('arquivos');
+
+            $data = trim((string) $this->input->post('data'));
+            $data = $data === '' ? date('Y-m-d') : dataIsoParaYmd($data);
+            if ($data === null) {
+                $erros['data'] = 'Informe uma data válida.';
             }
 
-            $data = [
-                'documento' => $this->input->post('nome'),
-                'descricao' => $this->input->post('descricao'),
-                'cadastro' => $data,
-            ];
+            if ($erros === []) {
+                $salvou = false;
+                $dados = [
+                    'documento' => trim((string) $this->input->post('nome')),
+                    'descricao' => trim((string) $this->input->post('descricao')),
+                    'cadastro' => $data,
+                ];
 
-            if ($this->arquivos_model->edit('documentos', $data, 'idDocumentos', $this->input->post('idDocumentos')) == true) {
-                $this->session->set_flashdata('success', 'Alterações efetuadas com sucesso!');
-                log_info('Alterou um arquivo, ID: ' . $this->input->post('idDocumentos'));
-                redirect(site_url('arquivos/editar/') . $this->input->post('idDocumentos'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                if ($arquivo === null) {
+                    $envio = $this->do_upload();
+
+                    if (is_string($envio)) {
+                        $erros['userfile'] = $envio;
+                    } else {
+                        $dados += [
+                            'file' => $envio['file_name'],
+                            'path' => $envio['full_path'],
+                            'url' => base_url() . 'assets/arquivos/' . date('d-m-Y') . '/' . $envio['file_name'],
+                            'tamanho' => $envio['file_size'],
+                            'tipo' => $envio['file_ext'],
+                        ];
+                        $salvou = $this->arquivos_model->add('documentos', $dados) == true;
+                    }
+                } else {
+                    $salvou = $this->arquivos_model->edit('documentos', $dados, 'idDocumentos', (int) $arquivo->idDocumentos) == true;
+                }
+
+                if ($erros === []) {
+                    if ($salvou) {
+                        log_info($arquivo === null ? 'Adicionou um arquivo' : 'Alterou um arquivo, ID: ' . (int) $arquivo->idDocumentos);
+                        $this->session->set_flashdata('success', $arquivo === null ? 'Arquivo enviado com sucesso!' : 'Alterações salvas.');
+
+                        return redirect('arquivos');
+                    }
+
+                    $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
+                }
             }
         }
 
-        $this->data['result'] = $this->arquivos_model->getById($this->uri->segment(3));
-        $this->data['view'] = 'arquivos/editarArquivo';
+        $post = $this->input->method() === 'post' ? $this->input->post() : null;
+        $this->data['arquivo'] = $arquivo;
+        $this->data['valores'] = [
+            'nome' => is_array($post) ? (string) ($post['nome'] ?? '') : (string) ($arquivo->documento ?? ''),
+            'descricao' => is_array($post) ? (string) ($post['descricao'] ?? '') : (string) ($arquivo->descricao ?? ''),
+            'data' => is_array($post) ? (string) ($post['data'] ?? '') : (string) ($arquivo->cadastro ?? date('Y-m-d')),
+        ];
+        $this->data['erros'] = $erros;
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'arquivos/formulario';
 
         return $this->layout();
     }
@@ -174,15 +172,14 @@ class Arquivos extends MY_Controller
             redirect(base_url());
         }
 
-        if ($id == null || ! is_numeric($id)) {
+        $file = $id !== null && is_numeric($id) ? $this->arquivos_model->getById($id) : null;
+        if (! $file || ! is_file((string) $file->path)) {
             $this->session->set_flashdata('error', 'Erro! O arquivo não pode ser localizado.');
             redirect(base_url() . 'index.php/arquivos/');
         }
 
-        $file = $this->arquivos_model->getById($id);
         $this->load->library('zip');
-        $path = $file->path;
-        $this->zip->read_file($path);
+        $this->zip->read_file($file->path);
         $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
     }
 
@@ -194,25 +191,33 @@ class Arquivos extends MY_Controller
         }
 
         $id = $this->input->post('id');
-        if ($id == null || ! is_numeric($id)) {
+        $file = $id !== null && is_numeric($id) ? $this->arquivos_model->getById($id) : null;
+        if (! $file) {
             $this->session->set_flashdata('error', 'Erro! O arquivo não pode ser localizado.');
             redirect(site_url('arquivos'));
         }
 
-        $file = $this->arquivos_model->getById($id);
         $this->db->where('idDocumentos', $id);
         if ($this->db->delete('documentos')) {
-            $path = $file->path;
-            unlink($path);
-            $this->session->set_flashdata('success', 'Arquivo excluido com sucesso!');
+            if (is_file((string) $file->path)) {
+                unlink($file->path);
+            }
+            $this->session->set_flashdata('success', 'Arquivo excluído com sucesso!');
             log_info('Removeu um arquivo. ID: ' . $id);
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar excluir o arquivo.');
         }
-        redirect(site_url('arquivos'));
+
+        redirect(site_url('arquivos') . listagemQuery(listagemFiltros(self::FILTROS, $this->input->get())));
     }
 
-    // Auxiliar interno: como método público seria acessível via /arquivos/do_upload.
+    /**
+     * Auxiliar interno (como método público seria acessível via
+     * /arquivos/do_upload). Devolve os dados do arquivo gravado, ou o texto do
+     * erro, que a tela mostra no campo do arquivo.
+     *
+     * @return array|string
+     */
     protected function do_upload()
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) {
@@ -239,15 +244,15 @@ class Arquivos extends MY_Controller
 
         $this->load->library('upload', $config);
 
-        if (! $this->upload->do_upload()) {
-            $error = ['error' => $this->upload->display_errors()];
-
-            $this->session->set_flashdata('error', 'Erro ao fazer upload do arquivo, verifique se a extensão do arquivo é permitida.');
-            redirect(site_url('arquivos/adicionar'));
-        } else {
-            //$data = array('upload_data' => $this->upload->data());
-            return $this->upload->data();
+        if (empty($_FILES['userfile']['name'])) {
+            return 'Escolha o arquivo.';
         }
+
+        if (! $this->upload->do_upload()) {
+            return 'Não foi possível enviar o arquivo. Use TXT, JPG, GIF, PNG ou PDF (imagens de até 3000 × 2000 px).';
+        }
+
+        return $this->upload->data();
     }
 }
 

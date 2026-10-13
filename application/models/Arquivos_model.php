@@ -6,20 +6,40 @@ if (! defined('BASEPATH')) {
 
 class Arquivos_model extends CI_Model
 {
-    public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    /**
+     * Arquivos da listagem (#2845), do mais novo para o mais antigo.
+     *
+     * @param  array<string, string>  $filtros  pesquisa (nome ou descrição),
+     *                                          de e ate (AAAA-MM-DD, pela data do arquivo)
+     * @return list<object>
+     */
+    public function listar(array $filtros, int $limite, int $offset): array
     {
-        $this->db->select($fields);
-        $this->db->from($table);
-        $this->db->limit($perpage, $start);
-        if ($where) {
-            $this->db->where($where);
+        $this->aplicarFiltros($filtros);
+
+        return $this->db->order_by('idDocumentos', 'desc')->limit($limite, max(0, $offset))->get('documentos')->result();
+    }
+
+    public function contar(array $filtros): int
+    {
+        $this->aplicarFiltros($filtros);
+
+        return (int) $this->db->count_all_results('documentos');
+    }
+
+    private function aplicarFiltros(array $filtros): void
+    {
+        if (($filtros['pesquisa'] ?? '') !== '') {
+            $this->db->group_start()->like('documento', $filtros['pesquisa'])->or_like('descricao', $filtros['pesquisa'])->group_end();
         }
 
-        $query = $this->db->get();
+        if (($filtros['de'] ?? '') !== '') {
+            $this->db->where('cadastro >=', $filtros['de']);
+        }
 
-        $result = ! $one ? $query->result() : $query->row();
-
-        return $result;
+        if (($filtros['ate'] ?? '') !== '') {
+            $this->db->where('cadastro <=', $filtros['ate']);
+        }
     }
 
     public function getById($id)
@@ -61,26 +81,6 @@ class Arquivos_model extends CI_Model
         }
 
         return false;
-    }
-
-    public function count($table)
-    {
-        return $this->db->count_all($table);
-    }
-
-    public function search($pesquisa, $de, $ate)
-    {
-        if ($pesquisa != null) {
-            $this->db->like('documento', $pesquisa);
-        }
-
-        if ($de != null) {
-            $this->db->where('cadastro >=', $de);
-            $this->db->where('cadastro <=', $ate);
-        }
-        $this->db->limit(10);
-
-        return $this->db->get('documentos')->result();
     }
 }
 

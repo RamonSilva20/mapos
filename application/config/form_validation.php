@@ -282,6 +282,18 @@ $config = [
             'rules' => 'required|trim',
         ],
     ],
+    'arquivos' => [
+        [
+            'field' => 'nome',
+            'label' => 'Nome',
+            'rules' => 'required|trim|max_length[70]',
+        ],
+        [
+            'field' => 'descricao',
+            'label' => 'Descrição',
+            'rules' => 'trim|max_length[2000]',
+        ],
+    ],
     'garantias' => [
         [
             'field' => 'dataGarantia',
@@ -295,13 +307,13 @@ $config = [
         ],
         [
             'field' => 'refGarantia',
-            'label' => 'refGarantia',
-            'rules' => 'trim',
+            'label' => 'Referência',
+            'rules' => 'trim|max_length[15]',
         ],
         [
             'field' => 'textoGarantia',
-            'label' => 'textoGarantia',
-            'rules' => 'required|trim',
+            'label' => 'Termo de garantia',
+            'rules' => 'required|trim|max_length[20000]',
         ],
     ],
     'pagamentos' => [

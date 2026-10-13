@@ -154,6 +154,24 @@ if (! function_exists('dataIsoParaYmd')) {
     }
 }
 
+if (! function_exists('tamanhoDeArquivo')) {
+    /**
+     * Tamanho de arquivo para a tela, a partir dos KB que o upload guarda
+     * (file_size): "0,08 KB" abaixo de 10 KB, "512 KB" acima, "1,5 MB" a
+     * partir de 1024 KB.
+     */
+    function tamanhoDeArquivo($kb): string
+    {
+        $kb = max(0.0, (float) $kb);
+
+        if ($kb >= 1024) {
+            return number_format($kb / 1024, 1, ',', '.') . ' MB';
+        }
+
+        return number_format($kb, $kb < 10 ? 2 : 0, ',', '.') . ' KB';
+    }
+}
+
 if (! function_exists('backupNomeArquivo')) {
     /**
      * Nome do arquivo de download do backup: backup-AAAA-MM-DD-HHhMM.zip.

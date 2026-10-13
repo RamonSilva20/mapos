@@ -92,9 +92,6 @@ $config['permissions_map'] = [
         'adicionar' => 'aGarantia',
         'editar' => 'eGarantia',
         'excluir' => 'dGarantia',
-        'autoCompleteProduto' => ['aGarantia', 'eGarantia'],
-        'autoCompleteCliente' => ['aGarantia', 'eGarantia'],
-        'autoCompleteUsuario' => ['aGarantia', 'eGarantia'],
     ],
 
     'Mapos' => [
