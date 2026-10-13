@@ -68,7 +68,7 @@ class Permission
             $this->CI->db->limit(1);
             $array = $this->CI->db->get($this->table)->row_array();
 
-            if (count($array) > 0) {
+            if ($array && count($array) > 0) {
                 $raw = $array[$this->select];
                 $array = json_decode_legacy($raw);
                 $this->permissions = [$array];

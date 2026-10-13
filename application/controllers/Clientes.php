@@ -23,7 +23,7 @@ class Clientes extends MY_Controller
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar clientes.');
-            redirect(base_url());
+            respond_redirect(base_url());
         }
 
         $pesquisa = $this->input->get('pesquisa');
@@ -50,7 +50,8 @@ class Clientes extends MY_Controller
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar clientes.');
-            redirect(base_url());
+            respond_redirect(base_url());
+            return;
         }
 
         $this->load->library('form_validation');
@@ -96,7 +97,7 @@ class Clientes extends MY_Controller
                 if ($this->clientes_model->add('clientes', $data) == true) {
                     $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
                     log_info('Adicionou um cliente.');
-                    redirect(site_url('clientes/'));
+                    respond_redirect(site_url('clientes/'));
                 } else {
                     $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
                 }
@@ -112,12 +113,13 @@ class Clientes extends MY_Controller
     {
         if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->clientes_model->getById($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Cliente não encontrado ou parâmetro inválido.');
-            redirect('clientes/gerenciar');
+            respond_redirect(site_url('clientes/gerenciar'));
         }
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar clientes.');
-            redirect(base_url());
+            respond_redirect(base_url());
+            return;
         }
 
         $this->load->library('form_validation');
@@ -175,7 +177,7 @@ class Clientes extends MY_Controller
                 if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
                     $this->session->set_flashdata('success', 'Cliente editado com sucesso!');
                     log_info('Alterou um cliente. ID' . $this->input->post('idClientes'));
-                    redirect(site_url('clientes/editar/') . $this->input->post('idClientes'));
+                    respond_redirect(site_url('clientes/editar/') . $this->input->post('idClientes'));
                 } else {
                     $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
                 }
@@ -192,12 +194,13 @@ class Clientes extends MY_Controller
     {
         if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+            respond_redirect(site_url('mapos'));
         }
 
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar clientes.');
-            redirect(base_url());
+            respond_redirect(base_url());
+            return;
         }
 
         $this->data['custom_error'] = '';
@@ -213,13 +216,14 @@ class Clientes extends MY_Controller
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'dCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir clientes.');
-            redirect(base_url());
+            respond_redirect(base_url());
+            return;
         }
 
         $id = $this->input->post('id');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir cliente.');
-            redirect(site_url('clientes/gerenciar/'));
+            respond_redirect(site_url('clientes/gerenciar/'));
         }
 
         $os = $this->clientes_model->getAllOsByClient($id);
@@ -237,6 +241,6 @@ class Clientes extends MY_Controller
         log_info('Removeu um cliente. ID' . $id);
 
         $this->session->set_flashdata('success', 'Cliente excluido com sucesso!');
-        redirect(site_url('clientes/gerenciar/'));
+        respond_redirect(site_url('clientes/gerenciar/'));
     }
 }
