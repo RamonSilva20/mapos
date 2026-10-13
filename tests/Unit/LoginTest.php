@@ -36,7 +36,9 @@ final class LoginTest extends MaposTestCase
     {
         // Comparação é estrita com 'now'; a data de hoje já passou no instante
         // da checagem, então a conta é tratada como expirada.
-        $this->assertTrue($this->contaExpirada((new DateTime())->format('d/m/Y')));
+        // No formato da coluna usuarios.dataExpiracao (date): "d/m/Y" de um dia
+        // acima de 12 nem é uma data válida para o DateTime.
+        $this->assertTrue($this->contaExpirada((new DateTime())->format('Y-m-d')));
     }
 
     /**

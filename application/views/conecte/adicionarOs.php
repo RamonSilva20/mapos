@@ -1,123 +1,65 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
-
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/trumbowyg/ui/trumbowyg.css">
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/trumbowyg.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/trumbowyg/langs/pt_br.js"></script>
-
-<style>
-    .ui-datepicker {
-        z-index: 9999 !important;
-    }
-
-    .trumbowyg-box {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-</style>
-
-<div class="row-fluid" style="margin-top:0">
-    <div class="span12">
-        <div class="widget-box">
-            <div class="widget-title" style="margin: -20px 0 0">
-                <span class="icon">
-                    <i class="fas fa-diagnoses"></i>
-                </span>
-                <h5>Cadastro de OS</h5>
-            </div>
-            <div class="widget-content nopadding tab-content">
-                <div class="span12" id="divProdutosServicos" style=" margin-left: 0">
-                    <ul class="nav nav-tabs">
-                        <li class="active" id="tabDetalhes"><a href="#tab1" data-toggle="tab">Detalhes da OS</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab1">
-                            <div class="span12" id="divCadastrarOs">
-                                <form action="<?php echo current_url(); ?>" method="post" id="formOs">
-                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
-                                    <div class="span12" style="padding: 1%;">
-                                        <div class="span12 alert alert-info">
-                                            <h5 class="text-center">Preencha os campos abaixo detalhando o que você precisa. Campos com asterisco são obrigatórios.</h5>
-                                        </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-
-                                        <div class="span12">
-                                            <label for="descricaoProduto">Descrição Produto/Serviço*</label>
-                                            <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-
-                                        <div class="span12">
-                                            <label for="defeito">Defeito</label>
-                                            <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span12">
-                                            <label for="observacoes">Observações</label>
-                                            <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="span12" style="padding: 1%; margin-left: 0">
-                                        <div class="span6 offset3" style="display:flex;justify-content: center">
-                                            <button class="button btn btn-success" id="btnContinuar">
-                                              <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Cadastrar</span></button>
-                                            <a href="<?php echo base_url() ?>index.php/mine/os" class="button btn btn-mini btn-warning">
-                                              <span class="button__icon"><i class="bx bx-undo"></i></span> <span class="button__text2">Voltar</span></a>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+<?php
+/**
+ * Abrir uma OS pela área do cliente (#2848), no padrão dos formulários
+ * (#2851): POST comum, validação no navegador (formulario/padrao) e no
+ * servidor, erro em cada campo. Só a descrição é obrigatória.
+ *
+ * @var array<string, string> $valores
+ * @var array<string, string> $erros  Por campo; _geral para falha ao salvar
+ */
+$erroGeral = $erros['_geral'] ?? null;
+$errosDeCampo = array_diff_key($erros, ['_geral' => true]);
+// Props do textarea com o valor e o erro do campo, para component('textarea', $texto(...)).
+$texto = static fn (string $nome, array $props) => [
+    'name' => $nome,
+    'value' => ($valores[$nome] ?? '') !== '' ? $valores[$nome] : null,
+    'error' => $errosDeCampo[$nome] ?? null,
+    'attrs' => ['maxlength' => 2000] + ($props['attrs'] ?? []),
+] + $props;
+?>
+<div class="flex max-w-3xl flex-col gap-4">
+    <div>
+        <?= component('button', ['label' => 'Ordens de serviço', 'icon' => 'chevron-left', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('mine/os'), 'class' => '-ml-3']) ?>
     </div>
+
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Abrir ordem de serviço</h1>
+        <p class="text-caption text-muted">Conte o que precisa. A assistência recebe o pedido e entra em contato.</p>
+    </header>
+
+    <?php if ($erroGeral !== null) { ?>
+        <?= component('alert', ['variant' => 'danger', 'message' => $erroGeral]) ?>
+    <?php } elseif ($errosDeCampo !== []) { ?>
+        <?= component('alert', ['variant' => 'danger', 'message' => count($errosDeCampo) === 1 ? 'Confira o campo destacado.' : 'Confira os ' . count($errosDeCampo) . ' campos destacados.']) ?>
+    <?php } ?>
+
+    <form method="post" action="<?= e(site_url('mine/adicionarOs')) ?>" novalidate class="flex flex-col gap-4" <?= js_module('formulario/padrao') ?>>
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+
+        <section class="flex flex-col gap-4 rounded-xl border border-border bg-surface p-4 sm:p-6" aria-label="Pedido">
+            <?= component('textarea', $texto('descricaoProduto', [
+                'label' => 'Equipamento ou serviço',
+                'rows' => 3,
+                'required' => true,
+                'placeholder' => 'Ex.: notebook Dell Inspiron 15, cinza',
+                'help' => 'Marca, modelo e o que mais ajudar a identificar.',
+                'attrs' => ['autofocus' => true, 'data-msg-vazio' => 'Descreva o equipamento ou o serviço.'],
+            ])) ?>
+            <?= component('textarea', $texto('defeito', [
+                'label' => 'Defeito ou problema',
+                'rows' => 4,
+                'placeholder' => 'Ex.: não liga depois que caiu café no teclado',
+            ])) ?>
+            <?= component('textarea', $texto('observacoes', [
+                'label' => 'Observações',
+                'rows' => 3,
+                'help' => 'Acessórios que vão junto, melhor horário para contato…',
+            ])) ?>
+        </section>
+
+        <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <?= component('button', ['label' => 'Cancelar', 'variant' => 'ghost', 'href' => site_url('mine/os')]) ?>
+            <?= component('button', ['label' => 'Abrir OS', 'icon' => 'plus', 'type' => 'submit', 'attrs' => ['data-rotulo-carregando' => 'Enviando…']]) ?>
+        </div>
+    </form>
 </div>
-
-
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-
-        $("#formOs").validate({
-            rules: {
-                descricaoProduto: {
-                    required: true
-                }
-            },
-            messages: {
-                descricaoProduto: {
-                    required: 'O campo descrição da OS é obrigatório.'
-                }
-            },
-
-            errorClass: "help-inline",
-            errorElement: "span",
-            highlight: function(element, errorClass, validClass) {
-                $(element).parents('.control-group').addClass('error');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('error');
-                $(element).parents('.control-group').addClass('success');
-            }
-        });
-
-        $(".datepicker").datepicker({
-            dateFormat: 'dd/mm/yy'
-        });
-
-        $('.editor').trumbowyg({
-            lang: 'pt_br',
-            semantic: { 'strikethrough': 's', }
-        });
-    });
-</script>
