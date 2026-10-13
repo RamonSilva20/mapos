@@ -345,7 +345,9 @@ class Mapos extends MY_Controller
         $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
 
         if ($retorno) {
-            $this->session->set_userdata('url_image_user', $imageUserPath);
+            // A chave que o layout lê (a mesma do login): sem ela o avatar da topbar
+            // só mudava no login seguinte.
+            $this->session->set_userdata('url_image_user_admin', $imageUserPath);
             $this->session->set_flashdata('success', 'Foto alterada com sucesso.');
             log_info('Alterou a Imagem do Usuario.');
         } else {

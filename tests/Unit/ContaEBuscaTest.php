@@ -149,6 +149,16 @@ final class ContaEBuscaTest extends MaposTestCase
         }
     }
 
+    public function testFotoNovaAtualizaAChaveDaSessaoQueOLayoutLe(): void
+    {
+        $controller = (string) file_get_contents(APPPATH . 'controllers/Mapos.php');
+        $base = (string) file_get_contents(APPPATH . 'core/MY_Controller.php');
+
+        $this->assertStringContainsString("userdata('url_image_user_admin')", $base, 'O layout lê esta chave.');
+        $this->assertStringContainsString("set_userdata('url_image_user_admin', \$imageUserPath)", $controller);
+        $this->assertStringNotContainsString("set_userdata('url_image_user',", $controller);
+    }
+
     private function busca(array $mudancas = []): string
     {
         $xss = '<img src=x onerror=alert(1)>';

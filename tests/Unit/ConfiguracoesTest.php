@@ -27,7 +27,7 @@ final class ConfiguracoesTest extends MaposTestCase
         }
 
         $v4 = ['app_name', 'per_page', 'os_notification', 'email_automatico', 'control_estoque', 'notifica_whats', 'control_baixa', 'control_editos', 'control_edit_vendas',
-            'control_datatable', 'os_status_list', 'control_2vias', 'pix_key', 'IMPRIMIR_ANEXOS', 'API_ENABLED', 'API_TOKEN_EXPIRE_TIME', 'API_JWT_KEY',
+            'os_status_list', 'control_2vias', 'pix_key', 'IMPRIMIR_ANEXOS', 'API_ENABLED', 'API_TOKEN_EXPIRE_TIME', 'API_JWT_KEY',
             'EMAIL_PROTOCOL', 'EMAIL_SMTP_HOST', 'EMAIL_SMTP_CRYPTO', 'EMAIL_SMTP_PORT', 'EMAIL_SMTP_USER', 'EMAIL_SMTP_PASS',
             'PAYMENT_GATEWAYS_EFI_PRODUCTION', 'PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_ID', 'PAYMENT_GATEWAYS_EFI_CREDENTIAIS_CLIENT_SECRET', 'PAYMENT_GATEWAYS_EFI_BOLETO_EXPIRATION',
             'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_PUBLIC_KEY', 'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_ACCESS_TOKEN', 'PAYMENT_GATEWAYS_MERCADO_PAGO_CREDENTIALS_CLIENT_ID',
@@ -41,15 +41,15 @@ final class ConfiguracoesTest extends MaposTestCase
     public function testAbaGravaSoOsCamposDelaEConverteOsTipos(): void
     {
         [$config, $env, $erros] = configuracaoDadosDoFormulario('geral', [
-            'app_name' => ' Minha Oficina ', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'control_datatable' => '1', 'pix_key' => 'invasor', 'API_ENABLED' => 'true',
+            'app_name' => ' Minha Oficina ', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'pix_key' => 'invasor', 'API_ENABLED' => 'true',
         ]);
 
         $this->assertSame([], $erros);
         $this->assertSame([], $env);
-        $this->assertSame(['app_name' => 'Minha Oficina', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'control_datatable' => '1'], $config, 'Só os campos da aba.');
+        $this->assertSame(['app_name' => 'Minha Oficina', 'per_page' => '20', 'app_tema_modo' => 'escuro'], $config, 'Só os campos da aba.');
 
         [$config] = configuracaoDadosDoFormulario('geral', ['app_name' => 'X', 'per_page' => '10', 'app_tema_modo' => 'sistema']);
-        $this->assertSame('0', $config['control_datatable'], 'Switch desmarcado não vem no POST: vale 0.');
+        $this->assertArrayNotHasKey('control_datatable', $config, 'A busca das tabelas antigas saiu na #2855.');
         $this->assertArrayNotHasKey('app_theme', $config, 'O app_theme não é mais gravado (os tema-*.css saíram na #2855).');
     }
 

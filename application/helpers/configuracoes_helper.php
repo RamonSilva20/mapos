@@ -75,7 +75,6 @@ if (! function_exists('configuracaoCampos')) {
                 'app_name' => ['destino' => 'config', 'tipo' => 'texto', 'rotulo' => 'Nome do sistema', 'obrigatorio' => true, 'max' => 100, 'ajuda' => 'Aparece no título das páginas e nos e-mails.'],
                 'per_page' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Registros por página', 'opcoes' => ['10' => '10', '20' => '20', '50' => '50', '100' => '100']],
                 'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Cada pessoa pode trocar o tema na barra do topo.'],
-                'control_datatable' => ['destino' => 'config', 'tipo' => 'sim_nao', 'rotulo' => 'Busca e ordenação nas tabelas das telas antigas', 'ajuda' => 'Vale só para as telas que ainda não foram migradas para a v5.'],
             ],
             'os' => [
                 'control_editos' => ['destino' => 'config', 'tipo' => 'sim_nao', 'rotulo' => 'Permitir editar OS faturada ou cancelada'],
