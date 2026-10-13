@@ -4,9 +4,9 @@ class MY_Controller extends CI_Controller
 {
     public $data = [
         'configuration' => [
-            // Itens por página das listagens. O markup da paginação legada
-            // (create_links) fica em application/config/pagination.php; as
-            // telas novas usam o componente pagination via paginacao().
+            // Itens por página das listagens. As telas usam o componente
+            // pagination via paginacao(); o application/config/pagination.php
+            // só continua para a API do app.
             'per_page' => 10,
             'app_name' => 'Map-OS',
             'os_notification' => 'cliente',
