@@ -34,7 +34,6 @@ class Permissoes extends MY_Controller
         $this->data['results'] = $this->permissoes_model->listarComUsuarios();
         $this->data['grupo_logado'] = (int) $this->session->userdata('permissao');
         $this->data['topbar_acao'] = ['label' => 'Novo grupo', 'icon' => 'plus', 'href' => site_url('permissoes/adicionar')];
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'permissoes/permissoes';
 
         return $this->layout();
@@ -107,7 +106,6 @@ class Permissoes extends MY_Controller
         $this->data['erros'] = $erros;
         $this->data['do_logado'] = $doLogado;
         $this->data['protegido'] = $protegido;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'permissoes/formulario';
 
         return $this->layout();

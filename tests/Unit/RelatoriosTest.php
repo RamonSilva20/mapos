@@ -191,7 +191,6 @@ final class RelatoriosTest extends MaposTestCase
 
         $this->assertSame(8, substr_count($codigo, "'relatorios/relatorio'"));
         $this->assertStringNotContainsString("'relatorios/rel_", $codigo);
-        $this->assertSame(8, substr_count($codigo, "\$this->data['legacy_assets'] = false;"));
         $this->assertSame([], glob(APPPATH . 'views/relatorios/rel_*.php'));
     }
 }

@@ -6,18 +6,9 @@
  * MY_Controller::layout() monta os dados com estas funções e as views só
  * imprimem. A lógica fica aqui para poder ser testada sem subir o framework.
  *
- * Modo legado
- * -----------
- * As telas ainda não migradas dependem do Bootstrap 2, do jQuery 1.x, do
- * matrix-style e dos tema-*.css. Com $this->data['legacy_assets'] = true (o
- * padrão), o layout carrega esses arquivos e o conteúdo da tela fica dentro de
- * #content, como antes. A moldura nova (sidebar, topbar, rodapé e toasts) usa
- * assets/dist/layout.css, cujas utilities só valem dentro de .v5-shell e por
- * isso não alteram o conteúdo legado. Ver assets/src/layout.css.
- *
- * Uma tela migrada desliga a flag e passa a receber o assets/dist/app.css
- * completo no lugar do CSS/JS legado. Quando todas estiverem migradas, a #2855
- * remove o modo legado.
+ * Os estilos da moldura vêm de assets/dist/layout.css, cujas utilities só valem
+ * dentro de .v5-shell; o conteúdo da tela recebe assets/dist/app.css. Ver
+ * assets/src/layout.css.
  */
 
 if (! function_exists('layoutSaudacao')) {
@@ -282,80 +273,19 @@ if (! function_exists('layoutBreadcrumb')) {
 
 if (! function_exists('layoutAssets')) {
     /**
-     * CSS e JS da página, como caminhos relativos a base_url() (ou URLs
-     * absolutas, para os externos).
+     * CSS e módulos JS da página, como caminhos relativos a base_url() (ou
+     * URLs absolutas, para os externos).
      *
-     * - shell: sempre. A moldura nova e o tema (tokens, modo, sidebar).
-     * - legado: só com legacy_assets, na mesma ordem do tema/topo.php da v4,
-     *   para que a cascata do CSS legado não mude.
-     * - app.css: só nas telas migradas (legacy_assets = false).
+     * O app.css (preflight e utilities, para o conteúdo da tela) vem antes do
+     * layout.css (a moldura), que vai por último.
      *
-     * @return array{css: list<string>, js_cabecalho: list<string>, modulos: list<string>, js_rodape: list<string>}
+     * @return array{css: list<string>, modulos: list<string>}
      */
-    function layoutAssets(bool $legado, string $appTheme): array
+    function layoutAssets(): array
     {
-        $temas = [
-            'white' => 'assets/css/tema-white.css',
-            'puredark' => 'assets/css/tema-pure-dark.css',
-            'darkviolet' => 'assets/css/tema-dark-violet.css',
-            'darkorange' => 'assets/css/tema-dark-orange.css',
-            'whitegreen' => 'assets/css/tema-white-green.css',
-            'whiteblack' => 'assets/css/tema-white-black.css',
-        ];
-
-        $css = [];
-        $jsCabecalho = [];
-        $jsRodape = [];
-
-        if ($legado) {
-            $css = [
-                'assets/css/bootstrap.min.css',
-                'assets/css/bootstrap-responsive.min.css',
-                'assets/css/matrix-style.css',
-                'assets/css/matrix-media.css',
-                'assets/font-awesome/css/font-awesome.css',
-                'assets/css/fullcalendar.css',
-            ];
-
-            if (isset($temas[$appTheme])) {
-                $css[] = $temas[$appTheme];
-            }
-
-            $css[] = 'https://fonts.googleapis.com/css?family=Open+Sans:400,700,800';
-            $css[] = 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;700&display=swap';
-
-            $jsCabecalho = [
-                'assets/js/legado/globais.js',
-                'assets/js/jquery-1.12.4.min.js',
-                'assets/js/shortcut.js',
-                'assets/js/funcoesGlobal.js',
-                'assets/js/datatables.min.js',
-                'assets/js/sweetalert.min.js',
-                'assets/js/csrf.js',
-                'assets/js/legado/atalhos.js',
-            ];
-
-            $jsRodape = [
-                'assets/js/bootstrap.min.js',
-                'assets/js/matrix.js',
-                'assets/js/legado/datatables.js',
-            ];
-            // As telas legadas ainda usam ícones do Boxicons (<i class="bx ...">).
-            // A moldura e as telas novas usam o sprite Lucide (icon(), #2915).
-            $css[] = 'assets/vendor/boxicons/css/boxicons.min.css';
-        } else {
-            $css[] = 'assets/dist/app.css';
-        }
-
-        // Depois do CSS legado: as regras estruturais do layout.css (sem
-        // camada) precisam vencer as do matrix-style com a mesma especificidade.
-        $css[] = 'assets/dist/layout.css';
-
         return [
-            'css' => $css,
-            'js_cabecalho' => $jsCabecalho,
+            'css' => ['assets/dist/app.css', 'assets/dist/layout.css'],
             'modulos' => ['assets/js/app.js'],
-            'js_rodape' => $jsRodape,
         ];
     }
 }
@@ -367,39 +297,5 @@ if (! function_exists('layoutUrlAsset')) {
     function layoutUrlAsset(string $caminho, string $baseUrl): string
     {
         return preg_match('#^https?://#', $caminho) ? $caminho : $baseUrl . $caminho;
-    }
-}
-
-if (! function_exists('layoutDadosLegado')) {
-    /**
-     * Dados que os scripts legados (assets/js/legado/) leem da página, no lugar
-     * do JavaScript que o tema/topo.php e o tema/rodape.php da v4 escreviam
-     * inline.
-     *
-     * @param  callable(string): string  $siteUrl
-     * @return array<string, mixed>
-     */
-    function layoutDadosLegado(string $baseUrl, callable $siteUrl, array $configuration): array
-    {
-        return [
-            'baseUrl' => $baseUrl,
-            'atalhos' => [
-                'Escape' => $baseUrl,
-                'F1' => $siteUrl('clientes'),
-                'F2' => $siteUrl('produtos'),
-                'F3' => $siteUrl('servicos'),
-                'F4' => $siteUrl('os'),
-                'F6' => $siteUrl('vendas/adicionar'),
-                'F7' => $siteUrl('financeiro/lancamentos'),
-            ],
-            // Teclas que a v4 registrava sem ação, só para bloquear o
-            // comportamento padrão do navegador.
-            'atalhosBloqueados' => ['F8', 'F9', 'F10', 'F12'],
-            'dataTable' => [
-                'ativo' => (string) ($configuration['control_datatable'] ?? '1') === '1',
-                'porPagina' => (int) ($configuration['per_page'] ?? 10),
-                'idioma' => $baseUrl . 'assets/js/dataTable_pt-br.json',
-            ],
-        ];
     }
 }

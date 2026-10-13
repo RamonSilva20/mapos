@@ -77,7 +77,6 @@ class Mapos extends MY_Controller
         }
 
         $this->data['menuPainel'] = 'Painel';
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/painel';
 
         return $this->layout();
@@ -104,7 +103,6 @@ class Mapos extends MY_Controller
         $this->data['tem_foto'] = $this->data['avatar'] !== base_url() . 'assets/img/User.png';
         $this->data['pode_foto'] = $this->permite('cUsuario');
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/minhaConta';
 
         return $this->layout();
@@ -170,7 +168,6 @@ class Mapos extends MY_Controller
         foreach ($pode as $grupo => $permitido) {
             $this->data[$grupo] = $permitido ? ($resultados[$grupo] ?? []) : [];
         }
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/pesquisa';
 
         return $this->layout();
@@ -267,7 +264,6 @@ class Mapos extends MY_Controller
         $this->data['emitente'] = $emitente;
         $this->data['valores'] = $valores;
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/emitente';
 
         return $this->layout();
@@ -381,7 +377,6 @@ class Mapos extends MY_Controller
         $this->data['total'] = $total;
         $this->data['results'] = $this->email_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
         $this->data['paginacao'] = $this->paginacao(site_url('mapos/emails'), $total, $offset, null, $filtros);
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'emails/emails';
 
         return $this->layout();
@@ -450,7 +445,6 @@ class Mapos extends MY_Controller
         $this->data['valores'] = configuracaoValores($aba, $this->input->method() === 'post' ? $this->input->post() : null, $this->data['configuration'], $_ENV);
         $this->data['erros'] = $erros;
         $this->data['pode_backup'] = $this->permite('cBackup');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/configurar';
 
         return $this->layout();

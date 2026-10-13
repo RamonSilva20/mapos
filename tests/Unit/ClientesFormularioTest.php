@@ -116,7 +116,6 @@ final class ClientesFormularioTest extends MaposTestCase
         $this->assertStringContainsString('clienteDadosDoFormulario($this->input->post(), $cliente === null)', $trecho[0]);
         $this->assertStringContainsString("'idClientes', (int) \$cliente->idClientes", $trecho[0]);
         $this->assertStringNotContainsString("post('idClientes')", $codigo);
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $trecho[0]);
     }
 
     public function testMensagensDeValidacaoEmPortugues(): void

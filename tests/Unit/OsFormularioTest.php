@@ -312,7 +312,6 @@ final class OsFormularioTest extends MaposTestCase
         $this->assertStringContainsString('isEditable((int) $os->idOs)', $editar[0]);
         $this->assertStringContainsString("\$this->validarFormulario('os')", $formulario[0]);
         $this->assertStringContainsString('osDadosDoFormulario($this->input->post())', $formulario[0]);
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $formulario[0]);
         $this->assertStringNotContainsString("post('idOs')", $editar[0] . $formulario[0]);
     }
 

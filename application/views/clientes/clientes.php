@@ -1,7 +1,7 @@
 <?php
 /**
  * Listagem de clientes e fornecedores (#2841, #2852): primeira tela de módulo
- * migrada para os componentes da v5 (legacy_assets = false).
+ * migrada para os componentes da v5.
  *
  * Padrão das listagens:
  * - cabeçalho com o título e o total encontrado;

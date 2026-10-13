@@ -3,8 +3,8 @@
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Layout do painel da v5 (#2835): menu, breadcrumb, assets do modo legado e
- * dados dos scripts legados. Ver application/helpers/layout_helper.php.
+ * Layout do painel da v5 (#2835): menu, breadcrumb e assets. Ver
+ * application/helpers/layout_helper.php.
  */
 final class LayoutTest extends MaposTestCase
 {
@@ -368,69 +368,40 @@ final class LayoutTest extends MaposTestCase
     }
 
     // ---------------------------------------------------------------------
-    // Assets e modo legado
+    // Assets
     // ---------------------------------------------------------------------
 
-    public function testModoLegadoCarregaOCssEJsDaV4NaMesmaOrdem(): void
+    public function testTodaTelaCarregaSoOsAssetsDaV5(): void
     {
-        $assets = layoutAssets(true, 'puredark');
+        $assets = layoutAssets();
 
-        $this->assertSame(
-            [
-                'assets/css/bootstrap.min.css',
-                'assets/css/bootstrap-responsive.min.css',
-                'assets/css/matrix-style.css',
-                'assets/css/matrix-media.css',
-                'assets/font-awesome/css/font-awesome.css',
-                'assets/css/fullcalendar.css',
-                'assets/css/tema-pure-dark.css',
-            ],
-            array_slice($assets['css'], 0, 7)
-        );
-        $this->assertNotContains('assets/dist/app.css', $assets['css']);
-        $this->assertContains('assets/vendor/boxicons/css/boxicons.min.css', $assets['css'], 'As telas legadas ainda usam Boxicons.');
-        $this->assertContains('assets/js/jquery-1.12.4.min.js', $assets['js_cabecalho']);
-        $this->assertContains('assets/js/csrf.js', $assets['js_cabecalho']);
-        $this->assertSame('assets/js/legado/globais.js', $assets['js_cabecalho'][0], 'BaseUrl precisa existir antes dos scripts das views.');
-        $this->assertSame(['assets/js/bootstrap.min.js', 'assets/js/matrix.js', 'assets/js/legado/datatables.js'], $assets['js_rodape']);
-    }
-
-    public function testTelaMigradaNaoCarregaNadaDoLegado(): void
-    {
-        $assets = layoutAssets(false, 'white');
-
-        $this->assertContains('assets/dist/app.css', $assets['css']);
-        $this->assertSame([], $assets['js_cabecalho']);
-        $this->assertSame([], $assets['js_rodape']);
-        foreach ($assets['css'] as $css) {
-            $this->assertStringNotContainsString('bootstrap', $css);
-            $this->assertStringNotContainsString('tema-', $css);
-            $this->assertStringNotContainsString('boxicons', $css, 'Telas migradas usam o sprite Lucide (#2915).');
-        }
+        // O layout.css (a moldura) vem por último: as regras de estrutura dele
+        // ficam fora de camada.
+        $this->assertSame(['assets/dist/app.css', 'assets/dist/layout.css'], $assets['css']);
+        $this->assertSame(['assets/js/app.js'], $assets['modulos']);
+        $this->assertSame(['css', 'modulos'], array_keys($assets), 'Sem JS de cabeçalho e de rodapé do modo legado.');
     }
 
     /**
-     * O layout.css tem regras sem camada que precisam vencer as do
-     * matrix-style com a mesma especificidade: ele vem por último.
+     * O modo legado (Bootstrap 2, jQuery, matrix-style e tema-*.css) saiu na
+     * #2855: nenhum controller o liga, e o layout não tem mais o gancho.
      */
-    #[DataProvider('modos')]
-    public function testLayoutCssVemPorUltimo(bool $legado): void
+    public function testNaoExisteMaisOModoLegado(): void
     {
-        $css = layoutAssets($legado, 'white')['css'];
+        foreach (glob(APPPATH . 'controllers/*.php') as $arquivo) {
+            $this->assertStringNotContainsString('legacy_assets', (string) file_get_contents($arquivo), basename($arquivo));
+        }
 
-        $this->assertSame('assets/dist/layout.css', end($css));
-        $this->assertSame(['assets/js/app.js'], layoutAssets($legado, 'white')['modulos']);
-    }
+        $base = strtolower((string) file_get_contents(APPPATH . 'core/MY_Controller.php'));
+        $this->assertStringNotContainsString('legacy', $base);
+        $this->assertStringNotContainsString('legado', $base);
+        $this->assertFalse(function_exists('layoutDadosLegado'));
+        $this->assertDirectoryDoesNotExist(MAPOS_ROOT . '/assets/js/legado');
 
-    public static function modos(): array
-    {
-        return ['legado' => [true], 'migrada' => [false]];
-    }
-
-    public function testTemaDesconhecidoNaoCarregaTemaCss(): void
-    {
-        foreach (layoutAssets(true, 'default')['css'] as $css) {
-            $this->assertStringNotContainsString('tema-', $css);
+        foreach (glob(APPPATH . 'views/tema/*.php') as $view) {
+            $codigo = strtolower((string) file_get_contents($view));
+            $this->assertStringNotContainsString('legado', $codigo, basename($view));
+            $this->assertStringNotContainsString('row-fluid', $codigo, basename($view));
         }
     }
 
@@ -438,24 +409,6 @@ final class LayoutTest extends MaposTestCase
     {
         $this->assertSame('http://x/assets/a.css', layoutUrlAsset('assets/a.css', 'http://x/'));
         $this->assertSame('https://unpkg.com/a.css', layoutUrlAsset('https://unpkg.com/a.css', 'http://x/'));
-    }
-
-    public function testDadosDosScriptsLegados(): void
-    {
-        $dados = layoutDadosLegado('http://x/', fn ($c) => 'http://x/index.php/' . $c, ['control_datatable' => '0', 'per_page' => '25']);
-
-        $this->assertSame('http://x/', $dados['baseUrl']);
-        $this->assertSame('http://x/', $dados['atalhos']['Escape']);
-        $this->assertSame('http://x/index.php/clientes', $dados['atalhos']['F1']);
-        $this->assertSame('http://x/index.php/vendas/adicionar', $dados['atalhos']['F6']);
-        $this->assertSame('http://x/index.php/financeiro/lancamentos', $dados['atalhos']['F7']);
-        $this->assertSame(['F1', 'F2', 'F3', 'F4', 'F6', 'F7', 'Escape'], array_values(array_intersect(['F1', 'F2', 'F3', 'F4', 'F6', 'F7', 'Escape'], array_keys($dados['atalhos']))));
-        $this->assertFalse($dados['dataTable']['ativo']);
-        $this->assertSame(25, $dados['dataTable']['porPagina']);
-
-        $padrao = layoutDadosLegado('http://x/', fn ($c) => $c, []);
-        $this->assertTrue($padrao['dataTable']['ativo']);
-        $this->assertSame(10, $padrao['dataTable']['porPagina']);
     }
 }
 

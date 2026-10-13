@@ -9,7 +9,6 @@ class MY_Controller extends CI_Controller
             // telas novas usam o componente pagination via paginacao().
             'per_page' => 10,
             'app_name' => 'Map-OS',
-            'app_theme' => 'default',
             'os_notification' => 'cliente',
             'control_estoque' => '1',
             'notifica_whats' => '',
@@ -260,10 +259,7 @@ class MY_Controller extends CI_Controller
     /**
      * Renderiza a tela dentro do layout do painel (views/tema/).
      *
-     * A tela informa a view em $this->data['view']. Telas que ainda dependem
-     * do Bootstrap 2/jQuery rodam no modo legado, que é o padrão; uma tela
-     * migrada para os componentes da v5 desliga com
-     * $this->data['legacy_assets'] = false. Ver layout_helper.php.
+     * A tela informa a view em $this->data['view'].
      *
      * A ação principal da tela (o único button-primary, ex. "Nova OS") vai na
      * topbar, com as props do button (ícone obrigatório: no celular ele fica
@@ -286,7 +282,6 @@ class MY_Controller extends CI_Controller
      */
     protected function dadosDoLayout()
     {
-        $legado = (bool) ($this->data['legacy_assets'] ?? true);
         $configuracao = $this->data['configuration'];
         $siteUrl = static fn ($caminho) => site_url($caminho);
 
@@ -308,9 +303,7 @@ class MY_Controller extends CI_Controller
         $acao = $this->data['topbar_acao'] ?? null;
 
         return [
-            'legado' => $legado,
-            'assets' => layoutAssets($legado, (string) ($configuracao['app_theme'] ?? '')),
-            'dados_legado' => layoutDadosLegado(base_url(), $siteUrl, $configuracao),
+            'assets' => layoutAssets(),
             'menu' => $menu,
             'grupos' => layoutMenuGrupos($menu),
             'breadcrumb' => layoutBreadcrumb([$this->uri->segment(1), $this->uri->segment(2), $this->uri->segment(3)], $siteUrl),

@@ -241,7 +241,6 @@ final class CobrancasTest extends MaposTestCase
 
         $this->assertStringNotContainsString('HTTP_REFERER', $codigo);
         $this->assertStringContainsString("\$this->input->method() !== 'post'", $codigo, 'Ações que mudam dados só por POST.');
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $codigo);
         // A resposta JSON de adicionar() é usada pelas telas de OS e de venda.
         $this->assertStringContainsString("json_encode(\$cobranca)", $codigo);
     }

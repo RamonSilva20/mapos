@@ -7,10 +7,8 @@
  * cor, a ação principal da tela quando o controller define
  * $this->data['topbar_acao'] (o único button-primary) e o menu do usuário.
  *
- * O conteúdo continua dentro de #content > .container-flu > .row-fluid >
- * .span12, como na v4, porque o CSS e o JavaScript das telas legadas contam
- * com essa estrutura. O CSS da moldura (assets/dist/layout.css) só vale dentro
- * de .v5-shell, e #content fica fora dele.
+ * O conteúdo da tela fica em .v5-conteudo, fora de .v5-shell: o CSS da moldura
+ * (assets/dist/layout.css) só vale dentro do shell, e a tela usa o app.css.
  *
  * @var array $configuration
  * @var array $layout
@@ -83,15 +81,9 @@
   </div>
 
   <main id="conteudo-principal" tabindex="-1">
-    <div id="content">
-      <div class="container-flu">
-        <div class="row-fluid">
-          <div class="span12">
-            <?php if (isset($view)) {
-                $this->load->view($view);
-            } ?>
-          </div>
-        </div>
-      </div>
+    <div class="v5-conteudo">
+      <?php if (isset($view)) {
+          $this->load->view($view);
+      } ?>
     </div>
   </main>

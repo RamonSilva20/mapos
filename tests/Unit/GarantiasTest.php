@@ -84,7 +84,6 @@ final class GarantiasTest extends MaposTestCase
         $this->assertStringContainsString("osTextoParaGravar((string) \$this->input->post('textoGarantia'))", $codigo);
         $this->assertStringContainsString("'idGarantias', \$id", $codigo);
         $this->assertStringNotContainsString("post('idGarantias')", $codigo, 'O id editado vem da URL.');
-        $this->assertSame(3, substr_count($codigo, "\$this->data['legacy_assets'] = false;"));
         $this->assertStringNotContainsString('autoComplete', $codigo);
 
         $mapa = (string) file_get_contents(APPPATH . 'config/permissions_map.php');

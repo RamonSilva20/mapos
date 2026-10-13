@@ -34,7 +34,6 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
         $this->data['relatorio'] = relatorioDefinicao('clientes');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
@@ -47,7 +46,6 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
         $this->data['relatorio'] = relatorioDefinicao('produtos');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
@@ -227,7 +225,6 @@ class Relatorios extends MY_Controller
         }
 
         $this->data['relatorio'] = relatorioDefinicao('sku');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
@@ -342,7 +339,6 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
         $this->data['relatorio'] = relatorioDefinicao('servicos');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
@@ -389,7 +385,6 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
         $this->data['relatorio'] = relatorioDefinicao('os');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
@@ -640,7 +635,6 @@ class Relatorios extends MY_Controller
         }
 
         $this->data['relatorio'] = relatorioDefinicao('financeiro');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
@@ -792,7 +786,6 @@ class Relatorios extends MY_Controller
         }
 
         $this->data['relatorio'] = relatorioDefinicao('vendas');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
@@ -988,7 +981,6 @@ class Relatorios extends MY_Controller
         }
 
         $this->data['relatorio'] = relatorioDefinicao('receitasBrutasMei');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();

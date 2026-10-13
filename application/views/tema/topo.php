@@ -6,16 +6,13 @@
  * tema/menu, tema/conteudo e tema/rodape. Os dados vêm prontos em $layout
  * (ver application/helpers/layout_helper.php):
  *
- * - legado: a tela ainda usa Bootstrap 2/jQuery (legacy_assets, o padrão);
- * - assets: CSS e JS da página (layoutAssets());
- * - dados_legado: URLs dos atalhos e configuração do DataTables, lidos pelos
- *   scripts de assets/js/legado/ no lugar do JavaScript inline da v4.
+ * - assets: CSS e módulos JS da página (layoutAssets()).
  *
  * @var array $configuration
  * @var array $layout
  */
 ?><!DOCTYPE html>
-<html lang="pt-br"<?= temaAtributosHtml($configuration) ?><?= $layout['legado'] ? ' data-layout-legado' : '' ?>>
+<html lang="pt-br"<?= temaAtributosHtml($configuration) ?>>
 
 <head>
   <meta charset="UTF-8">
@@ -28,12 +25,6 @@
   <script src="<?= e(base_url('assets/js/tema.js')) ?>"></script>
   <?php foreach ($layout['assets']['css'] as $arquivo) { ?>
   <link rel="stylesheet" href="<?= e(layoutUrlAsset($arquivo, base_url())) ?>">
-  <?php } ?>
-  <?php if ($layout['legado']) { ?>
-  <?= page_data('layout-legado', $layout['dados_legado']) ?>
-  <?php } ?>
-  <?php foreach ($layout['assets']['js_cabecalho'] as $arquivo) { ?>
-  <script src="<?= e(layoutUrlAsset($arquivo, base_url())) ?>"></script>
   <?php } ?>
   <?php foreach ($layout['assets']['modulos'] as $arquivo) { ?>
   <script type="module" src="<?= e(layoutUrlAsset($arquivo, base_url())) ?>"></script>

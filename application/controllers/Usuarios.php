@@ -49,7 +49,6 @@ class Usuarios extends MY_Controller
         $this->data['logado'] = (int) $this->session->userdata('id_admin');
         $this->data['hoje'] = date('Y-m-d');
         $this->data['topbar_acao'] = ['label' => 'Novo usuário', 'icon' => 'plus', 'href' => site_url('usuarios/adicionar')];
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'usuarios/usuarios';
 
         return $this->layout();
@@ -139,7 +138,6 @@ class Usuarios extends MY_Controller
         $this->data['erros'] = $erros;
         $this->data['grupos'] = $this->gruposParaEscolher($usuario);
         $this->data['protegido'] = $usuario !== null && usuarioPodeSerRemovido((int) $usuario->idUsuarios, $logado) !== null;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'usuarios/formulario';
 
         return $this->layout();

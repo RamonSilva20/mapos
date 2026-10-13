@@ -60,7 +60,6 @@ class Arquivos extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Novo arquivo', 'icon' => 'plus', 'href' => site_url('arquivos/adicionar')];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'arquivos/arquivos';
 
         return $this->layout();
@@ -159,7 +158,6 @@ class Arquivos extends MY_Controller
             'data' => is_array($post) ? (string) ($post['data'] ?? '') : (string) ($arquivo->cadastro ?? date('Y-m-d')),
         ];
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'arquivos/formulario';
 
         return $this->layout();

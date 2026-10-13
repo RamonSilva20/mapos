@@ -162,7 +162,6 @@ final class FinanceiroTelasTest extends MaposTestCase
 
         preg_match('/public function lancamentos\(\).*?\n    }\n/s', $controller, $lancamentos);
         $this->assertNotEmpty($lancamentos);
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $lancamentos[0]);
         $this->assertStringContainsString("'Novo lançamento'", $lancamentos[0]);
         $this->assertStringContainsString("'vLancamento'", $lancamentos[0]);
 

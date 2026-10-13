@@ -2,7 +2,7 @@
  * Design tokens da v5, compartilhados pelos dois pontos de entrada do CSS:
  *
  * - assets/src/app.css: telas novas (preflight + todas as utilities);
- * - assets/src/layout.css: moldura do painel, que convive com o CSS legado.
+ * - assets/src/layout.css: moldura do painel (reset e utilities em .v5-shell).
  *
  * A fonte de verdade é o DESIGN.md (raiz do repositório): nomes, valores e
  * contrastes vêm de lá. Mudou o design? Altere primeiro o DESIGN.md, depois

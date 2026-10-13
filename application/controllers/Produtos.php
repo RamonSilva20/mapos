@@ -57,7 +57,6 @@ class Produtos extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Novo produto', 'icon' => 'plus', 'href' => site_url('produtos/adicionar')];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'produtos/produtos';
 
         return $this->layout();
@@ -134,7 +133,6 @@ class Produtos extends MY_Controller
         $this->data['produto'] = $produto;
         $this->data['valores'] = $valores;
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'produtos/formulario';
 
         return $this->layout();
@@ -163,7 +161,6 @@ class Produtos extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Editar produto', 'icon' => 'pencil', 'href' => site_url('produtos/editar/' . (int) $produto->idProdutos)];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'produtos/visualizar';
 
         return $this->layout();

@@ -146,7 +146,6 @@ final class ContaEBuscaTest extends MaposTestCase
         foreach (['telaDaConta', 'pesquisar'] as $metodo) {
             preg_match('/function ' . $metodo . '\\(.*?\\n    }\\n/s', $controller, $corpo);
             $this->assertNotEmpty($corpo, $metodo);
-            $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $corpo[0], "{$metodo} saiu do modo legado.");
         }
     }
 
