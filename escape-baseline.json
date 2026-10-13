@@ -5,7 +5,6 @@
     "application/views/clientes/formulario.php": 12,
     "application/views/cobrancas/emails/cobranca.php": 13,
     "application/views/conecte/emails/clientenovasenha.php": 5,
-    "application/views/conecte/imprimirVenda.php": 29,
     "application/views/errors/cli/error_404.php": 1,
     "application/views/errors/cli/error_db.php": 1,
     "application/views/errors/cli/error_exception.php": 7,
@@ -38,8 +37,5 @@
     "application/views/relatorios/imprimir/imprimirTopo.php": 12,
     "application/views/relatorios/imprimir/imprimirVendas.php": 6,
     "application/views/relatorios/rel_os_topo.php": 6,
-    "application/views/tema/conteudo.php": 1,
-    "application/views/vendas/imprimirVenda.php": 29,
-    "application/views/vendas/imprimirVendaOrcamento.php": 28,
-    "application/views/vendas/imprimirVendaTermica.php": 20
+    "application/views/tema/conteudo.php": 1
 }
