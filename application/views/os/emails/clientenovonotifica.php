@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente->url_logo; ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= e($emitente->url_logo) ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -128,7 +128,7 @@
             <tr class="details">
             
                 <td colspan="4" style="text-align: left">
-                    Caro <b><?= $usuario->nome ?></b>, <br>
+                    Caro <b><?= e($usuario->nome) ?></b>, <br>
                     Um novo cliente se cadastrou no sistema. Seguem as informações sobre este cliente: <br>
                 </td>
 
@@ -153,22 +153,22 @@
                     Celular:
                 </td>
                 <td  style="text-align: left">
-                    <b> <?= $cliente->nomeCliente ?> </b><br>
-                    <?= $cliente->documento ?><br>
-                    <?= $cliente->rua ?>, <?= $cliente->numero ?> <br>
-                    <?= $cliente->complemento ?> <br>
-                    <?= $cliente->bairro ?><br>
-                    <?= $cliente->cidade ?>/<?= $cliente->estado ?> <br>
-                    <?= $cliente->cep ?> <br>
-                    <?= $cliente->email ?> <br>
-                    <?= $cliente->celular ?>
+                    <b> <?= e($cliente->nomeCliente) ?> </b><br>
+                    <?= e($cliente->documento) ?><br>
+                    <?= e($cliente->rua) ?>, <?= e($cliente->numero) ?> <br>
+                    <?= e($cliente->complemento) ?> <br>
+                    <?= e($cliente->bairro) ?><br>
+                    <?= e($cliente->cidade) ?>/<?= e($cliente->estado) ?> <br>
+                    <?= e($cliente->cep) ?> <br>
+                    <?= e($cliente->email) ?> <br>
+                    <?= e($cliente->celular) ?>
                 </td>
             </tr>
 
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Um abraço! <br>
-                    <?= $emitente->nome; ?>
+                    <?= e($emitente->nome) ?>
                 </td>
             </tr>
             
