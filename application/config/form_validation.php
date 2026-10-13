@@ -282,6 +282,26 @@ $config = [
             'rules' => 'required|trim',
         ],
     ],
+    'alterar_senha' => [
+        [
+            'field' => 'oldSenha',
+            'label' => 'Senha atual',
+            'rules' => 'required',
+        ],
+        [
+            'field' => 'novaSenha',
+            'label' => 'Nova senha',
+            'rules' => 'required|min_length[8]|max_length[72]',
+        ],
+        [
+            'field' => 'confirmarSenha',
+            'label' => 'Confirmação da senha',
+            'rules' => 'required|matches[novaSenha]',
+            'errors' => [
+                'matches' => 'A confirmação não é igual à nova senha.',
+            ],
+        ],
+    ],
     'arquivos' => [
         [
             'field' => 'nome',

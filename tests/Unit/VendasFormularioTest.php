@@ -255,7 +255,6 @@ final class VendasFormularioTest extends MaposTestCase
         $this->assertStringContainsString('isEditable((int) $venda->idVendas)', $editar[0]);
         $this->assertStringContainsString("\$this->validarFormulario('vendas')", $formulario[0]);
         $this->assertStringContainsString('vendaDadosDoFormulario($this->input->post())', $formulario[0]);
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $formulario[0]);
         $this->assertStringNotContainsString("post('idVendas')", $editar[0] . $formulario[0]);
     }
 

@@ -52,7 +52,6 @@ class Garantias extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Novo termo', 'icon' => 'plus', 'href' => site_url('garantias/adicionar')];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'garantias/garantias';
 
         return $this->layout();
@@ -132,7 +131,6 @@ class Garantias extends MY_Controller
             'textoGarantia' => is_array($post) ? (string) ($post['textoGarantia'] ?? '') : osTextoParaEdicao($garantia->textoGarantia ?? ''),
         ];
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'garantias/formulario';
 
         return $this->layout();
@@ -161,7 +159,6 @@ class Garantias extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Editar termo', 'icon' => 'pencil', 'href' => site_url('garantias/editar/' . (int) $garantia->idGarantias)];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'garantias/visualizar';
 
         return $this->layout();

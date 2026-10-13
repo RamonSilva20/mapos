@@ -78,6 +78,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Token de recuperação de senha da área do cliente guardado só como hash SHA-256 (busca pelo hash e conferência com `hash_equals`), com 32 bytes aleatórios, validade de 1 hora (antes 24 horas) e uso único; um pedido novo invalida os anteriores do mesmo e-mail. Uma migration invalida os tokens pendentes, que estavam em texto claro. #2934 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Removed
+- Frontend legado do painel: Bootstrap 2, jQuery e jQuery UI, tema Matrix, `tema-*.css`, Trumbowyg, wysihtml5, Select2, DataTables, jqPlot, Flot, Highcharts, Boxicons, SweetAlert v1 e o modo legado do layout (`legacy_assets`). As impressões e os PDFs mantêm o CSS próprio. #2855 [@RamonSilva20](https://github.com/RamonSilva20)
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Fixed

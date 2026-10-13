@@ -221,7 +221,7 @@ npm install --save-exact nome-da-lib@versao
 npm run build
 ```
 
-Para adicionar uma nova, ou outro arquivo de uma já existente, inclua-a na lista do `scripts/build-vendor.mjs`. Não adicione bibliotecas novas que dependam de jQuery: ele sai até o fim da Beta.
+Para adicionar uma nova, ou outro arquivo de uma já existente, inclua-a na lista do `scripts/build-vendor.mjs`. Não adicione bibliotecas que dependam de jQuery: ele saiu do painel na #2855.
 
 ### JavaScript nas views
 
@@ -277,7 +277,7 @@ $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $tot
 <?= component('pagination', $paginacao) ?>
 ```
 
-O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination.php` até a remoção do frontend legado (#2855).
+Nenhuma tela do painel usa mais o `create_links()` do `CI_Pagination`. O `application/config/pagination.php` (com o markup antigo do Bootstrap 2) só continua para a API do app, que inicializa a biblioteca para calcular as páginas.
 
 **Padrão das listagens** (#2852). A referência é a listagem de clientes (`Clientes::gerenciar()` e `views/clientes/clientes.php`):
 
@@ -318,7 +318,7 @@ O markup do Bootstrap 2 das telas legadas fica em `application/config/pagination
 
 Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
 
-### Layout do painel e modo legado
+### Layout do painel
 
 Toda tela do painel passa por `MY_Controller::layout()`, que monta a moldura da v5 (`application/views/tema/`): sidebar recolhível (gaveta no celular), topbar com busca, troca de modo de cor e menu do usuário, breadcrumb e mensagens de flash como toast. O menu sai de `layoutMenu()` (`application/helpers/layout_helper.php`), dividido em seções pela chave `grupo` de cada item (Operação, Financeiro, Sistema), e cada item só aparece se o mapa de permissões liberar a rota de destino.
 
@@ -330,15 +330,14 @@ $this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => 
 
 São as props do `button`, e o ícone é obrigatório: no celular a topbar mostra só o ícone, com o rótulo como nome acessível.
 
-Durante a Beta as telas são migradas aos poucos, então o layout tem um **modo legado**, ligado por padrão: ele carrega Bootstrap 2, jQuery, matrix-style e o `tema-*.css`, e a tela fica dentro de `#content` como antes. Uma tela já migrada para os componentes desliga o modo legado e passa a receber o `app.css` completo:
+Toda tela do painel passa por `layout()`, que carrega `assets/dist/app.css` e `assets/dist/layout.css`. Não há mais modo legado: Bootstrap 2, jQuery, matrix-style e os `tema-*.css` saíram na #2855. Só as impressões e os PDFs (`imprimir*.php`, `relatorios/imprimir/`) mantêm o CSS próprio deles (Bootstrap e Font Awesome) e ficam fora do Tailwind.
 
 ```php
-$this->data['legacy_assets'] = false;
 $this->data['view'] = 'clientes/clientes';
 return $this->layout();
 ```
 
-A moldura usa um CSS próprio, `assets/src/layout.css` → `assets/dist/layout.css`, montado para não interferir nas telas antigas: as utilities e o reset só valem dentro de elementos `.v5-shell`, e são `!important` para que o CSS legado também não interfira na moldura. Use `npm run watch:layout` ao mexer nela. HTML novo da moldura fica dentro de um wrapper `.v5-shell`; o conteúdo da tela nunca.
+A moldura usa um CSS próprio, `assets/src/layout.css` → `assets/dist/layout.css`: as utilities e o reset só valem dentro de elementos `.v5-shell`, e são `!important`. Use `npm run watch:layout` ao mexer nela. HTML novo da moldura fica dentro de um wrapper `.v5-shell`; o conteúdo da tela vai em `.v5-conteudo`, fora do shell, e usa o `app.css`.
 
 ## Alterações no banco de dados
 

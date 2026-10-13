@@ -4,10 +4,10 @@
  * Gera assets/dist/app.css com `npm run build:css`. O arquivo compilado é
  * commitado: quem só instala ou atualiza o Map-OS não precisa de Node.
  *
- * Tem o preflight (reset) e todas as utilities sem escopo, por isso só é
- * carregado onde não há CSS legado: nas telas migradas (layout com
- * legacy_assets = false) e no catálogo de componentes. A moldura do painel
- * usa o assets/src/layout.css, que convive com o Bootstrap 2.
+ * Tem o preflight (reset) e todas as utilities sem escopo: vale para o
+ * conteúdo das telas (.v5-conteudo) e para as telas de entrada. A moldura do
+ * painel usa o assets/src/layout.css, com o reset e as utilities restritos a
+ * .v5-shell.
  *
  * source(none) desliga a detecção automática de arquivos, que varreria
  * application/vendor e node_modules. As classes vêm só das views.

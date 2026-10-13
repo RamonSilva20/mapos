@@ -70,6 +70,5 @@ final class ProdutosTest extends MaposTestCase
         $this->assertStringNotContainsString("post('idProdutos')", $codigo);
         $this->assertStringNotContainsString("post('estoqueAtual')", $codigo);
         $this->assertStringContainsString('updateEstoque((int) $produto->idProdutos, abs($quantidade)', $codigo);
-        $this->assertSame(3, substr_count($codigo, "\$this->data['legacy_assets'] = false;"));
     }
 }

@@ -223,7 +223,6 @@ final class VendasListagemTest extends MaposTestCase
         preg_match('/public function excluir\(\).*?\n    }\n/s', $controller, $excluir);
 
         $this->assertNotEmpty($gerenciar);
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $gerenciar[0]);
         $this->assertStringContainsString("'Nova venda'", $gerenciar[0]);
         $this->assertStringContainsString('->contar($filtros)', $gerenciar[0], 'O total conta com os mesmos filtros da listagem.');
         $this->assertNotEmpty($excluir);

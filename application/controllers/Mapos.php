@@ -6,6 +6,7 @@ class Mapos extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper('os');
         $this->load->model('mapos_model');
     }
 
@@ -76,59 +77,97 @@ class Mapos extends MY_Controller
         }
 
         $this->data['menuPainel'] = 'Painel';
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/painel';
 
         return $this->layout();
     }
 
+    /**
+     * Minha conta (#2855): dados do usuário, foto e troca de senha, com os
+     * componentes da v5.
+     */
     public function minhaConta()
     {
-        $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id_admin'));
+        return $this->telaDaConta([]);
+    }
+
+    /**
+     * @param  array<string, string>  $erros  Por campo da troca de senha
+     */
+    private function telaDaConta(array $erros)
+    {
+        $usuario = $this->mapos_model->getById($this->session->userdata('id_admin'));
+
+        $this->data['usuario'] = $usuario;
+        $this->data['avatar'] = layoutAvatarUrl($usuario->url_image_user ?? null, FCPATH . 'assets/userImage', base_url());
+        $this->data['tem_foto'] = $this->data['avatar'] !== base_url() . 'assets/img/User.png';
+        $this->data['pode_foto'] = $this->permite('cUsuario');
+        $this->data['erros'] = $erros;
         $this->data['view'] = 'mapos/minhaConta';
 
         return $this->layout();
     }
 
+    /**
+     * Troca a senha do próprio usuário. Os erros aparecem no campo; a senha
+     * atual precisa conferir, e a nova tem de ter ao menos 8 caracteres e ser
+     * repetida igual (antes a confirmação só era conferida no navegador).
+     */
     public function alterarSenha()
     {
         $current_user = $this->mapos_model->getById($this->session->userdata('id_admin'));
 
-        if (!$current_user) {
+        if (! $current_user) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao pesquisar usuário!');
             redirect(site_url('mapos/minhaConta'));
         }
 
-        $oldSenha = $this->input->post('oldSenha');
-        $senha = $this->input->post('novaSenha');
+        $erros = $this->validarFormulario('alterar_senha');
 
-        if (!password_verify($oldSenha, $current_user->senha)) {
-            $this->session->set_flashdata('error', 'A senha atual não corresponde com a senha informada.');
-            redirect(site_url('mapos/minhaConta'));
+        if ($erros === [] && ! password_verify((string) $this->input->post('oldSenha'), $current_user->senha)) {
+            $erros['oldSenha'] = 'A senha atual não confere.';
         }
 
-        $result = $this->mapos_model->alterarSenha($senha);
+        if ($erros !== []) {
+            return $this->telaDaConta($erros);
+        }
 
-        if ($result) {
+        if ($this->mapos_model->alterarSenha($this->input->post('novaSenha'))) {
+            log_info('Alterou a própria senha.');
             $this->session->set_flashdata('success', 'Senha alterada com sucesso!');
-            redirect(site_url('mapos/minhaConta'));
+        } else {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a senha!');
         }
 
-        $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a senha!');
         redirect(site_url('mapos/minhaConta'));
     }
 
+    /**
+     * Busca geral (#2855), a da topbar: clientes, OS, produtos e serviços. Cada
+     * grupo só aparece para quem pode visualizá-lo; sem termo, a tela só pede
+     * o que buscar.
+     */
     public function pesquisar()
     {
-        $termo = $this->input->get('termo');
+        $termo = mb_substr(trim((string) $this->input->get('termo')), 0, 100);
+        $pode = [
+            'clientes' => $this->permite('vCliente'),
+            'os' => $this->permite('vOs'),
+            'produtos' => $this->permite('vProduto'),
+            'servicos' => $this->permite('vServico'),
+        ];
+        $resultados = $termo === '' ? [] : $this->mapos_model->pesquisar($termo);
 
-        $data['results'] = $this->mapos_model->pesquisar($termo);
-
-        // Cada grupo de resultados só é exibido para quem pode visualizá-lo
-        $this->data['produtos'] = $this->hasAnyPermission(['vProduto']) ? $data['results']['produtos'] : [];
-        $this->data['servicos'] = $this->hasAnyPermission(['vServico']) ? $data['results']['servicos'] : [];
-        $this->data['os'] = $this->hasAnyPermission(['vOs']) ? $data['results']['os'] : [];
-        $this->data['clientes'] = $this->hasAnyPermission(['vCliente']) ? $data['results']['clientes'] : [];
+        $this->data['termo'] = $termo;
+        $this->data['pode'] = $pode + [
+            'editar_cliente' => $this->permite('eCliente'),
+            'editar_os' => $this->permite('eOs'),
+            'editar_produto' => $this->permite('eProduto'),
+            'editar_servico' => $this->permite('eServico'),
+        ];
+        foreach ($pode as $grupo => $permitido) {
+            $this->data[$grupo] = $permitido ? ($resultados[$grupo] ?? []) : [];
+        }
         $this->data['view'] = 'mapos/pesquisa';
 
         return $this->layout();
@@ -225,7 +264,6 @@ class Mapos extends MY_Controller
         $this->data['emitente'] = $emitente;
         $this->data['valores'] = $valores;
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/emitente';
 
         return $this->layout();
@@ -307,7 +345,9 @@ class Mapos extends MY_Controller
         $retorno = $this->mapos_model->editImageUser($id, $imageUserPath);
 
         if ($retorno) {
-            $this->session->set_userdata('url_image_user', $imageUserPath);
+            // A chave que o layout lê (a mesma do login): sem ela o avatar da topbar
+            // só mudava no login seguinte.
+            $this->session->set_userdata('url_image_user_admin', $imageUserPath);
             $this->session->set_flashdata('success', 'Foto alterada com sucesso.');
             log_info('Alterou a Imagem do Usuario.');
         } else {
@@ -339,7 +379,6 @@ class Mapos extends MY_Controller
         $this->data['total'] = $total;
         $this->data['results'] = $this->email_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
         $this->data['paginacao'] = $this->paginacao(site_url('mapos/emails'), $total, $offset, null, $filtros);
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'emails/emails';
 
         return $this->layout();
@@ -408,7 +447,6 @@ class Mapos extends MY_Controller
         $this->data['valores'] = configuracaoValores($aba, $this->input->method() === 'post' ? $this->input->post() : null, $this->data['configuration'], $_ENV);
         $this->data['erros'] = $erros;
         $this->data['pode_backup'] = $this->permite('cBackup');
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'mapos/configurar';
 
         return $this->layout();

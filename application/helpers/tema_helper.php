@@ -8,8 +8,9 @@
  * é única, o laranja do DESIGN.md, e não há mais cor de destaque (#2913). O
  * CSS (assets/src/tokens.css) troca as variáveis pela classe .dark no <html>.
  *
- * Enquanto as telas legadas existirem (até a #2855), app_theme continua sendo
- * a fonte dos tema-*.css. Por isso nada aqui altera app_theme.
+ * O app_theme só é lido como origem do modo num banco que ainda não tem
+ * app_tema_modo (instalado pelo banco.sql antes da v5). Nada aqui o altera e
+ * as telas não o gravam mais: os tema-*.css saíram na #2855.
  */
 if (! defined('TEMA_MODOS')) {
     define('TEMA_MODOS', ['claro', 'escuro', 'sistema']);

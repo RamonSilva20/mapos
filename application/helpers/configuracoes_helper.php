@@ -75,7 +75,6 @@ if (! function_exists('configuracaoCampos')) {
                 'app_name' => ['destino' => 'config', 'tipo' => 'texto', 'rotulo' => 'Nome do sistema', 'obrigatorio' => true, 'max' => 100, 'ajuda' => 'Aparece no título das páginas e nos e-mails.'],
                 'per_page' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Registros por página', 'opcoes' => ['10' => '10', '20' => '20', '50' => '50', '100' => '100']],
                 'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Cada pessoa pode trocar o tema na barra do topo.'],
-                'control_datatable' => ['destino' => 'config', 'tipo' => 'sim_nao', 'rotulo' => 'Busca e ordenação nas tabelas das telas antigas', 'ajuda' => 'Vale só para as telas que ainda não foram migradas para a v5.'],
             ],
             'os' => [
                 'control_editos' => ['destino' => 'config', 'tipo' => 'sim_nao', 'rotulo' => 'Permitir editar OS faturada ou cancelada'],
@@ -212,11 +211,6 @@ if (! function_exists('configuracaoDadosDoFormulario')) {
 
         if ($aba === 'financeiro' && ($config['pix_key'] ?? '') !== '' && ! isset($erros['pix_key']) && function_exists('valid_pix_key') && ! valid_pix_key($config['pix_key'])) {
             $erros['pix_key'] = 'Chave PIX inválida. Use CPF, CNPJ, e-mail, telefone com DDD ou a chave aleatória.';
-        }
-
-        // As telas antigas ainda leem app_theme (tema-*.css): acompanha o modo.
-        if (isset($config['app_tema_modo'])) {
-            $config['app_theme'] = $config['app_tema_modo'] === 'escuro' ? 'puredark' : 'white';
         }
 
         return [$config, $env, $erros];

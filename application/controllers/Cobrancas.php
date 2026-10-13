@@ -117,7 +117,6 @@ class Cobrancas extends MY_Controller
             'editar' => $this->permite('eCobranca'),
             'excluir' => $this->permite('dCobranca'),
         ];
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'cobrancas/cobrancas';
 
         return $this->layout();
@@ -300,7 +299,6 @@ class Cobrancas extends MY_Controller
             'ver_venda' => $this->permite('vVenda'),
             'ver_cliente' => $this->permite('vCliente'),
         ];
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'cobrancas/visualizarCobranca';
 
         return $this->layout();

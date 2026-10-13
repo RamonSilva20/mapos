@@ -59,7 +59,6 @@ class Clientes extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Novo cliente', 'icon' => 'plus', 'href' => site_url('clientes/adicionar')];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'clientes/clientes';
 
         return $this->layout();
@@ -131,7 +130,6 @@ class Clientes extends MY_Controller
         $this->data['cliente'] = $cliente;
         $this->data['valores'] = clienteValoresDoFormulario($this->input->method() === 'post' ? $this->input->post() : null, $cliente);
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'clientes/formulario';
 
         return $this->layout();
@@ -176,7 +174,6 @@ class Clientes extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Editar cliente', 'icon' => 'pencil', 'href' => site_url('clientes/editar/' . $id)];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'clientes/visualizar';
 
         return $this->layout();

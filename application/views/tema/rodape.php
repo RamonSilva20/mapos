@@ -28,9 +28,6 @@
   </div>
 </div>
 
-<?php foreach ($layout['assets']['js_rodape'] as $arquivo) { ?>
-<script src="<?= e(layoutUrlAsset($arquivo, base_url())) ?>"></script>
-<?php } ?>
 </body>
 
 </html>

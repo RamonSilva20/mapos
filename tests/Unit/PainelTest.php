@@ -307,7 +307,6 @@ final class PainelTest extends MaposTestCase
         foreach (['vOs', 'vVenda', 'vLancamento', 'rFinanceiro', 'vProduto'] as $permissao) {
             $this->assertStringContainsString("\$this->permite('{$permissao}')", $index[0]);
         }
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $index[0]);
         $this->assertStringContainsString('painelEventoDaOs(', $calendario[0]);
         $this->assertStringNotContainsString('<b>', $calendario[0]);
         $this->assertStringContainsString('array_keys(OS_STATUS_VARIANTES)', $calendario[0], 'O filtro de status só aceita os status de OS.');

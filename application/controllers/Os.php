@@ -61,7 +61,6 @@ class Os extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'os/os';
 
         return $this->layout();
@@ -206,7 +205,6 @@ class Os extends MY_Controller
             'cadastrar_cliente' => $this->permite('aCliente'),
             'ver_os' => $os !== null,
         ];
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'os/formulario';
 
         return $this->layout();
@@ -326,7 +324,6 @@ class Os extends MY_Controller
             $this->data['gateways'] = osOpcoesDeCobranca($this->config->item('payment_gateways'));
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'os/visualizar';
 
         return $this->layout();

@@ -65,7 +65,6 @@ class Financeiro extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Novo lançamento', 'icon' => 'plus', 'href' => site_url('financeiro/adicionar') . listagemQuery($filtros)];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'financeiro/lancamentos';
 
         return $this->layout();
@@ -220,7 +219,6 @@ class Financeiro extends MY_Controller
         $this->data['erros'] = $erros;
         $this->data['retorno'] = $retorno;
         $this->data['controle_baixa'] = ($this->data['configuration']['control_baixa'] ?? '0') == '1';
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'financeiro/formulario';
 
         return $this->layout();

@@ -59,7 +59,6 @@ class Vendas extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Nova venda', 'icon' => 'plus', 'href' => site_url('vendas/adicionar')];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'vendas/vendas';
 
         return $this->layout();
@@ -199,7 +198,6 @@ class Vendas extends MY_Controller
             'cadastrar_cliente' => $this->permite('aCliente'),
             'ver_venda' => $venda !== null,
         ];
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'vendas/formulario';
 
         return $this->layout();
@@ -299,7 +297,6 @@ class Vendas extends MY_Controller
             $this->data['gateways'] = osOpcoesDeCobranca($this->config->item('payment_gateways'));
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'vendas/visualizar';
 
         return $this->layout();

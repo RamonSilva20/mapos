@@ -76,6 +76,5 @@ final class ClienteFichaTest extends MaposTestCase
         $this->assertStringContainsString("'ver_venda' => \$this->permite('vVenda')", $trecho[0]);
         $this->assertStringContainsString("'editar_venda' => \$this->permite('eVenda')", $trecho[0]);
         $this->assertStringContainsString("['aba' => ['dados', 'os', 'vendas']]", $trecho[0]);
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $trecho[0]);
     }
 }

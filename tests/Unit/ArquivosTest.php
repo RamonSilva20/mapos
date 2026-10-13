@@ -58,7 +58,6 @@ final class ArquivosTest extends MaposTestCase
         $this->assertStringContainsString("\$this->validarFormulario('arquivos')", $codigo);
         $this->assertStringContainsString("'idDocumentos', (int) \$arquivo->idDocumentos", $codigo);
         $this->assertStringNotContainsString("post('idDocumentos')", $codigo, 'O id editado vem da URL.');
-        $this->assertSame(2, substr_count($codigo, "\$this->data['legacy_assets'] = false;"));
         $this->assertStringContainsString('dataIsoParaYmd', $codigo);
         // O arquivo só é gravado depois da validação: o envio vem depois do if de erros vazios.
         $this->assertLessThan(strpos($codigo, '$this->do_upload()'), strpos($codigo, "validarFormulario('arquivos')"));

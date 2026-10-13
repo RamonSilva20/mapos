@@ -50,7 +50,6 @@ final class ServicosTest extends MaposTestCase
         $this->assertStringContainsString("valorDecimal(\$this->input->post('preco'))", $codigo);
         $this->assertStringContainsString("'idServicos', (int) \$servico->idServicos", $codigo);
         $this->assertStringNotContainsString("post('idServicos')", $codigo);
-        $this->assertSame(2, substr_count($codigo, "\$this->data['legacy_assets'] = false;"));
     }
 
     /**

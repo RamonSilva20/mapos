@@ -4,38 +4,23 @@
  *
  * Por que um arquivo separado do app.css
  * --------------------------------------
- * Durante a Beta o layout novo envolve telas que ainda usam Bootstrap 2,
- * matrix-style e tema-*.css (modo legado, ver layout_helper.php). Carregar o
- * app.css junto quebraria essas telas: o preflight zera margens, listas e
- * botões da página inteira, e utilities como .collapse, .table, .container e
- * .hidden têm o mesmo nome de classes do Bootstrap com outro significado.
+ * A moldura tem o reset e as utilities dela, que só valem dentro de um
+ * elemento .v5-shell (os wrappers da moldura em tema/*.php). O conteúdo da
+ * tela fica fora deles (.v5-conteudo) e usa o app.css, com o preflight e as
+ * utilities sem escopo. Assim o reset da moldura (que também zera o que o
+ * navegador aplica a input, ul e p) não depende do que a tela faz, e o
+ * contrário também.
  *
- * Como este arquivo convive com o CSS legado
- * ------------------------------------------
- * 1. Escopo. Tudo que é do Tailwind (utilities e o reset) só vale dentro de um
- *    elemento .v5-shell. A moldura fica em wrappers .v5-shell; o conteúdo da
- *    tela (#content) fica fora deles. Nada aqui alcança o HTML legado nem o
- *    que os scripts legados anexam ao <body> (datepicker, sweetalert, modais).
+ * Prioridade
+ * ----------
+ * Utilities e reset da moldura são !important, e entre declarações !important
+ * a ordem das camadas se inverte:
  *
- * 2. Prioridade. O CSS legado não usa @layer, e regra fora de camada vence
- *    regra em camada. Para a moldura não herdar estilos do Bootstrap
- *    (a:hover sublinhado, input com altura de 20px, ul com margem, o
- *    `* { outline: none !important }` do matrix-style), utilities e reset são
- *    !important. Entre declarações !important a ordem das camadas se inverte,
- *    e o resultado é:
+ *   utilities (!important)  >  shell, o reset (!important)  >  o resto
  *
- *      utilities (!important)  >  shell, o reset (!important)
- *        >  CSS legado, inclusive o !important dele  >  o resto
- *
- *    Ou seja: dentro da moldura, a utility sempre vence; o reset faz o papel
- *    do preflight; e o CSS legado não interfere.
- *
- * 3. Estrutura. As regras que posicionam o conteúdo legado ao lado da sidebar
- *    (.v5-main, #content) ficam no fim, sem camada, com seletores mais
- *    específicos que os do matrix-style.
- *
- * Telas migradas (legacy_assets = false) carregam também o app.css, com o
- * preflight e as utilities sem escopo para o conteúdo delas.
+ * Ou seja: dentro da moldura, a utility sempre vence e o reset faz o papel do
+ * preflight. As regras de estrutura (.v5-main, .v5-conteudo, a sidebar) ficam
+ * no fim, sem camada.
  */
 @layer theme, base, components, utilities, shell;
 
@@ -52,9 +37,7 @@
 @source "../js/modules/componentes/**/*.js";
 
 /*
- * Reset da moldura: o preflight do Tailwind restrito a .v5-shell, mais o que
- * o Bootstrap 2 aplica a elementos (altura e sombra de input, margem de ul e
- * p, line-height fixa, text-shadow).
+ * Reset da moldura: o preflight do Tailwind restrito a .v5-shell.
  */
 @layer shell {
   :where(.v5-shell) {
@@ -78,16 +61,6 @@
     text-shadow: none !important;
     /* .sr-only do font-awesome usa clip; o do Tailwind usa clip-path. */
     clip: auto !important;
-  }
-
-  /*
-   * Classes que existem com o mesmo nome no CSS legado e acrescentam
-   * propriedades que a utility não define. O .hidden do
-   * bootstrap-responsive também põe visibility: hidden, o que deixaria
-   * invisível um `hidden md:block`.
-   */
-  :where(.v5-shell) .hidden {
-    visibility: inherit !important;
   }
 
   :where(.v5-shell) :where(h1, h2, h3, h4, h5, h6, p, li, label, span, a, small, strong) {
@@ -161,7 +134,7 @@
     display: none !important;
   }
 
-  /* O matrix-style tira o outline de tudo (* { outline: none !important }). */
+  /* Foco sempre visível na moldura. */
   :where(.v5-shell) :focus-visible {
     outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent) !important;
     outline-offset: 2px !important;
@@ -171,30 +144,13 @@
 /*
  * Estrutura da página
  * -------------------
- * Fora de camada e com seletores mais específicos que os do matrix-style e do
- * bootstrap-responsive, que dão margem, padding e largura fixa a body e
- * #content pensando na sidebar antiga.
+ * Fora de camada, depois do reset e das utilities da moldura.
  */
 body.v5-layout {
   margin: 0 !important;
   padding: 0 !important;
   min-height: 100vh;
   background-color: var(--mapos-bg);
-}
-
-/*
- * No modo legado o conteúdo da tela segue o tema-*.css, não os tokens. O
- * `color-scheme: dark` que o .dark põe no <html> deixa branca a cor inicial
- * do texto, herdada pelas telas antigas (os números do calendário do painel
- * somem), então ali o esquema volta ao normal e o modo escuro vale só para a
- * moldura.
- */
-html.dark[data-layout-legado] {
-  color-scheme: normal;
-}
-
-html.dark[data-layout-legado] .v5-shell {
-  color-scheme: dark;
 }
 
 body.v5-layout .v5-main {
@@ -205,28 +161,10 @@ body.v5-layout .v5-main {
   transition: margin-left 0.2s ease;
 }
 
-body.v5-layout #content {
+body.v5-layout .v5-conteudo {
   flex: 1 0 auto;
-  margin: 0 !important;
-  padding: 0 1rem !important;
+  padding: 0.75rem 1rem 0;
   min-height: 0;
-  border-radius: 0;
-}
-
-body.v5-layout #content > .container-flu {
-  padding-top: 0.75rem;
-}
-
-/*
- * Título "Dashboard" do painel (views/mapos/painel.php). Na v4 ele ficava em
- * position: absolute no canto da barra de topo antiga, que agora é ocupado
- * pelo menu do usuário. No layout novo ele entra no fluxo, acima dos cards.
- */
-body.v5-layout #content-bemv {
-  position: static;
-  margin: 0 0 0.75rem;
-  flex-direction: row;
-  justify-content: flex-start;
 }
 
 body.v5-layout #conteudo-principal {
@@ -286,8 +224,8 @@ html[data-gaveta="aberta"] .v5-sidebar {
     margin-left: var(--spacing-sidebar);
   }
 
-  body.v5-layout #content {
-    padding: 0 1.5rem !important;
+  body.v5-layout .v5-conteudo {
+    padding: 0.75rem 1.5rem 0;
   }
 
   html[data-sidebar="recolhida"] body.v5-layout .v5-main {

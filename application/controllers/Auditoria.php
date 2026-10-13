@@ -37,7 +37,6 @@ class Auditoria extends MY_Controller
         $this->data['total'] = $total;
         $this->data['results'] = $this->Audit_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset);
         $this->data['paginacao'] = $this->paginacao(site_url('auditoria/index'), $total, $offset, null, $filtros);
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'auditoria/logs';
 
         return $this->layout();

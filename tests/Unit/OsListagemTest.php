@@ -229,7 +229,6 @@ final class OsListagemTest extends MaposTestCase
         preg_match('/public function excluir\(\).*?\n    }\n/s', $controller, $excluir);
 
         $this->assertNotEmpty($gerenciar);
-        $this->assertStringContainsString("\$this->data['legacy_assets'] = false;", $gerenciar[0]);
         $this->assertStringContainsString("'Nova OS'", $gerenciar[0]);
         $this->assertNotEmpty($excluir);
         $this->assertStringContainsString("delete('anotacoes_os', 'os_id', \$id)", $excluir[0]);

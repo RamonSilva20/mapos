@@ -51,7 +51,6 @@ class Servicos extends MY_Controller
             $this->data['topbar_acao'] = ['label' => 'Novo serviço', 'icon' => 'plus', 'href' => site_url('servicos/adicionar')];
         }
 
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'servicos/servicos';
 
         return $this->layout();
@@ -128,7 +127,6 @@ class Servicos extends MY_Controller
             'preco' => is_array($post) ? (string) ($post['preco'] ?? '') : (string) ($servico->preco ?? ''),
         ];
         $this->data['erros'] = $erros;
-        $this->data['legacy_assets'] = false;
         $this->data['view'] = 'servicos/formulario';
 
         return $this->layout();
