@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/matrix-style.css" />
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
     <style>
         .table {
             width: 72mm;
@@ -156,8 +155,6 @@
             </div>
         </div>
     </div>
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
     <script>
         window.print();
     </script>

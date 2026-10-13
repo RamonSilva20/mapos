@@ -521,7 +521,5 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
   window.print();
 </script>
 </body>
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/matrix.js"></script>
 
 </html>
