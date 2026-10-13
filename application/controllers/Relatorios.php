@@ -14,6 +14,7 @@ class Relatorios extends MY_Controller
     {
         parent::__construct();
 
+        $this->load->helper('relatorios');
         $this->load->model('Relatorios_model');
         $this->load->model('Usuarios_model');
         $this->load->model('Mapos_model');
@@ -32,7 +33,9 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de clientes.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_clientes';
+        $this->data['relatorio'] = relatorioDefinicao('clientes');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -43,7 +46,9 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de produtos.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_produtos';
+        $this->data['relatorio'] = relatorioDefinicao('produtos');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -175,10 +180,9 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $precoInicial = $this->input->get('precoInicial');
-        $precoFinal = $this->input->get('precoFinal');
-        $estoqueInicial = $this->input->get('estoqueInicial');
-        $estoqueFinal = $this->input->get('estoqueFinal');
+        // Preço em reais ("1.234,56") e estoque em unidades; cada limite vale sozinho.
+        [$precoInicial, $precoFinal] = relatorioFaixa($this->input->get('precoInicial'), $this->input->get('precoFinal'), true);
+        [$estoqueInicial, $estoqueFinal] = relatorioFaixa($this->input->get('estoqueInicial'), $this->input->get('estoqueFinal'), false);
 
         $data['produtos'] = $this->Relatorios_model->produtosCustom($precoInicial, $precoFinal, $estoqueInicial, $estoqueFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
@@ -222,7 +226,9 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_sku';
+        $this->data['relatorio'] = relatorioDefinicao('sku');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -335,7 +341,9 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de serviços.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_servicos';
+        $this->data['relatorio'] = relatorioDefinicao('servicos');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -347,8 +355,7 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $precoInicial = $this->input->get('precoInicial');
-        $precoFinal = $this->input->get('precoFinal');
+        [$precoInicial, $precoFinal] = relatorioFaixa($this->input->get('precoInicial'), $this->input->get('precoFinal'), true);
 
         $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
@@ -381,7 +388,9 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de OS.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_os';
+        $this->data['relatorio'] = relatorioDefinicao('os');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -630,7 +639,9 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_financeiro';
+        $this->data['relatorio'] = relatorioDefinicao('financeiro');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -780,7 +791,9 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_vendas';
+        $this->data['relatorio'] = relatorioDefinicao('vendas');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -974,7 +987,9 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_receitas_brutas_mei';
+        $this->data['relatorio'] = relatorioDefinicao('receitasBrutasMei');
+        $this->data['legacy_assets'] = false;
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
