@@ -11,7 +11,7 @@
                 <h5>Cadastro de Arquivo</h5>
             </div>
             <div class="widget-content nopadding tab-content">
-                <?= $custom_error ?>
+                <?= printSafeHtml((string) $custom_error) ?>
 
                 <form action="<?= current_url() ?>" id="formArquivo" enctype="multipart/form-data" method="post" class="form-horizontal">
 

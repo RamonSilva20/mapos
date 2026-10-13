@@ -56,29 +56,29 @@
                         }
     foreach ($results as $r) : ?>
                             <tr>
-                                <td><?= $r->idDocumentos ?></td>
+                                <td><?= e($r->idDocumentos) ?></td>
                                 <td>
                                     <?php if (@getimagesize($r->path)) : ?>
-                                        <a href="<?= $r->url ?>"> <img src="<?= $r->url ?> "></a>
+                                        <a href="<?= e($r->url) ?>"> <img src="<?= e($r->url) ?> "></a>
                                     <?php else : ?>
                                         <span>-</span>
                                     <?php endif ?>
                                 </td>
-                                <td><?= $r->documento ?></td>
+                                <td><?= e($r->documento) ?></td>
                                 <td><?= date('d/m/Y', strtotime($r->cadastro)) ?></td>
-                                <td><?= $r->descricao ?></td>
-                                <td><?= $r->tamanho ?> KB</td>
-                                <td><?= $r->tipo ?></td>
+                                <td><?= e($r->descricao) ?></td>
+                                <td><?= e($r->tamanho) ?> KB</td>
+                                <td><?= e($r->tipo) ?></td>
                                 <td><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
-                                        <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn-nwe" title="Baixar Arquivo"><i class="bx bx-download"></i>
+                                        <a href="<?= e(base_url()) ?>index.php/arquivos/download/<?= e($r->idDocumentos) ?>" class="btn-nwe" title="Baixar Arquivo"><i class="bx bx-download"></i>
                                         <?php endif ?>
 
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
-                                            <a href="<?= base_url() ?>index.php/arquivos/editar/<?= $r->idDocumentos ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
+                                            <a href="<?= e(base_url()) ?>index.php/arquivos/editar/<?= e($r->idDocumentos) ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
                                         <?php endif ?>
 
                                         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) : ?>
-                                            <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= $r->idDocumentos ?>" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt"></i></a>
+                                            <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= e($r->idDocumentos) ?>" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt"></i></a>
                                         </a>
                                     <?php endif ?>
                                 </td>
@@ -90,7 +90,7 @@
         </div>
     </div>
 
-    <?= $this->pagination->create_links() ?>
+    <?= e($this->pagination->create_links()) ?>
 
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <form action="<?= base_url() ?>index.php/arquivos/excluir" method="post">
