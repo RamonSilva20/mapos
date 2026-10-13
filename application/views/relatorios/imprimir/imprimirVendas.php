@@ -18,10 +18,10 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
-                    <?= $topo ?>
+                    <?php $this->load->view('relatorios/imprimir/imprimirTopo'); ?>
                     <div class="widget-title">
                         <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
-                            <?= ucfirst($title) ?>
+                            <?= e(ucfirst($title)) ?>
                         </h4>
                     </div>
                     <div class="widget_content nopadding">
@@ -41,12 +41,12 @@
                                 <?php
                                 foreach ($vendas as $v) {
                                     echo '<tr>';
-                                    echo '<td align="center">' . $v->idVendas . '</td>';
-                                    echo '<td>' . $v->nomeCliente . '</td>';
-                                    echo '<td align="center">' . $v->nome . '</td>';
+                                    echo '<td align="center">' . e($v->idVendas) . '</td>';
+                                    echo '<td>' . e($v->nomeCliente) . '</td>';
+                                    echo '<td align="center">' . e($v->nome) . '</td>';
                                     echo '<td align="center">' . date('d/m/Y', strtotime($v->dataVenda)) . '</td>';
                                     echo '<td align="center">R$: ' . number_format($v->valorTotal, 2, ',', '.') . '</td>';
-                                    echo '<td align="center">' . ($v->tipo_desconto == "real" ? "R$ " : "") . $v->desconto ." ". ($v->tipo_desconto == "porcento" ? " %" : "") . '</td>';
+                                    echo '<td align="center">' . e(($v->tipo_desconto == "real" ? "R$ " : "")) . e($v->desconto) ." ". e(($v->tipo_desconto == "porcento" ? " %" : "")) . '</td>';
                                     echo '<td align="center">R$: ' . number_format($v->valor_desconto != 0 ? $v->valor_desconto : $v->valorTotal, 2, ',', '.') . '</td>';
                                     echo '</tr>';
                                 }

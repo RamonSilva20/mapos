@@ -18,7 +18,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
-                    <?= $topo ?>
+                    <?php $this->load->view('relatorios/imprimir/imprimirTopo'); ?>
                     <div class="widget-title">
                         <h4 style="text-align: center">Produtos</h4>
                     </div>
@@ -42,16 +42,16 @@
                                 <?php
                                     foreach ($resultados as $r) {
                                         echo '<tr>';
-                                        echo '<td>' . $r->idClientes . '</td>';
-                                        echo '<td>' . $r->nomeCliente . '</td>';
-                                        echo '<td>' . $r->idProdutos . '</td>';
-                                        echo '<td>' . $r->descricao . '</td>';
-                                        echo '<td>' . $r->quantidade . '</td>';
-                                        echo '<td>' . $r->idRelacionado . '</td>';
+                                        echo '<td>' . e($r->idClientes) . '</td>';
+                                        echo '<td>' . e($r->nomeCliente) . '</td>';
+                                        echo '<td>' . e($r->idProdutos) . '</td>';
+                                        echo '<td>' . e($r->descricao) . '</td>';
+                                        echo '<td>' . e($r->quantidade) . '</td>';
+                                        echo '<td>' . e($r->idRelacionado) . '</td>';
                                         echo '<td>' . date('d/m/Y', strtotime($r->dataOcorrencia)) . '</td>';
                                         echo '<td>' . 'R$ ' . number_format($r->preco, 2, ',', '.') . '</td>';
                                         echo '<td>' . 'R$ ' . number_format($r->precoTotal, 2, ',', '.') . '</td>';
-                                        echo '<td>' . $r->origem . '</td>';
+                                        echo '<td>' . e($r->origem) . '</td>';
                                         echo '</tr>';
                                     }
     ?>
