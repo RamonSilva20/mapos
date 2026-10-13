@@ -90,7 +90,7 @@
         </div>
     </div>
 
-    <?= e($this->pagination->create_links()) ?>
+    <?= printSafeHtml($this->pagination->create_links()) ?>
 
     <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <form action="<?= base_url() ?>index.php/arquivos/excluir" method="post">

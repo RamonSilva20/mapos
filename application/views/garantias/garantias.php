@@ -64,7 +64,7 @@
     </div>
 </div>
 </div>
-<?php echo e($this->pagination->create_links()); ?>
+<?= printSafeHtml($this->pagination->create_links()) ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
