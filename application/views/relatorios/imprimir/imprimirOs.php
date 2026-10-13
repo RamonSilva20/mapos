@@ -48,7 +48,7 @@
                                         echo '<td><small>' . e($c->nomeCliente) . '</small></td>';
                                         echo '<td align="center"><small>' . e($c->status) . '</small></td>';
                                         echo '<td align="center"><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
-                                        echo '<td><small>' . e($c->descricaoProduto) . '</small></td>';
+                                        echo '<td><small>' . printSafeHtml($c->descricaoProduto) . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
