@@ -295,13 +295,13 @@ $config = [
         ],
         [
             'field' => 'refGarantia',
-            'label' => 'refGarantia',
-            'rules' => 'trim',
+            'label' => 'Referência',
+            'rules' => 'trim|max_length[15]',
         ],
         [
             'field' => 'textoGarantia',
-            'label' => 'textoGarantia',
-            'rules' => 'required|trim',
+            'label' => 'Termo de garantia',
+            'rules' => 'required|trim|max_length[20000]',
         ],
     ],
     'pagamentos' => [

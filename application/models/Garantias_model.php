@@ -29,6 +29,42 @@ class Garantias_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Termos da listagem (#2845), do mais novo para o mais antigo, com o nome
+     * do responsável. A busca olha a referência e o texto do termo.
+     *
+     * @param  array<string, string>  $filtros  listagemFiltros()
+     * @return list<object>
+     */
+    public function listar(array $filtros, int $limite, int $offset): array
+    {
+        $this->aplicarFiltros($filtros);
+
+        return $this->db->select('garantias.*, usuarios.nome')
+            ->from('garantias')
+            ->join('usuarios', 'usuarios.idUsuarios = garantias.usuarios_id', 'left')
+            ->order_by('garantias.idGarantias', 'desc')
+            ->limit($limite, max(0, $offset))
+            ->get()->result();
+    }
+
+    public function contar(array $filtros): int
+    {
+        $this->aplicarFiltros($filtros);
+
+        return (int) $this->db->count_all_results('garantias');
+    }
+
+    private function aplicarFiltros(array $filtros): void
+    {
+        if (($filtros['pesquisa'] ?? '') !== '') {
+            $this->db->group_start()
+                ->like('garantias.refGarantia', $filtros['pesquisa'])
+                ->or_like('garantias.textoGarantia', $filtros['pesquisa'])
+                ->group_end();
+        }
+    }
+
     public function getById($id)
     {
         $this->db->select('garantias.*, usuarios.telefone, usuarios.email, usuarios.nome');
@@ -94,52 +130,6 @@ class Garantias_model extends CI_Model
     public function count($table)
     {
         return $this->db->count_all($table);
-    }
-
-    public function autoCompleteProduto($q)
-    {
-        $this->db->select('*');
-        $this->db->limit(5);
-        $this->db->like('descricao', $q);
-        $query = $this->db->get('produtos');
-        // Sempre um array JSON: sem resultados, `[]`, e não uma resposta vazia (#2901).
-        $row_set = [];
-        foreach ($query->result_array() as $row) {
-            $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
-        }
-        $this->output->set_content_type('application/json');
-        echo json_encode($row_set);
-    }
-
-    public function autoCompleteCliente($q)
-    {
-        $this->db->select('*');
-        $this->db->limit(5);
-        $this->db->like('nomeCliente', $q);
-        $query = $this->db->get('clientes');
-        // Sempre um array JSON: sem resultados, `[]`, e não uma resposta vazia (#2901).
-        $row_set = [];
-        foreach ($query->result_array() as $row) {
-            $row_set[] = ['label' => $row['nomeCliente'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idClientes']];
-        }
-        $this->output->set_content_type('application/json');
-        echo json_encode($row_set);
-    }
-
-    public function autoCompleteUsuario($q)
-    {
-        $this->db->select('*');
-        $this->db->limit(5);
-        $this->db->like('nome', $q);
-        $this->db->where('situacao', 1);
-        $query = $this->db->get('usuarios');
-        // Sempre um array JSON: sem resultados, `[]`, e não uma resposta vazia (#2901).
-        $row_set = [];
-        foreach ($query->result_array() as $row) {
-            $row_set[] = ['label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']];
-        }
-        $this->output->set_content_type('application/json');
-        echo json_encode($row_set);
     }
 }
 
