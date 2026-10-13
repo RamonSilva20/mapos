@@ -26,23 +26,23 @@
                     <div class="span12">
                         <div class="span2">
                             <label for="dataGarantia">Data</label>
-                            <?php echo form_hidden('idGarantias', $result->idGarantias) ?>
+                            <?php echo e(form_hidden('idGarantias', $result->idGarantias));?>
                             <input id="dataGarantia" class="span12 datepicker" type="text" name="dataGarantia" value="<?php echo date('d/m/Y', strtotime($result->dataGarantia)); ?>" disabled />
                         </div>
                         <div class="span5">
                             <label for="usuarios_id">Responsável</label>
-                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo $result->nome ?>" disabled />
+                            <input id="usuarios_id" class="span12" type="text" name="usuarios_id" value="<?php echo e($result->nome);?>" disabled />
 
                         </div>
                         <div class="span5">
                             <label for="refGarantia">Ref. Garantia</label>
-                            <input id="refGarantia" class="span12" type="text" name="refGarantia" value="<?php echo $result->refGarantia ?>" />
+                            <input id="refGarantia" class="span12" type="text" name="refGarantia" value="<?php echo e($result->refGarantia);?>" />
                         </div>
                         <div class="span12" style="margin-left: 0">
                             <label for="textoGarantia">
                                 <h4 class="text-center">Termo de Garantia</h4>
                             </label>
-                            <textarea required class="span10 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"><?php echo $result->textoGarantia ?></textarea>
+                            <textarea required class="span10 editor" name="textoGarantia" id="textoGarantia" cols="30" rows="5"><?php echo e($result->textoGarantia);?></textarea>
                         </div>
                     </div>
 

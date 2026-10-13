@@ -16,6 +16,7 @@ class ClientOsController extends REST_Controller
     {
         parent::__construct();
         $this->load->model('Conecte_model');
+        $this->load->helper('os');
         $this->load->library('Authorization_Token');
         $this->load->library('pagination');
         $this->load->library('format');
@@ -175,10 +176,10 @@ class ClientOsController extends REST_Controller
             'clientes_id' => $this->logged_client()->usuario->idClientes,
             'usuarios_id' => $usuarioId,
             'dataFinal' => date('Y-m-d'),
-            'descricaoProduto' => $this->security->xss_clean($this->input->post('descricaoProduto')),
-            'defeito' => $this->security->xss_clean($this->input->post('defeito')),
+            'descricaoProduto' => osTextoParaGravar((string) $this->input->post('descricaoProduto')),
+            'defeito' => osTextoParaGravar((string) $this->input->post('defeito')),
             'status' => 'Aberto',
-            'observacoes' => $this->security->xss_clean($this->input->post('observacoes')),
+            'observacoes' => osTextoParaGravar((string) $this->input->post('observacoes')),
             'faturado' => 0,
         ];
 

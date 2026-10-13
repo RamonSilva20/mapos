@@ -3,7 +3,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>Map_Vendas_<?php echo $result->idVendas ?>_<?php echo $result->nomeCliente ?></title>
+    <title>Map_Vendas_<?php echo e($result->idVendas);?>_<?php echo e($result->nomeCliente);?></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" />
@@ -32,23 +32,23 @@
                                     <tr>
                                         <td colspan="5" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a>
                                             <<<</td> </tr> <?php } else { ?> 
-                                    <td style="width: 25%; text-align: center;"><img src="<?php echo $emitente->url_logo; ?>" style="max-height: 100px"></td>
+                                    <td style="width: 25%; text-align: center;"><img src="<?php echo e($emitente->url_logo); ?>" style="max-height: 100px"></td>
                                     <tr>
                                         <td colspan="4" style="text-align: center;"> <span style="font-size: 20px;">
-                                                <b><?php echo $emitente->nome; ?></b></span> </br><span>
-                                                <?php echo 'CNPJ: ' . $emitente->cnpj; ?> </br>
-                                                <?php echo $emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf; ?> </span> </br>
-                                            <span><?php echo 'Fone: ' . $emitente->telefone; ?></span>
+                                                <b><?php echo e($emitente->nome); ?></b></span> </br><span>
+                                                <?php echo e('CNPJ: ' . $emitente->cnpj); ?> </br>
+                                                <?php echo e($emitente->rua . ', ' . $emitente->numero . ', ' . $emitente->bairro . ' - ' . $emitente->cidade . ' - ' . $emitente->uf); ?> </span> </br>
+                                            <span><?php echo e('Fone: ' . $emitente->telefone); ?></span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="4" style="width: 100%;"><b>#Venda: </b><span>
-                                                <?php echo $result->idVendas ?></span>
+                                                <?php echo e($result->idVendas);?></span>
                                             <span style="padding-inline: 1em">Emissão: <?php echo date('d/m/Y H:i:s'); ?></span>
                                             <?php if ($result->faturado) : ?>
                                                 <br>
                                                 <b>Venc. Garantia: </b>
-                                                <?php echo dateInterval($result->dataVenda, $result->garantia); ?>
+                                                <?php echo e(dateInterval($result->dataVenda, $result->garantia)); ?>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -65,14 +65,14 @@
                                                 <span>
                                                     <h5><b>CLIENTE</b></h5>
                                                     <span>
-                                                        <?php echo $result->nomeCliente ?></span><br />
+                                                        <?php echo e($result->nomeCliente);?></span><br />
                                                     <span>
-                                                        <?php echo $result->rua ?>,
-                                                        <?php echo $result->numero ?>,
-                                                        <?php echo $result->bairro ?></span><br />
+                                                        <?php echo e($result->rua);?>,
+                                                        <?php echo e($result->numero);?>,
+                                                        <?php echo e($result->bairro);?></span><br />
                                                     <span>
-                                                        <?php echo $result->cidade ?> -
-                                                        <?php echo $result->estado ?></span>
+                                                        <?php echo e($result->cidade);?> -
+                                                        <?php echo e($result->estado);?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -96,9 +96,9 @@
                                                 foreach ($produtos as $p) {
                                                     $totalProdutos = $totalProdutos + $p->subTotal;
                                                     echo '<tr>';
-                                                    echo '<td>' . $p->descricao . '</td>';
-                                                    echo '<td>' . $p->quantidade . '</td>';
-                                                    echo '<td>R$ ' . ($p->preco ?: $p->precoVenda) . '</td>';
+                                                    echo '<td>' . e($p->descricao) . '</td>';
+                                                    echo '<td>' . e($p->quantidade) . '</td>';
+                                                    echo '<td>R$ ' . e(($p->preco ?: $p->precoVenda)) . '</td>';
                                                     echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                                     echo '</tr>';
                                                 } ?>
@@ -132,8 +132,8 @@
                                     <tr>
                                         <td colspan="4" style="text-align: center;">
                                             <img style="margin: 12px 0 0 0;" src="<?= base_url(); ?>assets/img/logo_pix.png" width="64px" alt="QR Code de Pagamento" /><br>
-                                            <img style="margin: 5px 0 0 0;" width="94px" src="<?= $qrCode ?>" alt="QR Code de Pagamento" /><br>
-                                            <span style="margin: 0; font-size: 80%; text-align: center;">Chave PIX: <?= $chaveFormatada ?></span>
+                                            <img style="margin: 5px 0 0 0;" width="94px" src="<?= e($qrCode) ?>" alt="QR Code de Pagamento" /><br>
+                                            <span style="margin: 0; font-size: 80%; text-align: center;">Chave PIX: <?= e($chaveFormatada) ?></span>
                                         </td>
                                     </tr>
                                 <?php endif; ?>

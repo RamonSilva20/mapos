@@ -18,10 +18,10 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
-                    <?= $topo ?>
+                    <?php $this->load->view('relatorios/imprimir/imprimirTopo'); ?>
                     <div class="widget-title">
                         <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
-                            <?= ucfirst($title) ?>
+                            <?= e(ucfirst($title)) ?>
                         </h4>
                     </div>
                     <div class="widget-content nopadding tab-content">
@@ -44,15 +44,15 @@
                                 <?php
                                     foreach ($os as $c) {
                                         echo '<tr>';
-                                        echo '<td align="center"><small>' . $c->idOs . '</small></td>';
-                                        echo '<td><small>' . $c->nomeCliente . '</small></td>';
-                                        echo '<td align="center"><small>' . $c->status . '</small></td>';
+                                        echo '<td align="center"><small>' . e($c->idOs) . '</small></td>';
+                                        echo '<td><small>' . e($c->nomeCliente) . '</small></td>';
+                                        echo '<td align="center"><small>' . e($c->status) . '</small></td>';
                                         echo '<td align="center"><small>' . date('d/m/Y', strtotime($c->dataInicial)) . '</small></td>';
-                                        echo '<td><small>' . $c->descricaoProduto . '</small></td>';
+                                        echo '<td><small>' . e($c->descricaoProduto) . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_servico, 2, ',', '.') . '</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->total_produto + $c->total_servico, 2, ',', '.') . '</small></td>';
-                                        echo '<td align="center"><small>' . ($c->tipo_desconto == "real" ? "R$ " : "") . $c->desconto ." ". ($c->tipo_desconto == "porcento" ? " %" : "") .'</small></td>';
+                                        echo '<td align="center"><small>' . e(($c->tipo_desconto == "real" ? "R$ " : "")) . e($c->desconto) ." ". e(($c->tipo_desconto == "porcento" ? " %" : "")) .'</small></td>';
                                         echo '<td align="center"><small>R$: ' . number_format($c->valor_desconto != 0 ? $c->valor_desconto : $c->total_produto + $c->total_servico, 2, ',', '.'). '</small></td>';
                                         echo '</tr>';
                                     }

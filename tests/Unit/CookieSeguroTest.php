@@ -168,6 +168,7 @@ final class CookieSeguroTest extends MaposTestCase
         $this->assertSame('Lax', $config['cookie_samesite']);
         $this->assertSame('Lax', $config['sess_samesite']);
         $this->assertTrue($config['sess_regenerate_destroy']);
+        $this->assertFalse($config['global_xss_filtering'], 'O filtro global fica desligado mesmo com GLOBAL_XSS_FILTERING=true num .env antigo (#2873).');
     }
 
     public function testConfigComEnvNovoEmHttps(): void

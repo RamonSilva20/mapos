@@ -11,23 +11,23 @@
                 <h5>Cadastro de Arquivo</h5>
             </div>
             <div class="widget-content nopadding tab-content">
-                <?php echo $custom_error; ?>
+                <?php echo printSafeHtml((string) $custom_error); ?>
                 <form action="<?php echo current_url(); ?>" id="formArquivo" method="post" class="form-horizontal">
 
 
                     <div class="control-group">
                         <label for="nome" class="control-label">Nome do Arquivo*</label>
                         <div class="controls">
-                            <input id="nome" type="text" name="nome" value="<?php echo $result->documento; ?> " />
+                            <input id="nome" type="text" name="nome" value="<?php echo e($result->documento); ?> " />
 
-                            <input id="idDocumentos" type="hidden" name="idDocumentos" value="<?php echo $result->idDocumentos; ?> " />
+                            <input id="idDocumentos" type="hidden" name="idDocumentos" value="<?php echo e($result->idDocumentos); ?> " />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="descricao" class="control-label">Descrição</label>
                         <div class="controls">
-                            <textarea rows="3" cols="30" name="descricao" id="descricao"><?php echo $result->descricao; ?></textarea>
+                            <textarea rows="3" cols="30" name="descricao" id="descricao"><?php echo e($result->descricao); ?></textarea>
                         </div>
                     </div>
 

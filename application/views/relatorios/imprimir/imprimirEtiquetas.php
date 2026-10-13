@@ -31,22 +31,22 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
+											<?= e(limitarTexto($string, 23)) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo $p->idProdutos; ?>
+										<?php echo e($p->idProdutos); ?>
 									</b>
 									<br /> Preço: R$
 									<b>
 										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                        echo $precoVenda; ?>
+                                        echo e($precoVenda); ?>
 									</b>
 								</div>
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
+									<barcode code="<?= e($p->codDeBarra) ?>" text="0" type="<?= e($this->input->get("etiquetaCode")) ?>" size="0.7" disableborder="0"
 									 class="barcode" />
 								</div>
 							</div>
@@ -61,23 +61,23 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
+											<?= e(limitarTexto($string, 23)) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo $p->idProdutos; ?>
+										<?php echo e($p->idProdutos); ?>
 									</b>
 									<br /> Preço: R$
 									<b>
 										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                    echo $precoVenda; ?>
+                                    echo e($precoVenda); ?>
 									</b>
 								</div>
 
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.7" disableborder="0"
+									<barcode code="<?= e($p->codDeBarra) ?>" text="0" type="<?= e($this->input->get("etiquetaCode")) ?>" size="0.7" disableborder="0"
 									 class="barcode" />
 								</div>
 
@@ -95,22 +95,22 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
+											<?= e(limitarTexto($string, 23)) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo $p->idProdutos; ?>
+										<?php echo e($p->idProdutos); ?>
 									</b>
 									<br /> Preço: R$
 									<b>
 										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                        echo $precoVenda; ?>
+                                        echo e($precoVenda); ?>
 									</b>
 								</div>
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
+									<barcode code="<?= e($p->codDeBarra) ?>" text="0" type="<?= e($this->input->get("etiquetaCode")) ?>" size="0.62" disableborder="0"
 									 class="barcode" />
 								</div>
 							</div>
@@ -127,23 +127,23 @@
 									<?php $string = strtoupper($p->descricao); ?>
 									<div>
 										<strong>
-											<?php print(limitarTexto($string, $limite = 23)); ?>
+											<?= e(limitarTexto($string, 23)) ?>
 										</strong>
 									</div>
 								</div>
 								<div class="textoProdutoEtiqueta">Cod:
 									<b>
-										<?php echo $p->idProdutos; ?>
+										<?php echo e($p->idProdutos); ?>
 									</b>
 									<br /> Preço: R$
 									<b>
 										<?php $precoVenda = str_replace(".", ",", $p->precoVenda);
-                                    echo $precoVenda; ?>
+                                    echo e($precoVenda); ?>
 									</b>
 								</div>
 
 								<div class="barcodecell">
-									<barcode code="<?= $p->codDeBarra ?>" text="0" type="<?= $this->input->get("etiquetaCode") ?>" size="0.62" disableborder="0"
+									<barcode code="<?= e($p->codDeBarra) ?>" text="0" type="<?= e($this->input->get("etiquetaCode")) ?>" size="0.62" disableborder="0"
 									 class="barcode" />
 								</div>
 

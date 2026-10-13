@@ -88,7 +88,7 @@
         <div class="row-fluid">
           <div class="span12">
             <?php if (isset($view)) {
-                echo $this->load->view($view, null, true);
+                $this->load->view($view);
             } ?>
           </div>
         </div>

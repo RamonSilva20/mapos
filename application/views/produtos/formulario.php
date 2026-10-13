@@ -21,11 +21,12 @@ if ($valores['unidade'] !== '' && ! isset($unidades[$valores['unidade']])) {
     $unidades = [$valores['unidade'] => $valores['unidade']] + $unidades;
 }
 
-$campo = static fn (string $nome, array $props) => component('input', $props + [
+// Props do input com o valor e o erro do campo, para component('input', $campo(...)).
+$campo = static fn (string $nome, array $props) => $props + [
     'name' => $nome,
     'value' => ($valores[$nome] ?? '') !== '' ? $valores[$nome] : null,
     'error' => $errosDeCampo[$nome] ?? null,
-]);
+];
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 ?>
 <div class="flex max-w-4xl flex-col gap-4 pt-2 pb-8" <?= js_module('produtos/formulario') ?>>
@@ -46,11 +47,11 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-produto">
             <h2 id="secao-produto" class="text-heading-sm text-text">Produto</h2>
             <div class="mt-4 grid gap-4 sm:grid-cols-[minmax(0,1fr)_14rem]">
-                <?= $campo('descricao', [
+                <?= component('input', $campo('descricao', [
                     'label' => 'Descrição',
                     'required' => true,
                     'attrs' => ['maxlength' => 80, 'autofocus' => ! $editando, 'data-msg-vazio' => 'Informe a descrição do produto.'],
-                ]) ?>
+                ])) ?>
                 <?= component('select', [
                     'name' => 'unidade',
                     'label' => 'Unidade',
@@ -60,11 +61,11 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                     'selected' => $valores['unidade'] !== '' ? $valores['unidade'] : 'UNID',
                     'error' => $errosDeCampo['unidade'] ?? null,
                 ]) ?>
-                <?= $campo('codDeBarra', [
+                <?= component('input', $campo('codDeBarra', [
                     'label' => 'Código de barras',
                     'help' => 'EAN, código interno ou deixe em branco.',
                     'attrs' => ['maxlength' => 70, 'autocomplete' => 'off'],
-                ]) ?>
+                ])) ?>
                 <fieldset class="flex flex-col gap-2">
                     <legend class="text-label-md text-text">Movimenta o estoque</legend>
                     <div class="flex flex-wrap gap-x-6 gap-y-2 pt-1">
@@ -79,12 +80,12 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
             <h2 id="secao-precos" class="text-heading-sm text-text">Preços</h2>
             <p class="mt-0.5 text-caption text-muted">Informe o lucro para calcular o preço de venda, ou digite o preço direto.</p>
             <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <?= $campo('precoCompra', [
+                <?= component('input', $campo('precoCompra', [
                     'label' => 'Preço de compra (R$)',
                     'required' => true,
                     'class' => 'text-right tabular-nums',
                     'attrs' => ['data-mascara' => 'dinheiro', 'inputmode' => 'decimal', 'maxlength' => 20, 'data-msg-vazio' => 'Informe o preço de compra.'],
-                ]) ?>
+                ])) ?>
                 <?= component('select', [
                     'name' => 'lucro_tipo',
                     'label' => 'Lucro por',
@@ -99,31 +100,31 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                     'class' => 'text-right tabular-nums',
                     'attrs' => ['min' => 0, 'max' => 999, 'step' => '0.01', 'inputmode' => 'decimal'],
                 ]) ?>
-                <?= $campo('precoVenda', [
+                <?= component('input', $campo('precoVenda', [
                     'label' => 'Preço de venda (R$)',
                     'required' => true,
                     'class' => 'text-right tabular-nums',
                     'attrs' => ['data-mascara' => 'dinheiro', 'inputmode' => 'decimal', 'maxlength' => 20, 'data-msg-vazio' => 'Informe o preço de venda.'],
-                ]) ?>
+                ])) ?>
             </div>
         </section>
 
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-estoque">
             <h2 id="secao-estoque" class="text-heading-sm text-text">Estoque</h2>
             <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                <?= $campo('estoque', [
+                <?= component('input', $campo('estoque', [
                     'label' => $editando ? 'Quantidade em estoque' : 'Estoque inicial',
                     'type' => 'number',
                     'required' => true,
                     'help' => $editando ? 'Para entradas e saídas do dia a dia, use "Entrada de estoque" na ficha do produto.' : null,
                     'attrs' => ['min' => 0, 'max' => 99999999, 'step' => 1, 'inputmode' => 'numeric', 'data-msg-vazio' => 'Informe a quantidade em estoque.'],
-                ]) ?>
-                <?= $campo('estoqueMinimo', [
+                ])) ?>
+                <?= component('input', $campo('estoqueMinimo', [
                     'label' => 'Estoque mínimo',
                     'type' => 'number',
                     'help' => 'Abaixo disso, o produto aparece como estoque baixo.',
                     'attrs' => ['min' => 0, 'max' => 99999999, 'step' => 1, 'inputmode' => 'numeric'],
-                ]) ?>
+                ])) ?>
             </div>
         </section>
 

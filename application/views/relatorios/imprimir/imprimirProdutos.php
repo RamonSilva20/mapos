@@ -18,10 +18,10 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
-                    <?= $topo ?>
+                    <?php $this->load->view('relatorios/imprimir/imprimirTopo'); ?>
                     <div class="widget-title">
                         <h4 style="text-align: center; font-size: 1.1em; padding: 5px;">
-                            <?= ucfirst($title) ?>
+                            <?= e(ucfirst($title)) ?>
                         </h4>
                     </div>
                     <div class="widget-content nopadding tab-content">
@@ -41,11 +41,11 @@
                                 <?php
                                     foreach ($produtos as $p) {
                                         echo '<tr>';
-                                        echo '<td>' . $p->descricao . '</td>';
-                                        echo '<td align="center">' . $p->unidade . '</td>';
-                                        echo '<td align="center">R$: ' . $p->precoCompra . '</td>';
-                                        echo '<td align="center">R$: ' . $p->precoVenda . '</td>';
-                                        echo '<td align="center">' . $p->estoque . '</td>';
+                                        echo '<td>' . e($p->descricao) . '</td>';
+                                        echo '<td align="center">' . e($p->unidade) . '</td>';
+                                        echo '<td align="center">R$: ' . e($p->precoCompra) . '</td>';
+                                        echo '<td align="center">R$: ' . e($p->precoVenda) . '</td>';
+                                        echo '<td align="center">' . e($p->estoque) . '</td>';
                                         echo '<td align="center">R$: ' . number_format($p->valorEstoque, 2, ',', '.') . '</td>';
                                         echo '<td align="center">R$: ' . number_format(floatval($p->estoque) * floatval($p->precoCompra), 2, ',', '.') . '</td>';
                                         echo '</tr>';
@@ -64,7 +64,7 @@
                                 </tr>
                                 <tr style="background-color: gainsboro;">
                                     <td colspan="4"></td>
-                                    <td align="center"><?= array_sum(array_column($produtos, 'estoque')) ?></td>
+                                    <td align="center"><?= e(array_sum(array_column($produtos, 'estoque'))) ?></td>
                                     <td align="center">R$: <?= number_format(array_sum(array_column($produtos, 'valorEstoque')), 2, ',', '.'); ?></td>
                                     <td align="center">R$: <?= number_format(array_sum(array_column($produtos, 'valorEstoqueR')), 2, ',', '.'); ?></td> <!-- Valor do Estoque (Compra) -->
                                 </tr>
