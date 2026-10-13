@@ -530,7 +530,10 @@ $config['proxy_ips'] = $_ENV['APP_PROXY_IPS'] ?? '';
 |          for backwards compatibility purposes!
 |
 */
-$config['global_xss_filtering'] = $_ENV['GLOBAL_XSS_FILTERING'] ? filter_var($_ENV['GLOBAL_XSS_FILTERING'], FILTER_VALIDATE_BOOLEAN) : true;
+// Desligado na v5 (#2873): o filtro alterava os dados de entrada; as views
+// escapam a saída com e() (scripts/check-escape.php) e o HTML confiável passa
+// pelo HTMLPurifier (printSafeHtml()).
+$config['global_xss_filtering'] = false;
 
 /*
 |--------------------------------------------------------------------------
