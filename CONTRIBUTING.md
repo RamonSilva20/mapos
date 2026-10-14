@@ -17,6 +17,7 @@ Ao participar deste projeto, você concorda em seguir o nosso [Código de Condut
 - [Padrão de código](#padrão-de-código)
 - [Front-end](#front-end)
 - [Alterações no banco de dados](#alterações-no-banco-de-dados)
+- [Testes e verificações](#testes-e-verificações)
 - [Comandos de terminal](#comandos-de-terminal)
 - [Mensagens de commit](#mensagens-de-commit)
 - [Abrindo um Pull Request](#abrindo-um-pull-request)
@@ -104,7 +105,9 @@ Aponte o document root do seu webserver para a raiz do projeto, acesse a URL e s
 ### Observações importantes
 
 - O `vendor-dir` do projeto é **`application/vendor`**, e não `./vendor` (definido em `composer.json`). Os binários ficam em `application/vendor/bin/`.
-- As configurações de ambiente ficam em `application/.env`, que é ignorado pelo Git. **Nunca** faça commit dele nem de credenciais.
+- As configurações de ambiente ficam em `application/.env`, que é ignorado pelo Git. **Nunca** faça commit dele nem de credenciais. A lista completa de variáveis está em `application/.env.example`.
+- Os anexos de OS e os arquivos enviados ficam em `STORAGE_PATH` (padrão `application/storage`), fora de `assets/` e servidos por controller com checagem de permissão. Veja [`docs/armazenamento-de-arquivos.md`](docs/armazenamento-de-arquivos.md). Ao testar upload, o limite vem de `UPLOAD_MAX_KB`.
+- A API só existe com `API_ENABLED=true` no `.env`; desligada, todas as rotas `api/v1` respondem 404. A autenticação está em [`docs/api-autenticacao.md`](docs/api-autenticacao.md).
 - A página de erro detalhada (Whoops) só é exibida quando `APP_ENVIRONMENT=development` **e** `WHOOPS_ERROR_PAGE_ENABLED=true` no `application/.env`. Em qualquer outro ambiente ela fica desabilitada.
 
 ## Estrutura do projeto
@@ -208,7 +211,7 @@ Se o código atual divergir do `DESIGN.md`, vale o documento: a base está sendo
 
 As views novas usam os **tokens** definidos em `assets/src/tokens.css`, nunca uma cor fixa: `bg-bg`, `bg-surface`, `bg-surface-subtle`, `text-text`, `text-muted`, `border-border`, `border-input`, `bg-primary`/`text-on-primary` (botão primário), `text-success-ink` sobre `bg-success-soft` e afins. A lista completa está no topo do arquivo. A paleta padrão do Tailwind está desligada, então classes como `bg-white` não existem. Assim a tela funciona nos modos claro e escuro sem precisar de `dark:`.
 
-O tema é configurado por `app_tema_modo` (`claro`, `escuro` ou `sistema`). O layout aplica o modo no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". Não existe cor de destaque: o `DESIGN.md` define uma cor de marca única, e a configuração `app_tema_destaque` foi removida na #2913. A antiga `app_theme` continua existindo só para as telas legadas.
+O tema é configurado por `app_tema_modo` (`claro`, `escuro` ou `sistema`). O layout aplica o modo no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". Não existe cor de destaque: o `DESIGN.md` define uma cor de marca única, e a configuração `app_tema_destaque` foi removida na #2913. A antiga `app_theme` da 4.x só é lida para converter o tema antigo no modo de cor, e cada usuário pode ter o próprio modo (`usuarios.tema_modo`).
 
 ### Bibliotecas de JavaScript
 
@@ -264,7 +267,7 @@ Telas novas são montadas com a biblioteca de componentes, em vez de HTML escrit
 
 Os componentes seguem as specs do `DESIGN.md`: `button` (primary, outline, ghost, danger, inverted, ghost-on-dark e link; um primary por tela), campos (`input`, `select`, `textarea`, `checkbox`, `radio`, `switch`), `pill-status` para estados de OS, venda e cobrança (o `badge` é só para contadores), `alert`, `toast`, `modal`, `modal-confirm` para ações destrutivas, `data-table`, `kpi-card`, `tabs`, `pagination`, `card`, `empty-state` e `breadcrumb`.
 
-Os partials ficam em `application/views/components/` e as props aceitas em `application/helpers/componente_helper.php`. Prop desconhecida, obrigatória faltando ou valor fora das opções gera erro na hora, em vez de ser ignorado. Componentes disponíveis: `button`, `input`, `select`, `textarea`, `card`, `table`, `modal`, `alert`, `toast`, `badge`, `pagination`, `empty-state` e `breadcrumb`.
+Os partials ficam em `application/views/components/` e as props aceitas em `application/helpers/componente_helper.php`. Prop desconhecida, obrigatória faltando ou valor fora das opções gera erro na hora, em vez de ser ignorado. A lista de componentes disponíveis é a do parágrafo acima, e o catálogo `/index.php/componentes` mostra todos com as variantes.
 
 Todo valor é escapado. Os slots (`body`, `footer`, `actions`, `message`, células da tabela) recebem texto, que também é escapado, ou um `HtmlSeguro`: a saída de outro `component()` ou de `html_purificado()`, que passa HTML do usuário pelo HTMLPurifier. Não crie um `HtmlSeguro` à mão com dado do usuário. Atributos extras vão na prop `attrs`; handlers `on*` são recusados (o JavaScript fica nos módulos).
 
@@ -385,7 +388,9 @@ Regras:
 
 - **Nunca edite uma migration que já foi publicada em uma release.** Crie outra para ajustar.
 - Teste tanto a instalação nova quanto a atualização de uma base existente.
-- O `down()` deve realmente reverter o `up()`.
+- O `down()` deve realmente reverter o `up()`. Para voltar a uma versão específica: `php index.php tools migrate <versão>`.
+- Migration que mexe em arquivos (como a `move_uploads_to_storage`) deve poder rodar de novo sem estragar nada e ter rollback documentado.
+- O código deve continuar funcionando, no que for possível, com a migration ainda não aplicada, e avisar o administrador para usar "Atualizar banco de dados" quando o recurso novo precisar dela.
 
 Para dados de teste, use seeders:
 
@@ -393,6 +398,23 @@ Para dados de teste, use seeders:
 php index.php tools seeder "nome_do_seeder"
 php index.php tools seed nome_do_seeder
 ```
+
+## Testes e verificações
+
+O CI roda o que está abaixo; rode localmente antes de abrir o PR:
+
+| Comando | O que verifica |
+| --- | --- |
+| `composer format` | Formata o PHP (`application/vendor/bin/php-cs-fixer fix --dry-run --diff` só confere) |
+| `composer test` | PHPUnit (`phpunit.xml`, testes em `tests/Unit`); inclui a checagem de `<script>` inline |
+| `composer analyse` | PHPStan, com os erros antigos em `phpstan-baseline.neon` |
+| `php scripts/check-escape.php` | Saída sem escape nas views |
+| `php scripts/check-inline-script.php` | `<script>` inline novo nas views |
+| `npm run test:js` | Testes dos utilitários de `assets/js` |
+| `composer audit` e `npm audit --audit-level=high` | Vulnerabilidades conhecidas nas dependências |
+| `npm ci && npm run build` | Refaz CSS, bibliotecas de JS e ilustrações; o `assets/dist` commitado precisa ser igual ao resultado |
+
+Escreva testes que **executem** o comportamento (PHPUnit, com o harness de `tests/MaposTestCase.php`), não só que leiam o código-fonte. Correção de bug deve vir com um teste que falhava antes dela. Mudança de segurança precisa de teste do caso negado (usuário sem permissão, registro de outro cliente, valor inválido).
 
 ## Comandos de terminal
 
@@ -442,11 +464,11 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 
 ## Abrindo um Pull Request
 
-1. Atualize seu `master` a partir do upstream:
+1. Atualize a branch base a partir do upstream. **Enquanto a v5 está em desenvolvimento, a base é a `v5`**; correções da série 4.x vão para a `master`:
 
    ```bash
-   git checkout master
-   git pull upstream master
+   git checkout v5
+   git pull upstream v5
    ```
 
 2. Crie uma branch descritiva:
@@ -459,12 +481,12 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 
 4. Teste manualmente o fluxo afetado. Se a mudança envolveu o banco, teste também a migration nos dois sentidos.
 
-5. Faça o push e abra o Pull Request contra a branch `master` do repositório oficial.
+5. Faça o push e abra o Pull Request contra a branch base (`v5` durante a pré-release da v5, `master` para a série 4.x) do repositório oficial.
 
 ### Checklist antes de enviar
 
 - [ ] O PR resolve **um** problema (evite juntar assuntos diferentes).
-- [ ] O código está formatado (`composer format`).
+- [ ] O código está formatado (`composer format`) e `composer test` e `composer analyse` passam.
 - [ ] A saída nova nas views passa por `e()` ou `printSafeHtml()` (`php scripts/check-escape.php`).
 - [ ] Não há credenciais, `.env`, dumps de banco ou arquivos de IDE no diff.
 - [ ] As pastas `application/vendor/` e `node_modules/` não foram commitadas.
@@ -472,7 +494,8 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 - [ ] Alterações de schema têm migration com `up()` e `down()`.
 - [ ] A descrição explica o problema, a solução e como testar.
 - [ ] Há capturas de tela (antes/depois) quando a mudança é visual.
-- [ ] Issues relacionadas foram referenciadas (ex.: `Closes #123`).
+- [ ] Issues relacionadas foram referenciadas (ex.: `Closes #123`). Como a `v5` não é a branch padrão do repositório, o `Closes` não fecha a issue sozinho: o mantenedor a fecha no merge.
+- [ ] Se a mudança altera o que quem atualiza precisa fazer (variável nova no `.env`, migration, rota), a documentação em `docs/` ou o guia de migração foi atualizado.
 
 ### O que esperar
 
