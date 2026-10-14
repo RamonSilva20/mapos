@@ -244,6 +244,56 @@ in CLI — assert on `$this->ci()->output->get_header()` instead. A view that
 declares a function or class at the top level is also unreachable, because the
 CI3 `include`s on every render and a second one dies with "Cannot redeclare".
 
+**The permission guard is `authorize()`, a helper rather than a method.** The
+denial used to be three lines copied into every action:
+`checkPermission()` → `set_flashdata('error', …)` → `respond_redirect(base_url())`.
+It is now `if (! authorize('vServico', '…')) { return; }`. It lives in
+`application/helpers/redirect_helper.php` and not in `MY_Controller` because the
+two controllers that use it have different base classes: `Servicos` and
+`Clientes` are `MY_Controller` (guard by `logado`), and `Mine` is a bare
+`CI_Controller` (client area, guard by `conectado`), which a method on
+`MY_Controller` could not reach. It reads `permission` and `session` through
+`get_instance()` for the same reason. The caller must `return;` on the false
+branch: `respond_redirect()` only queues the `Location` header, unlike the CI3
+`redirect()` it replaces. When a guard is refactored this way, the `return;` is
+part of the change: `redirect()` used to end the request and `respond_redirect()`
+does not, so every branch that queued a redirect without one fell through into
+the rest of the action. `Clientes::gerenciar()`, the success redirect in
+`Clientes::editar()`, and the not-found/null-id guards in
+`Clientes::editar()`/`visualizar()`/`excluir()` were in that state and now all
+`return;`.
+
+**Two edits a sweep like this makes, and two it deliberately does not.** A
+`multi-delete` that must land together is wrapped in `trans_start()` /
+`trans_complete()`, with `trans_rollback()` on the failure branch only — never
+`trans_complete()` followed by `trans_rollback()`, which is the pattern
+`TransactsDatabase` names as the one that drops the harness transaction
+(`Financeiro::excluirLancamento()`). And the id that authorized the request is
+the one from `uri->segment(3)`, not the one posted in the body: a guard that
+validates the segment while the `UPDATE` reads `input->post('id…')` is an IDOR
+the moment the two differ, which is why `Servicos::editar()` and
+`Clientes::editar()` now derive a single `$id` from the segment.
+
+The following were found in the same review and are **not** fixed, on purpose;
+each is recorded here so the next person does not re-derive it:
+
+- **Most controllers are still on the old guard.** `Os`, `Vendas`,
+  `Relatorios`, `Mapos`, `Cobrancas`, `Garantias`, `Produtos`, `Financeiro`,
+  `Arquivos`, `Usuarios` and `Permissoes` keep the inline `checkPermission` +
+  `redirect()` pattern and the segment-vs-POST mismatch in their `editar()`.
+  They have no controller test, so changing them is invisible to the suite —
+  they were left for the change that adds the tests, not this one.
+- **`Garantias::excluir()` deletes the same row twice** (the two `delete()`
+  calls at `application/controllers/Garantias.php:191-192` target the same
+  id/model). Harmless but wrong; fix it when the test exists to hold it.
+- **`Os::excluir()` runs five deletes with no transaction**
+  (`application/controllers/Os.php:632-637`). Same reason as the `Servicos`
+  fix above, but off the tested path.
+- **`edit()` returning true on `affected_rows() >= 0`** is app-wide and
+  intentional (all fifteen models): it reports success for an update that
+  changed nothing. It reads like a bug in isolation, and it is not to be
+  "fixed" in one model.
+
 ### Maintained schema, per-test data
 
 `setup-db.php` used to drop and recreate the database on every run, which cost

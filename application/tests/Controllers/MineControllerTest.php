@@ -4,6 +4,7 @@ namespace Tests\Controllers;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Support\ControllerTestCase;
+use Tests\Support\Database\ClientFixtures;
 use Tests\Support\Transaction\TransactsDatabase;
 
 /**
@@ -26,6 +27,7 @@ use Tests\Support\Transaction\TransactsDatabase;
  */
 final class MineControllerTest extends ControllerTestCase
 {
+    use ClientFixtures;
     use TransactsDatabase;
 
     private const INVALID_TOKEN_MESSAGE = 'Token inválido ou expirado. Solicite uma nova recuperação de senha.';
@@ -48,7 +50,8 @@ final class MineControllerTest extends ControllerTestCase
     #[DataProvider('missingTokens')]
     public function testSenhaSalvarRedirectsWhenTheTokenIsMissing(?string $token, string $_scenario): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $before = $this->clientPassword($email);
 
         $this->postWithCsrfToken(['senha' => 'nova-senha']);
@@ -99,7 +102,8 @@ final class MineControllerTest extends ControllerTestCase
         ?string $password,
         string $expectedMessage
     ): void {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $before = $this->clientPassword($email);
         $token = $this->tokenFor($state, $email);
 
@@ -123,7 +127,8 @@ final class MineControllerTest extends ControllerTestCase
      */
     public function testSenhaSalvarDoesNotRevealWhetherTheTokenExists(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $before = $this->clientPassword($email);
 
         $messages = [];
@@ -147,7 +152,8 @@ final class MineControllerTest extends ControllerTestCase
 
     public function testSenhaSalvarChangesThePasswordAndMarksTheTokenUsed(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $this->installResetToken($email, 'token-valido-abc123');
 
         $this->postWithCsrfToken(['token' => 'token-valido-abc123', 'senha' => 'nova-senha']);
@@ -210,7 +216,8 @@ final class MineControllerTest extends ControllerTestCase
     {
         $this->installIssuer();
 
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
 
         $this->postWithCsrfToken(['email' => $email]);
 
@@ -245,7 +252,8 @@ final class MineControllerTest extends ControllerTestCase
      */
     public function testGerarTokenResetarSenhaReportsTheMissingIssuer(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
 
         $this->postWithCsrfToken(['email' => $email]);
 
@@ -264,7 +272,8 @@ final class MineControllerTest extends ControllerTestCase
 
     public function testVerifyTokenSenhaRendersTheFormForAValidToken(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $this->installResetToken($email, 'token-valido-abc123');
 
         $this->resetUriSegments('mine/verifyTokenSenha/token/token-valido-abc123');
@@ -287,7 +296,8 @@ final class MineControllerTest extends ControllerTestCase
 
     public function testVerifyTokenSenhaRedirectsForAnExpiredToken(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $this->installResetToken($email, 'token-expirado', -2);
 
         $this->resetUriSegments('mine/verifyTokenSenha/token/token-expirado');
@@ -312,7 +322,8 @@ final class MineControllerTest extends ControllerTestCase
      */
     public function testLoginAnswersTheSameMessageForAnUnknownEmailAndAWrongPassword(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
 
         $this->postWithCsrfToken(['email' => $email, 'senha' => 'senha-errada']);
         $wrongLogin = $this->callController('Mine', 'login');
@@ -355,7 +366,8 @@ final class MineControllerTest extends ControllerTestCase
 
     public function testLoginAuthenticatesValidCredentials(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
 
         $this->postWithCsrfToken(['email' => $email, 'senha' => 'antiga']);
 
@@ -382,7 +394,8 @@ final class MineControllerTest extends ControllerTestCase
 
     public function testVisualizarOsRedirectsWhenTheClientIsNotAuthenticated(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $osId = $this->installServiceOrder($this->clientId($email));
 
         $this->resetUriSegments("mine/visualizarOs/{$osId}");
@@ -398,7 +411,8 @@ final class MineControllerTest extends ControllerTestCase
 
     public function testVisualizarOsRendersTheOrderOfTheClient(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $osId = $this->installServiceOrder($this->clientId($email));
         $this->installIssuer();
 
@@ -422,8 +436,10 @@ final class MineControllerTest extends ControllerTestCase
      */
     public function testVisualizarOsRejectsAnOrderThatIsNotTheClients(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
-        $otherEmail = $this->installClient('outro@exemplo.com', 'Outro Cliente');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
+        $otherEmail = 'outro@exemplo.com';
+        $this->installClient($otherEmail, 'Outro Cliente');
         $osId = $this->installServiceOrder($this->clientId($otherEmail));
 
         $this->loginAsClient($this->clientId($email));
@@ -454,7 +470,8 @@ final class MineControllerTest extends ControllerTestCase
      */
     public function testVisualizarOsAnswersWhenTheOrderDoesNotExist(): void
     {
-        $email = $this->installClient('cliente@exemplo.com');
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
         $osId = $this->installServiceOrder($this->clientId($email));
 
         $this->loginAsClient($this->clientId($email));
@@ -472,49 +489,53 @@ final class MineControllerTest extends ControllerTestCase
         );
     }
 
+    /**
+     * As duas actions de cobrança recusam quem não tem a permissão `eCobranca`.
+     *
+     * São o mesmo guard com a mesma resposta, então são uma tabela e não dois
+     * métodos. O `permissao` é um id inexistente (e não um ao qual falte só a
+     * atividade) para o caso não depender de quais atividades o seed deixou
+     * ligadas.
+     *
+     * @return array<string, array{string}>
+     */
+    public static function cobrancaDenials(): array
+    {
+        return [
+            'atualizarcobranca sem permissão' => ['atualizarcobranca'],
+            'enviarcobranca sem permissão' => ['enviarcobranca'],
+        ];
+    }
+
+    #[DataProvider('cobrancaDenials')]
+    public function testCobrancaActionsDenyWithoutPermission(string $method): void
+    {
+        $email = 'cliente@exemplo.com';
+        $this->installClient($email);
+        $this->loginAsClient($this->clientId($email));
+        $_SESSION['permissao'] = 999999;
+
+        $this->resetUriSegments("mine/{$method}/1");
+
+        $this->callControllerRaw('Mine', $method);
+
+        $this->assertSame(
+            base_url(),
+            $this->ci()->output->get_header('Location'),
+            'Sem permissão a cobrança deve devolver o cliente para base_url().'
+        );
+        $this->assertSame(
+            'Você não tem permissão para atualizar cobrança.',
+            $this->ci()->session->userdata('error')
+        );
+    }
+
     private function loginAsClient(int $clientId): void
     {
         $_SESSION['conectado'] = true;
         $_SESSION['isCliente'] = true;
         $_SESSION['cliente_id'] = $clientId;
         $_SESSION['nome'] = 'Cliente Teste';
-    }
-
-    private function installClient(
-        string $email,
-        string $name = 'Cliente Teste',
-        string $password = 'antiga'
-    ): string {
-        $this->ci()->db->insert('clientes', [
-            'nomeCliente' => $name,
-            'documento' => '12345678909',
-            'telefone' => '0000-0000',
-            'email' => $email,
-            'senha' => password_hash($password, PASSWORD_DEFAULT),
-            'dataCadastro' => date('Y-m-d'),
-        ]);
-
-        return $email;
-    }
-
-    private function clientId(string $email): int
-    {
-        return (int) $this->ci()->db
-            ->select('idClientes')
-            ->where('email', $email)
-            ->limit(1)
-            ->get('clientes')
-            ->row('idClientes');
-    }
-
-    private function clientPassword(string $email): string
-    {
-        return (string) $this->ci()->db
-            ->select('senha')
-            ->where('email', $email)
-            ->limit(1)
-            ->get('clientes')
-            ->row('senha');
     }
 
     /**
@@ -604,38 +625,5 @@ final class MineControllerTest extends ControllerTestCase
             'email' => 'emitente@exemplo.com',
             'url_logo' => base_url() . 'assets/img/logo-mapos.png',
         ]);
-    }
-
-    private function installServiceOrder(int $clientId): int
-    {
-        $this->ci()->db->insert('os', [
-            'dataInicial' => date('Y-m-d'),
-            'status' => 'Aberto',
-            'valorTotal' => 0,
-            'clientes_id' => $clientId,
-            'usuarios_id' => $this->firstUserId(),
-            'faturado' => 0,
-        ]);
-
-        return (int) $this->ci()->db->insert_id('os');
-    }
-
-    /**
-     * O `usuarios_id` da OS é obrigatório e tem chave estrangeira, então a OS não
-     * pode ser criada sem um técnico. A conta administrativa que a seed
-     * `application/database/seeds/Usuarios.php` grava é o id 1.
-     */
-    private function firstUserId(): int
-    {
-        $id = (int) $this->ci()->db
-            ->select('idUsuarios')
-            ->order_by('idUsuarios', 'ASC')
-            ->limit(1)
-            ->get('usuarios')
-            ->row('idUsuarios');
-
-        $this->assertGreaterThan(0, $id, 'Nenhuma conta em `usuarios` para ser o técnico da OS.');
-
-        return $id;
     }
 }

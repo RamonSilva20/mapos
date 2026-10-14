@@ -428,9 +428,8 @@ class Mine extends CI_Controller
             redirect('mapos');
         }
 
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
-            redirect(base_url());
+        if (! authorize('eCobranca', 'Você não tem permissão para atualizar cobrança.')) {
+            return;
         }
 
         $this->load->model('cobrancas_model');
@@ -450,9 +449,8 @@ class Mine extends CI_Controller
             redirect('mapos');
         }
 
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
-            redirect(base_url());
+        if (! authorize('eCobranca', 'Você não tem permissão para atualizar cobrança.')) {
+            return;
         }
 
         $this->load->model('cobrancas_model');
