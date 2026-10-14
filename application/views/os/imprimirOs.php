@@ -573,8 +573,6 @@ endforeach;
             </div>
         <?php endif; ?>
     </div>
-    <script type="text/javascript">
-        window.print();
-    </script>
+<script src="<?= e(base_url('assets/js/imprimir.js')) ?>"></script>
 </body>
 </html>

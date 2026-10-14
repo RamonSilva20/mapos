@@ -5,7 +5,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'seguranca_cabecalhos_helper.php';
 
 /**
- * Cabeçalhos de segurança, CSP em report-only e o endpoint de relatórios.
+ * Cabeçalhos de segurança, CSP em enforce (ou report-only) e o endpoint de relatórios.
  */
 final class SegurancaCabecalhosTest extends MaposTestCase
 {
@@ -35,7 +35,8 @@ final class SegurancaCabecalhosTest extends MaposTestCase
         $this->assertSame('strict-origin-when-cross-origin', $h['Referrer-Policy']);
         $this->assertStringContainsString('camera=()', $h['Permissions-Policy']);
         $this->assertStringContainsString('geolocation=()', $h['Permissions-Policy']);
-        $this->assertArrayHasKey('Content-Security-Policy-Report-Only', $h);
+        $this->assertArrayHasKey('Content-Security-Policy', $h, 'Padrão da v5: CSP em enforce (#2878).');
+        $this->assertArrayNotHasKey('Content-Security-Policy-Report-Only', $h);
     }
 
     /**
@@ -127,13 +128,82 @@ final class SegurancaCabecalhosTest extends MaposTestCase
 
     public function testCspPodeSerDesligada(): void
     {
-        $h = segurancaCabecalhos(['APP_CSP_REPORT_ONLY' => 'false'], []);
+        $h = segurancaCabecalhos(['APP_CSP' => 'off'], []);
 
+        $this->assertArrayNotHasKey('Content-Security-Policy', $h);
         $this->assertArrayNotHasKey('Content-Security-Policy-Report-Only', $h);
         $this->assertArrayHasKey('X-Frame-Options', $h);
     }
 
+    public function testModosDaCsp(): void
+    {
+        $this->assertSame('enforce', segurancaModoCsp([]));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP' => 'Enforce']));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP' => 'lixo']), 'Valor inválido cai no padrão seguro.');
+        $this->assertSame('report-only', segurancaModoCsp(['APP_CSP' => 'report-only']));
+        $this->assertSame('off', segurancaModoCsp(['APP_CSP' => 'off']));
+
+        $h = segurancaCabecalhos(['APP_CSP' => 'report-only'], []);
+        $this->assertArrayHasKey('Content-Security-Policy-Report-Only', $h);
+        $this->assertArrayNotHasKey('Content-Security-Policy', $h);
+    }
+
+    public function testReportOnlyDaFaseAnteriorContinuaValendo(): void
+    {
+        $this->assertSame('report-only', segurancaModoCsp(['APP_CSP_REPORT_ONLY' => 'true']));
+        $this->assertSame('off', segurancaModoCsp(['APP_CSP_REPORT_ONLY' => 'false']));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP_REPORT_ONLY' => '']));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP' => 'enforce', 'APP_CSP_REPORT_ONLY' => 'true']), 'APP_CSP vence o antigo.');
+    }
+
     // --- Política CSP ------------------------------------------------------
+
+    public function testNonceLiberaSoOStyleSrcENuncaOUnsafeInline(): void
+    {
+        $nonce = 'abc123==';
+        $csp = segurancaPoliticaCsp('', $nonce);
+
+        $this->assertStringContainsString("style-src 'self' 'nonce-abc123=='", $csp);
+        $this->assertStringContainsString("script-src 'self';", $csp, 'O script-src não ganha nonce: o FullCalendar só precisa do estilo.');
+        $this->assertStringNotContainsString('unsafe-inline', $csp);
+        $this->assertStringNotContainsString('unsafe-eval', $csp);
+        $this->assertStringContainsString("style-src 'self';", segurancaPoliticaCsp(''), 'Sem nonce, a política é a de antes.');
+    }
+
+    public function testCabecalhosLevamONonceDaRequisicao(): void
+    {
+        $h = segurancaCabecalhos([], [], 'N0nce==');
+
+        $this->assertStringContainsString("'nonce-N0nce=='", $h['Content-Security-Policy']);
+    }
+
+    public function testNonceEUnicoPorRequisicaoEImprevisivel(): void
+    {
+        $primeiro = segurancaGerarNonce();
+        $this->assertSame($primeiro, segurancaNonceAtual());
+        $this->assertSame(24, strlen($primeiro), '16 bytes em base64.');
+
+        $segundo = segurancaGerarNonce();
+        $this->assertNotSame($primeiro, $segundo);
+        $this->assertSame($segundo, segurancaNonceAtual());
+
+        unset($GLOBALS['mapos_csp_nonce']);
+        $this->assertSame('', segurancaNonceAtual());
+    }
+
+    public function testHookSoGeraNonceComCspLigadaEOLayoutPublicaAMeta(): void
+    {
+        $hook = (string) file_get_contents(APPPATH . 'hooks/security_headers.php');
+        $this->assertStringContainsString("segurancaModoCsp(\$_ENV) === 'off' ? '' : segurancaGerarNonce()", $hook);
+
+        $topo = (string) file_get_contents(APPPATH . 'views/tema/topo.php');
+        $this->assertStringContainsString('<meta name="csp-nonce" content="<?= e(segurancaNonceAtual()) ?>">', $topo);
+        $this->assertStringContainsString("function_exists('segurancaNonceAtual')", $topo);
+
+        // O FullCalendar lê o nonce dessa meta.
+        $fc = (string) file_get_contents(MAPOS_ROOT . '/assets/vendor/fullcalendar/fullcalendar.global.min.js');
+        $this->assertStringContainsString('csp-nonce', $fc);
+    }
 
     public function testPoliticaNaoLiberaScriptOuEstiloInline(): void
     {
@@ -150,7 +220,7 @@ final class SegurancaCabecalhosTest extends MaposTestCase
     {
         $h = segurancaCabecalhos(['APP_BASEURL' => 'https://exemplo.com/mapos/'], []);
 
-        $this->assertStringEndsWith('report-uri /mapos/index.php/csp/report', $h['Content-Security-Policy-Report-Only']);
+        $this->assertStringEndsWith('report-uri /mapos/index.php/csp/report', $h['Content-Security-Policy']);
     }
 
     public function testCspNaRaizDoDominio(): void
@@ -163,7 +233,7 @@ final class SegurancaCabecalhosTest extends MaposTestCase
     {
         $h = segurancaCabecalhos(['APP_CSP_REPORT' => 'false'], []);
 
-        $this->assertStringNotContainsString('report-uri', $h['Content-Security-Policy-Report-Only']);
+        $this->assertStringNotContainsString('report-uri', $h['Content-Security-Policy']);
     }
 
     // --- Endpoint de relatórios -------------------------------------------

@@ -43,9 +43,7 @@
             <div class="p-2 pb-8">Assinatura do Técnico Responsável</div>
         </div>
     </div>
-    <script>
-        window.print();
-    </script>
+<script src="<?= e(base_url('assets/js/imprimir.js')) ?>"></script>
 </body>
 
 </html>

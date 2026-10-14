@@ -390,9 +390,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
 
     </div>
 </div>
-<script type="text/javascript">
-  window.print();
-</script>
+<script src="<?= e(base_url('assets/js/imprimir.js')) ?>"></script>
 </body>
 
 </html>

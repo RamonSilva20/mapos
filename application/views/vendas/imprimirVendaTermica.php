@@ -111,9 +111,7 @@
 
         <div class="cupom-assinatura">Assinatura do Recebedor</div>
     </div>
-    <script>
-        window.print();
-    </script>
+<script src="<?= e(base_url('assets/js/imprimir.js')) ?>"></script>
 </body>
 
 </html>

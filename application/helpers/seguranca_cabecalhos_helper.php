@@ -14,31 +14,30 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'cookie_seguro_helper.php';
 /**
  * Política de CSP alvo da v5.
  *
- * Vai em modo report-only: o navegador não bloqueia nada, só relata o que
- * seria bloqueado. As telas legadas violam a política de propósito (scripts
- * inline, CDNs, Google Fonts); os relatórios medem o que falta migrar até o
- * modo enforce da #2878.
+ * Em modo enforce (padrão, #2878) o navegador bloqueia o que a política não
+ * permite; em report-only (APP_CSP=report-only) só relata. Os relatórios dos
+ * dois modos chegam ao endpoint do Map-OS e ajudam a achar o que ficou de fora.
  *
  * - script-src sem 'unsafe-inline': os scripts saem das views (#2838).
  * - style-src sem 'unsafe-inline': as views novas não usam style= (#2825).
  * - img-src aceita https: e data: por causa dos QR Codes de PIX e boletos,
  *   que vêm dos gateways como URL externa ou base64.
- * - connect-src libera as consultas de CEP e CNPJ: ViaCEP e BrasilAPI, por
- *   fetch, no formulário de cliente da v5 (modules/clientes/formulario.js), e
- *   a ReceitaWS do assets/js/funcoes.js legado. A ReceitaWS não manda CORS e
- *   lá é JSONP (vira script-src e será relatada); sai com o frontend legado.
+ * - connect-src libera só as consultas de CEP e CNPJ do formulário de cliente
+ *   (modules/clientes/formulario.js): ViaCEP e BrasilAPI, por fetch. A ReceitaWS
+ *   do frontend legado saiu junto com ele.
  *
  * @param  string  $reportUri  Caminho do endpoint de relatórios, ou '' para não relatar
+ * @param  string  $nonce      Nonce da requisição (base64), ou '' para não liberar nenhum
  */
-function segurancaPoliticaCsp($reportUri)
+function segurancaPoliticaCsp($reportUri, $nonce = '')
 {
     $diretivas = [
         'default-src' => "'self'",
         'script-src' => "'self'",
-        'style-src' => "'self'",
+        'style-src' => "'self'" . ($nonce !== '' ? " 'nonce-" . $nonce . "'" : ''),
         'img-src' => "'self' data: blob: https:",
         'font-src' => "'self' data:",
-        'connect-src' => "'self' https://viacep.com.br https://brasilapi.com.br https://www.receitaws.com.br",
+        'connect-src' => "'self' https://viacep.com.br https://brasilapi.com.br",
         'object-src' => "'none'",
         'base-uri' => "'self'",
         'form-action' => "'self'",
@@ -74,6 +73,47 @@ function segurancaCspReportUri($baseUrl)
 }
 
 /**
+ * Gera o nonce da requisição (16 bytes aleatórios, em base64) e o guarda para
+ * as views (segurancaNonceAtual()). Chamado uma vez, pelo hook pre_system.
+ */
+function segurancaGerarNonce(): string
+{
+    $GLOBALS['mapos_csp_nonce'] = base64_encode(random_bytes(16));
+
+    return $GLOBALS['mapos_csp_nonce'];
+}
+
+/** Nonce da requisição atual, ou '' se a CSP está desligada ou o hook não rodou. */
+function segurancaNonceAtual(): string
+{
+    return (string) ($GLOBALS['mapos_csp_nonce'] ?? '');
+}
+
+/**
+ * Modo da CSP: enforce (padrão), report-only ou off.
+ *
+ * Vem de APP_CSP. Quem ainda tem só o APP_CSP_REPORT_ONLY da fase anterior
+ * mantém o que tinha: true = report-only, false = sem CSP.
+ *
+ * @param  array  $env  Normalmente $_ENV
+ * @return 'enforce'|'report-only'|'off'
+ */
+function segurancaModoCsp(array $env)
+{
+    $modo = strtolower(trim((string) ($env['APP_CSP'] ?? '')));
+
+    if (in_array($modo, ['enforce', 'report-only', 'off'], true)) {
+        return $modo;
+    }
+
+    if (array_key_exists('APP_CSP_REPORT_ONLY', $env) && trim((string) $env['APP_CSP_REPORT_ONLY']) !== '') {
+        return cookieEnvFlag($env['APP_CSP_REPORT_ONLY'], true) ? 'report-only' : 'off';
+    }
+
+    return 'enforce';
+}
+
+/**
  * Monta os cabeçalhos de segurança da requisição.
  *
  * Variáveis do .env (todas opcionais):
@@ -82,14 +122,16 @@ function segurancaCspReportUri($baseUrl)
  *   (padrão 31536000, ou 0 com APP_ENVIRONMENT=development). Só é enviado
  *   quando a requisição chega por HTTPS.
  * - APP_HSTS_INCLUDE_SUBDOMAINS: inclui includeSubDomains (padrão false).
- * - APP_CSP_REPORT_ONLY: envia a CSP em report-only (padrão true).
+ * - APP_CSP: enforce (padrão), report-only ou off. O antigo
+ *   APP_CSP_REPORT_ONLY continua valendo quando APP_CSP não existe.
  * - APP_CSP_REPORT: envia os relatórios ao endpoint do Map-OS (padrão true).
  *
  * @param  array  $env     Normalmente $_ENV
  * @param  array  $server  Normalmente $_SERVER
+ * @param  string $nonce   Nonce da requisição para o style-src (ver segurancaPoliticaCsp)
  * @return array<string, string> nome do cabeçalho => valor
  */
-function segurancaCabecalhos(array $env, array $server)
+function segurancaCabecalhos(array $env, array $server, $nonce = '')
 {
     if (! cookieEnvFlag($env['APP_SECURITY_HEADERS'] ?? null, true)) {
         return [];
@@ -121,11 +163,12 @@ function segurancaCabecalhos(array $env, array $server)
         $cabecalhos['Strict-Transport-Security'] = $hsts;
     }
 
-    if (cookieEnvFlag($env['APP_CSP_REPORT_ONLY'] ?? null, true)) {
+    $modoCsp = segurancaModoCsp($env);
+    if ($modoCsp !== 'off') {
         $reportUri = cookieEnvFlag($env['APP_CSP_REPORT'] ?? null, true)
             ? segurancaCspReportUri($env['APP_BASEURL'] ?? '')
             : '';
-        $cabecalhos['Content-Security-Policy-Report-Only'] = segurancaPoliticaCsp($reportUri);
+        $cabecalhos[$modoCsp === 'enforce' ? 'Content-Security-Policy' : 'Content-Security-Policy-Report-Only'] = segurancaPoliticaCsp($reportUri, (string) $nonce);
     }
 
     return $cabecalhos;

@@ -18,7 +18,10 @@ function enviarCabecalhosSeguranca()
         return;
     }
 
-    foreach (segurancaCabecalhos($_ENV, $_SERVER) as $nome => $valor) {
+    // Um nonce novo por requisição, só quando há CSP (o FullCalendar o lê de <meta name="csp-nonce">).
+    $nonce = segurancaModoCsp($_ENV) === 'off' ? '' : segurancaGerarNonce();
+
+    foreach (segurancaCabecalhos($_ENV, $_SERVER, $nonce) as $nome => $valor) {
         header($nome . ': ' . $valor);
     }
 }
