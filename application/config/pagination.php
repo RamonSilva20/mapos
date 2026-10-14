@@ -12,7 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | padrão do CI_Pagination. O initialize() de cada controller continua
 | informando base_url, total_rows e per_page.
 |
-| É o markup do Bootstrap 2 que ficava em MY_Controller::$data['configuration'].
+| É o markup da paginação antiga que ficava em MY_Controller::$data['configuration'].
 | Ele foi movido para cá sem mudar nada, para que as telas ainda não migradas
 | continuem iguais. Sai junto com o resto do frontend legado (#2855).
 |

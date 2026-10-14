@@ -663,7 +663,7 @@ class Mine extends CI_Controller
         $img = imagecreatefromjpeg(FCPATH . 'assets/img/captcha_bg.jpg');
         $corCaptcha = imagecolorallocate($img, 255, 0, 0);
 
-        $font = FCPATH . 'assets/font-awesome/' . $arrFont[0];
+        $font = FCPATH . 'assets/fonts/captcha/' . $arrFont[0];
 
         imagettftext(
             $img,

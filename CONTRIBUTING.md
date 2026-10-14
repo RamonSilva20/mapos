@@ -221,7 +221,7 @@ npm install --save-exact nome-da-lib@versao
 npm run build
 ```
 
-Para adicionar uma nova, ou outro arquivo de uma já existente, inclua-a na lista do `scripts/build-vendor.mjs`. Não adicione bibliotecas que dependam de jQuery: ele saiu do painel na #2855.
+Para adicionar uma nova, ou outro arquivo de uma já existente, inclua-a na lista do `scripts/build-vendor.mjs`. Não adicione bibliotecas que dependam de jQuery: ele saiu do projeto todo (painel na #2855; impressões, PDFs e instalador na #2960).
 
 ### JavaScript nas views
 
@@ -277,7 +277,7 @@ $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $tot
 <?= component('pagination', $paginacao) ?>
 ```
 
-Nenhuma tela do painel usa mais o `create_links()` do `CI_Pagination`. O `application/config/pagination.php` (com o markup antigo do Bootstrap 2) só continua para a API do app, que inicializa a biblioteca para calcular as páginas.
+Nenhuma tela do painel usa mais o `create_links()` do `CI_Pagination`. O `application/config/pagination.php` (com o markup antigo da paginação) só continua para a API do app, que inicializa a biblioteca para calcular as páginas.
 
 **Padrão das listagens** (#2852). A referência é a listagem de clientes (`Clientes::gerenciar()` e `views/clientes/clientes.php`):
 
@@ -330,7 +330,7 @@ $this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => 
 
 São as props do `button`, e o ícone é obrigatório: no celular a topbar mostra só o ícone, com o rótulo como nome acessível.
 
-Toda tela do painel passa por `layout()`, que carrega `assets/dist/app.css` e `assets/dist/layout.css`. Não há mais modo legado: Bootstrap 2, jQuery, matrix-style e os `tema-*.css` saíram na #2855. Só as impressões e os PDFs (`imprimir*.php`, `relatorios/imprimir/`) mantêm o CSS próprio deles (Bootstrap e Font Awesome) e ficam fora do Tailwind.
+Toda tela do painel passa por `layout()`, que carrega `assets/dist/app.css` e `assets/dist/layout.css`. Não há mais modo legado: Bootstrap, jQuery, matrix-style e os `tema-*.css` saíram na #2855, e o Font Awesome e o que restava de Bootstrap nas impressões, nos PDFs e no instalador saíram na #2960. As impressões do navegador (`imprimir*.php`) usam `assets/dist/imprimir.css`, os PDFs dos relatórios (`relatorios/imprimir/`) usam `assets/dist/pdf.css` e o instalador usa `install/assets/css/instalador.css`, todos gerados pelo Tailwind em `npm run build:css`. O mPDF só lê CSS 2.1 e um pouco de CSS 3, então o `pdf.css` é achatado pelo `scripts/build-pdf-css.mjs`: nos relatórios use só as classes `rel-*` e utilities de tabela, borda, cor, tipografia e espaçamento, e confira o resultado com um PDF de verdade.
 
 ```php
 $this->data['view'] = 'clientes/clientes';

@@ -7,6 +7,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased] - v5 (5.0.0-alpha)
 
 ### Added
+- Impressões (OS, vendas, garantias, cupons e área do cliente), PDFs dos relatórios e instalador em Tailwind: `assets/dist/imprimir.css`, `assets/dist/pdf.css` (achatado para o mPDF por `scripts/build-pdf-css.mjs`) e `install/assets/css/instalador.css`. #2960 [@RamonSilva20](https://github.com/RamonSilva20)
 - CI com lint, php-cs-fixer, PHPStan (com baseline) e `composer audit`. #2887 [@RamonSilva20](https://github.com/RamonSilva20)
 - PHPUnit com harness para o CodeIgniter 3 e testes iniciais. #2886 [@RamonSilva20](https://github.com/RamonSilva20)
 - Dependabot para GitHub Actions e Composer. #2890 [@RamonSilva20](https://github.com/RamonSilva20)
@@ -78,6 +79,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Token de recuperação de senha da área do cliente guardado só como hash SHA-256 (busca pelo hash e conferência com `hash_equals`), com 32 bytes aleatórios, validade de 1 hora (antes 24 horas) e uso único; um pedido novo invalida os anteriores do mesmo e-mail. Uma migration invalida os tokens pendentes, que estavam em texto claro. #2934 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Removed
+- Bootstrap 2, 3 e 5.3, matrix-style, Font Awesome, jQuery (do instalador) e as imagens do tema antigo; as fontes do captcha foram para `assets/fonts/captcha`. #2960 [@RamonSilva20](https://github.com/RamonSilva20)
 - Frontend legado do painel: Bootstrap 2, jQuery e jQuery UI, tema Matrix, `tema-*.css`, Trumbowyg, wysihtml5, Select2, DataTables, jqPlot, Flot, Highcharts, Boxicons, SweetAlert v1 e o modo legado do layout (`legacy_assets`). As impressões e os PDFs mantêm o CSS próprio. #2855 [@RamonSilva20](https://github.com/RamonSilva20)
 - Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
 

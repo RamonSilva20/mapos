@@ -1,36 +1,20 @@
-<div class="section text-center">
-  <div class="clearfix">
+<?php
+/**
+ * Finalização: sucesso da instalação, ou o aviso de que o Map-OS já está
+ * instalado. Com installed = 1 esta é a única tela aberta.
+ */
+?>
+<div class="flex flex-col items-center gap-4 p-6 text-center sm:p-10">
+  <?php if (! $installed) { ?>
+    <span class="text-success"><?= instalador_icone('circulo-ok', 'size-12') ?></span>
+    <p>Parabéns! Você instalou o <strong><?= htmlspecialchars($settings['title'], ENT_QUOTES) ?></strong> com sucesso!</p>
+    <p class="text-danger-ink">Não esqueça de apagar a pasta <code>install</code> do servidor.</p>
+  <?php } else { ?>
+    <span class="text-danger"><?= instalador_icone('circulo-erro', 'size-12') ?></span>
+    <p class="text-danger-ink">Parece que este aplicativo já está instalado! Você não pode reinstalá-lo novamente.</p>
+  <?php } ?>
 
-    <?php if (! $installed) { ?>
-
-      <i class="status fa fa-check-circle-o" style="font-size: 50px;"></i>
-      <br />
-
-      <span style="line-height: 50px;">Parabéns! Você instalou o
-        <strong><?php echo $settings['title']; ?></strong> com sucesso!
-      </span>
-
-      <div style="margin: 15px 0 15px 0px; color: #d73b3b;">
-        Não esqueça de deletar seu diretório de instalação.
-      </div>
-
-      <?php } else { ?>
-
-        <i class="status fa fa-close" style="font-size: 50px; color:red;"></i>
-        <br />
-
-        <div style="margin: 15px 0 15px 0px; color: #d73b3b;">
-          Parece que este aplicativo já está instalado! Você não pode reinstalá-lo novamente.
-        </div>
-
-      <?php } ?>
-
-      <a class="go-to-login-page" href="<?php echo $dashboard_url; ?>">
-        <div>
-          <div style="font-size: 100px;"><i class="fa fa-desktop"></i></div>
-          <div>IR PARA PÁGINA DE LOGIN</div>
-        </div>
-      </a>
-
-    </div>
-  </div>
+  <a href="<?= htmlspecialchars($dashboard_url, ENT_QUOTES) ?>" class="inline-flex items-center gap-3 rounded-md bg-primary px-6 py-3 font-bold text-on-primary hover:bg-primary-hover">
+    <?= instalador_icone('monitor', 'size-6') ?> Ir para a página de login
+  </a>
+</div>

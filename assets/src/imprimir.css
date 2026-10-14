@@ -1,0 +1,143 @@
+/*
+ * CSS das impressões do navegador (OS, vendas, garantias, cupons e área do
+ * cliente), gerado em assets/dist/imprimir.css por `npm run build:css`.
+ *
+ * O documento impresso é sempre claro, seja qual for o modo do painel, e usa o
+ * preflight do Tailwind. As classes vêm só das views de impressão.
+ */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "./tokens.css";
+@import "./fonts.css";
+
+@source "../../application/views/os/imprimir*.php";
+@source "../../application/views/vendas/imprimir*.php";
+@source "../../application/views/garantias/imprimir*.php";
+@source "../../application/views/conecte/imprimir*.php";
+@source "../../application/views/conecte/partes/impressao*.php";
+
+/*
+ * Documento A4 (OS, venda, garantia). Em tela é uma folha sobre fundo cinza;
+ * ao imprimir, a folha some e o conteúdo ocupa a página. Cada parte usa
+ * utilities do Tailwind, e só o que se repete em todos os documentos vira
+ * classe aqui.
+ */
+@layer base {
+  body {
+    margin-inline: auto;
+    max-width: 230mm;
+    background-color: var(--color-hairline-cool);
+    font-size: 12px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+@layer components {
+  .doc-folha {
+    @apply mx-auto my-1 min-h-[297mm] w-[210mm] rounded-md bg-surface p-[7mm] text-text shadow-elev-3;
+  }
+
+  .doc-cabecalho {
+    @apply flex w-full flex-wrap items-center justify-between gap-2 border border-hairline-cool p-2.5;
+  }
+
+  .doc-titulo {
+    @apply relative flex w-full items-center justify-center border border-hairline-cool bg-surface-subtle p-1 text-lg font-bold;
+  }
+
+  .doc-subtitulo {
+    @apply mt-2.5 w-full border border-hairline-cool bg-surface-subtle p-1 font-bold;
+  }
+
+  .doc-dados {
+    @apply flex w-full justify-between border border-hairline-cool p-1.5 font-bold break-inside-avoid;
+  }
+
+  .doc-tabela {
+    @apply mt-2.5 w-full border-collapse;
+  }
+
+  .doc-tabela th,
+  .doc-tabela td {
+    @apply border border-hairline-cool px-2 py-0.5;
+  }
+
+  .doc-tabela thead tr {
+    @apply bg-surface-subtle;
+  }
+
+  .doc-rodape {
+    @apply w-full break-inside-avoid border border-hairline-cool p-2.5;
+  }
+
+  .doc-assinatura {
+    @apply mt-14 w-2/5 border-t border-ink pt-1 text-center;
+  }
+
+  /* Só aparece ao imprimir: via do cliente e anexos. */
+  .doc-so-impressao {
+    display: none;
+  }
+
+  /*
+   * Cupom térmico (OS e venda): bobina de 80mm sobre o fundo cinza do body;
+   * ao imprimir ocupa a largura do papel.
+   */
+  .cupom {
+    @apply mx-auto my-1 w-[80mm] bg-surface p-[2mm] text-[11px] text-text shadow-elev-3 print:m-0 print:w-auto print:shadow-none print:break-after-page;
+  }
+
+  .cupom-tabela {
+    @apply mx-auto my-1 w-full border-collapse text-[11px];
+  }
+
+  .cupom-tabela th,
+  .cupom-tabela td {
+    @apply px-1 py-0.5 align-top;
+  }
+
+  .cupom-tabela-grade th,
+  .cupom-tabela-grade td {
+    @apply border border-hairline-cool;
+  }
+
+  .cupom-total {
+    @apply my-1 text-right text-[13px] font-bold;
+  }
+
+  .cupom-assinatura {
+    @apply mt-2 border border-hairline-cool p-2 pb-8 text-center text-[15px] font-bold;
+  }
+}
+
+@media print {
+  @page {
+    size: auto;
+    margin: 0.5cm;
+  }
+
+  body {
+    max-width: none;
+    background-color: transparent;
+  }
+
+  .doc-folha {
+    margin: 0;
+    min-height: 0;
+    width: auto;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+    break-after: page;
+  }
+
+  .doc-so-impressao {
+    display: block;
+  }
+
+  .doc-sem-impressao {
+    display: none;
+  }
+}
