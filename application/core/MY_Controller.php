@@ -56,6 +56,9 @@ class MY_Controller extends CI_Controller
         }
         if ($estado['exige_2fa_cadastro']) {
             $this->session->set_userdata('exigir_2fa_cadastro', true);
+        } elseif ($this->session->userdata('exigir_2fa_cadastro')) {
+            // Voltou a um grupo sem exigência (ou ativou o 2FA): solta a tela de ativação.
+            $this->session->unset_userdata('exigir_2fa_cadastro');
         }
     }
 

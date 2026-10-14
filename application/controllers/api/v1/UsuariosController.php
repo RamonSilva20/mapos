@@ -237,7 +237,9 @@ class UsuariosController extends REST_Controller
 
         $user = $this->Mapos_model->check_credentials($email);
 
-        if ($user && senhaConfere((string) $password, $user->senha)) {
+        // senhaConfere() antes de testar $user: sem conta ela gasta o mesmo bcrypt (#2879).
+        $senhaConfere = senhaConfere((string) $password, $user->senha ?? null);
+        if ($user && $senhaConfere) {
             // Conta expirada: mesma resposta genérica de antes.
             if ($this->chk_date($user->dataExpiracao)) {
                 $this->limite_login->registrarSucesso('usuario', $email);

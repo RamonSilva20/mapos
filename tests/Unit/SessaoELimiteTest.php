@@ -226,4 +226,137 @@ final class SessaoELimiteTest extends MaposTestCase
         $this->assertStringContainsString('senha', (string) $this->motivo($estado, 0));
         $this->assertNull($this->motivo($estado, $versaoNova));
     }
+
+    // --- Ressalvas: flag do 2FA e confirmação sem senha --------------------
+
+    private function controllerComSessao(array $dados): object
+    {
+        $sessao = new class($dados) {
+            public function __construct(public array $dados)
+            {
+            }
+
+            public function userdata(string $chave)
+            {
+                return $this->dados[$chave] ?? null;
+            }
+
+            public function set_userdata($chave, $valor = null): void
+            {
+                $this->dados[$chave] = $valor;
+            }
+
+            public function unset_userdata($chave): void
+            {
+                unset($this->dados[$chave]);
+            }
+        };
+
+        $controller = new class() extends MY_Controller {
+            public $session;
+
+            public $mapos_model;
+
+            public $load;
+
+            public function __construct()
+            {
+            }
+
+            public function validar(): void
+            {
+                $this->validarSessaoDoUsuario();
+            }
+        };
+        $controller->session = $sessao;
+        $controller->mapos_model = $this->modelo;
+        $controller->load = new class() {
+            public function model($nome): void
+            {
+            }
+        };
+
+        return $controller;
+    }
+
+    public function testFlagDoDoisFatoresLigaEDesligaConformeOBanco(): void
+    {
+        $controller = $this->controllerComSessao(['id_admin' => 1, 'permissao' => 1, 'sessao_versao' => 0]);
+
+        // Grupo passa a exigir 2FA: a flag liga e a permissão acompanha o banco.
+        $this->db->query('UPDATE usuarios SET permissoes_id = 2 WHERE idUsuarios = 1');
+        $controller->validar();
+        $this->assertTrue($controller->session->userdata('exigir_2fa_cadastro'));
+        $this->assertSame(2, $controller->session->userdata('permissao'));
+
+        // Voltou a um grupo sem exigência: a flag desliga, sem novo login.
+        $this->db->query('UPDATE usuarios SET permissoes_id = 1 WHERE idUsuarios = 1');
+        $controller->validar();
+        $this->assertNull($controller->session->userdata('exigir_2fa_cadastro'));
+        $this->assertSame(1, $controller->session->userdata('permissao'));
+
+        // Ativou o 2FA no grupo que exige: também solta.
+        $this->db->query("UPDATE usuarios SET permissoes_id = 2, totp_ativado_em = '2026-10-14 10:00:00' WHERE idUsuarios = 1");
+        $controller->session->set_userdata('exigir_2fa_cadastro', true);
+        $controller->validar();
+        $this->assertNull($controller->session->userdata('exigir_2fa_cadastro'));
+    }
+
+    public function testConfirmacaoSemSenhaNaoContaFalhaNemLibera(): void
+    {
+        $limite = $this->limite();
+        $hash = password_hash('certa-123', PASSWORD_BCRYPT, ['cost' => 4]);
+
+        for ($i = 0; $i < 20; $i++) {
+            $this->assertSame(Limite_login::SENHA_ERRADA, $limite->confirmarSenha('ana@x.com', '10.0.0.1', '', $hash));
+        }
+
+        $this->assertFalse($limite->bloqueado('confirmacao', 'ana@x.com', '10.0.0.1'));
+        $this->assertSame(0, (int) $this->db->count_all_results('login_attempts'));
+        $this->assertSame(Limite_login::SENHA_OK, $limite->confirmarSenha('ana@x.com', '10.0.0.1', 'certa-123', $hash));
+    }
+
+    public function testSenhaEmBrancoNuncaConfere(): void
+    {
+        $this->assertFalse(senhaConfere('', password_hash('certa-123', PASSWORD_BCRYPT, ['cost' => 4])));
+    }
+
+    public function testTodosOsLoginsGastamOBcryptAntesDeTestarAConta(): void
+    {
+        $entradas = [
+            'controllers/Login.php' => ['verificarLogin', '$user'],
+            'controllers/Mine.php' => ['login', '$cliente'],
+            'controllers/api/v1/UsuariosController.php' => ['login_post', '$user'],
+            'controllers/api/v1/client/ClientLoginController.php' => ['login_post', '$cliente'],
+        ];
+
+        foreach ($entradas as $arquivo => [$metodo, $variavel]) {
+            $inteiro = (string) file_get_contents(APPPATH . $arquivo);
+            $inicio = strpos($inteiro, 'function ' . $metodo . '(');
+            $this->assertNotFalse($inicio, $arquivo . ' tem ' . $metodo . '().');
+            $codigo = substr($inteiro, $inicio);
+            $chamada = strpos($codigo, 'senhaConfere(');
+            $teste = preg_match('/if \(\s*!?\s*' . preg_quote($variavel, '/') . '\b/', $codigo, $m, PREG_OFFSET_CAPTURE) ? $m[0][1] : false;
+
+            $this->assertNotFalse($chamada, $arquivo . ' usa senhaConfere().');
+            $this->assertNotFalse($teste, $arquivo . ' testa a conta.');
+            $this->assertLessThan($teste, $chamada, $arquivo . ': senhaConfere() vem antes do teste da conta.');
+            $this->assertDoesNotMatchRegularExpression('/' . preg_quote($variavel, '/') . ' && senhaConfere|! ?' . preg_quote($variavel, '/') . ' \|\| ! ?senhaConfere|password_verify\(/', $codigo, $arquivo . ' não pode pular o bcrypt sem conta.');
+        }
+    }
+
+    public function testAlterarSenhaESoPorPostEAsOutrasConfirmacoesTambem(): void
+    {
+        $codigo = (string) file_get_contents(APPPATH . 'controllers/Mapos.php');
+
+        foreach (['alterarSenha', 'novosCodigosDoisFatores', 'desativarDoisFatores'] as $metodo) {
+            preg_match('/function ' . $metodo . '\(\).*?\n    }\n/s', $codigo, $trecho);
+            $this->assertNotEmpty($trecho, $metodo);
+            $posPost = strpos($trecho[0], "input->method() !== 'post'");
+            $posSenha = strpos($trecho[0], 'confirmarSenhaDoUsuario(');
+            $this->assertNotFalse($posPost, $metodo . ' exige POST.');
+            $this->assertNotFalse($posSenha, $metodo . ' confere a senha.');
+            $this->assertLessThan($posSenha, $posPost, $metodo . ': o POST é exigido antes de conferir a senha.');
+        }
+    }
 }

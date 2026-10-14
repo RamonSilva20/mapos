@@ -215,6 +215,12 @@ class Limite_login
             return self::SENHA_BLOQUEADA;
         }
 
+        // Requisição sem senha (GET, formulário vazio) não é tentativa: não conta,
+        // para uma página de terceiros não gastar as tentativas de quem está logado.
+        if ($senha === '') {
+            return self::SENHA_ERRADA;
+        }
+
         if (! password_verify($senha, $hash)) {
             $this->registrarFalha('confirmacao', $email, $ip);
 

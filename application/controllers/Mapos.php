@@ -279,6 +279,12 @@ class Mapos extends MY_Controller
      */
     public function alterarSenha()
     {
+        // Só POST confere a senha: um GET (link, imagem de terceiros) não pode
+        // gastar as tentativas de quem está logado (#2879).
+        if ($this->input->method() !== 'post') {
+            return redirect(site_url('mapos/minhaConta'));
+        }
+
         $current_user = $this->mapos_model->getById($this->session->userdata('id_admin'));
 
         if (! $current_user) {
