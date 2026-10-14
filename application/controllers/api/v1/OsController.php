@@ -27,7 +27,7 @@ class OsController extends REST_Controller
 
         $where_array = [];
 
-        $pesquisa = trim($this->get('search', true));
+        $pesquisa = trim((string) $this->get('search', true));
         $status = $this->get('status', true);
         $de = $this->get('from', true);
         $ate = $this->get('to', true);
@@ -82,6 +82,13 @@ class OsController extends REST_Controller
         }
 
         $os = $this->os_model->getById($id);
+        if (! $os) {
+            $this->response([
+                'status' => false,
+                'message' => 'OS não encontrada.',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
         $os->produtos = $this->os_model->getProdutos($id);
         $os->servicos = $this->os_model->getServicos($id);
         $os->anexos = osAnexosParaApi($this->os_model->getAnexos($id), site_url('api/v1/os/' . (int) $id . '/anexos'));
@@ -387,7 +394,7 @@ class OsController extends REST_Controller
         $this->os_model->delete('anexos', 'os_id', $id);
 
         if ((int) $os->faturado === 1) {
-            $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #${id}");
+            $this->os_model->delete('lancamentos', 'descricao', "Fatura de OS - #{$id}");
         }
 
         if ($this->os_model->delete('os', 'idOs', $id)) {
@@ -406,29 +413,39 @@ class OsController extends REST_Controller
 
     public function desconto_post($id)
     {
-        if (empty($this->post('desconto', true)) || empty($this->post('valor_desconto', true))) {
+        $this->logged_user();
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'eOs')) {
             $this->response([
                 'status' => false,
-                'message' => 'Campos Desconto e Valor com desconto obrigatórios',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
-
-        $data = [
-            'tipo_desconto' => $this->post('tipoDesconto', true) ?: 'real',
-            'desconto' => $this->post('desconto', true),
-            'valor_desconto' => $this->post('valor_desconto', true),
-        ];
-
-        $editavel = $this->isEditable($id);
-
-        if (! $editavel) {
-            $this->response([
-                'status' => false,
-                'message' => 'Desconto não pode ser adiciona. Os não ja Faturada/Cancelada',
+                'message' => 'Você não está autorizado a Editar OS!',
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        if ($this->os_model->edit('os', $data, 'idOs', $id)) {
+        $os = $this->osParaEditar($id, 'Desconto não pode ser adicionado. OS Faturada/Cancelada');
+
+        $tipo = $this->post('tipoDesconto', true) ?: 'real';
+        $desconto = $this->post('desconto', true);
+        if ($desconto === null || $desconto === '') {
+            $this->response([
+                'status' => false,
+                'message' => 'Campo Desconto obrigatório',
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+
+        // O valor com desconto é sempre calculado aqui, sobre o total dos
+        // itens; o valor_desconto que o app enviava não é mais usado.
+        $totais = $this->os_model->totais($os);
+        [$data, $erros] = osCalcularDesconto($totais['bruto'], $tipo, $desconto);
+
+        if ($erros !== []) {
+            $this->response([
+                'status' => false,
+                'message' => reset($erros),
+                'errors' => $erros,
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+
+        if ($this->os_model->edit('os', $data, 'idOs', (int) $os->idOs)) {
             $this->log_app('Adicionou um desconto na OS. ID: ' . $id);
             $this->response([
                 'status' => true,
@@ -464,6 +481,16 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.', 'Erro ao tentar inserir produto na OS. OS Não encontrada!');
+        $this->validarValoresDoItem($this->post('preco', true), $this->post('quantidade', true));
+
+        if (! $this->os_model->getProdutoCadastro((int) $this->post('idProduto', true))) {
+            $this->response([
+                'status' => false,
+                'message' => 'Produto não encontrado.',
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+
         $data = [
             'produtos_id' => $this->post('idProduto', true),
             'preco' => $this->post('preco', true),
@@ -471,14 +498,6 @@ class OsController extends REST_Controller
             'subTotal' => $this->post('preco', true) * $this->post('quantidade', true),
             'os_id' => $id,
         ];
-
-        $os = $this->os_model->getById($id);
-        if ($os == null) {
-            $this->response([
-                'status' => false,
-                'message' => 'Erro ao tentar inserir produto na OS. OS Não encontrada!',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
 
         if ($this->os_model->add('produtos_os', $data)) {
             $lastProdutoOs = $this->Api_model->lastRow('produtos_os', 'idProdutos_os');
@@ -529,7 +548,16 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $ddAntigo = $this->Api_model->getRowById('produtos_os', 'idProdutos_os', $idProdutos_os);
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.');
+        $ddAntigo = $this->os_model->getProdutoDaOs((int) $id, (int) $idProdutos_os);
+        if (! $ddAntigo) {
+            $this->response([
+                'status' => false,
+                'message' => 'Não foi encontrado esse Produto na OS.',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        $this->validarValoresDoItem($this->put('preco', true), $this->put('quantidade', true));
 
         $subTotal = $this->put('preco', true) * $this->put('quantidade', true);
 
@@ -580,21 +608,15 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        $os = $this->os_model->getById($id);
-        if ($os == null) {
-            $this->response([
-                'status' => false,
-                'message' => 'Não foi possível excluir o Produto da OS.',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.', 'Não foi possível excluir o Produto da OS.');
 
-        $ddAntigo = $this->Api_model->getRowById('produtos_os', 'idProdutos_os', $idProdutos_os);
+        $ddAntigo = $this->os_model->getProdutoDaOs((int) $id, (int) $idProdutos_os);
 
         if (! $ddAntigo) {
             $this->response([
                 'status' => false,
                 'message' => 'Não foi encontrado esse Produto na OS.',
-            ], REST_Controller::HTTP_BAD_REQUEST);
+            ], REST_Controller::HTTP_NOT_FOUND);
         }
 
         if ($this->os_model->delete('produtos_os', 'idProdutos_os', $idProdutos_os)) {
@@ -639,6 +661,16 @@ class OsController extends REST_Controller
             $this->response([
                 'status' => false,
                 'message' => validation_errors(),
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.', 'Erro ao tentar inserir serviço na OS. OS Não encontrada!');
+        $this->validarValoresDoItem($this->post('preco', true), $this->post('quantidade', true));
+
+        if (! $this->os_model->getServicoCadastro((int) $this->post('idServico', true))) {
+            $this->response([
+                'status' => false,
+                'message' => 'Serviço não encontrado.',
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
@@ -697,7 +729,16 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $ddAntigo = $this->Api_model->getRowById('servicos_os', 'idServicos_os', $idServicos_os);
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.');
+        $ddAntigo = $this->os_model->getServicoDaOs((int) $id, (int) $idServicos_os);
+        if (! $ddAntigo) {
+            $this->response([
+                'status' => false,
+                'message' => 'Não foi encontrado esse Serviço na OS.',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        $this->validarValoresDoItem($this->put('preco', true), $this->put('quantidade', true));
 
         $subTotal = $this->put('preco', true) * $this->put('quantidade', true);
 
@@ -741,10 +782,17 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.', 'Não foi possível excluir o Serviço da OS.');
+
+        if (! $this->os_model->getServicoDaOs((int) $id, (int) $idServicos_os)) {
+            $this->response([
+                'status' => false,
+                'message' => 'Não foi encontrado esse Serviço na OS.',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
         if ($this->os_model->delete('servicos_os', 'idServicos_os', $idServicos_os)) {
             $this->log_app('Removeu Serviço de uma OS. ID (OS): ' . $id);
-            $this->CI = &get_instance();
-            $this->CI->load->database();
             $this->db->set('desconto', 0.00);
             $this->db->set('valor_desconto', 0.00);
             $this->db->set('tipo_desconto', null);
@@ -785,6 +833,8 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.');
+
         $data = [
             'anotacao' => "[{$this->logged_user()->usuario->nome}] " . $this->post('anotacao', true),
             'data_hora' => date('Y-m-d H:i:s'),
@@ -821,6 +871,15 @@ class OsController extends REST_Controller
                 'status' => false,
                 'message' => 'Você não está autorizado a Editar OS!',
             ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
+        $this->osParaEditar($id, 'OS Faturada/Cancelada não pode ser alterada.');
+
+        if (! $this->os_model->getAnotacaoDaOs((int) $id, (int) $idAnotacao)) {
+            $this->response([
+                'status' => false,
+                'message' => 'Anotação não encontrada nesta OS.',
+            ], REST_Controller::HTTP_NOT_FOUND);
         }
 
         if ($this->os_model->delete('anotacoes_os', 'idAnotacoes', $idAnotacao)) {
@@ -997,6 +1056,45 @@ class OsController extends REST_Controller
             'status' => false,
             'message' => 'Erro ao tentar excluir anexo.',
         ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * OS da URL para alterar: 404 se não existe e 403 se está faturada ou
+     * cancelada (control_editos desligado), como no painel.
+     */
+    private function osParaEditar($id, string $mensagemFechada, string $mensagemInexistente = 'OS não encontrada.'): object
+    {
+        $os = ctype_digit((string) $id) ? $this->os_model->getById((int) $id) : null;
+        if (! $os) {
+            $this->response([
+                'status' => false,
+                'message' => $mensagemInexistente,
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        if (! $this->isEditable((int) $id)) {
+            $this->response([
+                'status' => false,
+                'message' => $mensagemFechada,
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
+
+        return $os;
+    }
+
+    /** Preço e quantidade de um item: números dentro de limites razoáveis (400 se não). */
+    private function validarValoresDoItem($preco, $quantidade): void
+    {
+        $valido = is_numeric($preco) && is_numeric($quantidade)
+            && (float) $preco >= 0 && (float) $preco <= 99999999.99
+            && (float) $quantidade > 0 && (float) $quantidade <= 999999;
+
+        if (! $valido) {
+            $this->response([
+                'status' => false,
+                'message' => 'Informe um preço (0 ou mais) e uma quantidade (maior que 0) válidos.',
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
     }
 
     private function calcTotal($id)

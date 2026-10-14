@@ -68,6 +68,7 @@ if (! function_exists('armazenamentoTipos')) {
             'jpeg' => ['mimes' => ['image/jpeg'], 'mime' => 'image/jpeg', 'inline' => true],
             'png' => ['mimes' => ['image/png'], 'mime' => 'image/png', 'inline' => true],
             'gif' => ['mimes' => ['image/gif'], 'mime' => 'image/gif', 'inline' => true],
+            'bmp' => ['mimes' => ['image/bmp', 'image/x-ms-bmp', 'image/x-bmp'], 'mime' => 'image/bmp', 'inline' => false],
             'pdf' => ['mimes' => ['application/pdf'], 'mime' => 'application/pdf', 'inline' => true],
             'txt' => ['mimes' => ['text/plain'], 'mime' => 'text/plain', 'inline' => false],
             'docx' => ['mimes' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'], 'mime' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'inline' => false],
@@ -265,16 +266,75 @@ if (! function_exists('armazenamentoValidarEnvio')) {
     function armazenamentoValidarEnvio(array $dados): ?string
     {
         $extensao = strtolower(ltrim((string) ($dados['file_ext'] ?? ''), '.'));
+        $caminho = (string) ($dados['full_path'] ?? '');
 
-        if (armazenamentoMimePermitido((string) ($dados['full_path'] ?? ''), $extensao)) {
-            return null;
+        if (! armazenamentoMimePermitido($caminho, $extensao)) {
+            if (is_file($caminho)) {
+                @unlink($caminho);
+            }
+
+            return 'O conteúdo do arquivo não confere com a extensão.';
         }
 
-        if (is_file((string) ($dados['full_path'] ?? ''))) {
-            @unlink($dados['full_path']);
+        if (armazenamentoImagemGrandeDemais($caminho, $extensao)) {
+            @unlink($caminho);
+
+            return 'A imagem tem pixels demais (limite de ' . number_format(armazenamentoLimitePixels() / 1000000, 0, ',', '.') . ' megapixels). Reduza a resolução e envie de novo.';
         }
 
-        return 'O conteúdo do arquivo não confere com a extensão.';
+        return null;
+    }
+}
+
+if (! function_exists('armazenamentoLimitePixels')) {
+    /**
+     * Limite de pixels de uma imagem enviada: UPLOAD_MAX_PIXELS, ou 40
+     * megapixels. O arquivo pode ser pequeno e ter dimensões enormes; ao gerar
+     * a miniatura (GD) ou o PDF (mPDF) a imagem é descompactada inteira na
+     * memória, então o tamanho em KB não basta como limite.
+     */
+    function armazenamentoLimitePixels(): int
+    {
+        $valor = (int) ($_ENV['UPLOAD_MAX_PIXELS'] ?? 0);
+
+        return $valor > 0 ? $valor : 40000000;
+    }
+}
+
+if (! function_exists('armazenamentoImagemGrandeDemais')) {
+    /** A imagem passa do limite de pixels (só lê o cabeçalho). Outros formatos: false. */
+    function armazenamentoImagemGrandeDemais(string $caminho, string $extensao): bool
+    {
+        if (! in_array(strtolower(ltrim($extensao, '.')), ['jpg', 'jpeg', 'png', 'gif', 'bmp'], true) || ! is_file($caminho)) {
+            return false;
+        }
+
+        $tamanho = @getimagesize($caminho);
+
+        return is_array($tamanho) && ((int) $tamanho[0]) * ((int) $tamanho[1]) > armazenamentoLimitePixels();
+    }
+}
+
+if (! function_exists('armazenamentoProtegerPastaPublica')) {
+    /**
+     * Pasta de imagens que continua em assets/ (logo, foto de perfil): cria
+     * index.html e um .htaccess que impede a execução de scripts, como em
+     * assets/anexos. No nginx vale a regra equivalente (docker/etc/nginx).
+     */
+    function armazenamentoProtegerPastaPublica(string $pasta): void
+    {
+        if (! is_dir($pasta)) {
+            return;
+        }
+
+        if (function_exists('protegerDiretorioUpload')) {
+            protegerDiretorioUpload([$pasta]);
+        }
+
+        $regras = $pasta . DIRECTORY_SEPARATOR . '.htaccess';
+        if (! file_exists($regras)) {
+            @file_put_contents($regras, "# Pasta de uploads: impede a execução de scripts enviados como imagem\n<FilesMatch \"\\.(?i:php[0-9]*|phtml|phar|pht|phps|cgi|pl|py|sh)\$\">\n    Order allow,deny\n    Deny from all\n</FilesMatch>\n");
+        }
     }
 }
 
