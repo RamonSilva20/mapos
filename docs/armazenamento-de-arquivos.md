@@ -45,6 +45,6 @@ O `down` devolve os arquivos para `assets/anexos` e `assets/arquivos` **da pasta
 1. Copie `assets/anexos` e `assets/arquivos` da pasta da v5 para a pasta da 4.x (mesmas subpastas).
 2. Restaure o dump do banco feito antes da migração. Prefira isso a ajustar `path` e `url` à mão: o `path` gravado pelo `down` é o caminho da pasta da v5.
 
-Ao restaurar o dump, apague o banco e recrie-o antes (`DROP DATABASE` e `CREATE DATABASE`). Restaurar por cima de um banco já migrado deixa tabelas da v5 (`login_attempts`, `os_historico`, `api_*`, `usuarios_codigos_recuperacao`) e a migração seguinte registra erros `Duplicate key name` no log, embora conclua.
+Ao restaurar o dump, apague o banco e recrie-o antes (`DROP DATABASE` e `CREATE DATABASE`). Restaurar por cima de um banco já migrado deixa tabelas da v5 (`login_attempts`, `os_historico`, `api_*`, `usuarios_codigos_recuperacao`), e a migração seguinte **falha**: o `php index.php tools migrate` para em `create_login_attempts` (tabela que já existe) e sai com código 8, sem concluir a atualização. Apagar e recriar o banco antes de restaurar evita isso.
 
 Depois do rollback, bloqueie o listing público de `assets/anexos` como na v4.55.1 (nomes aleatórios, `index.html` e bloqueio de scripts).
