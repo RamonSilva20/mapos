@@ -148,8 +148,10 @@ class UsuariosController extends REST_Controller
         }
         $data = $plano['dados'];
 
-        if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id)) {
-            $this->log_app('Alterou um usuário. ID: ' . $id);
+        // O nome vem antes da gravação: trocar a própria senha invalida o token em uso (ver usuarioApiGravarEdicao).
+        $nomeLogado = (string) $this->logged_user()->usuario->nome;
+
+        if (usuarioApiGravarEdicao($this->usuarios_model, fn (string $tarefa, string $nome) => $this->log_app($tarefa, $nome), $nomeLogado, (int) $id, $data)) {
             $this->response([
                 'status' => true,
                 'message' => 'Usuário editado com sucesso!',

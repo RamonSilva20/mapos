@@ -126,3 +126,29 @@ if (! function_exists('usuarioApiPlanoEdicao')) {
         return ['ok' => true, 'status' => 200, 'message' => '', 'dados' => $dados];
     }
 }
+
+if (! function_exists('usuarioApiGravarEdicao')) {
+    /**
+     * Grava a edição de um usuário e registra a auditoria.
+     *
+     * Trocar a senha (ou desativar a conta) invalida os access tokens do
+     * usuário dentro de `edit()`. Quem edita o próprio usuário passa a ter um
+     * token vencido, e `log_app()` sem o nome chamaria `logged_user()`, que o
+     * recusaria com 403 mesmo com a gravação feita. Por isso o nome de quem
+     * edita chega aqui lido ANTES do `edit()`.
+     *
+     * @param  object  $usuarios  Usuarios_model
+     * @param  callable(string, string): mixed  $auditar  recebe a tarefa e o nome de quem editou (log_app)
+     * @param  array<string, mixed>  $dados
+     */
+    function usuarioApiGravarEdicao($usuarios, callable $auditar, string $nomeLogado, int $id, array $dados): bool
+    {
+        if (! $usuarios->edit('usuarios', $dados, 'idUsuarios', $id)) {
+            return false;
+        }
+
+        $auditar('Alterou um usuário. ID: ' . $id, $nomeLogado);
+
+        return true;
+    }
+}
