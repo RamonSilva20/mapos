@@ -1,0 +1,21 @@
+## g5 dados do banco restaurado vs dump original (so INSERTs)
+2726af1102cac10f64a9a835dc3f5978  -
+2726af1102cac10f64a9a835dc3f5978  -
+## g6 sem DROP: migrar (v5), restaurar dump POR CIMA, migrar de novo; verificar erros no log
+
+Database error: A Database Error Occurred
+
+	Error Number: 1061
+	Duplicate key name 'login_attempts_chave'
+	CREATE UNIQUE INDEX login_attempts_chave ON `login_attempts` (escopo, tipo, chave)
+	Filename: database/migrations/20261009000000_create_login_attempts.php
+	Line Number: 36
+
+exit=8
+1
+ERROR - 2026-10-14 19:05:14 --> Query error: Duplicate key name 'login_attempts_chave' - Invalid query: CREATE UNIQUE INDEX login_attempts_chave ON `login_attempts` (escopo, tipo, chave)
+## g7 (com DROP/CREATE) restaurar e migrar: sem erro no log
+Migrations run successfully
+exit=0
+application/logs/log-2026-10-14.php
+1

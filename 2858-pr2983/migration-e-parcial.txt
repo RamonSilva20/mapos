@@ -1,0 +1,44 @@
+## (e1) falha parcial: destino de doc2.pdf ja existe com outro conteudo; rel3 ja copiado (identico)
+
+ERROR: An Error Was Encountered
+
+	A migration parou: 1 arquivo(s) não puderam ser movidos para ~/storage (primeiro: anexo 2: não foi possível mover doc2.pdf de ~/wt/assets/anexos/14-10-2026/OS-1). Confira as permissões da pasta e rode a atualização do banco de novo; o que já foi movido não se repete. A lista completa está no log.
+
+exit=1
+--- banco:
+20261014020000
+1	foto1.png	thumb_foto1.png	anexos/14-10-2026/OS-1
+2	doc2.pdf		~/wt/assets/anexos/14-10-2026/OS-1
+3	orfao.png	thumb_orfao.png	~/wt/assets/anexos/14-10-2026/OS-1
+1	arquivos/14-10-2026/rel3.pdf
+--- assets:
+anexos/14-10-2026/OS-1/doc2.pdf
+--- storage:
+./anexos/14-10-2026/OS-1/doc2.pdf
+./anexos/14-10-2026/OS-1/foto1.png
+./anexos/14-10-2026/OS-1/thumbs/thumb_foto1.png
+./arquivos/14-10-2026/rel3.pdf
+--- log:
+ERROR - 2026-10-14 19:02:08 --> move_uploads_to_storage: o arquivo do anexo 3 não existe em wt/assets/anexos/14-10-2026/OS-1; registro mantido como estava.
+ERROR - 2026-10-14 19:02:08 --> move_uploads_to_storage: anexo 2: não foi possível mover doc2.pdf de wt/assets/anexos/14-10-2026/OS-1
+
+## (e2) removido o conflito, rodar de novo
+Migrations run successfully
+exit=0
+--- banco:
+20261014060000
+1	foto1.png	thumb_foto1.png	anexos/14-10-2026/OS-1
+2	doc2.pdf		anexos/14-10-2026/OS-1
+3	orfao.png	thumb_orfao.png	~/wt/assets/anexos/14-10-2026/OS-1
+1	arquivos/14-10-2026/rel3.pdf
+--- assets:
+--- storage:
+./anexos/14-10-2026/OS-1/doc2.pdf
+./anexos/14-10-2026/OS-1/foto1.png
+./anexos/14-10-2026/OS-1/thumbs/thumb_foto1.png
+./arquivos/14-10-2026/rel3.pdf
+
+## (d) orfao no log
+ERROR - 2026-10-14 19:02:08 --> move_uploads_to_storage: o arquivo do anexo 3 não existe em wt/assets/anexos/14-10-2026/OS-1; registro mantido como estava.
+ERROR - 2026-10-14 19:02:08 --> move_uploads_to_storage: anexo 2: não foi possível mover doc2.pdf de wt/assets/anexos/14-10-2026/OS-1
+ERROR - 2026-10-14 19:02:08 --> move_uploads_to_storage: o arquivo do anexo 3 não existe em wt/assets/anexos/14-10-2026/OS-1; registro mantido como estava.

@@ -1,0 +1,34 @@
+## g1 migrar (v5 em pasta nova; originais continuam em v4old)
+Migrations run successfully
+exit=0
+## g2 rollback: 'desfaca apenas a move_uploads' (guia: tools migrate 20261014020000)
+Migrations run successfully
+exit=0
+20261014020000
+1	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1
+2	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1
+3	~/v4old/assets/anexos/14-10-2026/OS-1	http://antigo.test/assets/anexos/14-10-2026/OS-1/orfao.png
+1	~/wt/assets/arquivos/14-10-2026/rel3.pdf
+--- arquivos devolvidos na pasta da v5:
+anexos/14-10-2026/OS-1/doc2.pdf
+anexos/14-10-2026/OS-1/foto1.png
+anexos/14-10-2026/OS-1/thumbs/thumb_foto1.png
+arquivos/14-10-2026/rel3.pdf
+--- storage restante:
+## g3 passo do guia: copiar assets/anexos e assets/arquivos da v5 para a pasta 4.x
+--- 4.x folder:
+anexos/14-10-2026/OS-1/doc2.pdf
+anexos/14-10-2026/OS-1/foto1.png
+anexos/14-10-2026/OS-1/thumbs/thumb_foto1.png
+arquivos/14-10-2026/rel3.pdf
+## g4 restaurar dump: DROP/CREATE + import
+20240503170400
+1	~/v4old/assets/anexos/14-10-2026/OS-1
+2	~/v4old/assets/anexos/14-10-2026/OS-1
+3	~/v4old/assets/anexos/14-10-2026/OS-1
+27,30c27,30
+<   `anexo` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+<   `thumb` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+<   `url` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+<   `path` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+diff do dump restaurado vs original acima (vazio=identico)

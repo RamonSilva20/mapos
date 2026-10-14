@@ -1,0 +1,8 @@
+release 4.55.2         > atual 5.0.0-alpha  : false
+release 4.55.1         > atual 5.0.0-alpha  : false
+release 5.0.0-alpha    > atual 5.0.0-alpha  : false
+release 5.0.0-beta.1   > atual 5.0.0-alpha  : true
+release 5.0.0-alpha.2  > atual 5.0.0-alpha  : true
+release 5.0.0-rc.1     > atual 5.0.0-beta.2 : true
+release 5.0.0          > atual 5.0.0-rc.1   : true
+release 4.55.2         > atual 4.55.1       : true

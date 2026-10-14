@@ -1,0 +1,30 @@
+## (b) permissao corrigida -> conclui
+Migrations run successfully
+exit=0
+--- banco:
+20261014060000
+1	foto1.png	thumb_foto1.png	anexos/14-10-2026/OS-1	
+2	doc2.pdf		anexos/14-10-2026/OS-1	
+3	orfao.png	thumb_orfao.png	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1/orfao.png
+1	arquivos/14-10-2026/rel3.pdf	
+--- assets:
+--- storage:
+./anexos/14-10-2026/index.html
+./anexos/14-10-2026/OS-1/doc2.pdf
+./anexos/14-10-2026/OS-1/foto1.png
+./anexos/14-10-2026/OS-1/index.html
+./anexos/14-10-2026/OS-1/thumbs/index.html
+./anexos/14-10-2026/OS-1/thumbs/thumb_foto1.png
+./anexos/index.html
+./arquivos/14-10-2026/index.html
+./arquivos/14-10-2026/rel3.pdf
+./arquivos/index.html
+./.htaccess
+./index.html
+
+## (c) segunda execucao
+Migrations run successfully
+exit=0
+--- banco:
+20261014060000
+1	foto1.png	thumb_foto1.png	anexos/14-10-2026/OS-1	

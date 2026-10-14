@@ -1,0 +1,18 @@
+apos upload: Arquivo não encontrado Anexo 1 (PNG) EXCLUIR ANEXO 1 (PNG) Arquivo não encontrado Anexo 2 (PDF) EXCLUIR ANEXO 2 (PDF) Arquivo não encontrado Anexo 3 (PNG) EXCLUIR ANEXO 3 (PNG) Anexo 4 (JPG) BAIXAR ANEXO 4 (JPG) EXCLUIR ANEXO 4 (JPG) Abrir Anexo 5 (PDF) Anexo 5 (PDF) BAIXAR ANEXO 5 (PDF) EXCLUIR ANEXO 5 (PDF)
+ download 4 200 image/jpeg 1679
+ download 5 200 application/pdf 15
+imgs quebradas: []
+/os/imprimir/1 200 Map-OS - 1 - Cliente T ok
+/mapos 200 Início — Map-OS ok
+/clientes 200 Clientes — Map-OS ok
+/os 200 Ordens de serviço — Map-OS ok
+/produtos 200 Produtos — Map-OS ok
+/servicos 200 Serviços — Map-OS ok
+/vendas 200 Vendas — Map-OS ok
+/financeiro/lancamentos 200 Lançamentos — Financeiro — Map-OS ok
+/arquivos 200 Arquivos — Map-OS ok
+/mapos/configurar?aba=sistema 200 Configurações — Sistema — Map-OS ok
+/mapos/atualizacao 200 Atualização — Sistema — Map-OS ok
+  atualizador texto: Pular para o conteúdo Map-OS v5.0.0-alpha OPERAÇÃO Início Cliente / Fornecedor Produtos Serviços Vendas Ordens de Serviço Termos de Garantias FINANCEIRO Lançamentos Cobranças Relatórios SISTEMA Arquivos Configurações AD Meu perfil admin_name Meu perfil Sair MENU Pesquisar Ctrl K MODO CLARO MODO ESCURO SEGUIR O SISTEMA Menu do usuário Boa noite, admin_name AD Início / Sistema / Atualização Atualiza
+--- erros:
+console: Failed to load resource: the server responded with a status of 404 (Not Found)

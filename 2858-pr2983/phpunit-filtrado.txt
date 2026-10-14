@@ -1,0 +1,5 @@
+Time: 00:03.176, Memory: 52.50 MB
+
+[30;42mOK (104 tests, 697 assertions)[0m
+
+324 issues were ignored by baseline.

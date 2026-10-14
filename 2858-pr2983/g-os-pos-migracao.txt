@@ -1,0 +1,23 @@
+OS anexos: Anexo 1 (PNG) BAIXAR ANEXO 1 (PNG) EXCLUIR ANEXO 1 (PNG) Abrir Anexo 2 (PDF) Anexo 2 (PDF) BAIXAR ANEXO 2 (PDF) EXCLUIR ANEXO 2 (PDF) Arquivo não encontrado Anexo 3 (PNG) EXCLUIR ANEXO 3 (PNG)
+imgs: [ 'anexo/1/thumb w=60' ]
+downloads: [ 'downloadanexo/1', 'downloadanexo/2' ]
+ GET downloadanexo/1 200 image/png 171
+ GET downloadanexo/2 200 application/pdf 15
+ os/anexo/1 200 image/png
+ os/anexo/2 200 application/pdf
+ os/anexo/3 307 text/html; charset=UTF-8
+ thumb 1 200 image/png
+ url publica antiga 404
+cliente url http://127.0.0.1:8983/index.php/mine
+cliente apos login http://127.0.0.1:8983/index.php/mine/painel
+cliente os http://127.0.0.1:8983/index.php/mine/visualizarOs/1
+cliente corpo anexos: [
+  'Anexo 1 (PNG)',
+  'Baixar Anexo 2 (PDF)',
+  'Anexo 2 (PDF)',
+  'Arquivo não encontrado',
+  'Anexo 3 (PNG)'
+]
+cliente imgs: [ 'anexo/1/thumb w=60' ]
+--- erros:
+nenhum

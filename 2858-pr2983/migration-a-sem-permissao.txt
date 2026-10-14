@@ -1,0 +1,44 @@
+## (a1) STORAGE_PATH inexistente, pai sem permissao
+
+ERROR: An Error Was Encountered
+
+	A migration parou: A pasta de armazenamento ~/pai/storage não existe e o PHP não consegue criá-la (STORAGE_PATH=~/pai/storage). Crie a pasta, dê ao usuário do servidor web permissão de escrita e rode a atualização do banco de novo.
+
+exit=1
+--- banco:
+20261014020000
+1	foto1.png	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1/foto1.png
+2	doc2.pdf	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1/doc2.pdf
+3	orfao.png	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1/orfao.png
+1	~/wt/assets/arquivos/14-10-2026/rel3.pdf
+--- arquivos assets:
+anexos/14-10-2026/OS-1/doc2.pdf
+anexos/14-10-2026/OS-1/foto1.png
+anexos/14-10-2026/OS-1/thumbs/thumb_foto1.png
+arquivos/14-10-2026/rel3.pdf
+--- storage:
+
+## (a2) pasta existe mas sem escrita
+
+ERROR: An Error Was Encountered
+
+	A migration parou: O PHP não consegue gravar em ~/pai/storage (STORAGE_PATH=~/pai/storage). Dê ao usuário do servidor web permissão de escrita nessa pasta e rode a atualização do banco de novo; nenhum arquivo foi movido.
+
+exit=1
+--- banco:
+20261014020000
+1	foto1.png	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1/foto1.png
+2	doc2.pdf	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1/doc2.pdf
+3	orfao.png	~/wt/assets/anexos/14-10-2026/OS-1	http://127.0.0.1:8983/assets/anexos/14-10-2026/OS-1/orfao.png
+1	~/wt/assets/arquivos/14-10-2026/rel3.pdf
+--- arquivos assets:
+anexos/14-10-2026/OS-1/doc2.pdf
+anexos/14-10-2026/OS-1/foto1.png
+anexos/14-10-2026/OS-1/thumbs/thumb_foto1.png
+arquivos/14-10-2026/rel3.pdf
+--- storage:
+--- log:
+ERROR - 2026-10-14 19:01:48 --> move_uploads_to_storage: ~/pai/storage não existe e não pôde ser criada.
+ERROR - 2026-10-14 19:01:48 --> tools migrate: A pasta de armazenamento ~/pai/storage não existe e o PHP não consegue criá-la (STORAGE_PATH=/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b9
+ERROR - 2026-10-14 19:01:48 --> move_uploads_to_storage: ~/pai/storage não é gravável pelo PHP.
+ERROR - 2026-10-14 19:01:48 --> tools migrate: O PHP não consegue gravar em ~/pai/storage (STORAGE_PATH=~/pai/storage). Dê ao us

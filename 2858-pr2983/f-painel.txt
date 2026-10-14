@@ -1,0 +1,8 @@
+apos login: http://127.0.0.1:8983/index.php/mapos
+versao no corpo: 5.0.0-alpha,5.0.0-alpha
+url: http://127.0.0.1:8983/index.php/mapos/configurar?aba=sistema
+mensagem: Falha!
+
+A atualização do banco parou: A pasta de armazenamento pai/storage não existe e o PHP não consegue criá-la (STORAGE_PATH=pai/storage). Crie a pasta, dê ao usuário do servidor web permissão de escrita e rode a atualização do banco de novo.
+Fechar notificação
+sem erros de JS
