@@ -171,9 +171,9 @@ final class InstaladorTest extends MaposTestCase
 
     public function testAtualizadorNaoTrazOInstaladorDeVolta(): void
     {
-        $config = (string) file_get_contents(APPPATH . 'config/github_updater.php');
+        require_once APPPATH . 'libraries/Github_updater.php';
 
-        $this->assertStringContainsString("['install/']", $config);
+        $this->assertContains('install/', Github_updater::PROTEGIDOS);
     }
 
     public function testPainelAvisaOAdminQueAPastaInstallAindaExiste(): void

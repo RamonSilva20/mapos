@@ -8,8 +8,8 @@
  *   input/textarea e os status visíveis da OS em caixas.
  * - Segredos do .env (senhas, tokens) nunca voltam para a tela: o campo vem
  *   vazio e, em branco, mantém o valor atual.
- * - A aba Atualizações tem as ações de atualizar o banco e o Map-OS, por
- *   POST confirmado em modal-confirm.
+ * - A aba Atualizações atualiza o banco por POST confirmado em modal-confirm
+ *   e leva à tela mapos/atualizacao para atualizar o Map-OS (#2871).
  *
  * @var string                $aba
  * @var array<string, array>  $campos
@@ -83,16 +83,14 @@ foreach ($campos as $nome => $def) {
         </section>
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-mapos">
             <h2 id="secao-mapos" class="text-heading-sm text-text">Map-OS</h2>
-            <p class="mt-1 text-caption text-muted">Baixa a versão mais nova do GitHub e substitui os arquivos. As pastas assets/anexos e assets/arquivos são apagadas: faça backup delas antes.</p>
+            <p class="mt-1 text-caption text-muted">Consulta a última release do GitHub, mostra o que mudou e, se você confirmar, substitui os arquivos depois de conferir o SHA256 do zip. O <code>.env</code> e os uploads não são alterados.</p>
             <div class="mt-4">
-                <?= component('button', ['label' => 'Atualizar o Map-OS', 'icon' => 'download', 'variant' => 'outline', 'attrs' => ['data-modal-abrir' => 'atualizar-mapos']]) ?>
+                <?= component('button', ['label' => 'Verificar atualização', 'icon' => 'download', 'variant' => 'outline', 'href' => site_url('mapos/atualizacao')]) ?>
             </div>
         </section>
 
         <form id="form-atualizar-banco" method="post" action="<?= e(site_url('mapos/atualizarBanco')) ?>" hidden><input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>"></form>
-        <form id="form-atualizar-mapos" method="post" action="<?= e(site_url('mapos/atualizarMapos')) ?>" hidden><input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>"></form>
         <?= component('modal-confirm', ['id' => 'atualizar-banco', 'title' => 'Atualizar o banco de dados?', 'message' => 'As migrations pendentes alteram as tabelas. Recomendamos baixar um backup antes.', 'confirm_label' => 'Atualizar', 'icon' => 'download', 'confirm_attrs' => ['form' => 'form-atualizar-banco']]) ?>
-        <?= component('modal-confirm', ['id' => 'atualizar-mapos', 'title' => 'Atualizar o Map-OS?', 'message' => 'Os arquivos do sistema são substituídos e as pastas assets/anexos e assets/arquivos são apagadas. Faça backup delas e do banco antes.', 'confirm_label' => 'Atualizar', 'icon' => 'triangle-alert', 'confirm_attrs' => ['form' => 'form-atualizar-mapos']]) ?>
     <?php } else { ?>
         <form method="post" action="<?= e(site_url('mapos/configurar') . listagemQuery(['aba' => $aba])) ?>" novalidate class="flex flex-col gap-4" <?= js_module('formulario/padrao') ?>>
             <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
