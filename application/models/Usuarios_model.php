@@ -146,6 +146,12 @@ class Usuarios_model extends CI_Model
         $this->db->update($table, $data);
 
         if ($this->db->affected_rows() >= 0) {
+            // Senha trocada ou conta desativada: as sessões da API não renovam mais (#2869).
+            if ($table === 'usuarios' && $fieldID === 'idUsuarios' && (isset($data['senha']) || (isset($data['situacao']) && (int) $data['situacao'] !== 1))) {
+                $this->load->library('Refresh_token');
+                $this->refresh_token->revogarDoUsuario((int) $ID);
+            }
+
             return true;
         }
 

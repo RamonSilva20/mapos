@@ -438,6 +438,43 @@ abstract class REST_Controller extends CI_Controller
      */
     protected function early_checks()
     {
+        $this->limiteDeRequisicoes();
+    }
+
+    /**
+     * Limite de requisições por IP e por minuto (#2869), configurado em
+     * config/rest.php (api_rate_limit). Janela fixa, contada na tabela
+     * api_rate_limit; a chave é um HMAC do IP, sem guardá-lo em claro. Sem a
+     * tabela (migration não rodada) o limite fica desligado.
+     */
+    protected function limiteDeRequisicoes(): void
+    {
+        $limite = (int) $this->config->item('api_rate_limit');
+        if ($limite <= 0 || $this->input->method() === 'options' || ! $this->db->table_exists('api_rate_limit')) {
+            return;
+        }
+
+        $janela = intdiv(time(), 60);
+        $chave = hash_hmac('sha256', $this->input->ip_address(), (string) config_item('encryption_key'));
+
+        $this->db->query(
+            'INSERT INTO api_rate_limit (chave, janela, total) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE total = total + 1',
+            [$chave, $janela]
+        );
+        $total = (int) $this->db->select('total')->where(['chave' => $chave, 'janela' => $janela])->get('api_rate_limit')->row('total');
+
+        // Limpa janelas antigas de vez em quando, sem custo em toda requisição.
+        if (random_int(1, 100) === 1) {
+            $this->db->where('janela <', $janela - 5)->delete('api_rate_limit');
+        }
+
+        if ($total > $limite) {
+            header('Retry-After: ' . (60 - (time() % 60)));
+            $this->response([
+                'status' => false,
+                'message' => 'Muitas requisições. Aguarde um instante e tente novamente.',
+            ], self::HTTP_TOO_MANY_REQUESTS);
+        }
     }
 
     /**
@@ -2270,7 +2307,19 @@ abstract class REST_Controller extends CI_Controller
         $this->load->model('Usuarios_model');
         $this->user = $decodedToken;
         $this->user->usuario = $this->Usuarios_model->getById($decodedToken->data->uid);
-        $this->user->level = $decodedToken->data->permissao;
+
+        // O usuário e a permissão vêm do banco a cada requisição (#2869), não do
+        // token: quem foi removido, desativado ou teve a permissão trocada
+        // perde o acesso na hora, sem esperar o token vencer. Na renovação
+        // (reGenToken) quem decide é o próprio método, que responde a mensagem dele.
+        if (! $reGenToken && (empty($this->user->usuario) || (int) $this->user->usuario->situacao !== 1)) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], self::HTTP_FORBIDDEN);
+        }
+
+        $this->user->level = $this->user->usuario->permissoes_id ?? $decodedToken->data->permissao;
 
         return $this->user;
     }
