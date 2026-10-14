@@ -4,6 +4,7 @@ namespace Tests\Controllers;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Support\ControllerTestCase;
+use Tests\Support\Database\ClientFixtures;
 use Tests\Support\Transaction\TransactsDatabase;
 
 /**
@@ -19,6 +20,7 @@ use Tests\Support\Transaction\TransactsDatabase;
  */
 final class ClientesControllerTest extends ControllerTestCase
 {
+    use ClientFixtures;
     use TransactsDatabase;
 
     protected function setUp(): void
@@ -322,16 +324,50 @@ final class ClientesControllerTest extends ControllerTestCase
         ]);
 
         $this->resetUriSegments('clientes/editar/' . $id);
-        $this->callControllerRaw('Clientes', 'editar');
+        $body = $this->callControllerRaw('Clientes', 'editar');
 
         $this->assertSame(
             site_url('clientes/editar/') . $id,
             $this->ci()->output->get_header('Location')
         );
+        $this->assertSame('', $body, 'Depois do redirect de sucesso o controller não deve renderizar a view.');
 
         $row = $this->ci()->db->where('idClientes', $id)->get('clientes')->row();
         $this->assertSame('Editado', $row->nomeCliente);
         $this->assertSame('99999999', $row->telefone);
+    }
+
+    /**
+     * O id que autorizou a requisição é o do segmento da URL, não o do corpo.
+     *
+     * O guard valida `segment(3)`; antes, o UPDATE e o `log_info` liam
+     * `idClientes` do POST, então uma URL autorizada para um cliente podia
+     * gravar em outro. Este caso envia os dois divergentes e prova que a linha
+     * endereçada pelo POST não é tocada.
+     */
+    public function testEditarUsesTheUrlIdAndNotThePostedId(): void
+    {
+        $id = $this->installClient('alvo-url@exemplo.com', 'Alvo da URL', '123456');
+        $otherId = $this->installClient('alvo-post@exemplo.com', 'Alvo do POST', '123456');
+
+        $this->postWithCsrfToken([
+            'idClientes' => (string) $otherId,
+            'nomeCliente' => 'Editado',
+            'email' => 'novo-email@exemplo.com',
+            'documento' => '52998224725',
+            'telefone' => '99999999',
+        ]);
+
+        $this->resetUriSegments('clientes/editar/' . $id);
+        $this->callControllerRaw('Clientes', 'editar');
+
+        $target = $this->ci()->db->where('idClientes', $id)->get('clientes')->row();
+        $other = $this->ci()->db->where('idClientes', $otherId)->get('clientes')->row();
+
+        $this->assertSame('Editado', $target->nomeCliente);
+        $this->assertSame('novo-email@exemplo.com', $target->email);
+        $this->assertSame('Alvo do POST', $other->nomeCliente, 'O id do POST não pode ser o alvo da edição.');
+        $this->assertSame('alvo-post@exemplo.com', $other->email);
     }
 
     public function testVisualizarRendersTheClientsData(): void
@@ -350,12 +386,13 @@ final class ClientesControllerTest extends ControllerTestCase
     public function testVisualizarRedirectsOnInvalidId(): void
     {
         $this->resetUriSegments('clientes/visualizar/abc');
-        $this->callControllerRaw('Clientes', 'visualizar');
+        $body = $this->callControllerRaw('Clientes', 'visualizar');
 
         $this->assertSame(
             site_url('mapos'),
             $this->ci()->output->get_header('Location')
         );
+        $this->assertSame('', $body, 'Depois do redirect de not-found o controller não deve renderizar a view.');
         $this->assertSame(
             'Item não pode ser encontrado, parâmetro não foi passado corretamente.',
             $this->ci()->session->userdata('error')
@@ -364,15 +401,20 @@ final class ClientesControllerTest extends ControllerTestCase
 
     public function testExcluirRejectsAMissingId(): void
     {
-        $this->callControllerRaw('Clientes', 'excluir');
+        $body = $this->callControllerRaw('Clientes', 'excluir');
 
         $this->assertSame(
             site_url('clientes/gerenciar/'),
             $this->ci()->output->get_header('Location')
         );
+        $this->assertSame('', $body, 'Sem id o controller não deve renderizar a view.');
         $this->assertSame(
             'Erro ao tentar excluir cliente.',
             $this->ci()->session->userdata('error')
+        );
+        $this->assertNull(
+            $this->ci()->session->userdata('success'),
+            'Um id ausente não pode deixar flashdata de sucesso.'
         );
     }
 
@@ -399,72 +441,6 @@ final class ClientesControllerTest extends ControllerTestCase
         $this->assertSame(0, (int) $this->ci()->db->where('idOs', $osId)->count_all_results('os'));
         $this->assertSame(0, (int) $this->ci()->db->where('vendas_id', $vendaId)->count_all_results('itens_de_vendas'));
         $this->assertSame(0, (int) $this->ci()->db->where('idVendas', $vendaId)->count_all_results('vendas'));
-    }
-
-    private function installClient(
-        string $email,
-        string $name = 'Cliente Teste',
-        string $password = 'antiga',
-        string $documento = '12345678909'
-    ): int {
-        $this->ci()->db->insert('clientes', [
-            'nomeCliente' => $name,
-            'contato' => 'Contato',
-            'pessoa_fisica' => 1,
-            'documento' => $documento,
-            'telefone' => '00000000',
-            'celular' => '000000000',
-            'email' => $email,
-            'senha' => password_hash($password, PASSWORD_DEFAULT),
-            'rua' => 'Rua',
-            'numero' => '1',
-            'bairro' => 'Centro',
-            'cidade' => 'Cidade',
-            'estado' => 'SP',
-            'cep' => '00000000',
-            'dataCadastro' => date('Y-m-d'),
-            'fornecedor' => 0,
-        ]);
-
-        return (int) $this->ci()->db->insert_id('clientes');
-    }
-
-    private function clientPassword(string $email): string
-    {
-        return (string) $this->ci()->db
-            ->select('senha')
-            ->where('email', $email)
-            ->limit(1)
-            ->get('clientes')
-            ->row('senha');
-    }
-
-    private function firstUserId(): int
-    {
-        $id = (int) $this->ci()->db
-            ->select('idUsuarios')
-            ->order_by('idUsuarios', 'ASC')
-            ->limit(1)
-            ->get('usuarios')
-            ->row('idUsuarios');
-
-        $this->assertGreaterThan(0, $id, 'Nenhuma conta em `usuarios` para ser o técnico da OS.');
-
-        return $id;
-    }
-
-    private function installServiceOrder(int $clientId): int
-    {
-        $this->ci()->db->insert('os', [
-            'dataInicial' => date('Y-m-d'),
-            'status' => 'Aberto',
-            'valorTotal' => 0,
-            'clientes_id' => $clientId,
-            'usuarios_id' => $this->firstUserId(),
-            'faturado' => 0,
-        ]);
-
-        return (int) $this->ci()->db->insert_id('os');
     }
 
     private function installVenda(int $clientId): int

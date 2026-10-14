@@ -139,3 +139,36 @@ function is_api_request(): bool
 
     return $uri === 'api' || str_starts_with($uri, 'api/');
 }
+
+/**
+ * Recusa e redireciona quando o usuário logado não tem a permissão pedida.
+ *
+ * Devolve true quando a permissão existe e o chamador segue; quando não, grava a
+ * mensagem, redireciona para base_url() e devolve false. É a metade
+ * flashdata+redirect do guard que antes se repetia palavra por palavra em cada
+ * action destes controllers, e por isso mora ao lado de respond_redirect(), que
+ * é o que ela usa para sair.
+ *
+ * O chamador precisa sair com `return;` no caso false: respond_redirect() só
+ * enfileira o cabeçalho Location, ao contrário do redirect() do CI3, que
+ * chamava exit(). A suíte roda in-process, então um exit() no meio de um teste
+ * encerraria o PHPUnit inteiro.
+ *
+ * Lê `$ci->permission` e `$ci->session` pelo get_instance() porque os dois
+ * controllers que a usam têm bases diferentes: `Servicos` e `Clientes` são
+ * MY_Controller (guard por `logado`), e `Mine` é CI_Controller (área do cliente,
+ * guard por `conectado`). Um método em MY_Controller não alcançaria o Mine.
+ */
+function authorize(string $permission, string $message): bool
+{
+    $ci = &get_instance();
+
+    if ($ci->permission->checkPermission($ci->session->userdata('permissao'), $permission)) {
+        return true;
+    }
+
+    $ci->session->set_flashdata('error', $message);
+    respond_redirect(base_url());
+
+    return false;
+}
