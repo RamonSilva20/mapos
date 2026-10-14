@@ -75,3 +75,34 @@ test('Ctrl+K e ⌘K levam à busca; com Shift, Alt ou outra tecla, não', () => 
     assert.equal(ehAtalhoBusca({ ctrlKey: true, key: 'j' }), false);
     assert.equal(ehAtalhoBusca({ key: 'k' }), false);
 });
+
+test('a troca de modo é gravada no servidor, e sem URL não faz nada nem quebra', async () => {
+    const { gravarNoServidor } = await import('../../assets/js/modules/layout/shell.js');
+
+    assert.equal(await gravarNoServidor('', 'escuro'), false);
+    assert.equal(await gravarNoServidor(undefined, 'escuro'), false);
+
+    const original = globalThis.fetch;
+    const documentoOriginal = globalThis.document;
+    // O post() lê as metas do token CSRF do documento; sem elas, segue sem token.
+    globalThis.document = { querySelector: () => null, querySelectorAll: () => [], cookie: '' };
+    const chamadas = [];
+    globalThis.fetch = async (url, opcoes) => {
+        chamadas.push({ url, corpo: String(opcoes.body) });
+
+        return { ok: true, headers: { get: () => 'application/json' }, json: async () => ({ result: true }) };
+    };
+    try {
+        assert.equal(await gravarNoServidor('/index.php/mapos/salvarTemaModo', 'escuro'), true);
+        assert.equal(chamadas[0].url, '/index.php/mapos/salvarTemaModo');
+        assert.match(chamadas[0].corpo, /modo=escuro/);
+
+        globalThis.fetch = async () => {
+            throw new Error('sem rede');
+        };
+        assert.equal(await gravarNoServidor('/x', 'claro'), false, 'Falha de rede não estoura: o localStorage já guardou.');
+    } finally {
+        globalThis.fetch = original;
+        globalThis.document = documentoOriginal;
+    }
+});

@@ -9,7 +9,9 @@
  *    escolheu outro modo na topbar do layout, a escolha fica no localStorage
  *    (chave mapos:tema-modo) e vale neste navegador. No modo "sistema" a
  *    classe .dark segue o prefers-color-scheme, inclusive com a página aberta.
- *    A preferência gravada por usuário é a #2854.
+ *    Quem já escolheu um modo tem a preferência gravada no usuário (#2854):
+ *    o servidor a manda no <html> (data-tema-usuario) e ela vale em qualquer
+ *    navegador, no lugar do localStorage.
  *
  * 2. Sidebar recolhida do layout (chave mapos:sidebar), aplicada como
  *    <html data-sidebar="recolhida"> para a página já abrir no estado certo.
@@ -27,7 +29,9 @@
     }
   }
 
-  var modoLocal = ler('mapos:tema-modo');
+  // Com preferência gravada para o usuário (data-tema-usuario, #2854) o
+  // servidor manda: o localStorage de um navegador não a sobrescreve.
+  var modoLocal = html.hasAttribute('data-tema-usuario') ? null : ler('mapos:tema-modo');
   if (MODOS.indexOf(modoLocal) !== -1) {
     html.setAttribute('data-tema-modo', modoLocal);
     html.classList.toggle('dark', modoLocal === 'escuro');

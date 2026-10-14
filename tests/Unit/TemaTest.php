@@ -299,4 +299,53 @@ final class TemaTest extends MaposTestCase
 
         return $linha ? (string) $linha->valor : null;
     }
+
+    public function testPreferenciaDoUsuarioVenceOTemaPadraoDoSistema(): void
+    {
+        $this->assertSame(['modo' => 'escuro'], temaConfiguracao(['app_tema_modo' => 'claro', 'tema_usuario_modo' => 'escuro']));
+        $this->assertSame(['modo' => 'sistema'], temaConfiguracao(['app_tema_modo' => 'escuro', 'tema_usuario_modo' => 'SISTEMA']));
+        $this->assertSame(['modo' => 'claro'], temaConfiguracao(['app_tema_modo' => 'claro', 'tema_usuario_modo' => '']), 'Sem preferência vale o padrão.');
+        $this->assertSame(['modo' => 'escuro'], temaConfiguracao(['app_tema_modo' => 'escuro', 'tema_usuario_modo' => 'lixo']), 'Valor inválido é ignorado.');
+        $this->assertSame(['modo' => 'escuro'], temaConfiguracao(['app_tema_modo' => 'escuro', 'tema_usuario_modo' => null]));
+    }
+
+    public function testHtmlMarcaQuandoOModoVemDaPreferenciaDoUsuario(): void
+    {
+        $this->assertSame(' class="dark" data-tema-modo="escuro" data-tema-usuario="1"', temaAtributosHtml(['app_tema_modo' => 'claro', 'tema_usuario_modo' => 'escuro']));
+        $this->assertSame(' data-tema-modo="claro"', temaAtributosHtml(['app_tema_modo' => 'claro', 'tema_usuario_modo' => '']), 'Sem preferência não marca.');
+        $this->assertStringNotContainsString('data-tema-usuario', temaAtributosHtml(['app_tema_modo' => 'claro', 'tema_usuario_modo' => 'lixo']));
+    }
+
+    public function testSalvarOModoDoUsuarioNoBanco(): void
+    {
+        require_once APPPATH . 'models/Mapos_model.php';
+        $this->db->query('CREATE TABLE usuarios (idUsuarios INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, tema_modo TEXT NULL)');
+        $this->db->query("INSERT INTO usuarios (nome) VALUES ('Ana'), ('Bia')");
+        $modelo = $this->makeInstance(Mapos_model::class);
+        $this->setPrivateProperty($modelo, 'db', $this->db);
+
+        $this->assertTrue($modelo->salvarTemaModo(1, 'escuro'));
+        $this->assertSame('escuro', $this->db->where('idUsuarios', 1)->get('usuarios')->row()->tema_modo);
+        $this->assertNull($this->db->where('idUsuarios', 2)->get('usuarios')->row()->tema_modo, 'Só o usuário pedido muda.');
+
+        $this->db->query('DROP TABLE usuarios');
+        $this->db->query('CREATE TABLE usuarios (idUsuarios INTEGER PRIMARY KEY, nome TEXT)');
+        $this->assertFalse($modelo->salvarTemaModo(1, 'claro'), 'Sem a coluna (migration não rodada) não grava e não quebra.');
+    }
+
+    public function testEndpointEFluxoDaPreferencia(): void
+    {
+        $controller = (string) file_get_contents(APPPATH . 'controllers/Mapos.php');
+        preg_match('/function salvarTemaModo\(\).*?\n    }\n/s', $controller, $trecho);
+
+        $this->assertNotEmpty($trecho);
+        $this->assertStringContainsString('in_array($modo, TEMA_MODOS, true)', $trecho[0], 'Só os três modos.');
+        $this->assertStringContainsString("method() === 'post'", $trecho[0]);
+        $this->assertStringContainsString("id_admin", $trecho[0], 'Grava só do usuário logado, nunca um id vindo do POST.');
+        $this->assertStringContainsString("'salvarTemaModo' => '*'", (string) file_get_contents(APPPATH . 'config/permissions_map.php'));
+
+        $this->assertStringContainsString('tema_modo_admin\' => $user->tema_modo', (string) file_get_contents(APPPATH . 'controllers/Login.php'));
+        $this->assertStringContainsString("['configuration']['tema_usuario_modo']", (string) file_get_contents(APPPATH . 'core/MY_Controller.php'));
+        $this->assertStringContainsString("data-tema-url=", (string) file_get_contents(APPPATH . 'views/tema/topo.php'));
+    }
 }
