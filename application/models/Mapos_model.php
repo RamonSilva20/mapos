@@ -248,11 +248,19 @@ class Mapos_model extends CI_Model
 
     public function calendario($start, $end, $status = null)
     {
+        // Com o desconto individual dos itens (#2880), o valor do item é o subTotal gravado.
+        $valorProduto = 'produtos_os.preco * produtos_os.quantidade';
+        $valorServico = 'servicos_os.preco * servicos_os.quantidade';
+        if ($this->db->field_exists('desconto', 'produtos_os') && $this->db->field_exists('desconto', 'servicos_os')) {
+            $valorProduto = "CASE WHEN produtos_os.desconto > 0 THEN produtos_os.subTotal ELSE {$valorProduto} END";
+            $valorServico = "CASE WHEN servicos_os.desconto > 0 THEN servicos_os.subTotal ELSE {$valorServico} END";
+        }
+
         $this->db->select(
-            'os.*,
+            "os.*,
             clientes.nomeCliente,
-            COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-            COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos'
+            COALESCE((SELECT SUM({$valorProduto}) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+            COALESCE((SELECT SUM({$valorServico}) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos"
         );
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');

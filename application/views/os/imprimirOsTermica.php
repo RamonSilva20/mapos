@@ -120,7 +120,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                 $totalProdutos = $totalProdutos + $p->subTotal;
                 echo '<tr>';
                 echo '<td>' . e($p->quantidade) . '</td>';
-                echo '<td>' . e($p->descricao) . '</td>';
+                echo '<td>' . e($p->descricao) . osDescontoItemNota($p) . '</td>';
                 echo '<td>R$ ' . e($p->preco ?: $p->precoVenda) . '</td>';
                 echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                 echo '</tr>';
@@ -147,11 +147,11 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                         <?php setlocale(LC_MONETARY, 'en_US');
                 foreach ($servicos as $s) {
                     $preco = $s->preco ?: $s->precoVenda;
-                    $subtotal = $preco * ($s->quantidade ?: 1);
+                    $subtotal = osValorDoItem($s);
                     $totalServico = $totalServico + $subtotal;
                     echo '<tr>';
                     echo '<td>' . e(($s->quantidade ?: 1)) . '</td>';
-                    echo '<td>' . e($s->nome) . '</td>';
+                    echo '<td>' . e($s->nome) . osDescontoItemNota($s) . '</td>';
                     echo '<td>R$ ' . e($preco) . '</td>';
                     echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                     echo '</tr>';
@@ -312,7 +312,7 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                 $totalProdutos = $totalProdutos + $p->subTotal;
                 echo '<tr>';
                 echo '<td>' . e($p->quantidade) . '</td>';
-                echo '<td>' . e($p->descricao) . '</td>';
+                echo '<td>' . e($p->descricao) . osDescontoItemNota($p) . '</td>';
                 echo '<td>R$ ' . e($p->preco ?: $p->precoVenda) . '</td>';
                 echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                 echo '</tr>';
@@ -339,11 +339,11 @@ if (!empty($result->cidade) || !empty($result->estado) || !empty($result->cep)) 
                         <?php setlocale(LC_MONETARY, 'en_US');
                 foreach ($servicos as $s) {
                     $preco = $s->preco ?: $s->precoVenda;
-                    $subtotal = $preco * ($s->quantidade ?: 1);
+                    $subtotal = osValorDoItem($s);
                     $totalServico = $totalServico + $subtotal;
                     echo '<tr>';
                     echo '<td>' . e(($s->quantidade ?: 1)) . '</td>';
-                    echo '<td>' . e($s->nome) . '</td>';
+                    echo '<td>' . e($s->nome) . osDescontoItemNota($s) . '</td>';
                     echo '<td>R$ ' . e($preco) . '</td>';
                     echo '<td>R$ ' . number_format($subtotal, 2, ',', '.') . '</td>';
                     echo '</tr>';

@@ -389,13 +389,184 @@ if (! function_exists('osItemDoFormulario')) {
 
         $quantidade = $produto ? (int) $quantidade : (float) $quantidade;
         $preco = round((float) $preco, 2);
+        $bruto = round($preco * $quantidade, 2);
+
+        // Desconto do item (#2880): opcional; sem ele, a linha não ganha as
+        // chaves e as colunas ficam no padrão (0 e nulo).
+        [$desconto, $errosDesconto] = osDescontoDoItem($bruto, $post['tipoDescontoItem'] ?? null, $post['descontoItem'] ?? null);
+        if ($errosDesconto !== []) {
+            return [[], $errosDesconto];
+        }
 
         return [[
             ($produto ? 'produtos_id' : 'servicos_id') => (int) ($produto ? $cadastro->idProdutos : $cadastro->idServicos),
             'quantidade' => $quantidade,
             'preco' => $preco,
-            'subTotal' => round($preco * $quantidade, 2),
-        ], []];
+            'subTotal' => $desconto['subTotal'],
+        ] + ($desconto['desconto'] > 0 ? ['desconto' => $desconto['desconto'], 'tipo_desconto' => $desconto['tipo_desconto']] : []), []];
+    }
+}
+
+if (! function_exists('osDescontoDoItem')) {
+    /**
+     * Desconto individual de um item (#2880), calculado no servidor sobre o
+     * preço x quantidade ($bruto) do próprio item. Vazio ou 0 = sem desconto
+     * (subTotal igual ao bruto). Em reais não passa do bruto e em porcentagem
+     * vai até 100: um brinde (100%) é válido, o item só fica com subTotal 0.
+     *
+     * Os erros vêm pelos campos do formulário: tipoDescontoItem e descontoItem.
+     *
+     * @return array{0: array{tipo_desconto: string|null, desconto: float, subTotal: float}, 1: array<string, string>}
+     */
+    function osDescontoDoItem(float $bruto, $tipo, $valor): array
+    {
+        $semDesconto = ['tipo_desconto' => null, 'desconto' => 0.0, 'subTotal' => round($bruto, 2)];
+
+        $vazio = ! is_scalar($valor) || trim((string) $valor) === '';
+        if ($vazio) {
+            return [$semDesconto, []];
+        }
+
+        $numero = valorDecimal($valor);
+        if ($numero === null) {
+            return [$semDesconto, ['descontoItem' => 'Informe o desconto do item, como 10 ou 10,50.']];
+        }
+        $numero = (float) $numero;
+
+        if ($numero == 0) {
+            return [$semDesconto, []];
+        }
+
+        if (! in_array($tipo, ['real', 'porcento'], true)) {
+            return [$semDesconto, ['tipoDescontoItem' => 'Escolha o tipo de desconto do item.']];
+        }
+
+        if ($tipo === 'porcento' && $numero > 100) {
+            return [$semDesconto, ['descontoItem' => 'O desconto em porcentagem vai até 100%.']];
+        }
+
+        $emReais = $tipo === 'porcento' ? round($bruto * $numero / 100, 2) : round($numero, 2);
+        if ($emReais > round($bruto, 2)) {
+            return [$semDesconto, ['descontoItem' => 'O desconto do item não pode passar do valor dele (' . dinheiro($bruto) . ').']];
+        }
+
+        return [['tipo_desconto' => $tipo, 'desconto' => round($numero, 2), 'subTotal' => round($bruto - $emReais, 2)], []];
+    }
+}
+
+if (! function_exists('osDescontoDosItens')) {
+    /**
+     * Soma dos descontos individuais (#2880) de uma lista de produtos ou
+     * serviços da OS/venda, em reais: valor sem desconto (preço x quantidade;
+     * serviço sem preço usa o do cadastro e sem quantidade conta 1) menos o
+     * subTotal gravado. Item sem desconto não entra, mesmo que o subTotal
+     * antigo esteja zerado ou diferente.
+     *
+     * @param  iterable<object>  $itens
+     */
+    function osDescontoDosItens(iterable $itens): float
+    {
+        $total = 0.0;
+        foreach ($itens as $item) {
+            if ((float) ($item->desconto ?? 0) <= 0) {
+                continue;
+            }
+
+            $total += max(0.0, osValorBrutoDoItem($item) - (float) ($item->subTotal ?? 0));
+        }
+
+        return round($total, 2);
+    }
+}
+
+if (! function_exists('osValorBrutoDoItem')) {
+    /** Preço x quantidade do item, sem o desconto individual. */
+    function osValorBrutoDoItem(object $item): float
+    {
+        $preco = (float) ($item->preco ?? 0) ?: (float) ($item->precoVenda ?? 0);
+
+        return round($preco * ((float) ($item->quantidade ?? 0) ?: 1), 2);
+    }
+}
+
+if (! function_exists('osValorDoItem')) {
+    /**
+     * Valor do item já com o desconto individual (#2880): o subTotal gravado
+     * quando há desconto, e preço x quantidade nos demais (linhas antigas de
+     * serviço podem ter subTotal vazio).
+     */
+    function osValorDoItem(object $item): float
+    {
+        return (float) ($item->desconto ?? 0) > 0 ? round((float) ($item->subTotal ?? 0), 2) : osValorBrutoDoItem($item);
+    }
+}
+
+if (! function_exists('osDescontoItemTexto')) {
+    /**
+     * Desconto individual do item (#2880) para a tabela: "R$ 20,00" ou, em
+     * porcentagem, "10% (R$ 16,00)". Vazio quando o item não tem desconto.
+     */
+    function osDescontoItemTexto(object $item): string
+    {
+        $desconto = (float) ($item->desconto ?? 0);
+        if ($desconto <= 0) {
+            return '';
+        }
+
+        $emReais = dinheiro(max(0.0, osValorBrutoDoItem($item) - (float) ($item->subTotal ?? 0)));
+        if (($item->tipo_desconto ?? null) !== 'porcento') {
+            return $emReais;
+        }
+
+        return rtrim(rtrim(number_format($desconto, 2, ',', '.'), '0'), ',') . '% (' . $emReais . ')';
+    }
+}
+
+if (! function_exists('osDescontoItemNota')) {
+    /**
+     * Linha "Desconto: ..." (HTML já escapado) que as impressões, o PDF e o
+     * e-mail acrescentam ao nome do item com desconto individual (#2880).
+     * Vazia quando não há desconto.
+     */
+    function osDescontoItemNota(object $item): string
+    {
+        $texto = osDescontoItemTexto($item);
+
+        return $texto === '' ? '' : '<br><small>Desconto: ' . e($texto) . '</small>';
+    }
+}
+
+if (! function_exists('osColunaDescontoDoItem')) {
+    /** Coluna "Desconto" das tabelas de produtos e serviços (só quando algum item tem desconto). */
+    function osColunaDescontoDoItem(): array
+    {
+        return ['label' => 'Desconto', 'align' => 'right', 'nowrap' => true, 'render' => static fn ($item) => osDescontoItemTexto($item) ?: '—'];
+    }
+}
+
+if (! function_exists('osBotaoDescontoDoItem')) {
+    /**
+     * Botão da linha que abre o modal "desconto-item-<tipo>" (views/os/partes/
+     * desconto-item-modal.php) com o item e o desconto atual.
+     */
+    function osBotaoDescontoDoItem(object $item, string $tipo, int $idItem, string $nome): HtmlSeguro
+    {
+        $desconto = (float) ($item->desconto ?? 0);
+
+        return component('button', [
+            'label' => 'Desconto de ' . $nome,
+            'icon' => 'percent',
+            'icon_only' => true,
+            'variant' => 'ghost',
+            'size' => 'sm',
+            'attrs' => [
+                'data-modal-abrir' => 'desconto-item-' . $tipo,
+                'data-valor-id' => (string) $idItem,
+                'data-valor-nome' => $nome,
+                'data-valor-tipo' => ($item->tipo_desconto ?? null) === 'porcento' ? 'porcento' : 'real',
+                'data-valor-desconto' => $desconto > 0 ? rtrim(rtrim(number_format($desconto, 2, ',', ''), '0'), ',') : '',
+            ],
+        ]);
     }
 }
 
@@ -409,9 +580,13 @@ if (! function_exists('osTotais')) {
      * e os.tipo_desconto diz qual; depois de faturar, os.desconto passa a ser
      * o valor do desconto em reais.
      *
-     * @return array{produtos: float, servicos: float, bruto: float, desconto: float, total: float, tipo: string|null, informado: float}
+     * $produtos e $servicos já vêm com o desconto individual dos itens
+     * (#2880); $descontoItens é só a soma desses descontos, para mostrar. O
+     * desconto geral (tipo, informado, desconto) incide sobre esse bruto.
+     *
+     * @return array{produtos: float, servicos: float, bruto: float, desconto: float, total: float, tipo: string|null, informado: float, descontoItens: float}
      */
-    function osTotais(float $produtos, float $servicos, $valorComDesconto = 0, $tipoDesconto = null, $descontoInformado = 0): array
+    function osTotais(float $produtos, float $servicos, $valorComDesconto = 0, $tipoDesconto = null, $descontoInformado = 0, float $descontoItens = 0): array
     {
         $bruto = round($produtos + $servicos, 2);
         $comDesconto = round((float) $valorComDesconto, 2);
@@ -426,6 +601,7 @@ if (! function_exists('osTotais')) {
             'total' => $total,
             'tipo' => $temDesconto ? (in_array($tipoDesconto, ['real', 'porcento'], true) ? $tipoDesconto : 'real') : null,
             'informado' => $temDesconto ? round((float) $descontoInformado, 2) : 0.0,
+            'descontoItens' => round($descontoItens, 2),
         ];
     }
 }

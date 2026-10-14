@@ -122,7 +122,7 @@ $totalProdutos = 0;
                                 <?php foreach ($produtos as $p) :
                                     $totalProdutos = $totalProdutos + $p->subTotal;
                                     echo '<tr>';
-                                    echo '  <td>' . e($p->descricao) . '</td>';
+                                    echo '  <td>' . e($p->descricao) . osDescontoItemNota($p) . '</td>';
                                     echo '  <td class="text-center">' . e($p->quantidade) . '</td>';
                                     echo '  <td class="text-center">' . number_format($p->preco ?: $p->precoVenda, 2, ',', '.') . '</td>';
                                     echo '  <td class="text-right">R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';

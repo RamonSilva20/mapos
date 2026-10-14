@@ -14,9 +14,9 @@ final class OsListagemTest extends MaposTestCase
         $this->db->query('CREATE TABLE clientes (idClientes INTEGER PRIMARY KEY AUTOINCREMENT, nomeCliente TEXT, documento TEXT)');
         $this->db->query('CREATE TABLE usuarios (idUsuarios INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT)');
         $this->db->query('CREATE TABLE os (idOs INTEGER PRIMARY KEY AUTOINCREMENT, dataInicial TEXT, dataFinal TEXT, descricaoProduto TEXT, status TEXT, faturado INTEGER DEFAULT 0, desconto REAL, valor_desconto REAL, clientes_id INTEGER, usuarios_id INTEGER, lancamento INTEGER)');
-        $this->db->query('CREATE TABLE produtos_os (idProdutos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, produtos_id INTEGER, quantidade INTEGER, preco REAL, subTotal REAL)');
+        $this->db->query('CREATE TABLE produtos_os (idProdutos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, produtos_id INTEGER, quantidade INTEGER, preco REAL, subTotal REAL, desconto REAL DEFAULT 0, tipo_desconto TEXT)');
         $this->db->query('CREATE TABLE servicos (idServicos INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, preco REAL)');
-        $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, servicos_id INTEGER, quantidade REAL, preco REAL, subTotal REAL)');
+        $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, servicos_id INTEGER, quantidade REAL, preco REAL, subTotal REAL, desconto REAL DEFAULT 0, tipo_desconto TEXT)');
         $this->db->query('CREATE TABLE lancamentos (idLancamentos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT)');
 
         $this->db->query("INSERT INTO clientes (nomeCliente, documento) VALUES ('Ana Souza', '111.111.111-11'), ('Bruno 100% Lima', '222'), ('Carla', '333')");
@@ -68,6 +68,20 @@ final class OsListagemTest extends MaposTestCase
         $this->assertEqualsWithDelta(0.0, $porId[4]->total, 0.001);
         $this->assertSame('Ana Souza', $porId[1]->nomeCliente);
         $this->assertSame('Técnico', $porId[1]->responsavel);
+    }
+
+    public function testTotalUsaOSubTotalDoServicoComDescontoIndividual(): void
+    {
+        $model = $this->model();
+        // 2 x 80 = 160 com 20 de desconto no item: vale o subTotal gravado (140).
+        $this->db->query("INSERT INTO servicos_os (os_id, servicos_id, quantidade, preco, subTotal, desconto, tipo_desconto) VALUES (4, 1, 2, 80, 140, 20, 'real')");
+        // Serviço sem desconto continua em preço x quantidade, mesmo com subTotal vazio.
+        $this->db->query('INSERT INTO servicos_os (os_id, servicos_id, quantidade, preco) VALUES (4, 1, 1, 10)');
+
+        $porId = array_column($model->listar([], 10, 0), null, 'idOs');
+
+        $this->assertEqualsWithDelta(150.0, $porId[4]->total, 0.001);
+        $this->assertEqualsWithDelta(260.0, $porId[1]->total, 0.001, 'As outras OS não mudam.');
     }
 
     public function testPesquisaPorClienteDocumentoEquipamentoENumero(): void

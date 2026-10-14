@@ -134,6 +134,8 @@ $config['permissions_map'] = [
         // Itens, anexos, anotações, desconto e faturamento da tela da OS (JSON).
         'adicionarProduto' => 'eOs',
         'excluirProduto' => 'eOs',
+        'descontoProduto' => 'eOs',
+        'descontoServico' => 'eOs',
         'adicionarServico' => 'eOs',
         'excluirServico' => 'eOs',
         'anexar' => 'eOs',
@@ -240,6 +242,7 @@ $config['permissions_map'] = [
         // os/autoComplete*, que aceitam aVenda e eVenda.
         'adicionarProduto' => 'eVenda',
         'excluirProduto' => 'eVenda',
+        'descontoProduto' => 'eVenda',
         'adicionarDesconto' => 'eVenda',
         'faturar' => 'eVenda',
         'excluir' => 'dVenda',

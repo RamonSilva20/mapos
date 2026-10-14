@@ -219,7 +219,21 @@ class Vendas_model extends CI_Model
             ->get('itens_de_vendas')
             ->row()->subTotal ?? 0);
 
-        return osTotais($soma, 0.0, $venda->valor_desconto ?? 0, $venda->tipo_desconto ?? null, $venda->desconto ?? 0);
+        // A soma já traz o desconto individual dos itens (#2880); aqui só se
+        // calcula quanto eles somam, para mostrar.
+        $descontoItens = osDescontoDosItens($this->getProdutos((int) $venda->idVendas));
+
+        return osTotais($soma, 0.0, $venda->valor_desconto ?? 0, $venda->tipo_desconto ?? null, $venda->desconto ?? 0, $descontoItens);
+    }
+
+    /**
+     * Diz se as colunas do desconto por item existem. Uma instalação que
+     * ainda não rodou as migrations (Configurações > Atualizar banco)
+     * continua funcionando, só sem esse desconto.
+     */
+    public function descontoPorItemDisponivel(): bool
+    {
+        return $this->db->field_exists('desconto', 'itens_de_vendas');
     }
 
     /** Linha de itens_de_vendas que pertence à venda, ou null. */

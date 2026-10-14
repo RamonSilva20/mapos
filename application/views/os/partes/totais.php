@@ -3,15 +3,24 @@
  * Resumo dos valores da OS (#2842) em kpi-card. O total é calculado pelos
  * produtos e serviços menos o desconto (os_model->totais()).
  *
- * @var array{produtos: float, servicos: float, bruto: float, desconto: float, total: float, tipo: string|null, informado: float} $totais
+ * @var array{produtos: float, servicos: float, bruto: float, desconto: float, total: float, tipo: string|null, informado: float, descontoItens: float} $totais
  * @var list<object> $produtos
  * @var list<object> $servicos
  */
 $itens = static fn (int $n, string $um, string $varios) => $n === 0 ? 'Nenhum' : $n . ' ' . ($n === 1 ? $um : $varios);
-$descricaoDesconto = match (true) {
-    $totais['desconto'] <= 0 => 'Sem desconto',
+$descricaoGeral = match (true) {
+    $totais['desconto'] <= 0 => null,
     $totais['tipo'] === 'porcento' => rtrim(rtrim(number_format($totais['informado'], 2, ',', '.'), '0'), ',') . '% sobre ' . dinheiro($totais['bruto']),
     default => 'Sobre ' . dinheiro($totais['bruto']),
+};
+// Desconto geral no valor do cartão (Produtos + Serviços - Desconto = Total). O
+// desconto individual dos itens (#2880) já está abatido nos cartões de valores
+// e só aparece na legenda.
+$descricaoDesconto = match (true) {
+    $totais['descontoItens'] > 0 && $descricaoGeral !== null => $descricaoGeral . ' · Nos itens: ' . dinheiro($totais['descontoItens']),
+    $totais['descontoItens'] > 0 => 'Sem desconto geral · Nos itens: ' . dinheiro($totais['descontoItens']),
+    $descricaoGeral !== null => $descricaoGeral,
+    default => 'Sem desconto',
 };
 ?>
 <div class="grid grid-cols-2 gap-4 xl:grid-cols-4">

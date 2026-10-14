@@ -65,7 +65,7 @@
                                 foreach ($produtos as $p) {
                                     $totalProdutos = $totalProdutos + $p->subTotal;
                                     echo '<tr>';
-                                    echo '<td>' . e($p->descricao) . '</td>';
+                                    echo '<td>' . e($p->descricao) . osDescontoItemNota($p) . '</td>';
                                     echo '<td>' . e($p->quantidade) . '</td>';
                                     echo '<td>R$ ' . e(($p->preco ?: $p->precoVenda)) . '</td>';
                                     echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';

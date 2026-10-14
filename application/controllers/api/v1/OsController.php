@@ -56,11 +56,19 @@ class OsController extends REST_Controller
             $page = $this->get('page', true) ? ($this->get('page', true) * $perPage) : 0;
             $start = $page ? ($perPage * $page) : 0;
 
+            // Com o desconto individual dos itens (#2880), o valor do item é o subTotal gravado.
+            $valorProduto = 'produtos_os.preco * produtos_os.quantidade';
+            $valorServico = 'servicos_os.preco * servicos_os.quantidade';
+            if ($this->os_model->descontoPorItemDisponivel()) {
+                $valorProduto = "CASE WHEN produtos_os.desconto > 0 THEN produtos_os.subTotal ELSE {$valorProduto} END";
+                $valorServico = "CASE WHEN servicos_os.desconto > 0 THEN servicos_os.subTotal ELSE {$valorServico} END";
+            }
+
             $oss = $this->os_model->getOs(
                 'os',
-                'os.*,
-                COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
-                COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos',
+                "os.*,
+                COALESCE((SELECT SUM({$valorProduto}) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
+                COALESCE((SELECT SUM({$valorServico}) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos",
                 $where_array,
                 $perPage,
                 $page
@@ -80,8 +88,8 @@ class OsController extends REST_Controller
         $os->anotacoes = $this->os_model->getAnotacoes($id);
         $os->calcTotal = $this->calcTotal($id);
         unset($os->senha);
-        $os->totalProdutos = array_sum(array_map(fn ($p) => $p->preco * $p->quantidade, $os->produtos));
-        $os->totalServicos = array_sum(array_map(fn ($p) => $p->preco * $p->quantidade, $os->servicos));
+        $os->totalProdutos = array_sum(array_map(fn ($p) => ((float) ($p->desconto ?? 0) > 0 ? $p->subTotal : $p->preco * $p->quantidade), $os->produtos));
+        $os->totalServicos = array_sum(array_map(fn ($s) => ((float) ($s->desconto ?? 0) > 0 ? $s->subTotal : $s->preco * $s->quantidade), $os->servicos));
 
         // Montando texto para whatsapp
         if ($return = $this->os_model->valorTotalOS($id)) {
@@ -531,6 +539,12 @@ class OsController extends REST_Controller
             'subTotal' => $subTotal,
         ];
 
+        // Preço ou quantidade novos invalidam o desconto individual do item
+        // (#2880), que a API não mexe: o item volta a valer preço x quantidade.
+        if ($this->os_model->descontoPorItemDisponivel()) {
+            $data += ['desconto' => 0, 'tipo_desconto' => null];
+        }
+
         if ($this->os_model->edit('produtos_os', $data, 'idProdutos_os', $idProdutos_os)) {
             $operacao = $ddAntigo->quantidade > $this->put('quantidade', true) ? '+' : '-';
             $diferenca = $operacao == '+' ? $ddAntigo->quantidade - $this->put('quantidade', true) : $this->put('quantidade', true) - $ddAntigo->quantidade;
@@ -692,6 +706,12 @@ class OsController extends REST_Controller
             'preco' => $this->put('preco', true),
             'subTotal' => $subTotal,
         ];
+
+        // Preço ou quantidade novos invalidam o desconto individual do item
+        // (#2880), que a API não mexe: o item volta a valer preço x quantidade.
+        if ($this->os_model->descontoPorItemDisponivel()) {
+            $data += ['desconto' => 0, 'tipo_desconto' => null];
+        }
 
         if ($this->os_model->edit('servicos_os', $data, 'idServicos_os', $idServicos_os)) {
             $this->log_app("Atualizou a quantidade do Serviço id <b>{$ddAntigo->servicos_id}</b> na OS id <b>{$id}</b> para <b>{$this->put('quantidade', true)}</b>");
@@ -993,9 +1013,7 @@ class OsController extends REST_Controller
         }
 
         foreach ($servicos as $s) {
-            $preco = $s->preco ?: $s->precoVenda;
-            $subtotal = $preco * ($s->quantidade ?: 1);
-            $totalServicos = $totalServicos + $subtotal;
+            $totalServicos = $totalServicos + osValorDoItem($s);
         }
 
         if ($totalProdutos != 0 || $totalServicos != 0) {

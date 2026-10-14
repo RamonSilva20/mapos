@@ -78,7 +78,7 @@ final class VendasTelaTest extends MaposTestCase
         $this->db->query('CREATE TABLE vendas (idVendas INTEGER PRIMARY KEY AUTOINCREMENT, dataVenda TEXT, valorTotal REAL, desconto REAL DEFAULT 0, faturado INTEGER DEFAULT 0, clientes_id INTEGER, usuarios_id INTEGER,
             lancamentos_id INTEGER, observacoes TEXT, observacoes_cliente TEXT, valor_desconto REAL DEFAULT 0, tipo_desconto TEXT, garantia TEXT, status TEXT)');
         $this->db->query('CREATE TABLE produtos (idProdutos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, codDeBarra TEXT, precoVenda REAL, estoque INTEGER)');
-        $this->db->query('CREATE TABLE itens_de_vendas (idItens INTEGER PRIMARY KEY AUTOINCREMENT, subTotal REAL, quantidade INTEGER, preco REAL, vendas_id INTEGER, produtos_id INTEGER)');
+        $this->db->query('CREATE TABLE itens_de_vendas (idItens INTEGER PRIMARY KEY AUTOINCREMENT, subTotal REAL, quantidade INTEGER, preco REAL, vendas_id INTEGER, produtos_id INTEGER, desconto REAL DEFAULT 0, tipo_desconto TEXT)');
         $this->db->query('CREATE TABLE lancamentos (idLancamentos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, valor REAL, tipo_desconto TEXT, desconto REAL, valor_desconto REAL,
             clientes_id INTEGER, cliente_fornecedor TEXT, data_vencimento TEXT, data_pagamento TEXT, baixado INTEGER, forma_pgto TEXT, tipo TEXT, observacoes TEXT, usuarios_id INTEGER, vendas_id INTEGER)');
 
@@ -592,6 +592,148 @@ final class VendasTelaTest extends MaposTestCase
         $controller->adicionarProduto();
         $this->assertSame(200, $this->resposta($controller)[0]);
         $this->assertSame([], $controller->produtos_model->chamadas, 'Sem controle de estoque, o estoque não baixa.');
+    }
+
+    public function testTotaisDoModelComDescontoIndividualNosItens(): void
+    {
+        $this->criarBanco();
+        $model = $this->model();
+        // Venda 1: 3 × 100 com 10% no item (270).
+        $this->db->query("UPDATE itens_de_vendas SET desconto = 10, tipo_desconto = 'porcento', subTotal = 270 WHERE idItens = 1");
+
+        $totais = $model->totais($model->getById(1));
+        $this->assertSame(270.0, $totais['produtos']);
+        $this->assertSame(270.0, $totais['total']);
+        $this->assertSame(30.0, $totais['descontoItens']);
+        $this->assertSame(0.0, $totais['desconto'], 'O desconto geral é outro.');
+
+        // O desconto geral incide sobre o total já com o desconto dos itens.
+        $this->db->query("UPDATE vendas SET desconto = 10, valor_desconto = 243, tipo_desconto = 'porcento' WHERE idVendas = 1");
+        $totais = $model->totais($model->getById(1));
+        $this->assertSame(243.0, $totais['total']);
+        $this->assertSame(27.0, $totais['desconto']);
+        $this->assertSame(30.0, $totais['descontoItens']);
+
+        $this->assertSame(0.0, $model->totais($model->getById(2))['descontoItens']);
+    }
+
+    public function testAdicionarProdutoComDescontoDoItem(): void
+    {
+        $this->criarBanco();
+        $this->db->query("UPDATE vendas SET desconto = 10, valor_desconto = 270, tipo_desconto = 'porcento' WHERE idVendas = 1");
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idProduto' => '1', 'quantidade' => '2', 'preco' => '80', 'tipoDescontoItem' => 'real', 'descontoItem' => '25,50']);
+        $controller->adicionarProduto();
+
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(200, $status, (string) json_encode($corpo));
+        $linha = $this->db->query('SELECT * FROM itens_de_vendas ORDER BY idItens DESC LIMIT 1')->row();
+        $this->assertSame(134.5, (float) $linha->subTotal, '2 × 80 menos R$ 25,50, calculado no servidor.');
+        $this->assertSame(25.5, (float) $linha->desconto);
+        $this->assertSame('real', $linha->tipo_desconto);
+        $this->assertSame(0.0, (float) $this->db->query('SELECT valor_desconto FROM vendas WHERE idVendas = 1')->row()->valor_desconto);
+        $this->assertSame(434.5, (float) $corpo['totais']['total']);
+        $this->assertSame(25.5, (float) $corpo['totais']['descontoItens']);
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idProduto' => '1', 'quantidade' => '1', 'preco' => '50', 'tipoDescontoItem' => 'porcento', 'descontoItem' => '101']);
+        $controller->adicionarProduto();
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(422, $status);
+        $this->assertArrayHasKey('descontoItem', $corpo['erros']);
+        $this->assertSame(3, (int) $this->db->query('SELECT COUNT(*) AS n FROM itens_de_vendas')->row()->n, 'Nada foi gravado.');
+    }
+
+    public function testDescontoDoProdutoJaNaVenda(): void
+    {
+        $this->criarBanco();
+        $this->db->query("UPDATE vendas SET desconto = 10, valor_desconto = 270, tipo_desconto = 'porcento' WHERE idVendas = 1");
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'porcento', 'descontoItem' => '10', 'subTotal' => '1']);
+        $controller->descontoProduto();
+
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(200, $status, (string) json_encode($corpo));
+        $this->assertSame('Desconto do produto aplicado. O desconto geral da venda foi removido porque o total mudou.', $corpo['message']);
+        $this->assertSame(['produtos', 'totais', 'desconto', 'pix'], array_keys($corpo['html']));
+        $linha = $this->db->query('SELECT * FROM itens_de_vendas WHERE idItens = 1')->row();
+        $this->assertSame(270.0, (float) $linha->subTotal);
+        $this->assertSame('porcento', $linha->tipo_desconto);
+        $this->assertSame(0.0, (float) $this->db->query('SELECT valor_desconto FROM vendas WHERE idVendas = 1')->row()->valor_desconto);
+        $this->assertSame([], $controller->produtos_model->chamadas, 'O estoque não muda.');
+        $this->assertSame(270.0, (float) $corpo['totais']['total']);
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '0']);
+        $controller->descontoProduto();
+        $this->assertSame('Desconto do produto removido.', $this->resposta($controller)[1]['message']);
+        $this->assertSame(300.0, (float) $this->db->query('SELECT subTotal FROM itens_de_vendas WHERE idItens = 1')->row()->subTotal);
+    }
+
+    public function testDescontoDoProdutoValidaEProtege(): void
+    {
+        $this->criarBanco();
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '']);
+        $controller->descontoProduto();
+        $this->assertSame('Informe o desconto, ou 0 para tirar.', $this->resposta($controller)[1]['erros']['descontoItem']);
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '300,01']);
+        $controller->descontoProduto();
+        $this->assertSame(422, $this->resposta($controller)[0]);
+
+        // Item de outra venda.
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idItem' => '2', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->descontoProduto();
+        $this->assertSame(404, $this->resposta($controller)[0]);
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '5'], false);
+        $controller->descontoProduto();
+        $this->assertSame(403, $this->resposta($controller)[0]);
+
+        $controller = $this->controller($this->model(false), ['idVendas' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->descontoProduto();
+        $this->assertSame(403, $this->resposta($controller)[0]);
+
+        $this->assertSame(0.0, (float) $this->db->query('SELECT desconto FROM itens_de_vendas WHERE idItens = 1')->row()->desconto, 'Nada foi gravado.');
+    }
+
+    public function testDescontoDoProdutoSemAMigrationPedeAtualizarOBanco(): void
+    {
+        $this->criarBanco();
+        $this->db->query('ALTER TABLE itens_de_vendas DROP COLUMN desconto');
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->descontoProduto();
+        $this->assertSame(422, $this->resposta($controller)[0]);
+
+        $controller = $this->controller($this->model(), ['idVendas' => '1', 'idProduto' => '1', 'quantidade' => '1', 'preco' => '50', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->adicionarProduto();
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(422, $status);
+        $this->assertStringContainsString('Atualizar banco', $corpo['erros']['_geral']);
+
+        // Sem desconto, a venda continua funcionando no banco antigo.
+        $this->assertSame(300.0, $this->model()->totais($this->model()->getById(1))['total']);
+    }
+
+    public function testTelaDaVendaMostraODescontoIndividualDosItens(): void
+    {
+        $dados = $this->dadosDaTela('aberta');
+        $dados['produtos'] = [(object) ['idItens' => 1, 'descricao' => 'Tela', 'quantidade' => '2', 'preco' => '80', 'precoVenda' => '80', 'subTotal' => '134.5', 'desconto' => '25.5', 'tipo_desconto' => 'real']];
+        $dados['totais'] = osTotais(134.5, 0.0, 0, null, 0, 25.5);
+
+        $html = $this->renderizar('vendas/visualizar', $dados);
+
+        $this->assertStringContainsString('name="descontoItem"', $html);
+        $this->assertStringContainsString('data-modal-abrir="desconto-item-produto"', $html);
+        $this->assertStringContainsString('data-valor-desconto="25,5"', $html);
+        $this->assertStringContainsString('action="http://mapos.test/index.php/vendas/descontoProduto"', $html);
+        $this->assertStringContainsString('>R$ 25,50<', $html);
+        $this->assertStringContainsString('Nos itens: R$ 25,50', $html);
+        $this->assertStringNotContainsString('<script', $html);
+
+        $faturada = $this->renderizar('vendas/visualizar', $this->dadosDaTela('faturada'));
+        $this->assertStringNotContainsString('descontoItem', $faturada);
+        $this->assertStringNotContainsString('desconto-item-produto', $faturada);
     }
 
     public function testAdicionarProdutoTiraODescontoEAvisa(): void
