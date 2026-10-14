@@ -92,6 +92,23 @@ class Usuarios_model extends CI_Model
         return $this->db->count_all_results('usuarios') > 0;
     }
 
+    /** Outro usuário já usa o e-mail (sem diferenciar maiúsculas)? */
+    public function emailEmUso(string $email, ?int $exceto): bool
+    {
+        return $this->db->query(
+            'SELECT 1 FROM usuarios WHERE LOWER(email) = ? AND idUsuarios != ? LIMIT 1',
+            [mb_strtolower($email), $exceto ?? 0]
+        )->num_rows() > 0;
+    }
+
+    /** A senha confere com o hash do usuário? O hash é lido aqui e não sai do model. */
+    public function senhaConfere(int $id, string $senha): bool
+    {
+        $linha = $this->db->select('senha')->where('idUsuarios', $id)->limit(1)->get('usuarios')->row();
+
+        return $linha !== null && password_verify($senha, (string) $linha->senha);
+    }
+
     /**
      * Quantos registros apontam para o usuário (OS, vendas, lançamentos e
      * termos de garantia, todos com chave estrangeira): com algum, a exclusão
