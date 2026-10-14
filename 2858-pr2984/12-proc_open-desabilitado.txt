@@ -1,0 +1,6 @@
+linhas de requisito: ["PHP 8.5.10 8.5 ou superior Atende","allow_url_fopen On On Atende","Dependências (application/vendor) Instaladas Instaladas Atende","cURL On On Atende","MySQLi On On Atende","GD On On Atende","zip On On Atende","mbstring On On Atende","dom On On Atende","xml On On Atende","zlib On On Atende","iconv On On Atende","json On On Atende","openssl On On Atende","fileinfo On On Atende","/updates Atende"]
+storage sugerido: /tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/mapos-storage
+tentativa 1 storage="__sugerido__" erro="" final=true
+aviso final: {"hidden":false,"texto":"O instalador não conseguiu rodar as atualizações do banco de dados. O PHP de linha de comando não foi encontrado ou o servidor bloqueia a execução de programas (proc_open). Depois de entrar, abra Configurações, aba Sistema, e use \"Atualizar banco de dados\", ou rode php index.php tools migrate na pasta do sistema. Até lá o limite de tentativas de login e o 2FA ficam desligados."}
+version
+20240503170400

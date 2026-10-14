@@ -1,0 +1,2 @@
+admin -> /mapos ["A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos"]
+restrito -> /mapos []

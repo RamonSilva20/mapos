@@ -1,0 +1,33 @@
+### migration com erro fatal (função inexistente): stdout/stderr separados
+codigo=1
+-- stdout:
+
+An uncaught Exception was encountered
+
+Type:        Error
+Message:     Call to undefined function funcao_que_nao_existe_t2984()
+Filename:    /tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/wt/application/database/migrations/20261014999999_teste_fatal.php
+Line Number: 7
+-- stderr:
+version
+20261014060000
+### migration com erro fatal real do PHP (memory_limit): 
+codigo=1
+-- stdout:
+
+A PHP Error was encountered
+
+Severity:    Error
+Message:     Allowed memory size of 20971520 bytes exhausted (tried to allocate 200000032 bytes)
+Filename:    /tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/wt/application/database/migrations/20261014999999_teste_fatal.php
+Line Number: 7
+-- stderr:
+Fatal error: Allowed memory size of 20971520 bytes exhausted (tried to allocate 200000032 bytes) in t2984/wt/application/database/migrations/20261014999999_teste_
+Stack trace:
+#0 t2984/wt/application/database/migrations/20261014999999_teste_fatal.php(7): str_repeat('a', 200000000)
+#1 t2984/wt/application/vendor/codeigniter/framework/system/libraries/Migration.php(307): Migration_teste_fatal->up()
+#2 t2984/wt/application/vendor/codeigniter/framework/system/libraries/Migration.php(345): CI_Migration->version('20261014999999')
+#3 t2984/wt/application/controllers/Tools.php(78): CI_Migration->latest()
+#4 t2984/wt/application/vendor/codeigniter/framework/system/core/CodeIgniter.php(533): Tools->migrate()
+#5 t2984/wt/index.php(335): require_once('/tmp/claude-100...')
+#6 {main}

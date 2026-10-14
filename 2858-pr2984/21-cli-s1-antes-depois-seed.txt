@@ -1,0 +1,25 @@
+### S1 na v5 antiga (sem --no-dev faker): migrate
+codigo=1 (saída acima vazia = sem mensagem)
+-- rollback
+codigo=1
+784b935/scratchpad/t2984/wtold/application/controllers/Tools.php 29
+ERROR - 2026-10-14 19:15:35 --> Severity: error --> Exception: Class "Faker\Factory" not found /tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/wtold/application/controllers/Tools.php 29
+
+### PR: migrate no banco 4.x (mapos_t2984old)
+Migrations run successfully
+codigo=0
+version
+20261014060000
+### PR: seed sem Faker
+Running Configuracoes Seeder
+Seeds run successfully
+codigo=0
+Running Permissoes Seeder
+Running Usuarios Seeder
+Running Configuracoes Seeder
+Seeds run successfully
+codigo=0
+Running Usuarios Seeder
+Running Configuracoes Seeder
+Seeds run successfully
+codigo=0

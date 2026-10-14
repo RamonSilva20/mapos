@@ -1,0 +1,2 @@
+admin -> /mapos ["Há 13 atualizações do banco de dados pendentes. Enquanto o banco não for atualizado, proteções da versão 5, co","A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos"]
+restrito -> /mapos []

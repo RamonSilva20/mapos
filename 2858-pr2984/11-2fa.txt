@@ -1,0 +1,4 @@
+apos ativar: Autenticação em dois fatores Além da senha, o login pede um código de 6 dígitos gerado no seu celular. Códigos de recuperação Guarde estes códigos em um lugar s
+apos senha -> /login/doisFatores
+codigo errado -> /login/doisFatores Código incorreto. Confira o aplicativo ou use um código de recuperação.
+codigo certo -> /mapos

@@ -1,0 +1,11 @@
+login -> /mapos
+avisos: ["O arquivo application/.env tem valores antigos que enfraquecem a sessão (APP_COOKIE_HTTPONLY, APP_SESS_REGENERATE_DESTROY). Apague essas lin","A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos desnecessários expostos."]
+links ["http://127.0.0.1:8996/index.php/os/visualizar/1?aba=anexos","http://127.0.0.1:8996/index.php/os/anexo/1","http://127.0.0.1:8996/index.php/os/anexo/1/thumb","http://127.0.0.1:8996/index.php/os/downloadanexo/1","http://127.0.0.1:8996/index.php/os/anexo/2","http://127.0.0.1:8996/index.php/os/downloadanexo/2"]
+200 text/html; charset=UTF-8 /os/visualizar/1?aba=anexos
+200 image/png /os/anexo/1
+404 text/html; charset=UTF-8 /os/anexo/1/thumb
+200 image/png /os/downloadanexo/1
+200 application/pdf /os/anexo/2
+200 application/pdf /os/downloadanexo/2
+arquivo 1 200 application/pdf
+link publico antigo 404

@@ -1,0 +1,1 @@
+{"success":false,"message":"As depend\u00eancias do sistema n\u00e3o est\u00e3o instaladas (pasta application\/vendor). Use a vers\u00e3o completa da release ou, a partir do c\u00f3digo-fonte, execute \"composer install --no-dev\" na pasta do projeto."}

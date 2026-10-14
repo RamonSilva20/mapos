@@ -1,0 +1,50 @@
+Próximo desabilitado: false
+linhas de requisito: ["PHP 8.5.10 8.5 ou superior Atende","allow_url_fopen On On Atende","Dependências (application/vendor) Instaladas Instaladas Atende","cURL On On Atende","MySQLi On On Atende","GD On On Atende","zip On On Atende","mbstring On On Atende","dom On On Atende","xml On On Atende","zlib On On Atende","iconv On On Atende","json On On Atende","openssl On On Atende","fileinfo On On Atende","/updates Atende"]
+storage sugerido: /tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/mapos-storage
+tentativa 1 storage="__sugerido__" erro="" final=true
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.fill: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#storage_path')[22m
+[2m    - locator resolved to <input type="text" id="storage_path" autocomplete="off" name="storage_path" placeholder="Vazio: application/storage" value="/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/mapos-storage" class="w-full rounded-md border border-input bg-field px-3 py-2 text-text placeholder:text-muted focus:outline-3 focus:outline-ring/50 sm:flex-1"/>[22m
+[2m    - fill("/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/wt/assets/storage-x")[22m
+[2m  - attempting fill action[22m
+[2m    2 × waiting for element to be visible, enabled and editable[22m
+[2m      - element is not visible[22m
+[2m    - retrying fill action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and editable[22m
+[2m      - element is not visible[22m
+[2m    - retrying fill action[22m
+[2m      - waiting 100ms[22m
+[2m    60 × waiting for element to be visible, enabled and editable[22m
+[2m       - element is not visible[22m
+[2m     - retrying fill action[22m
+[2m       - waiting 500ms[22m
+
+    at /tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/inst.mjs:27:37 {
+  log: [
+    "  - waiting for locator('#storage_path')",
+    '    - locator resolved to <input type="text" id="storage_path" autocomplete="off" name="storage_path" placeholder="Vazio: application/storage" value="/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/mapos-storage" class="w-full rounded-md border border-input bg-field px-3 py-2 text-text placeholder:text-muted focus:outline-3 focus:outline-ring/50 sm:flex-1"/>',
+    '    - fill("/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/wt/assets/storage-x")',
+    '  - attempting fill action',
+    '    2 × waiting for element to be visible, enabled and editable',
+    '      - element is not visible',
+    '    - retrying fill action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and editable',
+    '      - element is not visible',
+    '    - retrying fill action',
+    '      - waiting 100ms',
+    '    60 × waiting for element to be visible, enabled and editable',
+    '       - element is not visible',
+    '     - retrying fill action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v26.8.2

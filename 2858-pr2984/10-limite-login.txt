@@ -1,0 +1,8 @@
+tentativa 1 url /login msg: Os dados de acesso estão incorretos.
+tentativa 2 url /login msg: Os dados de acesso estão incorretos.
+tentativa 3 url /login msg: Os dados de acesso estão incorretos.
+tentativa 4 url /login msg: Os dados de acesso estão incorretos.
+tentativa 5 url /login msg: Os dados de acesso estão incorretos.
+tentativa 6 url /login msg: Muitas tentativas de acesso. Aguarde alguns minutos e tente novamente.
+tentativa 7 url /login msg: Muitas tentativas de acesso. Aguarde alguns minutos e tente novamente.
+login durante bloqueio -> /login

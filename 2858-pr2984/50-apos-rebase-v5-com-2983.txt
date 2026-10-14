@@ -1,0 +1,48 @@
+?? install/instalado.lock
+
+Time: 00:46.684, Memory: 54.50 MB
+
+[30;42mOK (1468 tests, 6744 assertions)[0m
+
+3303 issues were ignored by baseline.
+## instalação limpa pelo navegador (código rebaseado)
+storage sugerido: /tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/mapos-storage
+tentativa 1 storage="__sugerido__" erro="" final=true
+aviso final: {"hidden":true,"texto":""}
+20261014060000
+env perm 600
+## CLI no-dev: rollback + migrate
+Migrations run successfully
+codigo=0
+Migrations run successfully
+codigo=0
+## exceção forçada em migration (CLI)
+stderr acima; codigo=1
+
+ERROR: An Error Was Encountered
+
+	A migration parou: falha forcada t2984
+
+## upgrade 4.x -> v5 (código rebaseado)
+Migrations run successfully
+codigo=0
+20261014060000
+up4a.png	anexos/10-2026/OS-1
+up4b.pdf	anexos/10-2026/OS-1
+manual.pdf	arquivos/manual.pdf
+  mapos-storage-up/arquivos/manual.pdf
+  mapos-storage-up/anexos/10-2026/OS-1/up4b.pdf
+  mapos-storage-up/anexos/10-2026/OS-1/up4a.png
+  mapos-storage-up/anexos/10-2026/OS-1/thumbs/thumb_up4a.png
+restou em assets:
+login -> /mapos
+avisos: ["A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos desnecessários expostos."]
+links ["http://127.0.0.1:8996/index.php/os/visualizar/1?aba=anexos","http://127.0.0.1:8996/index.php/os/anexo/1","http://127.0.0.1:8996/index.php/os/anexo/1/thumb","http://127.0.0.1:8996/index.php/os/
+200 text/html; charset=UTF-8 /os/visualizar/1?aba=anexos
+200 image/png /os/anexo/1
+200 image/png /os/anexo/1/thumb
+200 image/png /os/downloadanexo/1
+200 application/pdf /os/anexo/2
+200 application/pdf /os/downloadanexo/2
+arquivo 1 200 application/pdf
+link publico antigo 404

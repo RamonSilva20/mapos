@@ -1,0 +1,2 @@
+Próximo desabilitado: true
+["PHP 8.5.10 8.5 ou superior Atende","allow_url_fopen On On Atende","Dependências (application/vendor) Ausentes Instaladas Não atende","cURL On On Atende","MySQLi On On Atende","GD On On Atende","zip On On Atende","mbstring On On Atende","dom On On Atende","xml On On Atende","zlib On On Atende","iconv On On Atende","json On On Atende","openssl On On Atende","fileinfo On On Atende","/updates Atende"]

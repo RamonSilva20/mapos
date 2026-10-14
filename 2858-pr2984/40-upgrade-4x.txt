@@ -1,0 +1,36 @@
+## antes
+clientes	1.00
+os	1.00
+anexos	2.00
+documentos	1.00
+soma os	95.75
+## php index.php tools migrate (no-dev)
+Migrations run successfully
+codigo=0
+20261014060000
+## depois
+clientes	1.00
+os	1.00
+anexos	2.00
+documentos	1.00
+soma os	95.75
+up4a.png	anexos/10-2026/OS-1	
+up4b.pdf	anexos/10-2026/OS-1	
+manual.pdf	arquivos/manual.pdf
+## arquivos no STORAGE_PATH
+  mapos-storage-up/index.html
+  mapos-storage-up/.htaccess
+  mapos-storage-up/anexos/index.html
+  mapos-storage-up/arquivos/manual.pdf
+  mapos-storage-up/arquivos/index.html
+  mapos-storage-up/anexos/10-2026/index.html
+  mapos-storage-up/anexos/10-2026/OS-1/up4b.pdf
+  mapos-storage-up/anexos/10-2026/OS-1/up4a.png
+  mapos-storage-up/anexos/10-2026/OS-1/index.html
+  mapos-storage-up/anexos/10-2026/OS-1/thumbs/index.html
+## assets/anexos e assets/arquivos
+wt/assets/anexos/index.html
+wt/assets/anexos/.htaccess
+wt/assets/arquivos/index.html
+wt/assets/arquivos/.htaccess
+wt/assets/anexos/10-2026/OS-1/thumb_up4a.png

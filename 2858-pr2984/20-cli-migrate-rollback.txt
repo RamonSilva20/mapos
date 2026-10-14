@@ -1,0 +1,19 @@
+### vendor sem fakerphp: 0 pasta(s) fakerphp
+### tools migrate (já na última)
+Migrations run successfully
+codigo=0
+### rollback tools migrate 20240503170400
+Migrations run successfully
+codigo=0
+version
+20240503170400
+### tools migrate de novo
+Migrations run successfully
+codigo=0
+version
+20261014060000
+### tools help
+The following are the available command line interface commands
+
+php index.php tools migration "file_name"         Create new migration file
+codigo=0

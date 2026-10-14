@@ -1,0 +1,9 @@
+== http, .env antigo:
+admin -> /mapos ["O arquivo application/.env tem valores antigos que enfraquecem a sessão (APP_COOKIE_HTTPONLY, APP_SESS_REGENER","A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos"]
+== https (simulado por auto_prepend), .env antigo:
+admin -> /mapos ["O arquivo application/.env tem valores antigos que enfraquecem a sessão (APP_COOKIE_HTTPONLY, APP_SESS_REGENER","A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos"]
+== https, .env da instalação nova:
+admin -> /mapos ["A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos"]
+== https texto completo + restrito:
+admin -> /mapos ["O arquivo application/.env tem valores antigos que enfraquecem a sessão (APP_COOKIE_HTTPONLY, APP_SESS_REGENERATE_DESTROY, APP_COOKIE_SECURE). Apague essas linhas ou use true (em APP_COOKIE_SECURE, auto) e recarregue o sistema. Detalhes em docs/cookies-e-sessao.md.","A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos desnecessários expostos."]
+restrito -> /mapos []

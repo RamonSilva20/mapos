@@ -1,0 +1,68 @@
+perm .env: 600 ramon
+--- .env (valores sensíveis mascarados)
+APP_NAME="Map-OS"
+APP_SUBNAME="Sistema de Controle de Ordens de Serviço"
+APP_TIMEZONE=America/Sao_Paulo
+APP_BASEURL="http://127.0.0.1:8995/"
+APP_CHARSET=UTF-8
+APP_ENCRYPTION_KEY=<omitido, comprimento: >
+APP_ENVIRONMENT="production"
+APP_SESS_DRIVER=database
+APP_SESS_COOKIE_NAME=MAPOS_SESSION
+APP_SESS_EXPIRATION=7200
+APP_SESS_SAVE_PATH=ci_sessions
+APP_SESS_MATCH_IP=false
+APP_SESS_TIME_TO_UPDATE=300
+APP_SESS_REGENERATE_DESTROY=true
+APP_COOKIE_PREFIX=
+APP_COOKIE_DOMAIN=
+APP_COOKIE_PATH=/
+APP_COOKIE_SECURE=auto
+APP_COOKIE_HTTPONLY=true
+APP_COOKIE_SAMESITE=Lax
+APP_CSRF_PROTECTION=true
+APP_CSRF_TOKEN_NAME="MAPOS_CSRF_TOKEN"
+APP_CSRF_COOKIE_NAME="MAPOS_CSRF_COOKIE"
+APP_CSRF_EXPIRE=7200
+APP_CSRF_REGENERATE=true
+APP_COMPRESS_OUTPUT=false
+APP_PROXY_IPS=
+APP_SECURITY_HEADERS=true
+APP_HSTS_MAX_AGE=31536000
+APP_HSTS_INCLUDE_SUBDOMAINS=false
+APP_CSP=enforce
+APP_CSP_REPORT=true
+DB_HOSTNAME="localhost"
+DB_USERNAME="admin"
+DB_PASSWORD=<omitido, comprimento: >
+DB_DATABASE="mapos_t2984"
+API_ENABLED=true
+API_JWT_KEY=<omitido, comprimento: >
+API_TOKEN_EXPIRE_TIME=3600
+API_REFRESH_TOKEN_EXPIRE_TIME=2592000
+API_CORS_ORIGINS=
+API_RATE_LIMIT=300
+STORAGE_PATH="/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t2984/mapos-storage"
+APP_ENCRYPTION_KEY comprimento=32
+API_JWT_KEY comprimento=44
+sem marcadores enter_
+--- migrations
+version
+20261014060000
+tabelas
+33
+Tables_in_mapos_t2984 (login_attempts)
+login_attempts
+Tables_in_mapos_t2984 (os_historico)
+os_historico
+44
+total 0
+drwxr-x--- 2 ramon ramon  40 Oct 14 19:03 .
+drwxr-xr-x 7 ramon ramon 240 Oct 14 19:03 ..
+assets
+do_install.php
+index.php
+instalado.lock
+instalador.php
+settings.json
+view

@@ -1,0 +1,4 @@
+/mapos
+avisos antes: ["Há 13 atualizações do banco de dados pendentes. Enquanto o banco não for atualizado, proteções da versão 5, como o limite de tentativas de login, o 2FA e o histórico da OS, ficam desligadas. Abra Configurações, aba Sistema, e use \"Atualizar banco de dados\" (ou rode php index.php tools migrate no servidor).","A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos desnecessários expostos."]
+url: /mapos/configurar?aba=sistema avisos: []
+avisos dashboard depois: ["A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos desnecessários expostos."]
