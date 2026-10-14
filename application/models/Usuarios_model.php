@@ -182,13 +182,11 @@ class Usuarios_model extends CI_Model
                 $this->authorization_token->incrementarVersao('usuarios', 'idUsuarios', (int) $ID);
             }
 
-            // Senha trocada: as sessões abertas do painel também caem (#2879).
-            if ($table === 'usuarios' && $fieldID === 'idUsuarios' && isset($data['senha'])) {
-                $this->load->model('mapos_model');
-                $versao = $this->mapos_model->invalidarSessoes((int) $ID);
-                if ($versao !== null && (int) $this->session->userdata('id_admin') === (int) $ID) {
-                    $this->session->set_userdata('sessao_versao', $versao);
-                }
+            // Senha trocada: as sessões abertas do painel também caem (#2879). Quem
+            // edita o próprio usuário no painel renova a versão da sessão atual
+            // (Usuarios::formulario); sem a migration não há o que invalidar.
+            if ($table === 'usuarios' && $fieldID === 'idUsuarios' && isset($data['senha']) && $this->db->field_exists('sessao_versao', 'usuarios')) {
+                $this->db->set('sessao_versao', 'sessao_versao + 1', false)->where('idUsuarios', (int) $ID)->update('usuarios');
             }
 
             return true;

@@ -2,6 +2,7 @@
 
 require_once APPPATH . 'libraries/Limite_login.php';
 require_once APPPATH . 'models/Mapos_model.php';
+require_once APPPATH . 'models/Usuarios_model.php';
 
 /**
  * Hardening da sessão do painel e das confirmações de senha (#2879), contra um
@@ -358,5 +359,61 @@ final class SessaoELimiteTest extends MaposTestCase
             $this->assertNotFalse($posSenha, $metodo . ' confere a senha.');
             $this->assertLessThan($posSenha, $posPost, $metodo . ': o POST é exigido antes de conferir a senha.');
         }
+    }
+
+    private function usuariosModelo(): Usuarios_model
+    {
+        $biblioteca = new class() {
+            public function incrementarVersao(string $tabela, string $campoId, int $id): void
+            {
+            }
+
+            public function revogarDoUsuario(int $id): void
+            {
+            }
+        };
+
+        $model = new class() extends Usuarios_model {
+            public $load;
+
+            public $refresh_token;
+
+            public $authorization_token;
+
+            public function __construct()
+            {
+            }
+        };
+        $model->db = $this->db;
+        // Só library(): edit() não pode carregar models nem depender da sessão.
+        $model->load = new class() {
+            public function library(string $nome): void
+            {
+            }
+        };
+        $model->refresh_token = $biblioteca;
+        $model->authorization_token = $biblioteca;
+
+        return $model;
+    }
+
+    public function testTrocarASenhaPeloAdminDerrubaAsSessoesDoPainelDoUsuario(): void
+    {
+        $usuarios = $this->usuariosModelo();
+
+        $this->assertTrue($usuarios->edit('usuarios', ['nome' => 'Ana B'], 'idUsuarios', 1));
+        $this->assertSame(0, $this->modelo->estadoDaSessao(1)['versao'], 'Sem trocar a senha a sessão não cai.');
+
+        $this->assertTrue($usuarios->edit('usuarios', ['senha' => password_hash('nova-123', PASSWORD_BCRYPT, ['cost' => 4])], 'idUsuarios', 1));
+        $this->assertSame(1, $this->modelo->estadoDaSessao(1)['versao']);
+    }
+
+    public function testEditarUsuarioSemAMigrationDaSessaoNaoQuebra(): void
+    {
+        $this->db->query('DROP TABLE usuarios');
+        $this->db->query('CREATE TABLE usuarios (idUsuarios INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, senha TEXT, situacao INTEGER DEFAULT 1, permissoes_id INTEGER)');
+        $this->db->query("INSERT INTO usuarios (nome, email, senha, permissoes_id) VALUES ('Ana', 'ana@x.com', 'h', 1)");
+
+        $this->assertTrue($this->usuariosModelo()->edit('usuarios', ['senha' => 'novo-hash'], 'idUsuarios', 1));
     }
 }
