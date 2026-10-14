@@ -158,6 +158,12 @@ class Mapos extends MY_Controller
             return redirect(site_url('mapos/doisFatores'));
         }
 
+        // A senha também na ativação (#2879): num grupo que exige o 2FA, quem tem só a
+        // senha de outra pessoa não pode cadastrar o próprio autenticador e trancá-la fora.
+        if (! password_verify((string) $this->input->post('senha'), $usuario->senha)) {
+            return $this->telaDoisFatores(['senha_ativar' => 'A senha não confere.']);
+        }
+
         $passo = $this->totp->verificar($segredo, (string) $this->input->post('codigo'));
         if ($passo === null) {
             return $this->telaDoisFatores(['codigo' => 'Código incorreto. Confira o aplicativo e tente de novo.']);
@@ -415,6 +421,9 @@ class Mapos extends MY_Controller
             'format' => 'zip',
             'foreign_key_checks' => false,
             'filename' => 'backup' . date('d-m-Y') . '.sql',
+            // Segredos temporários que um backup nunca deve levar (#2879): o id da
+            // linha de ci_sessions é o próprio cookie de sessão de quem está logado.
+            'ignore' => ['ci_sessions', 'login_attempts', 'api_refresh_tokens', 'api_rate_limit', 'resets_de_senha'],
         ];
 
         $backup = $this->dbutil->backup($prefs);

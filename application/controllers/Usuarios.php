@@ -68,6 +68,9 @@ class Usuarios extends MY_Controller
         }
 
         $motivo = usuarioPodeSerEditadoPor((int) $usuario->idUsuarios, (int) $this->session->userdata('id_admin'));
+        if ($motivo === null && ! $this->podeDelegarGrupo((int) $usuario->permissoes_id)) {
+            $motivo = 'Este usuário tem permissões que você não tem. Só quem as tem pode alterá-lo.';
+        }
         if ($motivo !== null) {
             $this->session->set_flashdata('error', $motivo);
             redirect('usuarios/gerenciar');
@@ -109,6 +112,9 @@ class Usuarios extends MY_Controller
                 // Grupo inativo só fica se o usuário já estava nele.
                 if (! $grupo || ((int) $grupo->situacao !== 1 && (int) ($usuario->permissoes_id ?? 0) !== (int) $grupo->idPermissao)) {
                     $erros['permissoes_id'] = 'Escolha um grupo de permissão ativo.';
+                } elseif ((int) ($usuario->permissoes_id ?? 0) !== (int) $grupo->idPermissao && ! $this->podeDelegarGrupo((int) $grupo->idPermissao)) {
+                    // Só concede grupo com permissões que o próprio operador tem (#2879).
+                    $erros['permissoes_id'] = 'Você só pode escolher grupos com permissões que você também tem.';
                 }
             }
 
@@ -167,6 +173,17 @@ class Usuarios extends MY_Controller
             return redirect('usuarios/gerenciar');
         }
 
+        // Redefinir o 2FA remove a segunda barreira de uma conta: vale a regra da edição (#2879).
+        $motivo = usuarioPodeSerEditadoPor($id, (int) $this->session->userdata('id_admin'));
+        if ($motivo === null && ! $this->podeDelegarGrupo((int) $usuario->permissoes_id)) {
+            $motivo = 'Este usuário tem permissões que você não tem. Só quem as tem pode redefinir o 2FA dele.';
+        }
+        if ($motivo !== null) {
+            $this->session->set_flashdata('error', $motivo);
+
+            return redirect('usuarios/gerenciar');
+        }
+
         $this->load->model('mapos_model');
         $this->mapos_model->desativarTotp($id);
         log_info('Redefiniu o 2FA de um usuário. ID: ' . $id);
@@ -214,6 +231,10 @@ class Usuarios extends MY_Controller
         }
 
         $motivo = usuarioPodeSerRemovido($id, (int) $this->session->userdata('id_admin'));
+        $alvo = $this->usuarios_model->getById($id);
+        if ($motivo === null && ! $this->podeDelegarGrupo((int) $alvo->permissoes_id)) {
+            $motivo = 'Este usuário tem permissões que você não tem. Só quem as tem pode excluí-lo.';
+        }
         if ($motivo === null && $this->usuarios_model->referencias($id) > 0) {
             $motivo = 'Este usuário tem OS, vendas, lançamentos ou termos de garantia. Desative-o em vez de excluir.';
         }

@@ -13,7 +13,7 @@
  * @var bool                  $exigido    O grupo de permissão exige o 2FA
  * @var int                   $restantes  Códigos de recuperação ainda não usados
  * @var list<string>|null     $codigos    Códigos recém-gerados
- * @var array<string, string> $erros      codigo, senha_codigos, senha_desativar, _geral
+ * @var array<string, string> $erros      codigo, senha_ativar, senha_codigos, senha_desativar, _geral
  * @var string|null           $qr         Data URI do QR code (só desativado)
  * @var string|null           $segredo    Segredo em grupos de 4 letras
  */
@@ -60,6 +60,7 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                     <p class="mt-1 rounded-md border border-border bg-surface-subtle px-3 py-2 font-mono text-sm text-text" data-segredo><?php foreach (explode(' ', $segredo) as $grupo) { ?><span class="inline-block whitespace-nowrap"><?= e($grupo) ?></span> <?php } ?></p>
                     <form method="post" action="<?= e(site_url('mapos/ativarDoisFatores')) ?>" novalidate class="mt-4 flex flex-col gap-3" <?= js_module('formulario/padrao') ?>>
                         <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+                        <?= component('input', ['name' => 'senha', 'label' => 'Sua senha', 'type' => 'password', 'required' => true, 'autocomplete' => 'current-password', 'error' => $erros['senha_ativar'] ?? null, 'attrs' => ['data-msg-vazio' => 'Informe a senha.']]) ?>
                         <?= component('input', ['name' => 'codigo', 'label' => 'Código do aplicativo', 'required' => true, 'autocomplete' => 'one-time-code', 'error' => $erros['codigo'] ?? null, 'attrs' => ['inputmode' => 'numeric', 'maxlength' => 7, 'pattern' => '[0-9 ]{6,7}', 'data-msg-vazio' => 'Digite o código de 6 dígitos.']]) ?>
                         <div><?= component('button', ['label' => 'Ativar', 'type' => 'submit', 'icon' => 'shield-check', 'attrs' => ['data-rotulo-carregando' => 'Verificando…']]) ?></div>
                     </form>
