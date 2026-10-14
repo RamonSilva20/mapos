@@ -314,6 +314,7 @@ class MY_Controller extends CI_Controller
             'nome_sistema' => (string) (($configuracao['app_name'] ?? '') ?: 'Map-OS'),
             'versao' => (string) $this->config->item('app_version'),
             'acao' => is_array($acao) ? $acao : null,
+            'atalhos' => layoutAtalhos($menu, $siteUrl),
             'flash' => $flash,
         ];
     }

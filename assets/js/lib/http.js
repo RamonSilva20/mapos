@@ -74,11 +74,12 @@ function atualizarCamposCsrf(raiz = document) {
  * Faz a requisição e devolve o JSON (ou o texto, se a resposta não for JSON).
  * Lança ErroHttp para status >= 400, com a mensagem do servidor quando vier.
  */
-export async function requisicao(url, { metodo = 'GET', dados = null, headers = {} } = {}) {
+export async function requisicao(url, { metodo = 'GET', dados = null, headers = {}, signal } = {}) {
     const opcoes = {
         method: metodo,
         credentials: 'same-origin',
         headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json', ...headers },
+        signal,
     };
 
     if (metodo !== 'GET' && metodo !== 'HEAD') {

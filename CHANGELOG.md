@@ -7,6 +7,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased] - v5 (5.0.0-alpha)
 
 ### Added
+- Busca global Ctrl/⌘ K: paleta com resultados por grupo (clientes, OS, produtos e serviços) enquanto se digita, navegação por ↑ ↓ Enter Esc, as mesmas permissões da busca completa e botão de busca na topbar do celular. Os atalhos F1 a F4 (clientes, produtos, serviços e OS) voltam, só para as telas que o usuário pode abrir. #2850 [@RamonSilva20](https://github.com/RamonSilva20)
 - Impressões (OS, vendas, garantias, cupons e área do cliente), PDFs dos relatórios e instalador em Tailwind: `assets/dist/imprimir.css`, `assets/dist/pdf.css` (achatado para o mPDF por `scripts/build-pdf-css.mjs`) e `install/assets/css/instalador.css`. #2960 [@RamonSilva20](https://github.com/RamonSilva20)
 - CI com lint, php-cs-fixer, PHPStan (com baseline) e `composer audit`. #2887 [@RamonSilva20](https://github.com/RamonSilva20)
 - PHPUnit com harness para o CodeIgniter 3 e testes iniciais. #2886 [@RamonSilva20](https://github.com/RamonSilva20)

@@ -3,7 +3,7 @@
  * Layout do painel: topbar (DESIGN.md `topbar`, #2917), breadcrumb e o
  * conteúdo da tela.
  *
- * Topbar: menu, busca global (Ctrl/⌘ K foca o campo, ver shell.js), modo de
+ * Topbar: menu, busca global (Ctrl/⌘ K abre a paleta, ver layout/busca.js), modo de
  * cor, a ação principal da tela quando o controller define
  * $this->data['topbar_acao'] (o único button-primary) e o menu do usuário.
  *
@@ -25,6 +25,8 @@
           'variant' => 'ghost',
           'attrs' => ['data-sidebar-alternar' => true, 'aria-controls' => 'v5-sidebar', 'aria-expanded' => 'true'],
       ]) ?>
+
+      <?= component('button', ['label' => 'Buscar', 'icon' => 'search', 'icon_only' => true, 'variant' => 'ghost', 'class' => 'md:hidden', 'attrs' => ['data-busca-abrir' => true, 'aria-keyshortcuts' => 'Control+K Meta+K']]) ?>
 
       <form action="<?= e(site_url('mapos/pesquisar')) ?>" method="get" role="search" class="relative hidden w-full max-w-md md:block">
         <?= component('input', ['name' => 'termo', 'id' => 'v5-pesquisa', 'label' => 'Pesquisar', 'hide_label' => true, 'type' => 'search', 'placeholder' => 'Buscar OS, cliente, produto…', 'class' => 'pr-16 pl-10', 'attrs' => ['aria-keyshortcuts' => 'Control+K Meta+K']]) ?>

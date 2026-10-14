@@ -101,6 +101,7 @@ $config['permissions_map'] = [
         'minhaConta' => '*',
         'alterarSenha' => '*',
         'pesquisar' => '*',
+        'buscaRapida' => '*',
         'calendario' => 'vOs',
         'uploadUserImage' => 'cUsuario',
         'backup' => 'cBackup',

@@ -174,6 +174,59 @@ class Mapos extends MY_Controller
         return $this->layout();
     }
 
+    /**
+     * Resultados da paleta Ctrl+K, em JSON (#2850). Mesmas permissões da
+     * busca completa: um grupo que o usuário não pode ver nem é consultado.
+     */
+    public function buscaRapida()
+    {
+        $termo = mb_substr(trim((string) $this->input->get('termo')), 0, 100);
+        $grupos = [];
+
+        if (mb_strlen($termo) >= 2) {
+            $this->load->helper('os');
+            $r = $this->mapos_model->buscaRapida($termo);
+
+            if ($this->permite('vCliente')) {
+                $grupos[] = ['chave' => 'clientes', 'titulo' => 'Clientes e fornecedores', 'itens' => array_map(static fn ($c) => [
+                    'titulo' => (string) $c->nomeCliente,
+                    'detalhe' => trim(implode(' · ', array_filter([(string) $c->documento, (string) ($c->celular ?: $c->telefone)]))),
+                    'url' => site_url('clientes/visualizar/' . (int) $c->idClientes),
+                ], $r['clientes'])];
+            }
+            if ($this->permite('vOs')) {
+                $grupos[] = ['chave' => 'os', 'titulo' => 'Ordens de serviço', 'itens' => array_map(static fn ($o) => [
+                    'titulo' => 'OS #' . (int) $o->idOs,
+                    'detalhe' => trim(implode(' · ', array_filter([(string) $o->nomeCliente, (string) $o->status]))),
+                    'url' => site_url('os/visualizar/' . (int) $o->idOs),
+                ], $r['os'])];
+            }
+            if ($this->permite('vProduto')) {
+                $grupos[] = ['chave' => 'produtos', 'titulo' => 'Produtos', 'itens' => array_map(static fn ($p) => [
+                    'titulo' => (string) $p->descricao,
+                    'detalhe' => dinheiro($p->precoVenda) . ' · estoque ' . (float) $p->estoque,
+                    'url' => site_url('produtos/visualizar/' . (int) $p->idProdutos),
+                ], $r['produtos'])];
+            }
+            if ($this->permite('vServico')) {
+                $grupos[] = ['chave' => 'servicos', 'titulo' => 'Serviços', 'itens' => array_map(static fn ($s) => [
+                    'titulo' => (string) $s->nome,
+                    'detalhe' => dinheiro($s->preco),
+                    'url' => site_url('servicos/editar/' . (int) $s->idServicos),
+                ], $r['servicos'])];
+            }
+        }
+
+        return $this->output
+            ->set_content_type('application/json', 'utf-8')
+            ->set_header('Cache-Control: private, no-store')
+            ->set_output(json_encode([
+                'termo' => $termo,
+                'grupos' => array_values(array_filter($grupos, static fn ($g) => $g['itens'] !== [])),
+                'todos' => site_url('mapos/pesquisar') . '?termo=' . rawurlencode($termo),
+            ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG));
+    }
+
     public function backup()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) {

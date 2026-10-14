@@ -20,6 +20,8 @@
   </div>
 </div>
 
+<?php $this->load->view('tema/busca'); ?>
+
 <div class="v5-shell">
   <div data-toast-region class="pointer-events-none fixed right-4 bottom-4 z-50 flex flex-col items-end gap-2">
     <?php foreach ($layout['flash'] as $mensagem) { ?>

@@ -82,6 +82,36 @@ class Mapos_model extends CI_Model
         return $data;
     }
 
+    /**
+     * Busca da paleta Ctrl+K: poucos resultados por grupo e só as colunas que
+     * a lista mostra. Cada consulta agrupa seus OR; o Query Builder escapa % e _ do termo.
+     *
+     * @return array{clientes: list<object>, os: list<object>, produtos: list<object>, servicos: list<object>}
+     */
+    public function buscaRapida(string $termo, int $limite = 5): array
+    {
+        $dados = [];
+
+        $dados['clientes'] = $this->db->select('idClientes, nomeCliente, documento, telefone, celular')
+            ->group_start()->like('nomeCliente', $termo)->or_like('documento', $termo)->or_like('telefone', $termo)->or_like('celular', $termo)->group_end()
+            ->order_by('nomeCliente')->limit($limite)->get('clientes')->result();
+
+        $dados['os'] = $this->db->select('os.idOs, os.status, clientes.nomeCliente')
+            ->join('clientes', 'clientes.idClientes = os.clientes_id', 'left')
+            ->group_start()->like('os.idOs', $termo)->or_like('clientes.nomeCliente', $termo)->or_like('os.descricaoProduto', $termo)->group_end()
+            ->order_by('os.idOs', 'DESC')->limit($limite)->get('os')->result();
+
+        $dados['produtos'] = $this->db->select('idProdutos, descricao, precoVenda, estoque')
+            ->group_start()->like('descricao', $termo)->or_like('codDeBarra', $termo)->group_end()
+            ->order_by('descricao')->limit($limite)->get('produtos')->result();
+
+        $dados['servicos'] = $this->db->select('idServicos, nome, preco')
+            ->like('nome', $termo)
+            ->order_by('nome')->limit($limite)->get('servicos')->result();
+
+        return $dados;
+    }
+
     public function add($table, $data)
     {
         $this->db->insert($table, $data);
