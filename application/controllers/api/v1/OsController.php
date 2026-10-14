@@ -12,7 +12,7 @@ class OsController extends REST_Controller
 
         $this->load->model('os_model');
         $this->load->model('Api_model');
-        $this->load->helper('os');
+        $this->load->helper(['os', 'api']);
     }
 
     public function index_get($id = '')
@@ -202,7 +202,7 @@ class OsController extends REST_Controller
             $this->response([
                 'status' => true,
                 'message' => 'OS adicionada com sucesso!',
-                'result' => $os,
+                'result' => apiSemSenha($os),
             ], REST_Controller::HTTP_CREATED);
         }
 
@@ -327,7 +327,7 @@ class OsController extends REST_Controller
             $this->response([
                 'status' => true,
                 'message' => 'OS editada com sucesso!',
-                'result' => $os,
+                'result' => apiSemSenha($os),
             ], REST_Controller::HTTP_OK);
         }
 

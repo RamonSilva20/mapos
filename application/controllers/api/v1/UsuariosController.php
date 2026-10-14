@@ -13,6 +13,7 @@ class UsuariosController extends REST_Controller
         $this->load->library('Authorization_Token');
         $this->load->model('Mapos_model');
         $this->load->model('usuarios_model');
+        $this->load->helper(['api', 'usuarios']);
     }
 
     public function index_get($id = '')
@@ -105,13 +106,10 @@ class UsuariosController extends REST_Controller
 
         if ($this->usuarios_model->add('usuarios', $data)) {
 
-            $this->load->model('api_model');
-            $data = $this->api_model->lastRow('usuarios', 'idUsuarios');
-
             $this->response([
                 'status' => true,
                 'message' => 'Usuário adicionado com sucesso!',
-                'result' => $data,
+                'result' => $this->usuarios_model->getById($this->db->insert_id()),
             ], REST_Controller::HTTP_OK);
         }
     }
@@ -127,69 +125,34 @@ class UsuariosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        if ($this->logged_user()->usuario->idUsuarios != $id) {
-            if (! $this->permission->checkPermission($this->logged_user()->level, 'cUsuario')) {
-                $this->response([
-                    'status' => false,
-                    'message' => 'Você não está autorizado a Editar Usuários!',
-                ], REST_Controller::HTTP_UNAUTHORIZED);
+        $entrada = [];
+        foreach (['nome', 'rg', 'cpf', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'email', 'telefone', 'celular', 'dataExpiracao', 'situacao', 'permissoes_id', 'senha', 'senha_atual'] as $campo) {
+            $valor = $this->put($campo, true);
+            if ($valor !== null) {
+                $entrada[$campo] = $valor;
             }
         }
 
-        if (! $this->put(['nome'], true) ||
-            ! $this->put(['rg'], true) ||
-            ! $this->put(['cpf'], true) ||
-            ! $this->put(['cep'], true) ||
-            ! $this->put(['rua'], true) ||
-            ! $this->put(['numero'], true) ||
-            ! $this->put(['bairro'], true) ||
-            ! $this->put(['cidade'], true) ||
-            ! $this->put(['estado'], true) ||
-            ! $this->put(['email'], true) ||
-            ! $this->put(['telefone'], true) ||
-            ! $this->put(['situacao'], true) ||
-            ! $this->put(['permissoes_id'], true)
-        ) {
+        $plano = usuarioApiPlanoEdicao(
+            $this->usuarios_model,
+            (int) $this->logged_user()->usuario->idUsuarios,
+            (int) $id,
+            (bool) $this->permission->checkPermission($this->logged_user()->level, 'cUsuario'),
+            $entrada
+        );
+        if (! $plano['ok']) {
             $this->response([
                 'status' => false,
-                'message' => 'Preencha todos campos',
-            ], REST_Controller::HTTP_BAD_REQUEST);
+                'message' => $plano['message'],
+            ], $plano['status']);
         }
-
-        if ($id == 1 && $this->put('situacao', true) == 0) {
-            $this->response([
-                'status' => false,
-                'message' => 'error', 'O usuário super admin não pode ser desativado!',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
-
-        $data = [
-            'nome' => $this->put('nome', true),
-            'rg' => $this->put('rg', true),
-            'cpf' => $this->put('cpf', true),
-            'cep' => $this->put('cep', true),
-            'rua' => $this->put('rua', true),
-            'numero' => $this->put('numero', true),
-            'bairro' => $this->put('bairro', true),
-            'cidade' => $this->put('cidade', true),
-            'estado' => $this->put('estado', true),
-            'email' => $this->put('email', true),
-            'telefone' => $this->put('telefone', true),
-            'celular' => $this->put('celular', true),
-            'dataExpiracao' => $this->put('dataExpiracao', true),
-            'situacao' => $this->put('situacao', true),
-            'permissoes_id' => $this->put('permissoes_id', true),
-        ];
-
-        if ($this->put('senha', true)) {
-            $data['senha'] = $this->put('senha', true);
-        }
+        $data = $plano['dados'];
 
         if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id)) {
             $this->log_app('Alterou um usuário. ID: ' . $id);
             $this->response([
                 'status' => true,
-                'message' => 'Cliente editado com sucesso!',
+                'message' => 'Usuário editado com sucesso!',
                 'result' => $this->usuarios_model->getById($id),
             ], REST_Controller::HTTP_OK);
         }
