@@ -54,10 +54,10 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                 <li>Digite o código de 6 dígitos que o aplicativo mostrar.</li>
             </ol>
             <div class="mt-4 flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-                <img src="<?= e($qr) ?>" alt="QR code para o aplicativo autenticador" width="200" height="200" class="size-[200px] rounded-md border border-border bg-white">
+                <img src="<?= e($qr) ?>" alt="QR code para o aplicativo autenticador" width="200" height="200" class="size-[200px] rounded-md border border-border">
                 <div class="min-w-0 flex-1">
                     <p class="text-label-md text-text">Chave para digitar</p>
-                    <p class="mt-1 rounded-md border border-border bg-surface-subtle px-3 py-2 font-mono text-sm break-all text-text" data-segredo><?= e($segredo) ?></p>
+                    <p class="mt-1 rounded-md border border-border bg-surface-subtle px-3 py-2 font-mono text-sm text-text" data-segredo><?php foreach (explode(' ', $segredo) as $grupo) { ?><span class="inline-block whitespace-nowrap"><?= e($grupo) ?></span> <?php } ?></p>
                     <form method="post" action="<?= e(site_url('mapos/ativarDoisFatores')) ?>" novalidate class="mt-4 flex flex-col gap-3" <?= js_module('formulario/padrao') ?>>
                         <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
                         <?= component('input', ['name' => 'codigo', 'label' => 'Código do aplicativo', 'required' => true, 'autocomplete' => 'one-time-code', 'error' => $erros['codigo'] ?? null, 'attrs' => ['inputmode' => 'numeric', 'maxlength' => 7, 'pattern' => '[0-9 ]{6,7}', 'data-msg-vazio' => 'Digite o código de 6 dígitos.']]) ?>

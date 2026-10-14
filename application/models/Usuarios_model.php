@@ -170,6 +170,11 @@ class Usuarios_model extends CI_Model
 
     public function delete($table, $fieldID, $ID)
     {
+        // Os códigos de recuperação do 2FA não ficam órfãos (#2876).
+        if ($table === 'usuarios' && $fieldID === 'idUsuarios' && $this->db->table_exists('usuarios_codigos_recuperacao')) {
+            $this->db->where('usuario_id', $ID)->delete('usuarios_codigos_recuperacao');
+        }
+
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
         if ($this->db->affected_rows() == '1') {

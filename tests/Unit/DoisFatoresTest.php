@@ -260,6 +260,29 @@ final class DoisFatoresTest extends MaposTestCase
         $this->assertStringContainsString('HTTP_FORBIDDEN', $dois[0]);
     }
 
+    public function testTelaTemRotuloNoBreadcrumbSemClasseInexistenteENaoQuebraAChave(): void
+    {
+        $url = static fn ($c) => 'http://x/' . $c;
+        $this->assertSame('Autenticação em dois fatores', layoutBreadcrumb(['mapos', 'doisFatores', ''], $url)[2]['label']);
+        $this->assertSame('Autenticação em dois fatores', layoutBreadcrumb(['mapos', 'ativarDoisFatores', ''], $url)[2]['label']);
+
+        $view = (string) file_get_contents(APPPATH . 'views/mapos/doisFatores.php');
+        $this->assertStringNotContainsString('bg-white', $view, 'A paleta padrão do Tailwind está desligada.');
+        $this->assertStringContainsString('inline-block whitespace-nowrap', $view, 'A chave só quebra entre os grupos de 4.');
+    }
+
+    public function testExcluirUsuarioApagaOsCodigosDeRecuperacao(): void
+    {
+        require_once APPPATH . 'models/Usuarios_model.php';
+        $usuarios = $this->makeInstance(Usuarios_model::class);
+        $this->setPrivateProperty($usuarios, 'db', $this->db);
+        $this->modelo->substituirCodigosDeRecuperacao(1, ['a', 'b']);
+
+        $usuarios->delete('usuarios', 'idUsuarios', 1);
+
+        $this->assertSame(0, $this->modelo->codigosDeRecuperacaoRestantes(1));
+    }
+
     public function testRotasDeDoisFatoresEstaoNoMapaEOGrupoTemOSwitch(): void
     {
         $mapa = (string) file_get_contents(APPPATH . 'config/permissions_map.php');
