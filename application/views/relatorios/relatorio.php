@@ -25,7 +25,7 @@ $novaAba = ['target' => '_blank', 'rel' => 'noopener'];
         </div>
     </header>
 
-    <div class="grid gap-4 lg:grid-cols-3">
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-3">
         <section class="<?= e($caixa) ?> lg:col-span-1" aria-labelledby="secao-rapidos">
             <h2 id="secao-rapidos" class="text-heading-sm text-text">Relatórios rápidos</h2>
             <p class="mt-0.5 text-caption text-muted">Sem filtros, com todos os registros.</p>

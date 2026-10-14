@@ -240,6 +240,8 @@ if (! defined('LAYOUT_ROTULOS')) {
         'mapos' => 'Sistema',
         'emails' => 'E-mails',
         'configurar' => 'Configurações',
+        'lancamentos' => 'Lançamentos',
+        'minhaconta' => 'Minha conta',
     ]);
 }
 
@@ -258,13 +260,16 @@ if (! function_exists('layoutBreadcrumb')) {
 
         $itens = [['label' => 'Início', 'url' => $siteUrl('')]];
 
-        if ($controller !== '') {
+        // /mapos (sem método) é o painel inicial, não o módulo "Sistema".
+        $ehPainel = strtolower($controller) === 'mapos' && in_array(strtolower($metodo), ['', 'index'], true);
+
+        if ($controller !== '' && ! $ehPainel) {
             $itens[] = ['label' => LAYOUT_ROTULOS[strtolower($controller)] ?? ucfirst($controller), 'url' => $siteUrl($controller)];
         }
 
         // gerenciar e index são a própria listagem do controller: a página 2
         // (clientes/gerenciar/10) tem o mesmo breadcrumb da página 1 (clientes).
-        if ($controller !== '' && $metodo !== '' && ! in_array(strtolower($metodo), ['gerenciar', 'index'], true)) {
+        if ($controller !== '' && $metodo !== '' && ! $ehPainel && ! in_array(strtolower($metodo), ['gerenciar', 'index'], true)) {
             $itens[] = ['label' => LAYOUT_ROTULOS[strtolower($metodo)] ?? ucfirst($metodo), 'url' => $siteUrl(trim($controller . '/' . $metodo . '/' . $parametro, '/'))];
         }
 
@@ -328,16 +333,22 @@ if (! function_exists('layoutAtalhos')) {
 
 if (! function_exists('layoutTitulo')) {
     /**
-     * Título da aba do navegador: a tela atual (último item do breadcrumb) e o
-     * nome do sistema ("Clientes — Map-OS"); sem breadcrumb, só o sistema (WCAG
-     * 2.4.2: cada página tem um título que a descreve).
+     * Título da aba do navegador (WCAG 2.4.2): a tela atual, o módulo e o nome
+     * do sistema, do mais específico ao mais geral ("Adicionar — Clientes —
+     * Map-OS"). Vem do breadcrumb, sem o "Início"; no painel inicial sobra só
+     * "Início".
      *
      * @param  list<array{label: string, url?: string|null}>  $breadcrumb
      */
     function layoutTitulo(array $breadcrumb, string $sistema): string
     {
-        $ultimo = $breadcrumb === [] ? null : trim(end($breadcrumb)['label']);
+        $rotulos = array_values(array_filter(array_map(static fn (array $item): string => trim($item['label']), $breadcrumb), static fn (string $r): bool => $r !== ''));
+        $especificos = array_slice($rotulos, 1);
 
-        return $ultimo === null || $ultimo === '' ? $sistema : $ultimo . ' — ' . $sistema;
+        if ($especificos === [] && $rotulos !== []) {
+            $especificos = [$rotulos[0]];
+        }
+
+        return implode(' — ', [...array_reverse(array_slice($especificos, -2)), $sistema]);
     }
 }

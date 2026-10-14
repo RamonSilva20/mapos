@@ -295,13 +295,18 @@ html[data-gaveta="aberta"] .v5-sidebar {
  * Quem pede menos movimento (prefers-reduced-motion) não recebe transições nem
  * animações: botões, switch, abas, calendário e a rolagem suave (WCAG 2.3.3).
  */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+/* Na camada shell: as utilities da moldura são !important, e entre !important a
+   camada de baixo na lista (shell) vence. Fora dela esta regra não alcançaria
+   os botões e links da sidebar e da topbar. */
+@layer shell {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

@@ -10,10 +10,34 @@ final class AcessibilidadeTest extends MaposTestCase
     {
         $itens = [['label' => 'Início', 'url' => '/'], ['label' => 'Clientes', 'url' => '/clientes'], ['label' => 'Adicionar', 'url' => '/clientes/adicionar']];
 
-        $this->assertSame('Adicionar — Map-OS', layoutTitulo($itens, 'Map-OS'));
+        $this->assertSame('Adicionar — Clientes — Map-OS', layoutTitulo($itens, 'Map-OS'));
+        $this->assertSame('Clientes — Map-OS', layoutTitulo(array_slice($itens, 0, 2), 'Map-OS'));
         $this->assertSame('Início — Map-OS', layoutTitulo([['label' => 'Início', 'url' => '/']], 'Map-OS'));
         $this->assertSame('Map-OS', layoutTitulo([], 'Map-OS'));
         $this->assertSame('Map-OS', layoutTitulo([['label' => '  ', 'url' => null]], 'Map-OS'));
+    }
+
+    public function testPainelInicialEAcentosNoTitulo(): void
+    {
+        $url = static fn ($c) => 'http://x/' . $c;
+
+        $this->assertSame([['label' => 'Início', 'url' => 'http://x/']], layoutBreadcrumb(['mapos', '', ''], $url), '/mapos é o painel, não o módulo Sistema.');
+        $this->assertSame([['label' => 'Início', 'url' => 'http://x/']], layoutBreadcrumb(['mapos', 'index', ''], $url));
+        $this->assertSame('Lançamentos — Financeiro — Map-OS', layoutTitulo(layoutBreadcrumb(['financeiro', 'lancamentos', ''], $url), 'Map-OS'));
+        $this->assertSame('Minha conta — Sistema — Map-OS', layoutTitulo(layoutBreadcrumb(['mapos', 'minhaConta', ''], $url), 'Map-OS'));
+        $this->assertSame('Clientes — Relatórios — Map-OS', layoutTitulo(layoutBreadcrumb(['relatorios', 'clientes', ''], $url), 'Map-OS'));
+    }
+
+    public function testMenosMovimentoVenceAsUtilitiesDaMoldura(): void
+    {
+        $layout = (string) file_get_contents(MAPOS_ROOT . '/assets/src/layout.css');
+
+        $this->assertMatchesRegularExpression('/@layer shell \{\s+@media \(prefers-reduced-motion: reduce\)/', $layout);
+    }
+
+    public function testGridDosRelatoriosNaoEmpurraAPaginaEm320px(): void
+    {
+        $this->assertStringContainsString('grid-cols-[minmax(0,1fr)]', (string) file_get_contents(APPPATH . 'views/relatorios/relatorio.php'));
     }
 
     public function testTopoUsaOTituloDaTela(): void
