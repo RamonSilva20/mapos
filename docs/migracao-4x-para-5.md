@@ -13,7 +13,7 @@ Resumo do que muda:
 | Anexos de OS e arquivos | `assets/anexos` e `assets/arquivos`, com URL pública | `STORAGE_PATH`, fora da pasta pública, servidos por controller com permissão |
 | Login | só e-mail e senha | limite de tentativas, 2FA (TOTP) opcional |
 | Segurança do navegador | sem política | cabeçalhos de segurança e CSP em enforce |
-| API | `reGenToken`, token sem refresh | `exp`, refresh token, `API_ENABLED=false` desliga a API de verdade |
+| API | `reGenToken`, token sem refresh, sem expiração real | `exp`, refresh token, tokens revogáveis, `reGenToken` removido, `API_ENABLED=false` desliga a API de verdade |
 | OS e vendas | desconto só no total | desconto também por item |
 
 ## 1. Requisitos
@@ -71,6 +71,7 @@ Compare o seu `.env` com o `application/.env.example` da v5 e acrescente o que f
 | --- | --- | --- |
 | `STORAGE_PATH` | Pasta dos anexos de OS e dos arquivos. **Aponte para fora da pasta pública.** | vazio: `application/storage` |
 | `UPLOAD_MAX_KB` | Tamanho máximo de cada upload, em KB. | `10240` (10 MB) |
+| `UPLOAD_MAX_PIXELS` | Limite de pixels (largura × altura) de uma imagem enviada, para proteger a memória ao gerar miniaturas e PDFs. | `40000000` (40 megapixels) |
 | `APP_SECURITY_HEADERS` | Liga ou desliga os cabeçalhos de segurança. | `true` |
 | `APP_HSTS_MAX_AGE` | Duração do HSTS (só em HTTPS). `0` desliga. | `31536000` |
 | `APP_HSTS_INCLUDE_SUBDOMAINS` | Acrescenta `includeSubDomains` ao HSTS. | `false` |
@@ -80,9 +81,17 @@ Compare o seu `.env` com o `application/.env.example` da v5 e acrescente o que f
 | `APP_COOKIE_SAMESITE` | `SameSite` dos cookies. | `Lax` |
 | `APP_PROXY_IPS` | IPs do proxy reverso em que o Map-OS confia para ler o `X-Forwarded-Proto`. | vazio |
 | `API_REFRESH_TOKEN_EXPIRE_TIME` | Duração do refresh token da API, em segundos. | `2592000` (30 dias) |
+| `API_TOKEN_EXPIRE_TIME` | Duração do access token, em segundos. O token do usuário dura no máximo 1 hora, mesmo que este valor seja maior; o token da área do cliente (sem refresh) dura o configurado. | o instalador grava `3600` (1 hora) |
 | `API_CORS_ORIGINS` | Origens que podem chamar a API de um navegador. Vazio: sem CORS. | vazio |
 | `API_RATE_LIMIT` | Requisições por minuto por IP na API. `0` desliga. | `300` |
 | `UPDATER_PRERELEASES` | Inclui pré-releases na busca de atualização. | `false` |
+
+Variáveis que já existiam e **mudaram de comportamento**:
+
+- **`API_ENABLED`:** com `false`, a API deixa de existir: todas as rotas `api/v1` respondem `404`, inclusive por URL direta de controller.
+- **`API_JWT_KEY`:** precisa ter **pelo menos 32 caracteres** e não pode ser o `enter_jwt_key` do `.env.example`. Em produção, com a chave vazia, curta ou igual ao exemplo, a API responde `503` até a troca (Configurações > Sistema, "Gerar uma chave nova para os tokens", ou edite o `.env`; para gerar uma, `openssl rand -hex 32`). Trocar a chave invalida todos os tokens: quem usa o app entra de novo.
+- **`APP_ENCRYPTION_KEY`:** o 2FA recusa ativar com o valor do `.env.example`.
+- **`API_CORS_ORIGINS`:** passa a valer também para a API do cliente (que antes respondia `Access-Control-Allow-Origin: *`).
 
 `GLOBAL_XSS_FILTERING` não existe mais na v5 e pode ser apagada do `.env`.
 
@@ -90,7 +99,6 @@ Pontos de atenção:
 
 - **`APP_ENVIRONMENT`:** em produção use `production`. O catálogo de componentes (`/index.php/componentes`) e as páginas de erro detalhadas só existem em `development`.
 - **Atrás de proxy reverso** (Nginx na frente, Cloudflare, load balancer), preencha `APP_PROXY_IPS`; do contrário o sistema não percebe que o acesso é HTTPS e os cookies e o HSTS não funcionam como esperado. Detalhes em [cookies-e-sessao.md](cookies-e-sessao.md) e [cabecalhos-de-seguranca.md](cabecalhos-de-seguranca.md).
-- **API:** `API_JWT_KEY` precisa ter pelo menos 32 caracteres. Se a sua for mais curta, gere outra, por exemplo com `openssl rand -hex 32`. Trocar a chave invalida os tokens já emitidos, e os apps pedem novo login.
 - **Não troque `APP_ENCRYPTION_KEY`.** Ela cifra os segredos do 2FA e alimenta o limite de tentativas de login.
 
 ### 3.4. Defina o `STORAGE_PATH` e rode as migrations
@@ -115,7 +123,7 @@ Depois atualize o banco, de um destes jeitos:
   php index.php tools migrate
   ```
 
-As migrations da v5 (a última da 4.x é `20240503170400_add_garantia_status_to_vendas_table`):
+As migrations da v5, na ordem em que rodam (conferidas em `application/database/migrations`; a última da 4.x é `20240503170400_add_garantia_status_to_vendas_table`):
 
 | Migration | O que faz |
 | --- | --- |
@@ -124,44 +132,35 @@ As migrations da v5 (a última da 4.x é `20240503170400_add_garantia_status_to_
 | `invalidate_plain_password_reset_tokens` | Invalida os tokens de recuperação de senha do cliente que estavam em texto claro. Quem tinha um pedido pendente precisa pedir de novo. |
 | `fix_decimal_scale_of_prices` | Ajusta preços de produtos e serviços e saldo das contas para `DECIMAL(10,2)`. |
 | `create_os_historico` | Histórico de status da OS. |
-| `create_api_tokens` | Tabelas do refresh token e do limite de requisições da API. |
+| `create_api_tokens` | Tabelas `api_refresh_tokens` (refresh token da API) e `api_rate_limit` (limite de requisições). |
 | `create_two_factor` | Colunas e tabela do 2FA. |
 | `add_tema_modo_to_usuarios` | Preferência de tema por usuário. |
 | `move_uploads_to_storage` | Move `assets/anexos` e `assets/arquivos` para o `STORAGE_PATH` e grava no banco o caminho relativo. |
 | `add_desconto_to_itens` | Colunas de desconto por item em OS e vendas. |
+| `add_token_versao` | Coluna `token_versao` em `usuarios` e `clientes`: trocar a senha ou desativar a conta invalida os access tokens já emitidos. |
+| `add_sessao_versao_to_usuarios` | Coluna `usuarios.sessao_versao`: trocar a senha derruba as outras sessões abertas do painel. |
 
 Sobre o `move_uploads_to_storage`: ele pode rodar de novo com segurança; arquivo que não for encontrado fica como estava. Depois de migrar, confira que os anexos abrem e que `assets/anexos` e `assets/arquivos` esvaziaram. O link direto antigo (`/assets/anexos/...`) deixa de funcionar de propósito. Mais detalhes, e o rollback, em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md).
 
 ### 3.5. Configure o servidor web
 
-A v5 foi feita para o servidor entregar **só** `index.php` e `assets/`. Bloqueie o resto, principalmente `application/` (onde ficam o `.env`, os logs e, sem `STORAGE_PATH`, os anexos).
+A v5 foi feita para o servidor entregar **só** `index.php`, `assets/` e, até o fim da instalação, `install/`. Todo o resto (`application/`, `updates/`, `scripts/`, `tests/`, `docker/`, `docs/`, `banco.sql`, `composer.json` e demais arquivos de projeto, e qualquer arquivo que comece com `.`) só é lido pelo PHP.
 
-**Apache:** o `.htaccess` da raiz bloqueia arquivos que começam com `.`, como o `application/.env`. Isso só funciona com `AllowOverride` liberado para a pasta do sistema; sem isso o servidor ignora o `.htaccess` e o `.env` fica legível pela URL. Se não puder liberar o `AllowOverride`, bloqueie `application/` na configuração do virtual host (`<Directory>` com `Require all denied`). Teste depois de configurar:
+- **Apache:** o `.htaccess` da raiz e o de `application/` já fazem o bloqueio, **desde que o `AllowOverride` esteja liberado** para a pasta do sistema. Sem isso o servidor ignora os `.htaccess` e o `application/.env` (senha do banco, chave de criptografia, chave dos tokens da API) fica legível pela URL.
+- **Nginx, Caddy, FrankenPHP, Apache sem `.htaccess`:** é preciso aplicar as regras do guia **[servidor-web.md](servidor-web.md)**, que traz a configuração pronta de cada servidor.
+- O `docker/etc/nginx/default.conf` serve ao ambiente Docker e já traz as regras.
+
+O `application/.env` é lido de `application/` (o `index.php` não tem outro caminho configurável), então a proteção é bloquear a pasta. **Depois de configurar o servidor, e sempre que mexer nele, teste:**
 
 ```bash
 curl -I https://seu-dominio/application/.env
+curl -I https://seu-dominio/banco.sql
+curl -I https://seu-dominio/application/logs/index.html
 ```
 
-A resposta deve ser `403` ou `404`, nunca `200`.
+A resposta deve ser `403` ou `404`, nunca `200`. Um `200` no `.env` significa que a senha do banco e as chaves estão públicas: bloqueie o acesso imediatamente e troque a senha do banco, a `API_JWT_KEY` e os tokens dos gateways de pagamento.
 
-**Nginx** (o `docker/etc/nginx/default.conf` é um exemplo de ponto de partida, para desenvolvimento). Em produção, acrescente:
-
-```nginx
-# nunca servir arquivos ocultos, o código e os dados da aplicação
-location ~ /\.(?!well-known) { deny all; }
-location ^~ /application/ { deny all; }
-location ^~ /updates/ { deny all; }
-location ~* \.sql$ { deny all; }
-
-# instalador: arquivos internos nunca são públicos
-location ~* ^/install/(settings\.json|instalador\.php|.*\.lock)$ { deny all; }
-location ^~ /install/view/ { deny all; }
-
-# upload: nunca executar scripts nas pastas de arquivos públicas
-location ~* ^/assets/(anexos|arquivos|uploads|userImage)/.*\.(php[0-9]*|phtml|phar|pht|phps)$ { deny all; }
-```
-
-Se o `STORAGE_PATH` estiver fora da pasta pública (o recomendado), nenhuma regra de nginx é necessária para os anexos. Sem `STORAGE_PATH`, o bloqueio de `/application/` é o que os protege.
+O melhor complemento é apontar o `STORAGE_PATH` para fora da pasta pública ([armazenamento-de-arquivos.md](armazenamento-de-arquivos.md)): os anexos, os arquivos enviados e o `csp-violacoes.json` (em `<STORAGE_PATH>/logs/`) ficam lá.
 
 Depois de testar o acesso, **apague a pasta `install/`** do servidor.
 
@@ -197,6 +196,9 @@ Os cron jobs de e-mail continuam os mesmos:
 
 ### Quem administra o servidor
 
+- A sessão do painel é revalidada a cada requisição: usuário desativado, excluído ou com a conta expirada perde o acesso na hora, e trocar a senha encerra as outras sessões abertas do usuário.
+- Confirmações de senha (trocar a senha, gerar novos códigos do 2FA, desativar o 2FA) e o pedido de redefinição de senha têm limite de tentativas, como o login.
+- Imagens enviadas têm limite de pixels (`UPLOAD_MAX_PIXELS`), além do limite de tamanho.
 - Rotas do painel passam pelo mapa de permissões (`application/config/permissions_map.php`): **o que não estiver mapeado é negado**. Um controller que você criou precisa de entrada nele.
 - Os cabeçalhos de segurança são enviados em toda resposta, e a CSP está em `enforce`: scripts e estilos inline são bloqueados.
 - Anexos e arquivos vêm do `STORAGE_PATH` e só abrem com login e permissão. O backup do painel é só do banco: inclua o `STORAGE_PATH` no seu backup de arquivos.
@@ -220,17 +222,20 @@ Se você mantém um fork, o caminho mais seguro é reaplicar suas mudanças sobr
 
 ### Quem usa a API (`/api/v1`)
 
-O fluxo antigo continua; o novo é opcional. Detalhes completos em [api-autenticacao.md](api-autenticacao.md). O que muda:
+Detalhes completos em [api-autenticacao.md](api-autenticacao.md). **Quem tem app móvel deve rever os pontos abaixo antes de atualizar o servidor:**
 
-- **`API_ENABLED=false` agora desliga a API de verdade:** todas as rotas respondem `404`, inclusive por URL direta de controller. Na 4.x ela continuava acessível pelo roteamento padrão.
-- **Login:** a resposta ganha `refresh_token`, `token_type` e `expires_in`. O access token passa a ter a claim `exp`.
-- **Renovação:** `POST /api/v1/refresh` e `POST /api/v1/logout` (refresh token de uso único). Veja em [api-autenticacao.md](api-autenticacao.md) o estado atual da rota legada `GET /api/v1/reGenToken`.
+- **`API_ENABLED=false` desliga a API de verdade:** todas as rotas respondem `404`, inclusive por URL direta de controller. Na 4.x ela continuava acessível pelo roteamento padrão.
+- **Chave:** com `API_JWT_KEY` vazia, com menos de 32 caracteres ou igual ao `.env.example`, a API responde `503` em produção.
+- **Login:** a resposta ganha `refresh_token`, `token_type` e `expires_in`. O access token passa a ter a claim `exp`; o do usuário dura no máximo 1 hora. Tokens da 4.x (sem `exp`) valem até vencer pelo `API_TIME`.
+- **Renovação:** `POST /api/v1/refresh` (refresh token de uso único) e `POST /api/v1/logout`. **`GET /api/v1/reGenToken` foi removida** e responde `404`: o app precisa renovar pelo refresh token ou fazer login de novo.
+- **Tokens revogáveis:** trocar a senha, desativar a conta ou fazer logout invalida na hora os access tokens já emitidos (`403`). Depois de trocar a própria senha pela API, o app precisa entrar de novo.
 - **2FA:** quem ativou o 2FA precisa enviar o campo `totp` no login. O app móvel atual não envia, então esses usuários só devem ligar o 2FA depois que o app for atualizado ([dois-fatores.md](dois-fatores.md)).
-- **Permissões** são consultadas no banco a cada requisição; o token não as carrega.
-- **Limite de requisições:** `API_RATE_LIMIT` (300 por minuto por IP). Acima disso, `429` com `Retry-After`.
-- **CORS:** só com `API_CORS_ORIGINS` preenchido. App Android/iOS não precisa.
-- **Anexos de OS:** a resposta deixa de trazer o caminho do arquivo e passa a trazer `url` e `thumb_url`, que exigem o token. O arquivo é baixado por `GET api/v1/os/<os>/anexos/<id>` (`?miniatura=1` para a miniatura) e, para o cliente, `GET api/v1/client/os/<os>/anexos/<id>`.
-- **Login com limite de tentativas**, como no painel.
+- **`PUT /api/v1/usuarios/{id}` no próprio usuário:** só grava os campos de perfil e **ignora** `permissoes_id`, `situacao` e `dataExpiracao`. Trocar a própria senha exige `senha_atual` (sem ela, `403`), a nova senha tem no mínimo 8 caracteres, a senha é sempre gravada com hash e o e-mail não pode repetir. `situacao` e `permissoes_id` só são obrigatórios ao editar *outro* usuário (que exige a permissão `cUsuario`). O super admin não pode ser desativado nem sair do grupo Administrador.
+- **Respostas sem senha:** o hash da senha não aparece mais nas respostas de clientes, usuários e OS. Um app que lia esse campo deixa de recebê-lo.
+- **Anexos de OS:** a resposta deixa de trazer o caminho do arquivo e passa a trazer `url` e `thumb_url`, que **exigem o token**. O arquivo é baixado por `GET api/v1/os/<os>/anexos/<id>` (`?miniatura=1` para a miniatura) e, para o cliente, `GET api/v1/client/os/<os>/anexos/<id>`. Detalhes em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md).
+- **OS pela API:** o item (produto, serviço) e a anotação precisam pertencer à OS da URL (`404` se não); OS faturada ou cancelada só é editada com `control_editos` ligado (`403`); o desconto é calculado no servidor e preço e quantidade são validados.
+- **Limite de requisições:** `API_RATE_LIMIT` (300 por minuto por IP). Acima disso, `429` com `Retry-After`. O login também tem limite de tentativas, como o painel.
+- **CORS:** só com `API_CORS_ORIGINS` preenchido, vale para a API de usuários e para a do cliente. App Android/iOS não precisa.
 
 ## 5. Rollback
 
@@ -243,6 +248,8 @@ php index.php tools migrate 20240503170400
 ```
 
 Isso desfaz todas as migrations da v5. Faça backup antes, porque colunas e tabelas novas (2FA, tokens, histórico da OS, desconto por item) são removidas com os dados que tinham.
+
+Isso inclui as colunas `token_versao` e `usuarios.sessao_versao`.
 
 Para voltar **só** os anexos para `assets/`, desfaça apenas a migration `move_uploads_to_storage`, como descrito em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md#rollback).
 
@@ -257,6 +264,9 @@ Depois do rollback do banco, volte também os arquivos da 4.x, o `.env` anterior
 | Anexos antigos não abrem | `STORAGE_PATH` não definido antes da migration, ou sem permissão de escrita. Defina, corrija a permissão e rode `php index.php tools migrate` de novo. |
 | Botões e janelas não respondem; erros de CSP no console | Script inline ou biblioteca de CDN adicionada por customização. Ajuste a customização; evite desligar a CSP. |
 | A API responde `404` | `API_ENABLED` está `false`. |
+| A API responde `503` | `API_JWT_KEY` vazia, com menos de 32 caracteres ou igual ao `.env.example`. |
+| O app móvel pede login a toda hora, ou `reGenToken` dá `404` | Esperado na v5: renove pelo refresh token (`POST /api/v1/refresh`). |
+| `curl -I .../application/.env` responde `200` | O servidor ignora os `.htaccess`. Aplique as regras de [servidor-web.md](servidor-web.md) agora. |
 | O 2FA de um usuário deixou de abrir | A `APP_ENCRYPTION_KEY` foi trocada. Redefina o 2FA do usuário em Usuários → editar. |
 
 Dúvidas e problemas: [Discussions](https://github.com/RamonSilva20/mapos/discussions) ou contato@mapos.com.br. Falhas de segurança **não** vão em issue pública: veja o [SECURITY.md](../SECURITY.md).

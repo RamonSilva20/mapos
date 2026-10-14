@@ -95,7 +95,7 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 
 ### Segurança do servidor
 
-- O servidor web deve entregar apenas `index.php` e `assets/`. **Não deixe `application/` (onde ficam o `.env`, os logs e, sem `STORAGE_PATH`, os anexos), `updates/` nem arquivos `.sql` acessíveis pela URL.** No Apache isso depende de o `.htaccess` da raiz valer (`AllowOverride`); no Nginx, crie as regras de bloqueio. Exemplos e o teste `curl` em [docs/migracao-4x-para-5.md](docs/migracao-4x-para-5.md#35-configure-o-servidor-web).
+- O servidor web deve entregar apenas `index.php` e `assets/`. **Não deixe `application/` (onde ficam o `.env`, os logs e, sem `STORAGE_PATH`, os anexos), `updates/` nem arquivos `.sql` acessíveis pela URL.** No Apache isso depende de os `.htaccess` valerem (`AllowOverride`); em Nginx, Caddy e outros, aplique as regras de [docs/servidor-web.md](docs/servidor-web.md). Depois de configurar, teste: `curl -I https://seu-dominio/application/.env` deve responder 403 ou 404, nunca 200.
 - Defina `STORAGE_PATH` no `application/.env` com uma pasta **fora** da pasta pública para os anexos de OS e os arquivos enviados ([docs/armazenamento-de-arquivos.md](docs/armazenamento-de-arquivos.md)).
 - Atrás de proxy reverso, preencha `APP_PROXY_IPS` ([docs/cookies-e-sessao.md](docs/cookies-e-sessao.md)). Os cabeçalhos de segurança e a CSP estão em [docs/cabecalhos-de-seguranca.md](docs/cabecalhos-de-seguranca.md).
 - Autenticação em dois fatores opcional em Meu perfil ([docs/dois-fatores.md](docs/dois-fatores.md)).
@@ -153,6 +153,7 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 
 ### Documentação
 * [Migração da 4.x para a v5](docs/migracao-4x-para-5.md)
+* [Servidor web: o que não pode ser público](docs/servidor-web.md)
 * [Atualização pelo painel](docs/atualizacao.md)
 * [Armazenamento de arquivos (`STORAGE_PATH`)](docs/armazenamento-de-arquivos.md)
 * [Autenticação da API](docs/api-autenticacao.md)

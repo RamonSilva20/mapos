@@ -107,6 +107,7 @@ Aponte o document root do seu webserver para a raiz do projeto, acesse a URL e s
 - O `vendor-dir` do projeto é **`application/vendor`**, e não `./vendor` (definido em `composer.json`). Os binários ficam em `application/vendor/bin/`.
 - As configurações de ambiente ficam em `application/.env`, que é ignorado pelo Git. **Nunca** faça commit dele nem de credenciais. A lista completa de variáveis está em `application/.env.example`.
 - Os anexos de OS e os arquivos enviados ficam em `STORAGE_PATH` (padrão `application/storage`), fora de `assets/` e servidos por controller com checagem de permissão. Veja [`docs/armazenamento-de-arquivos.md`](docs/armazenamento-de-arquivos.md). Ao testar upload, o limite vem de `UPLOAD_MAX_KB`.
+- O que o servidor web não pode entregar (`application/`, `.env`, `updates/`...) e as regras de cada servidor estão em [`docs/servidor-web.md`](docs/servidor-web.md).
 - A API só existe com `API_ENABLED=true` no `.env`; desligada, todas as rotas `api/v1` respondem 404. A autenticação está em [`docs/api-autenticacao.md`](docs/api-autenticacao.md).
 - A página de erro detalhada (Whoops) só é exibida quando `APP_ENVIRONMENT=development` **e** `WHOOPS_ERROR_PAGE_ENABLED=true` no `application/.env`. Em qualquer outro ambiente ela fica desabilitada.
 
