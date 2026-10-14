@@ -41,6 +41,10 @@ class Mapos_model extends CI_Model
         $this->db->update('usuarios');
 
         if ($this->db->affected_rows() >= 0) {
+            // As sessões da API deste usuário deixam de renovar (#2869).
+            $this->load->library('Refresh_token');
+            $this->refresh_token->revogarDoUsuario((int) $this->session->userdata('id_admin'));
+
             return true;
         }
 

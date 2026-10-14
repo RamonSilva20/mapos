@@ -293,8 +293,8 @@ class UsuariosController extends REST_Controller
                 'type' => REST_Controller::TOKEN_TYPE_USER,
             ];
 
-            $result = [
-                'access_token' => $this->authorization_token->generateToken($token_data),
+            // Campos novos e opcionais (#2869): quem não os conhece continua só com access_token e permissions.
+            $result = ['access_token' => $this->authorization_token->generateToken($token_data)] + $this->sessaoDoToken((int) $user->idUsuarios) + [
                 'permissions' => [$permissoes],
             ];
 
@@ -320,6 +320,10 @@ class UsuariosController extends REST_Controller
      */
     public function reGenToken_get()
     {
+        // Mantido para os apps já instalados (#2869); o fluxo novo é POST /refresh.
+        header('Deprecation: true');
+        header('Link: <' . site_url('api/v1/refresh') . '>; rel="successor-version"');
+
         $user = $this->logged_user(true)->usuario;
 
         // Usuário removido ou desativado não pode renovar o token
@@ -364,6 +368,91 @@ class UsuariosController extends REST_Controller
             'status' => false,
             'message' => 'O x-api-key expirado é necessário para gerar um novo x-api-key!',
         ], REST_Controller::HTTP_OK);
+    }
+
+    /**
+     * Renova o access token com o refresh token (#2869).
+     *
+     * POST /api/v1/refresh {"refresh_token": "..."}. O refresh token é de uso
+     * único: a resposta traz um novo, que substitui o anterior.
+     */
+    public function refresh_post()
+    {
+        $_POST = (array) json_decode(file_get_contents('php://input'), true);
+        $refreshToken = (string) $this->post('refresh_token', true);
+
+        $this->load->library('Refresh_token');
+        $girado = $this->refresh_token->girar($refreshToken, $this->input->ip_address(), $this->input->user_agent());
+
+        $usuario = $girado['ok'] ? $this->usuarios_model->getById($girado['usuario_id']) : null;
+        // Usuário removido, desativado ou com a conta expirada: a sessão acaba aqui.
+        if ($girado['ok'] && (empty($usuario) || (int) $usuario->situacao !== 1 || $this->chk_date($usuario->dataExpiracao))) {
+            $this->refresh_token->revogarDoUsuario((int) $girado['usuario_id']);
+            $girado = ['ok' => false];
+        }
+
+        if (! $girado['ok']) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
+        $token_data = [
+            'uid' => $usuario->idUsuarios,
+            'email' => $usuario->email,
+            'permissao' => $usuario->permissoes_id,
+            'type' => REST_Controller::TOKEN_TYPE_USER,
+        ];
+        $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $usuario->permissoes_id, 1, true)['permissoes']);
+
+        $this->response([
+            'status' => true,
+            'message' => 'Token renovado!',
+            'result' => [
+                'access_token' => $this->authorization_token->generateToken($token_data),
+                'refresh_token' => $girado['refresh_token'],
+                'token_type' => 'Bearer',
+                'expires_in' => $this->authorization_token->expiresIn(),
+                'permissions' => [$permissoes],
+            ],
+        ], REST_Controller::HTTP_OK);
+    }
+
+    /**
+     * Encerra a sessão da API: revoga o refresh token (e a sessão a que ele pertence).
+     * POST /api/v1/logout {"refresh_token": "..."}. Sempre responde 200: o app
+     * apaga os tokens locais de qualquer forma.
+     */
+    public function logout_post()
+    {
+        $_POST = (array) json_decode(file_get_contents('php://input'), true);
+
+        $this->load->library('Refresh_token');
+        $this->refresh_token->revogar((string) $this->post('refresh_token', true));
+
+        $this->response([
+            'status' => true,
+            'message' => 'Sessão encerrada.',
+        ], REST_Controller::HTTP_OK);
+    }
+
+    /**
+     * Campos da sessão que o login devolve além do access_token: refresh_token
+     * (só se a migration rodou), token_type e expires_in.
+     *
+     * @return array<string, mixed>
+     */
+    private function sessaoDoToken(int $usuarioId): array
+    {
+        $this->load->library('Refresh_token');
+        $refresh = $this->refresh_token->emitir($usuarioId, $this->input->ip_address(), $this->input->user_agent());
+
+        return array_filter([
+            'refresh_token' => $refresh,
+            'token_type' => 'Bearer',
+            'expires_in' => $this->authorization_token->expiresIn(),
+        ], static fn ($valor) => $valor !== null);
     }
 
     public function conta_get()
