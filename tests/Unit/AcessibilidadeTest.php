@@ -32,7 +32,7 @@ final class AcessibilidadeTest extends MaposTestCase
     {
         $layout = (string) file_get_contents(MAPOS_ROOT . '/assets/src/layout.css');
 
-        $this->assertMatchesRegularExpression('/@layer shell \{\s+@media \(prefers-reduced-motion: reduce\)/', $layout);
+        $this->assertMatchesRegularExpression('/@layer base \{\s+@media \(prefers-reduced-motion: reduce\)/', $layout);
     }
 
     public function testGridDosRelatoriosNaoEmpurraAPaginaEm320px(): void
