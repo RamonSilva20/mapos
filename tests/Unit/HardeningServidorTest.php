@@ -244,7 +244,10 @@ final class HardeningServidorTest extends MaposTestCase
         $nginx = (string) file_get_contents(MAPOS_ROOT . '/docker/etc/nginx/default.conf');
         $this->assertStringContainsString('location ~ /\.(?!well-known)', $nginx);
         $docs = (string) file_get_contents(MAPOS_ROOT . '/docs/servidor-web.md');
-        $this->assertStringContainsString('<DirectoryMatch "(^|/)\.(?!well-known)">', $docs);
+        // A receita do Apache parte da raiz do site: sem a âncora, um caminho de instalação
+        // com componente iniciado por ponto (/home/u/.local/www/mapos) dava 403 em tudo.
+        $this->assertStringContainsString('<DirectoryMatch "^/caminho/do/mapos/(.*/)?\.(?!well-known)">', $docs);
+        $this->assertStringNotContainsString('<DirectoryMatch "(^|/)\.(?!well-known)">', $docs);
         $this->assertStringContainsString('curl -I https://seu-site/.git/HEAD', $docs);
     }
 
