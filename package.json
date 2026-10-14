@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "npm run build:css && npm run build:vendor && npm run build:stickers",
-    "build:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --minify && tailwindcss -i assets/src/layout.css -o assets/dist/layout.css --minify && tailwindcss -i assets/src/imprimir.css -o assets/dist/imprimir.css --minify && npm run build:pdf",
+    "build:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --minify && tailwindcss -i assets/src/layout.css -o assets/dist/layout.css --minify && tailwindcss -i assets/src/imprimir.css -o assets/dist/imprimir.css --minify && tailwindcss -i assets/src/instalador.css -o install/assets/css/instalador.css --minify && npm run build:pdf",
     "build:stickers": "svgo --multipass --quiet -f assets/src/stickers -o assets/img/stickers",
     "build:vendor": "node scripts/build-vendor.mjs",
     "test:js": "node --test tests/js/*.mjs",
