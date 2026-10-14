@@ -105,9 +105,7 @@ class ClientOsController extends REST_Controller
             );
         }
 
-        foreach ($anexos as $anexo) {
-            unset($anexo->path);
-        }
+        $anexos = osAnexosParaApi($anexos, site_url('api/v1/client/os/' . (int) $osId . '/anexos'));
 
         unset($os->senha);
 
@@ -207,5 +205,31 @@ class ClientOsController extends REST_Controller
                 'message' => 'Ocorreu um erro ao criar a ordem de serviço.',
             ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /** Arquivo (ou miniatura com ?miniatura=1) de um anexo de uma OS do cliente autenticado. */
+    public function anexo_get(int $id, int $idAnexo)
+    {
+        $clientLogged = $this->logged_client();
+        $os = $this->os_model->getById($id);
+
+        if (! $os || (int) $os->idClientes !== (int) $clientLogged->usuario->idClientes) {
+            $this->response([
+                'status' => false,
+                'message' => 'Anexo não encontrado',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        $anexo = $this->os_model->getAnexoDaOs($id, $idAnexo);
+        $arquivo = $anexo ? armazenamentoArquivoDoAnexo($anexo, $this->get('miniatura') !== null) : null;
+
+        if ($arquivo === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Anexo não encontrado',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        armazenamentoEnviar($arquivo, 'anexo-' . (int) $anexo->idAnexos . '.' . strtolower(pathinfo($arquivo, PATHINFO_EXTENSION)));
     }
 }

@@ -52,6 +52,7 @@ class Github_updater
         'assets/arquivos/',
         'assets/uploads/',
         'assets/userImage/',
+        'application/storage/',
         'application/logs/',
         'application/cache/',
         'ci_sessions/',

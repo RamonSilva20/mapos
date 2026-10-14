@@ -10,6 +10,7 @@
 
 define('MAPOS_ROOT', dirname(__DIR__));
 define('APPPATH', MAPOS_ROOT . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR);
+defined('FCPATH') || define('FCPATH', MAPOS_ROOT . DIRECTORY_SEPARATOR);
 define('BASEPATH', MAPOS_ROOT . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'codeigniter' . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR);
 
 require MAPOS_ROOT . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
@@ -113,6 +114,7 @@ if (! class_exists('CI_Migration', false)) {
 }
 
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'general_helper.php';
+require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'armazenamento_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'financeiro_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'escape_helper.php';
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'tema_helper.php';

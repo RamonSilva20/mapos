@@ -561,35 +561,44 @@ class Mine extends CI_Controller
         ]);
     }
 
+    /** Exibe o anexo de uma OS do cliente (imagens e PDF na página). */
+    public function anexo($id = null, $parte = null)
+    {
+        $this->enviarAnexo($id, $parte === 'thumb', false);
+    }
+
     public function downloadanexo($id = null)
+    {
+        $this->enviarAnexo($id, false, true);
+    }
+
+    /**
+     * O anexo precisa pertencer a uma OS do cliente autenticado; o arquivo vem
+     * de STORAGE_PATH (#2872), nunca de uma URL pública.
+     */
+    private function enviarAnexo($id, bool $miniatura, bool $baixar): void
     {
         $idCliente = $this->clienteLogado();
 
-        if ($id == null || ! is_numeric($id)) {
+        $file = ($id != null && is_numeric($id)) ? $this->db->where('idAnexos', (int) $id)->get('anexos', 1)->row() : null;
+
+        $os = null;
+        if ($file) {
+            $this->load->model('os_model');
+            $os = $this->os_model->getById($file->os_id);
+        }
+
+        $arquivo = ($os && $os->idClientes == $idCliente) ? armazenamentoArquivoDoAnexo($file, $miniatura) : null;
+
+        if ($arquivo === null) {
+            if ($miniatura) {
+                show_404();
+            }
             $this->session->set_flashdata('error', 'Anexo não encontrado.');
             redirect('mine/painel');
         }
 
-        $this->db->where('idAnexos', (int) $id);
-        $file = $this->db->get('anexos', 1)->row();
-
-        if (! $file) {
-            $this->session->set_flashdata('error', 'Anexo não encontrado.');
-            redirect('mine/painel');
-        }
-
-        // O anexo precisa pertencer a uma OS do cliente autenticado.
-        $this->load->model('os_model');
-        $os = $this->os_model->getById($file->os_id);
-
-        if (! $os || $os->idClientes != $idCliente) {
-            $this->session->set_flashdata('error', 'Anexo não encontrado.');
-            redirect('mine/painel');
-        }
-
-        $this->load->library('zip');
-        $this->zip->read_file($file->path . '/' . $file->anexo);
-        $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
+        armazenamentoEnviar($arquivo, 'anexo-' . (int) $file->idAnexos . '.' . strtolower(pathinfo($arquivo, PATHINFO_EXTENSION)), $baixar);
     }
 
     // --- Cadastro -------------------------------------------------------------

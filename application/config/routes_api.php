@@ -44,6 +44,7 @@ $route['api/v1/client/auth'] = 'api/v1/client/ClientLoginController/login';
 
 $route['api/v1/client/os'] = 'api/v1/client/ClientOsController/os';
 $route['api/v1/client/os/(:num)'] = 'api/v1/client/ClientOsController/os/$1';
+$route['api/v1/client/os/(:num)/anexos/(:num)'] = 'api/v1/client/ClientOsController/anexo/$1/$2';
 
 $route['api/v1/client/compras'] = 'api/v1/client/ClientComprasController/index';
 $route['api/v1/client/compras/(:num)'] = 'api/v1/client/ClientComprasController/index/$1';

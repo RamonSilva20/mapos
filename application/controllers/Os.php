@@ -6,6 +6,9 @@ if (! defined('BASEPATH')) {
 
 class Os extends MY_Controller
 {
+    /** Formatos aceitos nos anexos da OS (e na API). */
+    public const EXTENSOES_ANEXO = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'cdr', 'docx', 'txt'];
+
     /** Filtros da listagem, na query string (listagemFiltros()). */
     public const FILTROS = [
         'pesquisa' => 'texto',
@@ -991,22 +994,17 @@ class Os extends MY_Controller
         $this->load->library('upload');
         $this->load->library('image_lib');
 
-        $pastaMes = date('m-Y');
-        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . $pastaMes . DIRECTORY_SEPARATOR . 'OS-' . $idOs;
+        // Pasta relativa a STORAGE_PATH, fora de assets/: o arquivo só sai por os/anexo.
+        $relativo = 'anexos/' . date('m-Y') . '/OS-' . $idOs;
+        $directory = armazenamentoPasta($relativo . '/thumbs') !== null ? armazenamentoPasta($relativo) : null;
 
-        if (! is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs') && ! @mkdir($directory . DIRECTORY_SEPARATOR . 'thumbs', 0755, true)) {
+        if ($directory === null) {
             $this->responderJson(500, ['result' => false, 'message' => 'Não foi possível criar a pasta dos anexos no servidor.']);
 
             return;
         }
 
-        protegerDiretorioUpload([dirname($directory), $directory, $directory . DIRECTORY_SEPARATOR . 'thumbs']);
-
-        $this->upload->initialize([
-            'upload_path' => $directory,
-            'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
-            'max_size' => 0,
-        ]);
+        $this->upload->initialize(armazenamentoConfigUpload($directory, self::EXTENSOES_ANEXO));
 
         foreach ($arquivos as $key => $val) {
             $i = 1;
@@ -1017,7 +1015,6 @@ class Os extends MY_Controller
         }
         unset($_FILES['userfile']);
 
-        $url = base_url('assets/anexos/' . $pastaMes . '/OS-' . $idOs);
         $falhas = [];
         $enviados = 0;
 
@@ -1034,10 +1031,15 @@ class Os extends MY_Controller
 
             $upload = $this->upload->data();
 
-            // Nome aleatório, mantendo a extensão original.
-            $nome = bin2hex(random_bytes(16)) . '.' . strtolower(pathinfo($upload['file_name'], PATHINFO_EXTENSION));
-            $caminho = $upload['file_path'] . $nome;
-            rename($upload['full_path'], $caminho);
+            // O conteúdo precisa bater com a extensão (o nome já é aleatório: encrypt_name).
+            if (($erroConteudo = armazenamentoValidarEnvio($upload)) !== null) {
+                $falhas[] = ($arquivo['name'] ?? 'Arquivo') . ': ' . $erroConteudo;
+
+                continue;
+            }
+
+            $nome = $upload['file_name'];
+            $caminho = $upload['full_path'];
 
             $thumb = '';
             if ($upload['is_image'] == 1) {
@@ -1054,7 +1056,7 @@ class Os extends MY_Controller
                 }
             }
 
-            if ($this->os_model->anexar($idOs, $nome, $url, $thumb, $directory)) {
+            if ($this->os_model->anexar($idOs, $nome, '', $thumb, $relativo)) {
                 $enviados++;
             } else {
                 @unlink($caminho);
@@ -1120,6 +1122,21 @@ class Os extends MY_Controller
         $this->responderTrechos($idOs, 'anexo', 'Anexo excluído.');
     }
 
+    /**
+     * Exibe o anexo (imagens e PDF na página, o resto como download) ou a
+     * miniatura (/os/anexo/<id>/thumb). Exige vOs; o arquivo vem de
+     * STORAGE_PATH, nunca de uma URL pública.
+     */
+    public function anexo($id = null, $parte = null)
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar O.S.');
+            redirect(base_url());
+        }
+
+        $this->enviarAnexo($id, $parte === 'thumb', false);
+    }
+
     public function downloadanexo($id = null)
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
@@ -1127,17 +1144,23 @@ class Os extends MY_Controller
             redirect(base_url());
         }
 
-        $file = $id != null && is_numeric($id) ? $this->db->where('idAnexos', (int) $id)->get('anexos', 1)->row() : null;
-        $arquivos = $file ? osArquivosDosAnexos([(object) ['path' => $file->path, 'anexo' => $file->anexo, 'thumb' => '']], FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos') : [];
+        $this->enviarAnexo($id, false, true);
+    }
 
-        if ($arquivos === []) {
+    private function enviarAnexo($id, bool $miniatura, bool $baixar): void
+    {
+        $anexo = $id != null && is_numeric($id) ? $this->db->where('idAnexos', (int) $id)->get('anexos', 1)->row() : null;
+        $arquivo = $anexo ? armazenamentoArquivoDoAnexo($anexo, $miniatura) : null;
+
+        if ($arquivo === null) {
+            if ($miniatura) {
+                show_404();
+            }
             $this->session->set_flashdata('error', 'Anexo não encontrado.');
             redirect(site_url('os'));
         }
 
-        $this->load->library('zip');
-        $this->zip->read_file($arquivos[0]);
-        $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
+        armazenamentoEnviar($arquivo, 'anexo-' . (int) $anexo->idAnexos . '.' . strtolower(pathinfo($arquivo, PATHINFO_EXTENSION)), $baixar);
     }
 
     /**

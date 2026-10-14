@@ -61,7 +61,7 @@ final class ArquivosTest extends MaposTestCase
         $this->assertStringContainsString('dataIsoParaYmd', $codigo);
         // O arquivo só é gravado depois da validação: o envio vem depois do if de erros vazios.
         $this->assertLessThan(strpos($codigo, '$this->do_upload()'), strpos($codigo, "validarFormulario('arquivos')"));
-        $this->assertStringContainsString('is_file((string) $file->path)', $codigo, 'Excluir e baixar conferem se o arquivo existe.');
+        $this->assertStringContainsString('armazenamentoLocalizar((string) $file->path', $codigo, 'Excluir e baixar conferem se o arquivo existe (e está na pasta de armazenamento).');
 
         $mapa = (string) file_get_contents(APPPATH . 'config/permissions_map.php');
         preg_match("/'Arquivos' => \\[.*?\\n    \\],/s", $mapa, $bloco);

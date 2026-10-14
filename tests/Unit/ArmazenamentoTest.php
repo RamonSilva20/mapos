@@ -1,0 +1,184 @@
+<?php
+
+/**
+ * Armazenamento fora do webroot (#2872): pasta configurável, caminhos que não
+ * saem da raiz, MIME conferido e cabeçalhos de download.
+ */
+final class ArmazenamentoTest extends MaposTestCase
+{
+    private string $raiz;
+
+    private ?string $envAnterior;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->raiz = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'mapos-storage-' . bin2hex(random_bytes(4));
+        $this->envAnterior = $_ENV['STORAGE_PATH'] ?? null;
+        $_ENV['STORAGE_PATH'] = $this->raiz;
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->envAnterior === null) {
+            unset($_ENV['STORAGE_PATH']);
+        } else {
+            $_ENV['STORAGE_PATH'] = $this->envAnterior;
+        }
+        unset($_ENV['UPLOAD_MAX_KB']);
+        $this->apagar($this->raiz);
+        parent::tearDown();
+    }
+
+    private function apagar(string $caminho): void
+    {
+        if (is_file($caminho) || is_link($caminho)) {
+            unlink($caminho);
+
+            return;
+        }
+        foreach (is_dir($caminho) ? scandir($caminho) : [] as $item) {
+            if ($item !== '.' && $item !== '..') {
+                $this->apagar($caminho . DIRECTORY_SEPARATOR . $item);
+            }
+        }
+        if (is_dir($caminho)) {
+            rmdir($caminho);
+        }
+    }
+
+    public function testRaizVemDoEnvOuDaPastaProtegidaDaAplicacao(): void
+    {
+        $this->assertSame($this->raiz, armazenamentoRaiz());
+
+        $_ENV['STORAGE_PATH'] = 'armazem/privado/';
+        $this->assertSame(rtrim(FCPATH, '/\\') . DIRECTORY_SEPARATOR . 'armazem/privado', armazenamentoRaiz());
+
+        unset($_ENV['STORAGE_PATH']);
+        $this->assertSame(rtrim(APPPATH, '/\\') . DIRECTORY_SEPARATOR . 'storage', armazenamentoRaiz());
+    }
+
+    public function testLimiteConfiguravel(): void
+    {
+        $this->assertSame(10240, armazenamentoLimiteKb());
+
+        $_ENV['UPLOAD_MAX_KB'] = '2048';
+        $this->assertSame(2048, armazenamentoLimiteKb());
+        $this->assertSame(2048, armazenamentoConfigUpload('/x', ['pdf', 'png'])['max_size']);
+        $this->assertSame('pdf|png', armazenamentoConfigUpload('/x', ['pdf', 'png'])['allowed_types']);
+
+        $_ENV['UPLOAD_MAX_KB'] = 'abc';
+        $this->assertSame(10240, armazenamentoLimiteKb());
+    }
+
+    public function testPastaProtegidaEFechadaParaOWeb(): void
+    {
+        $pasta = armazenamentoPasta('anexos/10-2026/OS-5/thumbs');
+
+        $this->assertSame($this->raiz . '/anexos/10-2026/OS-5/thumbs', str_replace('\\', '/', $pasta));
+        $this->assertFileExists($this->raiz . '/.htaccess');
+        $this->assertStringContainsString('Require all denied', (string) file_get_contents($this->raiz . '/.htaccess'));
+        $this->assertFileExists($this->raiz . '/anexos/index.html');
+        $this->assertNull(armazenamentoPasta('anexos/../../fora'));
+    }
+
+    public function testLocalizarSoDevolveArquivosDentroDaRaiz(): void
+    {
+        $pasta = armazenamentoPasta('arquivos/01-01-2026');
+        file_put_contents($pasta . '/a.txt', 'ok');
+        $fora = tempnam(sys_get_temp_dir(), 'fora');
+
+        $this->assertSame(realpath($pasta . '/a.txt'), armazenamentoLocalizar('arquivos/01-01-2026/a.txt'));
+        $this->assertSame(realpath($pasta . '/a.txt'), armazenamentoLocalizar($pasta . '/a.txt'));
+        $this->assertNull(armazenamentoLocalizar('arquivos/01-01-2026/nao-existe.txt'));
+        $this->assertNull(armazenamentoLocalizar('../' . basename($fora)), 'Caminho relativo que sai da raiz.');
+        $this->assertNull(armazenamentoLocalizar($fora), 'Caminho absoluto fora da raiz.');
+        $this->assertNull(armazenamentoLocalizar(''));
+        $this->assertSame(realpath($fora), armazenamentoLocalizar($fora, [dirname($fora)]), 'Raiz legada permitida.');
+
+        unlink($fora);
+    }
+
+    public function testArquivoDoAnexoUsaCaminhoRelativoEIgnoraNomeComBarras(): void
+    {
+        $pasta = armazenamentoPasta('anexos/10-2026/OS-5/thumbs');
+        file_put_contents(dirname($pasta) . '/abc.png', 'x');
+        file_put_contents($pasta . '/thumb_abc.png', 'x');
+        $anexo = (object) ['path' => 'anexos/10-2026/OS-5', 'anexo' => 'abc.png', 'thumb' => 'thumb_abc.png'];
+
+        $this->assertSame(realpath(dirname($pasta) . '/abc.png'), armazenamentoArquivoDoAnexo($anexo));
+        $this->assertSame(realpath($pasta . '/thumb_abc.png'), armazenamentoArquivoDoAnexo($anexo, true));
+        $this->assertNull(armazenamentoArquivoDoAnexo((object) ['path' => 'anexos/10-2026/OS-5', 'anexo' => '../../../../etc/passwd', 'thumb' => '']));
+        $this->assertNull(armazenamentoArquivoDoAnexo((object) ['path' => '/etc', 'anexo' => 'passwd', 'thumb' => '']));
+    }
+
+    public function testMimeConfereComAExtensao(): void
+    {
+        $pasta = armazenamentoPasta('teste');
+        $png = $pasta . '/a.png';
+        file_put_contents($png, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg=='));
+        $php = $pasta . '/b.png';
+        file_put_contents($php, '<?php echo 1;');
+        $pdf = $pasta . '/c.pdf';
+        file_put_contents($pdf, "%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n");
+
+        $this->assertTrue(armazenamentoMimePermitido($png, 'png'));
+        $this->assertFalse(armazenamentoMimePermitido($png, 'pdf'));
+        $this->assertFalse(armazenamentoMimePermitido($php, 'png'), 'Script com extensão de imagem.');
+        $this->assertTrue(armazenamentoMimePermitido($pdf, '.PDF'));
+        $this->assertFalse(armazenamentoMimePermitido($png, 'php'), 'Extensão fora da lista.');
+
+        $this->assertNull(armazenamentoValidarEnvio(['full_path' => $png, 'file_ext' => '.png']));
+        $this->assertSame('O conteúdo do arquivo não confere com a extensão.', armazenamentoValidarEnvio(['full_path' => $php, 'file_ext' => '.png']));
+        $this->assertFileDoesNotExist($php, 'Arquivo com conteúdo divergente é apagado.');
+    }
+
+    public function testCabecalhosDeDownload(): void
+    {
+        $imagem = armazenamentoCabecalhos('anexo-1.png', 'png', 10);
+        $this->assertSame('image/png', $imagem['Content-Type']);
+        $this->assertStringStartsWith('inline;', $imagem['Content-Disposition']);
+        $this->assertSame('nosniff', $imagem['X-Content-Type-Options']);
+        $this->assertStringContainsString("default-src 'none'", $imagem['Content-Security-Policy']);
+
+        $this->assertStringStartsWith('attachment;', armazenamentoCabecalhos('anexo-1.png', 'png', 10, true)['Content-Disposition']);
+
+        $texto = armazenamentoCabecalhos('a.txt', 'txt', 3);
+        $this->assertStringStartsWith('attachment;', $texto['Content-Disposition'], 'Só imagens e PDF abrem na página.');
+
+        $estranho = armazenamentoCabecalhos("x\r\nSet-Cookie: a=b.html", 'html', 3);
+        $this->assertSame('application/octet-stream', $estranho['Content-Type']);
+        $this->assertStringNotContainsString("\n", $estranho['Content-Disposition'], 'Sem quebra de linha no nome (header injection).');
+    }
+
+    public function testAnexosDaApiNaoExpoemOCaminhoEApontamParaOEndpoint(): void
+    {
+        require_once APPPATH . 'helpers/os_helper.php';
+
+        $anexos = osAnexosParaApi([
+            (object) ['idAnexos' => 4, 'anexo' => 'a.jpg', 'thumb' => 'thumb_a.jpg', 'path' => '/var/www/x', 'url' => 'http://x/assets/anexos/y'],
+            (object) ['idAnexos' => 5, 'anexo' => 'b.pdf', 'thumb' => '', 'path' => 'anexos/z', 'url' => ''],
+        ], 'http://mapos.test/api/v1/os/1/anexos/');
+
+        $this->assertSame('http://mapos.test/api/v1/os/1/anexos/4', $anexos[0]->url);
+        $this->assertSame('http://mapos.test/api/v1/os/1/anexos/4?miniatura=1', $anexos[0]->thumb_url);
+        $this->assertNull($anexos[1]->thumb_url);
+        $this->assertFalse(isset($anexos[0]->path));
+    }
+
+    public function testControllersSoServemPeloArmazenamentoComPermissao(): void
+    {
+        $os = (string) file_get_contents(APPPATH . 'controllers/Os.php');
+        $this->assertStringNotContainsString("'assets/anexos/'", $os);
+        $this->assertStringContainsString('armazenamentoPasta(', $os);
+
+        $mine = (string) file_get_contents(APPPATH . 'controllers/Mine.php');
+        $this->assertStringContainsString('$os->idClientes == $idCliente', $mine, 'Anexo só da OS do cliente logado.');
+
+        $arquivos = (string) file_get_contents(APPPATH . 'controllers/Arquivos.php');
+        $this->assertStringNotContainsString("'./assets/arquivos/", $arquivos);
+
+        include APPPATH . 'config/permissions_map.php';
+        $this->assertSame('vOs', $config['permissions_map']['Os']['anexo']);
+    }
+}

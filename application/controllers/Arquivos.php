@@ -126,8 +126,8 @@ class Arquivos extends MY_Controller
                     } else {
                         $dados += [
                             'file' => $envio['file_name'],
-                            'path' => $envio['full_path'],
-                            'url' => base_url() . 'assets/arquivos/' . date('d-m-Y') . '/' . $envio['file_name'],
+                            'path' => 'arquivos/' . date('d-m-Y') . '/' . $envio['file_name'],
+                            'url' => '',
                             'tamanho' => $envio['file_size'],
                             'tipo' => $envio['file_ext'],
                         ];
@@ -171,14 +171,16 @@ class Arquivos extends MY_Controller
         }
 
         $file = $id !== null && is_numeric($id) ? $this->arquivos_model->getById($id) : null;
-        if (! $file || ! is_file((string) $file->path)) {
+        $arquivo = $file ? armazenamentoLocalizar((string) $file->path, [FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'arquivos']) : null;
+        if ($arquivo === null) {
             $this->session->set_flashdata('error', 'Erro! O arquivo não pode ser localizado.');
             redirect(base_url() . 'index.php/arquivos/');
         }
 
-        $this->load->library('zip');
-        $this->zip->read_file($file->path);
-        $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
+        // Imagens e PDF abrem na página; o resto baixa (armazenamentoEnviar()).
+        $nome = trim((string) $file->documento) !== '' ? (string) $file->documento : 'arquivo';
+        $extensao = strtolower(pathinfo($arquivo, PATHINFO_EXTENSION));
+        armazenamentoEnviar($arquivo, str_ends_with(strtolower($nome), '.' . $extensao) ? $nome : $nome . '.' . $extensao, $this->input->get('baixar') !== null);
     }
 
     public function excluir()
@@ -197,8 +199,9 @@ class Arquivos extends MY_Controller
 
         $this->db->where('idDocumentos', $id);
         if ($this->db->delete('documentos')) {
-            if (is_file((string) $file->path)) {
-                unlink($file->path);
+            $arquivo = armazenamentoLocalizar((string) $file->path, [FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'arquivos']);
+            if ($arquivo !== null) {
+                unlink($arquivo);
             }
             $this->session->set_flashdata('success', 'Arquivo excluído com sucesso!');
             log_info('Removeu um arquivo. ID: ' . $id);
@@ -223,22 +226,14 @@ class Arquivos extends MY_Controller
             redirect(base_url());
         }
 
-        $date = date('d-m-Y');
-
-        $config['upload_path'] = './assets/arquivos/' . $date;
-        $config['allowed_types'] = 'txt|jpg|jpeg|gif|png|pdf|PDF|JPG|JPEG|GIF|PNG';
-        $config['max_size'] = 0;
-        $config['max_width'] = '3000';
-        $config['max_height'] = '2000';
-        $config['encrypt_name'] = true;
-
-        if (! is_dir('./assets/arquivos/' . $date)) {
-            // 0755: o diretório recebe uploads e não precisa ser gravável por
-            // qualquer usuário do servidor.
-            mkdir('./assets/arquivos/' . $date, 0755, true);
+        $pasta = armazenamentoPasta('arquivos/' . date('d-m-Y'));
+        if ($pasta === null) {
+            return 'Não foi possível criar a pasta de arquivos no servidor.';
         }
 
-        protegerDiretorioUpload(['./assets/arquivos/' . $date]);
+        $config = armazenamentoConfigUpload($pasta, ['txt', 'jpg', 'jpeg', 'gif', 'png', 'pdf']);
+        $config['max_width'] = '3000';
+        $config['max_height'] = '2000';
 
         $this->load->library('upload', $config);
 
@@ -247,10 +242,15 @@ class Arquivos extends MY_Controller
         }
 
         if (! $this->upload->do_upload()) {
-            return 'Não foi possível enviar o arquivo. Use TXT, JPG, GIF, PNG ou PDF (imagens de até 3000 × 2000 px).';
+            return 'Não foi possível enviar o arquivo. Use TXT, JPG, GIF, PNG ou PDF, de até ' . tamanhoDeArquivo(armazenamentoLimiteKb()) . ' (imagens de até 3000 × 2000 px).';
         }
 
-        return $this->upload->data();
+        $dados = $this->upload->data();
+        if (($erro = armazenamentoValidarEnvio($dados)) !== null) {
+            return $erro;
+        }
+
+        return $dados;
     }
 }
 
