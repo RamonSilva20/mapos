@@ -287,6 +287,31 @@ final class AreaDoClienteTest extends MaposTestCase
 
     public function testTelaDaOsSoLeituraComPix(): void
     {
+        // O anexo precisa existir no disco: sem o arquivo a tela mostra "Arquivo não encontrado".
+        $raiz = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'mapos-cliente-anexo-' . bin2hex(random_bytes(4));
+        $anterior = $_ENV['STORAGE_PATH'] ?? null;
+        $_ENV['STORAGE_PATH'] = $raiz;
+        mkdir($raiz . '/anexos/7', 0750, true);
+        file_put_contents($raiz . '/anexos/7/foto.jpg', 'x');
+
+        try {
+            $this->verificarTelaDaOsSoLeituraComPix();
+        } finally {
+            if ($anterior === null) {
+                unset($_ENV['STORAGE_PATH']);
+            } else {
+                $_ENV['STORAGE_PATH'] = $anterior;
+            }
+            @unlink($raiz . '/anexos/7/foto.jpg');
+            @unlink($raiz . '/.htaccess');
+            @rmdir($raiz . '/anexos/7');
+            @rmdir($raiz . '/anexos');
+            @rmdir($raiz);
+        }
+    }
+
+    private function verificarTelaDaOsSoLeituraComPix(): void
+    {
         $xss = '<img src=x onerror=alert(1)>';
         $html = $this->tela('conecte/visualizar_os', 'os', [
             'os' => (object) ['idOs' => 7, 'status' => 'Em Andamento', 'dataInicial' => '2026-10-01', 'dataFinal' => '2026-10-10', 'garantia' => '0', 'nome' => 'Técnico ' . $xss,
@@ -294,7 +319,7 @@ final class AreaDoClienteTest extends MaposTestCase
             'totais' => ['produtos' => 100.0, 'servicos' => 50.0, 'bruto' => 150.0, 'desconto' => 0.0, 'total' => 150.0, 'tipo' => null, 'informado' => 0.0, 'descontoItens' => 0.0],
             'produtos' => [(object) ['idProdutos_os' => 1, 'descricao' => 'Tela ' . $xss, 'quantidade' => 1, 'preco' => 100, 'subTotal' => 100]],
             'servicos' => [],
-            'anexos' => [(object) ['idAnexos' => 3, 'anexo' => 'foto.jpg', 'thumb' => null, 'url' => 'http://mapos.test/assets/anexos/7']],
+            'anexos' => [(object) ['idAnexos' => 3, 'anexo' => 'foto.jpg', 'thumb' => null, 'path' => 'anexos/7']],
             'pode' => ['editar' => false],
             'garantia_ate' => null,
             'pix' => ['payload' => '000201PIX', 'qr' => 'data:image/png;base64,AAA', 'chave' => 'pix@loja.com'],

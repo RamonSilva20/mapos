@@ -711,7 +711,18 @@ class Mapos extends MY_Controller
 
         $this->load->library('migration');
 
-        if ($this->migration->latest() === false) {
+        try {
+            $resultado = $this->migration->latest();
+        } catch (Throwable $erro) {
+            // Uma migration que não consegue terminar (p. ex. STORAGE_PATH sem permissão) para aqui
+            // com a causa; a versão do banco fica na última que concluiu e a próxima tentativa continua dela.
+            log_message('error', 'Atualizar banco: ' . $erro->getMessage());
+            $this->session->set_flashdata('error', 'A atualização do banco parou: ' . $erro->getMessage());
+
+            return redirect(site_url('mapos/configurar?aba=sistema'));
+        }
+
+        if ($resultado === false) {
             $this->session->set_flashdata('error', $this->migration->error_string());
         } else {
             $this->session->set_flashdata('success', 'Banco de dados atualizado com sucesso!');

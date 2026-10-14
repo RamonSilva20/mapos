@@ -21,10 +21,18 @@ if ($anexos === []) { ?>
         <?php
         $extensao = strtoupper((string) pathinfo((string) $anexo->anexo, PATHINFO_EXTENSION));
         $endereco = site_url('os/anexo/' . (int) $anexo->idAnexos);
-        $miniatura = $anexo->thumb ? site_url('os/anexo/' . (int) $anexo->idAnexos . '/thumb') : null;
+        // Registro sem arquivo no disco (p. ex. anexo órfão vindo da 4.x): sem link nem miniatura quebrada.
+        $ausente = armazenamentoArquivoDoAnexo($anexo) === null;
+        $miniatura = ! $ausente && $anexo->thumb && armazenamentoArquivoDoAnexo($anexo, true) !== null ? site_url('os/anexo/' . (int) $anexo->idAnexos . '/thumb') : null;
         $nome = 'Anexo ' . ($indice + 1) . ($extensao !== '' ? ' (' . $extensao . ')' : '');
         ?>
         <li class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-surface">
+            <?php if ($ausente) { ?>
+                <div class="flex aspect-[8/5] flex-col items-center justify-center gap-1 bg-surface-subtle p-2 text-center text-muted">
+                    <?= icon('triangle-alert', ['class' => 'size-8']) ?>
+                    <span class="text-caption">Arquivo não encontrado</span>
+                </div>
+            <?php } else { ?>
             <a href="<?= e(componenteUrl($endereco)) ?>" target="_blank" rel="noopener" class="flex aspect-[8/5] items-center justify-center bg-surface-subtle text-muted focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring">
                 <?php if ($miniatura !== null) { ?>
                     <img src="<?= e(componenteUrl($miniatura)) ?>" alt="<?= e($nome) ?>" loading="lazy" class="size-full object-cover">
@@ -33,10 +41,13 @@ if ($anexos === []) { ?>
                     <span class="sr-only"><?= e('Abrir ' . $nome) ?></span>
                 <?php } ?>
             </a>
+            <?php } ?>
             <div class="flex items-center justify-between gap-1 p-2 pl-3">
                 <span class="min-w-0 truncate text-caption text-muted"><?= e($nome) ?></span>
                 <div class="flex shrink-0">
-                    <?= component('button', ['label' => 'Baixar ' . $nome, 'icon' => 'download', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os/downloadanexo/' . (int) $anexo->idAnexos)]) ?>
+                    <?php if (! $ausente) { ?>
+                        <?= component('button', ['label' => 'Baixar ' . $nome, 'icon' => 'download', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os/downloadanexo/' . (int) $anexo->idAnexos)]) ?>
+                    <?php } ?>
                     <?php if ($pode['editar']) { ?>
                         <?= component('button', [
                             'label' => 'Excluir ' . $nome,

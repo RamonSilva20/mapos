@@ -247,11 +247,11 @@ Se precisar voltar só o banco e manter a v5 instalada, cada migration tem `down
 php index.php tools migrate 20240503170400
 ```
 
-Isso desfaz todas as migrations da v5. Faça backup antes, porque colunas e tabelas novas (2FA, tokens, histórico da OS, desconto por item) são removidas com os dados que tinham.
+Isso desfaz as migrations da v5 (menos a de escala decimal dos preços, `fix_decimal_scale_of_prices`, que permanece em `DECIMAL(10,2)` de propósito). Faça backup antes, porque colunas e tabelas novas (2FA, tokens, histórico da OS, desconto por item) são removidas com os dados que tinham.
 
 Isso inclui as colunas `token_versao` e `usuarios.sessao_versao`.
 
-Para voltar **só** os anexos para `assets/`, desfaça apenas a migration `move_uploads_to_storage`, como descrito em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md#rollback).
+Para voltar **só** os anexos para `assets/`, desfaça apenas a migration `move_uploads_to_storage`, como descrito em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md#rollback). Com a v5 em uma pasta nova, esse `down` devolve os arquivos para a pasta da v5, e não para a da 4.x: copie `assets/anexos` e `assets/arquivos` de volta e restaure o dump do banco (apagando e recriando o banco antes, para não sobrarem tabelas da v5).
 
 Depois do rollback do banco, volte também os arquivos da 4.x, o `.env` anterior e, se mudou o PHP, a versão que a 4.x usava.
 
@@ -261,7 +261,7 @@ Depois do rollback do banco, volte também os arquivos da 4.x, o `.env` anterior
 | --- | --- |
 | Tela branca ou erro 500 logo após trocar os arquivos | PHP < 8.5 no servidor web, ou `application/vendor` ausente (instalação pelo código-fonte sem `composer install --no-dev`). |
 | Painel sem estilo ou sem botões | Pasta `assets/` incompleta, ou o servidor não entrega `assets/dist` e `assets/vendor`. |
-| Anexos antigos não abrem | `STORAGE_PATH` não definido antes da migration, ou sem permissão de escrita. Defina, corrija a permissão e rode `php index.php tools migrate` de novo. |
+| Anexos antigos não abrem, ou a atualização do banco parou na `move_uploads_to_storage` | `STORAGE_PATH` inexistente ou sem permissão de escrita. A migration para com a mensagem (e a lista de arquivos no log) e **não conclui**: corrija a permissão e rode a atualização do banco (ou `php index.php tools migrate`) de novo; o que já foi movido não se repete. Se você atualizou antes desta correção e a migration já consta como aplicada com os arquivos ainda em `assets/anexos`, desfaça só ela e refaça: `php index.php tools migrate 20261014020000` e depois `php index.php tools migrate`. Anexo sem arquivo no disco aparece como "Arquivo não encontrado"; não é erro de permissão. Detalhes em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md#migração-dos-arquivos-existentes). |
 | Botões e janelas não respondem; erros de CSP no console | Script inline ou biblioteca de CDN adicionada por customização. Ajuste a customização; evite desligar a CSP. |
 | A API responde `404` | `API_ENABLED` está `false`. |
 | A API responde `503` | `API_JWT_KEY` vazia, com menos de 32 caracteres ou igual ao `.env.example`. |

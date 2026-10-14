@@ -222,6 +222,32 @@ final class HardeningServidorTest extends MaposTestCase
         $this->assertFileExists(MAPOS_ROOT . '/docs/servidor-web.md');
     }
 
+    /**
+     * O .htaccess bloqueava arquivos com ponto, mas não pastas como .git
+     * (#2858). A regra de reescrita é aplicada aqui a caminhos reais; a prova
+     * no Apache de verdade (403 em /.git/HEAD) está na descrição do PR.
+     */
+    public function testRegraDePastasOcultasPegaGitEOutrasEDeixaOWellKnown(): void
+    {
+        $raiz = (string) file_get_contents(MAPOS_ROOT . '/.htaccess');
+        $this->assertSame(1, preg_match('/^RewriteRule (\S+) - \[F,L\]$/m', preg_replace('/^RewriteRule \^\(updates.*$/m', '', $raiz), $achado), 'A regra de pastas ocultas está no .htaccess.');
+
+        $padrao = '#' . $achado[1] . '#';
+        foreach (['.git/HEAD', '.git/config', '.git', '.github/workflows/ci.yml', '.idea/x.xml', '.claude/worktrees/a/b', 'assets/.git/HEAD', 'application/.env', '.env', '.htaccess'] as $caminho) {
+            $this->assertSame(1, preg_match($padrao, $caminho), $caminho . ' deve ser negado.');
+        }
+        foreach (['.well-known/acme-challenge/token', '.well-known', 'assets/dist/app.css', 'index.php', 'os/anexo/1', 'assets/img/logo.png', 'a.git/x'] as $caminho) {
+            $this->assertSame(0, preg_match($padrao, $caminho), $caminho . ' deve seguir liberado.');
+        }
+
+        // Os caminhos do nginx do Docker e as receitas documentadas seguem a mesma regra.
+        $nginx = (string) file_get_contents(MAPOS_ROOT . '/docker/etc/nginx/default.conf');
+        $this->assertStringContainsString('location ~ /\.(?!well-known)', $nginx);
+        $docs = (string) file_get_contents(MAPOS_ROOT . '/docs/servidor-web.md');
+        $this->assertStringContainsString('<DirectoryMatch "(^|/)\.(?!well-known)">', $docs);
+        $this->assertStringContainsString('curl -I https://seu-site/.git/HEAD', $docs);
+    }
+
     private function subirServidor(string $roteador): ?int
     {
         for ($tentativa = 0; $tentativa < 5; $tentativa++) {
