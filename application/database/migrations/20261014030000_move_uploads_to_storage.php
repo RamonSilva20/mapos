@@ -56,7 +56,8 @@ class Migration_move_uploads_to_storage extends CI_Migration
     public function down()
     {
         $this->load->helper('armazenamento');
-        $base = rtrim((string) $this->config->item('base_url'), '/') . '/';
+        // APP_BASEURL é a URL pública (a base_url do CI no terminal pode vir como http://).
+        $base = rtrim((string) ($_ENV['APP_BASEURL'] ?? $this->config->item('base_url')), '/') . '/';
 
         foreach ($this->db->get('anexos')->result() as $anexo) {
             $path = (string) $anexo->path;

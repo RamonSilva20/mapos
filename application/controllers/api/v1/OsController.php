@@ -860,6 +860,8 @@ class OsController extends REST_Controller
 
         $id = (int) $id;
 
+        // Mensagens de erro do upload em pt-br (o idioma padrão do CI é inglês).
+        $this->lang->load('upload', 'pt-br');
         $this->load->library('upload');
         $this->load->library('image_lib');
 
@@ -874,7 +876,7 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $this->upload->initialize(armazenamentoConfigUpload($directory, Os::EXTENSOES_ANEXO));
+        $this->upload->initialize(armazenamentoConfigUpload($directory, armazenamentoExtensoesAnexo()));
 
         $error = [];
         $ultimo = null;

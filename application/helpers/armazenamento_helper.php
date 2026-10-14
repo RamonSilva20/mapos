@@ -76,6 +76,18 @@ if (! function_exists('armazenamentoTipos')) {
     }
 }
 
+if (! function_exists('armazenamentoExtensoesAnexo')) {
+    /**
+     * Formatos aceitos nos anexos da OS (painel e API).
+     *
+     * @return list<string>
+     */
+    function armazenamentoExtensoesAnexo(): array
+    {
+        return ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'cdr', 'docx', 'txt'];
+    }
+}
+
 if (! function_exists('armazenamentoMimePermitido')) {
     /** O conteúdo do arquivo confere com a extensão (e a extensão é aceita). */
     function armazenamentoMimePermitido(string $caminho, string $extensao): bool

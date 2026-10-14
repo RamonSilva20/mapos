@@ -6,9 +6,6 @@ if (! defined('BASEPATH')) {
 
 class Os extends MY_Controller
 {
-    /** Formatos aceitos nos anexos da OS (e na API). */
-    public const EXTENSOES_ANEXO = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'cdr', 'docx', 'txt'];
-
     /** Filtros da listagem, na query string (listagemFiltros()). */
     public const FILTROS = [
         'pesquisa' => 'texto',
@@ -991,6 +988,8 @@ class Os extends MY_Controller
             return;
         }
 
+        // Mensagens de erro do upload em pt-br (o idioma padrão do CI é inglês).
+        $this->lang->load('upload', 'pt-br');
         $this->load->library('upload');
         $this->load->library('image_lib');
 
@@ -1004,7 +1003,7 @@ class Os extends MY_Controller
             return;
         }
 
-        $this->upload->initialize(armazenamentoConfigUpload($directory, self::EXTENSOES_ANEXO));
+        $this->upload->initialize(armazenamentoConfigUpload($directory, armazenamentoExtensoesAnexo()));
 
         foreach ($arquivos as $key => $val) {
             $i = 1;

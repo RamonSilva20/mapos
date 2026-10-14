@@ -181,4 +181,31 @@ final class ArmazenamentoTest extends MaposTestCase
         include APPPATH . 'config/permissions_map.php';
         $this->assertSame('vOs', $config['permissions_map']['Os']['anexo']);
     }
+
+    /**
+     * A API não carrega o controller Os (erro fatal "Class Os not found" no
+     * upload): a lista de formatos vem do helper e os controllers que sobem
+     * arquivo carregam as mensagens de upload em pt-br.
+     */
+    public function testUploadDaApiNaoDependeDeOutroControllerEUsaMensagensEmPortugues(): void
+    {
+        $formatos = armazenamentoExtensoesAnexo();
+        $this->assertSame(['jpg', 'jpeg', 'png', 'gif', 'pdf', 'cdr', 'docx', 'txt'], $formatos);
+        $this->assertSame(implode('|', $formatos), armazenamentoConfigUpload('/x', $formatos)['allowed_types']);
+
+        $api = (string) file_get_contents(APPPATH . 'controllers/api/v1/OsController.php');
+        $this->assertDoesNotMatchRegularExpression('/\bOs::/', $api);
+        $this->assertStringContainsString('armazenamentoConfigUpload($directory, armazenamentoExtensoesAnexo())', $api);
+        $this->assertStringNotContainsString('Os::', (string) file_get_contents(APPPATH . 'controllers/Os.php'));
+
+        foreach (['api/v1/OsController.php', 'Os.php', 'Arquivos.php'] as $controller) {
+            $this->assertStringContainsString("lang->load('upload', 'pt-br')", (string) file_get_contents(APPPATH . 'controllers/' . $controller), $controller);
+        }
+    }
+
+    public function testRollbackDaMigrationUsaAUrlPublicaDoEnv(): void
+    {
+        $migration = (string) file_get_contents(APPPATH . 'database/migrations/20261014030000_move_uploads_to_storage.php');
+        $this->assertStringContainsString("\$_ENV['APP_BASEURL']", $migration);
+    }
 }

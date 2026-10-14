@@ -235,6 +235,7 @@ class Arquivos extends MY_Controller
         $config['max_width'] = '3000';
         $config['max_height'] = '2000';
 
+        $this->lang->load('upload', 'pt-br');
         $this->load->library('upload', $config);
 
         if (empty($_FILES['userfile']['name'])) {
