@@ -11,10 +11,17 @@
  * handler original, e o hook do Whoops, que roda depois, continua mandando
  * quando está habilitado.
  */
+function paginaDeErroExibeErros(): bool
+{
+    // A mesma conta do _exception_handler do CodeIgniter, por veracidade do
+    // resultado: "0", "off", "none", "no", "false", "null" e vazio são desligado.
+    return (bool) str_ireplace(['off', 'none', 'no', 'false', 'null'], '', (string) ini_get('display_errors'));
+}
+
 function registrarPaginaDeErro(): void
 {
     set_exception_handler(static function (Throwable $exception): void {
-        if (is_cli() || str_ireplace(['off', 'none', 'no', 'false', 'null'], '', (string) ini_get('display_errors')) !== '') {
+        if (is_cli() || paginaDeErroExibeErros()) {
             _exception_handler($exception);
 
             return;

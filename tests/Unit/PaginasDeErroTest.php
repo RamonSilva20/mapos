@@ -113,6 +113,33 @@ final class PaginasDeErroTest extends MaposTestCase
         $this->assertStringContainsString('RuntimeException', $excecao);
     }
 
+    public function testDisplayErrorsDesligadoEmProducaoLeva500ENaoOHandlerPadrao(): void
+    {
+        require_once APPPATH . 'hooks/pagina_de_erro.php';
+        $original = ini_get('display_errors');
+
+        try {
+            foreach (['0', '', 'off', 'Off', 'none', 'false', 'no', 'null'] as $desligado) {
+                ini_set('display_errors', $desligado);
+                $this->assertFalse(paginaDeErroExibeErros(), "display_errors={$desligado} é desligado (o index.php de produção usa 0).");
+            }
+            foreach (['1', 'On', 'stdout', 'true'] as $ligado) {
+                ini_set('display_errors', $ligado);
+                $this->assertTrue(paginaDeErroExibeErros(), "display_errors={$ligado} é ligado.");
+            }
+        } finally {
+            ini_set('display_errors', (string) $original);
+        }
+    }
+
+    public function testMensagemDeBancoSeparaOsParagrafos(): void
+    {
+        $html = $this->renderizar('error_db', ['heading' => 'x', 'message' => '<p>Erro um</p><p>SELECT 1</p>'], 'development');
+
+        $this->assertStringContainsString("Erro um\nSELECT 1", $html);
+        $this->assertStringContainsString('rel="icon"', $html);
+    }
+
     public function testHookRegistraOHandlerQueDevolveAoPadraoComDisplayErrors(): void
     {
         $hook = (string) file_get_contents(APPPATH . 'hooks/pagina_de_erro.php');
