@@ -37,7 +37,7 @@ $atributos = [
         <div><?= componenteConteudo($message) ?></div>
     </div>
     <?php if ($dismissible) { ?>
-        <button type="button" data-dispensar class="-m-1 inline-flex size-8 shrink-0 items-center justify-center rounded-md opacity-80 hover:bg-current/10 hover:opacity-100 focus-visible:outline-3 focus-visible:outline-ring/50">
+        <button type="button" data-dispensar class="-m-1 inline-flex size-8 shrink-0 items-center justify-center rounded-md opacity-80 hover:bg-current/10 hover:opacity-100 focus-visible:outline-3 focus-visible:outline-ring">
             <?= icon('x', ['class' => 'size-4']) ?>
             <span class="sr-only"><?= e($dismiss_label) ?></span>
         </button>

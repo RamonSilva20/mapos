@@ -72,7 +72,7 @@ $erroArquivo = $errosDeCampo['userfile'] ?? null;
                                aria-describedby="arquivo-envio-ajuda<?= $erroArquivo !== null ? ' arquivo-envio-erro' : '' ?>"
                                <?= $erroArquivo !== null ? 'aria-invalid="true"' : '' ?>
                                data-msg-vazio="Escolha o arquivo."
-                               class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring/50">
+                               class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring">
                         <p id="arquivo-envio-ajuda" class="text-caption text-muted">TXT, JPG, GIF, PNG ou PDF.</p>
                         <?php if ($erroArquivo !== null) { ?>
                             <p id="arquivo-envio-erro" class="flex items-start gap-1.5 text-caption text-danger-ink"><?= icon('circle-alert', ['class' => 'mt-0.5 size-4']) ?><span><?= e($erroArquivo) ?></span></p>

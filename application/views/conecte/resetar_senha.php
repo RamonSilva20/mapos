@@ -43,7 +43,7 @@ include APPPATH . 'views/entrada/inicio.php';
             </form>
 
             <p class="mt-6 text-body-md">
-                <a href="<?= e(site_url('mine/tokenManual')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Já tenho o código</a>
+                <a href="<?= e(site_url('mine/tokenManual')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Já tenho o código</a>
             </p>
         </section>
     </main>

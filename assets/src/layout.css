@@ -136,7 +136,7 @@
 
   /* Foco sempre visível na moldura. */
   :where(.v5-shell) :focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent) !important;
+    outline: 3px solid var(--color-ring) !important;
     outline-offset: 2px !important;
   }
 }
@@ -288,5 +288,20 @@ html[data-gaveta="aberta"] .v5-sidebar {
   .v5-gaveta-fundo,
   body.v5-layout .v5-main {
     transition: none !important;
+  }
+}
+
+/*
+ * Quem pede menos movimento (prefers-reduced-motion) não recebe transições nem
+ * animações: botões, switch, abas, calendário e a rolagem suave (WCAG 2.3.3).
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

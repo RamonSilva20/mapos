@@ -125,12 +125,22 @@
   }
 
   &.fc .fc-button:focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent);
+    outline: 3px solid var(--color-ring);
     outline-offset: 1px;
   }
 
   &.fc a {
     color: inherit;
+  }
+
+  /* Dias de outro mês: o FullCalendar os apaga com opacity .3 (1,9:1). Ficam em
+     cor muted, com contraste de texto (WCAG 1.4.3). */
+  &.fc .fc-day-other .fc-daygrid-day-top {
+    opacity: 1;
+  }
+
+  &.fc .fc-day-other .fc-daygrid-day-number {
+    color: var(--color-muted);
   }
 
   &.fc .fc-daygrid-event,
@@ -179,4 +189,19 @@
   --fc-event-border-color: var(--color-neutral);
   --fc-event-text-color: var(--color-neutral-ink);
   color: var(--color-neutral-ink);
+}
+
+/*
+ * Quem pede menos movimento (prefers-reduced-motion) não recebe transições nem
+ * animações: botões, switch, abas, calendário e a rolagem suave (WCAG 2.3.3).
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

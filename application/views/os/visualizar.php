@@ -204,7 +204,7 @@ $textos = $campos([
                                accept=".jpg,.jpeg,.png,.gif,.pdf,.cdr,.docx,.txt"
                                aria-describedby="anexo-arquivos-ajuda"
                                data-msg-vazio="Escolha ao menos um arquivo."
-                               class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring/50">
+                               class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring">
                         <p id="anexo-arquivos-ajuda" class="text-caption text-muted">Imagens (JPG, PNG, GIF), PDF, DOCX, CDR ou TXT. Pode escolher vários de uma vez.</p>
                     </div>
                     <div class="sm:pt-7">

@@ -55,7 +55,7 @@ $atributos = [
         $multiple ? 'min-h-24 [scrollbar-color:var(--color-input)_transparent] [&_option:checked]:bg-primary-tint [&_option:checked]:text-text' : 'appearance-none pr-10 max-sm:min-h-11',
         // DESIGN.md text-input: borda hairline-input (3:1), texto body-md 400,
         // foco com sombra interna e anel azul de 3px, erro em danger.
-        'focus:outline-3 focus:outline-offset-0 focus:outline-ring/50 focus:shadow-field-focus',
+        'focus:outline-3 focus:outline-offset-0 focus:outline-ring focus:shadow-field-focus',
         'disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted',
         $error !== null ? 'border-danger' : 'border-input',
         $class

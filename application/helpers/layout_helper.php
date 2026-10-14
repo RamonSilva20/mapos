@@ -325,3 +325,19 @@ if (! function_exists('layoutAtalhos')) {
         return $atalhos;
     }
 }
+
+if (! function_exists('layoutTitulo')) {
+    /**
+     * Título da aba do navegador: a tela atual (último item do breadcrumb) e o
+     * nome do sistema ("Clientes — Map-OS"); sem breadcrumb, só o sistema (WCAG
+     * 2.4.2: cada página tem um título que a descreve).
+     *
+     * @param  list<array{label: string, url?: string|null}>  $breadcrumb
+     */
+    function layoutTitulo(array $breadcrumb, string $sistema): string
+    {
+        $ultimo = $breadcrumb === [] ? null : trim(end($breadcrumb)['label']);
+
+        return $ultimo === null || $ultimo === '' ? $sistema : $ultimo . ' — ' . $sistema;
+    }
+}

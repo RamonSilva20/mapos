@@ -19,7 +19,7 @@ $secoes = [
     'Contato' => ['E-mail (login)' => $cliente->email, 'Celular' => $cliente->celular, 'Telefone' => $cliente->telefone],
     'Endereço' => ['Endereço' => $endereco],
 ];
-$classeAtalho = 'flex min-h-12 items-center gap-3 rounded-md px-3 text-body-md text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring/50';
+$classeAtalho = 'flex min-h-12 items-center gap-3 rounded-md px-3 text-body-md text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring';
 ?>
 <div class="flex flex-col gap-4">
     <header class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">

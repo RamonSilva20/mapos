@@ -65,7 +65,7 @@ export function criarToast({ mensagem, titulo = null, variante = 'info', duracao
     texto.textContent = mensagem;
     corpo.appendChild(texto);
 
-    const fechar = el('button', '-m-1 inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-3 focus-visible:outline-ring/50');
+    const fechar = el('button', '-m-1 inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-3 focus-visible:outline-ring');
     fechar.type = 'button';
     fechar.setAttribute('data-dispensar', '');
     const x = criarIcone('x', 'size-4', doc);

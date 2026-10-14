@@ -35,7 +35,7 @@
       </form>
 
       <div class="ml-auto flex items-center gap-2 sm:gap-3">
-        <div class="inline-flex rounded-md border border-border bg-surface-subtle p-0.5" role="group" aria-label="Modo de cor">
+        <div class="max-sm:hidden inline-flex rounded-md border border-border bg-surface-subtle p-0.5" role="group" aria-label="Modo de cor">
           <?php foreach (['claro' => ['Modo claro', 'sun'], 'escuro' => ['Modo escuro', 'moon'], 'sistema' => ['Seguir o sistema', 'monitor']] as $modo => [$rotulo, $icone]) { ?>
             <?= component('button', [
                 'label' => $rotulo,
@@ -55,7 +55,8 @@
         <?php } ?>
 
         <details class="relative" data-menu-suspenso>
-          <summary class="flex cursor-pointer list-none items-center gap-3 rounded-md p-1 hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50 [&::-webkit-details-marker]:hidden" aria-label="Menu do usuário">
+          <summary class="flex cursor-pointer list-none items-center gap-3 rounded-md p-1 hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+            <span class="sr-only">Menu do usuário</span>
             <span class="hidden text-right leading-tight sm:block">
               <span class="block text-xs text-muted"><?= e($layout['saudacao']) ?>,</span>
               <span class="block max-w-40 truncate text-sm font-medium text-text"><?= e($layout['usuario']) ?></span>
@@ -66,12 +67,26 @@
               <span class="inline-flex size-9 items-center justify-center rounded-full bg-accent-violet-mid text-sm font-semibold text-on-dark" aria-hidden="true"><?= e($layout['iniciais']) ?></span>
             <?php } ?>
           </summary>
-          <div class="absolute right-0 z-40 mt-2 w-56 rounded-xl border border-border bg-surface p-1.5 shadow-overlay">
+          <div class="absolute right-0 z-40 mt-2 w-56 max-w-[calc(100vw-1rem)] rounded-xl border border-border bg-surface p-1.5 shadow-overlay">
             <p class="truncate px-3 py-2 text-sm font-medium text-text sm:hidden"><?= e($layout['usuario']) ?></p>
-            <a href="<?= e(site_url('mine')) ?>" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring/50"><?= icon('circle-user', ['class' => 'size-[18px] text-muted']) ?>Área do Cliente</a>
-            <a href="<?= e(site_url('mapos/minhaConta')) ?>" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring/50"><?= icon('id-card', ['class' => 'size-[18px] text-muted']) ?>Meu Perfil</a>
+            <div class="flex items-center justify-between gap-2 px-3 py-2 sm:hidden" role="group" aria-label="Modo de cor">
+              <?php foreach (['claro' => ['Modo claro', 'sun'], 'escuro' => ['Modo escuro', 'moon'], 'sistema' => ['Seguir o sistema', 'monitor']] as $modo => [$rotulo, $icone]) { ?>
+                <?= component('button', [
+                    'label' => $rotulo,
+                    'icon' => $icone,
+                    'icon_only' => true,
+                    'variant' => 'ghost',
+                    'size' => 'sm',
+                    'class' => 'aria-pressed:bg-surface-subtle aria-pressed:font-semibold aria-pressed:text-text',
+                    'attrs' => ['data-tema-escolher' => $modo, 'aria-pressed' => 'false'],
+                ]) ?>
+              <?php } ?>
+            </div>
+            <div class="my-1 border-t border-border sm:hidden" role="separator"></div>
+            <a href="<?= e(site_url('mine')) ?>" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring"><?= icon('circle-user', ['class' => 'size-[18px] text-muted']) ?>Área do Cliente</a>
+            <a href="<?= e(site_url('mapos/minhaConta')) ?>" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring"><?= icon('id-card', ['class' => 'size-[18px] text-muted']) ?>Meu Perfil</a>
             <div class="my-1 border-t border-border" role="separator"></div>
-            <a href="<?= e(site_url('login/sair')) ?>" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring/50"><?= icon('log-out', ['class' => 'size-[18px] text-muted']) ?>Sair do Sistema</a>
+            <a href="<?= e(site_url('login/sair')) ?>" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring"><?= icon('log-out', ['class' => 'size-[18px] text-muted']) ?>Sair do Sistema</a>
           </div>
         </details>
       </div>

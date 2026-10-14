@@ -49,7 +49,7 @@ $atributos = [
         <div class="<?= e($title !== null ? 'mt-0.5 text-muted' : '') ?>"><?= componenteConteudo($message) ?></div>
     </div>
     <?php if ($dismissible) { ?>
-        <button type="button" data-dispensar class="-m-1 inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-3 focus-visible:outline-ring/50">
+        <button type="button" data-dispensar class="-m-1 inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted hover:bg-surface-subtle hover:text-text focus-visible:outline-3 focus-visible:outline-ring">
             <?= icon('x', ['class' => 'size-4']) ?>
             <span class="sr-only"><?= e($dismiss_label) ?></span>
         </button>

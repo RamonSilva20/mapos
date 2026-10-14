@@ -35,7 +35,7 @@ $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
 </head>
 <body class="flex min-h-screen flex-col bg-canvas-dark bg-[url(../img/entrada/estrelas.svg)] font-sans text-on-dark antialiased">
     <header class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-5 lg:px-8">
-        <a href="<?= e(base_url()) ?>" class="flex min-w-0 items-center gap-2.5 rounded-md focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50">
+        <a href="<?= e(base_url()) ?>" class="flex min-w-0 items-center gap-2.5 rounded-md focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring">
             <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-primary text-on-primary"><?= icon('wrench', ['class' => 'size-5']) ?></span>
             <span class="truncate font-display text-[1.375rem] leading-none font-bold tracking-[-0.2px]"><?= e($nomeSistema) ?></span>
         </a>

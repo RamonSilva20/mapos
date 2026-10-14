@@ -23,7 +23,7 @@ $atributos = [
     'rel' => $external ? 'noopener noreferrer' : null,
     'class' => componenteClasses(
         'rounded-xs text-text underline decoration-1 underline-offset-4 hover:decoration-2',
-        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50',
+        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
         $class
     ),
 ];

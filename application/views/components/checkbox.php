@@ -34,7 +34,7 @@ $atributos = [
     'class' => componenteClasses(
         'peer size-5 cursor-pointer appearance-none rounded-xs border-[1.5px] bg-field',
         'checked:border-primary checked:bg-primary',
-        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50',
+        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
         'disabled:cursor-not-allowed disabled:opacity-60',
         $error !== null ? 'border-danger' : 'border-input'
     ),
