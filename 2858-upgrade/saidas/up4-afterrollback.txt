@@ -1,0 +1,27 @@
+clientes 4
+produtos 5
+servicos 4
+os 12
+produtos_os 24
+servicos_os 12
+anexos 6
+vendas 5
+itens_de_vendas 5
+lancamentos 8
+documentos 2
+usuarios 3
+permissoes 3
+contas 1
+categorias 2
+emitente 1
+os_sum	7421.80	1455.30
+prod_sum	1228.00	621.00
+serv_sum	315.00
+conta	1501.00
+vendas_sum	3552.20	3532.20
+lanc_sum	3609.00
+prod_os	6477.10
+serv_os	944.70
+iv	3552.20
+app_name	Map-OS
+app_theme	darkblue

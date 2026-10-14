@@ -1,0 +1,31 @@
+200  mapos                      Início — Map-OS | erros: 0 
+200  clientes                   Clientes — Map-OS | erros: 0 
+200  clientes/visualizar/1      Visualizar — Clientes — Map-OS | erros: 0 
+200  produtos                   Produtos — Map-OS | erros: 0 
+200  servicos                   Serviços — Map-OS | erros: 0 
+200  os                         Ordens de serviço — Map-OS | erros: 0 
+200  os/visualizar/1            Visualizar — Ordens de serviço — Map-OS | erros: 0 
+200  os/imprimir/1              Map-OS - 1 - Bruno Lima | erros: 2 Loading the image 'http://127.0.0.1:8960/assets/uploads/logo4x.png' violates the following Content Security Policy directive: "img-src 'self' data: blob: https:
+200  os/imprimirTermica/1       Map_OS_1_Bruno Lima | erros: 2 Loading the image 'http://127.0.0.1:8960/assets/uploads/logo4x.png' violates the following Content Security Policy directive: "img-src 'self' data: blob: https:
+200  vendas                     Vendas — Map-OS | erros: 0 
+200  vendas/visualizar/1        Visualizar — Vendas — Map-OS | erros: 0 
+200  vendas/imprimir/1          Map-OS - Venda Nº#1 - Ana Souza | erros: 1 Loading the image 'http://127.0.0.1:8960/assets/uploads/logo4x.png' violates the following Content Security Policy directive: "img-src 'self' data: blob: https:
+200  financeiro/lancamentos     Lançamentos — Financeiro — Map-OS | erros: 0 
+200  arquivos                   Arquivos — Map-OS | erros: 0 
+200  garantias                  Garantias — Map-OS | erros: 0 
+200  usuarios                   Usuários — Map-OS | erros: 0 
+200  permissoes                 Permissões — Map-OS | erros: 0 
+200  mapos/configurar           Configurações — Sistema — Map-OS | erros: 0 
+200  mapos/emitente             Emitente — Sistema — Map-OS | erros: 1 Loading the image 'http://127.0.0.1:8960/assets/uploads/logo4x.png' violates the following Content Security Policy directive: "img-src 'self' data: blob: https:
+200  relatorios/clientes        Clientes — Relatórios — Map-OS | erros: 0 
+200  relatorios/produtos        Produtos — Relatórios — Map-OS | erros: 0 
+200  relatorios/servicos        Serviços — Relatórios — Map-OS | erros: 0 
+200  relatorios/os              Ordens de serviço — Relatórios — Map-OS | erros: 0 
+200  relatorios/vendas          Vendas — Relatórios — Map-OS | erros: 0 
+200  relatorios/financeiro      Financeiro — Relatórios — Map-OS | erros: 0 
+400  mapos/calendario            | erros: 1 Failed to load resource: the server responded with a status of 400 (Bad Request)
+ERR page.goto: Download is starting
+Call log:
+[2m  - navigating mapos/backup                | erros: 0 
+200  mapos/atualizacao          Atualização — Sistema — Map-OS | erros: 0 
+404  mapos/meuperfil            Página não encontrada — Map-OS | erros: 1 Failed to load resource: the server responded with a status of 404 (Not Found)
