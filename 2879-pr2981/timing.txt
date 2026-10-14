@@ -1,0 +1,4 @@
+API usuario   existente: mediana 837 ms media 839 | inexistente: mediana 17 ms media 16 | mensagens: E:401 Os dados de acesso estão incorretos! / I:401 Os dados de acesso estão incorretos!
+API cliente   existente: mediana 807 ms media 811 | inexistente: mediana 803 ms media 807 | mensagens: E:401 Os dados de acesso estão incorretos. / I:401 Os dados de acesso estão incorretos.
+Painel        existente: mediana 852 ms media 852 | inexistente: mediana 836 ms media 838 | mensagens: E:200 Os dados de acesso estão incorretos. / I:200 Os dados de acesso estão incorretos.
+Area cliente  existente: mediana 832 ms media 833 | inexistente: mediana 838 ms media 841 | mensagens: E:200 Os dados de acesso estão incorretos. / I:200 Os dados de acesso estão incorretos.
