@@ -45,7 +45,7 @@ final class ServicosControllerTest extends ControllerTestCase
     }
 
     #[DataProvider('permissionDenials')]
-    public function testPermissionDeniesAccess(string $method): void
+    public function testGerenciarAdicionarEditarAndExcluirDenyWithoutPermission(string $method): void
     {
         if ($method === 'editar') {
             $id = $this->installService('Temporario');
@@ -99,36 +99,25 @@ final class ServicosControllerTest extends ControllerTestCase
     }
 
     /**
-     * @return array<string, array{array<string, string>, array<string>}>
+     * @return array<string, array{array<string, string>, string}>
      */
     public static function adicionarRejections(): array
     {
-        // As duas línguas estão na lista porque o app declara `english` na
-        // config e ainda carrega um `pt-br`; a mensagem exata sai do idioma que
-        // o framework resolver, e as duas formas são o mesmo contrato. O rótulo
-        // vazio na config faz o CI3 usar o nome do campo.
         return [
-            'nome vazio' => [['nome' => '', 'preco' => '150'], ['O campo Nome é obrigatório.', 'The Nome field is required.']],
-            'preco vazio' => [['nome' => 'Serviço X', 'preco' => ''], ['O campo preco é obrigatório.', 'The preco field is required.']],
+            'nome vazio' => [['nome' => '', 'preco' => '150'], 'The Nome field is required.'],
+            'preco vazio' => [['nome' => 'Serviço X', 'preco' => ''], 'The preco field is required.'],
         ];
     }
 
     #[DataProvider('adicionarRejections')]
-    public function testAdicionarRejectsTheRequest(array $fields, array $expectedMessages): void
+    public function testAdicionarRejectsTheRequest(array $fields, string $expectedMessage): void
     {
         $this->postWithCsrfToken($fields);
 
         $body = $this->callControllerRaw('Servicos', 'adicionar');
 
         $this->assertNull($this->ci()->output->get_header('Location'));
-        $found = false;
-        foreach ($expectedMessages as $m) {
-            if (str_contains($body, $m)) {
-                $found = true;
-                break;
-            }
-        }
-        $this->assertTrue($found, 'Expected one of ' . implode(', ', $expectedMessages) . ' in body');
+        $this->assertStringContainsString($expectedMessage, $body);
         $this->assertSame(0, (int) $this->ci()->db->count_all_results('servicos'));
     }
 

@@ -353,7 +353,7 @@ final class ClientesControllerTest extends ControllerTestCase
         $this->postWithCsrfToken([
             'idClientes' => (string) $otherId,
             'nomeCliente' => 'Editado',
-            'email' => 'alvo-url@exemplo.com',
+            'email' => 'novo-email@exemplo.com',
             'documento' => '52998224725',
             'telefone' => '99999999',
         ]);
@@ -361,8 +361,13 @@ final class ClientesControllerTest extends ControllerTestCase
         $this->resetUriSegments('clientes/editar/' . $id);
         $this->callControllerRaw('Clientes', 'editar');
 
+        $target = $this->ci()->db->where('idClientes', $id)->get('clientes')->row();
         $other = $this->ci()->db->where('idClientes', $otherId)->get('clientes')->row();
+
+        $this->assertSame('Editado', $target->nomeCliente);
+        $this->assertSame('novo-email@exemplo.com', $target->email);
         $this->assertSame('Alvo do POST', $other->nomeCliente, 'O id do POST não pode ser o alvo da edição.');
+        $this->assertSame('alvo-post@exemplo.com', $other->email);
     }
 
     public function testVisualizarRendersTheClientsData(): void

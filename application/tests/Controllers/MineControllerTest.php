@@ -508,7 +508,7 @@ final class MineControllerTest extends ControllerTestCase
     }
 
     #[DataProvider('cobrancaDenials')]
-    public function testCobrancaActionsDenyWithoutPermission(string $method): void
+    public function testAtualizarcobrancaAndEnviarcobrancaDenyWithoutPermission(string $method): void
     {
         $email = 'cliente@exemplo.com';
         $this->installClient($email);
