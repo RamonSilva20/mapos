@@ -61,6 +61,27 @@ if (! function_exists('contaExpirada')) {
     }
 }
 
+if (! function_exists('chaveInsegura')) {
+    /**
+     * Chave vazia, igual ao marcador do .env.example ou mais curta que o
+     * mínimo: quem copiou o exemplo sem trocar o valor tem uma chave pública.
+     */
+    function chaveInsegura(?string $valor, string $marcador, int $minimo = 0): bool
+    {
+        $valor = trim((string) $valor);
+
+        return $valor === '' || $valor === $marcador || strlen($valor) < $minimo;
+    }
+}
+
+if (! function_exists('apiChaveJwtInsegura')) {
+    /** API_JWT_KEY precisa ter pelo menos 32 caracteres e não ser o marcador do .env.example. */
+    function apiChaveJwtInsegura(): bool
+    {
+        return chaveInsegura($_ENV['API_JWT_KEY'] ?? '', 'enter_jwt_key', 32);
+    }
+}
+
 if (! function_exists('limitarTexto')) {
     function limitarTexto($texto, $limite)
     {
@@ -146,21 +167,33 @@ if (! function_exists('json_decode_legacy')) {
 }
 
 if (! function_exists('printSafeHtml')) {
-    function printSafeHtml(?string $html): string
+    /**
+     * HTML confiável filtrado por HTMLPurifier. Só http, https, mailto e tel
+     * ficam nos links. Com $semRecursosExternos (relatórios em PDF), imagens e
+     * outros recursos de outro host também saem, para o mPDF no servidor não
+     * buscar URL escolhida por quem digitou a descrição (#2879).
+     */
+    function printSafeHtml(?string $html, bool $semRecursosExternos = false): string
     {
-        static $purifier = null;
+        static $purifiers = [];
 
         // Colunas de texto opcionais (ex. os.defeito) chegam como null.
         if ($html === null || $html === '') {
             return '';
         }
 
-        if ($purifier === null) {
+        $chave = $semRecursosExternos ? 'pdf' : 'padrao';
+
+        if (! isset($purifiers[$chave])) {
             $config = HTMLPurifier_Config::createDefault();
-            $purifier = new HTMLPurifier($config);
+            $config->set('URI.AllowedSchemes', ['http' => true, 'https' => true, 'mailto' => true, 'tel' => true]);
+            if ($semRecursosExternos) {
+                $config->set('URI.DisableExternalResources', true);
+            }
+            $purifiers[$chave] = new HTMLPurifier($config);
         }
 
-        return $purifier->purify($html);
+        return $purifiers[$chave]->purify($html);
     }
 }
 

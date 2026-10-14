@@ -13,7 +13,7 @@ Imagens e PDF abrem na página; os demais formatos baixam. A logo do emitente e 
 
 ## Configuração (`application/.env`)
 
-- `STORAGE_PATH`: pasta dos arquivos, absoluta ou relativa à raiz do projeto. **Aponte para fora da pasta pública do servidor web**, por exemplo `/var/mapos-storage`, e dê ao usuário do PHP permissão de escrita. Sem ela vale `application/storage`, que recebe um `.htaccess` negando o acesso; no nginx, bloqueie a pasta (`location ^~ /application/ { deny all; }`).
+- `STORAGE_PATH`: pasta dos arquivos, absoluta ou relativa à raiz do projeto. **Aponte para fora da pasta pública do servidor web**, por exemplo `/var/mapos-storage`, e dê ao usuário do PHP permissão de escrita. Sem ela vale `application/storage`, que recebe um `.htaccess` negando o acesso; em outros servidores, bloqueie a pasta (regras em `docs/servidor-web.md`).
 - `UPLOAD_MAX_KB`: tamanho máximo de cada upload, em KB (padrão 10240). Os limites `upload_max_filesize` e `post_max_size` do PHP também valem.
 - `UPLOAD_MAX_PIXELS`: limite de pixels (largura × altura) de uma imagem enviada (padrão 40000000, 40 megapixels). Um arquivo pequeno pode ter dimensões enormes, e a miniatura (GD) e os PDFs descompactam a imagem inteira na memória.
 

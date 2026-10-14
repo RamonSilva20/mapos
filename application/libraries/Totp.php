@@ -44,6 +44,12 @@ class Totp
         $opcoes = is_array($opcoes) ? $opcoes : [];
 
         $segredoDaInstalacao = (string) ($opcoes['chave'] ?? config_item('encryption_key'));
+
+        // Com a chave do .env.example (pública) o segredo cifrado seria legível.
+        if (! isset($opcoes['chave']) && defined('ENVIRONMENT') && ENVIRONMENT === 'production' && chaveInsegura($segredoDaInstalacao, 'enter_encryption_key')) {
+            throw new RuntimeException('APP_ENCRYPTION_KEY não foi configurada: o 2FA não pode guardar segredos com a chave do .env.example.');
+        }
+
         $this->chave = hash_hkdf('sha256', $segredoDaInstalacao, 32, 'mapos-totp-v1');
         $this->emissor = (string) ($opcoes['emissor'] ?? (config_item('app_name') ?: 'Map-OS'));
     }

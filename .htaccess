@@ -1,8 +1,19 @@
 <FilesMatch "^\.">
-    Order allow,deny
-    Deny from all
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
 RewriteEngine On
+
+# Código-fonte, scripts de atualização e arquivos de projeto não são públicos
+# (docs/servidor-web.md). application/ tem o próprio .htaccess.
+RewriteRule ^(updates|scripts|tests|docker|docs)(/|$) - [F,L]
+RewriteRule ^[^/]+\.(sql|json|lock|md|xml|neon|bat|sh|dist)$ - [F,L,NC]
+
 RewriteCond %{HTTP:Authorization} ^(.+)$
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
