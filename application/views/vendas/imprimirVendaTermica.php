@@ -54,10 +54,10 @@
             <table class="cupom-tabela cupom-tabela-grade mt-2" id="tblProdutos">
                 <thead>
                     <tr class="bg-surface-subtle">
-                        <th class="text-left text-[15px]">Produto</th>
-                        <th class="text-left text-[15px]">Quantidade</th>
-                        <th class="text-left text-[15px]">Preço unit.</th>
-                        <th class="text-left text-[15px]">Sub-total</th>
+                        <th class="text-left text-xs">Produto</th>
+                        <th class="text-left text-xs">Quantidade</th>
+                        <th class="text-left text-xs">Preço unit.</th>
+                        <th class="text-left text-xs">Sub-total</th>
                     </tr>
                 </thead>
                 <tbody>

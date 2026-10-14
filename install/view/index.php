@@ -22,13 +22,13 @@
       <?php if (! $installed) { ?>
         <ol class="grid grid-cols-3 border-b border-border text-center text-sm" aria-label="Etapas da instalação">
           <li id="etapa-pre-instalacao" data-etapa class="flex items-center justify-center gap-2 border-b-2 border-transparent p-3 text-muted data-[atual]:border-primary data-[atual]:bg-primary-tint data-[atual]:font-semibold data-[atual]:text-text">
-            <?= instalador_icone('circulo', 'size-4') ?> <span>Pré-instalação</span>
+            <?= instalador_icone('circulo', 'size-4 shrink-0') ?> <span class="max-sm:text-xs">Pré-instalação</span>
           </li>
           <li id="etapa-configuracao" data-etapa class="flex items-center justify-center gap-2 border-b-2 border-transparent p-3 text-muted data-[atual]:border-primary data-[atual]:bg-primary-tint data-[atual]:font-semibold data-[atual]:text-text">
-            <?= instalador_icone('circulo', 'size-4') ?> <span>Configuração</span>
+            <?= instalador_icone('circulo', 'size-4 shrink-0') ?> <span class="max-sm:text-xs">Configuração</span>
           </li>
           <li id="etapa-finalizacao" data-etapa class="flex items-center justify-center gap-2 border-b-2 border-transparent p-3 text-muted data-[atual]:border-primary data-[atual]:bg-primary-tint data-[atual]:font-semibold data-[atual]:text-text">
-            <?= instalador_icone('circulo', 'size-4') ?> <span>Finalização</span>
+            <?= instalador_icone('circulo', 'size-4 shrink-0') ?> <span class="max-sm:text-xs">Finalização</span>
           </li>
         </ol>
       <?php } ?>

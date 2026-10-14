@@ -15,7 +15,7 @@ $celula = 'border-b border-border px-3 py-2';
 <div class="flex flex-col gap-6 p-4 sm:p-6">
   <div>
     <p class="mb-2">1. Confira se as configurações do seu <strong>PHP</strong> atendem aos requisitos:</p>
-    <table class="w-full text-sm">
+    <div class="overflow-x-auto"><table class="w-full text-sm">
       <thead>
         <tr>
           <th class="<?= $cabecalho ?> text-left">Configuração</th>
@@ -38,12 +38,12 @@ $celula = 'border-b border-border px-3 py-2';
           <td class="<?= $celula ?> text-center"><?= instalador_status($allow_url_fopen_success) ?></td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
   </div>
 
   <div>
     <p class="mb-2">2. Confira se as extensões abaixo estão <strong>instaladas e habilitadas</strong> no servidor:</p>
-    <table class="w-full text-sm">
+    <div class="overflow-x-auto"><table class="w-full text-sm">
       <thead>
         <tr>
           <th class="<?= $cabecalho ?> text-left">Extensão</th>
@@ -62,12 +62,12 @@ $celula = 'border-b border-border px-3 py-2';
           </tr>
         <?php } ?>
       </tbody>
-    </table>
+    </table></div>
   </div>
 
   <div>
     <p class="mb-2">3. Dê permissão de <strong>leitura e escrita</strong> aos diretórios e arquivos abaixo:</p>
-    <table class="w-full text-sm">
+    <div class="overflow-x-auto"><table class="w-full text-sm">
       <thead>
         <tr>
           <th class="<?= $cabecalho ?> text-left">Arquivo ou diretório</th>
@@ -82,7 +82,7 @@ $celula = 'border-b border-border px-3 py-2';
           </tr>
         <?php } ?>
       </tbody>
-    </table>
+    </table></div>
   </div>
 
   <div class="flex justify-end">
