@@ -61,7 +61,7 @@ Copie para a pasta nova:
 - `application/.env` (veja o passo 3.3);
 - `assets/uploads` e `assets/userImage`;
 - as personalizações de `assets/img`;
-- `assets/anexos` e `assets/arquivos`, **só para que a migration os encontre** (passo 3.4). Depois da migração eles ficam vazios.
+- `assets/anexos` e `assets/arquivos`, **só para que a migration os encontre** (passo 3.4). Depois da migração eles ficam vazios. **Não pule este passo:** se os arquivos não estiverem na pasta nova quando você rodar a atualização do banco, a migration conclui, mas os registros ficam sem arquivo e a OS mostra "Arquivo não encontrado" no lugar de cada anexo. Nesse caso, copie `assets/anexos` e `assets/arquivos` da 4.x para a pasta nova e refaça só essa migration: `php index.php tools migrate 20261014020000` (desfaz a `move_uploads_to_storage`) e depois `php index.php tools migrate`. Os registros órfãos mantêm o caminho antigo, então a segunda execução move os arquivos que agora existem.
 
 ### 3.3. Ajuste o `application/.env`
 
@@ -270,6 +270,9 @@ Depois do rollback do banco, volte também os arquivos da 4.x, o `.env` anterior
 | Tela branca ou erro 500 logo após trocar os arquivos | PHP < 8.5 no servidor web, ou `application/vendor` ausente (instalação pelo código-fonte sem `composer install --no-dev`). |
 | Painel sem estilo ou sem botões | Pasta `assets/` incompleta, ou o servidor não entrega `assets/dist` e `assets/vendor`. |
 | Anexos antigos não abrem, ou a atualização do banco parou na `move_uploads_to_storage` | `STORAGE_PATH` inexistente ou sem permissão de escrita. A migration para com a mensagem (e a lista de arquivos no log) e **não conclui**: corrija a permissão e rode a atualização do banco (ou `php index.php tools migrate`) de novo; o que já foi movido não se repete. Se você atualizou antes desta correção e a migration já consta como aplicada com os arquivos ainda em `assets/anexos`, desfaça só ela e refaça: `php index.php tools migrate 20261014020000` e depois `php index.php tools migrate`. Anexo sem arquivo no disco aparece como "Arquivo não encontrado"; não é erro de permissão. Detalhes em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md#migração-dos-arquivos-existentes). |
+| Os anexos mostram "Arquivo não encontrado" depois de migrar | `assets/anexos` e `assets/arquivos` não foram copiados para a pasta da v5 antes da migration. Copie-as e refaça só essa migration (`php index.php tools migrate 20261014020000` e depois `php index.php tools migrate`); veja o passo 3.2. |
+| `php index.php tools migrate` para em `create_login_attempts` e sai com código 8 | O dump da 4.x foi restaurado por cima de um banco que já tinha as tabelas da v5. Apague e recrie o banco (`DROP DATABASE` e `CREATE DATABASE`), restaure o dump e migre de novo. |
+| O painel avisa de atualizações do banco pendentes | A instalação ou a troca de arquivos não aplicou as migrations. Use Configurações > Sistema > `Atualizar banco de dados` ou `php index.php tools migrate` (funciona com `composer install --no-dev`). Enquanto houver pendência, o limite de tentativas de login, o 2FA e o histórico da OS ficam desligados. |
 | Botões e janelas não respondem; erros de CSP no console | Script inline ou biblioteca de CDN adicionada por customização. Ajuste a customização; evite desligar a CSP. |
 | A API responde `404` | `API_ENABLED` está `false`. |
 | A API responde `503` | `API_JWT_KEY` vazia, com menos de 32 caracteres ou igual ao `.env.example`. |

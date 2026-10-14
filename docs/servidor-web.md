@@ -79,13 +79,22 @@ Com `AllowOverride None`, ponha no `VirtualHost`:
 <DirectoryMatch "^/caminho/do/mapos/(application|updates|scripts|tests|docker|docs)(/|$)">
     Require all denied
 </DirectoryMatch>
-<DirectoryMatch "(^|/)\.(?!well-known)">
+<DirectoryMatch "^/caminho/do/mapos/(.*/)?\.(?!well-known)">
     Require all denied
 </DirectoryMatch>
 <FilesMatch "^(\..*|banco\.sql|composer\.(json|lock)|package(-lock)?\.json|.*baseline\.json)$">
     Require all denied
 </FilesMatch>
 ```
+
+Troque `/caminho/do/mapos` pelo caminho absoluto da pasta do Map-OS (o `DocumentRoot`),
+sem barra no fim. As duas primeiras regras começam nesse caminho de propósito: a
+regra das pastas ocultas só olha o que está **dentro** do site. Sem essa âncora,
+um caminho de instalação com um componente começando por ponto (por exemplo
+`/home/usuario/.local/www/mapos`) casaria com tudo e o site inteiro daria 403.
+A receita foi conferida num Apache 2.4 real, com a instalação num caminho normal e
+num caminho com `.local`: `.git/`, `.github/`, `assets/.qualquer/`, `application/` e
+`docs/` dão 403, e `index.php`, `assets/` e `.well-known/` continuam liberados.
 
 ## Arquivo de relatórios da CSP
 
