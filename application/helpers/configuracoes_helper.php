@@ -118,7 +118,7 @@ if (! function_exists('configuracaoCampos')) {
             ],
             'api' => [
                 'API_ENABLED' => ['destino' => 'env', 'tipo' => 'bool_env', 'rotulo' => 'API ligada', 'ajuda' => 'Usada pelo aplicativo do Map-OS.'],
-                'API_TOKEN_EXPIRE_TIME' => ['destino' => 'env', 'tipo' => 'opcao', 'rotulo' => 'Validade do token de acesso', 'opcoes' => ['60' => '1 minuto', '3600' => '1 hora', '86400' => '1 dia', '604800' => '1 semana', '2592000' => '1 mês']],
+                'API_TOKEN_EXPIRE_TIME' => ['destino' => 'env', 'tipo' => 'opcao', 'rotulo' => 'Validade do token de acesso (usuários: no máximo 1 hora)', 'opcoes' => ['60' => '1 minuto', '3600' => '1 hora', '86400' => '1 dia', '604800' => '1 semana', '2592000' => '1 mês']],
                 'API_JWT_KEY' => ['destino' => 'env', 'tipo' => 'gerar_jwt', 'rotulo' => 'Gerar uma chave nova para os tokens', 'ajuda' => 'Todos os tokens emitidos deixam de valer: quem usa o aplicativo entra de novo.'],
             ],
             default => [],

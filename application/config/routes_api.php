@@ -10,7 +10,6 @@ $route['api/v1/audit'] = 'api/v1/ApiController/audit';
 $route['api/v1/emitente'] = 'api/v1/ApiController/emitente';
 $route['api/v1/calendario'] = 'api/v1/ApiController/calendario';
 $route['api/v1/login'] = 'api/v1/UsuariosController/login';
-$route['api/v1/reGenToken'] = 'api/v1/UsuariosController/reGenToken';
 $route['api/v1/refresh'] = 'api/v1/UsuariosController/refresh';
 $route['api/v1/logout'] = 'api/v1/UsuariosController/logout';
 $route['api/v1/conta'] = 'api/v1/UsuariosController/conta';

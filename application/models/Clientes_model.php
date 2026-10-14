@@ -100,6 +100,12 @@ class Clientes_model extends CI_Model
         $this->db->update($table, $data);
 
         if ($this->db->affected_rows() >= 0) {
+            // Senha trocada: os access tokens da API do cliente deixam de valer.
+            if ($table === 'clientes' && $fieldID === 'idClientes' && isset($data['senha'])) {
+                $this->load->library('Authorization_Token');
+                $this->authorization_token->incrementarVersao('clientes', 'idClientes', (int) $ID);
+            }
+
             return true;
         }
 

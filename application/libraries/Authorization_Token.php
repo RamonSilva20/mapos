@@ -67,7 +67,7 @@ class Authorization_Token
      *
      * @param  array  $data
      */
-    public function generateToken($data = null)
+    public function generateToken($data = null, ?int $tetoExpiracao = null)
     {
         if (! $data || ! is_array($data)) {
             return 'Token Data Undefined!';
@@ -75,17 +75,58 @@ class Authorization_Token
 
         $agora = time();
         $data['iat'] = $agora;
-        $data['exp'] = $agora + (int) $this->token_expire_time;
+        $data['exp'] = $agora + $this->expiresIn($tetoExpiracao);
         // Legado: apps e tokens anteriores à #2869 usam API_TIME.
         $data['API_TIME'] = $agora;
 
         return JWT::encode($data, $this->token_key, $this->token_algorithm);
     }
 
-    /** Duração do access token, em segundos (expires_in da resposta de login). */
-    public function expiresIn(): int
+    /**
+     * Duração do access token, em segundos (expires_in da resposta de login).
+     * `$teto` limita a configurada: o token de operador, que tem refresh token,
+     * dura no máximo TETO_COM_REFRESH.
+     */
+    public function expiresIn(?int $teto = null): int
     {
-        return (int) $this->token_expire_time;
+        $duracao = (int) $this->token_expire_time;
+
+        return $teto !== null ? min($duracao, $teto) : $duracao;
+    }
+
+    /** Teto do access token que pode ser renovado pelo refresh token: 1 hora. */
+    public const TETO_COM_REFRESH = 3600;
+
+    /**
+     * O token continua valendo? A versão gravada no token (`tv`, 0 nos tokens
+     * anteriores à coluna) precisa ser a do registro: trocar a senha ou
+     * desativar a conta incrementa a versão e derruba os access tokens vivos.
+     */
+    public static function versaoVigente(object $dadosDoToken, int $versaoAtual): bool
+    {
+        return (int) ($dadosDoToken->tv ?? 0) === $versaoAtual;
+    }
+
+    /** Versão atual dos tokens do registro; 0 se a coluna ainda não existe (migration não rodada). */
+    public function versaoAtual(string $tabela, string $campoId, int $id): int
+    {
+        if (! in_array($tabela, ['usuarios', 'clientes'], true) || ! $this->CI->db->field_exists('token_versao', $tabela)) {
+            return 0;
+        }
+
+        $linha = $this->CI->db->select('token_versao')->where($campoId, $id)->limit(1)->get($tabela)->row();
+
+        return (int) ($linha->token_versao ?? 0);
+    }
+
+    /** Invalida os access tokens vivos do registro (usuarios ou clientes). Sem a coluna (migration não rodada), não faz nada. */
+    public function incrementarVersao(string $tabela, string $campoId, int $id): void
+    {
+        if (! in_array($tabela, ['usuarios', 'clientes'], true) || ! $this->CI->db->field_exists('token_versao', $tabela)) {
+            return;
+        }
+
+        $this->CI->db->set('token_versao', 'token_versao + 1', false)->where($campoId, $id)->update($tabela);
     }
 
     /**
@@ -93,7 +134,7 @@ class Authorization_Token
      *
      * @return : user informations
      */
-    public function validateToken($token, $regenToken = false)
+    public function validateToken($token)
     {
         $token_data = $this->tokenIsExist($this->CI->input->request_headers());
         if ($token_data['status'] !== true) {
@@ -102,11 +143,8 @@ class Authorization_Token
 
         $expire_time = (int) $this->token_expire_time;
 
-        // Na renovação (reGenToken legado) o token pode estar vencido, mas só
-        // dentro de uma janela igual ao tempo de expiração: sem esse limite um
-        // token vazado poderia ser renovado indefinidamente.
         $leewayAnterior = JWT::$leeway;
-        JWT::$leeway = $regenToken ? $expire_time : 0;
+        JWT::$leeway = 0;
 
         try {
             $token_decode = JWT::decode((string) $token, new Key($this->token_key, $this->token_algorithm));
@@ -128,8 +166,7 @@ class Authorization_Token
             return ['status' => false, 'message' => 'Token Time Not Define!'];
         }
 
-        $max_age = $regenToken ? $expire_time * 2 : $expire_time;
-        if (time() - (int) $token_decode->API_TIME >= $max_age) {
+        if (time() - (int) $token_decode->API_TIME >= $expire_time) {
             return ['status' => false, 'message' => 'Token Time Expire.'];
         }
 

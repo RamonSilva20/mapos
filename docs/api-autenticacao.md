@@ -1,8 +1,8 @@
 # Autenticação da API (v5)
 
-Quem integra com a API (`/api/v1`), como o app móvel, precisa saber o que mudou na v5. **Nada do que já funcionava deixou de funcionar**: o fluxo antigo continua e o novo é opcional. A remoção do antigo será anunciada no CHANGELOG com uma versão de antecedência.
+Quem integra com a API (`/api/v1`), como o app móvel, precisa saber o que mudou na v5. O login e o uso do access token seguem iguais; o que mudou é a renovação (veja "Renovar" abaixo) e a validade do token do usuário.
 
-Rode as migrations (Configurações → Sistema → Atualizar banco) para criar `api_refresh_tokens` e `api_rate_limit`. Sem elas o login funciona como antes, só não emite refresh token e o limite de requisições fica desligado.
+Rode as migrations (Configurações → Sistema → Atualizar banco) para criar `api_refresh_tokens` e `api_rate_limit` e as colunas `token_versao` de `usuarios` e `clientes`. Sem elas o login funciona, só não emite refresh token, o limite de requisições fica desligado e trocar a senha não derruba os access tokens já emitidos.
 
 ## Login
 
@@ -16,7 +16,7 @@ Rode as migrations (Configurações → Sistema → Atualizar banco) para criar 
     "access_token": "eyJ...",
     "refresh_token": "Zk3...",
     "token_type": "Bearer",
-    "expires_in": 86400,
+    "expires_in": 3600,
     "permissions": [ { "...": "..." } ]
   }
 }
@@ -27,8 +27,9 @@ Rode as migrations (Configurações → Sistema → Atualizar banco) para criar 
 ## Access token
 
 - JWT HS256 (biblioteca `firebase/php-jwt`, instalada pelo Composer; a cópia em `application/third_party/php-jwt` foi removida).
-- Tem a claim padrão `exp` (`API_TOKEN_EXPIRE_TIME`, em segundos) e `iat`. A claim `API_TIME` continua por compatibilidade e será removida; não use. Tokens emitidos antes da v5 (sem `exp`) seguem valendo até vencer pelo `API_TIME`.
+- Tem a claim padrão `exp` (`API_TOKEN_EXPIRE_TIME`, em segundos) e `iat`. O token do usuário que vem com refresh token dura no máximo 1 hora, mesmo que `API_TOKEN_EXPIRE_TIME` seja maior; o token da área do cliente (sem refresh token) dura o configurado. A claim `API_TIME` continua por compatibilidade e será removida; não use. Tokens emitidos antes da v5 (sem `exp`) seguem valendo até vencer pelo `API_TIME`.
 - A chave `API_JWT_KEY` precisa ter pelo menos 32 caracteres (256 bits), exigência da biblioteca. As instalações novas já geram uma assim.
+- Leva `tv` (versão dos tokens da conta) e, no usuário, `sid` (a sessão do refresh token). Trocar a senha ou desativar a conta soma 1 à versão e o logout revoga a sessão: em ambos os casos o access token já emitido passa a dar `403` na hora, sem esperar o `exp`. Tokens emitidos antes da migration não têm `tv` e valem como versão 0, até a primeira troca de senha.
 - **O token não carrega permissões.** O usuário e a permissão são consultados no banco a cada requisição: quem foi desativado ou removido recebe `403` na hora, e uma permissão alterada vale na próxima chamada. O app não deve decidir permissões só pelo que veio no login.
 
 ## Renovar: refresh token (novo)
@@ -37,15 +38,15 @@ Rode as migrations (Configurações → Sistema → Atualizar banco) para criar 
 
 - O refresh token é de **uso único**: guarde o novo e descarte o anterior. Dura `API_REFRESH_TOKEN_EXPIRE_TIME` (padrão 30 dias).
 - Se a resposta se perder na rede, repetir o mesmo token em até 10 segundos só devolve `401`, sem derrubar a sessão. Reutilizar um token já usado depois disso revoga a sessão inteira (cópia vazada).
-- Trocar a senha ou desativar o usuário revoga todos os refresh tokens dele.
+- Trocar a senha ou desativar o usuário revoga todos os refresh tokens dele e invalida os access tokens já emitidos.
 
 ## Logout (novo)
 
-`POST /api/v1/logout` com `{"refresh_token": "..."}` revoga a sessão. Sempre responde `200`.
+`POST /api/v1/logout` com `{"refresh_token": "..."}` revoga a sessão, inclusive o access token dela. Sempre responde `200`.
 
-## Renovar: `GET /api/v1/reGenToken` (legado)
+## `GET /api/v1/reGenToken` (removido)
 
-Continua igual: aceita o access token atual, mesmo vencido há até o tempo de expiração, e devolve `{status, result: {access_token, permissions}}`. Passa a responder com os headers `Deprecation: true` e `Link: <.../api/v1/refresh>; rel="successor-version"`. Token inválido ou vencido continua dando **`403`** (não `401`), porque o app atual só renova nesse caso.
+A rota que renovava um access token vencido, sem senha e sem refresh token, foi removida: dava para renovar um token vazado indefinidamente. Quem ainda a chama recebe `404`. Use o refresh token (acima) ou faça o login de novo.
 
 ## CORS e limite de requisições
 
