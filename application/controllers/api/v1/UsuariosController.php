@@ -273,15 +273,18 @@ class UsuariosController extends REST_Controller
         $user = $this->Mapos_model->check_credentials($email);
 
         if ($user && password_verify((string) $password, $user->senha)) {
-            $this->limite_login->registrarSucesso('usuario', $email);
-
             // Conta expirada: mesma resposta genérica de antes.
             if ($this->chk_date($user->dataExpiracao)) {
+                $this->limite_login->registrarSucesso('usuario', $email);
                 $this->response([
                     'status' => false,
                     'message' => 'Os dados de acesso estão incorretos!',
                 ], REST_Controller::HTTP_UNAUTHORIZED);
             }
+
+            // 2FA (#2876): com ele ativo a senha sozinha não gera token; o contador de falhas só zera com o código certo.
+            $this->conferirDoisFatores($user, $email, $ip);
+            $this->limite_login->registrarSucesso('usuario', $email);
 
             $this->log_app('Efetuou login no sistema', $user->nome);
             $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
@@ -368,6 +371,47 @@ class UsuariosController extends REST_Controller
             'status' => false,
             'message' => 'O x-api-key expirado é necessário para gerar um novo x-api-key!',
         ], REST_Controller::HTTP_OK);
+    }
+
+    /**
+     * Segundo fator do login pela API (#2876). Usuário com 2FA ativo manda o
+     * campo `totp` (código do aplicativo ou de recuperação); grupo que exige o
+     * 2FA recusa quem ainda não o ativou. Responde e encerra se não passar.
+     */
+    private function conferirDoisFatores(object $user, string $email, string $ip): void
+    {
+        $this->load->model('Mapos_model');
+
+        if (! ($user->totp_ativado_em ?? null)) {
+            if ($this->Mapos_model->grupoExige2fa((int) $user->permissoes_id)) {
+                $this->response([
+                    'status' => false,
+                    'message' => 'O seu grupo de permissão exige a autenticação em dois fatores. Ative em Meu perfil, no painel, para usar a API.',
+                    'two_factor_setup_required' => true,
+                ], REST_Controller::HTTP_FORBIDDEN);
+            }
+
+            return;
+        }
+
+        $codigo = trim((string) $this->post('totp', true));
+        if ($codigo === '') {
+            $this->response([
+                'status' => false,
+                'message' => 'Informe o código de verificação em dois fatores (campo "totp").',
+                'two_factor_required' => true,
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
+        $this->load->library('Totp');
+        if (! $this->totp->aceitar($this->Mapos_model, $user, $codigo)) {
+            $this->limite_login->registrarFalha('usuario', $email, $ip);
+            $this->response([
+                'status' => false,
+                'message' => 'Código de verificação incorreto.',
+                'two_factor_required' => true,
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
     }
 
     /**

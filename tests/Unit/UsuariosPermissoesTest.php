@@ -341,7 +341,7 @@ final class UsuariosPermissoesTest extends MaposTestCase
     {
         $html = $this->renderizar('permissoes/formulario', [
             'grupo' => (object) ['idPermissao' => 2, 'nome' => 'Vendas <b>'],
-            'valores' => ['nome' => 'Vendas <b>', 'situacao' => true, 'marcadas' => ['vVenda', 'cEmail']],
+            'valores' => ['nome' => 'Vendas <b>', 'situacao' => true, 'exigir_2fa' => true, 'marcadas' => ['vVenda', 'cEmail']],
             'erros' => [],
             'do_logado' => false,
             'protegido' => false,

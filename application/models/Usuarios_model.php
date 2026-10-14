@@ -140,6 +140,16 @@ class Usuarios_model extends CI_Model
         return false;
     }
 
+    /** O usuário tem o 2FA ativo (#2876)? Falso se a migration ainda não rodou. */
+    public function doisFatoresAtivo(int $id): bool
+    {
+        if (! $this->db->field_exists('totp_ativado_em', 'usuarios')) {
+            return false;
+        }
+
+        return $this->db->where('idUsuarios', $id)->where('totp_ativado_em IS NOT NULL', null, false)->count_all_results('usuarios') > 0;
+    }
+
     public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);

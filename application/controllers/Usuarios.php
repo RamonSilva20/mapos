@@ -138,9 +138,35 @@ class Usuarios extends MY_Controller
         $this->data['erros'] = $erros;
         $this->data['grupos'] = $this->gruposParaEscolher($usuario);
         $this->data['protegido'] = $usuario !== null && usuarioPodeSerRemovido((int) $usuario->idUsuarios, $logado) !== null;
+        $this->data['dois_fatores_ativo'] = $usuario !== null && $this->usuarios_model->doisFatoresAtivo((int) $usuario->idUsuarios);
         $this->data['view'] = 'usuarios/formulario';
 
         return $this->layout();
+    }
+
+    /**
+     * Redefine o 2FA de um usuário que perdeu o celular e os códigos de
+     * recuperação (#2876): desliga o 2FA e apaga os códigos (POST com CSRF). O
+     * usuário entra só com a senha; se o grupo exige o 2FA, será levado a
+     * ativá-lo de novo.
+     */
+    public function redefinirDoisFatores()
+    {
+        $id = (int) $this->input->post('id');
+        $usuario = $id > 0 ? $this->usuarios_model->getById($id) : null;
+
+        if ($this->input->method() !== 'post' || ! $usuario) {
+            $this->session->set_flashdata('error', 'Usuário não encontrado.');
+
+            return redirect('usuarios/gerenciar');
+        }
+
+        $this->load->model('mapos_model');
+        $this->mapos_model->desativarTotp($id);
+        log_info('Redefiniu o 2FA de um usuário. ID: ' . $id);
+        $this->session->set_flashdata('success', 'Autenticação em dois fatores do usuário redefinida.');
+
+        return redirect('usuarios/editar/' . $id);
     }
 
     /**

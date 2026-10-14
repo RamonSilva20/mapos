@@ -73,6 +73,7 @@ final class ContaEBuscaTest extends MaposTestCase
             'avatar' => 'http://mapos.test/assets/img/User.png',
             'tem_foto' => false,
             'pode_foto' => true,
+            'dois_fatores_ativo' => false,
             'erros' => [],
         ]);
     }
@@ -100,6 +101,17 @@ final class ContaEBuscaTest extends MaposTestCase
         $this->assertStringContainsString('src="http://mapos.test/assets/userImage/a.png"', $html);
         $this->assertStringContainsString('Trocar foto', $html);
         $this->assertStringContainsString('Sem data de expiração', $html);
+    }
+
+    public function testContaMostraOEstadoDoDoisFatores(): void
+    {
+        $this->assertStringContainsString('Desativada', $this->conta());
+        $this->assertStringContainsString('Configurar', $this->conta());
+
+        $ativo = $this->conta(['dois_fatores_ativo' => true]);
+        $this->assertStringContainsString('Ativada', $ativo);
+        $this->assertStringContainsString('Gerenciar', $ativo);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/mapos/doisFatores"', $ativo);
     }
 
     public function testFotoSoApareceComAPermissaoDeEnviar(): void

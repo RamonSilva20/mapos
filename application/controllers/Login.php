@@ -2,6 +2,11 @@
 
 class Login extends CI_Controller
 {
+    /** Quanto tempo a senha conferida espera o código, e quantos códigos errados são aceitos (#2876). */
+    private const DOIS_FATORES_VALIDADE = 300;
+
+    private const DOIS_FATORES_TENTATIVAS = 5;
+
     public function __construct()
     {
         parent::__construct();
@@ -64,29 +69,136 @@ class Login extends CI_Controller
             exit();
         }
 
-        $this->limite_login->registrarSucesso('usuario', $email);
-
-        if ($this->chk_date($user->dataExpiracao)) {
-            echo json_encode($this->falha('A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.'));
+        $bloqueio = $this->motivoDeBloqueio($user);
+        if ($bloqueio !== null) {
+            echo json_encode($this->falha($bloqueio));
             exit();
+        }
+
+        // 2FA ativo (#2876): a senha sozinha não entra. A sessão guarda só que a
+        // senha conferiu, por 5 minutos e 5 tentativas, e o código decide. O
+        // contador de falhas só zera com o código certo: senão repetir a senha
+        // devolveria tentativas de código de graça.
+        if ($user->totp_ativado_em ?? null) {
+            $this->session->sess_regenerate(true);
+            $this->session->set_userdata('dois_fatores', ['email' => $user->email, 'expira' => time() + self::DOIS_FATORES_VALIDADE, 'tentativas' => 0]);
+            echo json_encode(['result' => true, 'destino' => site_url('login/doisFatores')]);
+            exit();
+        }
+
+        $this->limite_login->registrarSucesso('usuario', $email);
+        $this->iniciarSessao($user);
+        echo json_encode(['result' => true]);
+        exit();
+    }
+
+    /**
+     * Segundo passo do login (#2876): o código do aplicativo autenticador ou
+     * um código de recuperação. Só abre com a senha já conferida na sessão.
+     */
+    public function doisFatores()
+    {
+        if ($this->doisFatoresPendente() === null) {
+            $this->session->set_flashdata('error', 'Entre com e-mail e senha primeiro.');
+
+            return redirect(site_url('login'));
+        }
+
+        return $this->load->view('mapos/login_dois_fatores', ['erro' => $this->session->flashdata('error')]);
+    }
+
+    public function verificarDoisFatores()
+    {
+        $pendente = $this->doisFatoresPendente();
+        if ($pendente === null || $this->input->method() !== 'post') {
+            $this->session->set_flashdata('error', 'Entre com e-mail e senha primeiro.');
+
+            return redirect(site_url('login'));
+        }
+
+        $this->load->library('Limite_login');
+        $this->load->library('Totp');
+        $ip = $this->input->ip_address();
+        $email = (string) $pendente['email'];
+
+        if ($this->limite_login->bloqueado('usuario', $email, $ip)) {
+            $this->session->unset_userdata('dois_fatores');
+            $this->session->set_flashdata('error', Limite_login::MENSAGEM);
+
+            return redirect(site_url('login'));
+        }
+
+        $user = $this->mapos_model->check_credentials($email);
+        $codigo = trim((string) $this->input->post('codigo'));
+        $ok = $user && $this->motivoDeBloqueio($user) === null && $this->totp->aceitar($this->mapos_model, $user, $codigo);
+
+        if (! $ok) {
+            $this->limite_login->registrarFalha('usuario', $email, $ip);
+            $pendente['tentativas']++;
+
+            if ($pendente['tentativas'] >= self::DOIS_FATORES_TENTATIVAS) {
+                $this->session->unset_userdata('dois_fatores');
+                $this->session->set_flashdata('error', 'Código incorreto várias vezes. Entre de novo com e-mail e senha.');
+
+                return redirect(site_url('login'));
+            }
+
+            $this->session->set_userdata('dois_fatores', $pendente);
+            $this->session->set_flashdata('error', 'Código incorreto. Confira o aplicativo ou use um código de recuperação.');
+
+            return redirect(site_url('login/doisFatores'));
+        }
+
+        $this->limite_login->registrarSucesso('usuario', $email);
+        $this->session->unset_userdata('dois_fatores');
+        $this->iniciarSessao($user);
+
+        return redirect(site_url('mapos'));
+    }
+
+    /** @return array{email: string, expira: int, tentativas: int}|null */
+    private function doisFatoresPendente(): ?array
+    {
+        $pendente = $this->session->userdata('dois_fatores');
+        if (! is_array($pendente) || (int) ($pendente['expira'] ?? 0) < time()) {
+            $this->session->unset_userdata('dois_fatores');
+
+            return null;
+        }
+
+        return $pendente;
+    }
+
+    /** Motivo para a conta não entrar (expirada, grupo desativado), ou null. */
+    private function motivoDeBloqueio(object $user): ?string
+    {
+        if ($this->chk_date($user->dataExpiracao)) {
+            return 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.';
         }
 
         // Grupo de permissão desativado (#2846): a conta não entra, como a
         // expirada (até a v4 a situação do grupo era só informativa).
-        if (! $this->Mapos_model->grupoAtivo((int) $user->permissoes_id)) {
-            echo json_encode($this->falha('O grupo de permissão desta conta está desativado. Fale com o administrador do sistema.'));
-            exit();
+        if (! $this->mapos_model->grupoAtivo((int) $user->permissoes_id)) {
+            return 'O grupo de permissão desta conta está desativado. Fale com o administrador do sistema.';
         }
 
+        return null;
+    }
+
+    private function iniciarSessao(object $user): void
+    {
         // Novo ID de sessão a cada autenticação, para que um ID
         // fixado antes do login não continue válido depois dele.
         $this->session->sess_regenerate(true);
 
-        $session_admin_data = ['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true];
-        $this->session->set_userdata($session_admin_data);
+        $this->session->set_userdata(['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true]);
+
+        // Grupo que exige 2FA e usuário sem ele: entra, mas só alcança a tela de ativação (MY_Controller).
+        if (! ($user->totp_ativado_em ?? null) && $this->mapos_model->grupoExige2fa((int) $user->permissoes_id)) {
+            $this->session->set_userdata('exigir_2fa_cadastro', true);
+        }
+
         log_info('Efetuou login no sistema');
-        echo json_encode(['result' => true]);
-        exit();
     }
 
     /**

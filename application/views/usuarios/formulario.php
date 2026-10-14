@@ -16,6 +16,7 @@
  * @var array<string, string> $erros
  * @var array<string, string> $grupos   id => nome
  * @var bool                  $protegido
+ * @var bool                  $dois_fatores_ativo  O usuário editado tem o 2FA ativo (botão de redefinir)
  */
 $editando = $usuario !== null;
 $erroGeral = $erros['_geral'] ?? null;
@@ -132,4 +133,22 @@ $grade = 'mt-4 grid gap-4 sm:grid-cols-2';
             <?= component('button', ['label' => $editando ? 'Salvar alterações' : 'Cadastrar usuário', 'icon' => 'save', 'type' => 'submit', 'attrs' => ['data-rotulo-carregando' => 'Salvando…']]) ?>
         </div>
     </form>
+
+    <?php if ($editando && ! empty($dois_fatores_ativo)) { ?>
+        <section class="rounded-xl border border-border bg-surface p-4 sm:p-6" aria-labelledby="secao-2fa">
+            <div class="flex flex-wrap items-center gap-2">
+                <h2 id="secao-2fa" class="text-heading-sm text-text">Autenticação em dois fatores</h2>
+                <?= component('pill-status', ['label' => 'Ativada', 'variant' => 'success']) ?>
+            </div>
+            <p class="mt-1 text-caption text-muted">Se este usuário perdeu o celular e os códigos de recuperação, redefina: ele volta a entrar só com a senha (e, se o grupo exigir o 2FA, ativa de novo).</p>
+            <div class="mt-4">
+                <?= component('button', ['label' => 'Redefinir o 2FA', 'icon' => 'shield-off', 'variant' => 'outline', 'attrs' => ['data-modal-abrir' => 'redefinir-2fa']]) ?>
+            </div>
+        </section>
+        <form id="form-redefinir-2fa" method="post" action="<?= e(site_url('usuarios/redefinirDoisFatores')) ?>" hidden>
+            <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+            <input type="hidden" name="id" value="<?= e((string) $usuario->idUsuarios) ?>">
+        </form>
+        <?= component('modal-confirm', ['id' => 'redefinir-2fa', 'title' => 'Redefinir o 2FA deste usuário?', 'message' => 'O 2FA e os códigos de recuperação dele são apagados. Faça isso só depois de confirmar quem está pedindo.', 'confirm_label' => 'Redefinir', 'icon' => 'triangle-alert', 'confirm_attrs' => ['form' => 'form-redefinir-2fa']]) ?>
+    <?php } ?>
 </div>

@@ -64,7 +64,10 @@ export function interpretarResposta(corpo) {
     // interessa, e ele é exibido com textContent.
     const mensagem = ok ? '' : textoSimples(dados.message) || MENSAGEM_PADRAO;
 
-    return { ok, mensagem, token: typeof dados.MAPOS_TOKEN === 'string' ? dados.MAPOS_TOKEN : null };
+    // Com 2FA ativo o servidor manda o login para a tela do código (#2876).
+    const destino = ok && typeof dados.destino === 'string' ? dados.destino : null;
+
+    return { ok, mensagem, token: typeof dados.MAPOS_TOKEN === 'string' ? dados.MAPOS_TOKEN : null, destino };
 }
 
 export function textoSimples(valor) {
@@ -131,7 +134,7 @@ export default function iniciar(formulario) {
             const resposta = interpretarResposta(await post(formulario.action, new FormData(formulario)));
 
             if (resposta.ok) {
-                window.location.assign(formulario.dataset.destino);
+                window.location.assign(resposta.destino ?? formulario.dataset.destino);
                 return;
             }
 
