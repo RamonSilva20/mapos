@@ -70,6 +70,10 @@ class Permissoes extends MY_Controller
 
         if ($this->input->method() === 'post') {
             [$dados, $erros] = permissaoDadosDoFormulario($this->input->post(), $grupo === null);
+            // Exigir 2FA do grupo (#2876): só grava se a migration já criou a coluna.
+            if ($this->db->field_exists('exigir_2fa', 'permissoes')) {
+                $dados['exigir_2fa'] = in_array($this->input->post('exigir_2fa'), ['1', 'on'], true) ? 1 : 0;
+            }
 
             if ($protegido && $dados['situacao'] !== 1) {
                 $erros['situacao'] = 'Este grupo não pode ser desativado.';
@@ -99,6 +103,7 @@ class Permissoes extends MY_Controller
         $this->data['valores'] = [
             'nome' => $post !== null ? (is_scalar($post['nome'] ?? null) ? trim((string) $post['nome']) : '') : (string) ($grupo->nome ?? ''),
             'situacao' => $post !== null ? in_array($post['situacao'] ?? null, ['1', 'on'], true) : (int) ($grupo->situacao ?? 1) === 1,
+            'exigir_2fa' => $post !== null ? in_array($post['exigir_2fa'] ?? null, ['1', 'on'], true) : (int) ($grupo->exigir_2fa ?? 0) === 1,
             'marcadas' => $post !== null
                 ? permissoesMarcadas(json_encode(permissoesDoFormulario($post['permissoes'] ?? [])))
                 : permissoesMarcadas($grupo->permissoes ?? null),

@@ -140,6 +140,16 @@ class Usuarios_model extends CI_Model
         return false;
     }
 
+    /** O usuário tem o 2FA ativo (#2876)? Falso se a migration ainda não rodou. */
+    public function doisFatoresAtivo(int $id): bool
+    {
+        if (! $this->db->field_exists('totp_ativado_em', 'usuarios')) {
+            return false;
+        }
+
+        return $this->db->where('idUsuarios', $id)->where('totp_ativado_em IS NOT NULL', null, false)->count_all_results('usuarios') > 0;
+    }
+
     public function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -160,6 +170,11 @@ class Usuarios_model extends CI_Model
 
     public function delete($table, $fieldID, $ID)
     {
+        // Os códigos de recuperação do 2FA não ficam órfãos (#2876).
+        if ($table === 'usuarios' && $fieldID === 'idUsuarios' && $this->db->table_exists('usuarios_codigos_recuperacao')) {
+            $this->db->where('usuario_id', $ID)->delete('usuarios_codigos_recuperacao');
+        }
+
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
         if ($this->db->affected_rows() == '1') {

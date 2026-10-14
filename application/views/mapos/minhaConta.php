@@ -55,6 +55,15 @@ $errosDeCampo = $erros;
             </dl>
         </section>
 
+        <section class="<?= e($caixa) ?>" aria-labelledby="secao-2fa">
+            <div class="flex flex-wrap items-center gap-2">
+                <h2 id="secao-2fa" class="text-heading-sm text-text">Autenticação em dois fatores</h2>
+                <?= component('pill-status', ['label' => $dois_fatores_ativo ? 'Ativada' : 'Desativada', 'variant' => $dois_fatores_ativo ? 'success' : 'neutral']) ?>
+            </div>
+            <p class="mt-0.5 text-caption text-muted">Além da senha, o login pede um código do aplicativo autenticador no seu celular.</p>
+            <div class="mt-4"><?= component('button', ['label' => $dois_fatores_ativo ? 'Gerenciar' : 'Configurar', 'icon' => 'shield-check', 'variant' => 'outline', 'href' => site_url('mapos/doisFatores')]) ?></div>
+        </section>
+
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-senha">
             <h2 id="secao-senha" class="text-heading-sm text-text">Alterar minha senha</h2>
             <p class="mt-0.5 text-caption text-muted">A nova senha precisa de pelo menos 8 caracteres.</p>

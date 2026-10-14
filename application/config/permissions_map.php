@@ -100,6 +100,10 @@ $config['permissions_map'] = [
         'index' => '*',
         'minhaConta' => '*',
         'alterarSenha' => '*',
+        'doisFatores' => '*',
+        'ativarDoisFatores' => '*',
+        'novosCodigosDoisFatores' => '*',
+        'desativarDoisFatores' => '*',
         'pesquisar' => '*',
         'buscaRapida' => '*',
         'calendario' => 'vOs',
@@ -217,6 +221,7 @@ $config['permissions_map'] = [
         'adicionar' => 'cUsuario',
         'editar' => 'cUsuario',
         'excluir' => 'cUsuario',
+        'redefinirDoisFatores' => 'cUsuario',
     ],
 
     'Vendas' => [

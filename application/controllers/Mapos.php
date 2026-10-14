@@ -103,8 +103,132 @@ class Mapos extends MY_Controller
         $this->data['avatar'] = layoutAvatarUrl($usuario->url_image_user ?? null, FCPATH . 'assets/userImage', base_url());
         $this->data['tem_foto'] = $this->data['avatar'] !== base_url() . 'assets/img/User.png';
         $this->data['pode_foto'] = $this->permite('cUsuario');
+        $this->data['dois_fatores_ativo'] = (bool) ($usuario->totp_ativado_em ?? null);
         $this->data['erros'] = $erros;
         $this->data['view'] = 'mapos/minhaConta';
+
+        return $this->layout();
+    }
+
+    /**
+     * Autenticação em dois fatores da própria conta (#2876): ativar (QR code e
+     * código de confirmação), ver os códigos de recuperação uma vez, gerar
+     * novos e desativar (os dois pedem a senha). Um grupo que exige o 2FA não
+     * permite desativar.
+     */
+    public function doisFatores()
+    {
+        return $this->telaDoisFatores();
+    }
+
+    public function ativarDoisFatores()
+    {
+        $this->load->library('Totp');
+        $usuario = $this->usuarioDoDoisFatores();
+        $segredo = $this->session->userdata('totp_pendente');
+
+        if ($this->input->method() !== 'post' || $usuario->totp_ativado_em || ! is_string($segredo) || $segredo === '') {
+            return redirect(site_url('mapos/doisFatores'));
+        }
+
+        $passo = $this->totp->verificar($segredo, (string) $this->input->post('codigo'));
+        if ($passo === null) {
+            return $this->telaDoisFatores(['codigo' => 'Código incorreto. Confira o aplicativo e tente de novo.']);
+        }
+
+        $codigos = $this->totp->gerarCodigosDeRecuperacao();
+        $salvou = $this->mapos_model->ativarTotp((int) $usuario->idUsuarios, $this->totp->cifrar($segredo), array_map([Totp::class, 'hashDoCodigo'], $codigos), $passo);
+
+        if (! $salvou) {
+            return $this->telaDoisFatores(['_geral' => 'Não foi possível ativar. Tente de novo.']);
+        }
+
+        $this->session->unset_userdata(['totp_pendente', 'exigir_2fa_cadastro']);
+        log_info('Ativou a autenticação em dois fatores.');
+
+        return $this->telaDoisFatores([], $codigos);
+    }
+
+    public function novosCodigosDoisFatores()
+    {
+        $this->load->library('Totp');
+        $usuario = $this->usuarioDoDoisFatores();
+
+        if ($this->input->method() !== 'post' || ! $usuario->totp_ativado_em) {
+            return redirect(site_url('mapos/doisFatores'));
+        }
+        if (! password_verify((string) $this->input->post('senha'), $usuario->senha)) {
+            return $this->telaDoisFatores(['senha_codigos' => 'A senha não confere.']);
+        }
+
+        $codigos = $this->totp->gerarCodigosDeRecuperacao();
+        $this->mapos_model->substituirCodigosDeRecuperacao((int) $usuario->idUsuarios, array_map([Totp::class, 'hashDoCodigo'], $codigos));
+        log_info('Gerou novos códigos de recuperação do 2FA.');
+
+        return $this->telaDoisFatores([], $codigos);
+    }
+
+    public function desativarDoisFatores()
+    {
+        $usuario = $this->usuarioDoDoisFatores();
+
+        if ($this->input->method() !== 'post' || ! $usuario->totp_ativado_em) {
+            return redirect(site_url('mapos/doisFatores'));
+        }
+        if ($this->mapos_model->grupoExige2fa((int) $usuario->permissoes_id)) {
+            return $this->telaDoisFatores(['_geral' => 'O seu grupo de permissão exige o 2FA: não é possível desativar.']);
+        }
+        if (! password_verify((string) $this->input->post('senha'), $usuario->senha)) {
+            return $this->telaDoisFatores(['senha_desativar' => 'A senha não confere.']);
+        }
+
+        $this->mapos_model->desativarTotp((int) $usuario->idUsuarios);
+        log_info('Desativou a autenticação em dois fatores.');
+        $this->session->set_flashdata('success', 'Autenticação em dois fatores desativada.');
+
+        return redirect(site_url('mapos/doisFatores'));
+    }
+
+    private function usuarioDoDoisFatores(): object
+    {
+        $usuario = $this->mapos_model->usuarioParaLoginPorId((int) $this->session->userdata('id_admin'));
+        if (! $usuario) {
+            redirect(site_url('login/sair'));
+        }
+
+        return $usuario;
+    }
+
+    /**
+     * @param  array<string, string>  $erros
+     * @param  list<string>|null      $codigos  Códigos de recuperação recém-gerados (mostrados só agora)
+     */
+    private function telaDoisFatores(array $erros = [], ?array $codigos = null)
+    {
+        $this->load->library('Totp');
+        $usuario = $this->usuarioDoDoisFatores();
+        $ativo = (bool) $usuario->totp_ativado_em;
+
+        $this->data['ativo'] = $ativo;
+        $this->data['exigido'] = $this->mapos_model->grupoExige2fa((int) $usuario->permissoes_id);
+        $this->data['restantes'] = $ativo ? $this->mapos_model->codigosDeRecuperacaoRestantes((int) $usuario->idUsuarios) : 0;
+        $this->data['codigos'] = $codigos;
+        $this->data['erros'] = $erros;
+        $this->data['qr'] = null;
+        $this->data['segredo'] = null;
+
+        if (! $ativo && $codigos === null) {
+            // O segredo só vai para o banco depois que o usuário prova que o aplicativo o leu.
+            $segredo = $this->session->userdata('totp_pendente');
+            if (! is_string($segredo) || $segredo === '') {
+                $segredo = $this->totp->criarSegredo();
+                $this->session->set_userdata('totp_pendente', $segredo);
+            }
+            $this->data['qr'] = $this->totp->qrCodeDataUri((string) $usuario->email, $segredo);
+            $this->data['segredo'] = Totp::formatarSegredo($segredo);
+        }
+
+        $this->data['view'] = 'mapos/doisFatores';
 
         return $this->layout();
     }

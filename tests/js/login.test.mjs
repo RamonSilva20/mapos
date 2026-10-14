@@ -68,3 +68,11 @@ test('mensagemDeFalha: 403 é sessão/CSRF vencido, outros status e rede têm me
     assert.equal(mensagemDeFalha(new ErroHttp(500, 'x')), MENSAGEM_PADRAO);
     assert.equal(mensagemDeFalha(new TypeError('Failed to fetch')), MENSAGEM_REDE);
 });
+
+test('com 2FA o servidor manda o destino da tela do código e o login segue para lá', async () => {
+    const { interpretarResposta } = await import('../../assets/js/modules/login/formulario.js');
+
+    assert.equal(interpretarResposta({ result: true, destino: '/index.php/login/doisFatores' }).destino, '/index.php/login/doisFatores');
+    assert.equal(interpretarResposta({ result: true }).destino, undefined);
+    assert.equal(interpretarResposta({ result: false, destino: '/x', message: 'erro' }).destino, undefined, 'Falha não redireciona.');
+});

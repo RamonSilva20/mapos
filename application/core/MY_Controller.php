@@ -25,8 +25,26 @@ class MY_Controller extends CI_Controller
         if ((! session_id()) || (! $this->session->userdata('logado'))) {
             redirect('login');
         }
+        $this->exigirDoisFatores();
         $this->load_configuration();
         $this->verificarPermissaoDaRota();
+    }
+
+    /**
+     * Grupo que exige o 2FA (#2876): até o usuário ativar, só a tela de
+     * ativação e o logout abrem. Qualquer outra rota leva para ela.
+     */
+    protected function exigirDoisFatores(): void
+    {
+        if (! $this->session->userdata('exigir_2fa_cadastro')) {
+            return;
+        }
+
+        $rota = strtolower($this->router->class . '/' . $this->router->method);
+        if (! in_array($rota, ['mapos/doisfatores', 'mapos/ativardoisfatores'], true)) {
+            $this->session->set_flashdata('error', 'Seu grupo de permissão exige a autenticação em dois fatores. Ative para continuar.');
+            redirect(site_url('mapos/doisFatores'));
+        }
     }
 
     /**

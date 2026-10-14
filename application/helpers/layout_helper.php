@@ -241,6 +241,10 @@ if (! defined('LAYOUT_ROTULOS')) {
         'emails' => 'E-mails',
         'configurar' => 'Configurações',
         'lancamentos' => 'Lançamentos',
+        'doisfatores' => 'Autenticação em dois fatores',
+        'ativardoisfatores' => 'Autenticação em dois fatores',
+        'novoscodigosdoisfatores' => 'Autenticação em dois fatores',
+        'desativardoisfatores' => 'Autenticação em dois fatores',
         'minhaconta' => 'Minha conta',
     ]);
 }

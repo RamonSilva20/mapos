@@ -53,6 +53,9 @@ $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
                     </div>
                 <?php } ?>
             </div>
+            <div class="mt-4">
+                <?= component('switch', ['name' => 'exigir_2fa', 'value' => '1', 'label' => 'Exigir autenticação em dois fatores', 'checked' => (bool) ($valores['exigir_2fa'] ?? false), 'help' => 'Quem é deste grupo só usa o sistema depois de ativar o 2FA no próprio perfil. O login pela API também passa a exigir o código.']) ?>
+            </div>
         </section>
 
         <section class="<?= e($caixa) ?>" aria-labelledby="secao-modulos">

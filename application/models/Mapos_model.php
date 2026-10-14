@@ -339,6 +339,77 @@ class Mapos_model extends CI_Model
         return $this->db->where('idPermissao', $idPermissao)->where('situacao', 1)->count_all_results('permissoes') > 0;
     }
 
+    /** O grupo de permissão exige o 2FA ativo (#2876)? Falso se a migration ainda não rodou. */
+    public function grupoExige2fa(int $idPermissao): bool
+    {
+        if (! $this->db->field_exists('exigir_2fa', 'permissoes')) {
+            return false;
+        }
+
+        return $this->db->where('idPermissao', $idPermissao)->where('exigir_2fa', 1)->count_all_results('permissoes') > 0;
+    }
+
+    /** Usuário (com os campos do 2FA) pelo id, só se estiver ativo. */
+    public function usuarioParaLoginPorId(int $id)
+    {
+        return $this->db->where('idUsuarios', $id)->where('situacao', 1)->limit(1)->get('usuarios')->row();
+    }
+
+    /**
+     * Guarda o segredo cifrado e os códigos de recuperação (só o hash) e liga o
+     * 2FA do usuário. Troca os códigos antigos.
+     *
+     * @param  list<string>  $hashesDosCodigos
+     */
+    public function ativarTotp(int $idUsuario, string $segredoCifrado, array $hashesDosCodigos, int $passo): bool
+    {
+        $this->db->trans_start();
+        $this->db->where('idUsuarios', $idUsuario)->update('usuarios', ['totp_secreto' => $segredoCifrado, 'totp_ativado_em' => date('Y-m-d H:i:s'), 'totp_ultimo_passo' => $passo]);
+        $this->substituirCodigosDeRecuperacao($idUsuario, $hashesDosCodigos);
+        $this->db->trans_complete();
+
+        return $this->db->trans_status() !== false;
+    }
+
+    /** @param list<string> $hashes */
+    public function substituirCodigosDeRecuperacao(int $idUsuario, array $hashes): void
+    {
+        $this->db->where('usuario_id', $idUsuario)->delete('usuarios_codigos_recuperacao');
+        $agora = date('Y-m-d H:i:s');
+        foreach ($hashes as $hash) {
+            $this->db->insert('usuarios_codigos_recuperacao', ['usuario_id' => $idUsuario, 'codigo_hash' => $hash, 'criado_em' => $agora]);
+        }
+    }
+
+    public function desativarTotp(int $idUsuario): void
+    {
+        $this->db->trans_start();
+        $this->db->where('idUsuarios', $idUsuario)->update('usuarios', ['totp_secreto' => null, 'totp_ativado_em' => null, 'totp_ultimo_passo' => null]);
+        $this->db->where('usuario_id', $idUsuario)->delete('usuarios_codigos_recuperacao');
+        $this->db->trans_complete();
+    }
+
+    /** Grava a janela aceita só se for maior que a última: o mesmo código não vale duas vezes, nem em duas requisições juntas. */
+    public function registrarPassoTotp(int $idUsuario, int $passo): bool
+    {
+        $this->db->where('idUsuarios', $idUsuario)->group_start()->where('totp_ultimo_passo IS NULL', null, false)->or_where('totp_ultimo_passo <', $passo)->group_end()->update('usuarios', ['totp_ultimo_passo' => $passo]);
+
+        return $this->db->affected_rows() === 1;
+    }
+
+    /** Consome um código de recuperação (uso único). */
+    public function usarCodigoDeRecuperacao(int $idUsuario, string $hash): bool
+    {
+        $this->db->where(['usuario_id' => $idUsuario, 'codigo_hash' => $hash])->where('usado_em IS NULL', null, false)->update('usuarios_codigos_recuperacao', ['usado_em' => date('Y-m-d H:i:s')]);
+
+        return $this->db->affected_rows() === 1;
+    }
+
+    public function codigosDeRecuperacaoRestantes(int $idUsuario): int
+    {
+        return $this->db->where('usuario_id', $idUsuario)->where('usado_em IS NULL', null, false)->count_all_results('usuarios_codigos_recuperacao');
+    }
+
     public function check_credentials($email)
     {
         $this->db->where('email', $email);
