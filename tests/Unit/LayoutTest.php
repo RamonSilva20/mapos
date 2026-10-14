@@ -398,6 +398,22 @@ final class LayoutTest extends MaposTestCase
         $this->assertFalse(function_exists('layoutDadosLegado'));
         $this->assertDirectoryDoesNotExist(MAPOS_ROOT . '/assets/js/legado');
 
+        // Bootstrap, matrix-style e Font Awesome saíram do projeto todo na #2960.
+        foreach (['assets/css', 'assets/font-awesome', 'install/assets/js/jquery.min.js', 'install/assets/css/bootstrap.min.css'] as $caminho) {
+            $this->assertFileDoesNotExist(MAPOS_ROOT . '/' . $caminho);
+        }
+        $this->assertFileExists(MAPOS_ROOT . '/assets/dist/imprimir.css');
+        $this->assertFileExists(MAPOS_ROOT . '/assets/dist/pdf.css');
+        $this->assertFileExists(MAPOS_ROOT . '/install/assets/css/instalador.css');
+
+        $iterador = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(APPPATH . 'views', FilesystemIterator::SKIP_DOTS));
+        foreach (new CallbackFilterIterator($iterador, static fn ($arquivo) => $arquivo->getExtension() === 'php') as $arquivo) {
+            $codigo = strtolower((string) file_get_contents($arquivo->getPathname()));
+            foreach (['bootstrap', 'font-awesome', 'matrix-style', 'row-fluid', 'fa-camera', 'fa-fingerprint'] as $legado) {
+                $this->assertStringNotContainsString($legado, $codigo, $arquivo->getPathname() . ' ' . $legado);
+            }
+        }
+
         foreach (glob(APPPATH . 'views/tema/*.php') as $view) {
             $codigo = strtolower((string) file_get_contents($view));
             $this->assertStringNotContainsString('legado', $codigo, basename($view));

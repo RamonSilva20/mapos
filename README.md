@@ -3,7 +3,6 @@
 
 ![version](https://img.shields.io/badge/version-4.55.1-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-Apache-green.svg?longCache=true&style=flat-square)
-![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
@@ -138,11 +137,8 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
-* [twbs/bootstrap](https://github.com/twbs/bootstrap)
-* [jquery/jquery](https://github.com/jquery/jquery)
-* [jquery/jquery-ui](https://github.com/jquery/jquery-ui)
 * [mpdf/mpdf](https://github.com/mpdf/mpdf)
-* [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
+* [tailwindlabs/tailwindcss](https://github.com/tailwindlabs/tailwindcss)
 * [filp/whoops](https://github.com/filp/whoops)
 * [ezyang/htmlpurifier](https://github.com/ezyang/htmlpurifier)
 
