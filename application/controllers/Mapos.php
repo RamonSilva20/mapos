@@ -31,7 +31,8 @@ class Mapos extends MY_Controller
             'produtos' => $this->permite('vProduto'),
         ];
 
-        $painel = ['hoje' => $hoje, 'pode' => $pode];
+        // Instalador esquecido no servidor (#2874): só quem administra o sistema vê o aviso.
+        $painel = ['hoje' => $hoje, 'pode' => $pode, 'instalador_no_servidor' => $this->permite('cSistema') && is_dir(FCPATH . 'install')];
 
         if ($pode['os']) {
             $osPorStatus = $this->mapos_model->contarPorStatus('os');

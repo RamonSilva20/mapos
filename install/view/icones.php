@@ -1,4 +1,5 @@
 <?php
+defined('INSTALADOR') || exit;
 
 /**
  * Ícones do instalador (Lucide, ISC), embutidos em SVG: o instalador não

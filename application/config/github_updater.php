@@ -37,7 +37,8 @@ $config['current_commit'] = 'd93b12025b1533a334cb79b34346fa79ecb9005b';
  * 'application/views/admin/test.php'
  * and any other path with the term 'admin' in it.
  */
-$config['ignored_files'] = [];
+// install/ fica de fora: depois de instalado o admin apaga a pasta, e a atualização não pode trazê-la de volta (#2874).
+$config['ignored_files'] = ['install/'];
 
 /**
  * Flag to indicate if the downloaded and extracted update files

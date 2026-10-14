@@ -43,7 +43,7 @@ Quer ajudar a melhorar o Map-OS? Leia o **[Guia de Contribuição](CONTRIBUTING.
 1. Faça o download dos arquivos.
 2. Extraia o pacote e copie para seu webserver.
 3. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
-4. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
+4. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**. Terminada a instalação, o instalador se bloqueia sozinho (`install/instalado.lock` e `application/.env`), mas **apague a pasta `install`** do servidor.
 5. Configure o email de envio em Configurações > Sistema > E-mail .
 6. Configurar cron jobs para envio de e-mail:
     ##### Enviar emails pendentes a cada 2 minutos.

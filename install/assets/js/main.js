@@ -28,11 +28,6 @@
     avisos.append(caixa);
   }
 
-  if (document.body.dataset.instalado === '1') {
-    mostrar('finalizacao');
-    return;
-  }
-
   mostrar('pre-instalacao');
 
   document.querySelector('[data-proxima]')?.addEventListener('click', () => {
