@@ -17,6 +17,11 @@ function instaladorRaiz(): string
     return dirname(__DIR__);
 }
 
+/**
+ * Lê o disco: outra instalação pode terminar entre duas chamadas.
+ *
+ * @phpstan-impure
+ */
 function instaladorInstalado(?string $raiz = null): bool
 {
     $raiz ??= instaladorRaiz();
