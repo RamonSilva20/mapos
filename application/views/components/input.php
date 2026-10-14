@@ -38,7 +38,7 @@ $atributos = [
         'block w-full rounded-sm border bg-field px-3 py-2 text-body-md text-text placeholder:text-muted max-sm:min-h-11',
         // DESIGN.md text-input: borda hairline-input (3:1), texto body-md 400,
         // foco com sombra interna e anel azul de 3px, erro em danger.
-        'focus:outline-3 focus:outline-offset-0 focus:outline-ring/50 focus:shadow-field-focus',
+        'focus:outline-3 focus:outline-offset-0 focus:outline-ring focus:shadow-field-focus',
         'disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted read-only:bg-surface-subtle',
         $error !== null ? 'border-danger' : 'border-input',
         $class

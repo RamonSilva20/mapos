@@ -48,7 +48,7 @@ $atributos = [
             'aria-current' => $ativa ? 'page' : null,
             'class' => componenteClasses(
                 'relative inline-flex items-center gap-2 px-3.5 py-3 text-[0.9375rem] leading-tight whitespace-nowrap rounded-t-md',
-                'focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring/50',
+                'focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring',
                 $ativa
                     ? 'font-semibold text-text after:absolute after:inset-x-2.5 after:bottom-0 after:h-0.5 after:rounded-full after:bg-primary'
                     : 'font-medium text-muted hover:text-text'

@@ -25,7 +25,7 @@ if ($anexos === []) { ?>
         $nome = 'Anexo ' . ($indice + 1) . ($extensao !== '' ? ' (' . $extensao . ')' : '');
         ?>
         <li class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-surface">
-            <a href="<?= e(componenteUrl($endereco)) ?>" target="_blank" rel="noopener" class="flex aspect-[8/5] items-center justify-center bg-surface-subtle text-muted focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring/50">
+            <a href="<?= e(componenteUrl($endereco)) ?>" target="_blank" rel="noopener" class="flex aspect-[8/5] items-center justify-center bg-surface-subtle text-muted focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring">
                 <?php if ($miniatura !== null) { ?>
                     <img src="<?= e(componenteUrl($miniatura)) ?>" alt="<?= e($nome) ?>" loading="lazy" class="size-full object-cover">
                 <?php } else { ?>

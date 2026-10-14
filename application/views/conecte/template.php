@@ -25,7 +25,7 @@
  */
 // Mesmo nome das telas de entrada (views/entrada/inicio.php).
 $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
-$foco = 'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50';
+$foco = 'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring';
 $atual = array_values(array_filter($menu, static fn ($item) => $item['atual']))[0]['label'] ?? 'Área do cliente';
 ?><!doctype html>
 <html lang="pt-br"<?= temaAtributosHtml($configuration) ?>>
@@ -89,7 +89,7 @@ $atual = array_values(array_filter($menu, static fn ($item) => $item['atual']))[
                 <?php if ($item['tabbar']) { ?>
                     <li>
                         <a href="<?= e(site_url($item['url'])) ?>"
-                           class="relative flex min-h-16 flex-col items-center justify-center gap-1 px-1 text-[0.75rem] leading-none font-medium text-muted hover:text-text aria-[current=page]:font-semibold aria-[current=page]:text-text aria-[current=page]:before:absolute aria-[current=page]:before:top-0 aria-[current=page]:before:left-1/2 aria-[current=page]:before:h-[3px] aria-[current=page]:before:w-7 aria-[current=page]:before:-translate-x-1/2 aria-[current=page]:before:rounded-b-[3px] aria-[current=page]:before:bg-primary focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring/50"<?= $item['atual'] ? ' aria-current="page"' : '' ?>>
+                           class="relative flex min-h-16 flex-col items-center justify-center gap-1 px-1 text-[0.75rem] leading-none font-medium text-muted hover:text-text aria-[current=page]:font-semibold aria-[current=page]:text-text aria-[current=page]:before:absolute aria-[current=page]:before:top-0 aria-[current=page]:before:left-1/2 aria-[current=page]:before:h-[3px] aria-[current=page]:before:w-7 aria-[current=page]:before:-translate-x-1/2 aria-[current=page]:before:rounded-b-[3px] aria-[current=page]:before:bg-primary focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring"<?= $item['atual'] ? ' aria-current="page"' : '' ?>>
                             <?= icon($item['icon'], ['class' => 'size-6']) ?>
                             <span><?= e($item['curto']) ?></span>
                         </a>

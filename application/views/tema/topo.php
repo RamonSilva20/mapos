@@ -17,7 +17,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= e($configuration['app_name'] ?: 'Map-OS') ?></title>
+  <title><?= e(layoutTitulo($layout['breadcrumb'], (string) ($configuration['app_name'] ?: 'Map-OS'))) ?></title>
   <meta name="csrf-token-name" content="<?= e(config_item('csrf_token_name')) ?>">
   <meta name="csrf-cookie-name" content="<?= e(config_item('csrf_cookie_name')) ?>">
   <meta name="base-url" content="<?= e(base_url()) ?>">

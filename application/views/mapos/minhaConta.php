@@ -107,7 +107,7 @@ $errosDeCampo = $erros;
         'body' => [
             new HtmlSeguro('<div class="flex flex-col gap-1.5">'),
             new HtmlSeguro('<label for="foto-arquivo" class="text-label-md text-text">Imagem <span class="text-danger-ink" aria-hidden="true">*</span></label>'),
-            new HtmlSeguro('<input type="file" id="foto-arquivo" name="userfile" form="form-foto" required accept=".png,.jpg,.jpeg,.bmp" aria-describedby="foto-ajuda" class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring/50">'),
+            new HtmlSeguro('<input type="file" id="foto-arquivo" name="userfile" form="form-foto" required accept=".png,.jpg,.jpeg,.bmp" aria-describedby="foto-ajuda" class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring">'),
             new HtmlSeguro('<p id="foto-ajuda" class="text-caption text-muted">PNG, JPG ou BMP, até 2 MB. Tamanho indicado: 130 × 130 px.</p>'),
             new HtmlSeguro('</div>'),
         ],

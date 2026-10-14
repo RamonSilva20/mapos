@@ -42,7 +42,7 @@ $atributos = [
     'id' => $id,
     'class' => componenteClasses(
         'inline-flex shrink-0 items-center justify-center rounded-md whitespace-nowrap transition-colors',
-        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50',
+        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
         // DESIGN.md button-disabled: legível, sem opacidade.
         'disabled:cursor-not-allowed disabled:border-transparent disabled:bg-disabled-bg disabled:text-disabled disabled:shadow-none',
         'aria-disabled:pointer-events-none aria-disabled:border-transparent aria-disabled:bg-disabled-bg aria-disabled:text-disabled',

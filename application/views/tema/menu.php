@@ -22,7 +22,7 @@
  */
 $ativo = 'aria-[current=page]:bg-primary-tint aria-[current=page]:font-semibold aria-[current=page]:text-text'
     . ' aria-[current=page]:before:absolute aria-[current=page]:before:inset-y-2 aria-[current=page]:before:-left-3 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r-[3px] aria-[current=page]:before:bg-primary';
-$foco = 'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50';
+$foco = 'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring';
 $classeLink = 'relative flex h-10 items-center gap-3 rounded-md px-2.5 text-[0.9375rem] font-medium text-muted transition-colors hover:bg-surface-subtle hover:text-text ' . $foco . ' ' . $ativo;
 $classeSublink = 'relative flex min-h-9 items-center rounded-md py-1.5 pr-2.5 pl-10.5 text-sm text-muted transition-colors hover:bg-surface-subtle hover:text-text ' . $foco . ' ' . $ativo;
 ?>

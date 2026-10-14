@@ -91,7 +91,7 @@ $logo = (string) ($emitente->url_logo ?? '');
                     <label for="emitente-logo" class="text-label-md text-text"><?= e($logo !== '' ? 'Trocar o logo' : 'Logo') ?></label>
                     <input type="file" id="emitente-logo" name="userfile" accept=".png,.jpg,.jpeg,.bmp"
                            aria-describedby="emitente-logo-ajuda<?= isset($errosDeCampo['userfile']) ? ' emitente-logo-erro' : '' ?>"<?= isset($errosDeCampo['userfile']) ? ' aria-invalid="true"' : '' ?>
-                           class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring/50">
+                           class="block w-full rounded-sm border border-input bg-field px-3 py-2 text-body-md text-text file:mr-3 file:rounded-sm file:border-0 file:bg-surface-subtle file:px-3 file:py-1 file:text-label-md file:text-text focus:outline-3 focus:outline-offset-0 focus:outline-ring">
                     <p id="emitente-logo-ajuda" class="text-caption text-muted">Opcional. PNG, JPG ou BMP, até 2 MB. Sai no topo das impressões.</p>
                     <?php if (isset($errosDeCampo['userfile'])) { ?>
                         <p id="emitente-logo-erro" class="text-caption text-danger-ink"><?= e($errosDeCampo['userfile']) ?></p>

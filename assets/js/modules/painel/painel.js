@@ -191,6 +191,13 @@ async function iniciarAgenda(raiz, { doc, get }) {
                     falha(erro);
                 });
         },
+        // Os ícones das setas vêm com role=img sem texto: o nome do botão já está no title (buttonHints).
+        datesSet: () => {
+            for (const icone of alvo.querySelectorAll('.fc-icon[role="img"]')) {
+                icone.setAttribute('aria-hidden', 'true');
+                icone.removeAttribute('role');
+            }
+        },
         eventClick: (info) => {
             info.jsEvent.preventDefault();
             if (modal) {

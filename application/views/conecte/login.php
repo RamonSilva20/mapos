@@ -79,8 +79,8 @@ include APPPATH . 'views/entrada/inicio.php';
             </form>
 
             <div class="mt-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-body-md">
-                <a href="<?= e(site_url('mine/resetarSenha')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Esqueci minha senha</a>
-                <a href="<?= e(site_url('mine/cadastrar')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring/50 max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Criar conta</a>
+                <a href="<?= e(site_url('mine/resetarSenha')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Esqueci minha senha</a>
+                <a href="<?= e(site_url('mine/cadastrar')) ?>" class="rounded-xs text-on-dark underline underline-offset-4 hover:decoration-2 focus-visible:outline-3 focus-visible:outline-ring max-sm:inline-flex max-sm:min-h-11 max-sm:items-center">Criar conta</a>
             </div>
         </section>
     </main>

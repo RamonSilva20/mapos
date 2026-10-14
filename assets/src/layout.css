@@ -136,7 +136,7 @@
 
   /* Foco sempre visível na moldura. */
   :where(.v5-shell) :focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--color-ring) 50%, transparent) !important;
+    outline: 3px solid var(--color-ring) !important;
     outline-offset: 2px !important;
   }
 }
@@ -288,5 +288,26 @@ html[data-gaveta="aberta"] .v5-sidebar {
   .v5-gaveta-fundo,
   body.v5-layout .v5-main {
     transition: none !important;
+  }
+}
+
+/*
+ * Quem pede menos movimento (prefers-reduced-motion) não recebe transições nem
+ * animações: botões, switch, abas, calendário e a rolagem suave (WCAG 2.3.3).
+ */
+/* Entre declarações !important a ordem das camadas se inverte: a mais antiga
+   da lista vence. As utilities da moldura (transition-colors etc.) são
+   !important na camada utilities, então esta regra fica numa camada anterior,
+   a base; na shell ou fora de camada ela perderia para elas. */
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

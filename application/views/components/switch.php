@@ -31,7 +31,7 @@ $atributos = [
     'class' => componenteClasses(
         'peer h-6 w-10 cursor-pointer appearance-none rounded-full bg-input transition-colors',
         'checked:bg-primary',
-        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring/50',
+        'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
         'disabled:cursor-not-allowed disabled:opacity-60'
     ),
 ];

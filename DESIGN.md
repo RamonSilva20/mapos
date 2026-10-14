@@ -58,7 +58,7 @@ Typography splits cleanly between three families: a chunky display sans for hero
 - **On Dark Faint** (`{colors.on-dark-faint}` — `rgba(255,255,255,0.18)`): Translucent surface-on-dark — used for ghost button fills and dimmed nav items.
 
 ### Semantic
-- **Focus Ring** (`{colors.ring-focus}` — `rgba(59,130,246,0.5)`): Translucent blue focus ring, 3px — the only blue in the system outside the info status, reserved for keyboard focus on fields and buttons.
+- **Focus Ring** (`{colors.ring-focus}` — `#3B82F6`): Opaque blue focus ring, 3px — the only blue in the system outside the info status, reserved for keyboard focus on fields and buttons. It must reach the WCAG 1.4.11 minimum of 3:1 against the surface it sits on: 3.68:1 on white, 3.36:1 on `{colors.surface-subtle}` and 5.08:1 on the dark canvas. The earlier 50% translucent version measured about 1.8:1 on white and failed, so the ring is always drawn fully opaque.
 
 **Status colors.** Each state has a base (icons, dots, fills such as `button-danger`), an `-ink` for text, and a `-soft` background (base at 12% over white). Pills and alerts always put `-ink` on `-soft`.
 

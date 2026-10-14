@@ -54,7 +54,7 @@
  * Status       text-{estado}-ink sobre bg-{estado}-soft, para success,
  *              warning, danger, info, progress e neutral; bg-{estado} é a cor
  *              base (ponto, ícone, bg-danger do botão de perigo)
- * Foco         outline-ring/50 ({colors.ring-focus}), 3px
+ * Foco         outline-ring ({colors.ring-focus}, #3B82F6), 3px
  * Tipografia   text-body-md, text-label-md, text-caption, text-heading-xl,
  *              text-button-cap (+ uppercase), font-display, font-mono...
  * Forma        rounded-xs..rounded-xxl e rounded-full; shadow-elev-1..4
@@ -90,7 +90,7 @@
   --color-primary-tint: var(--mapos-primary-tint);
   --color-primary-strong: var(--mapos-primary-strong);
 
-  /* Foco: o único azul do sistema. Use outline-ring/50. */
+  /* Foco: o único azul do sistema. Use outline-ring, opaco: com 50% de alfa o contraste cai para cerca de 1,8:1. */
   --color-ring: #3b82f6;
 
   /*
