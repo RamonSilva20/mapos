@@ -36,10 +36,35 @@ function gravar(chave, valor) {
     }
 }
 
-// Ctrl+K (ou ⌘K no Mac) leva à busca global (DESIGN.md topbar). Shift e Alt
+// Ctrl+K (ou ⌘K no Mac) abre a busca global (DESIGN.md topbar). Shift e Alt
 // ficam de fora para não roubar outros atalhos.
 export function ehAtalhoBusca(evento) {
     return Boolean(evento.ctrlKey || evento.metaKey) && !evento.altKey && !evento.shiftKey && String(evento.key).toLowerCase() === 'k';
+}
+
+// F1 a F4 levam às telas principais (como na v4), sem Ctrl/Alt/Shift/⌘. Só
+// valem as teclas que o servidor mandou: telas que o usuário não pode abrir
+// não têm atalho. Dentro de um campo de formulário não agem: navegar
+// descartaria o que a pessoa está digitando.
+export function urlDoAtalho(evento, atalhos) {
+    if (evento.ctrlKey || evento.metaKey || evento.altKey || evento.shiftKey) {
+        return null;
+    }
+
+    const alvo = evento.target;
+    if (alvo?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(alvo?.tagName)) {
+        return null;
+    }
+
+    return Object.hasOwn(atalhos, evento.key) ? atalhos[evento.key] : null;
+}
+
+function lerAtalhos(corpo) {
+    try {
+        return JSON.parse(corpo.querySelector('#layout-atalhos')?.textContent ?? '{}') ?? {};
+    } catch {
+        return {};
+    }
 }
 
 export default function iniciar(corpo) {
@@ -130,18 +155,47 @@ export default function iniciar(corpo) {
         }
     });
 
+    const busca = corpo.querySelector('#v5-busca');
+    const atalhos = lerAtalhos(corpo);
+
+    const abrirBusca = () => {
+        if (busca?.showModal) {
+            if (!busca.open) {
+                busca.showModal();
+            }
+            busca.querySelector('[data-busca-campo]')?.focus();
+            return;
+        }
+
+        // Sem a paleta: foca o campo da topbar (ou o da gaveta, no celular).
+        let campo = corpo.querySelector('#v5-pesquisa');
+        if (!campo || campo.offsetParent === null) {
+            aplicar({ ...estado(), gavetaAberta: true });
+            campo = corpo.querySelector('#v5-pesquisa-gaveta');
+        }
+        campo?.focus();
+        campo?.select?.();
+    };
+
+    // Campo de busca da topbar e botão de busca do celular abrem a paleta.
+    corpo.addEventListener('click', (evento) => {
+        if (evento.target.closest?.('[data-busca-abrir], #v5-pesquisa')) {
+            evento.preventDefault();
+            abrirBusca();
+        }
+    });
+
     corpo.addEventListener('keydown', (evento) => {
         if (ehAtalhoBusca(evento)) {
             evento.preventDefault();
-            // No celular a busca da topbar fica escondida: abre a gaveta, que
-            // tem o próprio campo.
-            let campo = corpo.querySelector('#v5-pesquisa');
-            if (!campo || campo.offsetParent === null) {
-                aplicar({ ...estado(), gavetaAberta: true });
-                campo = corpo.querySelector('#v5-pesquisa-gaveta');
-            }
-            campo?.focus();
-            campo?.select?.();
+            abrirBusca();
+            return;
+        }
+
+        const destino = urlDoAtalho(evento, atalhos);
+        if (destino !== null && !document.querySelector('dialog[open]')) {
+            evento.preventDefault();
+            window.location.href = destino;
             return;
         }
 

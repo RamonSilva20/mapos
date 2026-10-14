@@ -300,3 +300,28 @@ if (! function_exists('layoutUrlAsset')) {
         return preg_match('#^https?://#', $caminho) ? $caminho : $baseUrl . $caminho;
     }
 }
+
+if (! function_exists('layoutAtalhos')) {
+    /**
+     * Atalhos de teclado do painel (F1 a F4, como na v4), só para as telas que
+     * o usuário pode abrir: saem do mesmo menu já filtrado por permissão.
+     *
+     * @param  list<array<string, mixed>>  $menu  Saída de layoutMenuVisivel()
+     * @return array<string, string> tecla => URL
+     */
+    function layoutAtalhos(array $menu, callable $siteUrl): array
+    {
+        $teclas = ['clientes' => 'F1', 'produtos' => 'F2', 'servicos' => 'F3', 'os' => 'F4'];
+        $atalhos = [];
+
+        foreach ($menu as $item) {
+            if (isset($item['url'], $teclas[$item['url']])) {
+                $atalhos[$teclas[$item['url']]] = $siteUrl($item['url']);
+            }
+        }
+
+        ksort($atalhos);
+
+        return $atalhos;
+    }
+}
