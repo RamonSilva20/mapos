@@ -44,9 +44,15 @@ export function ehAtalhoBusca(evento) {
 
 // F1 a F4 levam às telas principais (como na v4), sem Ctrl/Alt/Shift/⌘. Só
 // valem as teclas que o servidor mandou: telas que o usuário não pode abrir
-// não têm atalho.
+// não têm atalho. Dentro de um campo de formulário não agem: navegar
+// descartaria o que a pessoa está digitando.
 export function urlDoAtalho(evento, atalhos) {
     if (evento.ctrlKey || evento.metaKey || evento.altKey || evento.shiftKey) {
+        return null;
+    }
+
+    const alvo = evento.target;
+    if (alvo?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(alvo?.tagName)) {
         return null;
     }
 

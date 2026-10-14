@@ -18,7 +18,7 @@
     <form action="<?= e(site_url('mapos/pesquisar')) ?>" method="get" role="search" class="flex flex-col" data-busca-form>
       <div class="relative border-b border-border">
         <?= icon('search', ['class' => 'pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted']) ?>
-        <input type="search" name="termo" autocomplete="off" autofocus maxlength="100" data-busca-campo role="combobox" aria-expanded="false" aria-controls="v5-busca-lista" aria-autocomplete="list" placeholder="Buscar OS, cliente, produto ou serviço…" aria-label="Buscar" class="h-14 w-full rounded-t-xl bg-transparent pr-16 pl-12 text-base text-text placeholder:text-muted focus-visible:outline-none">
+        <input type="text" enterkeyhint="search" name="termo" autocomplete="off" autofocus maxlength="100" data-busca-campo role="combobox" aria-expanded="false" aria-controls="v5-busca-lista" aria-autocomplete="list" placeholder="Buscar OS, cliente, produto ou serviço…" aria-label="Buscar" class="h-14 w-full rounded-t-xl bg-transparent pr-16 pl-12 text-base text-text placeholder:text-muted focus-visible:outline-none">
         <kbd class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rounded-xs border border-border px-1.5 font-sans text-xs leading-5 font-medium text-muted" aria-hidden="true">Esc</kbd>
       </div>
       <div id="v5-busca-lista" role="listbox" aria-label="Resultados" data-busca-resultados class="max-h-[50vh] overflow-y-auto"></div>

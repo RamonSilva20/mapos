@@ -68,6 +68,8 @@ final class BuscaGlobalTest extends MaposTestCase
             $this->assertStringContainsString("permite('$permissao')", $trecho[0]);
         }
         $this->assertStringContainsString('JSON_HEX_TAG', $trecho[0]);
+        $this->assertStringNotContainsString('servicos/editar', $trecho[0], 'Quem só vê serviços não pode abrir a edição.');
+        $this->assertStringContainsString("site_url('servicos') . '?pesquisa='", $trecho[0]);
 
         $mapa = (string) file_get_contents(APPPATH . 'config/permissions_map.php');
         $this->assertStringContainsString("'buscaRapida' => '*'", $mapa);

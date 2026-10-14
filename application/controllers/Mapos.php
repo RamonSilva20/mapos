@@ -212,7 +212,8 @@ class Mapos extends MY_Controller
                 $grupos[] = ['chave' => 'servicos', 'titulo' => 'Serviços', 'itens' => array_map(static fn ($s) => [
                     'titulo' => (string) $s->nome,
                     'detalhe' => dinheiro($s->preco),
-                    'url' => site_url('servicos/editar/' . (int) $s->idServicos),
+                    // Serviço não tem tela de visualização: abre a listagem (vServico) já filtrada.
+                    'url' => site_url('servicos') . '?pesquisa=' . rawurlencode((string) $s->nome),
                 ], $r['servicos'])];
             }
         }

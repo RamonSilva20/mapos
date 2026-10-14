@@ -55,3 +55,13 @@ test('Ctrl K continua sendo o atalho da busca', () => {
     assert.equal(ehAtalhoBusca({ key: 'K', metaKey: true }), true);
     assert.equal(ehAtalhoBusca({ key: 'k' }), false);
 });
+
+test('dentro de um campo de formulário os atalhos não navegam, para não perder o que foi digitado', () => {
+    const atalhos = { F1: '/clientes' };
+
+    for (const tag of ['INPUT', 'TEXTAREA', 'SELECT']) {
+        assert.equal(urlDoAtalho({ key: 'F1', target: { tagName: tag } }, atalhos), null, tag);
+    }
+    assert.equal(urlDoAtalho({ key: 'F1', target: { tagName: 'DIV', isContentEditable: true } }, atalhos), null);
+    assert.equal(urlDoAtalho({ key: 'F1', target: { tagName: 'BODY' } }, atalhos), '/clientes');
+});
