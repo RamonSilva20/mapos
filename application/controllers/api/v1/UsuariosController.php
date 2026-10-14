@@ -116,88 +116,22 @@ class UsuariosController extends REST_Controller
         }
     }
 
-    public function index_put($id)
+    /**
+     * Edição de usuário pela API: desativada (#2879). O método anterior nunca
+     * funcionou no PHP 8 (lia os campos com um array como chave) e, se fosse
+     * "consertado" como estava, deixaria qualquer usuário trocar o próprio
+     * grupo, gravaria a senha em texto puro e não protegeria o administrador
+     * principal. A edição de usuários é feita no painel, onde essas regras
+     * existem. Use `GET/PUT /conta` para os dados do próprio usuário.
+     */
+    public function index_put($id = null)
     {
         $this->logged_user();
 
-        if (! $id) {
-            $this->response([
-                'status' => false,
-                'message' => 'Informe o ID do Usuário!',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
-
-        if ($this->logged_user()->usuario->idUsuarios != $id) {
-            if (! $this->permission->checkPermission($this->logged_user()->level, 'cUsuario')) {
-                $this->response([
-                    'status' => false,
-                    'message' => 'Você não está autorizado a Editar Usuários!',
-                ], REST_Controller::HTTP_UNAUTHORIZED);
-            }
-        }
-
-        if (! $this->put(['nome'], true) ||
-            ! $this->put(['rg'], true) ||
-            ! $this->put(['cpf'], true) ||
-            ! $this->put(['cep'], true) ||
-            ! $this->put(['rua'], true) ||
-            ! $this->put(['numero'], true) ||
-            ! $this->put(['bairro'], true) ||
-            ! $this->put(['cidade'], true) ||
-            ! $this->put(['estado'], true) ||
-            ! $this->put(['email'], true) ||
-            ! $this->put(['telefone'], true) ||
-            ! $this->put(['situacao'], true) ||
-            ! $this->put(['permissoes_id'], true)
-        ) {
-            $this->response([
-                'status' => false,
-                'message' => 'Preencha todos campos',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
-
-        if ($id == 1 && $this->put('situacao', true) == 0) {
-            $this->response([
-                'status' => false,
-                'message' => 'error', 'O usuário super admin não pode ser desativado!',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
-
-        $data = [
-            'nome' => $this->put('nome', true),
-            'rg' => $this->put('rg', true),
-            'cpf' => $this->put('cpf', true),
-            'cep' => $this->put('cep', true),
-            'rua' => $this->put('rua', true),
-            'numero' => $this->put('numero', true),
-            'bairro' => $this->put('bairro', true),
-            'cidade' => $this->put('cidade', true),
-            'estado' => $this->put('estado', true),
-            'email' => $this->put('email', true),
-            'telefone' => $this->put('telefone', true),
-            'celular' => $this->put('celular', true),
-            'dataExpiracao' => $this->put('dataExpiracao', true),
-            'situacao' => $this->put('situacao', true),
-            'permissoes_id' => $this->put('permissoes_id', true),
-        ];
-
-        if ($this->put('senha', true)) {
-            $data['senha'] = $this->put('senha', true);
-        }
-
-        if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id)) {
-            $this->log_app('Alterou um usuário. ID: ' . $id);
-            $this->response([
-                'status' => true,
-                'message' => 'Cliente editado com sucesso!',
-                'result' => $this->usuarios_model->getById($id),
-            ], REST_Controller::HTTP_OK);
-        }
-
         $this->response([
             'status' => false,
-            'message' => 'Não foi possível editar o Usuário.',
-        ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+            'message' => 'A edição de usuários pela API não está disponível. Use o painel.',
+        ], REST_Controller::HTTP_NOT_IMPLEMENTED);
     }
 
     public function index_delete($id)
@@ -327,7 +261,27 @@ class UsuariosController extends REST_Controller
         header('Deprecation: true');
         header('Link: <' . site_url('api/v1/refresh') . '>; rel="successor-version"');
 
-        $user = $this->logged_user(true)->usuario;
+        $sessao = $this->logged_user(true);
+        $user = $sessao->usuario;
+
+        // A renovação encadeada tem teto (#2879): sem ele, um token vazado renovado
+        // antes de vencer nunca perderia o acesso. Passado o teto, só um login novo.
+        $inicio = (int) ($sessao->data->orig ?? $sessao->data->API_TIME ?? 0);
+        $teto = max(3600, (int) ($_ENV['API_REGENTOKEN_MAX_AGE'] ?? 2592000));
+        if ($inicio <= 0 || time() - $inicio > $teto) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
+
+        $this->load->helper('usuarios');
+        if (! empty($user) && (usuarioContaExpirada($user->dataExpiracao ?? null) || ! $this->Mapos_model->grupoAtivo((int) $user->permissoes_id))) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
 
         // Usuário removido ou desativado não pode renovar o token
         if (empty($user) || (int) $user->situacao !== 1) {
@@ -345,6 +299,7 @@ class UsuariosController extends REST_Controller
                     'email' => $user->email,
                     'permissao' => $user->permissoes_id,
                     'type' => REST_Controller::TOKEN_TYPE_USER,
+                    'orig' => $inicio,
                 ];
 
                 $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);

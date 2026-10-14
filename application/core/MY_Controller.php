@@ -25,9 +25,33 @@ class MY_Controller extends CI_Controller
         if ((! session_id()) || (! $this->session->userdata('logado'))) {
             redirect('login');
         }
+        $this->revalidarSessao();
         $this->exigirDoisFatores();
         $this->load_configuration();
         $this->verificarPermissaoDaRota();
+    }
+
+    /**
+     * Revalida a sessão contra o banco a cada requisição (#2879): usuário
+     * desativado, excluído, com a conta expirada ou em grupo desativado perde a
+     * sessão na hora, em vez de seguir logado por até 2 horas (a sessão desliza).
+     * O grupo do usuário também é relido, então trocar o grupo vale já.
+     */
+    protected function revalidarSessao(): void
+    {
+        $this->load->model('mapos_model');
+        $this->load->helper('usuarios');
+
+        $usuario = $this->mapos_model->usuarioParaLoginPorId((int) $this->session->userdata('id_admin'));
+
+        if (! $usuario || usuarioContaExpirada($usuario->dataExpiracao ?? null) || ! $this->mapos_model->grupoAtivo((int) $usuario->permissoes_id)) {
+            $this->session->sess_destroy();
+            redirect('login');
+        }
+
+        if ((int) $this->session->userdata('permissao') !== (int) $usuario->permissoes_id) {
+            $this->session->set_userdata('permissao', $usuario->permissoes_id);
+        }
     }
 
     /**
@@ -194,6 +218,38 @@ class MY_Controller extends CI_Controller
 
         // Modo de cor do próprio usuário (#2854); separado de app_tema_modo, o padrão do sistema.
         $this->data['configuration']['tema_usuario_modo'] = (string) $this->session->userdata('tema_modo_admin');
+    }
+
+    /**
+     * O usuário logado pode conceder, editar ou redefinir algo que tem estas
+     * permissões? Só o que ele mesmo tem; o administrador pode tudo (#2879).
+     *
+     * @param  list<string>  $codigosDoAlvo
+     */
+    protected function podeDelegar(array $codigosDoAlvo): bool
+    {
+        $this->load->helper('usuarios');
+
+        if ((int) $this->session->userdata('id_admin') === USUARIO_SUPER_ADMIN || (int) $this->session->userdata('permissao') === PERMISSAO_ADMIN) {
+            return true;
+        }
+
+        $this->load->model('permissoes_model');
+        $meu = $this->permissoes_model->getById((int) $this->session->userdata('permissao'));
+
+        return delegacaoPermitida(false, permissoesMarcadas($meu->permissoes ?? null), $codigosDoAlvo);
+    }
+
+    /**
+     * O grupo de permissão (por id) está ao alcance de quem opera? Ver podeDelegar().
+     */
+    protected function podeDelegarGrupo(int $idPermissao): bool
+    {
+        $this->load->helper('usuarios');
+        $this->load->model('permissoes_model');
+        $grupo = $this->permissoes_model->getById($idPermissao);
+
+        return $grupo ? $this->podeDelegar(permissoesMarcadas($grupo->permissoes ?? null)) : false;
     }
 
     /**

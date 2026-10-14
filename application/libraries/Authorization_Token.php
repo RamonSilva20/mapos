@@ -74,6 +74,8 @@ class Authorization_Token
         }
 
         $agora = time();
+        // Início da cadeia de renovações (reGenToken): preservado nas renovações, para ter teto (#2879).
+        $data['orig'] = (int) ($data['orig'] ?? $agora);
         $data['iat'] = $agora;
         $data['exp'] = $agora + (int) $this->token_expire_time;
         // Legado: apps e tokens anteriores à #2869 usam API_TIME.

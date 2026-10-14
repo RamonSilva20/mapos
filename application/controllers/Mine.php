@@ -310,9 +310,14 @@ class Mine extends CI_Controller
                 $erros['senha_confirmacao'] = $confirmacao;
             }
 
-            if ($erros === []) {
-                $dados = conecteDadosDoCliente($this->input->post(), false);
+            // Trocar e-mail (o login) ou senha pede a senha atual (#2879): quem só
+            // sequestrou a sessão não assume a conta de forma permanente.
+            $dados = $erros === [] ? conecteDadosDoCliente($this->input->post(), false) : [];
+            if ($erros === [] && (strcasecmp((string) $dados['email'], (string) $cliente->email) !== 0 || ! empty($dados['senha'])) && ! password_verify((string) $this->input->post('senha_atual'), (string) $cliente->senha)) {
+                $erros['senha_atual'] = 'Para trocar o e-mail ou a senha, informe a sua senha atual.';
+            }
 
+            if ($erros === []) {
                 if ($this->Conecte_model->edit('clientes', $dados, 'idClientes', $idCliente)) {
                     $this->session->set_userdata(['nome' => $dados['nomeCliente'], 'email' => $dados['email']]);
                     $this->session->set_flashdata('success', 'Seus dados foram salvos.');

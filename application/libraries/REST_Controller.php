@@ -438,6 +438,12 @@ abstract class REST_Controller extends CI_Controller
      */
     protected function early_checks()
     {
+        // API_ENABLED=false tira só as rotas; o roteamento por diretório do CodeIgniter
+        // ainda alcançaria os controllers por URL direta (#2879). Desligada, é 404.
+        if (! filter_var($_ENV['API_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
+            show_404();
+        }
+
         $this->limiteDeRequisicoes();
     }
 
@@ -2317,6 +2323,19 @@ abstract class REST_Controller extends CI_Controller
                 'status' => false,
                 'message' => 'Faça o login novamente!',
             ], self::HTTP_FORBIDDEN);
+        }
+
+        // Conta expirada ou grupo desativado também perdem o acesso na hora (#2879),
+        // como no login do painel: antes só a situação era conferida.
+        if (! $reGenToken) {
+            $this->load->helper('usuarios');
+            $this->load->model('Mapos_model');
+            if (usuarioContaExpirada($this->user->usuario->dataExpiracao ?? null) || ! $this->Mapos_model->grupoAtivo((int) $this->user->usuario->permissoes_id)) {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Faça o login novamente!',
+                ], self::HTTP_FORBIDDEN);
+            }
         }
 
         $this->user->level = $this->user->usuario->permissoes_id ?? $decodedToken->data->permissao;

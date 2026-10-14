@@ -52,6 +52,11 @@ class Permissoes extends MY_Controller
             redirect('permissoes/gerenciar');
         }
 
+        if (! $this->podeDelegar(permissoesMarcadas($grupo->permissoes ?? null))) {
+            $this->session->set_flashdata('error', 'Este grupo tem permissões que você não tem. Só quem as tem pode alterá-lo.');
+            redirect('permissoes/gerenciar');
+        }
+
         return $this->formulario($grupo);
     }
 
@@ -80,6 +85,11 @@ class Permissoes extends MY_Controller
             }
             if ($protegido && array_diff(['cPermissao', 'cUsuario'], permissoesMarcadas($dados['permissoes'])) !== []) {
                 $erros['_geral'] = ($doLogado ? 'Este é o grupo do seu usuário' : 'Este é o grupo Administrador') . ': mantenha "Usuários" e "Permissões" marcados para não perder o acesso a estas telas.';
+            }
+
+            // Ninguém concede permissão que não tem (#2879): senão cPermissao vira administrador.
+            if ($erros === [] && ! $this->podeDelegar(permissoesMarcadas($dados['permissoes']))) {
+                $erros['_geral'] = 'Você só pode marcar permissões que você também tem.';
             }
 
             if ($erros === []) {

@@ -31,7 +31,7 @@ class ClientesController extends REST_Controller
             $page = $this->get('page', true) ?: 0;
             $start = $page ? ($perPage * $page) : 0;
 
-            $clientes = $this->clientes_model->get('clientes', '*', $search, $perPage, $start);
+            $clientes = array_map([$this, 'semSenha'], $this->clientes_model->get('clientes', '*', $search, $perPage, $start));
 
             if ($clientes) {
                 $this->response([
@@ -43,7 +43,7 @@ class ClientesController extends REST_Controller
         }
 
         if ($id && is_numeric($id)) {
-            $cliente = $this->clientes_model->getById($id);
+            $cliente = $this->semSenha($this->clientes_model->getById($id));
 
             if ($cliente) {
                 $cliente->ordensServicos = $this->clientes_model->getOsByCliente($id);
@@ -117,7 +117,7 @@ class ClientesController extends REST_Controller
             $this->response([
                 'status' => true,
                 'message' => 'Cliente adicionado com sucesso!',
-                'result' => $this->clientes_model->get('clientes', '*', "telefone = '{$data['telefone']}'", 1, 0, true),
+                'result' => $this->semSenha($this->clientes_model->getById($this->db->insert_id())),
             ], REST_Controller::HTTP_CREATED);
         }
 
@@ -169,7 +169,7 @@ class ClientesController extends REST_Controller
             $this->response([
                 'status' => true,
                 'message' => 'Cliente editado com sucesso!',
-                'result' => $this->clientes_model->getById($id),
+                'result' => $this->semSenha($this->clientes_model->getById($id)),
             ], REST_Controller::HTTP_OK);
         }
 
@@ -218,5 +218,19 @@ class ClientesController extends REST_Controller
             'status' => false,
             'message' => 'Não foi possível excluir o Cliente.',
         ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * O hash da senha do cliente nunca sai pela API (#2879): quem tem só vCliente
+     * não pode levar os hashes de todos os clientes (e a senha inicial de muitos é
+     * o próprio CPF/CNPJ, que está na mesma linha).
+     */
+    private function semSenha(?object $cliente): ?object
+    {
+        if ($cliente !== null) {
+            unset($cliente->senha);
+        }
+
+        return $cliente;
     }
 }
