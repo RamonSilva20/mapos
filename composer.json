@@ -9,11 +9,10 @@
         "mpdf/mpdf": "^8.2.7",
         "mk-j/php_xlsxwriter": "^0.38.0",
         "mpdf/qrcode": "^1.2.2",
-        "phpoffice/phpword": "^0.18.3",
+        "phpoffice/phpword": "^1.0",
         "piggly/php-pix": "^2.0.2",
         "vlucas/phpdotenv": "^5.6.3",
         "codephix/asaas-sdk": "^2.0.12",
-        "filp/whoops": "^2.18.4",
         "ezyang/htmlpurifier": "^4.19",
         "firebase/php-jwt": "^7.2"
     },
@@ -22,7 +21,8 @@
         "symfony/var-dumper": "^6.4.32",
         "fakerphp/faker": "^1.24.1",
         "phpstan/phpstan": "^2.3",
-        "phpunit/phpunit": "^12.5"
+        "phpunit/phpunit": "^12.5",
+        "filp/whoops": "^2.18.4"
     },
     "scripts": {
         "format": [
