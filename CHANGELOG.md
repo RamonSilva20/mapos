@@ -24,6 +24,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DESIGN.md` como fonte de verdade da UI da v5 (cores, tipografia, componentes, estados, modo escuro e responsividade), referenciado no `AGENTS.md`, no `CONTRIBUTING.md` e no template de PR. #2920 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Changed
+- Acessibilidade AA (auditoria com axe-core em 29 telas, claro e escuro): anel de foco opaco (#3B82F6, 3,68:1 sobre branco; a 50% de alfa dava cerca de 1,8:1 e reprovava o WCAG 1.4.11, DESIGN.md atualizado), título da aba por tela ("Clientes — Map-OS"), menu do usuário com nome acessível igual ao texto visível, seletor de modo de cor no menu do usuário no celular (a topbar não estoura mais em 320 px), `prefers-reduced-motion` nos dois CSS, dias de outro mês e setas do calendário do painel com contraste e sem ícone sem texto, e a lista da paleta Ctrl+K fora da ordem de tabulação. #2853 [@RamonSilva20](https://github.com/RamonSilva20)
 - `phpoffice/phpword` 0.18 → 1.4 (relatório de receitas brutas do MEI) e `filp/whoops` movido para `require-dev`: o pacote de instalação não o traz mais, e o hook só o usa se a classe existir. `composer audit` segue no CI. #2877 [@RamonSilva20](https://github.com/RamonSilva20)
 - Produtos migrados para os componentes da v5, completando Clientes, Produtos e Serviços:
   - listagem com busca e filtro de estoque baixo (pill "Baixo") e etiquetas em modal;
