@@ -1,0 +1,105 @@
+/*
+ * CSS dos relatórios em PDF (mPDF), gerado em assets/dist/pdf.css por
+ * `npm run build:pdf` (scripts/build-pdf-css.mjs).
+ *
+ * O mPDF só entende CSS 2.1 e um pouco de CSS 3: não lê variáveis, @layer,
+ * oklch/color-mix, rem, flex nem grid. Por isso este arquivo NÃO tem o
+ * preflight do Tailwind, e o script achata a saída (resolve var(), troca rem
+ * por px, converte as cores e desembrulha as camadas). Nas views dos
+ * relatórios use só utilities de tabela, borda, cor, tipografia, float e
+ * espaçamento; nada de flex, grid, gap, space-* ou opacidade.
+ */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "./tokens.css";
+
+@source "../../application/views/relatorios/imprimir/**/*.php";
+
+@layer base {
+  body {
+    font-family: sans-serif;
+    font-size: 12px;
+    color: #1f1633;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+}
+
+/*
+ * Classes dos relatórios: a tabela e o título, usados por todas as views de
+ * relatorios/imprimir. Escritas com utilities do Tailwind (@apply) que o
+ * mPDF consegue ler depois do achatamento.
+ */
+@layer components {
+  .rel-titulo {
+    @apply my-2 bg-surface-subtle p-1.5 text-center text-base font-bold;
+  }
+
+  .rel-tabela {
+    @apply w-full;
+  }
+
+  .rel-th {
+    @apply border border-hairline-cool bg-surface-subtle px-1.5 py-1 text-center text-xs font-bold;
+  }
+
+  .rel-td {
+    @apply border border-hairline-cool px-1.5 py-1 text-xs;
+  }
+
+  .rel-total {
+    @apply border border-hairline-cool bg-surface-subtle px-1.5 py-1 text-xs font-bold;
+  }
+
+  .rel-rodape {
+    @apply mt-2 text-right text-xs;
+  }
+}
+
+/*
+ * Etiquetas de produto com código de barras (imprimirEtiquetas.php): o mPDF
+ * desenha <barcode> e posiciona as etiquetas por float.
+ */
+@layer components {
+  .barcode {
+    margin: 0;
+    padding: 1.5mm;
+    vertical-align: top;
+    color: #000;
+  }
+
+  .barcodecell {
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .etiqueta {
+    float: left;
+    height: auto;
+    border: 1px dashed #777;
+    page-break-inside: avoid;
+  }
+
+  .etiqueta-padrao {
+    width: 200px;
+    padding: 5px;
+  }
+
+  .etiqueta-ean13 {
+    width: 145px;
+    padding: 4px;
+  }
+
+  .etiqueta-descricao {
+    text-align: center;
+    font-size: 70%;
+  }
+
+  .etiqueta-texto {
+    font-size: 70%;
+  }
+}
