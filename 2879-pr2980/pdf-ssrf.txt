@@ -1,0 +1,5 @@
+Relatorio de OS em PDF (relatorios/osRapid), descricao da OS com <img src="http://127.0.0.1:8999/x.png">, data: e img do proprio host, link javascript:, link https.
+DEPOIS (PR): 200 application/pdf; listener (porta de controle) sem nenhum acesso; imagem da descricao removida; links https mantido, javascript: removido; logo local do emitente aparece (pdfimages: 1 imagem 148x29); data: na descricao ja era removida pelo HTMLPurifier antes do PR.
+ANTES (mPDF de fabrica, CLI): o listener recebeu GET /x.png (SSRF). No fluxo web com o codigo antigo a requisicao travou (php -S de thread unica tentando buscar a propria URL).
+Demais PDFs 200 application/pdf: osCustom, clientesRapid, produtosRapid, produtosRapidMin, servicosRapid, financeiroRapid, vendasRapid.
+mpdfCriar(): imagem local e data: URI presentes no PDF (pdfimages lista 2 imagens + smasks).

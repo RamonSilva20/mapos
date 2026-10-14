@@ -1,0 +1,8 @@
+POST /index.php/csp/report (php -S, STORAGE_PATH=<scratch>/storage)
+valido (application/csp-report)         -> 204; gravado em storage/logs/csp-violacoes.json; application/logs sem o arquivo
+legado application/logs/csp-violacoes.json -> movido (conteudo "legacy":1 preservado e agregado em STORAGE_PATH/logs)
+legado + novo existentes                -> legado removido
+content-type text/plain                 -> 415
+corpo 20000 bytes                       -> 413
+GET                                     -> 405
+Apache: STORAGE_PATH vazio -> application/storage/logs/csp-violacoes.json, acesso direto 403

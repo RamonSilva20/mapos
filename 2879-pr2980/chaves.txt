@@ -1,0 +1,12 @@
+ENVIRONMENT=production, API_ENABLED=true (php -S)
+API_JWT_KEY="enter_jwt_key" (placeholder) : GET clientes 503, POST login 503, painel /login 200
+API_JWT_KEY curta (6)                     : 503 / 503 / 200
+API_JWT_KEY 31 caracteres                 : 503 / 503 / 200
+API_JWT_KEY vazia                         : 503 / 503 / 200
+API_JWT_KEY 32 caracteres                 : 401 sem token / login 200 / painel 200
+API_JWT_KEY real (44)                     : 401 sem token / login 200 / painel 200; com token: clientes, os, produtos 200 (php -S e Apache)
+Painel com chave JWT ruim em production: login do painel {"result":true}, /mapos 200, /os 200
+development + placeholder: API 401 (nao 503)
+2FA: ativado TOTP para admin com APP_ENCRYPTION_KEY real (ativarDoisFatores 200, codigos de recuperacao exibidos); login pede o 2o fator e aceita o codigo (303 -> /mapos)
+2FA com APP_ENCRYPTION_KEY="enter_encryption_key" em production: verificarDoisFatores 500; usuario sem 2FA abrindo /mapos/doisFatores 500 (pagina "Algo deu errado"); painel /mapos 200
+  log: "Exception: APP_ENCRYPTION_KEY nao foi configurada: o 2FA nao pode guardar segredos com a chave do .env.example."

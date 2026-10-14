@@ -1,0 +1,6 @@
+/application/.env                        403
+/banco.sql                               200
+/application/config/database.php         200
+/updates/index.html                      404
+/composer.json                           200
+/index.php/login                         200
