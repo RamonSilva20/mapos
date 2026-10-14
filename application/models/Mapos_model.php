@@ -339,6 +339,18 @@ class Mapos_model extends CI_Model
         return $this->db->where('idPermissao', $idPermissao)->where('situacao', 1)->count_all_results('permissoes') > 0;
     }
 
+    /** Grava o modo de cor do usuário (#2854). Falso se a migration ainda não rodou. */
+    public function salvarTemaModo(int $idUsuario, string $modo): bool
+    {
+        if (! $this->db->field_exists('tema_modo', 'usuarios')) {
+            return false;
+        }
+
+        $this->db->where('idUsuarios', $idUsuario)->update('usuarios', ['tema_modo' => $modo]);
+
+        return $this->db->affected_rows() >= 0;
+    }
+
     /** O grupo de permissão exige o 2FA ativo (#2876)? Falso se a migration ainda não rodou. */
     public function grupoExige2fa(int $idPermissao): bool
     {

@@ -8,6 +8,9 @@
  * é única, o laranja do DESIGN.md, e não há mais cor de destaque (#2913). O
  * CSS (assets/src/tokens.css) troca as variáveis pela classe .dark no <html>.
  *
+ * Cada pessoa pode ter o próprio modo (usuarios.tema_modo, #2854), que vale mais
+ * que o app_tema_modo, o tema padrão do sistema.
+ *
  * O app_theme só é lido como origem do modo num banco que ainda não tem
  * app_tema_modo (instalado pelo banco.sql antes da v5). Nada aqui o altera e
  * as telas não o gravam mais: os tema-*.css saíram na #2855.
@@ -59,6 +62,12 @@ if (! function_exists('temaConfiguracao')) {
      */
     function temaConfiguracao(array $configuration)
     {
+        // Preferência da pessoa (#2854) vale mais que o tema padrão do sistema.
+        $doUsuario = strtolower(trim((string) ($configuration['tema_usuario_modo'] ?? '')));
+        if (in_array($doUsuario, TEMA_MODOS, true)) {
+            return ['modo' => $doUsuario];
+        }
+
         $modo = strtolower(trim((string) ($configuration['app_tema_modo'] ?? '')));
 
         if (in_array($modo, TEMA_MODOS, true)) {
@@ -90,6 +99,12 @@ if (! function_exists('temaAtributosHtml')) {
         }
 
         $atributos .= ' data-tema-modo="' . htmlspecialchars($tema['modo'], ENT_QUOTES, 'UTF-8') . '"';
+
+        // Com preferência gravada para o usuário, ela vale em qualquer navegador:
+        // o assets/js/tema.js não deixa o localStorage de um navegador mandar nela.
+        if (in_array(strtolower(trim((string) ($configuration['tema_usuario_modo'] ?? ''))), TEMA_MODOS, true)) {
+            $atributos .= ' data-tema-usuario="1"';
+        }
 
         return $atributos;
     }

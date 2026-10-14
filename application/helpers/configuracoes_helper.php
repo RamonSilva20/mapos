@@ -74,7 +74,7 @@ if (! function_exists('configuracaoCampos')) {
             'geral' => [
                 'app_name' => ['destino' => 'config', 'tipo' => 'texto', 'rotulo' => 'Nome do sistema', 'obrigatorio' => true, 'max' => 100, 'ajuda' => 'Aparece no título das páginas e nos e-mails.'],
                 'per_page' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Registros por página', 'opcoes' => ['10' => '10', '20' => '20', '50' => '50', '100' => '100']],
-                'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Cada pessoa pode trocar o tema na barra do topo.'],
+                'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Cada pessoa pode trocar o tema na barra do topo, e a escolha fica salva no perfil dela. Este é o tema de quem ainda não escolheu.'],
             ],
             'os' => [
                 'control_editos' => ['destino' => 'config', 'tipo' => 'sim_nao', 'rotulo' => 'Permitir editar OS faturada ou cancelada'],
@@ -297,7 +297,7 @@ if (! function_exists('configuracaoValores')) {
         }
 
         if ($aba === 'geral' && ! isset($configuracao['app_tema_modo']) && $post === null) {
-            $valores['app_tema_modo'] = temaConfiguracao($configuracao)['modo'];
+            $valores['app_tema_modo'] = temaConfiguracao(array_diff_key($configuracao, ['tema_usuario_modo' => true]))['modo'];
         }
 
         return $valores;

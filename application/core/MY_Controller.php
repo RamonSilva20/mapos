@@ -191,6 +191,9 @@ class MY_Controller extends CI_Controller
         foreach ($configuracoes as $c) {
             $this->data['configuration'][$c->config] = $c->valor;
         }
+
+        // Modo de cor do próprio usuário (#2854); separado de app_tema_modo, o padrão do sistema.
+        $this->data['configuration']['tema_usuario_modo'] = (string) $this->session->userdata('tema_modo_admin');
     }
 
     /**

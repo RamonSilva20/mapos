@@ -111,6 +111,27 @@ class Mapos extends MY_Controller
     }
 
     /**
+     * Grava o modo de cor do usuário logado (#2854): POST {modo}, chamado pela
+     * topbar quando a pessoa troca claro, escuro ou sistema. Responde JSON.
+     */
+    public function salvarTemaModo()
+    {
+        $modo = strtolower(trim((string) $this->input->post('modo')));
+        $this->load->helper('tema');
+        $valido = $this->input->method() === 'post' && in_array($modo, TEMA_MODOS, true);
+        $salvou = $valido && $this->mapos_model->salvarTemaModo((int) $this->session->userdata('id_admin'), $modo);
+
+        if ($salvou) {
+            $this->session->set_userdata('tema_modo_admin', $modo);
+        }
+
+        return $this->output
+            ->set_status_header($valido ? 200 : 422)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode(['result' => $salvou, 'modo' => $valido ? $modo : null]));
+    }
+
+    /**
      * Autenticação em dois fatores da própria conta (#2876): ativar (QR code e
      * código de confirmação), ver os códigos de recuperação uma vez, gerar
      * novos e desativar (os dois pedem a senha). Um grupo que exige o 2FA não

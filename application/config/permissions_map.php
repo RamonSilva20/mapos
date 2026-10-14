@@ -100,6 +100,7 @@ $config['permissions_map'] = [
         'index' => '*',
         'minhaConta' => '*',
         'alterarSenha' => '*',
+        'salvarTemaModo' => '*',
         'doisFatores' => '*',
         'ativarDoisFatores' => '*',
         'novosCodigosDoisFatores' => '*',

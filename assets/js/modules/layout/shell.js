@@ -5,6 +5,7 @@
 // sidebar e do modo já vem aplicado pelo assets/js/tema.js no <head>; este
 // módulo só reage às ações do usuário.
 
+import { post } from '../../lib/http.js';
 import { aplicarModo, salvarModo } from '../../lib/tema.js';
 
 export const CHAVE_SIDEBAR = 'mapos:sidebar';
@@ -65,6 +66,19 @@ function lerAtalhos(corpo) {
     } catch {
         return {};
     }
+}
+
+/**
+ * Grava o modo do usuário no servidor (#2854), para valer em qualquer
+ * navegador. Se falhar (rede, sessão), o localStorage já guardou a escolha
+ * neste navegador, então a falha não é mostrada.
+ */
+export function gravarNoServidor(url, modo) {
+    if (!url) {
+        return Promise.resolve(false);
+    }
+
+    return post(url, { modo }).then(() => true, () => false);
 }
 
 export default function iniciar(corpo) {
@@ -144,6 +158,7 @@ export default function iniciar(corpo) {
             const escolhido = modo.dataset.temaEscolher;
             aplicarModo(html, escolhido, Boolean(escuro?.matches));
             salvarModo(escolhido);
+            gravarNoServidor(corpo.dataset.temaUrl, escolhido);
             marcarModo();
         }
 
