@@ -25,9 +25,64 @@ class MY_Controller extends CI_Controller
         if ((! session_id()) || (! $this->session->userdata('logado'))) {
             redirect('login');
         }
+        $this->validarSessaoDoUsuario();
         $this->exigirDoisFatores();
         $this->load_configuration();
         $this->verificarPermissaoDaRota();
+    }
+
+    /**
+     * Revalida o usuário da sessão no banco a cada requisição (#2879): conta
+     * desativada, excluída ou expirada, grupo desativado e senha trocada em outra
+     * sessão encerram esta com uma mensagem. O grupo e a exigência de 2FA seguem
+     * o banco, não o que ficou gravado no login.
+     */
+    protected function validarSessaoDoUsuario(): void
+    {
+        $this->load->model('mapos_model');
+        $estado = $this->mapos_model->estadoDaSessao((int) $this->session->userdata('id_admin'));
+
+        $motivo = $this->motivoDeEncerramento($estado, (int) $this->session->userdata('sessao_versao'));
+
+        if ($motivo !== null) {
+            $this->session->unset_userdata(['logado', 'id_admin', 'nome_admin', 'email_admin', 'url_image_user_admin', 'tema_modo_admin', 'permissao', 'exigir_2fa_cadastro', 'totp_pendente', 'sessao_versao']);
+            $this->session->sess_regenerate(true);
+            $this->session->set_flashdata('error', $motivo);
+            redirect('login');
+        }
+
+        if ((int) $this->session->userdata('permissao') !== $estado['permissoes_id']) {
+            $this->session->set_userdata('permissao', $estado['permissoes_id']);
+        }
+        if ($estado['exige_2fa_cadastro']) {
+            $this->session->set_userdata('exigir_2fa_cadastro', true);
+        } elseif ($this->session->userdata('exigir_2fa_cadastro')) {
+            // Voltou a um grupo sem exigência (ou ativou o 2FA): solta a tela de ativação.
+            $this->session->unset_userdata('exigir_2fa_cadastro');
+        }
+    }
+
+    /**
+     * Por que a sessão não vale mais, ou null se vale (#2879).
+     *
+     * @param  array{situacao: int, expirada: bool, grupo_ativo: bool, versao: int}|null  $estado  De Mapos_model::estadoDaSessao()
+     */
+    protected function motivoDeEncerramento(?array $estado, int $versaoDaSessao): ?string
+    {
+        if ($estado === null || $estado['situacao'] !== 1) {
+            return 'Sua conta está desativada. Fale com o administrador do sistema.';
+        }
+        if ($estado['expirada']) {
+            return 'A conta do usuário está expirada, por favor entre em contato com o administrador do sistema.';
+        }
+        if (! $estado['grupo_ativo']) {
+            return 'O grupo de permissão desta conta está desativado. Fale com o administrador do sistema.';
+        }
+        if ($estado['versao'] !== $versaoDaSessao) {
+            return 'A senha desta conta foi alterada. Entre novamente.';
+        }
+
+        return null;
     }
 
     /**

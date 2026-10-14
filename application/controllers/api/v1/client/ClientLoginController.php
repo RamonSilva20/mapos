@@ -45,7 +45,8 @@ class ClientLoginController extends REST_Controller
 
         // Mesma resposta para e-mail inexistente e senha errada: "Usuário não
         // encontrado" revelava quais e-mails possuem cadastro.
-        if (!$cliente || !password_verify((string) $password, $cliente->senha)) {
+        $senhaConfere = senhaConfere((string) $password, $cliente->senha ?? null);
+        if (!$cliente || !$senhaConfere) {
             $this->limite_login->registrarFalha('cliente', $email, $ip);
             $this->response([
                 'status' => false,

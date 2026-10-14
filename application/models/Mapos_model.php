@@ -41,6 +41,13 @@ class Mapos_model extends CI_Model
         $this->db->update('usuarios');
 
         if ($this->db->affected_rows() >= 0) {
+            // As outras sessões do painel deste usuário deixam de valer (#2879);
+            // a atual segue com a versão nova.
+            $versao = $this->invalidarSessoes((int) $this->session->userdata('id_admin'));
+            if ($versao !== null) {
+                $this->session->set_userdata('sessao_versao', $versao);
+            }
+
             // As sessões da API deste usuário deixam de renovar (#2869).
             $this->load->library('Refresh_token');
             $this->refresh_token->revogarDoUsuario((int) $this->session->userdata('id_admin'));
@@ -51,6 +58,58 @@ class Mapos_model extends CI_Model
         }
 
         return false;
+    }
+
+    /**
+     * Soma 1 à versão de sessão do usuário: as sessões do painel abertas com a
+     * versão anterior caem na próxima requisição (#2879). Devolve a versão nova,
+     * ou null se a migration ainda não rodou (nada a invalidar).
+     */
+    public function invalidarSessoes(int $idUsuario): ?int
+    {
+        if (! $this->db->field_exists('sessao_versao', 'usuarios')) {
+            return null;
+        }
+
+        $this->db->set('sessao_versao', 'sessao_versao + 1', false)->where('idUsuarios', $idUsuario)->update('usuarios');
+
+        $linha = $this->db->select('sessao_versao')->where('idUsuarios', $idUsuario)->limit(1)->get('usuarios')->row();
+
+        return (int) ($linha->sessao_versao ?? 0);
+    }
+
+    /**
+     * Estado atual do usuário da sessão do painel, lido do banco a cada
+     * requisição (#2879): conta ativa, expiração, grupo e versão da sessão.
+     * Devolve null se o usuário não existe mais.
+     *
+     * @return array{situacao: int, expirada: bool, permissoes_id: int, grupo_ativo: bool, versao: int, exige_2fa_cadastro: bool}|null
+     */
+    public function estadoDaSessao(int $idUsuario): ?array
+    {
+        // Colunas de migrations recentes só entram se já existirem.
+        $campos = 'situacao, dataExpiracao, permissoes_id';
+        foreach (['totp_ativado_em', 'sessao_versao'] as $coluna) {
+            if ($this->db->field_exists($coluna, 'usuarios')) {
+                $campos .= ', ' . $coluna;
+            }
+        }
+        $usuario = $this->db->select($campos)->where('idUsuarios', $idUsuario)->limit(1)->get('usuarios')->row();
+
+        if (! $usuario) {
+            return null;
+        }
+
+        $grupo = (int) $usuario->permissoes_id;
+
+        return [
+            'situacao' => (int) $usuario->situacao,
+            'expirada' => contaExpirada($usuario->dataExpiracao),
+            'permissoes_id' => $grupo,
+            'grupo_ativo' => $this->grupoAtivo($grupo),
+            'versao' => (int) ($usuario->sessao_versao ?? 0),
+            'exige_2fa_cadastro' => ! ($usuario->totp_ativado_em ?? null) && $this->grupoExige2fa($grupo),
+        ];
     }
 
     public function pesquisar($termo)

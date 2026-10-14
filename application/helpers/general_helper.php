@@ -24,6 +24,43 @@ if (! function_exists('apiHabilitada')) {
     }
 }
 
+if (! function_exists('senhaConfere')) {
+    /**
+     * Confere a senha em tempo parecido com e sem conta: sem hash (e-mail
+     * inexistente) ela é verificada contra um hash fictício e fixo, de custo 12
+     * (o PASSWORD_DEFAULT do PHP 8.4+), e o tempo de resposta deixa de revelar
+     * quais e-mails têm cadastro (#2879). Sempre falso quando não há hash. O
+     * hash é fixo porque gerar um a cada requisição dobraria o tempo do caminho
+     * sem conta. Contas antigas, com hash de custo 10, ainda respondem mais
+     * rápido que as demais.
+     */
+    function senhaConfere(string $senha, ?string $hash): bool
+    {
+        if ($hash === null || $hash === '') {
+            password_verify($senha, '$2y$12$as5wptyRExe36.CMu5o7vODVOzM1KVZ.PLep3qTOd6G.AFhrLAu5u');
+
+            return false;
+        }
+
+        return password_verify($senha, $hash);
+    }
+}
+
+if (! function_exists('contaExpirada')) {
+    /**
+     * Diz se a conta está expirada pela data de usuarios.dataExpiracao.
+     * Sem data cadastrada (nulo ou só espaços) a conta não expira.
+     */
+    function contaExpirada(?string $dataExpiracao): bool
+    {
+        if (trim((string) $dataExpiracao) === '') {
+            return false;
+        }
+
+        return new DateTime($dataExpiracao) < new DateTime('now');
+    }
+}
+
 if (! function_exists('limitarTexto')) {
     function limitarTexto($texto, $limite)
     {

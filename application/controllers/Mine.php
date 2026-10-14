@@ -166,6 +166,20 @@ class Mine extends CI_Controller
     {
         $emailSolicitado = (string) $this->input->post('email');
 
+        // Limite de pedidos por e-mail e IP (#2879): cada pedido conta, exista ou
+        // não a conta, e quem passa do limite recebe a mesma resposta de sucesso,
+        // sem e-mail, para o limite não revelar quais e-mails têm cadastro nem
+        // permitir encher a caixa de um cliente.
+        $this->load->library('Limite_login');
+        $ip = $this->input->ip_address();
+
+        if ($this->limite_login->bloqueado('reset', $emailSolicitado, $ip)) {
+            log_info('Pedido de alteração de senha ignorado pelo limite de tentativas.');
+            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para ' . $emailSolicitado . '.');
+            redirect(base_url() . 'index.php/mine');
+        }
+        $this->limite_login->registrarFalha('reset', $emailSolicitado, $ip);
+
         if (! $cliente = $this->check_credentials($emailSolicitado)) {
             // Mesma resposta de sucesso quando o e-mail não existe, para não
             // permitir enumeração de contas.
@@ -234,7 +248,8 @@ class Mine extends CI_Controller
 
         // Mesma mensagem para e-mail inexistente e senha errada: mensagens
         // distintas revelam quais e-mails possuem cadastro.
-        if (! $cliente || ! password_verify($password, $cliente->senha)) {
+        $senhaConfere = senhaConfere((string) $password, $cliente->senha ?? null);
+        if (! $cliente || ! $senhaConfere) {
             $this->limite_login->registrarFalha('cliente', $email, $ip);
             echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
 

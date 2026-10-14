@@ -300,9 +300,9 @@ final class DoisFatoresTest extends MaposTestCase
         $codigo = (string) file_get_contents(APPPATH . 'controllers/Mapos.php');
         preg_match('/function desativarDoisFatores\(\).*?\n    }\n/s', $codigo, $trecho);
 
-        $this->assertStringContainsString("password_verify((string) \$this->input->post('senha')", $trecho[0], 'Desativar pede a senha.');
+        $this->assertStringContainsString("confirmarSenhaDoUsuario(\$usuario, (string) \$this->input->post('senha')", $trecho[0], 'Desativar pede a senha, com limite de tentativas (#2879).');
         $this->assertStringContainsString('grupoExige2fa', $trecho[0], 'Grupo que exige não deixa desativar.');
         preg_match('/function novosCodigosDoisFatores\(\).*?\n    }\n/s', $codigo, $novos);
-        $this->assertStringContainsString("password_verify((string) \$this->input->post('senha')", $novos[0], 'Gerar novos códigos pede a senha.');
+        $this->assertStringContainsString("confirmarSenhaDoUsuario(\$usuario, (string) \$this->input->post('senha')", $novos[0], 'Gerar novos códigos pede a senha, com limite de tentativas (#2879).');
     }
 }

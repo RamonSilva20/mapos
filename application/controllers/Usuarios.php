@@ -122,6 +122,12 @@ class Usuarios extends MY_Controller
                     : $this->usuarios_model->edit('usuarios', $dados, 'idUsuarios', (int) $usuario->idUsuarios);
 
                 if ($salvou) {
+                    // Trocou a própria senha por aqui: a sessão atual segue valendo, as outras caem (#2879).
+                    if ($usuario !== null && isset($dados['senha']) && (int) $usuario->idUsuarios === $logado) {
+                        $this->load->model('mapos_model');
+                        $this->session->set_userdata('sessao_versao', (int) ($this->mapos_model->estadoDaSessao($logado)['versao'] ?? 0));
+                    }
+
                     log_info($usuario === null ? 'Adicionou um usuário.' : 'Alterou um usuário. ID: ' . (int) $usuario->idUsuarios);
                     $this->session->set_flashdata('success', $usuario === null ? 'Usuário cadastrado.' : 'Alterações salvas.');
 

@@ -153,7 +153,7 @@ final class ContaEBuscaTest extends MaposTestCase
         preg_match('/function alterarSenha\(\).*?\n    }\n/s', $controller, $trecho);
         $this->assertNotEmpty($trecho);
         $this->assertStringContainsString("validarFormulario('alterar_senha')", $trecho[0]);
-        $this->assertStringContainsString("password_verify((string) \$this->input->post('oldSenha')", $trecho[0]);
+        $this->assertStringContainsString("confirmarSenhaDoUsuario(\$current_user, (string) \$this->input->post('oldSenha')", $trecho[0]);
         $this->assertStringContainsString('return $this->telaDaConta($erros)', $trecho[0]);
         foreach (['telaDaConta', 'pesquisar'] as $metodo) {
             preg_match('/function ' . $metodo . '\\(.*?\\n    }\\n/s', $controller, $corpo);
