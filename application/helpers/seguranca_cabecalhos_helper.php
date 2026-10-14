@@ -14,10 +14,9 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'cookie_seguro_helper.php';
 /**
  * Política de CSP alvo da v5.
  *
- * Vai em modo report-only: o navegador não bloqueia nada, só relata o que
- * seria bloqueado. As telas legadas violam a política de propósito (scripts
- * inline, CDNs, Google Fonts); os relatórios medem o que falta migrar até o
- * modo enforce da #2878.
+ * Em modo enforce (padrão, #2878) o navegador bloqueia o que a política não
+ * permite; em report-only (APP_CSP=report-only) só relata. Os relatórios dos
+ * dois modos chegam ao endpoint do Map-OS e ajudam a achar o que ficou de fora.
  *
  * - script-src sem 'unsafe-inline': os scripts saem das views (#2838).
  * - style-src sem 'unsafe-inline': as views novas não usam style= (#2825).
@@ -74,6 +73,30 @@ function segurancaCspReportUri($baseUrl)
 }
 
 /**
+ * Modo da CSP: enforce (padrão), report-only ou off.
+ *
+ * Vem de APP_CSP. Quem ainda tem só o APP_CSP_REPORT_ONLY da fase anterior
+ * mantém o que tinha: true = report-only, false = sem CSP.
+ *
+ * @param  array  $env  Normalmente $_ENV
+ * @return 'enforce'|'report-only'|'off'
+ */
+function segurancaModoCsp(array $env)
+{
+    $modo = strtolower(trim((string) ($env['APP_CSP'] ?? '')));
+
+    if (in_array($modo, ['enforce', 'report-only', 'off'], true)) {
+        return $modo;
+    }
+
+    if (array_key_exists('APP_CSP_REPORT_ONLY', $env) && trim((string) $env['APP_CSP_REPORT_ONLY']) !== '') {
+        return cookieEnvFlag($env['APP_CSP_REPORT_ONLY'], true) ? 'report-only' : 'off';
+    }
+
+    return 'enforce';
+}
+
+/**
  * Monta os cabeçalhos de segurança da requisição.
  *
  * Variáveis do .env (todas opcionais):
@@ -82,7 +105,8 @@ function segurancaCspReportUri($baseUrl)
  *   (padrão 31536000, ou 0 com APP_ENVIRONMENT=development). Só é enviado
  *   quando a requisição chega por HTTPS.
  * - APP_HSTS_INCLUDE_SUBDOMAINS: inclui includeSubDomains (padrão false).
- * - APP_CSP_REPORT_ONLY: envia a CSP em report-only (padrão true).
+ * - APP_CSP: enforce (padrão), report-only ou off. O antigo
+ *   APP_CSP_REPORT_ONLY continua valendo quando APP_CSP não existe.
  * - APP_CSP_REPORT: envia os relatórios ao endpoint do Map-OS (padrão true).
  *
  * @param  array  $env     Normalmente $_ENV
@@ -121,11 +145,12 @@ function segurancaCabecalhos(array $env, array $server)
         $cabecalhos['Strict-Transport-Security'] = $hsts;
     }
 
-    if (cookieEnvFlag($env['APP_CSP_REPORT_ONLY'] ?? null, true)) {
+    $modoCsp = segurancaModoCsp($env);
+    if ($modoCsp !== 'off') {
         $reportUri = cookieEnvFlag($env['APP_CSP_REPORT'] ?? null, true)
             ? segurancaCspReportUri($env['APP_BASEURL'] ?? '')
             : '';
-        $cabecalhos['Content-Security-Policy-Report-Only'] = segurancaPoliticaCsp($reportUri);
+        $cabecalhos[$modoCsp === 'enforce' ? 'Content-Security-Policy' : 'Content-Security-Policy-Report-Only'] = segurancaPoliticaCsp($reportUri);
     }
 
     return $cabecalhos;

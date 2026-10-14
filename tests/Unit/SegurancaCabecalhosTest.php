@@ -5,7 +5,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 require_once APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'seguranca_cabecalhos_helper.php';
 
 /**
- * Cabeçalhos de segurança, CSP em report-only e o endpoint de relatórios.
+ * Cabeçalhos de segurança, CSP em enforce (ou report-only) e o endpoint de relatórios.
  */
 final class SegurancaCabecalhosTest extends MaposTestCase
 {
@@ -35,7 +35,8 @@ final class SegurancaCabecalhosTest extends MaposTestCase
         $this->assertSame('strict-origin-when-cross-origin', $h['Referrer-Policy']);
         $this->assertStringContainsString('camera=()', $h['Permissions-Policy']);
         $this->assertStringContainsString('geolocation=()', $h['Permissions-Policy']);
-        $this->assertArrayHasKey('Content-Security-Policy-Report-Only', $h);
+        $this->assertArrayHasKey('Content-Security-Policy', $h, 'Padrão da v5: CSP em enforce (#2878).');
+        $this->assertArrayNotHasKey('Content-Security-Policy-Report-Only', $h);
     }
 
     /**
@@ -127,10 +128,32 @@ final class SegurancaCabecalhosTest extends MaposTestCase
 
     public function testCspPodeSerDesligada(): void
     {
-        $h = segurancaCabecalhos(['APP_CSP_REPORT_ONLY' => 'false'], []);
+        $h = segurancaCabecalhos(['APP_CSP' => 'off'], []);
 
+        $this->assertArrayNotHasKey('Content-Security-Policy', $h);
         $this->assertArrayNotHasKey('Content-Security-Policy-Report-Only', $h);
         $this->assertArrayHasKey('X-Frame-Options', $h);
+    }
+
+    public function testModosDaCsp(): void
+    {
+        $this->assertSame('enforce', segurancaModoCsp([]));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP' => 'Enforce']));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP' => 'lixo']), 'Valor inválido cai no padrão seguro.');
+        $this->assertSame('report-only', segurancaModoCsp(['APP_CSP' => 'report-only']));
+        $this->assertSame('off', segurancaModoCsp(['APP_CSP' => 'off']));
+
+        $h = segurancaCabecalhos(['APP_CSP' => 'report-only'], []);
+        $this->assertArrayHasKey('Content-Security-Policy-Report-Only', $h);
+        $this->assertArrayNotHasKey('Content-Security-Policy', $h);
+    }
+
+    public function testReportOnlyDaFaseAnteriorContinuaValendo(): void
+    {
+        $this->assertSame('report-only', segurancaModoCsp(['APP_CSP_REPORT_ONLY' => 'true']));
+        $this->assertSame('off', segurancaModoCsp(['APP_CSP_REPORT_ONLY' => 'false']));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP_REPORT_ONLY' => '']));
+        $this->assertSame('enforce', segurancaModoCsp(['APP_CSP' => 'enforce', 'APP_CSP_REPORT_ONLY' => 'true']), 'APP_CSP vence o antigo.');
     }
 
     // --- Política CSP ------------------------------------------------------
@@ -150,7 +173,7 @@ final class SegurancaCabecalhosTest extends MaposTestCase
     {
         $h = segurancaCabecalhos(['APP_BASEURL' => 'https://exemplo.com/mapos/'], []);
 
-        $this->assertStringEndsWith('report-uri /mapos/index.php/csp/report', $h['Content-Security-Policy-Report-Only']);
+        $this->assertStringEndsWith('report-uri /mapos/index.php/csp/report', $h['Content-Security-Policy']);
     }
 
     public function testCspNaRaizDoDominio(): void
@@ -163,7 +186,7 @@ final class SegurancaCabecalhosTest extends MaposTestCase
     {
         $h = segurancaCabecalhos(['APP_CSP_REPORT' => 'false'], []);
 
-        $this->assertStringNotContainsString('report-uri', $h['Content-Security-Policy-Report-Only']);
+        $this->assertStringNotContainsString('report-uri', $h['Content-Security-Policy']);
     }
 
     // --- Endpoint de relatórios -------------------------------------------
