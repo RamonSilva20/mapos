@@ -1,0 +1,9 @@
+tv antes: 0
+antes: sessao A 200 / B 200
+painel alterarSenha: 303 -> http://mapos.test/index.php/mapos/minhaConta
+tv depois: 1
+depois: sessao A 403 / B 403
+refresh com token anterior a troca: 401
+login senha antiga: false  senha nova: true
+novo token: 200
+--- desativar via admin (painel Usuarios edit -> usuarios_model->edit situacao=0), simulado pelo mesmo caminho do model

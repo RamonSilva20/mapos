@@ -1,0 +1,11 @@
+login1 expires_in/type: {"expires_in":3600,"token_type":"Bearer"}
+A1 payload: {"uid":"2","permissao":"1","type":"user","tv":0,"sid":"54ec87a9578ec6763dd6cd9f305b316a","iat":1792007307,"exp":1792010907,"API_TIME":1792007307}
+GET /conta A1: 200  A2: 200
+reGenToken: 404
+refresh: {"status":true,"expires_in":3600}
+A1b payload sid: 54ec87a9578ec6763dd6cd9f305b316a / A1 sid: 54ec87a9578ec6763dd6cd9f305b316a
+conta A1b: 200
+logout: {"status":true,"message":"Sessão encerrada."} 200
+after logout conta A1: 403  A1b: 403  A2(other session): 200
+refresh with revoked: 401
+403 msg: {"status":false,"message":"Faça o login novamente!"}

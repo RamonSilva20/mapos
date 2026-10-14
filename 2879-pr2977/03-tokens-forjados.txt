@@ -1,0 +1,10 @@
+== token vencido, tv correto: 403
+== so API_TIME antigo (sem exp): 403
+== valido, sem tv e sem sid (pre-migration, vale como 0): 200
+== tv=5: 403
+== tv='0' string: 200
+== sid inexistente: 200
+== sid vazio (omite checagem de sessao, mas exige chave): 200
+== token cliente usado como usuario: 403
+== alg none: 403
+== sem header: 401

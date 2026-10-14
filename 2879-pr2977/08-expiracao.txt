@@ -1,0 +1,4 @@
+API_TOKEN_EXPIRE_TIME=86400 (temporario)
+operador: expires_in=3600 ttl_jwt=3600
+refresh: expires_in=3600 ttl_jwt=3600
+cliente ttl_jwt=86400

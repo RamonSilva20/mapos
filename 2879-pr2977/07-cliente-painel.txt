@@ -1,0 +1,7 @@
+antes: 200 tv=2
+== (c) painel: clientes/editar/1 com senha nova
+POST: 303 -> http://mapos.test/index.php/clientes/editar/1
+tv=3; token antigo: 403; novo: 200
+== painel sem senha (nao deve derrubar)
+POST: 303
+tv=3; token C4: 200

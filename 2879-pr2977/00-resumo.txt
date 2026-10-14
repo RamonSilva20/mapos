@@ -1,0 +1,4 @@
+PR #2977 (achado 6 da #2879) - testes no mapos.test, v5 @106ee23b + PR @5ad72412 (merge local sem conflitos)
+Arquivos: 01 migration, 02 login/refresh/logout, 03 tokens forjados, 04 troca de senha operador, 05 desativar operador,
+06 cliente (API PUT e area do cliente), 07 cliente (painel), 08 expiracao. PHPUnit: OK (1381 tests).
+Tokens e senhas nao sao impressos; as chaves foram lidas do .env pelo script de teste sem imprimir.

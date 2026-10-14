@@ -1,0 +1,15 @@
+payload cliente: {"type":"client","tv":0,"sid":null,"ttl":3600}
+cliente /client/os: 200  tv_db=0
+token cliente em rota de operador (/conta): 403  (/clientes): 403
+token operador em rota de cliente (/client/os): 403
+== (a) PUT /clientes/1 pela API com senha nova
+PUT: 200
+tv_db=1; token antigo: 403; login senha antiga: null
+token novo: 200
+== PUT sem senha nao derruba: 
+PUT sem senha: 200
+tv_db=1; token C2: 200
+== (b) area do cliente: recuperacao de senha (Mine::senhaSalvar)
+senhaSalvar: 303 -> http://mapos.test/index.php/mine?e=cliente%40mapos.test
+tv_db=2; token C2: 403
+token C3: 200

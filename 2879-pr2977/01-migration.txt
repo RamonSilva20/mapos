@@ -1,0 +1,13 @@
+versao antes: 20261014050000
+colunas: clientes usuarios 
+Migrations run successfully
+versao depois: 20261014040000
+colunas (rollback): []
+login sem coluna: {"status":true,"expires_in":3600}
+payload tv: {"tv":0,"sid":true}
+conta sem coluna: 200
+login cliente sem coluna: {"status":false}
+Migrations run successfully
+versao final: 20261014050000
+colunas (reaplicada): clientes usuarios 
+token antigo (tv=0, anterior a coluna) apos reaplicar: 200

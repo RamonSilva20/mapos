@@ -1,0 +1,7 @@
+antes: conta 200 tv=0
+admin desativa usuario 4 pelo painel: 303 -> http://mapos.test/index.php/usuarios/editar/4
+situacao=0 tv=1
+depois: conta 403; refresh 401; login [false,"Os dados de acesso estão incorretos!"]
+reativa: 303 -> http://mapos.test/index.php/usuarios/editar/4 situacao=1
+token antigo apos reativar: 403
+novo login: 200
