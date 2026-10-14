@@ -494,6 +494,17 @@ abstract class REST_Controller extends CI_Controller
 
         $this->preflight_checks();
 
+        // Chave dos tokens vazia, curta ou igual à do .env.example: qualquer um
+        // forjaria um token. Em produção a API fica fora do ar até a troca
+        // (Configurações > Sistema, "Gerar uma chave nova para os tokens").
+        if (ENVIRONMENT === 'production' && apiChaveJwtInsegura()) {
+            log_message('error', 'API desativada: API_JWT_KEY vazia, com menos de 32 caracteres ou igual ao valor do .env.example.');
+            http_response_code(503);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['status' => false, 'error' => 'API indisponível: a chave dos tokens (API_JWT_KEY) não está configurada.']);
+            exit;
+        }
+
         $this->config->set_item('token_header', 'Authorization');
 
         // Set the default value of global xss filtering. Same approach as CodeIgniter 3

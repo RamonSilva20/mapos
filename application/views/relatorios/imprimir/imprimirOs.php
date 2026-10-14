@@ -21,7 +21,7 @@
                     <td class="rel-td"><?= e($c->nomeCliente) ?></td>
                     <td class="rel-td text-center"><?= e($c->status) ?></td>
                     <td class="rel-td text-center"><?= e(date('d/m/Y', strtotime($c->dataInicial))) ?></td>
-                    <td class="rel-td"><?= printSafeHtml($c->descricaoProduto) ?></td>
+                    <td class="rel-td"><?= printSafeHtml($c->descricaoProduto, true) ?></td>
                     <td class="rel-td text-center">R$: <?= number_format($c->total_produto, 2, ',', '.') ?></td>
                     <td class="rel-td text-center">R$: <?= number_format($c->total_servico, 2, ',', '.') ?></td>
                     <td class="rel-td text-center">R$: <?= number_format($c->total_produto + $c->total_servico, 2, ',', '.') ?></td>

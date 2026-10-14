@@ -58,8 +58,13 @@ bloqueado, tudo é relatado) e depois volte para `enforce`.
 Os relatórios continuam chegando nos dois modos, em `POST /index.php/csp/report` e ficam agregados em:
 
 ```
-application/logs/csp-violacoes.json
+<STORAGE_PATH>/logs/csp-violacoes.json
 ```
+
+(sem `STORAGE_PATH`, `application/storage/logs/csp-violacoes.json`; veja
+`docs/armazenamento-de-arquivos.md`. Até a versão anterior ele ficava em
+`application/logs`, dentro da pasta pública; o Map-OS move o arquivo sozinho
+no primeiro relatório.)
 
 Cada violação distinta (diretiva + origem bloqueada + página) aparece uma vez,
 com o total de ocorrências, a primeira e a última. A primeira ocorrência de cada

@@ -12,15 +12,16 @@ if (! defined('BASEPATH')) {
  * aceita só POST com o content-type de relatório, limita o tamanho e nunca
  * devolve o que recebeu. A rota está em csrf_exclude_uris.
  *
- * As violações ficam agregadas em application/logs/csp-violacoes.json, e cada
- * violação nova também vai para o log do CodeIgniter.
+ * As violações ficam agregadas em logs/csp-violacoes.json dentro de STORAGE_PATH
+ * (fora da pasta pública; #2879), e cada violação nova também vai para o log
+ * do CodeIgniter.
  */
 class Csp extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper('seguranca_cabecalhos');
+        $this->load->helper(['seguranca_cabecalhos', 'armazenamento']);
     }
 
     public function report()
@@ -40,9 +41,11 @@ class Csp extends CI_Controller
             return;
         }
 
-        $novas = segurancaCspRegistrar(
+        $arquivo = $this->arquivoDeViolacoes();
+
+        $novas = $arquivo === null ? [] : segurancaCspRegistrar(
             segurancaCspLerRelatorio($corpo),
-            APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'csp-violacoes.json',
+            $arquivo,
             time()
         );
 
@@ -51,5 +54,30 @@ class Csp extends CI_Controller
         }
 
         $this->output->set_status_header(204)->set_output('');
+    }
+
+    /**
+     * Arquivo agregado em STORAGE_PATH/logs. Até a 5.0 ele ficava em
+     * application/logs, dentro da pasta pública: se existir, é movido.
+     */
+    private function arquivoDeViolacoes(): ?string
+    {
+        $pasta = armazenamentoPasta('logs');
+        if ($pasta === null) {
+            return null;
+        }
+
+        $arquivo = $pasta . DIRECTORY_SEPARATOR . 'csp-violacoes.json';
+        $antigo = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'csp-violacoes.json';
+
+        if (is_file($antigo)) {
+            if (! file_exists($arquivo)) {
+                @rename($antigo, $arquivo);
+            } else {
+                @unlink($antigo);
+            }
+        }
+
+        return $arquivo;
     }
 }
