@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.55.2] - 2026-10-14
+
+### Fixed
+- Correção do atualizador que falhava com "The branch to update from GitHub does not exist!" quando o repositório possui mais de 30 branches. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [4.55.1] - 2026-10-06
 
 ### Added
