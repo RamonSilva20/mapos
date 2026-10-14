@@ -1,0 +1,84 @@
+== 3a POST /clientes
+--- POST clientes
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"44","asaas_id":null,"nomeCliente":"Cli T2978","sexo":null,"pessoa_fisica":"1","documento":"529.982.247-25","telefone":"11999990001","celular":"11999990001","email":"t2978.cli@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":null,"cidade":null,"estado":null,"cep":null,"contato":null,"complemento":null,"fornecedor":"0","token_versao":"0"}}
+HTTP 201
+>>> sem senha
+cliente id 44
+== GET /clientes/44
+--- GET clientes/44
+{"status":true,"message":"Detalhes do Cliente","result":{"idClientes":"44","asaas_id":null,"nomeCliente":"Cli T2978","sexo":null,"pessoa_fisica":"1","documento":"529.982.247-25","telefone":"11999990001","celular":"11999990001","email":"t2978.cli@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":null,"cidade":null,"estado":null,"cep":null,"contato":null,"complemento":null,"fornecedor":"0","token_versao":"0","ordensServicos":[]}}
+HTTP 200
+>>> sem senha
+== GET /clientes (lista)
+>>> sem senha
+== PUT /clientes/44
+--- PUT clientes/44
+{"status":true,"message":"Cliente editado com sucesso!","result":{"idClientes":"44","asaas_id":null,"nomeCliente":"Cli T2978 Ed","sexo":null,"pessoa_fisica":"1","documento":"529.982.247-25","telefone":"11999990001","celular":"11999990001","email":"t2978.cli@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":null,"cidade":null,"estado":null,"cep":null,"contato":null,"complemento":null,"fornecedor":"0","token_versao":"0"}}
+HTTP 200
+>>> sem senha
+== POST /usuarios
+--- POST usuarios
+{"status":true,"message":"Usuário adicionado com sucesso!","result":{"idUsuarios":"9004","nome":"Novo API T","rg":"1","cpf":"529.982.247-25","cep":"00000-000","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","email":"t2978.novo@mapos.test","telefone":"1","celular":"1","dataCadastro":"2026-10-14","dataExpiracao":"2030-01-01","situacao":"1","permissoes_id":"92","url_image_user":null}}
+HTTP 200
+>>> sem senha
+idUsuarios	left(senha,7)
+9004	$2y$12$
+== GET /usuarios, /usuarios/1
+>>> sem senha
+>>> sem senha
+== POST /os
+--- POST os
+{"status":true,"message":"OS adicionada com sucesso!","result":{"idOs":"27","dataInicial":"2026-10-14","dataFinal":"2026-10-20","garantia":"","descricaoProduto":"x","defeito":"y","status":"Aberto","observacoes":null,"laudoTecnico":null,"valorTotal":"0.00","desconto":"0.00","valor_desconto":"0.00","tipo_desconto":null,"clientes_id":"44","usuarios_id":"1","lancamento":null,"faturado":"0","garantias_id":null,"idClientes":"44","asaas_id":null,"nomeCliente":"Cli T2978 Ed","sexo":null,"pessoa_fisica":"1","documento":"529.982.247-25","telefone":"11999990001","celular":"11999990001","email":"t2978.cli@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":null,"cidade":null,"estado":null,"cep":null,"contato":null,"complemento":null,"fornecedor":"0","token_versao":"0","celular_cliente":"11999990001","telefone_cliente":"11999990001","contato_cliente":null,"refGarantia":null,"textoGarantia":null,"telefone_usuario":"1","email_usuario":"admin@admin.com","nome":"Admin"}}
+HTTP 201
+>>> sem senha
+os id 27
+== GET /os/27
+>>> sem senha
+--- GET os/27
+{"status":true,"message":"Detalhes da OS","result":{"idOs":"27","dataInicial":"2026-10-14","dataFinal":"2026-10-20","garantia":"","descricaoProduto":"x","defeito":"y","status":"Aberto","observacoes":null,"laudoTecnico":null,"valorTotal":"0.00","desconto":"0.00","valor_desconto":"0.00","tipo_desconto":null,"clientes_id":"44","usuarios_id":"1","lancamento":null,"faturado":"0","garantias_id":null,"idClientes":"44","asaas_id":null,"nomeCliente":"Cli T2978 Ed","sexo":null,"pessoa_fisica== GET /os
+>>> sem senha
+== PUT /os/27
+--- PUT os/27
+{"status":true,"message":"OS editada com sucesso!","result":{"idOs":"27","dataInicial":"2026-10-14","dataFinal":"2026-10-20","garantia":"","descricaoProduto":"x2","defeito":"y","status":"Aberto","observacoes":null,"laudoTecnico":null,"valorTotal":"0.00","desconto":"0.00","valor_desconto":"0.00","tipo_desconto":null,"che right syntax to use near '' at line 1
+== GET /os/ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+>>> sem senha
+--- GET os/ERROR
+<!DOCTYPE html>
+<html lang="pt-br" data-tema-modo="sistema">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Página não encontrada — Map-OS</title>
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+    <script src="/assets/js/tema.js"></script>
+    <link rel="stylesheet" href="/assets/dist/app.css">
+</head>
+
+<body class="min-h-screen bg-bg tex== GET /os
+>>> sem senha
+== PUT /os/ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+--- PUT os/ERROR
+<!DOCTYPE html>
+<html lang="pt-br" data-tema-modo="sistema">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Página não encontrada — Map-OS</title>
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+    <script src="/assets/js/tema.js"></script>
+    <link rel="stylesheet" href="/assets/dist/app.css">
+</head>
+
+<body class="min-h-screen bg-bg text-text">
+    <main class="mx-auto flex min-h-screen w-full max-w-xl flex-col items-start justify-center gap-4 px-6 py-12">
+        <p class="font-display text-display-large font-medium text-primary-strong" aria-hidden="true">404</p>
+        <h1 class="font-display text-heading-xl text-text">Página >>> sem senha
+== Outras rotas GET
+conta -> HTTP 200 >>> sem senha
+emitente -> HTTP 200 >>> sem senha
+audit -> HTTP 200 >>> sem senha
+calendario -> HTTP 200 >>> sem senha

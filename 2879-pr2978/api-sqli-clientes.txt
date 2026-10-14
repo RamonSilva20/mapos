@@ -1,0 +1,46 @@
+--- {"nomeCliente":"SQLi T2978 1","documento":"12345678062","telefone":"11'99","email":"t2978.sqli1@mapos.test"}
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"45","asaas_id":null,"nomeCliente":"SQLi T2978 1","sexo":null,"pessoa_fisica":"1","documento":"12345678062","telefone":"11'99","celular":null,"email":"t2978.sqli1@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":null,"cidad
+HTTP 201
+/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t4.sh: line 7: bc: command not found
+ tempo s
+--- {"nomeCliente":"SQLi T2978 2","documento":"12345678143","telefone":"1' OR '1'='1","email":"t2978.sqli2@mapos.test"}
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"46","asaas_id":null,"nomeCliente":"SQLi T2978 2","sexo":null,"pessoa_fisica":"1","documento":"12345678143","telefone":"1' OR '1'='1","celular":null,"email":"t2978.sqli2@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":null
+HTTP 201
+/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t4.sh: line 7: bc: command not found
+ tempo s
+--- {"nomeCliente":"SQLi T2978 3","documento":"12345678224","telefone":"1'; DROP TABLE clientes;-- ","email":"t2978.sqli3@mapos.test"}
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"47","asaas_id":null,"nomeCliente":"SQLi T2978 3","sexo":null,"pessoa_fisica":"1","documento":"12345678224","telefone":"1'; DROP TABLE clien","celular":null,"email":"t2978.sqli3@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bair
+HTTP 201
+/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t4.sh: line 7: bc: command not found
+ tempo s
+--- {"nomeCliente":"SQLi T2978 4","documento":"12345678305","telefone":"1' UNION SELECT senha,2,3 FROM usuarios-- -","email":"t2978.sqli4@mapos.test"}
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"48","asaas_id":null,"nomeCliente":"SQLi T2978 4","sexo":null,"pessoa_fisica":"1","documento":"12345678305","telefone":"1' UNION SELECT senh","celular":null,"email":"t2978.sqli4@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bair
+HTTP 201
+/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t4.sh: line 7: bc: command not found
+ tempo s
+--- {"nomeCliente":"SQLi T2978 5","documento":"12345678496","telefone":"1' AND SLEEP(5)-- -","email":"t2978.sqli5@mapos.test"}
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"49","asaas_id":null,"nomeCliente":"SQLi T2978 5","sexo":null,"pessoa_fisica":"1","documento":"12345678496","telefone":"1' AND SLEEP(5)-- -","celular":null,"email":"t2978.sqli5@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairr
+HTTP 201
+/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t4.sh: line 7: bc: command not found
+ tempo s
+--- {"nomeCliente":"SQLi T2978 6","documento":"12345678577","telefone":"1\\'; --","email":"t2978.sqli6@mapos.test"}
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"50","asaas_id":null,"nomeCliente":"SQLi T2978 6","sexo":null,"pessoa_fisica":"1","documento":"12345678577","telefone":"1\\'; --","celular":null,"email":"t2978.sqli6@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":null,"ci
+HTTP 201
+/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t4.sh: line 7: bc: command not found
+ tempo s
+--- {"nomeCliente":"SQLi T2978 7","documento":"12345678658","telefone":"\" OR \"\"=\"","email":"t2978.sqli7@mapos.test"}
+{"status":true,"message":"Cliente adicionado com sucesso!","result":{"idClientes":"51","asaas_id":null,"nomeCliente":"SQLi T2978 7","sexo":null,"pessoa_fisica":"1","documento":"12345678658","telefone":"\" OR \"\"=\"","celular":null,"email":"t2978.sqli7@mapos.test","dataCadastro":"2026-10-14","rua":null,"numero":null,"bairro":nul
+HTTP 201
+/tmp/claude-1000/-home-ramon-Work-mapos/e684cf0a-c290-4714-a84f-28356784b935/scratchpad/t4.sh: line 7: bc: command not found
+ tempo s
+clientes antes=33 depois=40
+idClientes	nomeCliente	telefone	s
+45	SQLi T2978 1	11'99	$2y$
+46	SQLi T2978 2	1' OR '1'='1	$2y$
+47	SQLi T2978 3	1'; DROP TABLE clien	$2y$
+48	SQLi T2978 4	1' UNION SELECT senh	$2y$
+49	SQLi T2978 5	1' AND SLEEP(5)-- -	$2y$
+50	SQLi T2978 6	1\\'; --	$2y$
+51	SQLi T2978 7	" OR ""="	$2y$
+Tables_in_mapos (clientes)
+clientes

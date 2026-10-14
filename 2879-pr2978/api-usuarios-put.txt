@@ -1,0 +1,85 @@
+token len 324
+== 1a perfil + tentativa de escalar (permissoes_id=1,situacao=0,dataExpiracao)
+--- PUT usuarios/9001 {"nome":"Comum T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.comum@mapos.test","permissoes_id":1,"situacao":0,"dataExpiracao":"2020-01-01","nome":"Comum Editado"}
+{"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"9001","nome":"Comum Editado","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","email":"t2978.comum@mapos.test","telefone":"1","celular":"1","dataCadastro":"2026-10-14","dataExpiracao":null,"situacao":"1","permissoes_id":"92","url_image_user":null}}
+HTTP 200
+idUsuarios	nome	permissoes_id	situacao	dataExpiracao
+9001	Comum Editado	92	1	NULL
+== acesso a rota privilegiada (GET /usuarios) continua negado?
+{"status":false,"message":"Você não está autorizado a Visualizar Usuários"}
+HTTP 401
+== 1b senha sem senha_atual
+--- PUT usuarios/9001 {"nome":"Comum T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.comum@mapos.test","senha":"novasenha123"}
+{"status":false,"message":"Informe a senha atual para trocar a senha."}
+HTTP 403
+== senha_atual errada
+--- PUT usuarios/9001 {"nome":"Comum T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.comum@mapos.test","senha":"novasenha123","senha_atual":"errada"}
+{"status":false,"message":"Informe a senha atual para trocar a senha."}
+HTTP 403
+== senha curta
+--- PUT usuarios/9001 {"nome":"Comum T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.comum@mapos.test","senha":"curta1","senha_atual":"password"}
+{"status":false,"message":"A senha deve ter pelo menos 8 caracteres."}
+HTTP 400
+== email repetido
+--- PUT usuarios/9001 {"nome":"Comum T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"admin@admin.com"}
+{"status":false,"message":"Já existe um usuário com este e-mail."}
+HTTP 400
+== senha correta
+--- PUT usuarios/9001 {"nome":"Comum T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.comum@mapos.test","senha":"novasenha123","senha_atual":"password"}
+{"status":false,"message":"Faça o login novamente!"}
+HTTP 403
+prefixo	len	token_versao
+$2y$12$	60	1
+== login nova / antiga
+{"status":true,"message":"Login realizado com sucesso!","result":{"access_token":"<jwt>
+{"status":false,"message":"Os dados de acesso estão incorretos!"}
+== token antigo apos troca de senha
+{"status":false,"message":"Faça o login novamente!"}
+HTTP 403
+== 2a gestor edita outro (grupo 91, situacao 1, expiracao futura)
+--- PUT usuarios/9003 {"nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.alvo@mapos.test","permissoes_id":91,"situacao":1,"dataExpiracao":"2030-12-31"}
+{"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"9003","nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","email":"t2978.alvo@mapos.test","telefone":"1","celular":"1","dataCadastro":"2026-10-14","dataExpiracao":"2030-12-31","situacao":"1","permissoes_id":"91","url_image_user":null}}
+HTTP 200
+idUsuarios	permissoes_id	situacao	dataExpiracao	left(senha,4)
+9003	91	1	2030-12-31	$2y$
+== 2b gestor desativa outro (situacao=0)
+--- PUT usuarios/9003 {"nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.alvo@mapos.test","permissoes_id":92,"situacao":0}
+{"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"9003","nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","email":"t2978.alvo@mapos.test","telefone":"1","celular":"1","dataCadastro":"2026-10-14","dataExpiracao":"2030-12-31","situacao":"0","permissoes_id":"92","url_image_user":null}}
+HTTP 200
+idUsuarios	permissoes_id	situacao	token_versao
+9003	92	0	1
+== 2c gestor tenta mudar proprio grupo/situacao
+--- PUT usuarios/9002 {"nome":"Gestor T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.gestor@mapos.test","permissoes_id":1,"situacao":0,"dataExpiracao":"2020-01-01"}
+{"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"9002","nome":"Gestor T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","email":"t2978.gestor@mapos.test","telefone":"1","celular":"1","dataCadastro":"2026-10-14","dataExpiracao":null,"situacao":"1","permissoes_id":"91","url_image_user":null}}
+HTTP 200
+idUsuarios	permissoes_id	situacao	dataExpiracao
+9002	91	1	NULL
+== 2d gestor tenta super admin: desativar / sair do grupo
+--- PUT usuarios/1 {"nome":"Admin","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"admin@admin.com","permissoes_id":1,"situacao":0}
+{"status":false,"message":"O usuário super admin não pode ser desativado nem sair do grupo Administrador!"}
+HTTP 400
+--- PUT usuarios/1 {"nome":"Admin","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"admin@admin.com","permissoes_id":92,"situacao":1}
+{"status":false,"message":"O usuário super admin não pode ser desativado nem sair do grupo Administrador!"}
+HTTP 400
+idUsuarios	permissoes_id	situacao
+1	1	1
+== 2e comum edita outro usuario
+--- PUT usuarios/9003 {"nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.alvo@mapos.test","permissoes_id":1,"situacao":1}
+{"status":false,"message":"Você não está autorizado a Editar Usuários!"}
+HTTP 401
+== 2f gestor troca senha de outro sem senha_atual (hash)
+--- PUT usuarios/9003 {"nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.alvo@mapos.test","permissoes_id":92,"situacao":1,"senha":"outrasenha99"}
+{"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"9003","nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","email":"t2978.alvo@mapos.test","telefone":"1","celular":"1","dataCadastro":"2026-10-14","dataExpiracao":"2030-12-31","situacao":"1","permissoes_id":"92","url_image_user":null}}
+HTTP 200
+left(senha,7)	length(senha)	token_versao
+$2y$12$	60	2
+== 2g gestor: grupo/situacao invalidos
+--- PUT usuarios/9003 {"nome":"Alvo T","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"t2978.alvo@mapos.test","permissoes_id":abc,"situacao":1}
+{"status":false,"message":"Preencha todos campos"}
+HTTP 400
+== 2h gestor admin edita super admin mantendo grupo (admin proprio): PUT proprio como admin
+--- PUT usuarios/1 {"nome":"Admin","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","telefone":"1","email":"admin@admin.com","permissoes_id":5,"situacao":0}
+{"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"1","nome":"Admin","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","email":"admin@admin.com","telefone":"1","celular":"","dataCadastro":"2026-10-08","dataExpiracao":"3000-01-01","situacao":"1","permissoes_id":"1","url_image_user":null}}
+HTTP 200
+idUsuarios	permissoes_id	situacao
+1	1	1
