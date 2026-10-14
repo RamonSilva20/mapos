@@ -133,6 +133,78 @@ final class ArmazenamentoTest extends MaposTestCase
         $this->assertFileDoesNotExist($php, 'Arquivo com conteúdo divergente é apagado.');
     }
 
+    public function testImagemComPixelsDemaisEhRejeitadaEApagada(): void
+    {
+        $pasta = $this->raiz . '/imagens';
+        mkdir($pasta, 0750, true);
+        $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==');
+
+        // Arquivo de poucos bytes que declara 10000 x 10000 px (100 megapixels): o GD
+        // descompactaria a imagem inteira ao gerar a miniatura.
+        $grande = $pasta . '/grande.png';
+        file_put_contents($grande, substr($png, 0, 16) . pack('NN', 10000, 10000) . substr($png, 24));
+        $this->assertLessThan(200, filesize($grande));
+
+        $pequeno = $pasta . '/pequena.png';
+        file_put_contents($pequeno, $png);
+
+        $this->assertTrue(armazenamentoImagemGrandeDemais($grande, 'png'));
+        $this->assertFalse(armazenamentoImagemGrandeDemais($pequeno, 'png'));
+        $this->assertFalse(armazenamentoImagemGrandeDemais($grande, 'pdf'), 'Só imagens.');
+
+        $this->assertStringContainsString('pixels demais', (string) armazenamentoValidarEnvio(['full_path' => $grande, 'file_ext' => '.png']));
+        $this->assertFileDoesNotExist($grande);
+        $this->assertNull(armazenamentoValidarEnvio(['full_path' => $pequeno, 'file_ext' => '.png']));
+
+        // O limite é configurável.
+        $_ENV['UPLOAD_MAX_PIXELS'] = '1';
+        try {
+            $this->assertSame(1, armazenamentoLimitePixels());
+            $this->assertFalse(armazenamentoImagemGrandeDemais($pequeno, 'png'), '1 x 1 px cabe em 1 pixel.');
+            $_ENV['UPLOAD_MAX_PIXELS'] = '0';
+            $this->assertSame(40000000, armazenamentoLimitePixels());
+        } finally {
+            unset($_ENV['UPLOAD_MAX_PIXELS']);
+        }
+    }
+
+    public function testPastaPublicaDeImagensNaoExecutaScripts(): void
+    {
+        $pasta = $this->raiz . '/publica';
+        mkdir($pasta, 0750, true);
+
+        armazenamentoProtegerPastaPublica($pasta);
+
+        $this->assertFileExists($pasta . '/index.html');
+        $regras = (string) file_get_contents($pasta . '/.htaccess');
+        $this->assertStringContainsString('php[0-9]*|phtml|phar', $regras);
+        $this->assertStringContainsString('Deny from all', $regras);
+        // Mesma regra dos anexos versionados em assets/.
+        $this->assertSame(
+            preg_replace('/^#.*\n/', '', (string) file_get_contents(FCPATH . 'assets/anexos/.htaccess')),
+            preg_replace('/^#.*\n/', '', $regras),
+        );
+
+        // Chamar de novo não sobrescreve nem falha; pasta inexistente é ignorada.
+        armazenamentoProtegerPastaPublica($pasta);
+        armazenamentoProtegerPastaPublica($this->raiz . '/nao-existe');
+        $this->assertDirectoryDoesNotExist($this->raiz . '/nao-existe');
+    }
+
+    public function testLogoEFotoDePerfilConferemOConteudoDaImagem(): void
+    {
+        $codigo = (string) file_get_contents(APPPATH . 'controllers/Mapos.php');
+        preg_match('/private function enviarImagem\(.*?\n    }\n/s', $codigo, $metodo);
+
+        $this->assertNotEmpty($metodo);
+        $this->assertStringContainsString('armazenamentoProtegerPastaPublica($pasta)', $metodo[0]);
+        $this->assertStringContainsString('armazenamentoValidarEnvio($this->upload->data())', $metodo[0]);
+
+        $nginx = (string) file_get_contents(MAPOS_ROOT . '/docker/etc/nginx/default.conf');
+        $this->assertStringContainsString('(anexos|arquivos|userImage|uploads)', $nginx);
+        $this->assertFileExists(FCPATH . 'assets/userImage/.htaccess');
+    }
+
     public function testCabecalhosDeDownload(): void
     {
         $imagem = armazenamentoCabecalhos('anexo-1.png', 'png', 10);

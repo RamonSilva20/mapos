@@ -15,6 +15,7 @@ Imagens e PDF abrem na página; os demais formatos baixam. A logo do emitente e 
 
 - `STORAGE_PATH`: pasta dos arquivos, absoluta ou relativa à raiz do projeto. **Aponte para fora da pasta pública do servidor web**, por exemplo `/var/mapos-storage`, e dê ao usuário do PHP permissão de escrita. Sem ela vale `application/storage`, que recebe um `.htaccess` negando o acesso; no nginx, bloqueie a pasta (`location ^~ /application/ { deny all; }`).
 - `UPLOAD_MAX_KB`: tamanho máximo de cada upload, em KB (padrão 10240). Os limites `upload_max_filesize` e `post_max_size` do PHP também valem.
+- `UPLOAD_MAX_PIXELS`: limite de pixels (largura × altura) de uma imagem enviada (padrão 40000000, 40 megapixels). Um arquivo pequeno pode ter dimensões enormes, e a miniatura (GD) e os PDFs descompactam a imagem inteira na memória.
 
 Formatos aceitos: anexos de OS em JPG, PNG, GIF, PDF, DOCX, CDR e TXT; arquivos em JPG, PNG, GIF, PDF e TXT. Além da extensão, o conteúdo do arquivo (MIME) é conferido; o nome gravado é aleatório e o servidor responde com `X-Content-Type-Options: nosniff`.
 

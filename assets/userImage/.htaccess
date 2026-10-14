@@ -1,0 +1,5 @@
+# Pasta de uploads: impede a execução de scripts enviados como anexo
+<FilesMatch "\.(?i:php[0-9]*|phtml|phar|pht|phps|cgi|pl|py|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

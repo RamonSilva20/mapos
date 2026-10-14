@@ -21,9 +21,6 @@ class ClientLoginController extends REST_Controller
     public function login_post()
     {
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: POST');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
         
         $_POST = (array) json_decode(file_get_contents('php://input'), true);
         $email = $this->input->post('email', true);

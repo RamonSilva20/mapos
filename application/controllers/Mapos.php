@@ -488,6 +488,8 @@ class Mapos extends MY_Controller
             return [null, 'A imagem passa de 2 MB. Reduza o tamanho e envie de novo.'];
         }
 
+        armazenamentoProtegerPastaPublica($pasta);
+
         $this->load->library('upload');
 
         $this->upload->initialize([
@@ -512,7 +514,17 @@ class Mapos extends MY_Controller
             $this->config->set_item('language', $idioma);
         }
 
-        return $enviou ? [$this->upload->data('file_name'), null] : [null, $erro];
+        if (! $enviou) {
+            return [null, $erro];
+        }
+
+        // O conteúdo precisa ser mesmo uma imagem da extensão e ter um número
+        // razoável de pixels (a logo vai para PDFs, que descompactam a imagem).
+        if (($erroConteudo = armazenamentoValidarEnvio($this->upload->data())) !== null) {
+            return [null, $erroConteudo];
+        }
+
+        return [$this->upload->data('file_name'), null];
     }
 
     public function uploadUserImage()
