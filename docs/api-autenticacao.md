@@ -2,11 +2,13 @@
 
 Quem integra com a API (`/api/v1`), como o app móvel, precisa saber o que mudou na v5. O login e o uso do access token seguem iguais; o que mudou é a renovação (veja "Renovar" abaixo) e a validade do token do usuário.
 
-Rode as migrations (Configurações → Sistema → Atualizar banco) para criar `api_refresh_tokens` e `api_rate_limit` e as colunas `token_versao` de `usuarios` e `clientes`. Sem elas o login funciona, só não emite refresh token, o limite de requisições fica desligado e trocar a senha não derruba os access tokens já emitidos.
+Rode as migrations (Configurações → Sistema → Atualizar banco de dados, ou `php index.php tools migrate`) para criar `api_refresh_tokens` e `api_rate_limit` e as colunas `token_versao` de `usuarios` e `clientes`. Sem elas o login funciona, só não emite refresh token, o limite de requisições fica desligado e trocar a senha não derruba os access tokens já emitidos.
 
 ## Login
 
 `POST /api/v1/login` com `{"email": "...", "password": "..."}`.
+
+Com a API desligada (`API_ENABLED=false`) todas as rotas `api/v1`, inclusive por URL direta de controller, respondem `404`. O login tem limite de tentativas (`429` com `Retry-After`), como o do painel. Quem ativou o 2FA precisa enviar também o campo `totp` ([dois-fatores.md](dois-fatores.md)).
 
 ```json
 {
@@ -48,6 +50,13 @@ Rode as migrations (Configurações → Sistema → Atualizar banco) para criar 
 
 A rota que renovava um access token vencido, sem senha e sem refresh token, foi removida: dava para renovar um token vazado indefinidamente. Quem ainda a chama recebe `404`. Use o refresh token (acima) ou faça o login de novo.
 
+## Outras mudanças de contrato
+
+- **`PUT /api/v1/usuarios/{id}` no próprio usuário** grava só os campos de perfil (`nome`, `rg`, `cpf`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `telefone`, `celular`) e **ignora** `permissoes_id`, `situacao` e `dataExpiracao`. Trocar a própria senha exige `senha_atual` (sem ela ou errada, `403`); a nova senha tem no mínimo 8 caracteres e é gravada com hash. O e-mail não pode repetir (`400`). Como trocar a senha invalida os access tokens, o app precisa entrar de novo depois. `situacao` e `permissoes_id` só são exigidos ao editar **outro** usuário, o que pede a permissão `cUsuario`; o super admin não pode ser desativado nem sair do grupo Administrador.
+- **Respostas sem senha:** o hash da senha não aparece mais nas respostas de clientes, usuários e OS.
+- **Anexos de OS:** a resposta traz `url` e `thumb_url` (autenticadas, `Authorization: Bearer`) e não traz mais o caminho do arquivo. O arquivo vem de `GET /api/v1/os/<os>/anexos/<id>` (`?miniatura=1` para a miniatura) e, na API do cliente, de `GET /api/v1/client/os/<os>/anexos/<id>`. Veja [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md).
+- **OS:** o item (produto ou serviço) e a anotação precisam pertencer à OS da URL (`404` se não); OS faturada ou cancelada só é alterada com `control_editos` ligado (`403`); o desconto é calculado no servidor e preço e quantidade são validados (`400`).
+
 ## CORS e limite de requisições
 
 Configurados no `.env` (lidos por `application/config/rest.php`):
@@ -57,6 +66,8 @@ Configurados no `.env` (lidos por `application/config/rest.php`):
 | `API_CORS_ORIGINS` | vazio | Origens que podem chamar a API de um navegador, separadas por vírgula, ou `*`. Vazio: sem CORS, como na v4. App Android/iOS não precisa. Os headers liberados incluem `Authorization`, `Content-Type` e `App-Version`. |
 | `API_RATE_LIMIT` | `300` | Requisições por minuto por IP. `0` desliga. Acima disso a API responde `429` em JSON (`{"status": false, "message": "..."}`) com `Retry-After`. |
 | `API_REFRESH_TOKEN_EXPIRE_TIME` | `2592000` | Duração do refresh token, em segundos. |
+| `API_TOKEN_EXPIRE_TIME` | `3600` (gravado pelo instalador) | Duração do access token, em segundos. O do usuário dura no máximo 1 hora; o do cliente dura o configurado. |
+| `API_ENABLED` | `false` | `false` desliga a API (`404`). |
 
 ## O que um app novo deve fazer
 
