@@ -26,14 +26,13 @@ class ServicosController extends REST_Controller
         }
 
         if (! $id) {
-            $search = trim($this->get('search', true));
-            $where = $search ? "nome LIKE '%{$search}%' OR descricao LIKE '%{$search}%'" : '';
+            $search = trim((string) $this->get('search', true));
 
             $perPage = $this->get('perPage', true) ?: 20;
             $page = $this->get('page', true) ?: 0;
             $start = $page ? ($perPage * $page) : 0;
 
-            $servicos = $this->servicos_model->get('servicos', '*', $where, $perPage, $start);
+            $servicos = $this->servicos_model->get('servicos', '*', $search, $perPage, $start);
 
             $this->response([
                 'status' => true,

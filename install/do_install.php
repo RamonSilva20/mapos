@@ -91,7 +91,7 @@ if (! empty($_POST)) {
     $env_file = str_replace('enter_db_name', $dbname, $env_file);
 
     // set random enter_encryption_key
-    $encryption_key = substr(md5(rand()), 0, 15);
+    $encryption_key = bin2hex(random_bytes(16));
     $env_file = str_replace('enter_encryption_key', $encryption_key, $env_file);
     $env_file = str_replace('enter_baseurl', $base_url, $env_file);
 

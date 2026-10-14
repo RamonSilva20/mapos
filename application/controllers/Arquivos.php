@@ -235,6 +235,8 @@ class Arquivos extends MY_Controller
             mkdir('./assets/arquivos/' . $date, 0755, true);
         }
 
+        protegerDiretorioUpload(['./assets/arquivos/' . $date]);
+
         $this->load->library('upload', $config);
 
         if (! $this->upload->do_upload()) {

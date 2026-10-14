@@ -26,65 +26,48 @@ class Financeiro extends MY_Controller
             redirect(base_url());
         }
 
-        $where = '';
         $vencimento_de = $this->input->get('vencimento_de') ?: date('d/m/Y');
         $vencimento_ate = $this->input->get('vencimento_ate') ?: date('d/m/Y');
         $cliente = $this->input->get('cliente');
         $tipo = $this->input->get('tipo');
         $status = $this->input->get('status');
-        $valor_desconto = $this->input->get('valor_desconto');
-        $desconto = $this->input->get('desconto');
 
         $periodo = $this->input->get('periodo');
 
-        if (! empty($vencimento_de)) {
-            $date = DateTime::createFromFormat('d/m/Y', $vencimento_de);
+        // Datas inválidas caem para o dia atual em vez de gerar erro fatal
+        $dataDe = DateTime::createFromFormat('d/m/Y', (string) $vencimento_de) ?: new DateTime();
+        $dataAte = DateTime::createFromFormat('d/m/Y', (string) $vencimento_ate) ?: new DateTime();
 
-            if (empty($where)) {
-                $dateString = $date->format('Y-m-d');
-                $where = "data_vencimento >= '$dateString'";
-            } else {
-                $where .= " AND data_vencimento >= '$date'";
-            }
-        }
+        // Todos os valores vindos do GET são validados ou escapados antes de entrar no WHERE
+        $conditions = [
+            'data_vencimento >= ' . $this->db->escape($dataDe->format('Y-m-d')),
+            'data_vencimento <= ' . $this->db->escape($dataAte->format('Y-m-d')),
+        ];
 
-        if (! empty($vencimento_ate)) {
-            $date = DateTime::createFromFormat('d/m/Y', $vencimento_ate)->format('Y-m-d');
-
-            if (empty($where)) {
-                $where = "data_vencimento <= '$date'";
-            } else {
-                $where .= " AND data_vencimento <= '$date'";
-            }
-        }
-
-        if (isset($status) && $status != '') {
-            if (empty($where)) {
-                $where = "baixado = '$status'";
-            } else {
-                $where .= " AND baixado = '$status'";
-            }
+        if (in_array($status, ['0', '1'], true)) {
+            $conditions[] = 'baixado = ' . (int) $status;
         }
 
         if (! empty($cliente)) {
-            if (empty($where)) {
-                $where = "cliente_fornecedor LIKE '%{$cliente}%'";
-            } else {
-                $where .= " AND cliente_fornecedor LIKE '%{$cliente}%'";
-            }
+            $conditions[] = 'cliente_fornecedor LIKE ' . $this->db->escape('%' . $this->db->escape_like_str($cliente) . '%') . " ESCAPE '!'";
         }
 
-        if (! empty($tipo)) {
-            if (empty($where)) {
-                $where = "tipo = '$tipo'";
-            } else {
-                $where .= " AND tipo = '$tipo'";
-            }
+        if (in_array($tipo, ['receita', 'despesa'], true)) {
+            $conditions[] = 'tipo = ' . $this->db->escape($tipo);
         }
+
+        $where = implode(' AND ', $conditions);
 
         $this->load->library('pagination');
 
-        $this->data['configuration']['base_url'] = site_url("financeiro/lancamentos/?vencimento_de=$vencimento_de&vencimento_ate=$vencimento_ate&cliente=$cliente&tipo=$tipo&status=$status&periodo=$periodo");
+        $this->data['configuration']['base_url'] = site_url('financeiro/lancamentos/?' . http_build_query([
+            'vencimento_de' => $vencimento_de,
+            'vencimento_ate' => $vencimento_ate,
+            'cliente' => $cliente,
+            'tipo' => $tipo,
+            'status' => $status,
+            'periodo' => $periodo,
+        ]));
         $this->data['configuration']['total_rows'] = $this->financeiro_model->count('lancamentos', $where);
         $this->data['configuration']['page_query_string'] = true;
 
@@ -606,6 +589,12 @@ class Financeiro extends MY_Controller
     
     public function autoCompleteClienteFornecedor()
     {
+        if (! $this->hasAnyPermission(['vLancamento'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->financeiro_model->autoCompleteClienteFornecedor($q);
@@ -614,6 +603,12 @@ class Financeiro extends MY_Controller
 
     public function autoCompleteClienteAddReceita()
     {
+        if (! $this->hasAnyPermission(['vLancamento'])) {
+            echo json_encode([]);
+
+            return;
+        }
+
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
             $this->financeiro_model->autoCompleteClienteReceita($q);

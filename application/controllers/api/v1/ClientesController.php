@@ -25,14 +25,13 @@ class ClientesController extends REST_Controller
         }
 
         if (! $id) {
-            $search = trim($this->get('search', true));
-            $where = $search ? "nomeCliente LIKE '%{$search}%' OR documento LIKE '%{$search}%' OR telefone LIKE '%{$search}%' OR celular LIKE '%{$search}%' OR email LIKE '%{$search}%' OR contato LIKE '%{$search}%'" : '';
+            $search = trim((string) $this->get('search', true));
 
             $perPage = $this->get('perPage', true) ?: 20;
             $page = $this->get('page', true) ?: 0;
             $start = $page ? ($perPage * $page) : 0;
 
-            $clientes = $this->clientes_model->get('clientes', '*', $where, $perPage, $start);
+            $clientes = $this->clientes_model->get('clientes', '*', $search, $perPage, $start);
 
             if ($clientes) {
                 $this->response([

@@ -56,6 +56,20 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    /**
+     * Verifica se o usuário logado possui ao menos uma das permissões informadas.
+     */
+    protected function hasAnyPermission(array $permissoes)
+    {
+        foreach ($permissoes as $permissao) {
+            if ($this->permission->checkPermission($this->session->userdata('permissao'), $permissao)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function layout()
     {
         // load views

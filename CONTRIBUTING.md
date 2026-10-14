@@ -103,7 +103,7 @@ Aponte o document root do seu webserver para a raiz do projeto, acesse a URL e s
 
 - O `vendor-dir` do projeto é **`application/vendor`**, e não `./vendor` (definido em `composer.json`). Os binários ficam em `application/vendor/bin/`.
 - As configurações de ambiente ficam em `application/.env`, que é ignorado pelo Git. **Nunca** faça commit dele nem de credenciais.
-- A página de erro detalhada (Whoops) é controlada pela variável `WHOOPS_ERROR_PAGE_ENABLED` e deve ficar habilitada **apenas em desenvolvimento**.
+- A página de erro detalhada (Whoops) só é exibida quando `APP_ENVIRONMENT=development` **e** `WHOOPS_ERROR_PAGE_ENABLED=true` no `application/.env`. Em qualquer outro ambiente ela fica desabilitada.
 
 ## Estrutura do projeto
 
