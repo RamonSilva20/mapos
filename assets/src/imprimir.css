@@ -80,6 +80,36 @@
   .doc-so-impressao {
     display: none;
   }
+
+  /*
+   * Cupom térmico (OS e venda): bobina de 80mm sobre o fundo cinza do body;
+   * ao imprimir ocupa a largura do papel.
+   */
+  .cupom {
+    @apply mx-auto my-1 w-[80mm] bg-surface p-[2mm] text-[11px] text-text shadow-elev-3 print:m-0 print:w-auto print:shadow-none print:break-after-page;
+  }
+
+  .cupom-tabela {
+    @apply mx-auto my-1 w-full border-collapse text-[11px];
+  }
+
+  .cupom-tabela th,
+  .cupom-tabela td {
+    @apply px-1 py-0.5 align-top;
+  }
+
+  .cupom-tabela-grade th,
+  .cupom-tabela-grade td {
+    @apply border border-hairline-cool;
+  }
+
+  .cupom-total {
+    @apply my-1 text-right text-[13px] font-bold;
+  }
+
+  .cupom-assinatura {
+    @apply mt-2 border border-hairline-cool p-2 pb-8 text-center text-[15px] font-bold;
+  }
 }
 
 @media print {

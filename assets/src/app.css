@@ -17,6 +17,9 @@
 @import "./fonts.css";
 
 @source "../../application/views/**/*.php";
+/* As impressões e os PDFs têm o CSS próprio (imprimir.css e pdf.css). */
+@source not "../../application/views/{os,vendas,garantias,conecte}/imprimir*.php";
+@source not "../../application/views/relatorios/imprimir/**/*.php";
 /* Classes montadas no JS (ex.: o toast de assets/js/lib/toast.js). */
 @source "../js/lib/**/*.js";
 @source "../js/modules/**/*.js";
