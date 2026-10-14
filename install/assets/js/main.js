@@ -52,6 +52,12 @@
       const resposta = await fetch(formulario.action, { method: 'POST', body: new FormData(formulario) });
       const resultado = await resposta.json();
       if (resultado.success) {
+        // A instalação terminou, mas as atualizações do banco podem não ter rodado: o aviso diz o que fazer.
+        const final = document.querySelector('[data-aviso-final]');
+        if (final && resultado.aviso) {
+          final.textContent = resultado.aviso;
+          final.hidden = false;
+        }
         concluir('configuracao');
         concluir('finalizacao');
         mostrar('finalizacao');

@@ -34,6 +34,12 @@ class Mapos extends MY_Controller
         // Instalador esquecido no servidor (#2874): só quem administra o sistema vê o aviso.
         $painel = ['hoje' => $hoje, 'pode' => $pode, 'instalador_no_servidor' => $this->permite('cSistema') && is_dir(FCPATH . 'install')];
 
+        // Migrations pendentes e .env antigo (#2858): também só para quem administra o sistema.
+        $this->load->helper('manutencao');
+        $painel['avisos_sistema'] = $this->permite('cSistema')
+            ? manutencaoAvisos($this->db, $_ENV, ! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            : [];
+
         if ($pode['os']) {
             $osPorStatus = $this->mapos_model->contarPorStatus('os');
             $painel['os_por_status'] = $osPorStatus;

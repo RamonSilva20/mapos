@@ -18,7 +18,7 @@ Resumo do que muda:
 
 ## 1. Requisitos
 
-- PHP >= 8.5 com as extensões `curl` e `gd`.
+- PHP >= 8.5 com as extensões `curl`, `gd`, `mysqli`, `zip`, `mbstring`, `dom`, `xml`, `zlib`, `iconv`, `json`, `openssl` e `fileinfo` (o instalador da v5 confere todas; na atualização, confira com `php -m` no PHP que o servidor web usa).
 - MySQL >= 5.7 ou >= 8.0 (ou MariaDB).
 - **Composer só é necessário se você instalar pelo código-fonte** (`git clone`). O zip da release (`vX.Y.Z-release.zip`) já traz o `application/vendor` instalado.
 - **Node não é necessário.** Ele só serve para quem altera views, CSS ou as bibliotecas de JavaScript (veja o [CONTRIBUTING](../CONTRIBUTING.md)). O CSS e o JS compilados vão no pacote.
@@ -78,6 +78,8 @@ Compare o seu `.env` com o `application/.env.example` da v5 e acrescente o que f
 | `APP_CSP` | `enforce`, `report-only` ou `off`. | `enforce` |
 | `APP_CSP_REPORT` | Envia relatórios de violação ao Map-OS. | `true` |
 | `APP_COOKIE_SECURE` | `auto` marca o cookie como `Secure` quando o acesso é HTTPS. | `auto` |
+| `APP_COOKIE_HTTPONLY` | `true` impede que JavaScript leia o cookie da sessão. | `true` |
+| `APP_SESS_REGENERATE_DESTROY` | `true` troca o id da sessão no login e apaga a antiga. | `true` |
 | `APP_COOKIE_SAMESITE` | `SameSite` dos cookies. | `Lax` |
 | `APP_PROXY_IPS` | IPs do proxy reverso em que o Map-OS confia para ler o `X-Forwarded-Proto`. | vazio |
 | `API_REFRESH_TOKEN_EXPIRE_TIME` | Duração do refresh token da API, em segundos. | `2592000` (30 dias) |
@@ -94,6 +96,8 @@ Variáveis que já existiam e **mudaram de comportamento**:
 - **`API_CORS_ORIGINS`:** passa a valer também para a API do cliente (que antes respondia `Access-Control-Allow-Origin: *`).
 
 `GLOBAL_XSS_FILTERING` não existe mais na v5 e pode ser apagada do `.env`.
+
+> **Atenção aos valores antigos.** A 4.x gravava `APP_COOKIE_SECURE=false`, `APP_COOKIE_HTTPONLY=false` e `APP_SESS_REGENERATE_DESTROY=false`. Esses valores **continuam valendo** se você só acrescentar o que falta: os padrões novos só se aplicam a quem não define a variável (e às instalações novas). Troque-os por `auto`, `true` e `true` (ou apague as linhas). O painel mostra um aviso aos administradores enquanto o `.env` tiver os valores antigos.
 
 Pontos de atenção:
 
@@ -122,6 +126,10 @@ Depois atualize o banco, de um destes jeitos:
   ```bash
   php index.php tools migrate
   ```
+
+  O comando funciona com `composer install --no-dev` (não precisa de pacotes de desenvolvimento) e, se falhar, escreve o erro no terminal (stderr) e sai com código diferente de zero. A tela inicial do painel avisa os administradores enquanto houver atualizações do banco pendentes.
+
+Numa **instalação nova** (instalador web) você não precisa fazer isto: o instalador aplica as migrations ao final e avisa na tela se não conseguir (sem o PHP de linha de comando no servidor, por exemplo); nesse caso use um dos dois jeitos acima.
 
 As migrations da v5, na ordem em que rodam (conferidas em `application/database/migrations`; a última da 4.x é `20240503170400_add_garantia_status_to_vendas_table`):
 
