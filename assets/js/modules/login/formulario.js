@@ -67,7 +67,7 @@ export function interpretarResposta(corpo) {
     // Com 2FA ativo o servidor manda o login para a tela do código (#2876).
     const destino = ok && typeof dados.destino === 'string' ? dados.destino : null;
 
-    return { ok, mensagem, token: typeof dados.MAPOS_TOKEN === 'string' ? dados.MAPOS_TOKEN : null, destino };
+    return { ok, mensagem, token: typeof dados.MAPOS_TOKEN === 'string' ? dados.MAPOS_TOKEN : null, ...(destino ? { destino } : {}) };
 }
 
 export function textoSimples(valor) {

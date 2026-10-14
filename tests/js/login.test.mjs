@@ -73,6 +73,6 @@ test('com 2FA o servidor manda o destino da tela do código e o login segue para
     const { interpretarResposta } = await import('../../assets/js/modules/login/formulario.js');
 
     assert.equal(interpretarResposta({ result: true, destino: '/index.php/login/doisFatores' }).destino, '/index.php/login/doisFatores');
-    assert.equal(interpretarResposta({ result: true }).destino, null);
-    assert.equal(interpretarResposta({ result: false, destino: '/x', message: 'erro' }).destino, null, 'Falha não redireciona.');
+    assert.equal(interpretarResposta({ result: true }).destino, undefined);
+    assert.equal(interpretarResposta({ result: false, destino: '/x', message: 'erro' }).destino, undefined, 'Falha não redireciona.');
 });
