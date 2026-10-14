@@ -110,6 +110,7 @@ $config['permissions_map'] = [
         'excluirEmail' => 'cEmail',
         'configurar' => 'cSistema',
         'atualizarBanco' => 'cSistema',
+        'atualizacao' => 'cSistema',
         'atualizarMapos' => 'cSistema',
     ],
 

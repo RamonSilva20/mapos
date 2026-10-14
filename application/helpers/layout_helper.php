@@ -234,6 +234,7 @@ if (! defined('LAYOUT_ROTULOS')) {
         'cobrancas' => 'Cobranças',
         'relatorios' => 'Relatórios',
         'sku' => 'SKU',
+        'atualizacao' => 'Atualização',
         'usuarios' => 'Usuários',
         'permissoes' => 'Permissões',
         'mapos' => 'Sistema',
