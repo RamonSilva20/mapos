@@ -3,10 +3,5 @@
     "application/views/errors/cli/error_db.php": 1,
     "application/views/errors/cli/error_exception.php": 7,
     "application/views/errors/cli/error_general.php": 1,
-    "application/views/errors/cli/error_php.php": 7,
-    "application/views/errors/html/error_404.php": 2,
-    "application/views/errors/html/error_db.php": 2,
-    "application/views/errors/html/error_exception.php": 7,
-    "application/views/errors/html/error_general.php": 2,
-    "application/views/errors/html/error_php.php": 7
+    "application/views/errors/cli/error_php.php": 7
 }

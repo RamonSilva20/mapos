@@ -31,6 +31,15 @@ $hook['pre_system'][] = [
     'filepath' => 'hooks',
 ];
 
+// Página de erro 500 para exceção não tratada em produção (#2849). Antes do
+// Whoops: se ele estiver habilitado (development), o handler dele vence.
+$hook['pre_system'][] = [
+    'class' => '',
+    'function' => 'registrarPaginaDeErro',
+    'filename' => 'pagina_de_erro.php',
+    'filepath' => 'hooks',
+];
+
 $hook['pre_system'][] = [
     'class' => 'WhoopsHook',
     'function' => 'bootWhoops',
