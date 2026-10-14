@@ -15,7 +15,11 @@ if (! defined('BASEPATH')) {
  *
  * Escopos: `usuario` (painel e API de usuários) e `cliente` (área do cliente e
  * API do cliente). O painel e a API usam o mesmo escopo, para não somar
- * tentativas por caminhos diferentes.
+ * tentativas por caminhos diferentes. Mais dois, para ações de quem já tem
+ * sessão ou quer recuperar a senha (#2879): `confirmacao` (senha pedida de novo
+ * para trocar a senha ou mexer no 2FA, por e-mail do usuário logado) e `reset`
+ * (pedidos de recuperação de senha: cada pedido conta como tentativa, por
+ * e-mail e IP; use registrarFalha() a cada pedido).
  *
  * Cada falha conta em duas chaves: o e-mail informado (exista ou não a conta,
  * para o bloqueio não revelar quais e-mails têm cadastro) e o IP. Ao chegar ao
@@ -46,7 +50,9 @@ class Limite_login
 
     private const TABELA = 'login_attempts';
 
-    private const ESCOPOS = ['usuario', 'cliente'];
+    private const ESCOPOS = ['usuario', 'cliente', 'confirmacao', 'reset'];
+
+    private const ROTULOS = ['usuario' => 'painel', 'cliente' => 'área do cliente', 'confirmacao' => 'confirmação de senha', 'reset' => 'recuperação de senha'];
 
     /** @var mixed Query Builder do CodeIgniter (CI_DB_query_builder) */
     private $db;
@@ -161,7 +167,7 @@ class Limite_login
             if ($duracao > 0) {
                 $bloqueou = true;
                 ($this->auditar)(
-                    sprintf('Login bloqueado por %d min após %d tentativas com falha (%s, por %s)', intdiv($duracao, 60), $falhas, $escopo === 'usuario' ? 'painel' : 'área do cliente', $tipo === 'ip' ? 'IP' : 'e-mail'),
+                    sprintf('Login bloqueado por %d min após %d tentativas com falha (%s, por %s)', intdiv($duracao, 60), $falhas, self::ROTULOS[$escopo], $tipo === 'ip' ? 'IP' : 'e-mail'),
                     $ip
                 );
             }
@@ -187,6 +193,37 @@ class Limite_login
             ->where('tipo', 'email')
             ->where('chave', $this->hash('email', $this->normalizarEmail($email)))
             ->delete(self::TABELA);
+    }
+
+    /** Resultado de confirmarSenha(). */
+    public const SENHA_OK = 'ok';
+
+    public const SENHA_ERRADA = 'errada';
+
+    public const SENHA_BLOQUEADA = 'bloqueada';
+
+    /**
+     * Confere a senha de quem já está logado (trocar a senha, mexer no 2FA)
+     * com o limite de tentativas do escopo `confirmacao` (#2879): bloqueado,
+     * nem confere; senha errada conta uma falha; certa zera o contador.
+     *
+     * @return self::SENHA_*
+     */
+    public function confirmarSenha(string $email, string $ip, string $senha, string $hash): string
+    {
+        if ($this->bloqueado('confirmacao', $email, $ip)) {
+            return self::SENHA_BLOQUEADA;
+        }
+
+        if (! password_verify($senha, $hash)) {
+            $this->registrarFalha('confirmacao', $email, $ip);
+
+            return self::SENHA_ERRADA;
+        }
+
+        $this->registrarSucesso('confirmacao', $email);
+
+        return self::SENHA_OK;
     }
 
     /**

@@ -237,7 +237,7 @@ class UsuariosController extends REST_Controller
 
         $user = $this->Mapos_model->check_credentials($email);
 
-        if ($user && password_verify((string) $password, $user->senha)) {
+        if ($user && senhaConfere((string) $password, $user->senha)) {
             // Conta expirada: mesma resposta genérica de antes.
             if ($this->chk_date($user->dataExpiracao)) {
                 $this->limite_login->registrarSucesso('usuario', $email);
@@ -439,21 +439,12 @@ class UsuariosController extends REST_Controller
      * date DEFAULT NULL e a API não exige o campo, então tratar o vazio como
      * expirado recusava o token de quem nunca teve expiração configurada.
      *
-     * Mantido em par com Login::chk_date(), que tem a mesma regra. Alterar um
-     * dos dois sem o outro deixa o admin e a API discordando sobre quem pode
-     * entrar.
+     * Mesma regra do painel e da sessão: contaExpirada() (general_helper).
      *
      * @param  string|null  $data_banco  Data no formato aceito por DateTime, ou null
      */
     private function chk_date($data_banco)
     {
-        // O trim importa: string só com espaços é truthy em PHP, então com
-        // empty() um campo enviado em branco cairia no new DateTime() e
-        // voltaria a ser lido como expirado.
-        if (trim((string) $data_banco) === '') {
-            return false;
-        }
-
-        return new DateTime($data_banco) < new DateTime('now');
+        return contaExpirada($data_banco);
     }
 }

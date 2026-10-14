@@ -178,8 +178,8 @@ class Mapos extends MY_Controller
         if ($this->input->method() !== 'post' || ! $usuario->totp_ativado_em) {
             return redirect(site_url('mapos/doisFatores'));
         }
-        if (! password_verify((string) $this->input->post('senha'), $usuario->senha)) {
-            return $this->telaDoisFatores(['senha_codigos' => 'A senha não confere.']);
+        if ($erro = $this->confirmarSenhaDoUsuario($usuario, (string) $this->input->post('senha'))) {
+            return $this->telaDoisFatores(['senha_codigos' => $erro]);
         }
 
         $codigos = $this->totp->gerarCodigosDeRecuperacao();
@@ -199,8 +199,8 @@ class Mapos extends MY_Controller
         if ($this->mapos_model->grupoExige2fa((int) $usuario->permissoes_id)) {
             return $this->telaDoisFatores(['_geral' => 'O seu grupo de permissão exige o 2FA: não é possível desativar.']);
         }
-        if (! password_verify((string) $this->input->post('senha'), $usuario->senha)) {
-            return $this->telaDoisFatores(['senha_desativar' => 'A senha não confere.']);
+        if ($erro = $this->confirmarSenhaDoUsuario($usuario, (string) $this->input->post('senha'))) {
+            return $this->telaDoisFatores(['senha_desativar' => $erro]);
         }
 
         $this->mapos_model->desativarTotp((int) $usuario->idUsuarios);
@@ -208,6 +208,24 @@ class Mapos extends MY_Controller
         $this->session->set_flashdata('success', 'Autenticação em dois fatores desativada.');
 
         return redirect(site_url('mapos/doisFatores'));
+    }
+
+    /**
+     * Confere a senha de quem já está logado antes de uma ação sensível, com o
+     * limite de tentativas do login (#2879): quem tem uma sessão roubada não
+     * pode adivinhar a senha sem limite. Devolve a mensagem de erro, ou null
+     * se a senha confere.
+     */
+    private function confirmarSenhaDoUsuario(object $usuario, string $senha, string $mensagemErro = 'A senha não confere.'): ?string
+    {
+        $this->load->library('Limite_login');
+        $resultado = $this->limite_login->confirmarSenha((string) $usuario->email, $this->input->ip_address(), $senha, (string) $usuario->senha);
+
+        return match ($resultado) {
+            Limite_login::SENHA_OK => null,
+            Limite_login::SENHA_BLOQUEADA => Limite_login::MENSAGEM,
+            default => $mensagemErro,
+        };
     }
 
     private function usuarioDoDoisFatores(): object
@@ -270,8 +288,8 @@ class Mapos extends MY_Controller
 
         $erros = $this->validarFormulario('alterar_senha');
 
-        if ($erros === [] && ! password_verify((string) $this->input->post('oldSenha'), $current_user->senha)) {
-            $erros['oldSenha'] = 'A senha atual não confere.';
+        if ($erros === [] && ($erro = $this->confirmarSenhaDoUsuario($current_user, (string) $this->input->post('oldSenha'), 'A senha atual não confere.'))) {
+            $erros['oldSenha'] = $erro;
         }
 
         if ($erros !== []) {

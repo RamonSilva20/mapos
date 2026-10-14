@@ -63,7 +63,10 @@ class Login extends CI_Controller
         // Mesma mensagem para e-mail inexistente e senha errada: mensagens
         // distintas revelam quais e-mails possuem conta. A expiração só é
         // informada depois da senha certa, pelo mesmo motivo.
-        if (! $user || ! password_verify($password, $user->senha)) {
+        // senhaConfere() gasta o mesmo bcrypt sem conta, para o tempo de resposta
+        // também não revelar quais e-mails existem (#2879).
+        $senhaConfere = senhaConfere((string) $password, $user->senha ?? null);
+        if (! $user || ! $senhaConfere) {
             $this->limite_login->registrarFalha('usuario', $email, $ip);
             echo json_encode($this->falha('Os dados de acesso estão incorretos.'));
             exit();
@@ -191,7 +194,7 @@ class Login extends CI_Controller
         // fixado antes do login não continue válido depois dele.
         $this->session->sess_regenerate(true);
 
-        $this->session->set_userdata(['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'tema_modo_admin' => $user->tema_modo ?? null, 'logado' => true]);
+        $this->session->set_userdata(['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'tema_modo_admin' => $user->tema_modo ?? null, 'sessao_versao' => (int) ($user->sessao_versao ?? 0), 'logado' => true]);
 
         // Grupo que exige 2FA e usuário sem ele: entra, mas só alcança a tela de ativação (MY_Controller).
         if (! ($user->totp_ativado_em ?? null) && $this->mapos_model->grupoExige2fa((int) $user->permissoes_id)) {
@@ -221,13 +224,6 @@ class Login extends CI_Controller
      */
     private function chk_date($data_banco)
     {
-        // O trim importa: string só com espaços é truthy em PHP, então com
-        // empty() um campo enviado em branco cairia no new DateTime() e
-        // voltaria a ser lido como expirado.
-        if (trim((string) $data_banco) === '') {
-            return false;
-        }
-
-        return new DateTime($data_banco) < new DateTime('now');
+        return contaExpirada($data_banco);
     }
 }

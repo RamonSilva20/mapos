@@ -182,6 +182,15 @@ class Usuarios_model extends CI_Model
                 $this->authorization_token->incrementarVersao('usuarios', 'idUsuarios', (int) $ID);
             }
 
+            // Senha trocada: as sessões abertas do painel também caem (#2879).
+            if ($table === 'usuarios' && $fieldID === 'idUsuarios' && isset($data['senha'])) {
+                $this->load->model('mapos_model');
+                $versao = $this->mapos_model->invalidarSessoes((int) $ID);
+                if ($versao !== null && (int) $this->session->userdata('id_admin') === (int) $ID) {
+                    $this->session->set_userdata('sessao_versao', $versao);
+                }
+            }
+
             return true;
         }
 
