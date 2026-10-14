@@ -1,0 +1,16 @@
+t2981rt.cliente@mapos.test
+  pedido 1: HTTP 200 113ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.cliente | resets_de_senha=1 linhas_limite=2
+  pedido 2: HTTP 200 114ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.cliente | resets_de_senha=2 linhas_limite=2
+  pedido 3: HTTP 200 114ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.cliente | resets_de_senha=3 linhas_limite=2
+  pedido 4: HTTP 200 114ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.cliente | resets_de_senha=4 linhas_limite=2
+  pedido 5: HTTP 200 113ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.cliente | resets_de_senha=5 linhas_limite=2
+  pedido 6: HTTP 200 100ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.cliente | resets_de_senha=5 linhas_limite=2
+  pedido 7: HTTP 200 101ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.cliente | resets_de_senha=5 linhas_limite=2
+t2981rt.naoexiste@mapos.test
+  pedido 1: HTTP 200 103ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.naoexiste | resets_de_senha=0 linhas_limite=2
+  pedido 2: HTTP 200 104ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.naoexiste | resets_de_senha=0 linhas_limite=2
+  pedido 3: HTTP 200 110ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.naoexiste | resets_de_senha=0 linhas_limite=2
+  pedido 4: HTTP 200 107ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.naoexiste | resets_de_senha=0 linhas_limite=2
+  pedido 5: HTTP 200 109ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.naoexiste | resets_de_senha=0 linhas_limite=2
+  pedido 6: HTTP 200 103ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.naoexiste | resets_de_senha=0 linhas_limite=2
+  pedido 7: HTTP 200 102ms | Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para t2981rt.naoexiste | resets_de_senha=0 linhas_limite=2

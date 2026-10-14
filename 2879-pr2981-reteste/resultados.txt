@@ -1,0 +1,28 @@
+PR #2981 reteste - commit testado 983b4e0c (210d26e4 rebaseado sobre a v5 4e3aa11a, #2975-#2978), mapos.test, API_ENABLED=true temporario
+
+== ITEM 1 tempo (12 amostras alternando existente/inexistente, senha errada; login_attempts limpo antes de cada amostra)
+(ver timing.txt)
+
+== ITEM 2 (ressalva A)
+grupo exige 2FA -> mapos vai para: /mapos/doisFatores
+grupo exige 2FA -> os vai para: /mapos/doisFatores
+apos tirar exigencia, mesma sessao -> os: 200 /os ; mapos: 200 /mapos
+exigencia religada -> os vai para: /mapos/doisFatores ; desligada de novo -> /os
+
+== ITEM 3 (ressalva B)
+GET x8 /mapos/alterarSenha, ativarDoisFatores, novosCodigosDoisFatores, desativarDoisFatores -> linhas em login_attempts: 0 (todos)
+POST sem senha atual x8 pelo formulario -> 0 linhas ("Informe a senha atual.")
+POST sem senha (2FA ativo) x8 em novosCodigosDoisFatores e desativarDoisFatores -> 0 linhas ("A senha não confere.")
+GET /login/verificarDoisFatores sem senha previa -> /login, 0 linhas
+5 senhas erradas por POST -> 5x "A senha atual não confere."; 6a com a senha CERTA -> "Muitas tentativas de acesso."; senha nao trocou
+
+== ITEM 4 regressao
+troca propria: sessao A derrubada ("A senha desta conta foi alterada."), sessao B (a que trocou) mantida
+admin troca a senha pelo formulario do usuario: as duas sessoes do usuario derrubadas; sessao do admin intacta
+desativado / expirado / grupo desativado / excluido: derrubados na requisicao seguinte (mensagens proprias; excluido: "Sua conta está desativada.")
+reset de senha do cliente (emitente temporario inserido e removido): ver reset.txt (5 pedidos geram token, 6o e 7o nao; resposta identica para e-mail existente e inexistente; 2 linhas de limite)
+2FA TOTP: ativacao, login pede codigo, codigo errado -> volta com "Código incorreto.", TOTP certo -> /mapos; /os 69 ms
+navegacao: /mapos 88 ms, /os 107 ms, /clientes 98 ms, /produtos 67 ms
+
+== ITEM 5 PUT proprio pela API (senha + senha_atual)
+200; sessao_versao 0->1 e token_versao 0->1; as 2 sessoes do painel do usuario caem ("A senha desta conta foi alterada."); token antigo da API -> 403; login da API com a senha nova -> 200

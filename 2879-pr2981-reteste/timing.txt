@@ -1,0 +1,4 @@
+API usuario   existente: mediana 791 ms media 795 | inexistente: mediana 791 ms media 793 | mensagens: E:[(401, 'Os dados de acesso estão incorretos!')] I:[(401, 'Os dados de acesso estão incorretos!')]
+API cliente   existente: mediana 792 ms media 796 | inexistente: mediana 790 ms media 793 | mensagens: E:[(401, 'Os dados de acesso estão incorretos.')] I:[(401, 'Os dados de acesso estão incorretos.')]
+Painel        existente: mediana 833 ms media 832 | inexistente: mediana 832 ms media 832 | mensagens: E:[(200, 'Os dados de acesso estão incorretos.')] I:[(200, 'Os dados de acesso estão incorretos.')]
+Area cliente  existente: mediana 826 ms media 826 | inexistente: mediana 826 ms media 826 | mensagens: E:[(200, 'Os dados de acesso estão incorretos.')] I:[(200, 'Os dados de acesso estão incorretos.')]
