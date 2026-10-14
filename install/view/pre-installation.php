@@ -8,6 +8,7 @@ defined('INSTALADOR') || exit;
  * @var string $php_version_required
  * @var bool   $php_version_success
  * @var bool   $allow_url_fopen_success
+ * @var bool   $vendor_success
  * @var bool   $all_requirement_success
  */
 $cabecalho = 'border-b border-border bg-surface-subtle px-3 py-2 font-medium';
@@ -37,6 +38,12 @@ $celula = 'border-b border-border px-3 py-2';
           <td class="<?= $celula ?>"><?= $allow_url_fopen_success ? 'On' : 'Off' ?></td>
           <td class="<?= $celula ?>">On</td>
           <td class="<?= $celula ?> text-center"><?= instalador_status($allow_url_fopen_success) ?></td>
+        </tr>
+        <tr>
+          <td class="<?= $celula ?>">Dependências (application/vendor)</td>
+          <td class="<?= $celula ?>"><?= $vendor_success ? 'Instaladas' : 'Ausentes' ?></td>
+          <td class="<?= $celula ?>">Instaladas</td>
+          <td class="<?= $celula ?> text-center"><?= instalador_status($vendor_success) ?></td>
         </tr>
       </tbody>
     </table></div>

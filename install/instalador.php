@@ -92,7 +92,179 @@ function instaladorValidar(array $post): array
         return [null, 'Configuração da API inválida.'];
     }
 
-    return [$campos + ['enter_token_expire_time' => $expiracao, 'enter_api_enabled' => $api], null];
+    $armazenamento = $post['storage_path'] ?? '';
+    if (! is_string($armazenamento) || preg_match('/[\x00-\x1F\x7F"\'$\\\\]/', $armazenamento)) {
+        return [null, 'A pasta dos anexos não pode ter aspas, barra invertida, cifrão nem caracteres de controle.'];
+    }
+
+    return [$campos + ['enter_token_expire_time' => $expiracao, 'enter_api_enabled' => $api, 'storage_path' => trim($armazenamento)], null];
+}
+
+/**
+ * Pasta sugerida para os anexos: ao lado da pasta do sistema (uma acima), fora
+ * do que o servidor web publica na instalação comum. Vazio quando a pasta
+ * acima não aceita escrita (hospedagem compartilhada); aí vale application/storage.
+ */
+function instaladorSugerirArmazenamento(?string $raiz = null): string
+{
+    $raiz ??= instaladorRaiz();
+    $acima = dirname($raiz);
+    $sugerida = $acima . DIRECTORY_SEPARATOR . 'mapos-storage';
+
+    if (is_dir($sugerida) ? is_writable($sugerida) : is_writable($acima)) {
+        return $sugerida;
+    }
+
+    return '';
+}
+
+/**
+ * Confere e cria a pasta dos anexos (STORAGE_PATH). Aceita caminho absoluto ou
+ * relativo à raiz do sistema. Recusa pastas que o servidor web publica
+ * (assets/, install/ e a própria raiz); application/ fica de fora porque o
+ * sistema nega o acesso a ela (.htaccess e nginx).
+ *
+ * @return array{0: string|null, 1: string|null} [caminho final, ou null quando vazio; erro]
+ */
+function instaladorPrepararArmazenamento(string $valor, ?string $raiz = null): array
+{
+    $valor = trim($valor);
+    if ($valor === '') {
+        return [null, null];
+    }
+
+    $raiz = rtrim($raiz ?? instaladorRaiz(), '/\\');
+    $absoluto = (bool) preg_match('#^(/|[A-Za-z]:[\\\\/]|\\\\\\\\)#', $valor);
+    $caminho = rtrim($absoluto ? $valor : $raiz . DIRECTORY_SEPARATOR . $valor, '/\\');
+
+    if (! is_dir($caminho) && ! @mkdir($caminho, 0750, true) && ! is_dir($caminho)) {
+        return [null, 'Não foi possível criar a pasta dos anexos. Crie-a no servidor, dê permissão de escrita ao usuário do PHP e informe o caminho de novo.'];
+    }
+    if (! is_writable($caminho)) {
+        return [null, 'A pasta dos anexos existe, mas o PHP não tem permissão para escrever nela.'];
+    }
+
+    $real = realpath($caminho) ?: $caminho;
+    $raizReal = realpath($raiz) ?: $raiz;
+    $dentroDe = static fn (string $pasta, string $base): bool => str_starts_with($pasta . DIRECTORY_SEPARATOR, $base . DIRECTORY_SEPARATOR);
+
+    // Dentro da raiz só application/ é aceita: o resto (a raiz, assets/, install/...) o servidor web publica.
+    if ($dentroDe($real, $raizReal) && ! $dentroDe($real, $raizReal . DIRECTORY_SEPARATOR . 'application')) {
+        return [null, 'A pasta dos anexos fica dentro da pasta pública do sistema. Escolha uma pasta fora dela (por exemplo '
+            . dirname($raizReal) . DIRECTORY_SEPARATOR . 'mapos-storage) ou deixe o campo vazio.'];
+    }
+
+    return [$real, null];
+}
+
+/**
+ * Dependências do Composer (application/vendor). Sem elas nem o sistema nem o
+ * comando de migrations sobem.
+ */
+function instaladorTemDependencias(?string $raiz = null): bool
+{
+    $raiz ??= instaladorRaiz();
+
+    return is_file($raiz . '/application/vendor/autoload.php');
+}
+
+/**
+ * Localiza o PHP de linha de comando (o do servidor web costuma ser FPM ou
+ * módulo do Apache, que não roda o index.php do terminal).
+ *
+ * @param  string[]|null  $candidatos  Para teste; padrão: o binário atual (se for CLI) e os lugares comuns
+ */
+function instaladorLocalizarPhpCli(?array $candidatos = null): ?string
+{
+    if (! function_exists('proc_open')) {
+        return null;
+    }
+
+    $candidatos ??= array_values(array_unique(array_filter([
+        PHP_SAPI === 'cli' ? PHP_BINARY : null,
+        PHP_BINDIR . DIRECTORY_SEPARATOR . 'php',
+        dirname(PHP_BINARY) . DIRECTORY_SEPARATOR . 'php',
+        '/usr/bin/php',
+        '/usr/local/bin/php',
+        'php',
+    ])));
+
+    foreach ($candidatos as $candidato) {
+        $resultado = instaladorExecutar([$candidato, '-v']);
+
+        if ($resultado !== null && $resultado[0] === 0 && str_contains($resultado[1], '(cli)')) {
+            return $candidato;
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Executa um programa sem shell (cada argumento vai direto ao processo) e junta
+ * stdout e stderr. A saída passa por um arquivo temporário para não travar
+ * quando o programa escreve muito.
+ *
+ * @param  list<string>  $comando
+ * @return array{0: int, 1: string}|null [código de saída, saída]; null se o processo não pôde ser criado
+ */
+function instaladorExecutar(array $comando, ?string $pasta = null): ?array
+{
+    if (! function_exists('proc_open')) {
+        return null;
+    }
+
+    $arquivo = tempnam(sys_get_temp_dir(), 'mapos-instalador-');
+    if ($arquivo === false) {
+        return null;
+    }
+
+    try {
+        $processo = @proc_open($comando, [1 => ['file', $arquivo, 'w'], 2 => ['file', $arquivo, 'a']], $pipes, $pasta);
+        if (! is_resource($processo)) {
+            return null;
+        }
+
+        $codigo = proc_close($processo);
+
+        return [$codigo, trim((string) file_get_contents($arquivo))];
+    } finally {
+        @unlink($arquivo);
+    }
+}
+
+/**
+ * Roda as migrations pendentes (php index.php tools migrate) na raiz do sistema.
+ * O banco.sql entrega o esquema da 4.x; sem esta etapa a instalação nova ficava
+ * sem o limite de tentativas de login, o 2FA e as demais tabelas da v5 (#2858).
+ *
+ * @return array{0: bool|null, 1: string} [true: aplicou; false: o comando falhou; null: não foi possível executar; saída]
+ */
+function instaladorMigrar(?string $raiz = null, ?string $php = null): array
+{
+    $raiz ??= instaladorRaiz();
+    $php ??= instaladorLocalizarPhpCli();
+
+    if ($php === null) {
+        return [null, 'O PHP de linha de comando não foi encontrado ou o servidor bloqueia a execução de programas (proc_open).'];
+    }
+
+    $resultado = instaladorExecutar([$php, 'index.php', 'tools', 'migrate'], $raiz);
+    if ($resultado === null) {
+        return [null, 'Não foi possível executar o PHP de linha de comando.'];
+    }
+
+    [$codigo, $saida] = $resultado;
+
+    // Só o fim da saída: o suficiente para entender o erro sem despejar o log inteiro na tela.
+    $linhas = array_slice(preg_split('/\R/', $saida) ?: [], -8);
+    $texto = implode("\n", $linhas);
+
+    if ($codigo !== 0 && $texto === '') {
+        $texto = "O comando terminou com o código {$codigo} e sem mensagem. Veja o arquivo mais recente em application/logs.";
+    }
+
+    return [$codigo === 0, $texto];
 }
 
 /** Valor entre aspas duplas para o .env (o Dotenv interpreta \, " e $ ali dentro). */
@@ -108,9 +280,9 @@ function instaladorValorEnv(string $valor): string
  *
  * @param array<string, string> $dados Saída de instaladorValidar()
  */
-function instaladorMontarEnv(string $modelo, array $dados, string $chaveDeCriptografia, string $chaveJwt): string
+function instaladorMontarEnv(string $modelo, array $dados, string $chaveDeCriptografia, string $chaveJwt, ?string $armazenamento = null): string
 {
-    return strtr($modelo, [
+    $env = strtr($modelo, [
         'enter_db_hostname' => instaladorValorEnv($dados['host']),
         'enter_db_username' => instaladorValorEnv($dados['dbuser']),
         'enter_db_password' => instaladorValorEnv($dados['dbpassword']),
@@ -122,6 +294,18 @@ function instaladorMontarEnv(string $modelo, array $dados, string $chaveDeCripto
         'enter_api_enabled' => $dados['enter_api_enabled'],
         'pre_installation' => 'production',
     ]);
+
+    // STORAGE_PATH não tem marcador no modelo (quem copia o .env.example à mão o deixa vazio): troca a linha,
+    // depois do strtr para que um caminho com "enter_..." não seja tratado como marcador.
+    if ($armazenamento !== null && $armazenamento !== '') {
+        $env = (string) preg_replace_callback(
+            '/^STORAGE_PATH=.*$/m',
+            static fn (): string => 'STORAGE_PATH="' . instaladorValorEnv($armazenamento) . '"',
+            $env
+        );
+    }
+
+    return $env;
 }
 
 /**

@@ -29,6 +29,16 @@ if ($erro !== null) {
     exit(json_encode(['success' => false, 'message' => $erro]));
 }
 
+if (! instaladorTemDependencias()) {
+    exit(json_encode(['success' => false, 'message' => 'As dependências do sistema não estão instaladas (pasta application/vendor). Use a versão completa da release ou, a partir do código-fonte, execute "composer install --no-dev" na pasta do projeto.']));
+}
+
+// Pasta dos anexos (opcional): criada e conferida antes de mexer no banco.
+[$armazenamento, $erro] = instaladorPrepararArmazenamento($dados['storage_path']);
+if ($erro !== null) {
+    exit(json_encode(['success' => false, 'message' => $erro]));
+}
+
 if (! is_file($settings['database_file'])) {
     exit(json_encode(['success' => false, 'message' => 'O arquivo ../banco.sql não foi encontrado na pasta de instalação!']));
 }
@@ -40,10 +50,10 @@ if ($trava === false) {
     exit(json_encode(['success' => false, 'message' => 'Já existe uma instalação em andamento. Aguarde alguns instantes.']));
 }
 
-$terminar = static function (bool $sucesso, string $mensagem) use ($trava, $arquivoDeTrava): never {
+$terminar = static function (bool $sucesso, string $mensagem, ?string $aviso = null) use ($trava, $arquivoDeTrava): never {
     fclose($trava);
     @unlink($arquivoDeTrava);
-    exit(json_encode(['success' => $sucesso, 'message' => $mensagem]));
+    exit(json_encode(['success' => $sucesso, 'message' => $mensagem, 'aviso' => $aviso]));
 };
 
 try {
@@ -76,14 +86,30 @@ do {
 $mysqli->close();
 
 $modelo = file_get_contents(dirname(__DIR__) . '/application/.env.example');
-$env = instaladorMontarEnv($modelo, $dados, bin2hex(random_bytes(16)), base64_encode(random_bytes(32)));
+$env = instaladorMontarEnv($modelo, $dados, bin2hex(random_bytes(16)), base64_encode(random_bytes(32)), $armazenamento);
 
-if (! file_put_contents(dirname(__DIR__) . '/application/.env', $env)) {
+$arquivoEnv = dirname(__DIR__) . '/application/.env';
+if (! file_put_contents($arquivoEnv, $env)) {
     $terminar(false, 'Erro ao criar arquivo env.');
+}
+// Guarda a senha do banco e as chaves: só o dono do arquivo lê (se o sistema de arquivos permitir).
+@chmod($arquivoEnv, 0600);
+
+// O banco.sql traz o esquema da 4.x: as migrations da v5 (limite de login, 2FA, histórico da OS, API...) rodam agora (#2858).
+[$migrou, $saidaMigracao] = instaladorMigrar();
+$aviso = null;
+if ($migrou === null) {
+    $aviso = 'O instalador não conseguiu rodar as atualizações do banco de dados. ' . $saidaMigracao . ' '
+        . 'Depois de entrar, abra Configurações, aba Sistema, e use "Atualizar banco de dados", ou rode php index.php tools migrate na pasta do sistema. '
+        . 'Até lá o limite de tentativas de login e o 2FA ficam desligados.';
+} elseif ($migrou === false) {
+    $aviso = 'O banco foi criado, mas as atualizações do banco de dados falharam' . ($saidaMigracao !== '' ? ': ' . $saidaMigracao : '') . '. '
+        . 'Corrija o erro e rode php index.php tools migrate na pasta do sistema, ou use "Atualizar banco de dados" em Configurações, aba Sistema. '
+        . 'Até lá o limite de tentativas de login e o 2FA ficam desligados.';
 }
 
 // Trava definitiva e regra do servidor web que deixa só a página de aviso acessível.
 @file_put_contents(__DIR__ . '/instalado.lock', date('c'));
 @file_put_contents(__DIR__ . '/.htaccess', instaladorHtaccessInstalado());
 
-$terminar(true, 'Instalação bem sucedida.');
+$terminar(true, 'Instalação bem sucedida.', $aviso);

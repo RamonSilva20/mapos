@@ -3,6 +3,8 @@ defined('INSTALADOR') || exit;
 /**
  * Configuração: banco de dados, administrador, URL e API REST. O formulário é
  * enviado por fetch (install/assets/js/main.js) para do_install.php.
+ *
+ * @var string $storage_sugerido Pasta sugerida para os anexos (vazio quando a pasta acima da raiz não aceita escrita)
  */
 $campo = 'w-full rounded-md border border-input bg-field px-3 py-2 text-text placeholder:text-muted focus:outline-3 focus:outline-ring/50 sm:flex-1';
 ?>
@@ -52,7 +54,16 @@ $campo = 'w-full rounded-md border border-input bg-field px-3 py-2 text-text pla
   </fieldset>
 
   <fieldset class="flex flex-col gap-3">
-    <legend class="mb-1 text-body-strong">4. API REST (usada no aplicativo)</legend>
+    <legend class="mb-1 text-body-strong">4. Pasta dos <strong>anexos</strong></legend>
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+        <label for="storage_path" class="text-label-md sm:w-1/4">Pasta (STORAGE_PATH)</label>
+        <input type="text" id="storage_path" name="storage_path" value="<?= htmlspecialchars($storage_sugerido, ENT_QUOTES) ?>" placeholder="Vazio: application/storage" autocomplete="off" class="<?= $campo ?>">
+      </div>
+      <p class="text-sm text-muted">Anexos de OS e arquivos ficam aqui e só saem por tela com permissão. Use uma pasta <strong>fora</strong> da pasta pública do servidor; o instalador a cria se puder. Vazio usa <code>application/storage</code>, que no nginx precisa ser bloqueada (veja docs/servidor-web.md).</p>
+  </fieldset>
+
+  <fieldset class="flex flex-col gap-3">
+    <legend class="mb-1 text-body-strong">5. API REST (usada no aplicativo)</legend>
       <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
         <label for="enter_api_enabled" class="text-label-md sm:w-1/4">Habilitar?</label>
         <select id="enter_api_enabled" name="enter_api_enabled" class="<?= $campo ?>">

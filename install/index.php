@@ -34,8 +34,11 @@ if (ini_get('allow_url_fopen')) {
     $allow_url_fopen_success = true;
 }
 
+//check the Composer dependencies (application/vendor): without them neither the system nor the migrations start
+$vendor_success = instaladorTemDependencias();
+
 //check if all requirement is success
-if ($php_version_success && $allow_url_fopen_success) {
+if ($php_version_success && $allow_url_fopen_success && $vendor_success) {
     $all_requirement_success = true;
 } else {
     $all_requirement_success = false;
@@ -60,6 +63,8 @@ if (! empty($_SERVER['HTTPS'])) {
 } else {
     $dashboard_url = 'http://' . $dashboard_url;
 }
+
+$storage_sugerido = instaladorSugerirArmazenamento();
 
 $installed = false;
 

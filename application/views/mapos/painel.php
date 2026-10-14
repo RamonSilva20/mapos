@@ -18,6 +18,7 @@
  * @var string              $hoje
  * @var array<string, bool> $pode
  * @var bool                 $instalador_no_servidor Pasta install/ ainda existe (aviso a quem tem cSistema)
+ * @var list<string>         $avisos_sistema Migrations pendentes e .env com valores antigos (só para quem tem cSistema)
  */
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 
@@ -67,6 +68,10 @@ if ($pode['os']) {
         <h1 class="font-display text-heading-xl text-text">Painel</h1>
         <p class="text-caption text-muted"><?= e(ucfirst(painelDataPorExtenso($hoje))) ?></p>
     </header>
+
+    <?php foreach ($avisos_sistema ?? [] as $aviso) { ?>
+        <?= component('alert', ['variant' => 'warning', 'message' => $aviso]) ?>
+    <?php } ?>
 
     <?php if (! empty($instalador_no_servidor)) { ?>
         <?= component('alert', ['variant' => 'warning', 'message' => 'A pasta install ainda está no servidor. Ela já não funciona, mas apague-a do servidor para não deixar arquivos desnecessários expostos.']) ?>

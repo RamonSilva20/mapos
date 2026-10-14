@@ -43,7 +43,7 @@ Quer ajudar a melhorar o Map-OS? Leia o **[Guia de Contribuição](CONTRIBUTING.
 1. Faça o download do pacote da release (`vX.Y.Z-release.zip`, que já traz o `application/vendor`) ou clone o repositório.
 2. Extraia o pacote e copie para seu webserver.
 3. Se instalou pelo código-fonte (e não pelo zip da release), rode o comando `composer install --no-dev` a partir da raiz do projeto.
-4. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**. Terminada a instalação, o instalador se bloqueia sozinho (`install/instalado.lock` e `application/.env`), mas **apague a pasta `install`** do servidor.
+4. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS** (inclusive a pasta dos anexos, o `STORAGE_PATH`, que deve ficar fora da pasta pública). O instalador cria o banco, aplica as atualizações do banco de dados e grava o `application/.env` só para o dono do arquivo. Se não conseguir aplicar as atualizações, a tela final avisa e o painel mostra o aviso até você usar `Atualizar banco de dados` (Configurações > Sistema) ou rodar `php index.php tools migrate`. Terminada a instalação, o instalador se bloqueia sozinho (`install/instalado.lock` e `application/.env`), mas **apague a pasta `install`** do servidor.
 5. Proteja o servidor web (veja [Segurança do servidor](#segurança-do-servidor)): `application/` não pode ser acessível pela URL, e `STORAGE_PATH` deve apontar para uma pasta fora da pasta pública.
 6. Configure o email de envio em Configurações > Sistema > E-mail .
 7. Configurar cron jobs para envio de e-mail:
@@ -146,7 +146,7 @@ Solicite sua hospedagem agora [Clique Aqui!](https://sysgo.com.br/mapos)
 * [ezyang/htmlpurifier](https://github.com/ezyang/htmlpurifier)
 
 ### Requerimentos
-* PHP >= 8.5, com as extensões `curl` e `gd`
+* PHP >= 8.5, com as extensões `curl`, `gd`, `mysqli`, `zip`, `mbstring`, `dom`, `xml`, `zlib`, `iconv`, `json`, `openssl` e `fileinfo` (o instalador confere todas)
 * MySQL >= 5.7 ou >= 8.0 (ou MariaDB)
 * Composer >= 2, só para instalar pelo código-fonte (o zip da release já traz o `application/vendor`)
 * Node >= 22, só para quem altera views, CSS ou bibliotecas de JavaScript (veja o [Guia de Contribuição](CONTRIBUTING.md)); instalar o Map-OS nunca exige Node
