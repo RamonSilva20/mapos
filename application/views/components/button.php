@@ -19,15 +19,16 @@
  */
 $variantes = [
     // DESIGN.md button-primary: rótulo sempre ink (6,00:1), nunca branco.
-    'primary' => 'border border-transparent bg-primary text-on-primary text-button-cap uppercase hover:bg-primary-hover active:bg-primary-pressed',
-    'outline' => 'border border-hairline-cool bg-transparent text-text text-button-cap-light uppercase hover:bg-surface-subtle dark:border-input',
-    'ghost' => 'border border-transparent bg-transparent text-muted text-button-cap-light uppercase hover:bg-surface-subtle hover:text-text',
+    'primary' => 'rounded-md border border-transparent bg-primary text-on-primary text-button-cap uppercase hover:bg-primary-hover active:bg-primary-pressed',
+    'outline' => 'rounded-md border border-hairline-cool bg-transparent text-text text-button-cap-light uppercase hover:bg-surface-subtle dark:border-input',
+    'ghost' => 'rounded-md border border-transparent bg-transparent text-muted text-button-cap-light uppercase hover:bg-surface-subtle hover:text-text',
     // Só ações destrutivas, de preferência dentro de modal-confirm.
-    'danger' => 'border border-transparent bg-danger text-on-dark text-button-cap uppercase hover:opacity-90 active:bg-danger-ink',
+    'danger' => 'rounded-md border border-transparent bg-danger text-on-dark text-button-cap uppercase hover:opacity-90 active:bg-danger-ink',
     // Sobre fundo escuro (telas de entrada): branco com ink.
-    'inverted' => 'border border-transparent bg-on-dark text-ink text-button-cap uppercase shadow-elev-1 active:bg-press-light active:text-ink-press active:shadow-elev-4',
-    'ghost-on-dark' => 'border border-transparent bg-on-dark-faint text-on-dark text-button-cap uppercase hover:bg-on-dark/25',
-    'link' => 'border border-transparent bg-transparent text-primary-strong text-label-md underline underline-offset-4 hover:decoration-2',
+    'inverted' => 'rounded-md border border-transparent bg-on-dark text-ink text-button-cap uppercase shadow-elev-1 active:bg-press-light active:text-ink-press active:shadow-elev-4',
+    // DESIGN.md button-ghost-on-dark: raio xl (12px) e padding sm (8px); a altura de 44px no celular vem do tamanho.
+    'ghost-on-dark' => 'rounded-xl border border-transparent bg-on-dark-faint text-on-dark text-button-cap uppercase hover:bg-on-dark/25',
+    'link' => 'rounded-md border border-transparent bg-transparent text-primary-strong text-label-md underline underline-offset-4 hover:decoration-2',
 ];
 
 $tamanhos = [
@@ -41,13 +42,14 @@ $tamanhos = [
 $atributos = [
     'id' => $id,
     'class' => componenteClasses(
-        'inline-flex shrink-0 items-center justify-center rounded-md whitespace-nowrap transition-colors',
+        'inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-colors',
         'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
         // DESIGN.md button-disabled: legível, sem opacidade.
         'disabled:cursor-not-allowed disabled:border-transparent disabled:bg-disabled-bg disabled:text-disabled disabled:shadow-none',
         'aria-disabled:pointer-events-none aria-disabled:border-transparent aria-disabled:bg-disabled-bg aria-disabled:text-disabled',
         $variantes[$variant],
-        $tamanhos[$size],
+        // ghost-on-dark tem o padding da spec (8px) no lugar do padding do tamanho.
+        $variant === 'ghost-on-dark' ? preg_replace('/\\bpx-\\d+\\b/', 'px-2', $tamanhos[$size]) : $tamanhos[$size],
         $class
     ),
 ];

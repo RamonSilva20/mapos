@@ -318,6 +318,30 @@ final class ComponentesTest extends MaposTestCase
         $this->assertStringContainsString('type="submit"', $this->html('button', ['label' => 'x', 'type' => 'submit']));
     }
 
+    public function testGhostOnDarkSegueASpecDoDesignMd(): void
+    {
+        $html = $this->html('button', ['label' => 'Área do cliente', 'variant' => 'ghost-on-dark']);
+
+        $this->assertStringContainsString('rounded-xl', $html, 'rounded.xl (12px).');
+        $this->assertStringNotContainsString('rounded-md', $html);
+        $this->assertStringContainsString('px-2', $html, 'padding sm (8px).');
+        $this->assertDoesNotMatchRegularExpression('/\\bpx-(3|4|5)\\b/', $html);
+        $this->assertStringContainsString('max-sm:h-11', $html, 'Mantém os 44px no celular.');
+
+        foreach (['sm' => 'px-2', 'md' => 'px-2', 'lg' => 'px-2'] as $tamanho => $padding) {
+            $this->assertStringContainsString($padding, $this->html('button', ['label' => 'x', 'variant' => 'ghost-on-dark', 'size' => $tamanho]), $tamanho);
+        }
+    }
+
+    public function testOutrasVariantesContinuamComRaioEPaddingDoTamanho(): void
+    {
+        foreach (['primary', 'outline', 'ghost', 'danger', 'inverted', 'link'] as $variante) {
+            $html = $this->html('button', ['label' => 'x', 'variant' => $variante]);
+            $this->assertStringContainsString('rounded-md', $html, $variante);
+            $this->assertStringContainsString('px-4', $html, $variante);
+        }
+    }
+
     public function testBotaoComHrefViraLink(): void
     {
         $html = $this->html('button', ['label' => 'Ir', 'href' => '/clientes']);
