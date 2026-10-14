@@ -196,6 +196,12 @@ jobs:
       - run: npm ci
         if: ${{ steps.guard.outputs.pulando != '1' }}
 
+      # Alertas altos nas dependências de build (#2930). Só o build usa o npm,
+      # mas um alerta novo precisa aparecer no CI em vez de ficar escondido.
+      - name: npm audit
+        if: ${{ steps.guard.outputs.pulando != '1' }}
+        run: npm audit --audit-level=high
+
       - name: npm run build
         if: ${{ steps.guard.outputs.pulando != '1' }}
         run: npm run build
