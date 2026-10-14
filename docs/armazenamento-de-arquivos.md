@@ -21,7 +21,12 @@ Formatos aceitos: anexos de OS em JPG, PNG, GIF, PDF, DOCX, CDR e TXT; arquivos 
 
 ## Migração dos arquivos existentes
 
-A migration `move_uploads_to_storage` move os arquivos de `assets/anexos` e `assets/arquivos` para `STORAGE_PATH` e grava no banco o caminho relativo (`anexos/10-2026/OS-5`). Defina `STORAGE_PATH` **antes** de migrar. Registros cujo arquivo não for encontrado ou movido ficam como estavam, e o sistema ainda os lê nos caminhos antigos; rodar de novo é seguro.
+A migration `move_uploads_to_storage` move os arquivos de `assets/anexos` e `assets/arquivos` para `STORAGE_PATH` e grava no banco o caminho relativo (`anexos/10-2026/OS-5`). Defina `STORAGE_PATH` **antes** de migrar, e dê ao usuário do servidor web permissão de escrita nela.
+
+- Se a pasta não existe e o PHP não consegue criá-la, ou ele não grava nela, a migration **para com uma mensagem** (na tela "Atualizar banco" e no terminal) e **não conclui**: nenhum arquivo é movido e a versão do banco fica na migration anterior. Corrija a permissão e rode a atualização de novo.
+- Se só alguns arquivos não puderem ser movidos, os que deu para mover ficam movidos, a migration para com a contagem e a lista completa vai para `application/logs/`. Corrija a causa e rode a atualização de novo: o que já foi movido não se repete.
+- Registro cujo arquivo não existe mais no disco (anexo órfão, comum em bancos antigos) não impede a migration: fica registrado no log, o registro permanece como estava e a OS mostra "Arquivo não encontrado" no lugar do anexo.
+- Se a migration terminar com êxito mas você mudar o `STORAGE_PATH` depois, os arquivos já movidos continuam na pasta antiga: mova-os junto, mantendo as subpastas.
 
 Faça backup do banco e de `assets/anexos` e `assets/arquivos` antes de atualizar.
 
@@ -33,4 +38,13 @@ Rodar o `down` da migration devolve os arquivos para `assets/anexos` e `assets/a
 php index.php tools migrate 20261014020000
 ```
 
-(a versão anterior à migration é a da `add_tema_modo_to_usuarios`). Depois do rollback, bloqueie o listing público de `assets/anexos` como na v4.55.1 (nomes aleatórios, `index.html` e bloqueio de scripts).
+(a versão anterior à migration é a da `add_tema_modo_to_usuarios`).
+
+O `down` devolve os arquivos para `assets/anexos` e `assets/arquivos` **da pasta onde o comando roda** e grava nos registros o caminho absoluto dessa pasta e a URL do `APP_BASEURL`. Se a v5 está em uma pasta nova (como recomenda o guia de migração), os arquivos vão para a pasta da v5, não para a da 4.x. Para voltar à 4.x:
+
+1. Copie `assets/anexos` e `assets/arquivos` da pasta da v5 para a pasta da 4.x (mesmas subpastas).
+2. Restaure o dump do banco feito antes da migração. Prefira isso a ajustar `path` e `url` à mão: o `path` gravado pelo `down` é o caminho da pasta da v5.
+
+Ao restaurar o dump, apague o banco e recrie-o antes (`DROP DATABASE` e `CREATE DATABASE`). Restaurar por cima de um banco já migrado deixa tabelas da v5 (`login_attempts`, `os_historico`, `api_*`, `usuarios_codigos_recuperacao`) e a migração seguinte registra erros `Duplicate key name` no log, embora conclua.
+
+Depois do rollback, bloqueie o listing público de `assets/anexos` como na v4.55.1 (nomes aleatórios, `index.html` e bloqueio de scripts).

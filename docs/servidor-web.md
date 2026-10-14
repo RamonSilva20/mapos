@@ -18,7 +18,7 @@ Docker. Em qualquer outro servidor (Caddy, FrankenPHP, nginx próprio, Apache co
 | `application/` (inclusive `.env`, `logs/`, `storage/`, `vendor/`) | código, segredos e arquivos enviados |
 | `updates/`, `scripts/`, `tests/`, `docker/`, `docs/` | scripts SQL e arquivos de desenvolvimento |
 | `banco.sql`, `composer.json`, `*.lock`, `*.md`, `*.xml`, `*-baseline.json` na raiz | esquema e versões das dependências |
-| qualquer arquivo começando com `.` (exceto `.well-known`) | `.env`, `.git`, `.htaccess` |
+| qualquer arquivo **ou pasta** começando com `.` (exceto `.well-known`) | `.env`, `.htaccess` e as pastas `.git`, `.github`, `.idea` |
 | `install/*.lock`, `install/settings.json`, `install/instalador.php`, `install/view/` | internos do instalador |
 
 Depois de configurar, confira (deve dar 403 ou 404, nunca 200):
@@ -27,7 +27,13 @@ Depois de configurar, confira (deve dar 403 ou 404, nunca 200):
 curl -I https://seu-site/application/.env
 curl -I https://seu-site/banco.sql
 curl -I https://seu-site/application/logs/index.html
+curl -I https://seu-site/.git/HEAD
 ```
+
+A pasta `.git` só existe na instalação por `git clone`; o zip da release não a
+tem. Se você clonou, prefira apagá-la depois de instalar (`rm -rf .git`) ou
+garanta o 403: o histórico e o endereço do repositório, que pode conter um
+token, ficam legíveis se o servidor a entregar.
 
 O melhor complemento é apontar `STORAGE_PATH` para fora da pasta pública
 (`docs/armazenamento-de-arquivos.md`): os anexos e o arquivo de relatórios da
@@ -71,6 +77,9 @@ Com `AllowOverride None`, ponha no `VirtualHost`:
 
 ```apache
 <DirectoryMatch "^/caminho/do/mapos/(application|updates|scripts|tests|docker|docs)(/|$)">
+    Require all denied
+</DirectoryMatch>
+<DirectoryMatch "(^|/)\.(?!well-known)">
     Require all denied
 </DirectoryMatch>
 <FilesMatch "^(\..*|banco\.sql|composer\.(json|lock)|package(-lock)?\.json|.*baseline\.json)$">

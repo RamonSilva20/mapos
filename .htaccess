@@ -10,6 +10,10 @@
 
 RewriteEngine On
 
+# Pastas ocultas (.git, .github, .idea, .claude...) não são públicas: o bloco acima
+# só pega arquivos. O .well-known (ACME, security.txt) continua liberado.
+RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+
 # Código-fonte, scripts de atualização e arquivos de projeto não são públicos
 # (docs/servidor-web.md). application/ tem o próprio .htaccess.
 RewriteRule ^(updates|scripts|tests|docker|docs)(/|$) - [F,L]

@@ -611,6 +611,49 @@ final class OsTelaTest extends MaposTestCase
         $this->assertStringContainsString('Atualizar banco', $this->renderizar('os/partes/historico', ['historico_disponivel' => false] + $vazio));
     }
 
+    public function testAnexoSemArquivoNoDiscoMostraEstadoAusenteEmVezDeImagemQuebrada(): void
+    {
+        $raiz = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'mapos-anexos-view-' . bin2hex(random_bytes(4));
+        $anterior = $_ENV['STORAGE_PATH'] ?? null;
+        $_ENV['STORAGE_PATH'] = $raiz;
+        mkdir($raiz . '/anexos/10-2026/OS-9/thumbs', 0750, true);
+        file_put_contents($raiz . '/anexos/10-2026/OS-9/presente.jpg', 'x');
+        file_put_contents($raiz . '/anexos/10-2026/OS-9/thumbs/thumb_presente.jpg', 'x');
+
+        try {
+            $dados = $this->dadosDaTela(true);
+            $dados['anexos'] = [
+                (object) ['idAnexos' => 4, 'anexo' => 'presente.jpg', 'thumb' => 'thumb_presente.jpg', 'path' => 'anexos/10-2026/OS-9'],
+                (object) ['idAnexos' => 5, 'anexo' => 'sumiu.jpg', 'thumb' => 'thumb_sumiu.jpg', 'path' => 'anexos/10-2026/OS-9'],
+                (object) ['idAnexos' => 6, 'anexo' => 'sem-miniatura.pdf', 'thumb' => 'thumb_nao_existe.png', 'path' => 'anexos/10-2026/OS-9'],
+            ];
+            file_put_contents($raiz . '/anexos/10-2026/OS-9/sem-miniatura.pdf', 'x');
+
+            $html = $this->renderizar('os/partes/anexos', $dados);
+
+            $this->assertStringContainsString('os/anexo/4/thumb', $html, 'O anexo presente mostra a miniatura.');
+            $this->assertStringContainsString('os/downloadanexo/4', $html);
+
+            $this->assertSame(1, substr_count($html, 'Arquivo não encontrado'), 'Só o anexo sem arquivo vira estado ausente.');
+            $this->assertStringNotContainsString('os/anexo/5', $html, 'Sem link nem miniatura para o arquivo que não existe.');
+            $this->assertStringNotContainsString('os/downloadanexo/5', $html);
+            $this->assertStringContainsString('excluir-anexo', $html, 'O registro órfão ainda pode ser excluído.');
+
+            $this->assertStringNotContainsString('os/anexo/6/thumb', $html, 'Miniatura que não existe cai no ícone de arquivo.');
+            $this->assertStringContainsString('os/downloadanexo/6', $html);
+        } finally {
+            if ($anterior === null) {
+                unset($_ENV['STORAGE_PATH']);
+            } else {
+                $_ENV['STORAGE_PATH'] = $anterior;
+            }
+            foreach (['/anexos/10-2026/OS-9/thumbs/thumb_presente.jpg', '/anexos/10-2026/OS-9/presente.jpg', '/anexos/10-2026/OS-9/sem-miniatura.pdf', '/anexos/10-2026/OS-9/thumbs', '/anexos/10-2026/OS-9', '/anexos/10-2026', '/anexos', '/.htaccess', ''] as $item) {
+                $caminho = $raiz . $item;
+                is_dir($caminho) ? @rmdir($caminho) : @unlink($caminho);
+            }
+        }
+    }
+
     // --- Endpoints JSON ------------------------------------------------
 
     /**

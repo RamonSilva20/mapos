@@ -62,17 +62,17 @@ class Tools extends CI_Controller
     {
         $this->load->library('migration');
 
-        if ($version != null) {
-            if ($this->migration->version($version) === false) {
-                show_error($this->migration->error_string());
-            } else {
-                echo 'Migrations run successfully' . PHP_EOL;
-            }
+        try {
+            $resultado = $version != null ? $this->migration->version($version) : $this->migration->latest();
+        } catch (Throwable $erro) {
+            // A migration que falhou não é marcada como concluída: corrija a causa e rode de novo.
+            log_message('error', 'tools migrate: ' . $erro->getMessage());
+            show_error('A migration parou: ' . $erro->getMessage());
 
             return;
         }
 
-        if ($this->migration->latest() === false) {
+        if ($resultado === false) {
             show_error($this->migration->error_string());
         } else {
             echo 'Migrations run successfully' . PHP_EOL;
