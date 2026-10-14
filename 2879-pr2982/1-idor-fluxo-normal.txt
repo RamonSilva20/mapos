@@ -1,0 +1,62 @@
+== 1. fluxo normal OS 29
+$ POST /os/29/produtos  {"idProduto":1,"preco":25,"quantidade":2}
+{"status":true,"message":"Produto adicinado com sucesso!","result":{...}} [HTTP 201]
+$ POST /os/29/servicos  {"idServico":1,"preco":50,"quantidade":1}
+{"status":true,"message":"Serviço adicinado com sucesso!","result":{...}} [HTTP 201]
+$ POST /os/29/anotacoes  {"anotacao":"nota A"}
+{"status":true,"message":"Anotação adicinada com sucesso!","result":{...}} [HTTP 201]
+$ POST /os/30/produtos  {"idProduto":1,"preco":10,"quantidade":1}
+{"status":true,"message":"Produto adicinado com sucesso!","result":{...}} [HTTP 201]
+$ POST /os/30/servicos  {"idServico":1,"preco":20,"quantidade":1}
+{"status":true,"message":"Serviço adicinado com sucesso!","result":{...}} [HTTP 201]
+$ POST /os/30/anotacoes  {"anotacao":"nota B"}
+{"status":true,"message":"Anotação adicinada com sucesso!","result":{...}} [HTTP 201]
+prod	idProdutos_os	os_id	preco	quantidade	subTotal	desconto
+prod	14	29	25.00	2	50.00	0.00
+prod	15	30	10.00	1	10.00	0.00
+serv	idServicos_os	os_id	preco	quantidade	subTotal
+serv	10	29	50.00	1	50.00
+serv	11	30	20.00	1	20.00
+nota	idAnotacoes	os_id
+nota	5	29
+nota	6	30
+== 1b. IDOR: URL da OS 29 com itens da OS 30 (15 prod, 11 serv, 6 nota)
+$ PUT /os/29/produtos/15  {"preco":1,"quantidade":1}
+{"status":false,"message":"Não foi encontrado esse Produto na OS."} [HTTP 404]
+$ DELETE /os/29/produtos/15 
+{"status":false,"message":"Não foi encontrado esse Produto na OS."} [HTTP 404]
+$ PUT /os/29/servicos/11  {"preco":1,"quantidade":1}
+{"status":false,"message":"Não foi encontrado esse Serviço na OS."} [HTTP 404]
+$ DELETE /os/29/servicos/11 
+{"status":false,"message":"Não foi encontrado esse Serviço na OS."} [HTTP 404]
+$ DELETE /os/29/anotacoes/6 
+{"status":false,"message":"Anotação não encontrada nesta OS."} [HTTP 404]
+prod	idProdutos_os	os_id	preco	subTotal
+prod	15	30	10.00	10.00
+serv	idServicos_os	preco
+serv	11	20.00
+nota	idAnotacoes
+nota	6
+== 1c. fluxo normal PUT/GET/DELETE OS 29
+$ PUT /os/29/produtos/14  {"preco":30,"quantidade":3}
+{"status":true,"message":"Produto da OS editado com sucesso!","result":{...}} [HTTP 200]
+idProdutos_os	preco	quantidade	subTotal	desconto	tipo_desconto
+14	30.00	3	90.00	0.00	NULL
+$ PUT /os/29/servicos/10  {"preco":60,"quantidade":2}
+{"status":true,"message":"Serviço da OS editado com sucesso!","result":{...}} [HTTP 200]
+idServicos_os	preco	quantidade	subTotal
+10	60.00	2	120.00
+$ GET /os/29 
+{"status":true,"message":"Detalhes da OS","result":{...}} [HTTP 200]
+$ DELETE /os/29/produtos/14 
+{"status":true,"message":"Produto da OS excluído com sucesso!"} [HTTP 200]
+$ DELETE /os/29/servicos/10 
+{"status":true,"message":"Serviço da OS excluído com sucesso!"} [HTTP 200]
+$ DELETE /os/29/anotacoes/5 
+{"status":true,"message":"Anotação excluída com sucesso!"} [HTTP 200]
+restantes
+0
+count(*)
+0
+count(*)
+0

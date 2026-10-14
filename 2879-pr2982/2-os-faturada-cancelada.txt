@@ -1,0 +1,68 @@
+idOs	status	faturado
+29	Aberto	0
+30	Aberto	0
+31	Faturado	1
+32	Cancelado	0
+config	valor
+control_editos	0
+== control_editos=0, OS 31 (p=16 s=12 n=7)
+$ POST /os/31/produtos  {"idProduto":1,"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ PUT /os/31/produtos/16  {"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ DELETE /os/31/produtos/16 
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ POST /os/31/servicos  {"idServico":1,"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ PUT /os/31/servicos/12  {"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ DELETE /os/31/servicos/12 
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ POST /os/31/anotacoes  {"anotacao":"x"}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ DELETE /os/31/anotacoes/7 
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ POST /os/31/desconto  {"tipoDesconto":"real","desconto":1}
+{"status":false,"message":"Desconto não pode ser adicionado. OS Faturada\/Cancelada"} [HTTP 403]
+itens
+1
+== control_editos=0, OS 32 (p=17 s=13 n=8)
+$ POST /os/32/produtos  {"idProduto":1,"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ PUT /os/32/produtos/17  {"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ DELETE /os/32/produtos/17 
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ POST /os/32/servicos  {"idServico":1,"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ PUT /os/32/servicos/13  {"preco":5,"quantidade":1}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ DELETE /os/32/servicos/13 
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ POST /os/32/anotacoes  {"anotacao":"x"}
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ DELETE /os/32/anotacoes/8 
+{"status":false,"message":"OS Faturada\/Cancelada não pode ser alterada."} [HTTP 403]
+$ POST /os/32/desconto  {"tipoDesconto":"real","desconto":1}
+{"status":false,"message":"Desconto não pode ser adicionado. OS Faturada\/Cancelada"} [HTTP 403]
+itens
+1
+== control_editos=1
+$ POST /os/31/produtos  {"idProduto":1,"preco":5,"quantidade":1}
+{"status":true,"message":"Produto adicinado com sucesso!","result":{...}} [HTTP 201]
+$ PUT /os/31/produtos/16  {"preco":5,"quantidade":1}
+{"status":true,"message":"Produto da OS editado com sucesso!","result":{...}} [HTTP 200]
+$ DELETE /os/31/produtos/16 
+{"status":true,"message":"Produto da OS excluído com sucesso!"} [HTTP 200]
+$ POST /os/31/servicos  {"idServico":1,"preco":5,"quantidade":1}
+{"status":true,"message":"Serviço adicinado com sucesso!","result":{...}} [HTTP 201]
+$ PUT /os/31/servicos/12  {"preco":5,"quantidade":1}
+{"status":true,"message":"Serviço da OS editado com sucesso!","result":{...}} [HTTP 200]
+$ DELETE /os/31/servicos/12 
+{"status":true,"message":"Serviço da OS excluído com sucesso!"} [HTTP 200]
+$ POST /os/31/anotacoes  {"anotacao":"x"}
+{"status":true,"message":"Anotação adicinada com sucesso!","result":{...}} [HTTP 201]
+$ POST /os/31/desconto  {"tipoDesconto":"real","desconto":1}
+{"status":true,"message":"Desconto adicionado com sucesso!"} [HTTP 201]
+config	valor
+control_editos	1

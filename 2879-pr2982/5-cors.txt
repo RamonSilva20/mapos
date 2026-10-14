@@ -1,0 +1,61 @@
+== 5. CORS, API_CORS_ORIGINS=http://app.test
+-- Origin: http://evil.test
+$ -X POST http://127.0.0.1:8982/index.php/api/v1/client/auth -H Origin: http://evil.test -H Content-Type: application/json -d {"email":"cliente@mapos.test","senha":"errada"}
+HTTP/1.1 401 Unauthorized
+
+$ -X OPTIONS http://127.0.0.1:8982/index.php/api/v1/client/auth -H Origin: http://evil.test -H Access-Control-Request-Method: POST -H Access-Control-Request-Headers: content-type,authorization
+HTTP/1.1 200 OK
+
+$ -X GET http://127.0.0.1:8982/index.php/api/v1/client/os -H Origin: http://evil.test
+HTTP/1.1 401 Unauthorized
+
+$ -X POST http://127.0.0.1:8982/index.php/api/v1/client/os -H Origin: http://evil.test -H Content-Type: application/json -d {}
+HTTP/1.1 401 Unauthorized
+
+$ -X OPTIONS http://127.0.0.1:8982/index.php/api/v1/client/os -H Origin: http://evil.test -H Access-Control-Request-Method: POST
+HTTP/1.1 200 OK
+
+$ -X GET http://127.0.0.1:8982/index.php/api/v1/os -H Origin: http://evil.test -H Authorization: Bearer ***
+HTTP/1.1 200 OK
+
+-- Origin: http://app.test
+$ -X POST http://127.0.0.1:8982/index.php/api/v1/client/auth -H Origin: http://app.test -H Content-Type: application/json -d {"email":"cliente@mapos.test","senha":"errada"}
+HTTP/1.1 401 Unauthorized
+Access-Control-Allow-Origin: http://app.test
+Access-Control-Allow-Headers: Authorization, Content-Type, Accept, X-Requested-With, App-Version
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+
+$ -X OPTIONS http://127.0.0.1:8982/index.php/api/v1/client/auth -H Origin: http://app.test -H Access-Control-Request-Method: POST -H Access-Control-Request-Headers: content-type,authorization
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: http://app.test
+Access-Control-Allow-Headers: Authorization, Content-Type, Accept, X-Requested-With, App-Version
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+
+$ -X GET http://127.0.0.1:8982/index.php/api/v1/client/os -H Origin: http://app.test
+HTTP/1.1 401 Unauthorized
+Access-Control-Allow-Origin: http://app.test
+Access-Control-Allow-Headers: Authorization, Content-Type, Accept, X-Requested-With, App-Version
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+
+$ -X POST http://127.0.0.1:8982/index.php/api/v1/client/os -H Origin: http://app.test -H Content-Type: application/json -d {}
+HTTP/1.1 401 Unauthorized
+Access-Control-Allow-Origin: http://app.test
+Access-Control-Allow-Headers: Authorization, Content-Type, Accept, X-Requested-With, App-Version
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+
+$ -X OPTIONS http://127.0.0.1:8982/index.php/api/v1/client/os -H Origin: http://app.test -H Access-Control-Request-Method: POST
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: http://app.test
+Access-Control-Allow-Headers: Authorization, Content-Type, Accept, X-Requested-With, App-Version
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+
+$ -X GET http://127.0.0.1:8982/index.php/api/v1/os -H Origin: http://app.test -H Authorization: Bearer ***
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: http://app.test
+Access-Control-Allow-Headers: Authorization, Content-Type, Accept, X-Requested-With, App-Version
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+
+-- sem Origin
+$ -X POST http://127.0.0.1:8982/index.php/api/v1/client/auth -H Content-Type: application/json -d {}
+HTTP/1.1 401 Unauthorized
+

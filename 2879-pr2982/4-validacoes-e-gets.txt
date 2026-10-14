@@ -1,0 +1,63 @@
+== 4. precos/quantidades invalidos OS 30
+$ POST /os/30/produtos  {"idProduto":1,"preco":-1,"quantidade":1}
+{"status":false,"message":"<p>The preco field must contain a number greater than -1.<\/p>\n"} [HTTP 400]
+$ POST /os/30/produtos  {"idProduto":1,"preco":5,"quantidade":0}
+{"status":false,"message":"<p>The quantidade field must contain a number greater than 0.<\/p>\n"} [HTTP 400]
+$ POST /os/30/produtos  {"idProduto":1,"preco":5,"quantidade":-2}
+{"status":false,"message":"<p>The quantidade field must contain a number greater than 0.<\/p>\n"} [HTTP 400]
+$ POST /os/30/produtos  {"idProduto":1,"preco":"abc","quantidade":1}
+{"status":false,"message":"<p>The preco field must contain only numbers.<\/p>\n"} [HTTP 400]
+$ POST /os/30/produtos  {"idProduto":1,"preco":5,"quantidade":"x"}
+{"status":false,"message":"<p>The quantidade field must contain only numbers.<\/p>\n"} [HTTP 400]
+$ POST /os/30/produtos  {"idProduto":99999,"preco":5,"quantidade":1}
+{"status":false,"message":"Produto não encontrado."} [HTTP 400]
+$ POST /os/30/produtos  {"idProduto":1,"preco":0,"quantidade":1}
+{"status":true,"message":"Produto adicinado com sucesso!","result":{...}} [HTTP 201]
+$ POST /os/30/servicos  {"idServico":1,"preco":-1,"quantidade":1}
+{"status":false,"message":"<p>The preco field must contain a number greater than -1.<\/p>\n"} [HTTP 400]
+$ POST /os/30/servicos  {"idServico":1,"preco":5,"quantidade":0}
+{"status":false,"message":"<p>The quantidade field must contain a number greater than 0.<\/p>\n"} [HTTP 400]
+$ POST /os/30/servicos  {"idServico":1,"preco":"abc","quantidade":1}
+{"status":false,"message":"<p>The preco field must contain only numbers.<\/p>\n"} [HTTP 400]
+$ POST /os/30/servicos  {"idServico":99999,"preco":5,"quantidade":1}
+{"status":false,"message":"Serviço não encontrado."} [HTTP 400]
+$ PUT /os/30/produtos/19  {"preco":-1,"quantidade":1}
+{"status":false,"message":"Informe um preço (0 ou mais) e uma quantidade (maior que 0) válidos."} [HTTP 400]
+$ PUT /os/30/servicos/11  {"preco":-1,"quantidade":1}
+{"status":false,"message":"Informe um preço (0 ou mais) e uma quantidade (maior que 0) válidos."} [HTTP 400]
+$ PUT /os/30/produtos/19  {"preco":5,"quantidade":0}
+{"status":false,"message":"Informe um preço (0 ou mais) e uma quantidade (maior que 0) válidos."} [HTTP 400]
+$ PUT /os/30/servicos/11  {"preco":5,"quantidade":0}
+{"status":false,"message":"Informe um preço (0 ou mais) e uma quantidade (maior que 0) válidos."} [HTTP 400]
+$ PUT /os/30/produtos/19  {"preco":"x","quantidade":1}
+{"status":false,"message":"Informe um preço (0 ou mais) e uma quantidade (maior que 0) válidos."} [HTTP 400]
+$ PUT /os/30/servicos/11  {"preco":"x","quantidade":1}
+{"status":false,"message":"Informe um preço (0 ou mais) e uma quantidade (maior que 0) válidos."} [HTTP 400]
+$ POST /os/999999/produtos  {"idProduto":1,"preco":5,"quantidade":1}
+{"status":false,"message":"Erro ao tentar inserir produto na OS. OS Não encontrada!"} [HTTP 404]
+$ POST /os/999999/anotacoes  {"anotacao":"x"}
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ PUT /os/999999/produtos/19  {"preco":5,"quantidade":1}
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ DELETE /os/999999/servicos/11 
+{"status":false,"message":"Não foi possível excluir o Serviço da OS."} [HTTP 404]
+idProdutos_os	preco	quantidade
+15	10.00	1
+19	0.00	1
+== GETs
+$ GET /os/999999 
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ GET /os/30 
+{"status":true,"message":"Detalhes da OS","result":{...}} [HTTP 200]
+$ GET /os/30/produtos 
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ GET /os/999999/produtos 
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ GET /os/30/servicos 
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ GET /os/999999/servicos 
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ GET /os/30/anotacoes 
+{"status":false,"message":"OS não encontrada."} [HTTP 404]
+$ GET /os/999999/anotacoes 
+{"status":false,"message":"OS não encontrada."} [HTTP 404]

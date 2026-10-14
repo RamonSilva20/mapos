@@ -1,0 +1,42 @@
+== 3. desconto OS 30 (bruto = 10 + 20 = 30)
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":5}
+{"status":true,"message":"Desconto adicionado com sucesso!"} [HTTP 201]
+real	5.00	25.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":5,"valor_desconto":1}
+{"status":true,"message":"Desconto adicionado com sucesso!"} [HTTP 201]
+real	5.00	25.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"porcento","desconto":10}
+{"status":true,"message":"Desconto adicionado com sucesso!"} [HTTP 201]
+porcento	10.00	27.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":-1}
+{"status":false,"message":"Informe o desconto, como 10 ou 10,50.","errors":{"desconto":"Informe o desconto, como 10 ou 10,50."}} [HTTP 400]
+porcento	10.00	27.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":31}
+{"status":false,"message":"O desconto tem de ser menor que o total da OS (R$ 30,00).","errors":{"desconto":"O desconto tem de ser menor que o total da OS (R$ 30,00)."}} [HTTP 400]
+porcento	10.00	27.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"porcento","desconto":101}
+{"status":false,"message":"O desconto em porcentagem vai até 100%.","errors":{"desconto":"O desconto em porcentagem vai até 100%."}} [HTTP 400]
+porcento	10.00	27.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":"abc"}
+{"status":false,"message":"Informe o desconto, como 10 ou 10,50.","errors":{"desconto":"Informe o desconto, como 10 ou 10,50."}} [HTTP 400]
+porcento	10.00	27.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real"}
+{"status":false,"message":"Campo Desconto obrigatório"} [HTTP 400]
+porcento	10.00	27.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"xyz","desconto":3}
+{"status":false,"message":"Escolha o tipo de desconto.","errors":{"tipoDesconto":"Escolha o tipo de desconto."}} [HTTP 400]
+porcento	10.00	27.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":0}
+{"status":true,"message":"Desconto adicionado com sucesso!"} [HTTP 201]
+NULL	0.00	0.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":30}
+{"status":false,"message":"O desconto tem de ser menor que o total da OS (R$ 30,00).","errors":{"desconto":"O desconto tem de ser menor que o total da OS (R$ 30,00)."}} [HTTP 400]
+NULL	0.00	0.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"porcento","desconto":100}
+{"status":false,"message":"O desconto tem de ser menor que o total da OS (R$ 30,00).","errors":{"desconto":"O desconto tem de ser menor que o total da OS (R$ 30,00)."}} [HTTP 400]
+NULL	0.00	0.00	0.00
+$ POST /os/30/desconto  {"tipoDesconto":"real","desconto":0}
+{"status":true,"message":"Desconto adicionado com sucesso!"} [HTTP 201]
+NULL	0.00	0.00	0.00
+$ POST /os/999999/desconto  {"desconto":1}
+{"status":false,"message":"OS não encontrada."} [HTTP 404]

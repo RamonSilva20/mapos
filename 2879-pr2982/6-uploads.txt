@@ -1,0 +1,123 @@
+login HTTP 200
+== 6a. Anexo de OS no painel (OS 30)
+-- grande.png
+{"result":false,"message":"N\u00e3o foi poss\u00edvel anexar: grande.png: A imagem tem pixels demais (limite de 40 megapixels). Reduza a resolu\u00e7\u00e3o e envie de novo.","html":{...}
+
+-- falso.png
+{"result":false,"message":"N\u00e3o foi poss\u00edvel anexar: falso.png: O tipo de arquivo que voc\u00ea est\u00e1 tentando fazer upload n\u00e3o \u00e9 permitido.","html":{...}
+
+-- falso2.png
+{"result":false,"message":"N\u00e3o foi poss\u00edvel anexar: falso2.png: O tipo de arquivo que voc\u00ea est\u00e1 tentando fazer upload n\u00e3o \u00e9 permitido.","html":{...}
+
+-- shell.php
+{"result":false,"message":"N\u00e3o foi poss\u00edvel anexar: shell.php: O tipo de arquivo que voc\u00ea est\u00e1 tentando fazer upload n\u00e3o \u00e9 permitido.","html":{...}
+
+-- valida.png
+{"result":true,"message":"Arquivo anexado.","html":{...}
+
+-- doc.pdf
+{"result":true,"message":"Arquivo anexado.","html":{...}
+
+-- 35mp.png
+{"result":true,"message":"Arquivo anexado.","html":{...}
+
+== 6b. Anexo via API (OS 30)
+-- grande.png
+$ POST /os/30/anexos -F userfile=@up/grande.png
+{"status":false,"message":"Ocorreu um erro ao processar o arquivo.","result":{...}} [HTTP 500]
+-- falso.png
+$ POST /os/30/anexos -F userfile=@up/falso.png
+{"status":false,"message":"Ocorreu um erro ao processar o arquivo.","result":{...}} [HTTP 500]
+-- valida.png
+$ POST /os/30/anexos -F userfile=@up/valida.png
+{"status":true,"message":"Arquivo anexado com sucesso!","result":{...}} [HTTP 201]
+-- doc.pdf
+$ POST /os/30/anexos -F userfile=@up/doc.pdf
+{"status":true,"message":"Arquivo anexado com sucesso!","result":{...}} [HTTP 201]
+== 6c. Arquivos
+-- grande.png
+ Adicionar — Arquivos — Map-OS Pular para o conteúdo Map-OS v4.55.1 Fechar menu Pesquisar Operação Início Cliente / Fornecedor Produtos Serviços Vendas Ordens de Serviço Termos de Garantias Financeiro Lançamentos Cobranças Relatórios Clientes Produtos Serviços
+
+-- falso.png
+ Adicionar — Arquivos — Map-OS Pular para o conteúdo Map-OS v4.55.1 Fechar menu Pesquisar Operação Início Cliente / Fornecedor Produtos Serviços Vendas Ordens de Serviço Termos de Garantias Financeiro Lançamentos Cobranças Relatórios Clientes Produtos Serviços
+
+-- valida.png
+ [HTTP 303] -> http://127.0.0.1:8982/index.php/arquivos 
+
+-- doc.pdf
+ [HTTP 303] -> http://127.0.0.1:8982/index.php/arquivos 
+
+-- API grande.png
+{"status":false,"message":"Ocorreu um erro ao processar o arquivo.","result":{"upload":["A imagem tem pixels demais (limite de 40 megapixels). Reduza a resolução e envie de novo."]}} [HTTP 500]
+-- API falso.png
+{"status":false,"message":"Ocorreu um erro ao processar o arquivo.","result":{"upload":["<p>O tipo de arquivo que você está tentando fazer upload não é permitido.<\/p>"]}} [HTTP 500]
+-- API shell.php
+{"status":false,"message":"Ocorreu um erro ao processar o arquivo.","result":{"upload":["<p>O tipo de arquivo que você está tentando fazer upload não é permitido.<\/p>"]}} [HTTP 500]
+-- Arquivos grande.png
+class="flex items-start gap-3 rounded-lg border border-current/28 px-4 py-3.5 text-[0.9375rem] leading-normal bg-danger-soft text-danger-ink"> 
+class="text-danger-ink" aria-hidden="true">*
+class="text-danger-ink" aria-hidden="true">*
+-- Arquivos falso.png
+class="flex items-start gap-3 rounded-lg border border-current/28 px-4 py-3.5 text-[0.9375rem] leading-normal bg-danger-soft text-danger-ink"> 
+class="text-danger-ink" aria-hidden="true">*
+class="text-danger-ink" aria-hidden="true">*
+== 6d. foto de perfil (uploadUserImage)
+-- grande.png
+[HTTP 303] -> http://127.0.0.1:8982/index.php/mapos/minhaConta
+pixels demais (limite de 40 megapixels). Reduza a resolução e envie de novo.
+-- falso.png
+[HTTP 303] -> http://127.0.0.1:8982/index.php/mapos/minhaConta
+não é permitido.
+-- gif.png
+[HTTP 303] -> http://127.0.0.1:8982/index.php/mapos/minhaConta
+não é permitido.
+-- valida.png
+[HTTP 303] -> http://127.0.0.1:8982/index.php/mapos/minhaConta
+Foto alterada com sucesso.
+-- valida.jpg
+[HTTP 303] -> http://127.0.0.1:8982/index.php/mapos/minhaConta
+não é permitido.
+-- 35mp.png
+[HTTP 303] -> http://127.0.0.1:8982/index.php/mapos/minhaConta
+Foto alterada com sucesso.
+== 6e. logo emitente
+-- grande.png
+pixels demais (limite de 40 megapixels). Reduza a resolução e envie de novo.
+[HTTP 200] -> 
+-- falso.png
+tipo de arquivo que você está tentando fazer upload não é permitido.
+[HTTP 200] -> 
+-- gif.png
+tipo de arquivo que você está tentando fazer upload não é permitido.
+[HTTP 200] -> 
+-- valida.png
+[HTTP 303] -> http://127.0.0.1:8982/index.php/mapos/emitente
+nome	url_logo
+Emp	http://127.0.0.1:8982/assets/uploads/20b440fd0e614baea9e6f86ff3893637.png
+wt/assets/uploads:
+total 12
+drwxr-xr-x  2 ramon ramon 100 Oct 14 17:28 .
+drwxr-xr-x 14 ramon ramon 280 Oct 14 17:28 ..
+-rw-r--r--  1 ramon ramon 161 Oct 14 17:28 20b440fd0e614baea9e6f86ff3893637.png
+-rw-r--r--  1 ramon ramon 191 Oct 14 17:28 .htaccess
+-rw-r--r--  1 ramon ramon 115 Oct 14 17:28 index.html
+
+wt/assets/userImage:
+total 48
+drwxr-xr-x  2 ramon ramon   100 Oct 14 17:28 .
+drwxr-xr-x 14 ramon ramon   280 Oct 14 17:28 ..
+-rw-r--r--  1 ramon ramon 43334 Oct 14 17:28 c4e91d4842ace3b388e9407c2254bc70.png
+-rw-r--r--  1 ramon ramon   190 Oct 14 17:25 .htaccess
+-rw-r--r--  1 ramon ramon     0 Oct 14 17:25 index.html
+--- userImage/.htaccess
+# Pasta de uploads: impede a execução de scripts enviados como anexo
+<FilesMatch "\.(?i:php[0-9]*|phtml|phar|pht|phps|cgi|pl|py|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+--- uploads/.htaccess
+# Pasta de uploads: impede a execução de scripts enviados como imagem
+<FilesMatch "\.(?i:php[0-9]*|phtml|phar|pht|phps|cgi|pl|py|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
