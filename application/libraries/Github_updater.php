@@ -403,6 +403,8 @@ class Github_updater
                     throw new RuntimeException('O destino ' . $relativo . ' é um link simbólico; atualização cancelada.');
                 }
 
+                $modo = is_file($alvo) ? (fileperms($alvo) & 0777) : null;
+
                 if (is_file($alvo)) {
                     $copia = $backup . '/' . $relativo;
                     if (! is_dir(dirname($copia)) && ! mkdir(dirname($copia), 0755, true) && ! is_dir(dirname($copia))) {
@@ -426,6 +428,11 @@ class Github_updater
                     @unlink($temporario);
 
                     throw new RuntimeException('Não foi possível gravar ' . $relativo . '.');
+                }
+
+                // O rename deixa o modo padrão; quem já existia mantém as permissões (ex.: executável).
+                if ($modo !== null) {
+                    @chmod($alvo, $modo);
                 }
             }
         } catch (Throwable $erro) {

@@ -25,6 +25,7 @@ final class AtualizadorTest extends MaposTestCase
             mkdir($this->raiz . '/' . $pasta, 0777, true);
         }
         file_put_contents($this->raiz . '/index.php', "<?php // antigo\n");
+        chmod($this->raiz . '/index.php', 0755);
         file_put_contents($this->raiz . '/application/.env', "APP_SECRET=nao-mexer\n");
         file_put_contents($this->raiz . '/application/config/config.php', "<?php\n\$config['app_version'] = '4.55.1';\n");
         file_put_contents($this->raiz . '/application/controllers/Os.php', "<?php // os antigo\n");
@@ -318,6 +319,7 @@ final class AtualizadorTest extends MaposTestCase
         $this->assertSame("<?php // novo\n", file_get_contents($this->raiz . '/index.php'));
         $this->assertSame("<?php // os novo\n", file_get_contents($this->raiz . '/application/controllers/Os.php'));
         $this->assertFileExists($this->raiz . '/application/controllers/Nova.php');
+        $this->assertSame(0755, fileperms($this->raiz . '/index.php') & 0777, 'Quem já existia mantém o modo.');
         $this->assertStringContainsString("'4.56.0'", (string) file_get_contents($this->raiz . '/application/config/config.php'));
         // Intocados:
         $this->assertSame("APP_SECRET=nao-mexer\n", file_get_contents($this->raiz . '/application/.env'));
@@ -414,6 +416,7 @@ final class AtualizadorTest extends MaposTestCase
 
         $tela = (string) file_get_contents(APPPATH . 'views/mapos/atualizacao.php');
         $this->assertStringContainsString("e(mb_strimwidth(\$notas", $tela, 'O changelog sai escapado.');
+        $this->assertStringContainsString('<pre class=', $tela, 'O pre guarda as quebras de linha do changelog (o hook de compressão do HTML preserva só pre, textarea e script).');
         $this->assertStringContainsString('O que mudou', $tela);
 
         $configurar = (string) file_get_contents(APPPATH . 'views/mapos/configurar.php');

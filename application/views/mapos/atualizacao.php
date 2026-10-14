@@ -39,7 +39,7 @@ $notas = $release !== null ? trim($release['notas']) : '';
 
             <h3 class="mt-4 text-label-md text-text">O que mudou</h3>
             <?php if ($notas !== '') { ?>
-                <div class="mt-2 max-h-96 overflow-y-auto rounded-md border border-border bg-surface-subtle p-3 text-caption whitespace-pre-wrap text-text"><?= e(mb_strimwidth($notas, 0, 8000, '…')) ?></div>
+                <pre class="mt-2 max-h-96 overflow-y-auto rounded-md border border-border bg-surface-subtle p-3 font-sans text-caption whitespace-pre-wrap text-text"><?= e(mb_strimwidth($notas, 0, 8000, '…')) ?></pre>
             <?php } else { ?>
                 <p class="mt-2 text-caption text-muted">Esta release não tem descrição.</p>
             <?php } ?>
