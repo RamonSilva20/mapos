@@ -187,6 +187,7 @@ $textos = $campos([
                     <div class="lg:pt-7">
                         <?= component('button', ['label' => 'Adicionar', 'icon' => 'plus', 'variant' => 'outline', 'type' => 'submit', 'attrs' => ['data-rotulo-carregando' => 'Adicionando…']]) ?>
                     </div>
+                    <?php $this->load->view('os/partes/desconto-item-campos'); ?>
                 </form>
             </section>
         <?php } ?>
@@ -271,6 +272,16 @@ foreach ($exclusoes as $tipo => [$rota, $titulo, $consequencia]) { ?>
         'confirm_attrs' => ['form' => 'form-excluir-' . $tipo],
     ]) ?>
 <?php } ?>
+
+<?php if ($pode['editar'] && ($aba === 'produtos' || $aba === 'servicos')) {
+    $this->load->view('os/partes/desconto-item-modal', [
+        'tipo' => $aba === 'produtos' ? 'produto' : 'servico',
+        'rota' => $aba === 'produtos' ? 'os/descontoProduto' : 'os/descontoServico',
+        'campoRegistro' => 'idOs',
+        'idRegistro' => $idOs,
+        'rotuloRegistro' => 'OS',
+    ]);
+} ?>
 
 <?php if ($pode['excluir']) { ?>
     <form id="form-excluir-os" method="post" action="<?= e(site_url('os/excluir')) ?>" hidden>

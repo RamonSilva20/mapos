@@ -200,8 +200,10 @@ class MercadoPago extends BasePaymentGateway
             ? $this->ci->Os_model->getById($id)
             : $this->ci->vendas_model->getById($id)];
 
-        $totalProdutos = array_reduce($produtos, fn ($t, $i) => $t + ($i->preco * $i->quantidade), 0);
-        $totalServicos = array_reduce($servicos, fn ($t, $i) => $t + ($i->preco * $i->quantidade), 0);
+        // Item com desconto individual (#2880) vale o subTotal gravado.
+        $valorDoItem = fn ($i) => (float) ($i->desconto ?? 0) > 0 ? (float) $i->subTotal : $i->preco * $i->quantidade;
+        $totalProdutos = array_reduce($produtos, fn ($t, $i) => $t + $valorDoItem($i), 0);
+        $totalServicos = array_reduce($servicos, fn ($t, $i) => $t + $valorDoItem($i), 0);
         $tipoDesconto = array_reduce($tipo_desconto, fn ($t, $i) => $i->tipo_desconto, 0);
         $totalDesconto = array_reduce($desconto, fn ($t, $i) => $i->desconto, 0);
 

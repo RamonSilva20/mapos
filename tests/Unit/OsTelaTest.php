@@ -68,6 +68,122 @@ final class OsTelaTest extends MaposTestCase
         $this->assertSame(['servicos_id' => 3, 'quantidade' => 1.5, 'preco' => 80.0, 'subTotal' => 120.0], $dados);
     }
 
+    // --- Desconto individual por item (#2880) --------------------------
+
+    public function testDescontoDoItemEmReaisEPorcentagem(): void
+    {
+        $this->assertSame([['tipo_desconto' => null, 'desconto' => 0.0, 'subTotal' => 160.0], []], osDescontoDoItem(160.0, null, ''), 'Vazio é sem desconto.');
+        $this->assertSame([['tipo_desconto' => null, 'desconto' => 0.0, 'subTotal' => 160.0], []], osDescontoDoItem(160.0, 'real', '0'));
+        $this->assertSame([['tipo_desconto' => 'real', 'desconto' => 20.0, 'subTotal' => 140.0], []], osDescontoDoItem(160.0, 'real', '20'));
+        $this->assertSame([['tipo_desconto' => 'real', 'desconto' => 20.5, 'subTotal' => 139.5], []], osDescontoDoItem(160.0, 'real', '20,50'));
+        $this->assertSame([['tipo_desconto' => 'porcento', 'desconto' => 10.0, 'subTotal' => 144.0], []], osDescontoDoItem(160.0, 'porcento', '10'));
+        // O arredondamento é em centavos, sobre o desconto em reais.
+        $this->assertSame(66.66, osDescontoDoItem(99.99, 'porcento', '33,33')[0]['subTotal']);
+        // Brinde: 100% e o valor inteiro são aceitos, o item fica com subTotal 0.
+        $this->assertSame(0.0, osDescontoDoItem(160.0, 'porcento', '100')[0]['subTotal']);
+        $this->assertSame(0.0, osDescontoDoItem(160.0, 'real', '160')[0]['subTotal']);
+    }
+
+    public function testDescontoDoItemRecusaValoresInvalidos(): void
+    {
+        $this->assertArrayHasKey('descontoItem', osDescontoDoItem(160.0, 'real', '160,01')[1], 'Passa do valor do item.');
+        $this->assertArrayHasKey('descontoItem', osDescontoDoItem(160.0, 'porcento', '100,01')[1]);
+        $this->assertArrayHasKey('descontoItem', osDescontoDoItem(160.0, 'real', '-5')[1]);
+        $this->assertArrayHasKey('descontoItem', osDescontoDoItem(160.0, 'real', 'abc')[1]);
+        $this->assertSame([], osDescontoDoItem(160.0, 'real', ['5'])[1], 'Valor que não é texto nem número vale como vazio.');
+    }
+
+    public function testDescontoDoItemExigeTipoQuandoHaValor(): void
+    {
+        $this->assertArrayHasKey('tipoDescontoItem', osDescontoDoItem(160.0, 'outro', '10')[1]);
+        $this->assertArrayHasKey('tipoDescontoItem', osDescontoDoItem(160.0, null, '10')[1]);
+        $this->assertSame([], osDescontoDoItem(160.0, 'outro', '0')[1], 'Sem desconto o tipo não importa.');
+    }
+
+    public function testItemDoFormularioComDesconto(): void
+    {
+        $produto = (object) ['idProdutos' => 5, 'estoque' => 10];
+
+        [$dados, $erros] = osItemDoFormulario(['quantidade' => '2', 'preco' => '80', 'tipoDescontoItem' => 'porcento', 'descontoItem' => '10'], 'produto', $produto, true);
+        $this->assertSame([], $erros);
+        $this->assertSame(['produtos_id' => 5, 'quantidade' => 2, 'preco' => 80.0, 'subTotal' => 144.0, 'desconto' => 10.0, 'tipo_desconto' => 'porcento'], $dados);
+
+        [$dados] = osItemDoFormulario(['quantidade' => '1,5', 'preco' => '100', 'tipoDescontoItem' => 'real', 'descontoItem' => '20'], 'servico', (object) ['idServicos' => 3]);
+        $this->assertSame(130.0, $dados['subTotal']);
+
+        // O desconto é sobre o item: mais que preço x quantidade é recusado.
+        [$dados, $erros] = osItemDoFormulario(['quantidade' => '1', 'preco' => '50', 'tipoDescontoItem' => 'real', 'descontoItem' => '60'], 'produto', $produto, true);
+        $this->assertSame([], $dados);
+        $this->assertArrayHasKey('descontoItem', $erros);
+
+        // Sem desconto a linha não ganha as chaves (as colunas ficam no padrão).
+        [$dados] = osItemDoFormulario(['quantidade' => '1', 'preco' => '50', 'tipoDescontoItem' => 'real', 'descontoItem' => '0'], 'produto', $produto, true);
+        $this->assertArrayNotHasKey('desconto', $dados);
+    }
+
+    public function testValorDoItemEDescontosDosItens(): void
+    {
+        $semDesconto = (object) ['preco' => 50.0, 'precoVenda' => 80.0, 'quantidade' => 2.0, 'subTotal' => 0, 'desconto' => 0];
+        $this->assertSame(100.0, osValorDoItem($semDesconto), 'Sem desconto vale preço x quantidade, mesmo com subTotal vazio.');
+
+        $semPreco = (object) ['preco' => 0, 'precoVenda' => 80.0, 'quantidade' => 0, 'subTotal' => 0, 'desconto' => 0];
+        $this->assertSame(80.0, osValorDoItem($semPreco), 'Serviço sem preço usa o do cadastro e sem quantidade conta 1.');
+
+        $comDesconto = (object) ['preco' => 80.0, 'quantidade' => 2.0, 'subTotal' => 140.0, 'desconto' => 20.0, 'tipo_desconto' => 'real'];
+        $this->assertSame(140.0, osValorDoItem($comDesconto));
+        $this->assertSame(20.0, osDescontoDosItens([$semDesconto, $comDesconto]));
+        $this->assertSame(0.0, osDescontoDosItens([]));
+
+        $this->assertSame('R$ 20,00', osDescontoItemTexto($comDesconto));
+        $porcento = (object) ['preco' => 80.0, 'quantidade' => 2.0, 'subTotal' => 144.0, 'desconto' => 10.0, 'tipo_desconto' => 'porcento'];
+        $this->assertSame('10% (R$ 16,00)', osDescontoItemTexto($porcento));
+        $this->assertSame('', osDescontoItemTexto($semDesconto));
+        $this->assertSame('<br><small>Desconto: 10% (R$ 16,00)</small>', osDescontoItemNota($porcento));
+        $this->assertSame('', osDescontoItemNota($semDesconto));
+    }
+
+    public function testTotaisComDescontoDosItensEDescontoGeral(): void
+    {
+        // Os totais de produtos e serviços já vêm com o desconto dos itens;
+        // o desconto geral incide sobre esse bruto.
+        $totais = osTotais(300.0, 130.0, 387, 'porcento', 10, 70.0);
+        $this->assertSame(430.0, $totais['bruto']);
+        $this->assertSame(43.0, $totais['desconto']);
+        $this->assertSame(387.0, $totais['total']);
+        $this->assertSame(70.0, $totais['descontoItens']);
+
+        $this->assertSame(0.0, osTotais(100.0, 0.0)['descontoItens']);
+    }
+
+    public function testTotaisDoModelComDescontoIndividual(): void
+    {
+        $this->criarBanco();
+        $model = $this->model();
+        // OS 1: produto 3 × 100 com 10% (270) e serviço 1 × 50 com R$ 20 (30).
+        $this->db->query("UPDATE produtos_os SET desconto = 10, tipo_desconto = 'porcento', subTotal = 270 WHERE idProdutos_os = 1");
+        $this->db->query("UPDATE servicos_os SET desconto = 20, tipo_desconto = 'real', subTotal = 30 WHERE idServicos_os = 1");
+
+        $totais = $model->totais($model->getById(1));
+        $this->assertSame(270.0, $totais['produtos']);
+        $this->assertSame(30.0, $totais['servicos']);
+        $this->assertSame(300.0, $totais['total']);
+        $this->assertSame(50.0, $totais['descontoItens']);
+        $this->assertSame(0.0, $totais['desconto'], 'O desconto geral é outro.');
+
+        $this->assertSame(100.0, $model->totais($model->getById(2))['total'], 'A OS 2 não muda.');
+        $this->assertSame(0.0, $model->totais($model->getById(2))['descontoItens']);
+    }
+
+    public function testDescontoPorItemDisponivelSoComAsColunas(): void
+    {
+        $this->criarBanco();
+        $this->assertTrue($this->model()->descontoPorItemDisponivel());
+
+        $this->db->query('ALTER TABLE servicos_os DROP COLUMN desconto');
+        $this->assertFalse($this->model()->descontoPorItemDisponivel(), 'Banco sem a migration continua funcionando, sem esse desconto.');
+        $this->assertSame(350.0, $this->model()->totais($this->model()->getById(1))['total']);
+    }
+
     public function testTotais(): void
     {
         $semDesconto = osTotais(100.0, 50.0);
@@ -169,8 +285,8 @@ final class OsTelaTest extends MaposTestCase
             descricaoProduto TEXT, defeito TEXT, observacoes TEXT, laudoTecnico TEXT)');
         $this->db->query('CREATE TABLE produtos (idProdutos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, precoVenda REAL, estoque INTEGER)');
         $this->db->query('CREATE TABLE servicos (idServicos INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, preco REAL)');
-        $this->db->query('CREATE TABLE produtos_os (idProdutos_os INTEGER PRIMARY KEY AUTOINCREMENT, quantidade INTEGER, preco REAL, os_id INTEGER, produtos_id INTEGER, subTotal REAL)');
-        $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, quantidade REAL, preco REAL, os_id INTEGER, servicos_id INTEGER, subTotal REAL)');
+        $this->db->query('CREATE TABLE produtos_os (idProdutos_os INTEGER PRIMARY KEY AUTOINCREMENT, quantidade INTEGER, preco REAL, os_id INTEGER, produtos_id INTEGER, subTotal REAL, desconto REAL DEFAULT 0, tipo_desconto TEXT)');
+        $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, quantidade REAL, preco REAL, os_id INTEGER, servicos_id INTEGER, subTotal REAL, desconto REAL DEFAULT 0, tipo_desconto TEXT)');
         $this->db->query('CREATE TABLE anotacoes_os (idAnotacoes INTEGER PRIMARY KEY AUTOINCREMENT, anotacao TEXT, data_hora TEXT, os_id INTEGER)');
         $this->db->query('CREATE TABLE lancamentos (idLancamentos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, valor REAL, tipo_desconto TEXT, desconto REAL, valor_desconto REAL,
             clientes_id INTEGER, cliente_fornecedor TEXT, data_vencimento TEXT, data_pagamento TEXT, baixado INTEGER, forma_pgto TEXT, tipo TEXT, observacoes TEXT, usuarios_id INTEGER)');
@@ -424,6 +540,64 @@ final class OsTelaTest extends MaposTestCase
         $this->assertStringNotContainsString('data-modal-abrir="excluir-', $faturada);
     }
 
+    public function testTelaMostraODescontoIndividualDosItens(): void
+    {
+        $xss = '<script>alert(1)</script>';
+        $dados = ['aba' => 'produtos'] + $this->dadosDaTela(true);
+        $dados['produtos'] = [
+            (object) ['idProdutos_os' => 1, 'descricao' => 'Tela ' . $xss, 'quantidade' => '2', 'preco' => '80', 'subTotal' => '144', 'desconto' => '10', 'tipo_desconto' => 'porcento'],
+            (object) ['idProdutos_os' => 2, 'descricao' => 'Cabo', 'quantidade' => '1', 'preco' => '20', 'subTotal' => '20', 'desconto' => '0', 'tipo_desconto' => null],
+        ];
+        $dados['totais'] = osTotais(164.0, 50.0, 0, null, 0, 16.0);
+
+        $html = $this->renderizar('os/visualizar', $dados);
+
+        // Formulário de adicionar com o desconto do item (enviado e calculado no servidor).
+        $this->assertStringContainsString('name="descontoItem"', $html);
+        $this->assertStringContainsString('name="tipoDescontoItem"', $html);
+        // Coluna, valor e botão do modal que muda o desconto de um item já na OS.
+        $this->assertStringContainsString('10% (R$ 16,00)', $html);
+        $this->assertStringContainsString('data-modal-abrir="desconto-item-produto"', $html);
+        $this->assertStringContainsString('data-valor-tipo="porcento"', $html);
+        $this->assertStringContainsString('data-valor-desconto="10"', $html);
+        $this->assertStringContainsString('action="http://mapos.test/index.php/os/descontoProduto"', $html);
+        $this->assertStringContainsString('Nos itens: R$ 16,00', $this->renderizar('os/partes/totais', $dados));
+        $this->assertStringNotContainsString('<script>alert(1)</script>', $html);
+        $this->assertStringNotContainsString('<script', $html);
+
+        // Sem nenhum item com desconto, a coluna não aparece.
+        $dados['produtos'] = [$dados['produtos'][1]];
+        $this->assertStringNotContainsString('>Desconto</th>', $this->renderizar('os/partes/produtos', $dados));
+
+        // Faturada: nem o formulário nem o modal de desconto.
+        $faturada = $this->renderizar('os/visualizar', ['aba' => 'produtos'] + $this->dadosDaTela(false));
+        $this->assertStringNotContainsString('descontoItem', $faturada);
+        $this->assertStringNotContainsString('desconto-item-produto', $faturada);
+
+        $servicos = $this->renderizar('os/visualizar', ['aba' => 'servicos'] + $this->dadosDaTela(true));
+        $this->assertStringContainsString('action="http://mapos.test/index.php/os/descontoServico"', $servicos);
+        $this->assertStringContainsString('data-modal-abrir="desconto-item-servico"', $servicos);
+    }
+
+    public function testImpressoesEmailEGatewaysUsamOValorComDescontoDoItem(): void
+    {
+        $views = [
+            'os/imprimirOs', 'os/imprimirOsTermica', 'os/emails/os', 'conecte/imprimirOs', 'conecte/imprimirVenda',
+            'vendas/imprimirVenda', 'vendas/imprimirVendaTermica', 'vendas/imprimirVendaOrcamento',
+        ];
+        foreach ($views as $view) {
+            $fonte = (string) file_get_contents(APPPATH . 'views/' . $view . '.php');
+            $this->assertStringContainsString('osDescontoItemNota($p)', $fonte, $view . ' mostra o desconto do produto.');
+            $this->assertStringNotContainsString('$preco * ($s->quantidade ?: 1)', $fonte, $view . ' soma o serviço pelo valor com desconto.');
+        }
+
+        // Cobrança no gateway = o que a OS cobra: item com desconto vale o subTotal.
+        foreach (['Asaas', 'GerencianetSdk', 'MercadoPago'] as $gateway) {
+            $fonte = (string) file_get_contents(APPPATH . 'libraries/Gateways/' . $gateway . '.php');
+            $this->assertStringContainsString('desconto individual (#2880)', $fonte, $gateway);
+        }
+    }
+
     public function testTrechosDosEndpointsRenderizamSozinhos(): void
     {
         $dados = ['aba' => 'produtos'] + $this->dadosDaTela(true);
@@ -636,6 +810,155 @@ final class OsTelaTest extends MaposTestCase
         $controller = $this->controller($this->model(), ['idOs' => '1', 'idServico' => '77', 'quantidade' => '1', 'preco' => '10']);
         $controller->adicionarServico();
         $this->assertSame('Escolha um serviço da lista.', $this->resposta($controller)[1]['erros']['servico']);
+    }
+
+    public function testAdicionarProdutoComDescontoDoItem(): void
+    {
+        $this->criarBanco();
+        $this->db->query("UPDATE os SET desconto = 10, valor_desconto = 315, tipo_desconto = 'porcento' WHERE idOs = 1");
+
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idProduto' => '1', 'quantidade' => '2', 'preco' => '80', 'tipoDescontoItem' => 'porcento', 'descontoItem' => '10']);
+        $controller->adicionarProduto();
+
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(200, $status, (string) json_encode($corpo));
+        $linha = $this->db->query('SELECT * FROM produtos_os ORDER BY idProdutos_os DESC LIMIT 1')->row();
+        $this->assertSame(144.0, (float) $linha->subTotal, 'O subTotal é calculado no servidor: 2 × 80 menos 10%.');
+        $this->assertSame(10.0, (float) $linha->desconto);
+        $this->assertSame('porcento', $linha->tipo_desconto);
+        $this->assertSame(0.0, (float) $this->db->query('SELECT valor_desconto FROM os WHERE idOs = 1')->row()->valor_desconto, 'O desconto geral sai porque o total mudou.');
+        // 300 + 144 (produtos) e 50 (serviço).
+        $this->assertSame(494.0, (float) $corpo['totais']['total']);
+        $this->assertSame(16.0, (float) $corpo['totais']['descontoItens']);
+    }
+
+    public function testAdicionarServicoComDescontoInvalidoDa422ENaoGrava(): void
+    {
+        $this->criarBanco();
+
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idServico' => '1', 'quantidade' => '1', 'preco' => '50', 'tipoDescontoItem' => 'real', 'descontoItem' => '51']);
+        $controller->adicionarServico();
+
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(422, $status);
+        $this->assertArrayHasKey('descontoItem', $corpo['erros']);
+        $this->assertSame(1, (int) $this->db->query('SELECT COUNT(*) AS n FROM servicos_os')->row()->n);
+    }
+
+    public function testAdicionarComDescontoSemAMigrationPedeAtualizarOBanco(): void
+    {
+        $this->criarBanco();
+        $this->db->query('ALTER TABLE produtos_os DROP COLUMN desconto');
+
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idProduto' => '1', 'quantidade' => '1', 'preco' => '50', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->adicionarProduto();
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(422, $status);
+        $this->assertStringContainsString('Atualizar banco', $corpo['erros']['_geral']);
+        $this->assertSame(2, (int) $this->db->query('SELECT COUNT(*) AS n FROM produtos_os')->row()->n);
+
+        // Sem desconto, adicionar continua funcionando no banco antigo.
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idProduto' => '1', 'quantidade' => '1', 'preco' => '50']);
+        $controller->adicionarProduto();
+        $this->assertSame(200, $this->resposta($controller)[0]);
+    }
+
+    public function testDescontoDoProdutoJaNaOs(): void
+    {
+        $this->criarBanco();
+        $this->db->query("UPDATE os SET desconto = 10, valor_desconto = 315, tipo_desconto = 'porcento' WHERE idOs = 1");
+
+        // O subTotal e o preço do POST são ignorados: valem os do banco.
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '30', 'subTotal' => '1', 'preco' => '1']);
+        $controller->descontoProduto();
+
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(200, $status, (string) json_encode($corpo));
+        $this->assertSame('Desconto do item aplicado. O desconto geral da OS foi removido porque o total mudou.', $corpo['message']);
+        $this->assertSame(['abas', 'produtos', 'totais', 'desconto', 'pix'], array_keys($corpo['html']));
+        $linha = $this->db->query('SELECT * FROM produtos_os WHERE idProdutos_os = 1')->row();
+        $this->assertSame(270.0, (float) $linha->subTotal);
+        $this->assertSame(30.0, (float) $linha->desconto);
+        $this->assertSame('real', $linha->tipo_desconto);
+        $this->assertSame(0.0, (float) $this->db->query('SELECT valor_desconto FROM os WHERE idOs = 1')->row()->valor_desconto);
+        $this->assertSame([], $controller->produtos_model->chamadas, 'O estoque não muda.');
+        $this->assertSame(320.0, (float) $corpo['totais']['total']);
+
+        // 0 tira o desconto: o subTotal volta a preço x quantidade.
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '0']);
+        $controller->descontoProduto();
+        $this->assertSame('Desconto do item removido.', $this->resposta($controller)[1]['message']);
+        $linha = $this->db->query('SELECT * FROM produtos_os WHERE idProdutos_os = 1')->row();
+        $this->assertSame(300.0, (float) $linha->subTotal);
+        $this->assertSame(0.0, (float) $linha->desconto);
+        $this->assertNull($linha->tipo_desconto);
+    }
+
+    public function testDescontoDoServicoUsaOPrecoDoCadastroQuandoAOsNaoTem(): void
+    {
+        $this->criarBanco();
+        // Serviço antigo, sem preço nem quantidade na OS: vale 1 × 50 do cadastro.
+        $this->db->query('UPDATE servicos_os SET preco = 0, quantidade = 0, subTotal = 0 WHERE idServicos_os = 1');
+
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'porcento', 'descontoItem' => '20']);
+        $controller->descontoServico();
+
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(200, $status, (string) json_encode($corpo));
+        $linha = $this->db->query('SELECT * FROM servicos_os WHERE idServicos_os = 1')->row();
+        $this->assertSame(40.0, (float) $linha->subTotal);
+        $this->assertSame(['abas', 'servicos', 'totais', 'desconto', 'pix'], array_keys($corpo['html']));
+        // 300 de produtos e 40 de serviço.
+        $this->assertSame(340.0, (float) $corpo['totais']['total']);
+        $this->assertSame(10.0, (float) $corpo['totais']['descontoItens']);
+    }
+
+    public function testDescontoDoItemValidaEProtege(): void
+    {
+        $this->criarBanco();
+
+        // Valor em branco: no modal o campo é obrigatório (0 tira o desconto).
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '']);
+        $controller->descontoProduto();
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(422, $status);
+        $this->assertSame('Informe o desconto, ou 0 para tirar.', $corpo['erros']['descontoItem']);
+
+        // Mais que o valor do item.
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '300,01']);
+        $controller->descontoProduto();
+        $this->assertSame(422, $this->resposta($controller)[0]);
+
+        // Item de outra OS e item que não existe.
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '2', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->descontoProduto();
+        $this->assertSame(404, $this->resposta($controller)[0]);
+        $controller = $this->controller($this->model(), ['idOs' => '2', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->descontoServico();
+        $this->assertSame(404, $this->resposta($controller)[0]);
+
+        // Sem permissão e OS que não pode mais ser alterada.
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '5'], false);
+        $controller->descontoProduto();
+        $this->assertSame(403, $this->resposta($controller)[0]);
+        $controller = $this->controller($this->model(false), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->descontoProduto();
+        $this->assertSame(403, $this->resposta($controller)[0]);
+
+        $this->assertSame(0.0, (float) $this->db->query('SELECT desconto FROM produtos_os WHERE idProdutos_os = 1')->row()->desconto, 'Nada foi gravado.');
+    }
+
+    public function testDescontoDoItemSemAMigrationPedeAtualizarOBanco(): void
+    {
+        $this->criarBanco();
+        $this->db->query('ALTER TABLE servicos_os DROP COLUMN desconto');
+
+        $controller = $this->controller($this->model(), ['idOs' => '1', 'idItem' => '1', 'tipoDescontoItem' => 'real', 'descontoItem' => '5']);
+        $controller->descontoProduto();
+
+        [$status, $corpo] = $this->resposta($controller);
+        $this->assertSame(422, $status);
+        $this->assertStringContainsString('Atualizar banco', $corpo['message']);
     }
 
     public function testDescontoIgnoraOResultadoDoNavegador(): void

@@ -51,6 +51,9 @@ const ESCAPE_FUNCOES_SEGURAS = [
     // icone_helper.php: icon() só aceita nomes da lista do sprite e escapa
     // os atributos com componenteAtributos().
     'icon',
+    // os_helper.php: devolve a marcação fixa "<br><small>Desconto: ...</small>"
+    // com o texto escapado por e() (desconto individual do item, #2880).
+    'osdescontoitemnota',
 ];
 
 /**

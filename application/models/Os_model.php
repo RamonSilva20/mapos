@@ -7,9 +7,15 @@ class Os_model extends CI_Model
     /** Cache de historicoDisponivel(). */
     private ?bool $historicoDisponivel = null;
 
+    /** Cache de descontoPorItemDisponivel(). */
+    private ?bool $descontoPorItemDisponivel = null;
+
     public function __construct()
     {
         parent::__construct();
+
+        // valorTotalOS() e totais() usam as regras de valores da OS.
+        $this->load->helper('os');
     }
 
     public function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
@@ -106,7 +112,12 @@ class Os_model extends CI_Model
         // Mesma regra de valorTotalOS(): serviço sem preço usa o do cadastro, e
         // sem quantidade conta 1.
         $totalProdutos = '(SELECT COALESCE(SUM(produtos_os.subTotal), 0) FROM produtos_os WHERE produtos_os.os_id = os.idOs)';
-        $totalServicos = '(SELECT COALESCE(SUM(COALESCE(NULLIF(servicos_os.preco, 0), servicos.preco, 0) * COALESCE(NULLIF(servicos_os.quantidade, 0), 1)), 0)'
+        $valorServico = 'COALESCE(NULLIF(servicos_os.preco, 0), servicos.preco, 0) * COALESCE(NULLIF(servicos_os.quantidade, 0), 1)';
+        if ($this->descontoPorItemDisponivel()) {
+            // Serviço com desconto individual (#2880) vale o subTotal gravado.
+            $valorServico = "CASE WHEN servicos_os.desconto > 0 THEN servicos_os.subTotal ELSE {$valorServico} END";
+        }
+        $totalServicos = "(SELECT COALESCE(SUM({$valorServico}), 0)"
             . ' FROM servicos_os LEFT JOIN servicos ON servicos.idServicos = servicos_os.servicos_id WHERE servicos_os.os_id = os.idOs)';
 
         $this->db->select('os.idOs, os.dataInicial, os.dataFinal, os.descricaoProduto, os.status, os.faturado, os.desconto, os.valor_desconto, os.clientes_id, os.usuarios_id');
@@ -455,22 +466,26 @@ class Os_model extends CI_Model
         $totalServico = 0;
         $totalProdutos = 0;
         $valorDesconto = 0;
+        $descontoItens = 0;
         if ($servicos = $this->getServicos($id)) {
             foreach ($servicos as $s) {
-                $preco = $s->preco ?: $s->precoVenda;
-                $totalServico = $totalServico + ($preco * ($s->quantidade ?: 1));
+                $totalServico = $totalServico + osValorDoItem($s);
             }
+            $descontoItens += osDescontoDosItens($servicos);
         }
         if ($produtos = $this->getProdutos($id)) {
             foreach ($produtos as $p) {
                 $totalProdutos = $totalProdutos + $p->subTotal;
             }
+            $descontoItens += osDescontoDosItens($produtos);
         }
         if ($valorDescontoBD = $this->getById($id)) {
             $valorDesconto = $valorDescontoBD->valor_desconto;
         }
 
-        return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos, 'valor_desconto' => $valorDesconto];
+        // totalServico e totalProdutos já saem com o desconto individual dos
+        // itens (#2880); descontoItens é a soma desses descontos.
+        return ['totalServico' => $totalServico, 'totalProdutos' => $totalProdutos, 'valor_desconto' => $valorDesconto, 'descontoItens' => $descontoItens];
     }
 
     public function isEditable($id = null)
@@ -540,7 +555,17 @@ class Os_model extends CI_Model
     {
         $soma = $this->valorTotalOS((int) $os->idOs);
 
-        return osTotais((float) $soma['totalProdutos'], (float) $soma['totalServico'], $os->valor_desconto ?? 0, $os->tipo_desconto ?? null, $os->desconto ?? 0);
+        return osTotais((float) $soma['totalProdutos'], (float) $soma['totalServico'], $os->valor_desconto ?? 0, $os->tipo_desconto ?? null, $os->desconto ?? 0, (float) $soma['descontoItens']);
+    }
+
+    /**
+     * Diz se as colunas do desconto por item (#2880) existem. Uma instalação
+     * que ainda não rodou as migrations (Configurações > Atualizar banco)
+     * continua funcionando, só sem esse desconto.
+     */
+    public function descontoPorItemDisponivel(): bool
+    {
+        return $this->descontoPorItemDisponivel ??= $this->db->field_exists('desconto', 'servicos_os') && $this->db->field_exists('desconto', 'produtos_os');
     }
 
     /** Linha de produtos_os que pertence à OS, ou null. */

@@ -588,6 +588,12 @@ class Vendas extends MY_Controller
         }
 
         $idVenda = (int) $venda->idVendas;
+        if (isset($dados['desconto']) && ! $this->vendas_model->descontoPorItemDisponivel()) {
+            $this->responderDescontoPorItemIndisponivel();
+
+            return;
+        }
+
         if (! $this->vendas_model->add('itens_de_vendas', $dados + ['vendas_id' => $idVenda])) {
             $this->responderJson(500, ['result' => false, 'message' => 'Não foi possível adicionar. Tente de novo.']);
 
@@ -604,6 +610,73 @@ class Vendas extends MY_Controller
         log_info('Adicionou produto à venda com ID: ' . $idVenda);
 
         $this->responderTrechos($idVenda, 'produto', $cadastro->descricao . ' adicionado à venda.' . ($tinhaDesconto ? ' O desconto foi removido porque o total mudou.' : ''));
+    }
+
+    /**
+     * Desconto individual de um produto já na venda (#2880), em R$ ou %. O
+     * item vem do banco e tem de ser da venda; o valor com desconto é
+     * calculado aqui sobre o preço x quantidade gravados (0 tira o desconto).
+     * Como o total muda, o desconto geral da venda é removido, como ao
+     * adicionar ou excluir produtos.
+     */
+    public function descontoProduto()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eVenda')) {
+            $this->responderJson(403, ['result' => false, 'message' => 'Você não tem permissão para editar vendas.']);
+
+            return;
+        }
+
+        $venda = $this->vendaParaAlterar(true);
+        if (! $venda) {
+            return;
+        }
+
+        $idVenda = (int) $venda->idVendas;
+        $idItem = (int) $this->input->post('idItem');
+        $item = $idItem > 0 ? $this->vendas_model->getProdutoDaVenda($idVenda, $idItem) : null;
+
+        if (! $item) {
+            $this->responderJson(404, ['result' => false, 'message' => 'Produto não encontrado nesta venda. Recarregue a página.']);
+
+            return;
+        }
+
+        if (! $this->vendas_model->descontoPorItemDisponivel()) {
+            $this->responderDescontoPorItemIndisponivel();
+
+            return;
+        }
+
+        [$desconto, $erros] = osDescontoDoItem(osValorBrutoDoItem($item), $this->input->post('tipoDescontoItem'), $this->input->post('descontoItem'));
+        if ($erros === [] && trim((string) $this->input->post('descontoItem')) === '') {
+            $erros['descontoItem'] = 'Informe o desconto, ou 0 para tirar.';
+        }
+
+        if ($erros !== []) {
+            $this->responderJson(422, ['result' => false, 'message' => 'Confira os campos destacados.', 'erros' => $erros]);
+
+            return;
+        }
+
+        if (! $this->vendas_model->edit('itens_de_vendas', $desconto, 'idItens', $idItem)) {
+            $this->responderJson(500, ['result' => false, 'message' => 'Não foi possível aplicar o desconto. Tente de novo.']);
+
+            return;
+        }
+
+        $tinhaDesconto = (float) $venda->valor_desconto > 0;
+        $this->vendas_model->zerarDesconto($idVenda);
+        log_info('Alterou o desconto de um produto da venda. ID da Venda: ' . $idVenda);
+
+        $this->responderTrechos($idVenda, 'produto', ($desconto['desconto'] > 0 ? 'Desconto do produto aplicado.' : 'Desconto do produto removido.') . ($tinhaDesconto ? ' O desconto geral da venda foi removido porque o total mudou.' : ''));
+    }
+
+    /** 422 de uma instalação que ainda não rodou a migration do desconto por item (#2880). */
+    private function responderDescontoPorItemIndisponivel(): void
+    {
+        $mensagem = 'O desconto por item precisa da atualização do banco de dados (Configurações > Atualizar banco).';
+        $this->responderJson(422, ['result' => false, 'message' => $mensagem, 'erros' => ['_geral' => $mensagem]]);
     }
 
     /**

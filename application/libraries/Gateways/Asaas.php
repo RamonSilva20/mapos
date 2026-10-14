@@ -187,14 +187,16 @@ class Asaas extends BasePaymentGateway
         $totalProdutos = array_reduce(
             $produtos,
             function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
+                // Item com desconto individual (#2880) vale o subTotal gravado.
+                return $total + ((float) ($item->desconto ?? 0) > 0 ? (float) $item->subTotal : (floatval($item->preco) * intval($item->quantidade)));
             },
             0
         );
         $totalServicos = array_reduce(
             $servicos,
             function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
+                // Item com desconto individual (#2880) vale o subTotal gravado.
+                return $total + ((float) ($item->desconto ?? 0) > 0 ? (float) $item->subTotal : (floatval($item->preco) * intval($item->quantidade)));
             },
             0
         );
@@ -302,14 +304,16 @@ class Asaas extends BasePaymentGateway
         $totalProdutos = array_reduce(
             $produtos,
             function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
+                // Item com desconto individual (#2880) vale o subTotal gravado.
+                return $total + ((float) ($item->desconto ?? 0) > 0 ? (float) $item->subTotal : (floatval($item->preco) * intval($item->quantidade)));
             },
             0
         );
         $totalServicos = array_reduce(
             $servicos,
             function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
+                // Item com desconto individual (#2880) vale o subTotal gravado.
+                return $total + ((float) ($item->desconto ?? 0) > 0 ? (float) $item->subTotal : (floatval($item->preco) * intval($item->quantidade)));
             },
             0
         );

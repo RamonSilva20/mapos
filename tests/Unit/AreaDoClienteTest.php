@@ -291,7 +291,7 @@ final class AreaDoClienteTest extends MaposTestCase
         $html = $this->tela('conecte/visualizar_os', 'os', [
             'os' => (object) ['idOs' => 7, 'status' => 'Em Andamento', 'dataInicial' => '2026-10-01', 'dataFinal' => '2026-10-10', 'garantia' => '0', 'nome' => 'Técnico ' . $xss,
                 'descricaoProduto' => 'Celular<br>' . $xss, 'defeito' => '', 'observacoes' => '', 'laudoTecnico' => ''],
-            'totais' => ['produtos' => 100.0, 'servicos' => 50.0, 'bruto' => 150.0, 'desconto' => 0.0, 'total' => 150.0, 'tipo' => null, 'informado' => 0.0],
+            'totais' => ['produtos' => 100.0, 'servicos' => 50.0, 'bruto' => 150.0, 'desconto' => 0.0, 'total' => 150.0, 'tipo' => null, 'informado' => 0.0, 'descontoItens' => 0.0],
             'produtos' => [(object) ['idProdutos_os' => 1, 'descricao' => 'Tela ' . $xss, 'quantidade' => 1, 'preco' => 100, 'subTotal' => 100]],
             'servicos' => [],
             'anexos' => [(object) ['idAnexos' => 3, 'anexo' => 'foto.jpg', 'thumb' => null, 'url' => 'http://mapos.test/assets/anexos/7']],
@@ -319,7 +319,7 @@ final class AreaDoClienteTest extends MaposTestCase
         $html = $this->tela('conecte/visualizar_compra', 'compras', [
             'venda' => (object) ['idVendas' => 9, 'status' => 'Faturado', 'dataVenda' => '2026-10-01', 'garantia' => '30', 'nome' => 'Vendedor',
                 'observacoes' => 'Margem baixa, cliente chato', 'observacoes_cliente' => 'Obrigado pela compra'],
-            'totais' => ['produtos' => 80.0, 'servicos' => 0.0, 'bruto' => 80.0, 'desconto' => 0.0, 'total' => 80.0, 'tipo' => null, 'informado' => 0.0],
+            'totais' => ['produtos' => 80.0, 'servicos' => 0.0, 'bruto' => 80.0, 'desconto' => 0.0, 'total' => 80.0, 'tipo' => null, 'informado' => 0.0, 'descontoItens' => 0.0],
             'produtos' => [],
             'pode' => ['itens' => false],
             'garantia_ate' => '2026-10-31',

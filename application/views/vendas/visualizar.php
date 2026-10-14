@@ -173,6 +173,7 @@ $textos = $campos([
                 <div class="lg:pt-7">
                     <?= component('button', ['label' => 'Adicionar', 'icon' => 'plus', 'variant' => 'outline', 'type' => 'submit', 'attrs' => ['data-rotulo-carregando' => 'Adicionando…']]) ?>
                 </div>
+                <?php $this->load->view('os/partes/desconto-item-campos'); ?>
             </form>
         </section>
     <?php } ?>
@@ -203,6 +204,13 @@ if ($pode['itens']) { ?>
         'confirm_label' => 'Excluir',
         'confirm_attrs' => ['form' => 'form-excluir-produto'],
     ]) ?>
+    <?php $this->load->view('os/partes/desconto-item-modal', [
+        'tipo' => 'produto',
+        'rota' => 'vendas/descontoProduto',
+        'campoRegistro' => 'idVendas',
+        'idRegistro' => $idVenda,
+        'rotuloRegistro' => 'venda',
+    ]); ?>
 <?php } ?>
 
 <?php if ($pode['excluir']) { ?>

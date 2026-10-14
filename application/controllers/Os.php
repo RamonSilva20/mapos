@@ -881,6 +881,12 @@ class Os extends MY_Controller
         }
 
         $idOs = (int) $os->idOs;
+        if (isset($dados['desconto']) && ! $this->os_model->descontoPorItemDisponivel()) {
+            $this->responderDescontoPorItemIndisponivel();
+
+            return;
+        }
+
         if (! $this->os_model->add($produto ? 'produtos_os' : 'servicos_os', $dados + ['os_id' => $idOs])) {
             $this->responderJson(500, ['result' => false, 'message' => 'Não foi possível adicionar. Tente de novo.']);
 
@@ -898,6 +904,93 @@ class Os extends MY_Controller
 
         $nome = $produto ? $cadastro->descricao : $cadastro->nome;
         $this->responderTrechos($idOs, $tipo, $nome . ' adicionado à OS.' . ($tinhaDesconto ? ' O desconto foi removido porque o total mudou.' : ''));
+    }
+
+    public function descontoProduto()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            $this->responderJson(403, ['result' => false, 'message' => 'Você não tem permissão para editar O.S.']);
+
+            return;
+        }
+
+        $this->descontoDoItem('produto');
+    }
+
+    public function descontoServico()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            $this->responderJson(403, ['result' => false, 'message' => 'Você não tem permissão para editar O.S.']);
+
+            return;
+        }
+
+        $this->descontoDoItem('servico');
+    }
+
+    /**
+     * Desconto individual de um produto ou serviço já na OS (#2880), em R$ ou
+     * %. O item vem do banco e tem de ser da OS; o valor com desconto é
+     * calculado aqui sobre o preço x quantidade gravados (0 tira o desconto).
+     * Como o total muda, o desconto geral da OS é removido, como ao
+     * adicionar ou excluir itens.
+     */
+    private function descontoDoItem(string $tipo): void
+    {
+        $os = $this->osParaAlterar();
+        if (! $os) {
+            return;
+        }
+
+        $produto = $tipo === 'produto';
+        $idOs = (int) $os->idOs;
+        $idItem = (int) $this->input->post('idItem');
+        $item = $idItem > 0
+            ? ($produto ? $this->os_model->getProdutoDaOs($idOs, $idItem) : $this->os_model->getServicoDaOs($idOs, $idItem))
+            : null;
+
+        if (! $item) {
+            $this->responderJson(404, ['result' => false, 'message' => 'Item não encontrado nesta OS. Recarregue a página.']);
+
+            return;
+        }
+
+        if (! $this->os_model->descontoPorItemDisponivel()) {
+            $this->responderDescontoPorItemIndisponivel();
+
+            return;
+        }
+
+        // Serviço sem preço na OS usa o do cadastro (Os_model::valorTotalOS()).
+        if (! $produto && (float) $item->preco <= 0) {
+            $cadastro = $this->os_model->getServicoCadastro((int) $item->servicos_id);
+            $item->precoVenda = $cadastro->preco ?? 0;
+        }
+
+        [$desconto, $erros] = osDescontoDoItem(osValorBrutoDoItem($item), $this->input->post('tipoDescontoItem'), $this->input->post('descontoItem'));
+        if ($erros === [] && trim((string) $this->input->post('descontoItem')) === '') {
+            $erros['descontoItem'] = 'Informe o desconto, ou 0 para tirar.';
+        }
+
+        if ($erros !== []) {
+            $this->responderJson(422, ['result' => false, 'message' => 'Confira os campos destacados.', 'erros' => $erros]);
+
+            return;
+        }
+
+        $tabela = $produto ? 'produtos_os' : 'servicos_os';
+        $chave = $produto ? 'idProdutos_os' : 'idServicos_os';
+        if (! $this->os_model->edit($tabela, $desconto, $chave, $idItem)) {
+            $this->responderJson(500, ['result' => false, 'message' => 'Não foi possível aplicar o desconto. Tente de novo.']);
+
+            return;
+        }
+
+        $tinhaDesconto = (float) $os->valor_desconto > 0;
+        $this->os_model->zerarDesconto($idOs);
+        log_info('Alterou o desconto de ' . ($produto ? 'um produto' : 'um serviço') . ' de uma OS. ID (OS): ' . $idOs);
+
+        $this->responderTrechos($idOs, $tipo, ($desconto['desconto'] > 0 ? 'Desconto do item aplicado.' : 'Desconto do item removido.') . ($tinhaDesconto ? ' O desconto geral da OS foi removido porque o total mudou.' : ''));
     }
 
     /**
@@ -940,6 +1033,13 @@ class Os extends MY_Controller
         log_info(($produto ? 'Removeu produto' : 'Removeu serviço') . ' de uma OS. ID (OS): ' . $idOs);
 
         $this->responderTrechos($idOs, $tipo, ($produto ? 'Produto removido da OS.' : 'Serviço removido da OS.') . ($tinhaDesconto ? ' O desconto foi removido porque o total mudou.' : ''));
+    }
+
+    /** 422 de uma instalação que ainda não rodou a migration do desconto por item (#2880). */
+    private function responderDescontoPorItemIndisponivel(): void
+    {
+        $mensagem = 'O desconto por item precisa da atualização do banco de dados (Configurações > Atualizar banco).';
+        $this->responderJson(422, ['result' => false, 'message' => $mensagem, 'erros' => ['_geral' => $mensagem]]);
     }
 
     /**
