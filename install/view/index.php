@@ -1,4 +1,7 @@
-<?php require_once __DIR__ . '/icones.php'; ?>
+<?php
+defined('INSTALADOR') || exit;
+require_once __DIR__ . '/icones.php';
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -11,7 +14,7 @@
   <link rel="stylesheet" href="<?= htmlspecialchars($dashboard_url, ENT_QUOTES) ?>install/assets/css/instalador.css" />
 </head>
 
-<body class="min-h-screen px-4 py-8" data-instalado="<?= $installed ? '1' : '0' ?>">
+<body class="min-h-screen px-4 py-8">
   <main class="mx-auto flex max-w-3xl flex-col gap-4">
     <header class="flex flex-col items-center gap-2 text-center">
       <img class="h-16 w-auto" src="<?= htmlspecialchars($dashboard_url, ENT_QUOTES) ?>assets/img/logo.png" alt="Map-OS" />
@@ -19,7 +22,6 @@
     </header>
 
     <div class="overflow-hidden rounded-xl border border-border bg-surface">
-      <?php if (! $installed) { ?>
         <ol class="grid grid-cols-3 border-b border-border text-center text-sm" aria-label="Etapas da instalação">
           <li id="etapa-pre-instalacao" data-etapa class="flex items-center justify-center gap-2 border-b-2 border-transparent p-3 text-muted data-[atual]:border-primary data-[atual]:bg-primary-tint data-[atual]:font-semibold data-[atual]:text-text">
             <?= instalador_icone('circulo', 'size-4 shrink-0') ?> <span class="max-sm:text-xs">Pré-instalação</span>
@@ -31,7 +33,6 @@
             <?= instalador_icone('circulo', 'size-4 shrink-0') ?> <span class="max-sm:text-xs">Finalização</span>
           </li>
         </ol>
-      <?php } ?>
 
       <div id="avisos" role="alert" class="empty:hidden"></div>
 

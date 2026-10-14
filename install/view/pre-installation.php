@@ -1,4 +1,5 @@
 <?php
+defined('INSTALADOR') || exit;
 /**
  * Pré-instalação: requisitos de PHP, extensões e permissões de escrita.
  * Cada tabela mostra o valor atual, o requerido e o status.

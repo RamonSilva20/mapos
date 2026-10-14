@@ -1,4 +1,5 @@
 <?php
+defined('INSTALADOR') || exit;
 /**
  * Configuração: banco de dados, administrador, URL e API REST. O formulário é
  * enviado por fetch (install/assets/js/main.js) para do_install.php.

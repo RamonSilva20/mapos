@@ -1,0 +1,10 @@
+# O instalador só precisa de index.php, do_install.php e assets/. O resto não é público.
+<FilesMatch "^(settings\.json|instalador\.php|.*\.lock)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
