@@ -252,7 +252,7 @@ final class DoisFatoresTest extends MaposTestCase
         preg_match('/function conferirDoisFatores\(.*?\n    }\n/s', $codigo, $dois);
 
         $this->assertLessThan(strrpos($login[0], 'registrarSucesso'), strpos($login[0], '$this->conferirDoisFatores('), 'O 2FA vem antes de zerar as falhas e de gerar o token.');
-        $this->assertLessThan(strpos($login[0], 'generateToken'), strpos($login[0], '$this->conferirDoisFatores('));
+        $this->assertLessThan(strpos($login[0], 'accessTokenDoUsuario'), strpos($login[0], '$this->conferirDoisFatores('));
         $this->assertStringContainsString("'two_factor_required' => true", $dois[0]);
         $this->assertStringContainsString("'two_factor_setup_required' => true", $dois[0]);
         $this->assertStringContainsString("post('totp', true)", $dois[0]);

@@ -289,15 +289,9 @@ class UsuariosController extends REST_Controller
             $this->log_app('Efetuou login no sistema', $user->nome);
             $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
 
-            $token_data = [
-                'uid' => $user->idUsuarios,
-                'email' => $user->email,
-                'permissao' => $user->permissoes_id,
-                'type' => REST_Controller::TOKEN_TYPE_USER,
-            ];
-
             // Campos novos e opcionais (#2869): quem não os conhece continua só com access_token e permissions.
-            $result = ['access_token' => $this->authorization_token->generateToken($token_data)] + $this->sessaoDoToken((int) $user->idUsuarios) + [
+            $sessao = $this->sessaoDoToken((int) $user->idUsuarios);
+            $result = ['access_token' => $this->accessTokenDoUsuario($user, $sessao['refresh_token'] ?? null)] + $sessao + [
                 'permissions' => [$permissoes],
             ];
 
@@ -314,63 +308,6 @@ class UsuariosController extends REST_Controller
             'status' => false,
             'message' => 'Os dados de acesso estão incorretos!',
         ], REST_Controller::HTTP_UNAUTHORIZED);
-    }
-
-    /**
-     * reGenToken function.
-     *
-     * @return void
-     */
-    public function reGenToken_get()
-    {
-        // Mantido para os apps já instalados (#2869); o fluxo novo é POST /refresh.
-        header('Deprecation: true');
-        header('Link: <' . site_url('api/v1/refresh') . '>; rel="successor-version"');
-
-        $user = $this->logged_user(true)->usuario;
-
-        // Usuário removido ou desativado não pode renovar o token
-        if (empty($user) || (int) $user->situacao !== 1) {
-            $this->response([
-                'status' => false,
-                'message' => 'Faça o login novamente!',
-            ], REST_Controller::HTTP_FORBIDDEN);
-        }
-
-        if (! empty($user->email)) {
-            if (! empty($user)) {
-                // token regeneration process
-                $token_data = [
-                    'uid' => $user->idUsuarios,
-                    'email' => $user->email,
-                    'permissao' => $user->permissoes_id,
-                    'type' => REST_Controller::TOKEN_TYPE_USER,
-                ];
-
-                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
-
-                $result = [
-                    'access_token' => $this->authorization_token->generateToken($token_data),
-                    'permissions' => [$permissoes],
-                ];
-
-                $this->response([
-                    'status' => true,
-                    'message' => 'Login realizado com sucesso!',
-                    'result' => $result,
-                ], REST_Controller::HTTP_OK);
-            }
-
-            $this->response([
-                'status' => false,
-                'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas!',
-            ], REST_Controller::HTTP_UNAUTHORIZED);
-        }
-
-        $this->response([
-            'status' => false,
-            'message' => 'O x-api-key expirado é necessário para gerar um novo x-api-key!',
-        ], REST_Controller::HTTP_OK);
     }
 
     /**
@@ -442,22 +379,16 @@ class UsuariosController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        $token_data = [
-            'uid' => $usuario->idUsuarios,
-            'email' => $usuario->email,
-            'permissao' => $usuario->permissoes_id,
-            'type' => REST_Controller::TOKEN_TYPE_USER,
-        ];
         $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $usuario->permissoes_id, 1, true)['permissoes']);
 
         $this->response([
             'status' => true,
             'message' => 'Token renovado!',
             'result' => [
-                'access_token' => $this->authorization_token->generateToken($token_data),
+                'access_token' => $this->accessTokenDoUsuario($usuario, null, $girado['familia']),
                 'refresh_token' => $girado['refresh_token'],
                 'token_type' => 'Bearer',
-                'expires_in' => $this->authorization_token->expiresIn(),
+                'expires_in' => $this->authorization_token->expiresIn(Authorization_Token::TETO_COM_REFRESH),
                 'permissions' => [$permissoes],
             ],
         ], REST_Controller::HTTP_OK);
@@ -495,8 +426,32 @@ class UsuariosController extends REST_Controller
         return array_filter([
             'refresh_token' => $refresh,
             'token_type' => 'Bearer',
-            'expires_in' => $this->authorization_token->expiresIn(),
+            'expires_in' => $this->authorization_token->expiresIn($refresh !== null ? Authorization_Token::TETO_COM_REFRESH : null),
         ], static fn ($valor) => $valor !== null);
+    }
+
+    /**
+     * Access token do operador. Leva a versão dos tokens do usuário (`tv`) e, se
+     * houver sessão de refresh token, o id dela (`sid`): trocar a senha, desativar
+     * a conta ou sair invalida o token na hora. Com refresh token dura no máximo 1 hora.
+     */
+    private function accessTokenDoUsuario(object $usuario, ?string $refreshToken, ?string $familia = null): string
+    {
+        $this->load->library('Refresh_token');
+        $familia ??= $refreshToken !== null ? $this->refresh_token->familiaDoToken($refreshToken) : null;
+
+        $dados = [
+            'uid' => $usuario->idUsuarios,
+            'email' => $usuario->email,
+            'permissao' => $usuario->permissoes_id,
+            'type' => REST_Controller::TOKEN_TYPE_USER,
+            'tv' => $this->authorization_token->versaoAtual('usuarios', 'idUsuarios', (int) $usuario->idUsuarios),
+        ];
+        if ($familia !== null) {
+            $dados['sid'] = $familia;
+        }
+
+        return $this->authorization_token->generateToken($dados, $familia !== null ? Authorization_Token::TETO_COM_REFRESH : null);
     }
 
     public function conta_get()

@@ -87,7 +87,7 @@ class Refresh_token
     /**
      * Valida o token e o gira.
      *
-     * @return array{ok: bool, motivo?: string, usuario_id?: int, refresh_token?: string}
+     * @return array{ok: bool, motivo?: string, usuario_id?: int, familia?: string, refresh_token?: string}
      */
     public function girar(string $token, ?string $ip = null, ?string $userAgent = null): array
     {
@@ -128,8 +128,31 @@ class Refresh_token
         return [
             'ok' => true,
             'usuario_id' => (int) $linha->usuario_id,
+            'familia' => (string) $linha->familia,
             'refresh_token' => (string) $this->emitir((int) $linha->usuario_id, $ip, $userAgent, $linha->familia),
         ];
+    }
+
+    /** Sessão (familia) a que o refresh token pertence, para o access token carregá-la (`sid`). */
+    public function familiaDoToken(string $token): ?string
+    {
+        if (! $this->ativo() || $token === '') {
+            return null;
+        }
+
+        $linha = $this->db->select('familia')->where('token_hash', self::hash($token))->limit(1)->get(self::TABELA)->row();
+
+        return $linha ? (string) $linha->familia : null;
+    }
+
+    /** A sessão ainda não foi revogada (logout, troca de senha, reuso)? Sem a tabela, não há o que revogar. */
+    public function familiaAtiva(string $familia): bool
+    {
+        if (! $this->ativo()) {
+            return true;
+        }
+
+        return $this->db->where('familia', $familia)->where('revogado_em IS NOT NULL', null, false)->count_all_results(self::TABELA) === 0;
     }
 
     /** Logout: revoga a sessão (familia) a que o token pertence. */

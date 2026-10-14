@@ -2259,7 +2259,7 @@ abstract class REST_Controller extends CI_Controller
         return $array ? $this->CI->db->get($table)->row_array() : $this->CI->db->get($table)->row_object();
     }
 
-    public function logged_user($reGenToken = false)
+    public function logged_user()
     {
         $headers = $this->input->request_headers();
 
@@ -2277,18 +2277,9 @@ abstract class REST_Controller extends CI_Controller
 
         $this->load->library('Authorization_Token');
         $token = explode(' ', $_SERVER["HTTP_AUTHORIZATION"]);
-        $decodedToken = (object) $this->authorization_token->validateToken($token[1] ?? '', $reGenToken);
+        $decodedToken = (object) $this->authorization_token->validateToken($token[1] ?? '');
 
-        // Assinatura/formato inválidos derrubam a requisição mesmo na
-        // renovação de token: sem isso, $decodedToken->data nem existe.
-        if (! $decodedToken->status && ! isset($decodedToken->data)) {
-            $this->response([
-                'status' => false,
-                'message' => 'Faça o login novamente!',
-            ], self::HTTP_FORBIDDEN);
-        }
-
-        if (! $reGenToken && ! $decodedToken->status) {
+        if (! $decodedToken->status || ! isset($decodedToken->data)) {
             $this->response([
                 'status' => false,
                 'message' => 'Faça o login novamente!',
@@ -2310,21 +2301,37 @@ abstract class REST_Controller extends CI_Controller
 
         // O usuário e a permissão vêm do banco a cada requisição (#2869), não do
         // token: quem foi removido, desativado ou teve a permissão trocada
-        // perde o acesso na hora, sem esperar o token vencer. Na renovação
-        // (reGenToken) quem decide é o próprio método, que responde a mensagem dele.
-        if (! $reGenToken && (empty($this->user->usuario) || (int) $this->user->usuario->situacao !== 1)) {
+        // perde o acesso na hora, sem esperar o token vencer. O mesmo vale para
+        // quem trocou a senha (versão do token) ou saiu (sessão `sid` revogada).
+        if (empty($this->user->usuario)
+            || (int) $this->user->usuario->situacao !== 1
+            || ! Authorization_Token::versaoVigente($decodedToken->data, $this->authorization_token->versaoAtual('usuarios', 'idUsuarios', (int) $decodedToken->data->uid))
+            || ! $this->sessaoDoTokenAtiva($decodedToken->data)) {
             $this->response([
                 'status' => false,
                 'message' => 'Faça o login novamente!',
             ], self::HTTP_FORBIDDEN);
         }
 
-        $this->user->level = $this->user->usuario->permissoes_id ?? $decodedToken->data->permissao;
+        $this->user->level = $this->user->usuario->permissoes_id;
 
         return $this->user;
     }
 
-    public function logged_client($reGenToken = false)
+    /** O refresh token da sessão que emitiu este access token (claim `sid`) não foi revogado. */
+    private function sessaoDoTokenAtiva(object $dadosDoToken): bool
+    {
+        $sid = (string) ($dadosDoToken->sid ?? '');
+        if ($sid === '') {
+            return true;
+        }
+
+        $this->load->library('Refresh_token');
+
+        return $this->refresh_token->familiaAtiva($sid);
+    }
+
+    public function logged_client()
     {
         $headers = $this->input->request_headers();
 
@@ -2342,7 +2349,7 @@ abstract class REST_Controller extends CI_Controller
 
         $this->load->library('Authorization_Token');
         $token = explode(' ', $_SERVER["HTTP_AUTHORIZATION"]);
-        $decodedToken = (object) $this->authorization_token->validateToken($token[1] ?? '', $reGenToken);
+        $decodedToken = (object) $this->authorization_token->validateToken($token[1] ?? '');
 
         if (! $decodedToken->status || ! isset($decodedToken->data)) {
             $this->response([
@@ -2363,7 +2370,7 @@ abstract class REST_Controller extends CI_Controller
         $this->client = $decodedToken;
         $this->client->usuario = $this->Clientes_model->getById($decodedToken->data->uid);
 
-        if (! $this->client->usuario) {
+        if (! $this->client->usuario || ! Authorization_Token::versaoVigente($decodedToken->data, $this->authorization_token->versaoAtual('clientes', 'idClientes', (int) $decodedToken->data->uid))) {
             $this->response([
                 'status' => false,
                 'message' => 'Faça o login novamente!',

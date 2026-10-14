@@ -61,11 +61,11 @@ $campo = 'w-full rounded-md border border-input bg-field px-3 py-2 text-text pla
         </select>
       </div>
       <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
-        <label for="enter_token_expire_time" class="text-label-md sm:w-1/4">Expiração do token JWT</label>
+        <label for="enter_token_expire_time" class="text-label-md sm:w-1/4">Expiração do token JWT (para usuários, no máximo 1 hora)</label>
         <select id="enter_token_expire_time" name="enter_token_expire_time" class="<?= $campo ?>">
           <option value="60">1 minuto</option>
-          <option value="3600">1 hora</option>
-          <option value="86400" selected>1 dia</option>
+          <option value="3600" selected>1 hora</option>
+          <option value="86400">1 dia</option>
           <option value="604800">1 semana</option>
           <option value="2592000">1 mês</option>
         </select>

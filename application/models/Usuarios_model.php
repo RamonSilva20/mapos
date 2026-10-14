@@ -160,6 +160,9 @@ class Usuarios_model extends CI_Model
             if ($table === 'usuarios' && $fieldID === 'idUsuarios' && (isset($data['senha']) || (isset($data['situacao']) && (int) $data['situacao'] !== 1))) {
                 $this->load->library('Refresh_token');
                 $this->refresh_token->revogarDoUsuario((int) $ID);
+                // Os access tokens já emitidos também deixam de valer.
+                $this->load->library('Authorization_Token');
+                $this->authorization_token->incrementarVersao('usuarios', 'idUsuarios', (int) $ID);
             }
 
             return true;

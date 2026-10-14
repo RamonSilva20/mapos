@@ -86,7 +86,7 @@ function instaladorValidar(array $post): array
         return [null, 'Informe a URL completa do sistema, começando com http:// ou https://.'];
     }
 
-    $expiracao = (string) ($post['enter_token_expire_time'] ?? '86400');
+    $expiracao = (string) ($post['enter_token_expire_time'] ?? '3600');
     $api = (string) ($post['enter_api_enabled'] ?? 'false');
     if (! in_array($expiracao, INSTALADOR_API_EXPIRACOES, true) || ! in_array($api, ['true', 'false'], true)) {
         return [null, 'Configuração da API inválida.'];

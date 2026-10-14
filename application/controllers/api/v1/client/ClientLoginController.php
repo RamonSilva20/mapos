@@ -65,6 +65,7 @@ class ClientLoginController extends REST_Controller
             'nome' => $cliente->nomeCliente,
             'email' => $cliente->email,
             'type' => REST_Controller::TOKEN_TYPE_CLIENT,
+            'tv' => $this->authorization_token->versaoAtual('clientes', 'idClientes', (int) $cliente->idClientes),
         ];
 
         $result = [
