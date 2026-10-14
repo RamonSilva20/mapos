@@ -13,6 +13,17 @@ if (! function_exists('convertUrlToUploadsPath')) {
     }
 }
 
+if (! function_exists('apiHabilitada')) {
+    /**
+     * A API só existe quando API_ENABLED está ligada: as rotas (routes.php) e a
+     * classe base dos controllers de api/, que cobre o acesso direto por URL.
+     */
+    function apiHabilitada(): bool
+    {
+        return filter_var($_ENV['API_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN);
+    }
+}
+
 if (! function_exists('limitarTexto')) {
     function limitarTexto($texto, $limite)
     {

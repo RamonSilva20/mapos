@@ -487,6 +487,11 @@ abstract class REST_Controller extends CI_Controller
     {
         parent::__construct();
 
+        // API desligada: nenhum controller de api/ responde, nem por URL direta.
+        if (! apiHabilitada()) {
+            show_404();
+        }
+
         $this->preflight_checks();
 
         $this->config->set_item('token_header', 'Authorization');
