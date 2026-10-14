@@ -1,0 +1,7 @@
+Reteste focado PR #2981, head 59f1ce03 (base v5 4e3aa11a), mapos.test
+1 alterarSenha: outra sessao derrubada ("A senha desta conta foi alterada."), atual mantida - OK
+2 proprio pelo formulario de Usuarios (senha): atual mantida, outra derrubada - OK
+3 admin troca senha de outro pelo formulario: 2 sessoes do usuario derrubadas, admin mantido - OK
+4 editar sem mudar a senha (admin e proprio): nenhuma derrubada, sessao_versao 0->0 - OK
+5 sem a coluna sessao_versao: formulario de Usuarios (admin e proprio) salva; alterarSenha "Senha alterada com sucesso!" - OK
+6 PUT proprio pela API: 200; sessao_versao 1->2; 2 sessoes do painel derrubadas; token antigo 403; login com senha nova 200 - OK
