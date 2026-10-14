@@ -1,0 +1,3 @@
+POST usuarios 200 {"status":true,"message":"Usuário adicionado com sucesso!","result":{"idUsuarios":"9017","nome":"T978 Novo","rg":"1","cp
+PASS sem campo senha em POST /usuarios 
+9017	$2y$

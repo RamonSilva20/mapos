@@ -1,0 +1,75 @@
+=== setup
+ids 9014 9015 9016
+=== 1 defeito: troca da propria senha
+PASS login self 
+PASS sem senha_atual 403 (403, '{"status":false,"message":"Informe a senha atual para trocar a senha."}')
+PASS senha_atual errada 403 (403, '{"status":false,"message":"Informe a senha atual para trocar a senha."}')
+PASS senha curta 400 (400, '{"status":false,"message":"A senha deve ter pelo menos 8 caracteres."}')
+PASS email repetido 400 (400, '{"status":false,"message":"Já existe um usuário com este e-mail."}')
+PASS nada gravado ate aqui 
+PUT correto 200 {"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"9014","nome":"T978 Self","rg":"1","cpf":"1","cep":"1","rua":"r","numero":"1","bairro":"b","cidade":"c","estado":"SP","em
+PASS PUT correto 200 
+PASS sem campo senha em PUT proprio 
+PASS hash $2y$ 
+PASS nova senha loga 
+PASS antiga nao loga 401
+PASS token antigo morre (403) (403, '{"status":false,"message":"Faça o login novamente!"}')
+PASS token novo vale 200
+480	T978 Self	Efetuou login no sistema	2026-10-14	17:19:01
+479	T978 Self	Alterou um usuário. ID: 9014	2026-10-14	17:19:00
+478	T978 Self	Efetuou login no sistema	2026-10-14	17:18:57
+PASS auditoria gravada com nome certo 
+=== 2 regressao
+PASS proprio: campos ignorados 200 200
+PASS perm/situacao/expiracao intactos 
+PASS self sem cUsuario nao lista 401
+PASS gestor edita outro 200 (200, '{"status":true,"message":"Usuário editado com sucesso!","result":{"idUsuarios":"')
+PASS sem campo senha em PUT outro 
+PASS auditoria com nome do gestor 
+PASS token do gestor continua valido 200
+PASS alvo editado 
+PASS super admin nao desativa (400, '{"status":false,"message":"O usuário super admin não pode ser desativado nem sair do grupo Administr')
+PASS super admin nao sai do Administrador (400, '{"status":false,"message":"O usuário super admin não pode ser desativado nem sair do grupo Administr')
+PASS admin intacto 
+PASS GET /usuarios 
+PASS sem campo senha em GET /usuarios 
+PASS GET /usuarios/id 
+PASS sem campo senha em GET /usuarios/id 
+POST usuarios 400 {"status":false,"message":"<p>O campo CPF não é um CPF válido.<\/p>\n"}
+PASS sem campo senha em POST /usuarios 
+POST cliente 201
+PASS POST cliente 201 
+PASS sem campo senha em POST /clientes 
+PASS sem campo senha em GET cliente 
+PASS sem campo senha em GET /clientes 
+sqli 1 "11'99" 201 0.81 s
+PASS sqli 1 sem erro 
+sqli 2 "1' OR '1'='1" 201 0.81 s
+PASS sqli 2 sem erro 
+sqli 3 "1'; DROP TABLE clientes;-- " 201 0.8 s
+PASS sqli 3 sem erro 
+sqli 4 "1' UNION SELECT senha,2,3 FROM usuarios-- -" 201 0.8 s
+PASS sqli 4 sem erro 
+sqli 5 "1' AND SLEEP(5)-- -" 201 0.8 s
+PASS sqli 5 sem erro 
+sqli 6 "1\\'; --" 201 0.8 s
+PASS sqli 6 sem erro 
+sqli 7 '" OR ""="' 201 0.8 s
+PASS sqli 7 sem erro 
+PASS tabela clientes intacta 
+POST os 201 {"status":true,"message":"OS adicionada com sucesso!","result":{"idOs":"28","dataInicial":"2026-10-1
+PASS sem campo senha em POST /os 
+OS 28
+PASS GET os 
+PASS sem campo senha em GET /os/id 
+PASS sem campo senha em GET /os 
+PUT os 200 {"status":true,"message":"OS editada com sucesso!","result":{"idOs":"28","dataInicial":"2026-10-14",
+PASS sem campo senha em PUT /os 
+PASS login cliente 200
+PASS token cliente vale 200
+PASS PUT cliente senha 200 (200, '{"status":true,"message":"Cliente editado com sucesso!","result":{"idClientes":"')
+PASS sem campo senha em PUT /clientes 
+PASS token cliente antigo 403 403
+PASS login cliente nova senha 
+PASS hash cliente $2y$ 
+RESULTADO OK
