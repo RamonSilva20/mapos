@@ -559,8 +559,7 @@ $totalProdutos = 0; ?>
                                 $contaAnexos = 0;
 foreach ($anexos as $a) :
     if ($a->thumb) :
-        $thumb = $a->url.'/thumbs/'.$a->thumb;
-        $link  = $a->url.'/'.$a->anexo;
+        $link  = site_url('os/anexo/'.(int) $a->idAnexos);
         ?>
                                         <img class="m-1 h-auto max-w-[150px] flex-[1_0_30%] object-cover" src="<?= e($link) ?>" alt="">
                             <?php

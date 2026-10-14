@@ -12,6 +12,7 @@ class OsController extends REST_Controller
 
         $this->load->model('os_model');
         $this->load->model('Api_model');
+        $this->load->helper('os');
     }
 
     public function index_get($id = '')
@@ -75,7 +76,7 @@ class OsController extends REST_Controller
         $os = $this->os_model->getById($id);
         $os->produtos = $this->os_model->getProdutos($id);
         $os->servicos = $this->os_model->getServicos($id);
-        $os->anexos = $this->os_model->getAnexos($id);
+        $os->anexos = osAnexosParaApi($this->os_model->getAnexos($id), site_url('api/v1/os/' . (int) $id . '/anexos'));
         $os->anotacoes = $this->os_model->getAnotacoes($id);
         $os->calcTotal = $this->calcTotal($id);
         unset($os->senha);
@@ -817,6 +818,29 @@ class OsController extends REST_Controller
         ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
     }
 
+    /** Arquivo (ou miniatura com ?miniatura=1) de um anexo da OS, servido de STORAGE_PATH. */
+    public function anexos_get($id, $idAnexo = null)
+    {
+        if (! $this->permission->checkPermission($this->logged_user()->level, 'vOs')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você não está autorizado a Visualizar Ordens de Serviços',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
+        $anexo = is_numeric($idAnexo) ? $this->os_model->getAnexoDaOs((int) $id, (int) $idAnexo) : null;
+        $arquivo = $anexo ? armazenamentoArquivoDoAnexo($anexo, $this->get('miniatura') !== null) : null;
+
+        if ($arquivo === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Anexo não encontrado.',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        armazenamentoEnviar($arquivo, 'anexo-' . (int) $anexo->idAnexos . '.' . strtolower(pathinfo($arquivo, PATHINFO_EXTENSION)));
+    }
+
     public function anexos_post($id)
     {
         $this->logged_user();
@@ -827,81 +851,80 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
+        if (! is_numeric($id) || ! $this->os_model->getById((int) $id)) {
+            $this->response([
+                'status' => false,
+                'message' => 'Ordem de serviço não encontrada.',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        $id = (int) $id;
+
         $this->load->library('upload');
         $this->load->library('image_lib');
 
-        $directory = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $id;
+        // Pasta relativa a STORAGE_PATH, fora de assets/ (#2872).
+        $relativo = 'anexos/' . date('m-Y') . '/OS-' . $id;
+        $directory = armazenamentoPasta($relativo . '/thumbs') !== null ? armazenamentoPasta($relativo) : null;
 
-        // If it exist, check if it's a directory
-        if (! is_dir($directory . DIRECTORY_SEPARATOR . 'thumbs')) {
-            // make directory for images and thumbs
-            try {
-                mkdir($directory . DIRECTORY_SEPARATOR . 'thumbs', 0755, true);
-            } catch (Exception $e) {
-                $this->response([
-                    'status' => false,
-                    'message' => 'Não foi anexar o arquivo.',
-                ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
-            }
+        if ($directory === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Não foi anexar o arquivo.',
+            ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        protegerDiretorioUpload([dirname($directory), $directory, $directory . DIRECTORY_SEPARATOR . 'thumbs']);
-
-        $upload_conf = [
-            'upload_path' => $directory,
-            'allowed_types' => 'jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG|pdf|PDF|cdr|CDR|docx|DOCX|txt', // formatos permitidos para anexos de os
-            'max_size' => 0,
-        ];
-
-        $this->upload->initialize($upload_conf);
+        $this->upload->initialize(armazenamentoConfigUpload($directory, armazenamentoExtensoesAnexo()));
 
         $error = [];
-        $success = [];
+        $ultimo = null;
 
         foreach ($_FILES as $field_name => $file) {
-            if (! $this->upload->do_upload($field_name)) {
+            if (! armazenamentoReceber($this->upload, $field_name)) {
                 $error['upload'][] = $this->upload->display_errors();
-            } else {
-                $upload_data = $this->upload->data();
 
-                // Gera um nome de arquivo aleatório mantendo a extensão original
-                $new_file_name = bin2hex(random_bytes(16)) . '.' . pathinfo($upload_data['file_name'], PATHINFO_EXTENSION);
-                $new_file_path = $upload_data['file_path'] . $new_file_name;
-                $url = base_url('assets' . DIRECTORY_SEPARATOR . 'anexos' . DIRECTORY_SEPARATOR . date('m-Y') . DIRECTORY_SEPARATOR . 'OS-' . $id);
-
-                rename($upload_data['full_path'], $new_file_path);
-
-                if ($upload_data['is_image'] == 1) {
-                    $resize_conf = [
-                        'source_image' => $new_file_path,
-                        'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $new_file_name,
-                        'width' => 200,
-                        'height' => 125,
-                    ];
-
-                    $this->image_lib->initialize($resize_conf);
-
-                    if (! $this->image_lib->resize()) {
-                        $error['resize'][] = $this->image_lib->display_errors();
-                    } else {
-                        $success[] = $upload_data;
-                        $result = $this->os_model->anexar($id, $new_file_name, $url, 'thumb_' . $new_file_name, $directory);
-                        if (! $result) {
-                            $error['db'][] = 'Erro ao inserir no banco de dados.';
-                        }
-                    }
-                } else {
-                    $success[] = $upload_data;
-
-                    $result = $this->os_model->anexar($id, $new_file_name, $url, '', $directory);
-                    if (! $result) {
-                        $error['db'][] = 'Erro ao inserir no banco de dados.';
-                    }
-                }
+                continue;
             }
+
+            $upload_data = $this->upload->data();
+
+            if (($erroConteudo = armazenamentoValidarEnvio($upload_data)) !== null) {
+                $error['upload'][] = $erroConteudo;
+
+                continue;
+            }
+
+            $nome = $upload_data['file_name'];
+            $thumb = '';
+
+            if ($upload_data['is_image'] == 1) {
+                $this->image_lib->clear();
+                $this->image_lib->initialize([
+                    'source_image' => $upload_data['full_path'],
+                    'new_image' => $upload_data['file_path'] . 'thumbs' . DIRECTORY_SEPARATOR . 'thumb_' . $nome,
+                    'width' => 200,
+                    'height' => 125,
+                ]);
+
+                if (! $this->image_lib->resize()) {
+                    $error['resize'][] = $this->image_lib->display_errors();
+
+                    continue;
+                }
+
+                $thumb = 'thumb_' . $nome;
+            }
+
+            if (! $this->os_model->anexar($id, $nome, '', $thumb, $relativo)) {
+                $error['db'][] = 'Erro ao inserir no banco de dados.';
+
+                continue;
+            }
+
+            $ultimo = ['idAnexos' => $this->db->insert_id(), 'anexo' => $nome, 'thumb' => $thumb];
         }
 
-        if (count($error) > 0) {
+        if (count($error) > 0 || $ultimo === null) {
             $this->response([
                 'status' => false,
                 'message' => 'Ocorreu um erro ao processar o arquivo.',
@@ -909,13 +932,11 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $anexo = $this->Api_model->lastRow('anexos', 'idAnexos');
-
         $retorno = [
-            'idAnexos' => $anexo->idAnexos,
-            'url' => $url,
-            'anexo' => $new_file_name,
-            'thumb' => 'thumb_' . $new_file_name,
+            'idAnexos' => $ultimo['idAnexos'],
+            'url' => site_url('api/v1/os/' . $id . '/anexos/' . $ultimo['idAnexos']),
+            'anexo' => $ultimo['anexo'],
+            'thumb' => $ultimo['thumb'],
         ];
 
         $this->log_app('Adicionou anexo(s) a uma OS. ID (OS): ' . $id);
@@ -936,25 +957,19 @@ class OsController extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
-        if ($idAnexo != null && is_numeric($idAnexo)) {
-            $this->db->where('idAnexos', $idAnexo);
-            $file = $this->db->get('anexos', 1)->row();
+        if (is_numeric($id) && is_numeric($idAnexo) && ($file = $this->os_model->getAnexoDaOs((int) $id, (int) $idAnexo))) {
+            // Só apaga o que está dentro de STORAGE_PATH (ou da pasta antiga de anexos).
+            foreach (osArquivosDosAnexos([$file], FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos') as $arquivo) {
+                @unlink($arquivo);
+            }
 
-            if ($file->os_id == $id) {
-                unlink($file->path . DIRECTORY_SEPARATOR . $file->anexo);
+            if ($this->os_model->delete('anexos', 'idAnexos', (int) $idAnexo)) {
+                $this->log_app('Removeu anexo de uma OS. ID (OS): ' . $id);
 
-                if ($file->thumb != null) {
-                    unlink($file->path . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $file->thumb);
-                }
-
-                if ($this->os_model->delete('anexos', 'idAnexos', $idAnexo)) {
-                    $this->log_app('Removeu anexo de uma OS. ID (OS): ' . $id);
-
-                    $this->response([
-                        'status' => true,
-                        'message' => 'Anexo excluído com sucesso!',
-                    ], REST_Controller::HTTP_OK);
-                }
+                $this->response([
+                    'status' => true,
+                    'message' => 'Anexo excluído com sucesso!',
+                ], REST_Controller::HTTP_OK);
             }
         }
 

@@ -128,6 +128,7 @@ $config['permissions_map'] = [
         'imprimirTermica' => 'vOs',
         'enviar_email' => 'vOs',
         'downloadanexo' => 'vOs',
+        'anexo' => 'vOs',
         'adicionar' => 'aOs',
         'editar' => 'eOs',
         // Itens, anexos, anotações, desconto e faturamento da tela da OS (JSON).

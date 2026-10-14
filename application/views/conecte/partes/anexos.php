@@ -16,7 +16,7 @@ if ($anexos === []) {
         <?php foreach ($anexos as $indice => $anexo) { ?>
             <?php
             $extensao = strtoupper((string) pathinfo((string) $anexo->anexo, PATHINFO_EXTENSION));
-            $miniatura = $anexo->thumb ? rtrim((string) $anexo->url, '/') . '/thumbs/' . rawurlencode((string) $anexo->thumb) : null;
+            $miniatura = $anexo->thumb ? site_url('mine/anexo/' . (int) $anexo->idAnexos . '/thumb') : null;
             $nome = 'Anexo ' . ($indice + 1) . ($extensao !== '' ? ' (' . $extensao . ')' : '');
             $baixar = site_url('mine/downloadanexo/' . (int) $anexo->idAnexos);
             ?>

@@ -20,8 +20,8 @@ if ($anexos === []) { ?>
     <?php foreach ($anexos as $indice => $anexo) { ?>
         <?php
         $extensao = strtoupper((string) pathinfo((string) $anexo->anexo, PATHINFO_EXTENSION));
-        $endereco = rtrim((string) $anexo->url, '/') . '/' . rawurlencode((string) $anexo->anexo);
-        $miniatura = $anexo->thumb ? rtrim((string) $anexo->url, '/') . '/thumbs/' . rawurlencode((string) $anexo->thumb) : null;
+        $endereco = site_url('os/anexo/' . (int) $anexo->idAnexos);
+        $miniatura = $anexo->thumb ? site_url('os/anexo/' . (int) $anexo->idAnexos . '/thumb') : null;
         $nome = 'Anexo ' . ($indice + 1) . ($extensao !== '' ? ' (' . $extensao . ')' : '');
         ?>
         <li class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-surface">

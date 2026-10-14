@@ -14,7 +14,7 @@ Configurações → Atualizar → **Verificar atualização** (precisa da permis
 
 ## O que nunca é alterado
 
-`application/.env`, `assets/anexos`, `assets/arquivos`, `assets/uploads`, `assets/userImage`, `application/logs`, `application/cache` e a pasta `install/`. Para proteger mais caminhos nesta instalação, use `ignored_files` em `application/config/github_updater.php`.
+`application/.env`, `assets/anexos`, `assets/arquivos`, `assets/uploads`, `assets/userImage`, `application/storage`, `application/logs`, `application/cache` e a pasta `install/`. Para proteger mais caminhos nesta instalação, use `ignored_files` em `application/config/github_updater.php`.
 
 ## Depois de atualizar
 

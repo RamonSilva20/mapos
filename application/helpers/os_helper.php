@@ -75,39 +75,50 @@ if (! function_exists('osDescricoesDaFatura')) {
 if (! function_exists('osArquivosDosAnexos')) {
     /**
      * Caminhos dos arquivos (e miniaturas) dos anexos de uma OS que podem ser
-     * apagados: só os que existem e ficam dentro de $raiz (a pasta de anexos).
-     * O path vem do banco; um registro adulterado não apaga nada fora dela.
+     * apagados: só os que existem e ficam dentro da pasta de armazenamento
+     * (STORAGE_PATH) ou, nos registros antigos, de $raizLegada (assets/anexos).
+     * O path vem do banco; um registro adulterado não apaga nada fora delas.
      *
      * @param  iterable<object>  $anexos  Linhas da tabela anexos (path, anexo, thumb)
      * @return list<string>
      */
-    function osArquivosDosAnexos(iterable $anexos, string $raiz): array
+    function osArquivosDosAnexos(iterable $anexos, string $raizLegada): array
     {
-        $raiz = realpath($raiz);
-        if ($raiz === false) {
-            return [];
-        }
-
         $arquivos = [];
         foreach ($anexos as $anexo) {
-            $pasta = rtrim((string) ($anexo->path ?? ''), '/\\');
-            $candidatos = [];
-            if (($anexo->anexo ?? '') !== '') {
-                $candidatos[] = $pasta . DIRECTORY_SEPARATOR . basename((string) $anexo->anexo);
-            }
-            if (($anexo->thumb ?? '') !== '') {
-                $candidatos[] = $pasta . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . basename((string) $anexo->thumb);
-            }
-
-            foreach ($candidatos as $candidato) {
-                $real = realpath($candidato);
-                if ($real !== false && is_file($real) && str_starts_with($real, $raiz . DIRECTORY_SEPARATOR)) {
-                    $arquivos[] = $real;
+            foreach ([false, true] as $miniatura) {
+                $arquivo = armazenamentoArquivoDoAnexo($anexo, $miniatura, $raizLegada);
+                if ($arquivo !== null) {
+                    $arquivos[] = $arquivo;
                 }
             }
         }
 
         return array_values(array_unique($arquivos));
+    }
+}
+
+if (! function_exists('osAnexosParaApi')) {
+    /**
+     * Anexos para a API: sem o caminho do servidor, e com `url` (e `thumb_url`,
+     * quando há miniatura) apontando para o endpoint que serve o arquivo com
+     * autenticação (#2872), em vez de uma URL pública.
+     *
+     * @param  iterable<object>  $anexos
+     * @return list<object>
+     */
+    function osAnexosParaApi(iterable $anexos, string $endpoint): array
+    {
+        $saida = [];
+        foreach ($anexos as $anexo) {
+            $endereco = rtrim($endpoint, '/') . '/' . (int) $anexo->idAnexos;
+            $anexo->url = $endereco;
+            $anexo->thumb_url = ($anexo->thumb ?? '') !== '' ? $endereco . '?miniatura=1' : null;
+            unset($anexo->path);
+            $saida[] = $anexo;
+        }
+
+        return $saida;
     }
 }
 
