@@ -158,6 +158,53 @@ final class SegurancaCabecalhosTest extends MaposTestCase
 
     // --- Política CSP ------------------------------------------------------
 
+    public function testNonceLiberaSoOStyleSrcENuncaOUnsafeInline(): void
+    {
+        $nonce = 'abc123==';
+        $csp = segurancaPoliticaCsp('', $nonce);
+
+        $this->assertStringContainsString("style-src 'self' 'nonce-abc123=='", $csp);
+        $this->assertStringContainsString("script-src 'self';", $csp, 'O script-src não ganha nonce: o FullCalendar só precisa do estilo.');
+        $this->assertStringNotContainsString('unsafe-inline', $csp);
+        $this->assertStringNotContainsString('unsafe-eval', $csp);
+        $this->assertStringContainsString("style-src 'self';", segurancaPoliticaCsp(''), 'Sem nonce, a política é a de antes.');
+    }
+
+    public function testCabecalhosLevamONonceDaRequisicao(): void
+    {
+        $h = segurancaCabecalhos([], [], 'N0nce==');
+
+        $this->assertStringContainsString("'nonce-N0nce=='", $h['Content-Security-Policy']);
+    }
+
+    public function testNonceEUnicoPorRequisicaoEImprevisivel(): void
+    {
+        $primeiro = segurancaGerarNonce();
+        $this->assertSame($primeiro, segurancaNonceAtual());
+        $this->assertSame(24, strlen($primeiro), '16 bytes em base64.');
+
+        $segundo = segurancaGerarNonce();
+        $this->assertNotSame($primeiro, $segundo);
+        $this->assertSame($segundo, segurancaNonceAtual());
+
+        unset($GLOBALS['mapos_csp_nonce']);
+        $this->assertSame('', segurancaNonceAtual());
+    }
+
+    public function testHookSoGeraNonceComCspLigadaEOLayoutPublicaAMeta(): void
+    {
+        $hook = (string) file_get_contents(APPPATH . 'hooks/security_headers.php');
+        $this->assertStringContainsString("segurancaModoCsp(\$_ENV) === 'off' ? '' : segurancaGerarNonce()", $hook);
+
+        $topo = (string) file_get_contents(APPPATH . 'views/tema/topo.php');
+        $this->assertStringContainsString('<meta name="csp-nonce" content="<?= e(segurancaNonceAtual()) ?>">', $topo);
+        $this->assertStringContainsString("function_exists('segurancaNonceAtual')", $topo);
+
+        // O FullCalendar lê o nonce dessa meta.
+        $fc = (string) file_get_contents(MAPOS_ROOT . '/assets/vendor/fullcalendar/fullcalendar.global.min.js');
+        $this->assertStringContainsString('csp-nonce', $fc);
+    }
+
     public function testPoliticaNaoLiberaScriptOuEstiloInline(): void
     {
         $csp = segurancaPoliticaCsp('/index.php/csp/report');

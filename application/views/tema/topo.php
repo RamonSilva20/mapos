@@ -21,6 +21,9 @@
   <meta name="csrf-token-name" content="<?= e(config_item('csrf_token_name')) ?>">
   <meta name="csrf-cookie-name" content="<?= e(config_item('csrf_cookie_name')) ?>">
   <meta name="base-url" content="<?= e(base_url()) ?>">
+  <?php if (function_exists('segurancaNonceAtual') && segurancaNonceAtual() !== '') { ?>
+  <meta name="csp-nonce" content="<?= e(segurancaNonceAtual()) ?>">
+  <?php } ?>
   <link rel="shortcut icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
   <script src="<?= e(base_url('assets/js/tema.js')) ?>"></script>
   <?php foreach ($layout['assets']['css'] as $arquivo) { ?>

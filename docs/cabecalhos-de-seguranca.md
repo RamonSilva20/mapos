@@ -11,7 +11,7 @@ A v5 envia cabeçalhos de segurança em toda resposta, pelo hook `pre_system`
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | sempre |
 | `Permissions-Policy` | câmera, microfone, localização, pagamento, USB e sensores desligados | sempre |
 | `Strict-Transport-Security` | `max-age=31536000` | só em acesso por HTTPS |
-| `Content-Security-Policy-Report-Only` | política alvo da v5 | sempre (desligável) |
+| `Content-Security-Policy` | política da v5, em enforce | sempre (`APP_CSP` muda o modo) |
 
 Os cabeçalhos também saem nas respostas da API (`api/v1`) e nos downloads. Lá
 eles não atrapalham: JSON e arquivos não executam script nem são exibidos em
@@ -24,7 +24,7 @@ frame, e o `nosniff` impede que um anexo seja interpretado como HTML.
 | `APP_SECURITY_HEADERS` | `true` | `false` desliga todos os cabeçalhos |
 | `APP_HSTS_MAX_AGE` | `31536000` (`0` com `APP_ENVIRONMENT=development`) | duração do HSTS em segundos; `0` desliga |
 | `APP_HSTS_INCLUDE_SUBDOMAINS` | `false` | acrescenta `includeSubDomains` |
-| `APP_CSP_REPORT_ONLY` | `true` | envia a CSP em modo report-only |
+| `APP_CSP` | `enforce` | `enforce` bloqueia o que a política não permite, `report-only` só relata e `off` desliga. O antigo `APP_CSP_REPORT_ONLY` (`true` = report-only, `false` = sem CSP) continua valendo quando `APP_CSP` não existe |
 | `APP_CSP_REPORT` | `true` | manda os relatórios ao endpoint do Map-OS |
 
 O HTTPS é detectado como nos cookies (`docs/cookies-e-sessao.md`): atrás de proxy
@@ -34,15 +34,28 @@ reverso, o `X-Forwarded-Proto` só vale vindo de um IP de `APP_PROXY_IPS`.
 acessar o domínio por HTTP pelo tempo do `max-age`. Ligue o HTTPS de forma
 definitiva antes, ou use `APP_HSTS_MAX_AGE=0`.
 
-## CSP em report-only
+## CSP em enforce
 
-A política é a meta da v5, sem `unsafe-inline` em script e estilo. Em
-report-only o navegador **não bloqueia nada**: ele só avisa o que seria
-bloqueado. As telas legadas geram violações de propósito (scripts inline,
-CDNs, Google Fonts), e os relatórios medem o que falta migrar até o modo
-enforce (#2878).
+Desde a Beta (#2878) a política vem em **enforce**: o navegador bloqueia o que
+ela não permite. Ela não tem `unsafe-inline` nem `unsafe-eval`:
 
-Os relatórios chegam em `POST /index.php/csp/report` e ficam agregados em:
+- `script-src 'self'`: todo o JavaScript fica em `assets/js` (módulos ES e
+  `assets/js/imprimir.js` nas views de impressão); não há `<script>` inline nem
+  atributos `on*`. Os blocos `application/json` de dados não são executados.
+- `style-src 'self' 'nonce-…'`: as views não usam `style=` nem `<style>`. A
+  única exceção é o **FullCalendar** (agenda do painel), que cria um `<style>` por
+  JavaScript e lê o nonce de `<meta name="csp-nonce">`. O nonce é gerado a cada
+  requisição (`segurancaGerarNonce()`, no hook `pre_system`) e só vale para o
+  elemento que o carrega.
+- `img-src 'self' data: blob: https:` por causa dos QR Codes de Pix e boletos,
+  `connect-src` só com ViaCEP e BrasilAPI, `form-action 'self'`, sem iframes
+  (`frame-ancestors 'self'`) e `object-src 'none'`.
+
+Se uma integração sua precisar de algo fora disso, ajuste a política em
+`segurancaPoliticaCsp()`; para investigar, use `APP_CSP=report-only` (nada é
+bloqueado, tudo é relatado) e depois volte para `enforce`.
+
+Os relatórios continuam chegando nos dois modos, em `POST /index.php/csp/report` e ficam agregados em:
 
 ```
 application/logs/csp-violacoes.json

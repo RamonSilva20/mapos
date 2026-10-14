@@ -22,22 +22,22 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'cookie_seguro_helper.php';
  * - style-src sem 'unsafe-inline': as views novas não usam style= (#2825).
  * - img-src aceita https: e data: por causa dos QR Codes de PIX e boletos,
  *   que vêm dos gateways como URL externa ou base64.
- * - connect-src libera as consultas de CEP e CNPJ: ViaCEP e BrasilAPI, por
- *   fetch, no formulário de cliente da v5 (modules/clientes/formulario.js), e
- *   a ReceitaWS do assets/js/funcoes.js legado. A ReceitaWS não manda CORS e
- *   lá é JSONP (vira script-src e será relatada); sai com o frontend legado.
+ * - connect-src libera só as consultas de CEP e CNPJ do formulário de cliente
+ *   (modules/clientes/formulario.js): ViaCEP e BrasilAPI, por fetch. A ReceitaWS
+ *   do frontend legado saiu junto com ele.
  *
  * @param  string  $reportUri  Caminho do endpoint de relatórios, ou '' para não relatar
+ * @param  string  $nonce      Nonce da requisição (base64), ou '' para não liberar nenhum
  */
-function segurancaPoliticaCsp($reportUri)
+function segurancaPoliticaCsp($reportUri, $nonce = '')
 {
     $diretivas = [
         'default-src' => "'self'",
         'script-src' => "'self'",
-        'style-src' => "'self'",
+        'style-src' => "'self'" . ($nonce !== '' ? " 'nonce-" . $nonce . "'" : ''),
         'img-src' => "'self' data: blob: https:",
         'font-src' => "'self' data:",
-        'connect-src' => "'self' https://viacep.com.br https://brasilapi.com.br https://www.receitaws.com.br",
+        'connect-src' => "'self' https://viacep.com.br https://brasilapi.com.br",
         'object-src' => "'none'",
         'base-uri' => "'self'",
         'form-action' => "'self'",
@@ -70,6 +70,23 @@ function segurancaCspReportUri($baseUrl)
     $caminho = '/' . trim($caminho, '/');
 
     return rtrim($caminho, '/') . '/index.php/csp/report';
+}
+
+/**
+ * Gera o nonce da requisição (16 bytes aleatórios, em base64) e o guarda para
+ * as views (segurancaNonceAtual()). Chamado uma vez, pelo hook pre_system.
+ */
+function segurancaGerarNonce(): string
+{
+    $GLOBALS['mapos_csp_nonce'] = base64_encode(random_bytes(16));
+
+    return $GLOBALS['mapos_csp_nonce'];
+}
+
+/** Nonce da requisição atual, ou '' se a CSP está desligada ou o hook não rodou. */
+function segurancaNonceAtual(): string
+{
+    return (string) ($GLOBALS['mapos_csp_nonce'] ?? '');
 }
 
 /**
@@ -111,9 +128,10 @@ function segurancaModoCsp(array $env)
  *
  * @param  array  $env     Normalmente $_ENV
  * @param  array  $server  Normalmente $_SERVER
+ * @param  string $nonce   Nonce da requisição para o style-src (ver segurancaPoliticaCsp)
  * @return array<string, string> nome do cabeçalho => valor
  */
-function segurancaCabecalhos(array $env, array $server)
+function segurancaCabecalhos(array $env, array $server, $nonce = '')
 {
     if (! cookieEnvFlag($env['APP_SECURITY_HEADERS'] ?? null, true)) {
         return [];
@@ -150,7 +168,7 @@ function segurancaCabecalhos(array $env, array $server)
         $reportUri = cookieEnvFlag($env['APP_CSP_REPORT'] ?? null, true)
             ? segurancaCspReportUri($env['APP_BASEURL'] ?? '')
             : '';
-        $cabecalhos[$modoCsp === 'enforce' ? 'Content-Security-Policy' : 'Content-Security-Policy-Report-Only'] = segurancaPoliticaCsp($reportUri);
+        $cabecalhos[$modoCsp === 'enforce' ? 'Content-Security-Policy' : 'Content-Security-Policy-Report-Only'] = segurancaPoliticaCsp($reportUri, (string) $nonce);
     }
 
     return $cabecalhos;
