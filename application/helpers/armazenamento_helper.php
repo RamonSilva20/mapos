@@ -231,6 +231,31 @@ if (! function_exists('armazenamentoConfigUpload')) {
     }
 }
 
+if (! function_exists('armazenamentoReceber')) {
+    /**
+     * CI_Upload::do_upload() com as mensagens de erro em português. O idioma
+     * global do CI é english, e CI_Upload::set_error() recarrega upload_lang
+     * nesse idioma a cada erro, e essa carga sobrescreve um lang->load('upload',
+     * 'pt-br') feito antes (CI_Lang só ignora a carga repetida no mesmo idioma).
+     * Por isso o idioma só é trocado durante o envio, como em
+     * MY_Controller::validarFormulario().
+     *
+     * @param  object  $upload  CI_Upload já configurado
+     */
+    function armazenamentoReceber(object $upload, string $campo = 'userfile'): bool
+    {
+        $config = &get_config([]);
+        $idioma = $config['language'] ?? 'english';
+        $config['language'] = 'pt-br';
+
+        try {
+            return (bool) $upload->do_upload($campo);
+        } finally {
+            $config['language'] = $idioma;
+        }
+    }
+}
+
 if (! function_exists('armazenamentoValidarEnvio')) {
     /**
      * Confere o arquivo recém-gravado pelo upload (CI_Upload::data()): o

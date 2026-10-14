@@ -199,8 +199,31 @@ final class ArmazenamentoTest extends MaposTestCase
         $this->assertStringNotContainsString('Os::', (string) file_get_contents(APPPATH . 'controllers/Os.php'));
 
         foreach (['api/v1/OsController.php', 'Os.php', 'Arquivos.php'] as $controller) {
-            $this->assertStringContainsString("lang->load('upload', 'pt-br')", (string) file_get_contents(APPPATH . 'controllers/' . $controller), $controller);
+            $codigo = (string) file_get_contents(APPPATH . 'controllers/' . $controller);
+            $this->assertStringContainsString('armazenamentoReceber($this->upload', $codigo, $controller);
+            $this->assertStringNotContainsString('$this->upload->do_upload(', $codigo, $controller);
         }
+    }
+
+    /**
+     * Roda a CI_Lang e a CI_Upload reais (processo à parte) e lê a mensagem
+     * de tipo não permitido. O lang->load('upload', 'pt-br') antes do envio
+     * não vale: set_error() recarrega o upload_lang em inglês e sobrescreve.
+     */
+    public function testMensagemDeUploadRejeitadoSaiEmPortuguesComOHelper(): void
+    {
+        $executar = function (string $modo): array {
+            $saida = [];
+            exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(MAPOS_ROOT . '/tests/Support/upload_idioma.php') . ' ' . escapeshellarg(MAPOS_ROOT) . ' ' . $modo . ' 2>&1', $saida);
+
+            return $saida;
+        };
+
+        $this->assertSame('The filetype you are attempting to upload is not allowed.', $executar('antigo')[0], 'A carga prévia em pt-br é desfeita pelo set_error().');
+
+        $helper = $executar('armazenamentoReceber');
+        $this->assertSame('O tipo de arquivo que você está tentando fazer upload não é permitido.', $helper[0]);
+        $this->assertSame('idioma depois: english', $helper[1], 'O idioma global volta ao que era.');
     }
 
     public function testRollbackDaMigrationUsaAUrlPublicaDoEnv(): void

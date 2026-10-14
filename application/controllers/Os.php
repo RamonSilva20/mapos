@@ -988,8 +988,6 @@ class Os extends MY_Controller
             return;
         }
 
-        // Mensagens de erro do upload em pt-br (o idioma padrão do CI é inglês).
-        $this->lang->load('upload', 'pt-br');
         $this->load->library('upload');
         $this->load->library('image_lib');
 
@@ -1022,7 +1020,7 @@ class Os extends MY_Controller
                 continue;
             }
 
-            if (! $this->upload->do_upload($campo)) {
+            if (! armazenamentoReceber($this->upload, $campo)) {
                 $falhas[] = ($arquivo['name'] ?? 'Arquivo') . ': ' . trim(strip_tags($this->upload->display_errors('', '')));
 
                 continue;

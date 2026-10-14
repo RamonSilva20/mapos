@@ -860,8 +860,6 @@ class OsController extends REST_Controller
 
         $id = (int) $id;
 
-        // Mensagens de erro do upload em pt-br (o idioma padrão do CI é inglês).
-        $this->lang->load('upload', 'pt-br');
         $this->load->library('upload');
         $this->load->library('image_lib');
 
@@ -882,7 +880,7 @@ class OsController extends REST_Controller
         $ultimo = null;
 
         foreach ($_FILES as $field_name => $file) {
-            if (! $this->upload->do_upload($field_name)) {
+            if (! armazenamentoReceber($this->upload, $field_name)) {
                 $error['upload'][] = $this->upload->display_errors();
 
                 continue;
