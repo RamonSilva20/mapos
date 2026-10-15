@@ -199,6 +199,10 @@ Os cron jobs de e-mail continuam os mesmos:
 - **Login:** depois de 5 falhas para o mesmo e-mail (ou 20 do mesmo IP) o acesso é bloqueado por 1 minuto, e o tempo dobra a cada nova falha, até 1 hora.
 - **2FA opcional** em Meu perfil. O administrador pode exigir o 2FA por grupo de permissão.
 - **Desconto por item** na OS e na venda, em R$ ou em %, além do desconto geral. O desconto geral passa a incidir sobre o total já com os descontos dos itens.
+- **Confirmação por senha:** ativar o 2FA e, na área do cliente, trocar o e-mail ou a senha pedem a senha atual.
+- **OS faturada com pagamento baixado** não pode ser excluída: estorne o recebimento antes. Ao excluir uma OS faturada sem baixa, só saem os lançamentos em aberto dela.
+- **E-mail da OS:** o botão "E-mail" da tela da OS envia por formulário (POST) e exige a permissão de editar OS (`eOs`). Link salvo para `os/enviar_email/<id>` não envia mais.
+- **Planilhas (XLSX)** dos relatórios: texto que começa com `=`, `+`, `-` ou `@` sai com um apóstrofo na frente, para o Excel não executá-lo como fórmula.
 - **Recuperação de senha do cliente:** o link vale 1 hora (eram 24) e uma só vez.
 - **Exclusões** passam por uma janela de confirmação, e ações das cobranças (atualizar, enviar por e-mail, confirmar, cancelar, excluir) e a exclusão de usuário usam POST com token CSRF. Links salvos que apontavam para elas como GET deixam de funcionar.
 
@@ -206,6 +210,9 @@ Os cron jobs de e-mail continuam os mesmos:
 
 - A sessão do painel é revalidada a cada requisição: usuário desativado, excluído ou com a conta expirada perde o acesso na hora, e trocar a senha encerra as outras sessões abertas do usuário.
 - Confirmações de senha (trocar a senha, gerar novos códigos do 2FA, desativar o 2FA) e o pedido de redefinição de senha têm limite de tentativas, como o login.
+- **Delegação de permissões:** quem tem `cUsuario` ou `cPermissao` só cria, edita e redefine usuários e grupos com permissões que ele mesmo tem; só o administrador concede tudo. Se um gerente deixou de conseguir cadastrar alguém num grupo mais alto, é isto.
+- O backup do painel não leva mais `ci_sessions`, `login_attempts` e os tokens da API e de recuperação de senha. Ao restaurar, todos entram de novo.
+- O zip da release não traz `tests/`, `docker/` nem `scripts/`. Quem usa Docker usa o código-fonte; as portas do `docker-compose.yml` escutam só em `127.0.0.1`, e o phpMyAdmin só acessa o servidor configurado.
 - Imagens enviadas têm limite de pixels (`UPLOAD_MAX_PIXELS`), além do limite de tamanho.
 - Rotas do painel passam pelo mapa de permissões (`application/config/permissions_map.php`): **o que não estiver mapeado é negado**. Um controller que você criou precisa de entrada nele.
 - Os cabeçalhos de segurança são enviados em toda resposta, e a CSP está em `enforce`: scripts e estilos inline são bloqueados.

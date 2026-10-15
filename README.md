@@ -9,7 +9,9 @@
 ### Contato: contato@mapos.com.br
 ### [Feedback](https://github.com/RamonSilva20/mapos/discussions) - Vote ou sugira melhorias
 
-![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
+![Painel do Map-OS v5, modo claro](docs/dashboard.png)
+
+![Painel do Map-OS v5, modo escuro](docs/dashboard-escuro.png)
 
 ### Apoie o Projeto Map-OS - Doações
 
