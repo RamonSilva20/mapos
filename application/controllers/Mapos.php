@@ -741,6 +741,8 @@ class Mapos extends MY_Controller
             $this->session->set_flashdata('error', $this->migration->error_string());
         } else {
             $this->session->set_flashdata('success', 'Banco de dados atualizado com sucesso!');
+
+            return redirect(base_url());
         }
 
         return redirect(site_url('mapos/configurar?aba=sistema'));

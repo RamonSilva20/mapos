@@ -26,6 +26,7 @@ class MY_Controller extends CI_Controller
             redirect('login');
         }
         $this->validarSessaoDoUsuario();
+        $this->exigirBancoAtualizado();
         $this->exigirDoisFatores();
         $this->load_configuration();
         $this->verificarPermissaoDaRota();
@@ -83,6 +84,57 @@ class MY_Controller extends CI_Controller
         }
 
         return null;
+    }
+
+    /**
+     * Banco com migrations pendentes (#3006): quem instala a v5 e importa um
+     * dump da 4.x fica com o esquema antigo, e as telas quebram com colunas
+     * inexistentes. Enquanto houver pendência, nenhuma rota do painel roda: a
+     * tela mapos/banco-desatualizado pergunta se quer atualizar (só
+     * cSistema; os demais pedem para avisar o administrador). Só
+     * mapos/atualizarBanco passa; o logout é do controller Login, que não
+     * estende MY_Controller. A tela não usa o layout() nem colunas novas,
+     * porque precisa abrir com o esquema antigo. AJAX recebe 503 em JSON.
+     */
+    protected function exigirBancoAtualizado(): void
+    {
+        $rota = strtolower($this->router->class . '/' . $this->router->method);
+        if ($rota === 'mapos/atualizarbanco') {
+            return;
+        }
+
+        $this->load->helper('manutencao');
+        $pendentes = migracoesPendentes($this->db);
+        if ($pendentes === []) {
+            return;
+        }
+
+        if ($this->input->is_ajax_request()) {
+            $this->output
+                ->set_status_header(503)
+                ->set_content_type('application/json', 'utf-8')
+                ->set_output(json_encode([
+                    'result' => false,
+                    'message' => 'O banco de dados precisa ser atualizado. Abra o painel para continuar.',
+                ]));
+            $this->output->_display();
+            $this->encerrar();
+
+            return;
+        }
+
+        $this->output->set_status_header(503);
+        $this->load->view('mapos/banco-desatualizado', [
+            'quantidade' => count($pendentes),
+            'podeAtualizar' => (bool) $this->permission->checkPermission($this->session->userdata('permissao'), 'cSistema'),
+            'erro' => $this->session->flashdata('error'),
+            'acaoAtualizar' => site_url('mapos/atualizarBanco'),
+            'acaoSair' => site_url('login/sair'),
+            'csrfNome' => $this->security->get_csrf_token_name(),
+            'csrfValor' => $this->security->get_csrf_hash(),
+        ]);
+        $this->output->_display();
+        $this->encerrar();
     }
 
     /**

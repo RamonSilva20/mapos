@@ -127,7 +127,7 @@ Depois atualize o banco, de um destes jeitos:
   php index.php tools migrate
   ```
 
-  O comando funciona com `composer install --no-dev` (não precisa de pacotes de desenvolvimento) e, se falhar, escreve o erro no terminal (stderr) e sai com código diferente de zero. A tela inicial do painel avisa os administradores enquanto houver atualizações do banco pendentes.
+  O comando funciona com `composer install --no-dev` (não precisa de pacotes de desenvolvimento) e, se falhar, escreve o erro no terminal (stderr) e sai com código diferente de zero. A tela inicial do painel avisa os administradores enquanto houver atualizações do banco pendentes. Com migrations pendentes, o painel pede para atualizar o banco antes de abrir qualquer tela: quem tem a permissão de sistema vê o botão "Atualizar banco de dados", os demais usuários veem um aviso para falar com o administrador.
 
 Numa **instalação nova** (instalador web) você não precisa fazer isto: o instalador aplica as migrations ao final e avisa na tela se não conseguir (sem o PHP de linha de comando no servidor, por exemplo); nesse caso use um dos dois jeitos acima.
 

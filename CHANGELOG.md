@@ -6,6 +6,9 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+- Banco com migrations pendentes (p. ex. v5 instalada e dump da 4.x importado) quebrava o painel logo depois do login com colunas inexistentes. Agora, enquanto houver migration pendente, o painel mostra uma tela com o botão "Atualizar banco de dados" (para quem tem `cSistema`; os demais veem um aviso para falar com o administrador) em vez de abrir a tela pedida, e as chamadas AJAX recebem 503; ao concluir, o painel abre. #3006 [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [5.0.0-beta.2] - 2026-10-15
 
 Correções e melhorias a partir dos testes da beta.1. Sem migration nem variável nova no `.env`.
