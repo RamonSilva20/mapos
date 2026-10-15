@@ -1,0 +1,107 @@
+[
+  {
+    "nome": "[admin] login",
+    "ok": true,
+    "detalhe": "http://mapos.test/index.php/mapos"
+  },
+  {
+    "nome": "[admin] OS 29 (aberta, campos vazios): 4 rotulos sempre visiveis",
+    "ok": false,
+    "detalhe": "faltando=Defeito,Observações,Laudo técnico"
+  },
+  {
+    "nome": "[admin] OS 29 (aberta, campos vazios): \"Não informado\" x3",
+    "ok": false,
+    "detalhe": "encontrado=0"
+  },
+  {
+    "nome": "[admin] OS 29 (aberta, campos vazios): botao Editar presente",
+    "ok": false,
+    "detalhe": "count=0 href=null"
+  },
+  {
+    "nome": "[admin] OS 30 (aberta, campos preenchidos): 4 rotulos sempre visiveis",
+    "ok": true,
+    "detalhe": ""
+  },
+  {
+    "nome": "[admin] OS 30 (aberta, campos preenchidos): \"Não informado\" x0",
+    "ok": true,
+    "detalhe": "encontrado=0"
+  },
+  {
+    "nome": "[admin] OS 30 (aberta, campos preenchidos): botao Editar presente",
+    "ok": false,
+    "detalhe": "count=0 href=null"
+  },
+  {
+    "nome": "[admin] OS 31 (faturada): 4 rotulos sempre visiveis",
+    "ok": false,
+    "detalhe": "faltando=Observações,Laudo técnico"
+  },
+  {
+    "nome": "[admin] OS 31 (faturada): \"Não informado\" x2",
+    "ok": false,
+    "detalhe": "encontrado=0"
+  },
+  {
+    "nome": "[admin] OS 31 (faturada): botao Editar ausente",
+    "ok": true,
+    "detalhe": "count=0 href=null"
+  },
+  {
+    "nome": "[teste.restrito] login",
+    "ok": true,
+    "detalhe": "http://mapos.test/index.php/mapos"
+  },
+  {
+    "nome": "[teste.restrito] OS 29 (aberta, campos vazios): 4 rotulos sempre visiveis",
+    "ok": false,
+    "detalhe": "faltando=Defeito,Observações,Laudo técnico"
+  },
+  {
+    "nome": "[teste.restrito] OS 29 (aberta, campos vazios): \"Não informado\" x3",
+    "ok": false,
+    "detalhe": "encontrado=0"
+  },
+  {
+    "nome": "[teste.restrito] OS 29 (aberta, campos vazios): botao Editar ausente",
+    "ok": true,
+    "detalhe": "count=0 href=null"
+  },
+  {
+    "nome": "[teste.restrito] OS 30 (aberta, campos preenchidos): 4 rotulos sempre visiveis",
+    "ok": true,
+    "detalhe": ""
+  },
+  {
+    "nome": "[teste.restrito] OS 30 (aberta, campos preenchidos): \"Não informado\" x0",
+    "ok": true,
+    "detalhe": "encontrado=0"
+  },
+  {
+    "nome": "[teste.restrito] OS 30 (aberta, campos preenchidos): botao Editar ausente",
+    "ok": true,
+    "detalhe": "count=0 href=null"
+  },
+  {
+    "nome": "[teste.restrito] OS 31 (faturada): 4 rotulos sempre visiveis",
+    "ok": false,
+    "detalhe": "faltando=Observações,Laudo técnico"
+  },
+  {
+    "nome": "[teste.restrito] OS 31 (faturada): \"Não informado\" x2",
+    "ok": false,
+    "detalhe": "encontrado=0"
+  },
+  {
+    "nome": "[teste.restrito] OS 31 (faturada): botao Editar ausente",
+    "ok": true,
+    "detalhe": "count=0 href=null"
+  },
+  {
+    "nome": "[teste.restrito] acesso direto a os/editar/29 negado",
+    "ok": true,
+    "detalhe": "http://mapos.test/"
+  }
+]

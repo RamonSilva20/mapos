@@ -1,0 +1,52 @@
+[
+  {
+    "nome": "login admin",
+    "ok": true,
+    "detalhe": "http://mapos.test/index.php/mapos"
+  },
+  {
+    "nome": "adicionar: lista de sugestoes visivel",
+    "ok": false,
+    "detalhe": "opcoes=0"
+  },
+  {
+    "nome": "adicionar: campo usa combobox compartilhado",
+    "ok": false,
+    "detalhe": "role=null"
+  },
+  {
+    "nome": "adicionar: texto livre salvo (redirecionou)",
+    "ok": true,
+    "detalhe": "url=http://mapos.test/index.php/financeiro/lancamentos erros=Vencido | "
+  },
+  {
+    "nome": "adicionar: fornecedor livre gravado no banco com clientes_id vazio",
+    "ok": true,
+    "detalhe": "linha=16|NULL"
+  },
+  {
+    "nome": "editar: lancamento localizado",
+    "ok": true,
+    "detalhe": "id=16"
+  },
+  {
+    "nome": "editar: fornecedor livre carregado",
+    "ok": true,
+    "detalhe": "valor=Fornecedor Livre chromium 948142"
+  },
+  {
+    "nome": "editar: sugestoes aparecem",
+    "ok": false,
+    "detalhe": "opcoes=0"
+  },
+  {
+    "nome": "editar: texto livre editado salvo",
+    "ok": true,
+    "detalhe": "id=16"
+  },
+  {
+    "nome": "estilo: campo presente e sem datalist nativo",
+    "ok": false,
+    "detalhe": "{\"existe\":true,\"classes\":\"block w-full rounded-sm border bg-field px-3 py-2 text-body-md text-text placeholder:text-muted max-sm:min-h-11 focus:outline-3 focus:outline-offset-0 focus:outline-ring focus:shadow-field-focus disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted read-only:bg-surface-subtle border-input\",\"borda\":\"rgb(138, 132, 156)\",\"fonte\":\"16px\",\"datalist\":true}"
+  }
+]
