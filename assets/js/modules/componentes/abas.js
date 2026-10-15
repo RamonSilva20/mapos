@@ -4,7 +4,10 @@
 // módulo ela continua rolável (toque e Shift + roda) com a borda esmaecida
 // (classe abas-rolagem, assets/src/app.css). Com ele:
 //
-// - ao carregar, a aba ativa (aria-current="page") vem para o centro da faixa;
+// - ao carregar, a aba ativa (aria-current="page") vem para o centro da faixa
+//   e continua lá enquanto o layout se acomoda (fonte que termina de carregar,
+//   janela que muda de tamanho, página que volta do bfcache), até o usuário
+//   mexer na faixa (roda, toque, clique, Tab ou setas);
 // - a roda do mouse na vertical rola a faixa, só enquanto ela tem para onde
 //   rolar (nas pontas a roda volta a rolar a página);
 // - as setas das pontas ([data-abas-seta]) rolam cerca de uma "página" e só
@@ -95,6 +98,27 @@ export default function iniciar(nav, janela = globalThis) {
         proxima: nav.querySelector('[data-abas-seta="proxima"]'),
     };
 
+    // A aba ativa fica no centro até o usuário assumir a rolagem. Medir uma
+    // vez só não basta: o módulo roda antes de a fonte da interface terminar
+    // de carregar, e com a fonte de reserva as abas são mais estreitas, o que
+    // encurta o limite da rolagem (nos testes: 305px em vez de 347px). Quando
+    // a fonte chega as abas crescem, o ResizeObserver avisa e a posição é
+    // refeita. Depois que o usuário mexe na faixa, a posição dele vale.
+    let seguirAtiva = true;
+
+    function centralizar() {
+        const ativa = lista.querySelector('[aria-current="page"]');
+        if (!ativa || !estadoDaRolagem(lista).transborda) {
+            return;
+        }
+
+        const alvo = posicaoParaCentralizar(lista, ativa);
+        // Sem animação: é o estado de partida da tela, não uma ação do usuário.
+        if (Math.abs(alvo - lista.scrollLeft) > TOLERANCIA) {
+            lista.scrollTo({ left: alvo, behavior: 'auto' });
+        }
+    }
+
     function atualizar() {
         const { transborda, noInicio, noFim } = estadoDaRolagem(lista);
 
@@ -106,7 +130,19 @@ export default function iniciar(nav, janela = globalThis) {
         }
     }
 
+    function aoMedir() {
+        if (seguirAtiva) {
+            centralizar();
+        }
+        atualizar();
+    }
+
+    function assumir() {
+        seguirAtiva = false;
+    }
+
     function rolar(direcao) {
+        assumir();
         lista.scrollBy({
             left: passoDaSeta(lista, direcao),
             behavior: reduzMovimento(janela) ? 'auto' : 'smooth',
@@ -126,6 +162,11 @@ export default function iniciar(nav, janela = globalThis) {
 
     lista.addEventListener('wheel', (evento) => {
         const delta = deltaDaRoda(evento, lista);
+
+        // Gesto horizontal (trackpad) também é o usuário rolando a faixa.
+        if (delta !== null || evento.deltaX) {
+            assumir();
+        }
         if (delta === null) {
             return;
         }
@@ -134,21 +175,37 @@ export default function iniciar(nav, janela = globalThis) {
         lista.scrollLeft += delta;
     }, { passive: false });
 
+    // Toque e arrastar, clique e Tab (o navegador rola a aba focada): o
+    // usuário assumiu a rolagem. A rolagem sozinha (evento scroll) não conta,
+    // porque o próprio centralizar() a dispara.
+    lista.addEventListener('pointerdown', assumir, { passive: true });
+    lista.addEventListener('focusin', assumir);
+
     lista.addEventListener('scroll', atualizar, { passive: true });
 
     // A faixa muda de largura com a janela, e cada aba muda com a fonte que
     // termina de carregar ou com o contador que cresce.
     if (typeof janela.ResizeObserver === 'function') {
-        const observador = new janela.ResizeObserver(atualizar);
+        const observador = new janela.ResizeObserver(aoMedir);
         observador.observe(lista);
         Array.from(lista.children).forEach((aba) => observador.observe(aba));
     }
 
-    // Posição inicial sem animação: é o estado de partida da tela, não uma ação.
-    const ativa = lista.querySelector('[aria-current="page"]');
-    if (ativa && estadoDaRolagem(lista).transborda) {
-        lista.scrollTo({ left: posicaoParaCentralizar(lista, ativa), behavior: 'auto' });
-    }
+    // Página que volta do bfcache (voltar/avançar) reaparece com a faixa onde
+    // estava: é como um carregamento novo, a aba ativa volta ao centro. O
+    // ouvinte se solta quando a nav sai da página (trecho renderizado de novo).
+    const aoMostrar = (evento) => {
+        if (nav.isConnected === false) {
+            janela.removeEventListener?.('pageshow', aoMostrar);
+            return;
+        }
 
-    atualizar();
+        if (evento.persisted) {
+            seguirAtiva = true;
+            aoMedir();
+        }
+    };
+    janela.addEventListener?.('pageshow', aoMostrar);
+
+    aoMedir();
 }

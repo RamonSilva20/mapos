@@ -36,16 +36,16 @@ function criarOuvintes() {
 function criarFaixa({ largura = 400, abas = [100, 100, 100, 100, 100, 100], ativa = null, rolagem = 0, comSetas = true } = {}) {
     const ouvintes = criarOuvintes();
     const chamadas = [];
-    const conteudo = abas.reduce((soma, a) => soma + a, 0);
+    let larguras = [...abas];
 
     const faixa = {
         ...ouvintes,
         clientWidth: largura,
-        scrollWidth: Math.max(conteudo, largura),
+        scrollWidth: Math.max(abas.reduce((soma, a) => soma + a, 0), largura),
         scrollLeft: rolagem,
         chamadas,
         children: [],
-        getBoundingClientRect: () => ({ left: 50, width: largura }),
+        getBoundingClientRect: () => ({ left: 50, width: faixa.clientWidth }),
         scrollTo({ left, behavior }) {
             chamadas.push({ tipo: 'scrollTo', left, behavior });
             faixa.scrollLeft = left;
@@ -57,24 +57,26 @@ function criarFaixa({ largura = 400, abas = [100, 100, 100, 100, 100, 100], ativ
             faixa.disparar('scroll');
         },
         querySelector: (seletor) => (seletor === '[aria-current="page"]' ? faixa.children.find((a) => a.ativa) ?? null : null),
+        /** As abas mudaram de largura (a fonte da interface terminou de carregar). */
+        redimensionarAbas(novas) {
+            larguras = [...novas];
+            faixa.scrollWidth = Math.max(larguras.reduce((soma, a) => soma + a, 0), faixa.clientWidth);
+        },
     };
 
-    let x = 0;
-    faixa.children = abas.map((largura_, indice) => {
-        const inicio = x;
-        x += largura_;
-
-        return {
-            ativa: indice === ativa,
-            observada: false,
-            getBoundingClientRect: () => ({ left: 50 + inicio - faixa.scrollLeft, width: largura_ }),
-        };
-    });
+    faixa.children = abas.map((_, indice) => ({
+        ativa: indice === ativa,
+        getBoundingClientRect: () => ({
+            left: 50 + larguras.slice(0, indice).reduce((soma, a) => soma + a, 0) - faixa.scrollLeft,
+            width: larguras[indice],
+        }),
+    }));
 
     const criarSeta = () => ({ ...criarOuvintes(), hidden: true });
     const setas = comSetas ? { anterior: criarSeta(), proxima: criarSeta() } : {};
 
     const nav = {
+        isConnected: true,
         querySelector(seletor) {
             if (seletor === '[data-abas-lista]') {
                 return faixa;
@@ -95,6 +97,8 @@ function criarFaixa({ largura = 400, abas = [100, 100, 100, 100, 100, 100], ativ
 
 function janelaFalsa({ reduzir = false } = {}) {
     const observadores = [];
+    const ouvintes = criarOuvintes();
+    const removidos = [];
 
     class ResizeObserverFalso {
         constructor(funcao) {
@@ -109,9 +113,12 @@ function janelaFalsa({ reduzir = false } = {}) {
     }
 
     return {
+        ...ouvintes,
         observadores,
+        removidos,
         ResizeObserver: ResizeObserverFalso,
         matchMedia: (consulta) => ({ matches: reduzir && consulta === '(prefers-reduced-motion: reduce)' }),
+        removeEventListener: (tipo, funcao) => removidos.push({ tipo, funcao }),
     };
 }
 
@@ -344,4 +351,158 @@ test('iniciar: funciona sem ResizeObserver, sem setas e sem aba ativa', () => {
 
 test('iniciar: nav sem a faixa é ignorada', () => {
     assert.doesNotThrow(() => iniciar({ querySelector: () => null }, janelaFalsa()));
+});
+
+// A causa do #2995: o módulo roda antes de a fonte da interface carregar. Com a
+// fonte de reserva as abas são mais estreitas e o limite da rolagem é menor
+// (305px em vez de 347px na tela das Configurações); sem refazer a posição, a
+// aba ativa ficava 40px aquém do centro possível depois que a fonte chegava.
+test('iniciar: quando a fonte chega e as abas crescem, a aba ativa volta ao centro possível', () => {
+    const janela = janelaFalsa();
+    const { nav, faixa } = criarFaixa({ largura: 400, abas: new Array(8).fill(90), ativa: 6 });
+    iniciar(nav, janela);
+
+    // Medida com a fonte de reserva: máximo de 320px.
+    assert.deepEqual(faixa.chamadas, [{ tipo: 'scrollTo', left: 320, behavior: 'auto' }]);
+
+    // A fonte carregou: cada aba passou de 90px para 100px (máximo de 400px).
+    faixa.redimensionarAbas(new Array(8).fill(100));
+    janela.observadores[0].funcao();
+
+    assert.deepEqual(faixa.chamadas.at(-1), { tipo: 'scrollTo', left: 400, behavior: 'auto' });
+    assert.equal(faixa.scrollLeft, 400);
+});
+
+test('iniciar: sem mudança de medida o ResizeObserver não rola de novo', () => {
+    const janela = janelaFalsa();
+    const { nav, faixa } = criarFaixa({ largura: 400, abas: new Array(8).fill(100), ativa: 4 });
+    iniciar(nav, janela);
+    assert.equal(faixa.chamadas.length, 1);
+
+    janela.observadores[0].funcao();
+    janela.observadores[0].funcao();
+
+    assert.equal(faixa.chamadas.length, 1);
+});
+
+test('iniciar: abas que passam a transbordar depois (fonte maior) também centralizam', () => {
+    const janela = janelaFalsa();
+    const { nav, faixa, setas } = criarFaixa({ largura: 400, abas: [90, 90, 90, 90], ativa: 3 });
+    iniciar(nav, janela);
+    assert.deepEqual(faixa.chamadas, []);
+    assert.equal(setas.proxima.hidden, true);
+
+    faixa.redimensionarAbas([120, 120, 120, 120, 120]);
+    janela.observadores[0].funcao();
+
+    assert.equal(faixa.chamadas.length, 1);
+    assert.equal(setas.anterior.hidden, false);
+});
+
+// Depois que o usuário mexe na faixa, a posição dele vale: o layout que muda
+// (janela, fonte) não pode puxar a faixa de volta.
+const ASSUMINDO = {
+    'roda do mouse': (faixa) => faixa.disparar('wheel', { deltaY: 50, deltaX: 0, deltaMode: 0 }),
+    'gesto horizontal do trackpad': (faixa) => faixa.disparar('wheel', { deltaY: 0, deltaX: 40, deltaMode: 0 }),
+    'toque ou clique na faixa': (faixa) => faixa.disparar('pointerdown'),
+    'foco numa aba (Tab)': (faixa) => faixa.disparar('focusin'),
+    'seta': (faixa, setas) => setas.anterior.disparar('click'),
+};
+
+for (const [nome, acao] of Object.entries(ASSUMINDO)) {
+    test(`iniciar: depois de ${nome} o layout que muda não recentra`, () => {
+        const janela = janelaFalsa();
+        const { nav, faixa, setas } = criarFaixa({ largura: 400, abas: new Array(8).fill(90), ativa: 6 });
+        iniciar(nav, janela);
+
+        // A roda para baixo na ponta direita seria da página; por isso o
+        // usuário puxa a faixa um pouco para trás antes de agir.
+        faixa.scrollLeft = 200;
+        faixa.disparar('scroll');
+        acao(faixa, setas);
+        faixa.scrollLeft = 120;
+        const antes = faixa.chamadas.length;
+
+        faixa.redimensionarAbas(new Array(8).fill(100));
+        janela.observadores[0].funcao();
+
+        assert.equal(faixa.chamadas.length, antes, 'não pode haver scrollTo depois do usuário assumir');
+        assert.equal(faixa.scrollLeft, 120);
+    });
+}
+
+test('iniciar: a roda que não rola nada (faixa na ponta) não conta como o usuário assumir', () => {
+    const janela = janelaFalsa();
+    const { nav, faixa } = criarFaixa({ largura: 400, abas: new Array(8).fill(90), ativa: 6 });
+    iniciar(nav, janela);
+    assert.equal(faixa.scrollLeft, 320);
+
+    // Na ponta direita a roda para baixo é da página.
+    const evento = faixa.disparar('wheel', { deltaY: 100, deltaX: 0, deltaMode: 0 });
+    assert.equal(evento.defaultPrevented, false);
+
+    faixa.redimensionarAbas(new Array(8).fill(100));
+    janela.observadores[0].funcao();
+    assert.equal(faixa.scrollLeft, 400);
+});
+
+test('iniciar: a rolagem que o próprio módulo faz não conta como o usuário assumir', () => {
+    const janela = janelaFalsa();
+    const { nav, faixa } = criarFaixa({ largura: 400, abas: new Array(8).fill(90), ativa: 6 });
+    iniciar(nav, janela);
+
+    // O scrollTo inicial dispara "scroll" (o fake faz como o navegador).
+    assert.equal(faixa.registrados.scroll.length, 1);
+    faixa.redimensionarAbas(new Array(8).fill(100));
+    janela.observadores[0].funcao();
+
+    assert.equal(faixa.scrollLeft, 400);
+});
+
+test('iniciar: voltar do bfcache (pageshow persisted) refaz o centro; carregamento comum não mexe', () => {
+    const janela = janelaFalsa();
+    const { nav, faixa } = criarFaixa({ largura: 400, abas: new Array(8).fill(100), ativa: 6 });
+    iniciar(nav, janela);
+    assert.equal(faixa.scrollLeft, 400);
+    assert.equal(janela.registrados.pageshow.length, 1);
+
+    // O usuário rolou a faixa para o começo e saiu da página.
+    faixa.disparar('pointerdown');
+    faixa.scrollLeft = 0;
+    const antes = faixa.chamadas.length;
+
+    janela.disparar('pageshow', { persisted: false });
+    assert.equal(faixa.chamadas.length, antes);
+    assert.equal(faixa.scrollLeft, 0);
+
+    // Voltou do bfcache: a página reaparece com a faixa onde ficou.
+    janela.disparar('pageshow', { persisted: true });
+    assert.equal(faixa.scrollLeft, 400);
+
+    // E volta a acompanhar o layout, como num carregamento novo.
+    faixa.redimensionarAbas(new Array(8).fill(110));
+    janela.observadores[0].funcao();
+    assert.equal(faixa.scrollLeft, 480);
+});
+
+test('iniciar: nav que saiu da página solta o ouvinte de pageshow e não rola', () => {
+    const janela = janelaFalsa();
+    const { nav, faixa } = criarFaixa({ largura: 400, abas: new Array(8).fill(100), ativa: 6 });
+    iniciar(nav, janela);
+    const antes = faixa.chamadas.length;
+    faixa.scrollLeft = 0;
+
+    nav.isConnected = false;
+    janela.disparar('pageshow', { persisted: true });
+
+    assert.equal(faixa.chamadas.length, antes);
+    assert.equal(faixa.scrollLeft, 0);
+    assert.deepEqual(janela.removidos.map((r) => r.tipo), ['pageshow']);
+    assert.equal(janela.removidos[0].funcao, janela.registrados.pageshow[0].funcao);
+});
+
+test('iniciar: janela sem addEventListener (testes, ambiente antigo) não quebra', () => {
+    const { nav } = criarFaixa({ largura: 400, abas: new Array(8).fill(100), ativa: 6 });
+
+    assert.doesNotThrow(() => iniciar(nav, {}));
 });
