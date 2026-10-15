@@ -130,4 +130,7 @@ jobs:
             ${{ inputs.tag }}-release.zip
             ${{ inputs.tag }}-release.zip.sha256
           generate_release_notes: true
-          make_latest: true
+          # Tag com sufixo (-alpha, -beta.1, -rc.1) é pré-release e nunca vira a
+          # "latest": quem está na 4.x não é levado para a v5 sem querer.
+          prerelease: ${{ contains(inputs.tag, '-') }}
+          make_latest: ${{ contains(inputs.tag, '-') && 'false' || 'true' }}

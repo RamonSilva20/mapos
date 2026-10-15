@@ -4,7 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - v5 (5.0.0-alpha)
+## [Unreleased]
+
+## [5.0.0-beta.1] - 2026-10-15
+
+Primeira beta pública da v5. Exige PHP 8.5; leia o [guia de migração](docs/migracao-4x-para-5.md) e teste numa cópia antes de usar em produção.
 
 ### Added
 - README com capturas do painel da v5 (claro e escuro) e guia de migração atualizado com a delegação de permissões, o backup sem sessões, o e-mail da OS por POST, a exclusão de OS faturada, as planilhas e o Docker em localhost. #2859 [@RamonSilva20](https://github.com/RamonSilva20)
