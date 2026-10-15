@@ -23,8 +23,9 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'cookie_seguro_helper.php';
  * - img-src aceita https: e data: por causa dos QR Codes de PIX e boletos,
  *   que vêm dos gateways como URL externa ou base64.
  * - connect-src libera só as consultas de CEP e CNPJ do formulário de cliente
- *   (modules/clientes/formulario.js): ViaCEP e BrasilAPI, por fetch. A ReceitaWS
- *   do frontend legado saiu junto com ele.
+ *   (modules/clientes/formulario.js), por fetch: ViaCEP para o CEP e, para o
+ *   CNPJ, BrasilAPI com Minha Receita e CNPJ.ws como alternativas (#2996). A
+ *   ReceitaWS do frontend legado saiu junto com ele: não manda CORS.
  *
  * @param  string  $reportUri  Caminho do endpoint de relatórios, ou '' para não relatar
  * @param  string  $nonce      Nonce da requisição (base64), ou '' para não liberar nenhum
@@ -37,7 +38,7 @@ function segurancaPoliticaCsp($reportUri, $nonce = '')
         'style-src' => "'self'" . ($nonce !== '' ? " 'nonce-" . $nonce . "'" : ''),
         'img-src' => "'self' data: blob: https:",
         'font-src' => "'self' data:",
-        'connect-src' => "'self' https://viacep.com.br https://brasilapi.com.br",
+        'connect-src' => "'self' https://viacep.com.br https://brasilapi.com.br https://minhareceita.org https://publica.cnpj.ws",
         'object-src' => "'none'",
         'base-uri' => "'self'",
         'form-action' => "'self'",

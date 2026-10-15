@@ -6,6 +6,9 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+- A busca de CNPJ do formulário de cliente deixava de funcionar quando a BrasilAPI estava fora do ar. Agora tenta a Minha Receita e depois a CNPJ.ws (cada uma com tempo limite de 8 s), passando para a próxima quando a anterior falha (rede, tempo esgotado, 429, 5xx ou outro erro HTTP); um 400 ou 404 (CNPJ inexistente) encerra a busca. A ReceitaWS não volta porque não manda CORS. As duas origens novas entram no `connect-src` da CSP (`docs/cabecalhos-de-seguranca.md`). #2996 [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [5.0.0-beta.1] - 2026-10-15
 
 Primeira beta pública da v5. Exige PHP 8.5; leia o [guia de migração](docs/migracao-4x-para-5.md) e teste numa cópia antes de usar em produção.

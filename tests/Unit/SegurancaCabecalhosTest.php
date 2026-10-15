@@ -216,6 +216,19 @@ final class SegurancaCabecalhosTest extends MaposTestCase
         $this->assertStringContainsString("frame-ancestors 'self'", $csp);
     }
 
+    public function testConnectSrcLiberaSoAsApisDeCepECnpjDoFormularioDeCliente(): void
+    {
+        $csp = segurancaPoliticaCsp('');
+
+        $this->assertStringContainsString(
+            "connect-src 'self' https://viacep.com.br https://brasilapi.com.br https://minhareceita.org https://publica.cnpj.ws;",
+            $csp,
+            'CEP: ViaCEP. CNPJ: BrasilAPI, com Minha Receita e CNPJ.ws de alternativa (#2996).'
+        );
+        $this->assertStringNotContainsString('receitaws', $csp, 'A ReceitaWS não manda CORS e não é usada por fetch.');
+        $this->assertDoesNotMatchRegularExpression('/connect-src[^;]*\*/', $csp, 'Nada de curinga no connect-src.');
+    }
+
     public function testCspApontaParaOEndpointNaSubpastaDaInstalacao(): void
     {
         $h = segurancaCabecalhos(['APP_BASEURL' => 'https://exemplo.com/mapos/'], []);

@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 
 import { formatarCep, formatarDinheiro, formatarDocumento, formatarTelefone, somenteDigitos } from '../../assets/js/lib/mascaras.js';
 import { MENSAGENS, marcarCarregando, mensagemDoCampo, semDescritor } from '../../assets/js/lib/formulario.js';
-import { dadosDoCnpj, enderecoDoCep, preencherVazios } from '../../assets/js/modules/clientes/formulario.js';
+import { consultarCnpj, dadosDoCnpj, dadosDoCnpjWs, enderecoDoCep, preencherVazios, URL_CNPJ, URL_CNPJ_MINHA_RECEITA, URL_CNPJ_WS } from '../../assets/js/modules/clientes/formulario.js';
 import { aplicarMascara } from '../../assets/js/modules/formulario/padrao.js';
 
 test('máscara de CPF, CNPJ e CNPJ alfanumérico', () => {
@@ -94,6 +94,268 @@ test('dados da empresa pela BrasilAPI', () => {
     assert.equal(dados.cidade, 'Brasilia');
     assert.equal(dados.estado, 'DF');
     assert.equal(dadosDoCnpj({}), null);
+});
+
+// --- Busca de CNPJ com fallback (#2996) ------------------------------------
+
+const CNPJ = '00000000000191';
+
+const empresaBrasilApi = {
+    razao_social: 'BANCO DO BRASIL SA',
+    nome_fantasia: 'DIRECAO GERAL',
+    ddd_telefone_1: '6134939002',
+    email: 'SECEX@BB.COM.BR',
+    cep: '70040912',
+    descricao_tipo_de_logradouro: 'QUADRA',
+    logradouro: 'SAUN QUADRA 5 BLOCO B',
+    numero: 'S/N',
+    complemento: 'ANDAR 1 A 16',
+    bairro: 'ASA NORTE',
+    municipio: 'BRASILIA',
+    uf: 'DF',
+};
+
+const empresaCnpjWs = {
+    razao_social: 'BANCO DO BRASIL SA',
+    estabelecimento: {
+        nome_fantasia: 'DIRECAO GERAL',
+        ddd1: '61',
+        telefone1: '34939002',
+        email: 'SECEX@BB.COM.BR',
+        cep: '70040912',
+        tipo_logradouro: 'QUADRA',
+        logradouro: 'SAUN QUADRA 5 BLOCO B',
+        numero: 'S/N',
+        complemento: 'ANDAR 1 A 16',
+        bairro: 'ASA NORTE',
+        cidade: { nome: 'Brasília' },
+        estado: { sigla: 'DF' },
+    },
+};
+
+const resposta = (status, corpo) => ({ ok: status >= 200 && status < 300, status, json: async () => corpo });
+
+/**
+ * fetch falso: cada API tem o seu comportamento, indexado pela URL. O valor é
+ * uma resposta pronta, ou uma função (url, opcoes) para falhar de outro jeito.
+ * `chamadas` guarda as URLs na ordem em que foram pedidas.
+ */
+function fetchFalso(comportamentos) {
+    const chamadas = [];
+    const buscar = async (url, opcoes) => {
+        chamadas.push(url);
+        const comportamento = comportamentos[url];
+
+        return typeof comportamento === 'function' ? comportamento(url, opcoes) : comportamento;
+    };
+    buscar.chamadas = chamadas;
+
+    return buscar;
+}
+
+const erroDeRede = () => {
+    throw new TypeError('Failed to fetch');
+};
+
+test('CNPJ.ws: dados do estabelecimento viram os mesmos campos da BrasilAPI', () => {
+    const dados = dadosDoCnpjWs(empresaCnpjWs);
+
+    assert.deepEqual(dados, {
+        nomeCliente: 'Banco Do Brasil Sa',
+        contato: 'Direcao Geral',
+        telefone: '(61) 3493-9002',
+        email: 'secex@bb.com.br',
+        cep: '70040-912',
+        rua: 'Quadra Saun Quadra 5 Bloco B',
+        numero: 'S/N',
+        complemento: 'Andar 1 A 16',
+        bairro: 'Asa Norte',
+        cidade: 'Brasília',
+        estado: 'DF',
+    });
+    assert.deepEqual(dados, { ...dadosDoCnpj(empresaBrasilApi), cidade: 'Brasília' });
+});
+
+test('CNPJ.ws: campos ausentes ficam vazios e sem razão social não há dados', () => {
+    const dados = dadosDoCnpjWs({ razao_social: 'FULANO LTDA', estabelecimento: { ddd1: '61', cidade: null } });
+
+    assert.equal(dados.nomeCliente, 'Fulano Ltda');
+    assert.equal(dados.telefone, '', 'Sem o telefone, o DDD sozinho não vira número.');
+    assert.equal(dados.cidade, '');
+    assert.equal(dados.estado, '');
+    assert.equal(dadosDoCnpjWs({ razao_social: 'FULANO LTDA' }).nomeCliente, 'Fulano Ltda');
+    assert.equal(dadosDoCnpjWs({ estabelecimento: {} }), null);
+    assert.equal(dadosDoCnpjWs(null), null);
+});
+
+test('CNPJ: a BrasilAPI responde e as outras nem são chamadas', async () => {
+    const buscar = fetchFalso({ [URL_CNPJ(CNPJ)]: resposta(200, empresaBrasilApi) });
+
+    const dados = await consultarCnpj(CNPJ, buscar);
+
+    assert.equal(dados.nomeCliente, 'Banco Do Brasil Sa');
+    assert.equal(dados.cidade, 'Brasilia');
+    assert.deepEqual(buscar.chamadas, ['https://brasilapi.com.br/api/cnpj/v1/00000000000191']);
+});
+
+test('CNPJ: erro 5xx na BrasilAPI cai na Minha Receita', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: resposta(503, {}),
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(200, empresaBrasilApi),
+    });
+
+    const dados = await consultarCnpj(CNPJ, buscar);
+
+    assert.equal(dados.nomeCliente, 'Banco Do Brasil Sa');
+    assert.equal(dados.telefone, '(61) 3493-9002');
+    assert.deepEqual(buscar.chamadas, ['https://brasilapi.com.br/api/cnpj/v1/00000000000191', 'https://minhareceita.org/00000000000191']);
+});
+
+test('CNPJ: limite de consultas (429) passa para a próxima API', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: resposta(429, {}),
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(429, {}),
+        [URL_CNPJ_WS(CNPJ)]: resposta(200, empresaCnpjWs),
+    });
+
+    const dados = await consultarCnpj(CNPJ, buscar);
+
+    assert.equal(dados.cidade, 'Brasília');
+    assert.equal(buscar.chamadas.length, 3);
+});
+
+test('CNPJ: outro erro HTTP (bloqueio, 403) também passa para a próxima API', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: resposta(403, {}),
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(200, empresaBrasilApi),
+    });
+
+    assert.equal((await consultarCnpj(CNPJ, buscar)).nomeCliente, 'Banco Do Brasil Sa');
+    assert.equal(buscar.chamadas.length, 2);
+});
+
+test('CNPJ: erro de rede passa para a próxima API', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: erroDeRede,
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(200, empresaBrasilApi),
+    });
+
+    const dados = await consultarCnpj(CNPJ, buscar);
+
+    assert.equal(dados.nomeCliente, 'Banco Do Brasil Sa');
+    assert.equal(buscar.chamadas.length, 2);
+});
+
+test('CNPJ: resposta que não é JSON passa para a próxima API', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: { ok: true, status: 200, json: async () => { throw new SyntaxError('Unexpected token <'); } },
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(200, empresaBrasilApi),
+    });
+
+    assert.equal((await consultarCnpj(CNPJ, buscar)).nomeCliente, 'Banco Do Brasil Sa');
+});
+
+test('CNPJ: tempo esgotado aborta a consulta e passa para a próxima API', async () => {
+    const sinais = [];
+    const travada = (url, { signal }) => new Promise((_, rejeitar) => {
+        sinais.push(signal);
+        signal.addEventListener('abort', () => rejeitar(new DOMException('The operation was aborted.', 'AbortError')));
+    });
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: travada,
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(200, empresaBrasilApi),
+    });
+
+    const dados = await consultarCnpj(CNPJ, buscar, 10);
+
+    assert.equal(dados.nomeCliente, 'Banco Do Brasil Sa');
+    assert.equal(sinais.length, 1);
+    assert.equal(sinais[0].aborted, true);
+});
+
+test('CNPJ: as duas primeiras falham e a CNPJ.ws responde com os campos mapeados', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: resposta(500, {}),
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: erroDeRede,
+        [URL_CNPJ_WS(CNPJ)]: resposta(200, empresaCnpjWs),
+    });
+
+    const dados = await consultarCnpj(CNPJ, buscar);
+
+    assert.equal(dados.nomeCliente, 'Banco Do Brasil Sa');
+    assert.equal(dados.telefone, '(61) 3493-9002');
+    assert.equal(dados.rua, 'Quadra Saun Quadra 5 Bloco B');
+    assert.equal(dados.cidade, 'Brasília');
+    assert.equal(dados.estado, 'DF');
+    assert.deepEqual(buscar.chamadas, [
+        'https://brasilapi.com.br/api/cnpj/v1/00000000000191',
+        'https://minhareceita.org/00000000000191',
+        'https://publica.cnpj.ws/cnpj/00000000000191',
+    ]);
+});
+
+test('CNPJ: 404 e 400 dizem que o CNPJ não existe e encerram a cadeia', async () => {
+    for (const status of [404, 400]) {
+        const buscar = fetchFalso({
+            [URL_CNPJ(CNPJ)]: resposta(status, { message: 'CNPJ não encontrado' }),
+            [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(200, empresaBrasilApi),
+        });
+
+        assert.equal(await consultarCnpj(CNPJ, buscar), null, `HTTP ${status}`);
+        assert.equal(buscar.chamadas.length, 1, `HTTP ${status}: não pergunta a outra API.`);
+    }
+});
+
+test('CNPJ: 404 numa API de fallback também encerra a cadeia', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: erroDeRede,
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: resposta(404, {}),
+        [URL_CNPJ_WS(CNPJ)]: resposta(200, empresaCnpjWs),
+    });
+
+    assert.equal(await consultarCnpj(CNPJ, buscar), null);
+    assert.equal(buscar.chamadas.length, 2);
+});
+
+test('CNPJ: resposta sem razão social conta como não encontrado', async () => {
+    const buscar = fetchFalso({ [URL_CNPJ(CNPJ)]: resposta(200, {}) });
+
+    assert.equal(await consultarCnpj(CNPJ, buscar), null);
+    assert.equal(buscar.chamadas.length, 1);
+});
+
+test('CNPJ: todas as APIs falhando lança erro com o motivo de cada uma', async () => {
+    const buscar = fetchFalso({
+        [URL_CNPJ(CNPJ)]: resposta(502, {}),
+        [URL_CNPJ_MINHA_RECEITA(CNPJ)]: erroDeRede,
+        [URL_CNPJ_WS(CNPJ)]: resposta(429, {}),
+    });
+
+    await assert.rejects(consultarCnpj(CNPJ, buscar), (erro) => {
+        assert.deepEqual(erro.falhas, [
+            { provedor: 'BrasilAPI', motivo: 'HTTP 502' },
+            { provedor: 'Minha Receita', motivo: 'Failed to fetch' },
+            { provedor: 'CNPJ.ws', motivo: 'HTTP 429' },
+        ]);
+
+        return true;
+    });
+    assert.equal(buscar.chamadas.length, 3);
+});
+
+test('CNPJ: cada consulta leva um sinal de cancelamento e o cabeçalho Accept', async () => {
+    const opcoesRecebidas = [];
+    const buscar = async (url, opcoes) => {
+        opcoesRecebidas.push(opcoes);
+
+        return resposta(200, empresaBrasilApi);
+    };
+
+    await consultarCnpj(CNPJ, buscar);
+
+    assert.equal(opcoesRecebidas[0].headers.Accept, 'application/json');
+    assert.equal(typeof opcoesRecebidas[0].signal.aborted, 'boolean');
+    assert.equal(opcoesRecebidas[0].signal.aborted, false);
 });
 
 test('preenche só os campos vazios', () => {
