@@ -529,6 +529,9 @@ final class OsTelaTest extends MaposTestCase
         $this->assertStringContainsString('https://wa.me/5511999998888?text=Ol%C3%A1%20Ana%0AOS%209', $resumo);
         $this->assertStringContainsString('data-modal-abrir="faturar-os"', $resumo);
         $this->assertStringContainsString('id="form-faturar"', $resumo);
+        $this->assertStringContainsString('Laudo técnico', $resumo);
+        $this->assertStringContainsString('Não informado', $resumo);
+        $this->assertStringContainsString('os/editar/', $resumo);
 
         $produtos = $this->renderizar('os/visualizar', ['aba' => 'produtos'] + $this->dadosDaTela(true));
         $this->assertStringContainsString('Tela &lt;script&gt;', $produtos);
@@ -537,6 +540,8 @@ final class OsTelaTest extends MaposTestCase
 
         $faturada = $this->renderizar('os/visualizar', ['aba' => 'resumo'] + $this->dadosDaTela(false));
         $this->assertStringContainsString('não podem mais ser alterados', $faturada);
+        $this->assertStringContainsString('Equipamento e serviço', $faturada);
+        $this->assertStringNotContainsString('os/editar/', $faturada);
         $this->assertStringNotContainsString('data-modal-abrir="excluir-', $faturada);
     }
 

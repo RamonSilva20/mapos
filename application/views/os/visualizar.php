@@ -38,12 +38,13 @@ $dados = $campos([
     'Termo de garantia' => $os->refGarantia ?? null,
 ]);
 
-$textos = $campos([
-    'Descrição do produto ou serviço' => trim(strip_tags((string) $os->descricaoProduto)) !== '' ? osTextoExibicao($os->descricaoProduto) : null,
-    'Defeito' => trim(strip_tags((string) $os->defeito)) !== '' ? osTextoExibicao($os->defeito) : null,
-    'Observações' => trim(strip_tags((string) $os->observacoes)) !== '' ? osTextoExibicao($os->observacoes) : null,
-    'Laudo técnico' => trim(strip_tags((string) $os->laudoTecnico)) !== '' ? osTextoExibicao($os->laudoTecnico) : null,
-]);
+$texto = static fn ($valor) => trim(strip_tags((string) $valor)) !== '' ? osTextoExibicao($valor) : null;
+$textos = [
+    'Descrição do produto ou serviço' => $texto($os->descricaoProduto),
+    'Defeito' => $texto($os->defeito),
+    'Observações' => $texto($os->observacoes),
+    'Laudo técnico' => $texto($os->laudoTecnico),
+];
 
 ?>
 <div class="flex flex-col gap-4 pt-2 pb-8" <?= js_module('os/tela') ?> data-os-aba="<?= e($aba) ?>">
@@ -110,19 +111,20 @@ $textos = $campos([
                 </dl>
             </section>
             <section class="<?= e($caixa) ?> lg:col-span-2" aria-labelledby="secao-equipamento">
-                <h2 id="secao-equipamento" class="text-heading-sm text-text">Equipamento e serviço</h2>
-                <?php if ($textos === []) { ?>
-                    <p class="mt-3 text-caption text-muted">Nada informado. Os textos da OS são preenchidos em Editar OS.</p>
-                <?php } else { ?>
-                    <dl class="mt-3 grid gap-4 sm:grid-cols-2">
-                        <?php foreach ($textos as $rotulo => $valor) { ?>
-                            <div>
-                                <dt class="text-caption text-muted"><?= e($rotulo) ?></dt>
-                                <dd class="text-body-md [overflow-wrap:anywhere] text-text"><?= componenteConteudo($valor) ?></dd>
-                            </div>
-                        <?php } ?>
-                    </dl>
-                <?php } ?>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="secao-equipamento" class="text-heading-sm text-text">Equipamento e serviço</h2>
+                    <?php if ($pode['editar']) { ?>
+                        <?= component('button', ['label' => 'Editar', 'icon' => 'pencil', 'variant' => 'outline', 'href' => site_url('os/editar/' . $idOs)]) ?>
+                    <?php } ?>
+                </div>
+                <dl class="mt-3 grid gap-4 sm:grid-cols-2">
+                    <?php foreach ($textos as $rotulo => $valor) { ?>
+                        <div>
+                            <dt class="text-caption text-muted"><?= e($rotulo) ?></dt>
+                            <dd class="text-body-md [overflow-wrap:anywhere] <?= $valor === null ? 'text-muted' : 'text-text' ?>"><?= $valor === null ? 'Não informado' : componenteConteudo($valor) ?></dd>
+                        </div>
+                    <?php } ?>
+                </dl>
             </section>
         </div>
 
