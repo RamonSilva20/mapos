@@ -3900,10 +3900,6 @@ form {
     height: 16px;
   }
 
-  label {
-    display: none;
-  }
-
   .form-horizontal .control-label {
     padding-top: 0;
   }
@@ -3913,12 +3909,13 @@ form {
   }
 
   .dataTables_filter {
-    top: 10px;
+    position: static;
+    margin  : 0 10px;
   }
 
   .dataTables_length {
     width : 100%;
-    margin: -8px 2px;
+    margin: 2px 10px;
   }
 
   #source-calendar .btn-xs {
