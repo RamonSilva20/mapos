@@ -4,6 +4,11 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.55.3] - 2026-10-15
+
+### Fixed
+- Correção dos labels e checkboxes ocultos nos formulários ao acessar pelo celular na vertical (#2953). [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [4.55.2] - 2026-10-14
 
 ### Fixed
