@@ -14,7 +14,7 @@
 **DOWNLOAD COMPOSER LINK**: ` https://getcomposer.org/Composer-Setup.exe`
 
 **DOWNLOAD DO XAMPP LINK**: `https://www.apachefriends.org/download.html`
-> **_Escolha a versão de sua preferência desde que seja superior ao php 7.1_**
+> **_Escolha a versão de sua preferência desde que seja igual ou superior ao PHP 8.5_**
 
 
 

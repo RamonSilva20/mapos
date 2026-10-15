@@ -38,6 +38,10 @@ O **Map-OS** é um projeto de código aberto **mantido e desenvolvido pela empre
 
 Quer ajudar a melhorar o Map-OS? Leia o **[Guia de Contribuição](CONTRIBUTING.md)** para saber como preparar o ambiente de desenvolvimento, o padrão de código adotado e como abrir um Pull Request.
 
+### Migrando da 4.x para a v5
+
+A v5 exige PHP 8.5 e traz um painel novo. Leia o **[guia de migração](docs/migracao-4-para-5.md)** antes de atualizar e teste numa cópia.
+
 ### [Instalação](Instalacao_xampp_windows.md)
 
 1. Faça o download dos arquivos.
@@ -77,7 +81,7 @@ URL: http://localhost:8000/
 6. Configure o email de envio em Configurações > Sistema > E-mail .
 
     ##### Obs: Cuide da pasta `docker/data`, onde é pasta que o mysql do docker salva os arquivos. Se for deletada você perderá seu banco de dados.
-    ##### Obs2: O PhpMyAdmin também e instalado e pode ser acessado em `http://localhost:8080/`.
+    ##### Obs2: O PhpMyAdmin também é instalado e pode ser acessado em `http://localhost:8080/`. As portas do Docker só aceitam conexões da própria máquina (`127.0.0.1`); para expor o serviço, ajuste o `docker-compose.yml` ciente do risco.
 
 ### Instalação Automatizada
 Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https://www.youtube.com/watch?v=aZE-LW_YOE4)
