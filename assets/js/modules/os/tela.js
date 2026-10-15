@@ -23,6 +23,7 @@ import { mostrarToast } from '../../lib/toast.js';
 import { marcarCarregando, mensagemDoCampo, mostrarErroDoCampo } from '../../lib/formulario.js';
 import { iniciarAutocompletes } from '../../lib/autocomplete.js';
 import { aplicarMascara } from '../formulario/padrao.js';
+import { iniciarModulos } from '../../app.js';
 
 /** Preço vindo do servidor ("49.9", 49.9) no formato do campo: "49,90". */
 export function formatarPreco(valor) {
@@ -160,8 +161,10 @@ export default function iniciar(raiz, { post = postPadrao, doc = document, naveg
     }
 
     const trocar = (alvo) => {
-        // Os trechos novos podem trazer autocompletes (não trazem hoje).
+        // Os trechos novos podem trazer autocompletes (não trazem hoje) e os
+        // módulos das abas (componentes/abas), que só rodam no carregamento.
         iniciarAutocompletes(alvo);
+        iniciarModulos(alvo);
     };
 
     async function enviar(form, evento) {

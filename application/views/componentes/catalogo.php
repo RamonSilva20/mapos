@@ -182,6 +182,19 @@ $statusOs = [
             ['label' => 'Serviços', 'url' => site_url('componentes'), 'count' => 1],
             ['label' => 'Anexos', 'url' => site_url('componentes'), 'icon' => 'folder-open'],
         ]]) ?>
+        <?= componenteConteudo($secao('Abas que transbordam', 'Quando não cabem, a faixa rola: a aba ativa vem para o centro, a roda do mouse rola na horizontal e as setas das pontas rolam uma página. Sem JavaScript a faixa continua rolável.')) ?>
+        <div class="max-w-md">
+            <?= component('tabs', ['label' => 'Seções das configurações', 'items' => [
+                ['label' => 'Geral', 'url' => site_url('componentes'), 'icon' => 'settings'],
+                ['label' => 'Ordens de serviço', 'url' => site_url('componentes'), 'icon' => 'wrench'],
+                ['label' => 'Vendas e estoque', 'url' => site_url('componentes'), 'icon' => 'shopping-cart'],
+                ['label' => 'Financeiro', 'url' => site_url('componentes'), 'icon' => 'circle-dollar-sign'],
+                ['label' => 'E-mail', 'url' => site_url('componentes'), 'icon' => 'mail'],
+                ['label' => 'Pagamentos', 'url' => site_url('componentes'), 'icon' => 'banknote', 'active' => true],
+                ['label' => 'API', 'url' => site_url('componentes'), 'icon' => 'key-round'],
+                ['label' => 'Atualizações', 'url' => site_url('componentes'), 'icon' => 'download'],
+            ]]) ?>
+        </div>
 
         <?= componenteConteudo($secao('Status (pill-status)', 'Sempre com a palavra; texto -ink sobre -soft, conferido nos dois modos. O laranja nunca indica status.')) ?>
         <div class="flex flex-wrap items-center gap-2">
