@@ -20,6 +20,12 @@
 //   pelo módulo formulario/padrao como qualquer outro erro de campo.
 // - O rodapé opcional (data-autocomplete-novo) abre o cadastro numa nova aba,
 //   para não perder o que já foi preenchido.
+// - Com data-autocomplete-novo-modal="<id do <dialog>>" e o dialog na página,
+//   o rodapé vira um botão que abre o modal (#3003). Antes de abrir, o wrapper
+//   dispara "autocomplete-novo" com detail.texto (o que foi digitado). Quem
+//   cria o registro devolve o item ({id, valor, detalhe}) disparando
+//   "autocomplete-novo-criado" no wrapper (detail.item): o autocomplete o
+//   escolhe como se tivesse sido tirado da lista. Sem o dialog, vale o link.
 
 import { mensagemDoCampo, mostrarErroDoCampo } from './formulario.js';
 import { get as getPadrao } from './http.js';
@@ -102,14 +108,26 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
     lista.setAttribute('aria-label', campo.labels?.[0]?.textContent?.replace('*', '').trim() || 'Opções');
     popup.append(lista);
 
-    if (wrapper.dataset.autocompleteNovo) {
-        const rodape = doc.createElement('a');
+    const modalNovo = wrapper.dataset.autocompleteNovoModal ? doc.getElementById(wrapper.dataset.autocompleteNovoModal) : null;
+
+    if (modalNovo || wrapper.dataset.autocompleteNovo) {
+        const rodape = doc.createElement(modalNovo ? 'button' : 'a');
         rodape.className = CLASSES_RODAPE;
-        rodape.href = wrapper.dataset.autocompleteNovo;
-        rodape.target = '_blank';
-        rodape.rel = 'noopener';
+        if (modalNovo) {
+            rodape.type = 'button';
+            rodape.classList.add('w-full', 'text-left');
+            rodape.addEventListener('click', () => {
+                fechar();
+                wrapper.dispatchEvent(new CustomEvent('autocomplete-novo', { bubbles: true, detail: { texto: campo.value.trim() } }));
+                modalNovo.showModal?.();
+            });
+        } else {
+            rodape.href = wrapper.dataset.autocompleteNovo;
+            rodape.target = '_blank';
+            rodape.rel = 'noopener';
+        }
         rodape.append(criarIcone('plus', 'size-4', doc), doc.createTextNode(wrapper.dataset.autocompleteNovoRotulo || 'Cadastrar novo'));
-        // Clicar no link não deve fechar a lista antes de abrir a aba.
+        // Clicar no rodapé não deve fechar a lista (blur do campo) antes de agir.
         rodape.addEventListener('mousedown', (evento) => evento.preventDefault());
         popup.append(rodape);
     }
@@ -223,6 +241,14 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
             detail: { item, dados: brutos.find((bruto) => bruto && String(bruto.id) === item.id) ?? null },
         }));
     }
+
+    // O modal de cadastro devolveu o registro criado: escolhe como se fosse da lista.
+    wrapper.addEventListener('autocomplete-novo-criado', (evento) => {
+        const [item] = normalizarItens([evento.detail?.item]);
+        if (item) {
+            escolher(item);
+        }
+    });
 
     async function pesquisar(termo) {
         const numero = ++pedido;

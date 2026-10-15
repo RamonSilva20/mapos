@@ -248,6 +248,14 @@ final class PermissionsMapTest extends MaposTestCase
         $this->assertArrayHasKey('gerenciar', self::controllers()['Clientes']);
     }
 
+    /** O cadastro rápido do modal da OS e da venda (#3003) exige aCliente, como clientes/adicionar. */
+    public function testCadastroRapidoDeClienteExigeACliente(): void
+    {
+        $this->assertSame('aCliente', self::mapa()['Clientes']['cadastroRapido']);
+        $this->assertSame(self::mapa()['Clientes']['adicionar'], self::mapa()['Clientes']['cadastroRapido']);
+        $this->assertArrayHasKey('cadastroRapido', self::controllers()['Clientes']);
+    }
+
     #[DataProvider('rotas')]
     public function testTodoMetodoPublicoEstaNoMapa(string $controller, string $metodo): void
     {

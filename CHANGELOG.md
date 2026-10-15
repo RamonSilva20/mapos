@@ -6,6 +6,9 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Cadastro rápido de cliente em modal na OS e na venda: o rodapé "Cadastrar novo cliente" do campo Cliente abre um modal (tipo, CPF/CNPJ com "Buscar CNPJ", nome, contato, telefone, celular, e-mail, CEP com busca e endereço) sem sair da tela; ao salvar, o cliente já fica escolhido e nada do que foi preenchido se perde. Sem a senha da área do cliente (começa com o CPF ou CNPJ, como no cadastro normal) e com o link "Cadastro completo". Nova rota `clientes/cadastroRapido`, que exige `aCliente`; sem essa permissão o rodapé e o modal não aparecem. #3003 [@RamonSilva20](https://github.com/RamonSilva20)
+
 ### Fixed
 - A busca de CNPJ do formulário de cliente deixava de funcionar quando a BrasilAPI estava fora do ar. Agora tenta a Minha Receita e depois a CNPJ.ws (cada uma com tempo limite de 8 s), passando para a próxima quando a anterior falha (rede, tempo esgotado, 429, 5xx ou outro erro HTTP); um 400 ou 404 (CNPJ inexistente) encerra a busca. A ReceitaWS não volta porque não manda CORS. As duas origens novas entram no `connect-src` da CSP (`docs/cabecalhos-de-seguranca.md`). #2996 [@RamonSilva20](https://github.com/RamonSilva20)
 - Abas que não cabem na largura (Configurações, OS, ficha do cliente): a aba ativa vem para o centro ao carregar, a roda do mouse rola a faixa na horizontal e setas nas pontas rolam uma página, aparecendo só do lado em que há aba escondida; antes, com o mouse, as abas depois de "Pagamentos" só eram achadas clicando na aba "API" cortada. As setas ficam fora do foco do teclado (o Tab já chega a cada aba) e a rolagem respeita `prefers-reduced-motion`. #2995 [@RamonSilva20](https://github.com/RamonSilva20)

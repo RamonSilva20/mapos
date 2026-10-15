@@ -351,6 +351,9 @@ final class VendasFormularioTest extends MaposTestCase
         $this->assertStringContainsString('name="clientes_id"', $html);
         $this->assertStringContainsString('name="usuarios_id"', $html);
         $this->assertStringContainsString('Cadastrar novo cliente', $html);
+        $this->assertStringContainsString('data-autocomplete-novo-modal="cliente-rapido"', $html);
+        $this->assertStringContainsString('id="cliente-rapido"', $html);
+        $this->assertStringContainsString('clientes/cadastroRapido', $html);
         $this->assertStringContainsString('A formatação do editor antigo', $html);
         $this->assertStringContainsString('hash-csrf', $html);
         $this->assertStringContainsString('vendas/visualizar/7', $html);
@@ -368,5 +371,7 @@ final class VendasFormularioTest extends MaposTestCase
         $this->assertStringContainsString('Criar venda', $nova);
         $this->assertStringContainsString('Não foi possível salvar', $nova);
         $this->assertStringNotContainsString('Cadastrar novo cliente', $nova);
+        $this->assertStringNotContainsString('cliente-rapido', $nova, 'Sem aCliente, nem o rodapé nem o modal são renderizados.');
+        $this->assertStringNotContainsString('clientes/cadastroRapido', $nova);
     }
 }
