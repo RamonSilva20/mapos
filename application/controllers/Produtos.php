@@ -22,9 +22,8 @@ class Produtos extends MY_Controller
 
     public function gerenciar()
     {
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
-            redirect(base_url());
+        if (! authorize('vProduto', 'Você não tem permissão para visualizar produtos.')) {
+            return;
         }
 
         $pesquisa = $this->input->get('pesquisa');
@@ -49,9 +48,8 @@ class Produtos extends MY_Controller
 
     public function adicionar()
     {
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aProduto')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar produtos.');
-            redirect(base_url());
+        if (! authorize('aProduto', 'Você não tem permissão para adicionar produtos.')) {
+            return;
         }
 
         $this->load->library('form_validation');
@@ -79,7 +77,9 @@ class Produtos extends MY_Controller
             if ($this->produtos_model->add('produtos', $data) == true) {
                 $this->session->set_flashdata('success', 'Produto adicionado com sucesso!');
                 log_info('Adicionou um produto');
-                redirect(site_url('produtos/adicionar/'));
+                respond_redirect(site_url('produtos/adicionar/'));
+
+                return;
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured.</p></div>';
             }
@@ -91,14 +91,17 @@ class Produtos extends MY_Controller
 
     public function editar()
     {
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3)) || ! $this->produtos_model->getById($this->uri->segment(3))) {
+        $id = $this->uri->segment(3);
+
+        if (! $id || ! is_numeric($id) || ! $this->produtos_model->getById($id)) {
             $this->session->set_flashdata('error', 'Produto não encontrado ou parâmetro inválido.');
-            redirect('produtos/gerenciar');
+            respond_redirect(site_url('produtos/gerenciar'));
+
+            return;
         }
 
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para editar produtos.');
-            redirect(base_url());
+        if (! authorize('eProduto', 'Você não tem permissão para editar produtos.')) {
+            return;
         }
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
@@ -122,16 +125,18 @@ class Produtos extends MY_Controller
                 'entrada' => set_value('entrada'),
             ];
 
-            if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $this->input->post('idProdutos')) == true) {
+            if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $id) == true) {
                 $this->session->set_flashdata('success', 'Produto editado com sucesso!');
-                log_info('Alterou um produto. ID: ' . $this->input->post('idProdutos'));
-                redirect(site_url('produtos/editar/') . $this->input->post('idProdutos'));
+                log_info('Alterou um produto. ID: ' . $id);
+                respond_redirect(site_url('produtos/editar/') . $id);
+
+                return;
             } else {
                 $this->data['custom_error'] = '<div class="form_error"><p>An Error Occured</p></div>';
             }
         }
 
-        $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
+        $this->data['result'] = $this->produtos_model->getById($id);
 
         $this->data['view'] = 'produtos/editarProduto';
 
@@ -142,19 +147,22 @@ class Produtos extends MY_Controller
     {
         if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
+            respond_redirect(site_url('mapos'));
+
+            return;
         }
 
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar produtos.');
-            redirect(base_url());
+        if (! authorize('vProduto', 'Você não tem permissão para visualizar produtos.')) {
+            return;
         }
 
         $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
 
         if ($this->data['result'] == null) {
             $this->session->set_flashdata('error', 'Produto não encontrado.');
-            redirect(site_url('produtos/editar/') . $this->input->post('idProdutos'));
+            respond_redirect(site_url('produtos/gerenciar'));
+
+            return;
         }
 
         $this->data['view'] = 'produtos/visualizarProduto';
@@ -164,50 +172,73 @@ class Produtos extends MY_Controller
 
     public function excluir()
     {
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'dProduto')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para excluir produtos.');
-            redirect(base_url());
+        if (! authorize('dProduto', 'Você não tem permissão para excluir produtos.')) {
+            return;
         }
 
         $id = $this->input->post('id');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
-            redirect(base_url() . 'index.php/produtos/gerenciar/');
+            respond_redirect(site_url('produtos/gerenciar/'));
+
+            return;
         }
+
+        // As três exclusões são uma operação só: os itens de OS e de venda
+        // referenciam o produto, então uma falha no meio deixaria os filhos
+        // removidos sem o pai. O rollback do ramo de erro desfaz os dois
+        // primeiros quando o produto não sai.
+        $this->db->trans_start();
 
         $this->produtos_model->delete('produtos_os', 'produtos_id', $id);
         $this->produtos_model->delete('itens_de_vendas', 'produtos_id', $id);
-        $this->produtos_model->delete('produtos', 'idProdutos', $id);
+
+        if ($this->produtos_model->delete('produtos', 'idProdutos', $id) === false) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
+            respond_redirect(site_url('produtos/gerenciar/'));
+
+            return;
+        }
+
+        if (! $this->db->trans_complete()) {
+            $this->session->set_flashdata('error', 'Erro ao tentar excluir produto.');
+            respond_redirect(site_url('produtos/gerenciar/'));
+
+            return;
+        }
 
         log_info('Removeu um produto. ID: ' . $id);
 
         $this->session->set_flashdata('success', 'Produto excluido com sucesso!');
-        redirect(site_url('produtos/gerenciar/'));
+        respond_redirect(site_url('produtos/gerenciar/'));
     }
 
     public function atualizar_estoque()
     {
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar estoque de produtos.');
-            redirect(base_url());
+        if (! authorize('eProduto', 'Você não tem permissão para atualizar estoque de produtos.')) {
+            return;
         }
 
         $idProduto = $this->input->post('id');
         $novoEstoque = $this->input->post('estoque');
         $estoqueAtual = $this->input->post('estoqueAtual');
 
-        $estoque = $estoqueAtual + $novoEstoque;
+        if (! is_numeric($estoqueAtual) || ! is_numeric($novoEstoque)) {
+            $this->session->set_flashdata('error', 'Estoque inválido.');
+            respond_redirect(site_url('produtos/gerenciar/'));
+
+            return;
+        }
 
         $data = [
-            'estoque' => $estoque,
+            'estoque' => (int) $estoqueAtual + (int) $novoEstoque,
         ];
 
-        if ($this->produtos_model->edit('produtos', $data, 'idProdutos', $idProduto) == true) {
-            $this->session->set_flashdata('success', 'Estoque de Produto atualizado com sucesso!');
-            log_info('Atualizou estoque de um produto. ID: ' . $idProduto);
-            redirect(site_url('produtos/visualizar/') . $idProduto);
-        } else {
-            $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
-        }
+        $this->produtos_model->edit('produtos', $data, 'idProdutos', $idProduto);
+
+        $this->session->set_flashdata('success', 'Estoque de Produto atualizado com sucesso!');
+        log_info('Atualizou estoque de um produto. ID: ' . $idProduto);
+        respond_redirect(site_url('produtos/visualizar/') . $idProduto);
     }
 }

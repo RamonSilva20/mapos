@@ -271,14 +271,25 @@ the rest of the action. `Clientes::gerenciar()`, the success redirect in
 (`Financeiro::excluirLancamento()`). And the id that authorized the request is
 the one from `uri->segment(3)`, not the one posted in the body: a guard that
 validates the segment while the `UPDATE` reads `input->post('id…')` is an IDOR
-the moment the two differ, which is why `Servicos::editar()` and
-`Clientes::editar()` now derive a single `$id` from the segment.
+the moment the two differ, which is why `Servicos::editar()`,
+`Clientes::editar()` and `Produtos::editar()` now derive a single `$id` from
+the segment. `Produtos::visualizar()` had the same defect from the other
+direction: its not-found branch redirected to `produtos/editar/` . `post('idProdutos')`,
+which is empty on a GET, and now goes to `produtos/gerenciar` with the error.
+`Produtos::excluir()` also joined the `trans_start()`/`trans_complete()` sweep,
+because its three deletes touch `produtos_os` and `itens_de_vendas` before
+`produtos` and a failure between them would leave the children orphaned.
+`Produtos::atualizar_estoque()` was the one method on the sweep that did
+arithmetic on raw POST strings: `$estoqueAtual + $novoEstoque` is a `TypeError`
+on PHP 8 whenever either comes back non-numeric or empty, which a cleared
+quantity field does. It now guards with `is_numeric()` and casts both operands,
+so the failure is a flash message and a redirect instead of a 500.
 
 The following were found in the same review and are **not** fixed, on purpose;
 each is recorded here so the next person does not re-derive it:
 
 - **Most controllers are still on the old guard.** `Os`, `Vendas`,
-  `Relatorios`, `Mapos`, `Cobrancas`, `Garantias`, `Produtos`, `Financeiro`,
+  `Relatorios`, `Mapos`, `Cobrancas`, `Garantias`, `Financeiro`,
   `Arquivos`, `Usuarios` and `Permissoes` keep the inline `checkPermission` +
   `redirect()` pattern and the segment-vs-POST mismatch in their `editar()`.
   They have no controller test, so changing them is invisible to the suite —
@@ -293,6 +304,17 @@ each is recorded here so the next person does not re-derive it:
   intentional (all fifteen models): it reports success for an update that
   changed nothing. It reads like a bug in isolation, and it is not to be
   "fixed" in one model.
+- **The `excluir()` transaction rolls back only at depth 1, so the suite never
+  exercises its failure path.** `CI_DB_driver::trans_rollback()` issues the
+  `ROLLBACK` only when `_trans_depth === 1`; in the harness the test's own
+  transaction already holds depth 1, the controller's `trans_start()` runs at
+  depth 2, and its `trans_rollback()` just decrements. `Servicos::excluir()` and
+  `Produtos::excluir()` carry the same gap. It is latent for a second reason: in
+  production the only trigger is a `produtos` row that does not exist, and such a
+  row has no children for the foreign key to orphan. Separately,
+  `trans_complete()` returns `false` when `trans_enabled` is off, which would
+  send every successful delete down the error branch; it is left because it
+  mirrors `Servicos` and the configuration is not expected to change.
 
 ### Maintained schema, per-test data
 

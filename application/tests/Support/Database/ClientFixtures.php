@@ -3,7 +3,7 @@
 namespace Tests\Support\Database;
 
 /**
- * Fixtures de cliente e de OS, comuns aos testes de controller.
+ * Fixtures de cliente, de OS e de venda, comuns aos testes de controller.
  *
  * O `installClient()` insere o conjunto completo de colunas (o dos testes de
  * Clientes), que é superconjunto do que Servicos e Mine precisam: as colunas
@@ -12,8 +12,8 @@ namespace Tests\Support\Database;
  * `clientId()`/`clientPassword()` para reencontrar a linha.
  *
  * É a regra de "um fato mora em um só lugar" do AGENTS.md aplicada ao schema:
- * uma mudança em `clientes` ou `os` é corrigida aqui, uma vez, e não em cada
- * teste de controller.
+ * uma mudança em `clientes`, `os` ou `vendas` é corrigida aqui, uma vez, e não
+ * em cada teste de controller.
  */
 trait ClientFixtures
 {
@@ -82,6 +82,37 @@ trait ClientFixtures
         ]);
 
         return (int) $this->ci()->db->insert_id('os');
+    }
+
+    /**
+     * A venda recebe o `$productId` do chamador, e não instala o produto: o
+     * `itens_de_vendas.produtos_id` tem chave estrangeira, então o produto
+     * precisa existir antes, mas quem sabe criá-lo é o `ProductFixtures`. Aqui
+     * só o vínculo é montado.
+     */
+    private function installVenda(int $clientId, int $productId): int
+    {
+        $this->ci()->db->insert('vendas', [
+            'dataVenda' => date('Y-m-d'),
+            'valorTotal' => 0,
+            'desconto' => 0,
+            'faturado' => 0,
+            'clientes_id' => $clientId,
+            'usuarios_id' => $this->firstUserId(),
+            'valor_desconto' => 0,
+        ]);
+
+        $vendaId = (int) $this->ci()->db->insert_id('vendas');
+
+        $this->ci()->db->insert('itens_de_vendas', [
+            'vendas_id' => $vendaId,
+            'quantidade' => 1,
+            'subTotal' => 0,
+            'preco' => 0,
+            'produtos_id' => $productId,
+        ]);
+
+        return $vendaId;
     }
 
     private function firstUserId(): int

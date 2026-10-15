@@ -5,6 +5,7 @@ namespace Tests\Controllers;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Support\ControllerTestCase;
 use Tests\Support\Database\ClientFixtures;
+use Tests\Support\Database\ProductFixtures;
 use Tests\Support\Transaction\TransactsDatabase;
 
 /**
@@ -21,6 +22,7 @@ use Tests\Support\Transaction\TransactsDatabase;
 final class ClientesControllerTest extends ControllerTestCase
 {
     use ClientFixtures;
+    use ProductFixtures;
     use TransactsDatabase;
 
     protected function setUp(): void
@@ -422,7 +424,7 @@ final class ClientesControllerTest extends ControllerTestCase
     {
         $id = $this->installClient('del@exemplo.com', 'Del');
         $osId = $this->installServiceOrder($id);
-        $vendaId = $this->installVenda($id);
+        $vendaId = $this->installVenda($id, $this->installProduct());
 
         $_POST['id'] = (string) $id;
         $this->callControllerRaw('Clientes', 'excluir');
@@ -441,45 +443,5 @@ final class ClientesControllerTest extends ControllerTestCase
         $this->assertSame(0, (int) $this->ci()->db->where('idOs', $osId)->count_all_results('os'));
         $this->assertSame(0, (int) $this->ci()->db->where('vendas_id', $vendaId)->count_all_results('itens_de_vendas'));
         $this->assertSame(0, (int) $this->ci()->db->where('idVendas', $vendaId)->count_all_results('vendas'));
-    }
-
-    private function installVenda(int $clientId): int
-    {
-        $this->ci()->db->insert('vendas', [
-            'dataVenda' => date('Y-m-d'),
-            'valorTotal' => 0,
-            'desconto' => 0,
-            'faturado' => 0,
-            'clientes_id' => $clientId,
-            'usuarios_id' => $this->firstUserId(),
-            'valor_desconto' => 0,
-        ]);
-
-        $vendaId = (int) $this->ci()->db->insert_id('vendas');
-
-        $produtoId = $this->installProduto();
-        $this->ci()->db->insert('itens_de_vendas', [
-            'vendas_id' => $vendaId,
-            'quantidade' => 1,
-            'subTotal' => 0,
-            'preco' => 0,
-            'produtos_id' => $produtoId,
-        ]);
-
-        return $vendaId;
-    }
-
-    private function installProduto(): int
-    {
-        $this->ci()->db->insert('produtos', [
-            'descricao' => 'Produto Teste',
-            'unidade' => 'UN',
-            'precoCompra' => 10.00,
-            'precoVenda' => 15.00,
-            'estoque' => 100,
-            'estoqueMinimo' => 1,
-        ]);
-
-        return (int) $this->ci()->db->insert_id('produtos');
     }
 }
