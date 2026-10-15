@@ -6,14 +6,15 @@
 //   (o lançamento parcelado nasce em aberto) e um resumo mostra o valor de
 //   cada parcela.
 // - Valor líquido: valor menos desconto, ao digitar.
-// - Cliente / fornecedor: sugestões dos clientes do cadastro e dos nomes já
-//   usados; escolher um cliente guarda o id (clientes_id), e mudar o texto
+// - Cliente / fornecedor: autocomplete compartilhado com a OS e a venda
+//   (lib/autocomplete.js, modo livre), com os clientes do cadastro e os nomes
+//   já usados; escolher um cliente guarda o id (clientes_id), e mudar o texto
 //   depois solta o vínculo.
 //
 // Tudo isto é prévia: o servidor calcula o líquido, as parcelas e o vínculo de
 // novo (financeiroLancamentoDoFormulario() e financeiroLinhasDoParcelamento()).
 
-import { get as getPadrao } from '../../lib/http.js';
+import { iniciarAutocompletes } from '../../lib/autocomplete.js';
 
 /** Texto em reais ("1.234,56" ou "1234.56") em centavos; vazio ou inválido, null. */
 export function paraCentavos(texto) {
@@ -146,71 +147,6 @@ function iniciarValores(raiz, formulario) {
     atualizar();
 }
 
-function iniciarSugestoes(raiz, formulario, { buscar = getPadrao, atraso = 250 } = {}) {
-    const url = raiz.dataset.financeiroSugestoes;
-    const campo = formulario.elements.namedItem('cliente_fornecedor');
-    const oculto = formulario.elements.namedItem('clientes_id');
-    const lista = raiz.querySelector('datalist');
-    if (!url || !campo || !oculto || !lista) {
-        return;
-    }
-
-    let itens = [];
-    let espera = null;
-    let pedido = 0;
-    // O cliente com que o formulário já veio (ao editar): continua vinculado
-    // enquanto o texto não muda.
-    const inicial = oculto.value ? { id: oculto.value, valor: campo.value } : null;
-
-    const vincular = () => {
-        const texto = campo.value.trim();
-        const sugestao = itens.find((item) => item.id && item.valor === texto);
-        if (sugestao) {
-            oculto.value = String(sugestao.id);
-        } else if (inicial && texto === inicial.valor.trim()) {
-            oculto.value = inicial.id;
-        } else {
-            oculto.value = '';
-        }
-    };
-
-    const preencher = (novos) => {
-        itens = novos;
-        lista.replaceChildren(...novos.map((item) => {
-            const opcao = document.createElement('option');
-            opcao.value = item.valor;
-            if (item.detalhe) {
-                opcao.label = item.detalhe;
-            }
-            return opcao;
-        }));
-    };
-
-    campo.addEventListener('input', () => {
-        vincular();
-        clearTimeout(espera);
-
-        const termo = campo.value.trim();
-        if (termo.length < 2) {
-            preencher([]);
-            return;
-        }
-
-        espera = setTimeout(async () => {
-            const atual = ++pedido;
-            try {
-                const resposta = await buscar(`${url}${url.includes('?') ? '&' : '?'}term=${encodeURIComponent(termo)}`);
-                if (atual === pedido && Array.isArray(resposta)) {
-                    preencher(resposta.filter((item) => item && typeof item.valor === 'string'));
-                    vincular();
-                }
-            } catch {
-                // Sem sugestões: o campo continua aceitando texto livre.
-            }
-        }, atraso);
-    });
-}
-
 export default function iniciar(raiz) {
     const formulario = raiz.querySelector('form');
     if (!formulario) {
@@ -219,5 +155,5 @@ export default function iniciar(raiz) {
 
     iniciarBaixa(raiz, formulario);
     iniciarValores(raiz, formulario);
-    iniciarSugestoes(raiz, formulario);
+    iniciarAutocompletes(raiz);
 }

@@ -344,7 +344,8 @@ final class FinanceiroTelasTest extends MaposTestCase
         $this->assertStringContainsString('financeiro/adicionar?periodo=mes&amp;de=2026-10-01&amp;ate=2026-10-31', $html, 'O POST volta com os filtros da listagem.');
         $this->assertStringContainsString('Parcelamento', $html);
         $this->assertStringContainsString('name="parcelas"', $html);
-        $this->assertStringContainsString('<datalist id="cliente-sugestoes">', $html);
+        $this->assertStringContainsString('data-autocomplete-livre', $html);
+        $this->assertStringNotContainsString('<datalist', $html);
         $this->assertStringContainsString('name="clientes_id"', $html);
         $this->assertStringContainsString('data-mascara="dinheiro"', $html);
         $this->assertStringNotContainsString('<script', $html);
