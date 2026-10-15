@@ -8,6 +8,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 - A busca de CNPJ do formulário de cliente deixava de funcionar quando a BrasilAPI estava fora do ar. Agora tenta a Minha Receita e depois a CNPJ.ws (cada uma com tempo limite de 8 s), passando para a próxima quando a anterior falha (rede, tempo esgotado, 429, 5xx ou outro erro HTTP); um 400 ou 404 (CNPJ inexistente) encerra a busca. A ReceitaWS não volta porque não manda CORS. As duas origens novas entram no `connect-src` da CSP (`docs/cabecalhos-de-seguranca.md`). #2996 [@RamonSilva20](https://github.com/RamonSilva20)
+- Abas que não cabem na largura (Configurações, OS, ficha do cliente): a aba ativa vem para o centro ao carregar, a roda do mouse rola a faixa na horizontal e setas nas pontas rolam uma página, aparecendo só do lado em que há aba escondida; antes, com o mouse, as abas depois de "Pagamentos" só eram achadas clicando na aba "API" cortada. As setas ficam fora do foco do teclado (o Tab já chega a cada aba) e a rolagem respeita `prefers-reduced-motion`. #2995 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ## [5.0.0-beta.1] - 2026-10-15
 

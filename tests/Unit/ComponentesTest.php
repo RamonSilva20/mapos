@@ -669,6 +669,37 @@ final class ComponentesTest extends MaposTestCase
         $this->assertStringContainsString('>2</span>', $html);
     }
 
+    /**
+     * Abas que transbordam: a faixa que rola e as duas setas das pontas, que
+     * começam escondidas (sem JavaScript a faixa segue rolável) e fora do
+     * foco e do leitor de tela (o teclado chega às abas pelo Tab).
+     */
+    public function testTabsTemFaixaESetasParaAbasQueTransbordam(): void
+    {
+        $html = $this->html('tabs', ['items' => [
+            ['label' => 'Geral', 'url' => '/c', 'active' => true],
+            ['label' => 'API', 'url' => '/c?aba=api'],
+        ]]);
+
+        $this->assertStringContainsString('data-module="componentes/abas"', $html);
+        $this->assertStringContainsString('<div data-abas-lista class="abas-rolagem flex gap-1 overflow-x-auto', $html);
+        $this->assertStringContainsString('scroll-px-16', $html);
+
+        foreach (['anterior' => ['Abas anteriores', 'chevron-left'], 'proxima' => ['Próximas abas', 'chevron-right']] as $lado => [$rotulo, $icone]) {
+            $this->assertMatchesRegularExpression('#<div data-abas-seta="' . $lado . '" hidden class="[^"]*pointer-events-none[^"]*">#', $html);
+            $this->assertStringContainsString('aria-label="' . $rotulo . '"', $html);
+            $this->assertStringContainsString('#' . $icone . '"', $html);
+        }
+
+        $this->assertSame(2, substr_count($html, 'type="button"'));
+        $this->assertSame(2, substr_count($html, 'tabindex="-1"'));
+        $this->assertSame(2, substr_count($html, 'aria-hidden="true" tabindex="-1"'));
+
+        // As setas ficam depois da faixa e não levam aria-current.
+        $this->assertGreaterThan(strpos($html, 'data-abas-lista'), strpos($html, 'data-abas-seta="anterior"'));
+        $this->assertSame(1, substr_count($html, 'aria-current'));
+    }
+
     public function testTabsSemUrlFalha(): void
     {
         $this->expectException(InvalidArgumentException::class);

@@ -271,6 +271,7 @@ Map-OS doesn't use traditional photography — it uses **illustrated stickers an
 
 **`tabs`** — section tabs inside a page (e.g., Detalhes / Produtos / Serviços / Anexos on an OS).
 - Labels at 15px / 500 in `{colors.ink-muted}` with optional neutral counters; a 1px `{colors.hairline-cloud}` baseline. Active tab: label in ink at weight 600 plus a 2px `{colors.primary}` underline.
+- Overflow: when the tabs don't fit, the strip scrolls horizontally and its edges fade where a tab is hidden. With JavaScript the active tab is centered on load, the mouse wheel scrolls the strip, and a `button-ghost` icon button (chevron, `{colors.ink-muted}`) sits on the edge with a hidden tab, over a `{colors.surface-canvas-light}` fade, and scrolls about one page. The arrows are pointer aids, out of the tab order and hidden from assistive tech, since keyboard users reach every tab with Tab. No new colors: the contrast ratios are those of the existing `{colors.ink-muted}` label.
 
 **`tabbar-mobile`** — bottom navigation of the client area on phones.
 - Four items (Início, Minhas OS, Compras, Conta), white background, 1px `{colors.hairline-cloud}` top border, 24px icon over a 12px label in `{colors.ink-muted}`. Active item: label and icon in ink at weight 600 with a 28×3px `{colors.primary}` indicator at the top edge.
