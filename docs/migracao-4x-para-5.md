@@ -31,7 +31,7 @@ Não pule esta etapa: a migração altera tabelas e move arquivos.
 
 1. **Banco de dados:** no painel, menu Configurações → **Backup**, ou `mysqldump` pelo terminal. Guarde o arquivo fora do servidor.
 2. **Arquivos que não vêm no pacote novo:**
-   - `application/.env`;
+   - `application/.env` (ou o `.env` que você moveu para fora da pasta pública, veja [servidor web](servidor-web.md));
    - `assets/anexos`, `assets/arquivos`, `assets/uploads` (logo) e `assets/userImage` (fotos de perfil);
    - qualquer personalização feita em `assets/img`;
    - arquivos de `application/config` que você alterou à mão (`config.php`, `database.php`, `email.php`);

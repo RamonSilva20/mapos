@@ -5,11 +5,13 @@
  * instalado, validação do que chega pelo formulário e montagem do .env e do
  * SQL de carga. Fica separado de index.php e do_install.php para ser testado.
  *
- * O instalador só pode rodar uma vez. A trava é application/.env (criado no
+ * O instalador só pode rodar uma vez. A trava é o .env (application/.env ou o local de MAPOS_ENV_FILE, criado no
  * fim da instalação) ou install/instalado.lock; qualquer um dos dois bloqueia
  * index.php e do_install.php antes de ler o formulário ou abrir conexão com o
  * banco, para o arquivo não servir de testador de conexão num sistema em uso.
  */
+require_once dirname(__DIR__) . '/application/env_arquivo.php';
+
 const INSTALADOR_API_EXPIRACOES = ['60', '3600', '86400', '604800', '2592000'];
 
 function instaladorRaiz(): string
@@ -26,7 +28,7 @@ function instaladorInstalado(?string $raiz = null): bool
 {
     $raiz ??= instaladorRaiz();
 
-    return file_exists($raiz . '/application/.env') || file_exists($raiz . '/install/instalado.lock');
+    return is_file(maposEnvArquivo($raiz)) || file_exists($raiz . '/install/instalado.lock');
 }
 
 /** Resposta curta e sem detalhes (versão do PHP, requisitos, caminhos) de um sistema já instalado. */

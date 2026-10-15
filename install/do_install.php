@@ -88,7 +88,7 @@ $mysqli->close();
 $modelo = file_get_contents(dirname(__DIR__) . '/application/.env.example');
 $env = instaladorMontarEnv($modelo, $dados, bin2hex(random_bytes(16)), base64_encode(random_bytes(32)), $armazenamento);
 
-$arquivoEnv = dirname(__DIR__) . '/application/.env';
+$arquivoEnv = maposEnvArquivo(dirname(__DIR__));
 if (! file_put_contents($arquivoEnv, $env)) {
     $terminar(false, 'Erro ao criar arquivo env.');
 }

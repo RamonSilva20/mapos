@@ -33,7 +33,7 @@ class WhoopsHook
         }
 
         if ($handler instanceof PrettyPageHandler) {
-            $sensitiveVars = $this->extractEnvNames(APPPATH . '.env');
+            $sensitiveVars = $this->extractEnvNames(maposEnvArquivo(FCPATH));
 
             foreach ($sensitiveVars as $sensitiveVar) {
                 $handler->blacklist('_SERVER', $sensitiveVar);

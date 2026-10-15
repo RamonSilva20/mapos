@@ -670,7 +670,7 @@ class Mapos extends MY_Controller
             [$config, $env, $erros] = configuracaoDadosDoFormulario($aba, $this->input->post());
 
             if ($erros === [] && $env !== [] && !$this->gravarEnv($env)) {
-                $erros['_geral'] = 'Não foi possível gravar o arquivo application/.env. Confira a permissão de escrita.';
+                $erros['_geral'] = 'Não foi possível gravar o arquivo .env. Confira a permissão de escrita.';
             }
 
             if ($erros === [] && ($config === [] || $this->mapos_model->saveConfiguracao($config))) {
@@ -694,10 +694,10 @@ class Mapos extends MY_Controller
         return $this->layout();
     }
 
-    /** Grava as chaves no application/.env (configuracaoEnvAtualizado()). */
+    /** Grava as chaves no .env (application/.env ou o local definido por MAPOS_ENV_FILE) (configuracaoEnvAtualizado()). */
     private function gravarEnv(array $valores): bool
     {
-        $arquivo = dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . '.env';
+        $arquivo = maposEnvArquivo(FCPATH);
         $conteudo = is_readable($arquivo) ? (string) file_get_contents($arquivo) : '';
 
         return is_writable($arquivo) && file_put_contents($arquivo, configuracaoEnvAtualizado($conteudo, $valores)) !== false;

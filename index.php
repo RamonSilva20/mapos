@@ -75,10 +75,10 @@ if (file_exists($composerAutoloadFile)) {
         . '<h1 style="font-size:1.25rem">Dependências ausentes</h1><p>' . htmlspecialchars($mensagem, ENT_QUOTES) . '</p></body></html>');
 }
 
-$envFile = __DIR__ . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env';
-if (file_exists($envFile) && file_exists($composerAutoloadFile)) {
-    $envFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'application';
-    $dotenv = Dotenv\Dotenv::createImmutable($envFilePath);
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'env_arquivo.php';
+$envFile = maposEnvArquivo(__DIR__);
+if (is_file($envFile) && file_exists($composerAutoloadFile)) {
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname($envFile), basename($envFile));
     $dotenv->load();
 }
 

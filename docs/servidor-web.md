@@ -11,6 +11,26 @@ O `.htaccess` que acompanha o Map-OS já cobre o **Apache** (com
 Docker. Em qualquer outro servidor (Caddy, FrankenPHP, nginx próprio, Apache com
 `AllowOverride None`) é preciso aplicar as regras abaixo.
 
+## `.env` fora da pasta pública (recomendado)
+
+A defesa mais forte é o `.env` nem estar na pasta que o servidor publica: ele passa
+a não depender de nenhuma regra. O Map-OS procura o arquivo nesta ordem e usa o
+primeiro que existir:
+
+1. o caminho absoluto da variável de ambiente `MAPOS_ENV_FILE`
+   (`SetEnv MAPOS_ENV_FILE /etc/mapos/mapos.env` no Apache,
+   `fastcgi_param MAPOS_ENV_FILE /etc/mapos/mapos.env;` no nginx ou `env[MAPOS_ENV_FILE]` no php-fpm);
+2. `.mapos.env` na pasta **acima** da raiz do projeto (para hospedagens em que não
+   dá para definir variáveis; ex.: com o site em `/home/u/public_html`, o arquivo em `/home/u/.mapos.env`);
+3. `application/.env`, o local de sempre. Instalações existentes continuam funcionando sem mudança.
+
+Para mover: copie `application/.env` para o novo local, deixe-o legível só pelo
+usuário do PHP (`chmod 600`), confirme que o sistema abre e **apague** o
+`application/.env`. A tela Configurações > Sistema e o instalador gravam no arquivo
+que está em uso. Com `MAPOS_ENV_FILE` definida e nenhum arquivo ainda criado, o
+instalador grava no caminho indicado. A atualização pelo painel não toca no arquivo
+(ele está fora dos arquivos trocados). Mantenha as regras abaixo mesmo assim.
+
 ## O que bloquear
 
 | Caminho | Motivo |
