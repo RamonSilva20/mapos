@@ -314,6 +314,24 @@ if (! function_exists('usuarioPodeSerEditadoPor')) {
     }
 }
 
+if (! function_exists('delegacaoPermitida')) {
+    /**
+     * Regra de delegação (#2879): quem gerencia usuários e grupos só concede,
+     * edita ou redefine o que ele próprio tem. Sem isso, cUsuario ou cPermissao
+     * seriam, na prática, o mesmo que ser administrador (criar usuário no grupo
+     * Administrador, ou marcar todas as caixas do próprio grupo).
+     *
+     * O administrador (grupo Administrador ou usuário principal) delega tudo.
+     *
+     * @param  list<string>  $codigosDoOperador  Permissões do grupo de quem opera
+     * @param  list<string>  $codigosDoAlvo      Permissões do grupo ou do usuário alvo
+     */
+    function delegacaoPermitida(bool $operadorEhAdmin, array $codigosDoOperador, array $codigosDoAlvo): bool
+    {
+        return $operadorEhAdmin || array_diff($codigosDoAlvo, $codigosDoOperador) === [];
+    }
+}
+
 if (! function_exists('usuarioPodeSerRemovido')) {
     /**
      * Motivo para não excluir (ou desativar) um usuário, ou null se pode: o

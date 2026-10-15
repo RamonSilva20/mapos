@@ -252,6 +252,38 @@ class MY_Controller extends CI_Controller
     }
 
     /**
+     * O usuário logado pode conceder, editar ou redefinir algo que tem estas
+     * permissões? Só o que ele mesmo tem; o administrador pode tudo (#2879).
+     *
+     * @param  list<string>  $codigosDoAlvo
+     */
+    protected function podeDelegar(array $codigosDoAlvo): bool
+    {
+        $this->load->helper('usuarios');
+
+        if ((int) $this->session->userdata('id_admin') === USUARIO_SUPER_ADMIN || (int) $this->session->userdata('permissao') === PERMISSAO_ADMIN) {
+            return true;
+        }
+
+        $this->load->model('permissoes_model');
+        $meu = $this->permissoes_model->getById((int) $this->session->userdata('permissao'));
+
+        return delegacaoPermitida(false, permissoesMarcadas($meu->permissoes ?? null), $codigosDoAlvo);
+    }
+
+    /**
+     * O grupo de permissão (por id) está ao alcance de quem opera? Ver podeDelegar().
+     */
+    protected function podeDelegarGrupo(int $idPermissao): bool
+    {
+        $this->load->helper('usuarios');
+        $this->load->model('permissoes_model');
+        $grupo = $this->permissoes_model->getById($idPermissao);
+
+        return $grupo ? $this->podeDelegar(permissoesMarcadas($grupo->permissoes ?? null)) : false;
+    }
+
+    /**
      * Verifica se o usuário logado possui ao menos uma das permissões informadas.
      */
     protected function hasAnyPermission(array $permissoes)

@@ -31,6 +31,14 @@ $errosDeCampo = array_diff_key($erros, ['_geral' => true]);
 
         <?php $this->load->view('conecte/partes/campos_cliente', ['erros' => $errosDeCampo, 'novo' => false, 'caixa' => 'rounded-xl border border-border bg-surface p-4 sm:p-6']); ?>
 
+        <section class="rounded-xl border border-border bg-surface p-4 sm:p-6" aria-labelledby="secao-senha-atual">
+            <h2 id="secao-senha-atual" class="text-heading-sm text-text">Confirmar com a senha atual</h2>
+            <p class="mt-0.5 text-caption text-muted">Só é preciso se você for trocar o e-mail ou a senha.</p>
+            <div class="mt-4 sm:max-w-sm">
+                <?= component('input', ['name' => 'senha_atual', 'label' => 'Senha atual', 'type' => 'password', 'autocomplete' => 'current-password', 'error' => $errosDeCampo['senha_atual'] ?? null, 'attrs' => ['maxlength' => 72]]) ?>
+            </div>
+        </section>
+
         <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <?= component('button', ['label' => 'Cancelar', 'variant' => 'ghost', 'href' => site_url('mine/conta')]) ?>
             <?= component('button', ['label' => 'Salvar alterações', 'icon' => 'save', 'type' => 'submit', 'attrs' => ['data-rotulo-carregando' => 'Salvando…']]) ?>
