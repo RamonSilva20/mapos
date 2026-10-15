@@ -1,0 +1,7 @@
+ERROR - 2026-10-15 19:15:04 --> Limite de login desligado: rode as migrations (tabela login_attempts não existe).
+ERROR - 2026-10-15 19:15:05 --> Query error: Unknown column 'status' in 'field list' - Invalid query: SELECT `status`, COUNT(*) AS total
+FROM `vendas`
+GROUP BY `status`
+ERROR - 2026-10-15 19:15:06 --> Query error: Unknown column 'status' in 'field list' - Invalid query: SELECT `status`, COUNT(*) AS total
+FROM `vendas`
+GROUP BY `status`
