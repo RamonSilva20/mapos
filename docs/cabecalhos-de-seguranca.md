@@ -48,7 +48,8 @@ ela não permite. Ela não tem `unsafe-inline` nem `unsafe-eval`:
   requisição (`segurancaGerarNonce()`, no hook `pre_system`) e só vale para o
   elemento que o carrega.
 - `img-src 'self' data: blob: https:` por causa dos QR Codes de Pix e boletos,
-  `connect-src` só com ViaCEP e BrasilAPI, `form-action 'self'`, sem iframes
+  `connect-src` só com ViaCEP (CEP) e BrasilAPI, Minha Receita e CNPJ.ws (CNPJ,
+  nessa ordem de tentativa), `form-action 'self'`, sem iframes
   (`frame-ancestors 'self'`) e `object-src 'none'`.
 
 Se uma integração sua precisar de algo fora disso, ajuste a política em
