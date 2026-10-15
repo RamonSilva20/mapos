@@ -1,6 +1,13 @@
 // Formulário de cliente (views/clientes/formulario.php, #2851): busca o
-// endereço pelo CEP (ViaCEP) e os dados da empresa pelo CNPJ (BrasilAPI).
-// As duas APIs mandam CORS e estão no connect-src da CSP.
+// endereço pelo CEP (ViaCEP) e os dados da empresa pelo CNPJ.
+//
+// O CNPJ passa por uma cadeia de APIs públicas, na ordem: BrasilAPI, Minha
+// Receita e CNPJ.ws (#2996). Cada uma é consultada por fetch, com tempo limite;
+// falha de rede, tempo esgotado, 429, erro do servidor (5xx) ou qualquer outro
+// erro HTTP passa para a próxima. Um 400 ou 404 quer dizer que o CNPJ não
+// existe e encerra a cadeia. A ReceitaWS não entra: ela não manda CORS (a v4
+// usava JSONP, que a CSP da v5 bloqueia). Todas as APIs mandam CORS e estão no
+// connect-src da CSP (application/helpers/seguranca_cabecalhos_helper.php).
 //
 // Os dados só preenchem campos vazios: nada que o usuário digitou é apagado.
 // Falha de consulta vira erro no próprio campo (CEP ou CPF/CNPJ), como os
@@ -12,6 +19,11 @@ import { mostrarToast } from '../../lib/toast.js';
 
 export const URL_CEP = (cep) => `https://viacep.com.br/ws/${cep}/json/`;
 export const URL_CNPJ = (cnpj) => `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`;
+export const URL_CNPJ_MINHA_RECEITA = (cnpj) => `https://minhareceita.org/${cnpj}`;
+export const URL_CNPJ_WS = (cnpj) => `https://publica.cnpj.ws/cnpj/${cnpj}`;
+
+/** Tempo máximo de cada consulta de CNPJ antes de tentar a próxima API. */
+export const TEMPO_LIMITE_CNPJ = 8000;
 
 const capitalizar = (texto) => String(texto ?? '').toLowerCase().replace(/(^|\s)(\p{L})/gu, (_, espaco, letra) => espaco + letra.toUpperCase());
 
@@ -30,7 +42,7 @@ export function enderecoDoCep(dados) {
     };
 }
 
-/** Campos do formulário a partir da resposta da BrasilAPI de CNPJ. */
+/** Campos do formulário a partir da resposta da BrasilAPI (ou da Minha Receita, que usa os mesmos nomes). */
 export function dadosDoCnpj(dados) {
     if (!dados || !dados.razao_social) {
         return null;
@@ -51,6 +63,30 @@ export function dadosDoCnpj(dados) {
         cidade: capitalizar(dados.municipio ?? ''),
         estado: dados.uf ?? '',
     };
+}
+
+/** Campos do formulário a partir da resposta da CNPJ.ws pública, que aninha os dados do estabelecimento. */
+export function dadosDoCnpjWs(dados) {
+    if (!dados || !dados.razao_social) {
+        return null;
+    }
+
+    const estabelecimento = dados.estabelecimento ?? {};
+
+    return dadosDoCnpj({
+        razao_social: dados.razao_social,
+        nome_fantasia: estabelecimento.nome_fantasia,
+        ddd_telefone_1: estabelecimento.ddd1 && estabelecimento.telefone1 ? `${estabelecimento.ddd1}${estabelecimento.telefone1}` : '',
+        email: estabelecimento.email,
+        cep: estabelecimento.cep,
+        descricao_tipo_de_logradouro: estabelecimento.tipo_logradouro,
+        logradouro: estabelecimento.logradouro,
+        numero: estabelecimento.numero,
+        complemento: estabelecimento.complemento,
+        bairro: estabelecimento.bairro,
+        municipio: estabelecimento.cidade?.nome,
+        uf: estabelecimento.estado?.sigla,
+    });
 }
 
 /** Preenche só os campos vazios; devolve quantos foram preenchidos. */
@@ -75,6 +111,63 @@ async function consultar(url, buscar = fetch) {
     }
 
     return resposta.json();
+}
+
+/** APIs de CNPJ na ordem em que são tentadas; `mapear` devolve os campos do formulário ou null. */
+export const PROVEDORES_CNPJ = [
+    { nome: 'BrasilAPI', url: URL_CNPJ, mapear: dadosDoCnpj },
+    { nome: 'Minha Receita', url: URL_CNPJ_MINHA_RECEITA, mapear: dadosDoCnpj },
+    { nome: 'CNPJ.ws', url: URL_CNPJ_WS, mapear: dadosDoCnpjWs },
+];
+
+/** Status com que as APIs dizem que o CNPJ não existe (ou é inválido): não adianta perguntar a outra. */
+const STATUS_CNPJ_INEXISTENTE = [400, 404];
+
+/** Consulta uma API; devolve { encontrado: false } para 400/404 e lança em qualquer outra falha. */
+async function consultarProvedor(provedor, cnpj, buscar, tempoLimite) {
+    const controle = new AbortController();
+    const temporizador = setTimeout(() => controle.abort(), tempoLimite);
+
+    try {
+        const resposta = await buscar(provedor.url(cnpj), { headers: { Accept: 'application/json' }, signal: controle.signal });
+        if (STATUS_CNPJ_INEXISTENTE.includes(resposta.status)) {
+            return { encontrado: false };
+        }
+        if (!resposta.ok) {
+            throw new Error(`HTTP ${resposta.status}`);
+        }
+
+        return { encontrado: true, dados: provedor.mapear(await resposta.json()) };
+    } finally {
+        clearTimeout(temporizador);
+    }
+}
+
+/**
+ * Dados da empresa pelo CNPJ (só dígitos), tentando as APIs em PROVEDORES_CNPJ.
+ *
+ * Passa para a próxima API quando a atual falha na rede, estoura o tempo limite
+ * ou responde 429, 5xx ou qualquer erro que não seja 400/404. Devolve os campos do
+ * formulário, ou null se a API diz que o CNPJ não existe (a cadeia para aí).
+ * Se todas falham, lança um Error com `falhas` ([{ provedor, motivo }]).
+ */
+export async function consultarCnpj(cnpj, buscar = fetch, tempoLimite = TEMPO_LIMITE_CNPJ) {
+    const falhas = [];
+
+    for (const provedor of PROVEDORES_CNPJ) {
+        try {
+            const { encontrado, dados } = await consultarProvedor(provedor, cnpj, buscar, tempoLimite);
+
+            return encontrado ? dados : null;
+        } catch (erro) {
+            falhas.push({ provedor: provedor.nome, motivo: erro?.message || String(erro) });
+        }
+    }
+
+    const erro = new Error('Nenhuma API de CNPJ respondeu.');
+    erro.falhas = falhas;
+
+    throw erro;
 }
 
 // O <form> já leva o módulo formulario/padrao; este fica num wrapper em volta.
@@ -125,7 +218,7 @@ export default function iniciar(raiz) {
         botaoCnpj.disabled = true;
         botaoCnpj.setAttribute('aria-busy', 'true');
         try {
-            const dados = dadosDoCnpj(await consultar(URL_CNPJ(cnpj)));
+            const dados = await consultarCnpj(cnpj);
             if (!dados) {
                 mostrarErroDoCampo(documento, 'CNPJ não encontrado na Receita.');
                 return;
