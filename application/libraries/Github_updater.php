@@ -28,21 +28,7 @@ class Github_updater
      */
     public function has_update()
     {
-        $branches = json_decode(
-            $this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/branches')
-        );
-
-        $branchToUpdateFrom = current(
-            array_filter($branches, function ($branch) {
-                return $branch->name === $this->ci->config->item('github_branch');
-            })
-        );
-
-        if (! $branchToUpdateFrom) {
-            throw new Exception('The branch to update from GitHub does not exist!');
-        }
-
-        return $branchToUpdateFrom->commit->sha !== $this->ci->config->item('current_commit');
+        return $this->getCurrentCommitHash() !== $this->ci->config->item('current_commit');
     }
 
     /**
@@ -237,17 +223,13 @@ class Github_updater
      */
     private function getCurrentCommitHash()
     {
-        $branches = json_decode(
-            $this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/branches')
+        // Consulta o branch direto: a listagem /branches é paginada (30 por página)
+        // e o branch configurado pode não estar na primeira página.
+        $branchToUpdateFrom = json_decode(
+            $this->_connect(self::API_URL . $this->ci->config->item('github_user') . '/' . $this->ci->config->item('github_repo') . '/branches/' . rawurlencode($this->ci->config->item('github_branch')))
         );
 
-        $branchToUpdateFrom = current(
-            array_filter($branches, function ($branch) {
-                return $branch->name === $this->ci->config->item('github_branch');
-            })
-        );
-
-        if (! $branchToUpdateFrom) {
+        if (! $branchToUpdateFrom || empty($branchToUpdateFrom->commit->sha)) {
             throw new Exception('The branch to update from GitHub does not exist!');
         }
 
