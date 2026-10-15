@@ -17,7 +17,7 @@ final class OsListagemTest extends MaposTestCase
         $this->db->query('CREATE TABLE produtos_os (idProdutos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, produtos_id INTEGER, quantidade INTEGER, preco REAL, subTotal REAL, desconto REAL DEFAULT 0, tipo_desconto TEXT)');
         $this->db->query('CREATE TABLE servicos (idServicos INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, preco REAL)');
         $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, servicos_id INTEGER, quantidade REAL, preco REAL, subTotal REAL, desconto REAL DEFAULT 0, tipo_desconto TEXT)');
-        $this->db->query('CREATE TABLE lancamentos (idLancamentos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT)');
+        $this->db->query('CREATE TABLE lancamentos (idLancamentos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, baixado INTEGER)');
 
         $this->db->query("INSERT INTO clientes (nomeCliente, documento) VALUES ('Ana Souza', '111.111.111-11'), ('Bruno 100% Lima', '222'), ('Carla', '333')");
         $this->db->query("INSERT INTO usuarios (nome) VALUES ('Técnico')");
@@ -149,6 +149,21 @@ final class OsListagemTest extends MaposTestCase
 
         $restantes = array_column($this->db->query('SELECT descricao FROM lancamentos ORDER BY idLancamentos')->result_array(), 'descricao');
         $this->assertSame(['Fatura de OS Nº: 30 '], $restantes);
+    }
+
+    public function testExcluirFaturaPreservaLancamentosBaixados(): void
+    {
+        $model = $this->model();
+        $this->db->query('INSERT INTO lancamentos (descricao, baixado) VALUES (?, 1)', ['Fatura de OS Nº: 3']);
+        $this->db->query('INSERT INTO lancamentos (descricao, baixado) VALUES (?, 0)', ['Fatura de OS - #3']);
+
+        $this->assertTrue($model->faturaBaixada(3, null));
+        $this->assertFalse($model->faturaBaixada(4, null));
+
+        $model->excluirFatura(3, null);
+
+        $restantes = array_column($this->db->query('SELECT descricao FROM lancamentos')->result_array(), 'descricao');
+        $this->assertSame(['Fatura de OS Nº: 3'], $restantes);
     }
 
     public function testFiltrosDaListagemSaoOsStatusDeOs(): void

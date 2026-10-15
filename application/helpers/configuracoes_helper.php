@@ -236,7 +236,7 @@ if (! function_exists('configuracaoValorEnv')) {
             return "'" . $valor . "'";
         }
 
-        return '"' . addcslashes($valor, '\\"') . '"';
+        return '"' . addcslashes($valor, '\\"$') . '"';
     }
 }
 
