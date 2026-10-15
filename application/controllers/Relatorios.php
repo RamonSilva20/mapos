@@ -119,7 +119,7 @@ class Relatorios extends MY_Controller
                 } else {
                     $cliente['pessoa_fisica'] = 'não';
                 }
-                $writer->writeSheetRow('Sheet1', $cliente);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($cliente));
             }
 
             $arquivo = $writer->writeToString();
@@ -260,7 +260,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
 
             $arquivo = $writer->writeToString();
@@ -313,7 +313,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
 
             $arquivo = $writer->writeToString();
@@ -466,7 +466,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($osFormatadas as $os) {
-                $writer->writeSheetRow('Sheet1', $os);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($os));
             }
             $writer->writeSheetRow('Sheet1', []);
             $writer->writeSheetRow('Sheet1', [
@@ -581,7 +581,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($osFormatadas as $os) {
-                $writer->writeSheetRow('Sheet1', $os);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($os));
             }
             $writer->writeSheetRow('Sheet1', []);
             $writer->writeSheetRow('Sheet1', [
@@ -688,7 +688,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($lancamentosFormatados as $lancamento) {
-                $writer->writeSheetRow('Sheet1', $lancamento);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($lancamento));
             }
 
             $arquivo = $writer->writeToString();
@@ -759,7 +759,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($lancamentosFormatados as $lancamento) {
-                $writer->writeSheetRow('Sheet1', $lancamento);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($lancamento));
             }
 
             $arquivo = $writer->writeToString();
@@ -848,7 +848,7 @@ class Relatorios extends MY_Controller
             $writer->writeSheetRow(null, []);
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendasFormatadas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
             $writer->writeSheetRow(null, []);
             $writer->writeSheetRow(null, []);
@@ -941,7 +941,7 @@ class Relatorios extends MY_Controller
             $writer = new XLSXWriter();
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendasFormatadas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
             $writer->writeSheetRow(null, []);
             $writer->writeSheetRow(null, []);
@@ -1011,8 +1011,8 @@ class Relatorios extends MY_Controller
             return redirect('/relatorios/receitasBrutasMei');
         }
 
-        $tempFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . 'temp.docx';
-        $generatedFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . "RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
+        $tempFilePath = $this->arquivoTemporario('docx');
+        $generatedFilePath = $this->arquivoTemporario($format);
 
         $templateProcessor = new TemplateProcessor($templatePath);
         $data = $this->Relatorios_model->receitasBrutasRapid();
@@ -1075,8 +1075,8 @@ class Relatorios extends MY_Controller
             return redirect('/relatorios/receitasBrutasMei');
         }
 
-        $tempFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . 'temp.docx';
-        $generatedFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . "RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
+        $tempFilePath = $this->arquivoTemporario('docx');
+        $generatedFilePath = $this->arquivoTemporario($format);
 
         $templateProcessor = new TemplateProcessor($templatePath);
         $data = $this->Relatorios_model->receitasBrutasCustom($dataInicial, $dataFinal);
@@ -1116,5 +1116,21 @@ class Relatorios extends MY_Controller
                 ->set_output($fileContents)
                 ->_display();
         }
+    }
+
+    /**
+     * Caminho único fora do webroot, apagado ao fim da requisição mesmo se a
+     * geração falhar: o nome fixo em assets/ ficava público e podia sobrar.
+     */
+    private function arquivoTemporario(string $extensao): string
+    {
+        $base = tempnam(sys_get_temp_dir(), 'mapos_mei_');
+        $caminho = $base . '.' . $extensao;
+        register_shutdown_function(static function () use ($base, $caminho) {
+            @unlink($base);
+            @unlink($caminho);
+        });
+
+        return $caminho;
     }
 }
