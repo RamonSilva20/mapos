@@ -4,7 +4,7 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - v5 (5.0.0-alpha)
+## [Unreleased] - v5 (5.0.0-beta)
 
 ### Added
 - Preferência de tema por usuário: a escolha de claro, escuro ou sistema na topbar fica gravada no perfil (`usuarios.tema_modo`) e vale em qualquer navegador; sem escolha, vale o tema padrão das Configurações. #2854 [@RamonSilva20](https://github.com/RamonSilva20)

@@ -24,7 +24,7 @@ final class LoginViewTest extends MaposTestCase
 {
     private function renderizar(array $dados = [], array $config = [], string $view = 'mapos/login'): string
     {
-        $config += ['app_name' => 'Map-OS', 'app_version' => '5.0.0-alpha', 'app_subname' => 'Sistema de Controle de Ordens de Serviço'];
+        $config += ['app_name' => 'Map-OS', 'app_version' => '5.0.0-beta', 'app_subname' => 'Sistema de Controle de Ordens de Serviço'];
 
         $contexto = new class($config) {
             public object $config;
