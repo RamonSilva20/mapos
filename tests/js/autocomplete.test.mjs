@@ -24,6 +24,12 @@ test('resposta que não é lista ou item sem id é descartado', () => {
     assert.deepEqual(normalizarItens([{ label: 'sem id' }, { id: '', label: 'vazio' }, null]), []);
 });
 
+test('no modo livre, itens sem id (nomes já usados) ficam na lista com id vazio', () => {
+    assert.deepEqual(normalizarItens([{ id: null, label: 'Fornecedor X', valor: 'Fornecedor X', detalhe: 'Já usado' }, null], true), [
+        { id: '', valor: 'Fornecedor X', detalhe: 'Já usado' },
+    ]);
+});
+
 test('setas dão a volta na lista', () => {
     assert.equal(proximoIndice(-1, 3, 1), 0);
     assert.equal(proximoIndice(-1, 3, -1), 2);

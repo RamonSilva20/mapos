@@ -34,7 +34,7 @@ for ($i = 1; $i <= FINANCEIRO_PARCELAS_MAX; $i++) {
     $parcelas[(string) $i] = $i === 1 ? 'À vista' : $i . 'x';
 }
 ?>
-<div class="flex max-w-4xl flex-col gap-4 pt-2 pb-8" <?= js_module('financeiro/formulario') ?> data-financeiro-sugestoes="<?= e(site_url('financeiro/autoCompleteClienteFornecedor')) ?>">
+<div class="flex max-w-4xl flex-col gap-4 pt-2 pb-8" <?= js_module('financeiro/formulario') ?>>
     <header class="flex flex-col gap-1">
         <div class="flex flex-wrap items-center gap-3">
             <h1 class="font-display text-heading-xl text-text"><?= e($editando ? 'Editar lançamento #' . $lancamento->idLancamentos : 'Novo lançamento') ?></h1>
@@ -75,7 +75,7 @@ for ($i = 1; $i <= FINANCEIRO_PARCELAS_MAX; $i++) {
                     'error' => $errosDeCampo['descricao'] ?? null,
                     'attrs' => ['maxlength' => 255, 'autofocus' => ! $editando, 'data-msg-vazio' => 'Informe a descrição.'],
                 ]) ?>
-                <div class="sm:col-span-2">
+                <div class="relative sm:col-span-2" data-autocomplete="<?= e(site_url('financeiro/autoCompleteClienteFornecedor')) ?>" data-autocomplete-alvo="clientes_id" data-autocomplete-livre>
                     <?= component('input', [
                         'name' => 'cliente_fornecedor',
                         'label' => 'Cliente / fornecedor',
@@ -84,9 +84,8 @@ for ($i = 1; $i <= FINANCEIRO_PARCELAS_MAX; $i++) {
                         'autocomplete' => 'off',
                         'help' => 'Escolha um cliente da lista para vincular o lançamento ao cadastro, ou digite o nome de um fornecedor.',
                         'error' => $errosDeCampo['cliente_fornecedor'] ?? null,
-                        'attrs' => ['maxlength' => 255, 'list' => 'cliente-sugestoes', 'data-msg-vazio' => 'Informe o cliente ou fornecedor.'],
+                        'attrs' => ['maxlength' => 255, 'data-msg-vazio' => 'Informe o cliente ou fornecedor.'],
                     ]) ?>
-                    <datalist id="cliente-sugestoes"></datalist>
                     <input type="hidden" id="clientes_id" name="clientes_id" value="<?= e($valores['clientes_id']) ?>">
                 </div>
                 <div class="sm:col-span-2">

@@ -15,6 +15,9 @@
 //   label; valor (o texto que fica no campo) e detalhe (linha secundária) são
 //   opcionais e, sem eles, saem do label "valor | detalhe | ...".
 // - Teclado: ↓/↑ percorrem as opções, Enter escolhe, Esc fecha.
+// - Com data-autocomplete-livre o texto digitado é aceito sem escolher da
+//   lista (ex.: o fornecedor de um lançamento): itens sem id só completam o
+//   texto (o oculto fica vazio) e o campo nunca fica inválido.
 // - Digitar sem escolher da lista apaga o id e deixa o campo inválido
 //   (setCustomValidity), com o texto de data-msg-invalido: o envio é barrado
 //   pelo módulo formulario/padrao como qualquer outro erro de campo.
@@ -36,17 +39,17 @@ export const CLASSES_RODAPE = 'flex items-center gap-2 border-t border-border px
  * Itens sem id são descartados; sem valor/detalhe, o label "a | b | c" vira
  * valor "a" e detalhe "b · c".
  */
-export function normalizarItens(dados) {
+export function normalizarItens(dados, livre = false) {
     if (!Array.isArray(dados)) {
         return [];
     }
 
     return dados
-        .filter((item) => item && item.id !== undefined && item.id !== null && String(item.id) !== '')
+        .filter((item) => item && (livre || (item.id !== undefined && item.id !== null && String(item.id) !== '')))
         .map((item) => {
             const partes = String(item.label ?? '').split(' | ').map((parte) => parte.trim()).filter(Boolean);
             return {
-                id: String(item.id),
+                id: item.id === undefined || item.id === null ? '' : String(item.id),
                 valor: String(item.valor ?? partes[0] ?? ''),
                 detalhe: String(item.detalhe ?? partes.slice(1).join(' · ')),
             };
@@ -90,6 +93,7 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
         return null;
     }
 
+    const livre = wrapper.dataset.autocompleteLivre !== undefined;
     const minimo = Number(wrapper.dataset.autocompleteMin ?? 2) || 1;
     const idLista = `${campo.id}-opcoes`;
 
@@ -202,6 +206,10 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
     }
 
     function validar() {
+        if (livre) {
+            campo.setCustomValidity('');
+            return;
+        }
         const estado = situacao(campo.value, oculto.value, escolhido?.valor);
         campo.setCustomValidity(estado === 'pendente' ? (campo.dataset.msgInvalido || 'Escolha uma opção da lista.') : '');
         if (campo.getAttribute('aria-invalid') === 'true') {
@@ -234,7 +242,7 @@ export function iniciarAutocomplete(wrapper, { buscar = getPadrao, atraso = 250,
                 return;
             }
             brutos = Array.isArray(resposta) ? resposta : [];
-            itens = normalizarItens(resposta);
+            itens = normalizarItens(resposta, livre);
             renderizar();
             marcarAtivo(-1);
         } catch {
