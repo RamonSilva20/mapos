@@ -592,8 +592,14 @@ class Mine extends CI_Controller
             redirect('mine/painel');
         }
 
+        $arquivos = osArquivosDosAnexos([(object) ['path' => $file->path, 'anexo' => $file->anexo, 'thumb' => '']], FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'anexos');
+        if ($arquivos === []) {
+            $this->session->set_flashdata('error', 'Anexo não encontrado.');
+            redirect('mine/painel');
+        }
+
         $this->load->library('zip');
-        $this->zip->read_file($file->path . '/' . $file->anexo);
+        $this->zip->read_file($arquivos[0]);
         $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
     }
 

@@ -159,4 +159,61 @@ final class RevisaoDeSegurancaTest extends MaposTestCase
         $this->assertLessThan(strpos($ativar, '$this->totp->verificar('), strpos($ativar, 'password_verify'), 'A senha vem antes do código.');
         $this->assertStringContainsString("'name' => 'senha'", $this->fonte('application/views/mapos/doisFatores.php'));
     }
+
+    public function testPlanilhaNeutralizaFormulas(): void
+    {
+        require_once APPPATH . 'helpers/relatorios_helper.php';
+
+        $this->assertSame(
+            ["'=HYPERLINK(\"http://x\")", "'+1+1", "'@SUM(A1)", 'Ana', 12.5, '-3', '', null],
+            planilhaCelulasSeguras(['=HYPERLINK("http://x")', '+1+1', '@SUM(A1)', 'Ana', 12.5, '-3', '', null])
+        );
+        $this->assertStringContainsString('planilhaCelulasSeguras($cliente)', $this->fonte('application/controllers/Relatorios.php'));
+    }
+
+    public function testRelatorioMeiUsaArquivosTemporariosForaDoWebroot(): void
+    {
+        $fonte = $this->fonte('application/controllers/Relatorios.php');
+
+        $this->assertStringNotContainsString("'temp.docx'", $fonte);
+        $this->assertStringContainsString('sys_get_temp_dir()', $fonte);
+    }
+
+    public function testServidorNegaArquivosInternos(): void
+    {
+        foreach (['.htaccess', 'docker/etc/nginx/default.conf', 'docker/etc/nginx/default.template.conf'] as $arquivo) {
+            $fonte = $this->fonte($arquivo);
+            foreach (['application', 'tests', 'docs', 'node_modules'] as $pasta) {
+                $this->assertStringContainsString($pasta, $fonte, "$arquivo nega $pasta");
+            }
+        }
+        $this->assertStringNotContainsString('PMA_ARBITRARY', $this->fonte('docker/docker-compose.yml'));
+        $this->assertStringContainsString('"127.0.0.1:${MYSQL_MAPOS_PORT}:3306"', $this->fonte('docker/docker-compose.yml'));
+    }
+
+    public function testReleaseValidaATagSemInterpolarNoScript(): void
+    {
+        $fonte = $this->fonte('.github/workflows/release.yml');
+
+        $this->assertStringContainsString('Validate tag name', $fonte);
+        $this->assertStringNotContainsString('git tag "${{ inputs.tag }}"', $fonte);
+        $this->assertStringContainsString('--exclude \'./tests/*\'', $fonte);
+    }
+
+    public function testDownloadsFicamDentroDasPastasDeUpload(): void
+    {
+        $this->assertStringContainsString('osArquivosDosAnexos(', $this->metodo('application/controllers/Mine.php', 'downloadanexo'));
+        $this->assertStringContainsString('str_starts_with($real, $raiz', $this->metodo('application/controllers/Arquivos.php', 'download'));
+    }
+
+    public function testEmailDaOsSoPorPostComPermissaoDeEdicao(): void
+    {
+        $this->assertStringContainsString("method() !== 'post'", $this->metodo('application/controllers/Os.php', 'enviar_email'));
+        $this->assertStringContainsString("'eOs'", $this->metodo('application/controllers/Os.php', 'enviar_email'));
+    }
+
+    public function testValorDoEnvEscapaCifrao(): void
+    {
+        $this->assertSame('"a\\$b\'c"', configuracaoValorEnv("a\$b'c"));
+    }
 }

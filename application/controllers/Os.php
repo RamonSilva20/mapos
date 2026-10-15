@@ -584,12 +584,17 @@ class Os extends MY_Controller
 
     public function enviar_email()
     {
+        // Envia e-mail e grava log: só por POST (com CSRF), nunca por um link.
+        if ($this->input->method() !== 'post') {
+            redirect(site_url('os'));
+        }
+
         if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
             $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
             redirect('mapos');
         }
 
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para enviar O.S. por e-mail.');
             redirect(base_url());
         }
@@ -722,6 +727,12 @@ class Os extends MY_Controller
         }
 
         $osStockRefund = $this->os_model->getById($id);
+        if ((int) $osStockRefund->faturado === 1
+            && $this->os_model->faturaBaixada($id, isset($osStockRefund->lancamento) ? (int) $osStockRefund->lancamento : null)) {
+            $this->session->set_flashdata('error', 'A fatura desta OS já tem pagamento baixado: estorne o recebimento antes de excluir a OS.');
+            redirect($listagem);
+        }
+
         //Verifica para poder fazer a devolução do produto para o estoque caso OS seja excluida.
         if (strtolower($osStockRefund->status) != 'cancelado') {
             $this->devolucaoEstoque($id);

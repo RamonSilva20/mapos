@@ -27,20 +27,35 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
 
-      - name: Ensure tag does not exist
+      # O valor entra por variável de ambiente, nunca interpolado no script:
+      # um nome de tag com aspas ou $() executaria comandos no runner.
+      - name: Validate tag name
+        env:
+          TAG: ${{ inputs.tag }}
         run: |
-          if git rev-parse "refs/tags/${{ inputs.tag }}" >/dev/null 2>&1; then
-            echo "Tag ${{ inputs.tag }} already exists."
+          if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'; then
+            echo "Invalid tag name."
+            exit 1
+          fi
+
+      - name: Ensure tag does not exist
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists."
             exit 1
           fi
 
       - name: Create and push tag
+        env:
+          TAG: ${{ inputs.tag }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git tag "${{ inputs.tag }}"
-          git push origin "${{ inputs.tag }}"
+          git tag "$TAG"
+          git push origin "$TAG"
 
       # A versão do PHP segue o composer.json. Quando o #2829 mergear na v5 e
       # subir o mínimo para 8.5, este número acompanha.
@@ -91,6 +106,9 @@ jobs:
             --exclude './.git/*' \
             --exclude './.github/*' \
             --exclude './node_modules/*' \
+            --exclude './tests/*' \
+            --exclude './docker/*' \
+            --exclude './scripts/*' \
             --exclude './assets/src/*' \
             --exclude './.php-cs-fixer.cache' \
             --exclude './.phpunit.cache' \

@@ -171,13 +171,16 @@ class Arquivos extends MY_Controller
         }
 
         $file = $id !== null && is_numeric($id) ? $this->arquivos_model->getById($id) : null;
-        if (! $file || ! is_file((string) $file->path)) {
+        // Só serve arquivos que estão dentro de assets/arquivos.
+        $raiz = realpath(FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'arquivos');
+        $real = $file ? realpath((string) $file->path) : false;
+        if ($raiz === false || $real === false || ! is_file($real) || ! str_starts_with($real, $raiz . DIRECTORY_SEPARATOR)) {
             $this->session->set_flashdata('error', 'Erro! O arquivo não pode ser localizado.');
             redirect(base_url() . 'index.php/arquivos/');
         }
 
         $this->load->library('zip');
-        $this->zip->read_file($file->path);
+        $this->zip->read_file($real);
         $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
     }
 

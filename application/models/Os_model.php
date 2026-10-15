@@ -185,13 +185,31 @@ class Os_model extends CI_Model
      * quando existir, e pelas descrições que o faturar grava (ver
      * osDescricoesDaFatura()).
      */
+    /**
+     * Lançamentos já baixados (dinheiro recebido) da fatura da OS: a OS faturada
+     * com baixa não pode ser excluída sem estornar antes.
+     */
+    public function faturaBaixada(int $idOs, ?int $idLancamento): bool
+    {
+        $this->db->from('lancamentos')->where('baixado', 1)->group_start();
+        if ($idLancamento) {
+            $this->db->where('idLancamentos', $idLancamento)->or_where_in('descricao', osDescricoesDaFatura($idOs));
+        } else {
+            $this->db->where_in('descricao', osDescricoesDaFatura($idOs));
+        }
+
+        return $this->db->group_end()->count_all_results() > 0;
+    }
+
     public function excluirFatura(int $idOs, ?int $idLancamento): void
     {
         if ($idLancamento) {
-            $this->db->where('idLancamentos', $idLancamento)->delete('lancamentos');
+            $this->db->where('idLancamentos', $idLancamento)->where('COALESCE(baixado, 0) = 0', null, false)->delete('lancamentos');
         }
 
-        $this->db->where_in('descricao', osDescricoesDaFatura($idOs))->delete('lancamentos');
+        // Pela descrição só saem lançamentos em aberto: um lançamento baixado com
+        // texto igual (de outra origem) não pode sumir junto.
+        $this->db->where_in('descricao', osDescricoesDaFatura($idOs))->where('COALESCE(baixado, 0) = 0', null, false)->delete('lancamentos');
     }
 
     public function getById($id)

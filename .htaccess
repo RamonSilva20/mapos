@@ -6,3 +6,9 @@
 RewriteEngine On
 RewriteCond %{HTTP:Authorization} ^(.+)$
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+
+# Arquivos internos nunca são públicos (#2879): código, dependências, testes,
+# documentação, dumps e arquivos de build.
+RewriteRule ^(application|tests|docs|docker|scripts|node_modules|phpstan-stubs|updates)(/|$) - [F,L]
+RewriteRule ^[^/]+\.(sql|lock|md|neon|xml|json|bat|sh|txt)$ - [F,L]

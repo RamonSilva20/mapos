@@ -178,3 +178,21 @@ if (! function_exists('relatorioFaixa')) {
         return [$limite($minimo), $limite($maximo)];
     }
 }
+
+if (! function_exists('planilhaCelulasSeguras')) {
+    /**
+     * Neutraliza injeção de fórmula em planilhas: texto que começa com =, +, -,
+     * @, tab ou CR viraria fórmula no Excel/LibreOffice (ex.: =HYPERLINK(...)
+     * num nome de cliente). Números reais passam intactos.
+     */
+    function planilhaCelulasSeguras(array $linha): array
+    {
+        return array_map(static function ($celula) {
+            if (is_string($celula) && $celula !== '' && ! is_numeric($celula) && strpbrk($celula[0], "=+-@\t\r") !== false) {
+                return "'" . $celula;
+            }
+
+            return $celula;
+        }, $linha);
+    }
+}
