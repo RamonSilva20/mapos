@@ -51,6 +51,7 @@ $config['permissions_map'] = [
         'index' => 'vCliente',
         'gerenciar' => 'vCliente',
         'adicionar' => 'aCliente',
+        'cadastroRapido' => 'aCliente',
         'editar' => 'eCliente',
         'visualizar' => 'vCliente',
         'excluir' => 'dCliente',

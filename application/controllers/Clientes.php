@@ -103,27 +103,11 @@ class Clientes extends MY_Controller
         $erros = [];
 
         if ($this->input->method() === 'post') {
-            $erros = $this->validarFormulario('clientes');
+            [$erros, $id] = $this->salvarCliente($cliente);
             if ($erros === []) {
-                $email = trim((string) $this->input->post('email'));
-                if ($email !== '' && $this->clientes_model->emailExists($email, $cliente ? (int) $cliente->idClientes : null)) {
-                    $erros['email'] = 'Este e-mail já está sendo usado por outro cliente.';
-                } else {
-                    $dados = clienteDadosDoFormulario($this->input->post(), $cliente === null);
+                $this->session->set_flashdata('success', $cliente === null ? 'Cliente cadastrado com sucesso!' : 'Alterações salvas.');
 
-                    $salvou = $cliente === null
-                        ? $this->clientes_model->add('clientes', $dados + ['dataCadastro' => date('Y-m-d')])
-                        : $this->clientes_model->edit('clientes', $dados, 'idClientes', (int) $cliente->idClientes);
-
-                    if ($salvou) {
-                        log_info($cliente === null ? 'Adicionou um cliente.' : 'Alterou um cliente. ID ' . (int) $cliente->idClientes);
-                        $this->session->set_flashdata('success', $cliente === null ? 'Cliente cadastrado com sucesso!' : 'Alterações salvas.');
-
-                        return redirect($cliente === null ? 'clientes' : 'clientes/editar/' . (int) $cliente->idClientes);
-                    }
-
-                    $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
-                }
+                return redirect($cliente === null ? 'clientes' : 'clientes/editar/' . $id);
             }
         }
 
@@ -133,6 +117,100 @@ class Clientes extends MY_Controller
         $this->data['view'] = 'clientes/formulario';
 
         return $this->layout();
+    }
+
+    /**
+     * Valida o POST e grava o cliente (novo, ou o editado). É o que o
+     * formulário e o cadastro rápido (modal da OS e da venda) têm em comum.
+     *
+     * @param  bool  $aceitaSenha  false ignora a senha do POST (o cadastro rápido não tem o campo)
+     * @return array{0: array<string, string>, 1: int|null} erros por campo ('_geral' para falha ao gravar) e o id gravado
+     */
+    private function salvarCliente(?object $cliente, bool $aceitaSenha = true): array
+    {
+        $erros = $this->validarFormulario('clientes');
+        if ($erros !== []) {
+            return [$erros, null];
+        }
+
+        $email = trim((string) $this->input->post('email'));
+        if ($email !== '' && $this->clientes_model->emailExists($email, $cliente ? (int) $cliente->idClientes : null)) {
+            return [['email' => 'Este e-mail já está sendo usado por outro cliente.'], null];
+        }
+
+        $post = $this->input->post();
+        if (! $aceitaSenha && is_array($post)) {
+            unset($post['senha']);
+        }
+        $dados = clienteDadosDoFormulario($post, $cliente === null);
+
+        if ($cliente === null) {
+            $id = $this->clientes_model->add('clientes', $dados + ['dataCadastro' => date('Y-m-d')]);
+            $salvou = (bool) $id;
+            $id = $salvou ? (int) $id : null;
+        } else {
+            $id = (int) $cliente->idClientes;
+            $salvou = $this->clientes_model->edit('clientes', $dados, 'idClientes', $id);
+        }
+
+        if (! $salvou) {
+            return [['_geral' => 'Não foi possível salvar. Tente de novo.'], null];
+        }
+
+        log_info($cliente === null ? 'Adicionou um cliente.' : 'Alterou um cliente. ID ' . $id);
+
+        return [[], $id];
+    }
+
+    /**
+     * Cadastro rápido de cliente, no modal da tela da OS e da venda (#3003).
+     * POST sem recarregar, com os mesmos campos e regras do formulário, mas
+     * sem a senha da área do cliente: ela é gerada a partir do documento.
+     *
+     * 201 {result, message, cliente: {id, valor, detalhe}} (o formato do
+     * autocomplete), 422 {result: false, erros: {campo: mensagem}} ou 403.
+     */
+    public function cadastroRapido()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'aCliente')) {
+            $this->responderJson(403, ['result' => false, 'message' => 'Você não tem permissão para adicionar clientes.']);
+
+            return;
+        }
+
+        if ($this->input->method() !== 'post') {
+            $this->responderJson(405, ['result' => false, 'message' => 'Método não permitido.']);
+
+            return;
+        }
+
+        [$erros, $id] = $this->salvarCliente(null, false);
+        if ($erros !== []) {
+            $this->responderJson(422, ['result' => false, 'message' => 'Confira os campos destacados.', 'erros' => $erros]);
+
+            return;
+        }
+
+        $cliente = $this->clientes_model->getById($id);
+
+        $this->responderJson(201, [
+            'result' => true,
+            'message' => 'Cliente cadastrado e escolhido.',
+            'cliente' => [
+                'id' => (string) $id,
+                'valor' => (string) $cliente->nomeCliente,
+                'detalhe' => implode(' · ', array_filter([(string) $cliente->documento, (string) ($cliente->celular ?: $cliente->telefone)], static fn ($v) => $v !== '')),
+            ],
+        ]);
+    }
+
+    /** Resposta JSON dos endpoints do cadastro rápido. */
+    private function responderJson(int $status, array $corpo): void
+    {
+        $this->output
+            ->set_status_header($status)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode($corpo));
     }
 
     /**

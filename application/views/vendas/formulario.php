@@ -90,6 +90,7 @@ $statusOpcoes = array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STA
             <div class="<?= e($grade) ?>">
                 <div<?= componenteAtributos($wrapper(site_url('os/autoCompleteCliente'), 'clientes_id', $pode['cadastrar_cliente'] ? [
                     'data-autocomplete-novo' => site_url('clientes/adicionar'),
+                    'data-autocomplete-novo-modal' => 'cliente-rapido',
                     'data-autocomplete-novo-rotulo' => 'Cadastrar novo cliente',
                 ] : [])) ?>>
                     <?= component('input', $visivel('cliente', [
@@ -165,4 +166,8 @@ $statusOpcoes = array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STA
             <?= component('button', ['label' => $editando ? 'Salvar alterações' : 'Criar venda', 'icon' => 'save', 'type' => 'submit', 'attrs' => ['data-rotulo-carregando' => 'Salvando…']]) ?>
         </div>
     </form>
+
+    <?php if ($pode['cadastrar_cliente']) { ?>
+        <?php $this->load->view('clientes/partes/cadastro-rapido') ?>
+    <?php } ?>
 </div>

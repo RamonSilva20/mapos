@@ -109,12 +109,14 @@ final class ClientesFormularioTest extends MaposTestCase
     public function testControllerUsaOIdDaUrlEOPadraoDeFormulario(): void
     {
         $codigo = (string) file_get_contents(APPPATH . 'controllers/Clientes.php');
-        preg_match('/private function formulario\(.*?\n    }\n/s', $codigo, $trecho);
+        preg_match('/private function salvarCliente\(.*?\n    }\n/s', $codigo, $trecho);
 
         $this->assertNotEmpty($trecho);
         $this->assertStringContainsString("\$this->validarFormulario('clientes')", $trecho[0]);
-        $this->assertStringContainsString('clienteDadosDoFormulario($this->input->post(), $cliente === null)', $trecho[0]);
-        $this->assertStringContainsString("'idClientes', (int) \$cliente->idClientes", $trecho[0]);
+        $this->assertStringContainsString('clienteDadosDoFormulario($post, $cliente === null)', $trecho[0]);
+        $this->assertStringContainsString("'idClientes', \$id", $trecho[0]);
+        $this->assertStringContainsString('(int) $cliente->idClientes', $trecho[0]);
+        $this->assertStringContainsString('$this->salvarCliente($cliente)', $codigo);
         $this->assertStringNotContainsString("post('idClientes')", $codigo);
     }
 

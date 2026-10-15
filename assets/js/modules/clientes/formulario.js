@@ -170,16 +170,17 @@ export async function consultarCnpj(cnpj, buscar = fetch, tempoLimite = TEMPO_LI
     throw erro;
 }
 
-// O <form> já leva o módulo formulario/padrao; este fica num wrapper em volta.
-export default function iniciar(raiz) {
-    const formulario = raiz.matches?.('form') ? raiz : raiz.querySelector('form');
-    if (!formulario) {
-        return;
-    }
-
+/**
+ * Liga a busca de CEP (campo cep) e o botão [data-buscar-cnpj] ao formulário.
+ * Os campos vêm de formulario.elements (inclui os ligados por form="id"); o
+ * botão é procurado em `raiz`, que por padrão é o próprio formulário. O modal
+ * de cadastro rápido (clientes/cadastro-rapido) usa a mesma função e chama
+ * reiniciar() do retorno ao limpar o formulário.
+ */
+export function ligarBuscas(formulario, raiz = formulario) {
     const cep = formulario.elements.namedItem('cep');
     const documento = formulario.elements.namedItem('documento');
-    const botaoCnpj = formulario.querySelector('[data-buscar-cnpj]');
+    const botaoCnpj = raiz.querySelector('[data-buscar-cnpj]');
     let ultimoCep = somenteDigitos(cep?.value);
 
     cep?.addEventListener('input', async () => {
@@ -237,4 +238,17 @@ export default function iniciar(raiz) {
             botaoCnpj.removeAttribute('aria-busy');
         }
     });
+
+    // Depois de limpar o formulário, o mesmo CEP precisa poder ser buscado de novo.
+    return { reiniciar: () => { ultimoCep = ''; } };
+}
+
+// O <form> já leva o módulo formulario/padrao; este fica num wrapper em volta.
+export default function iniciar(raiz) {
+    const formulario = raiz.matches?.('form') ? raiz : raiz.querySelector('form');
+    if (!formulario) {
+        return;
+    }
+
+    ligarBuscas(formulario, formulario);
 }
