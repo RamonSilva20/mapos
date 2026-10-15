@@ -1,0 +1,37 @@
+[
+ {
+  "nome": "[escuro] tema escuro aplicado",
+  "ok": true,
+  "detalhe": "escuro"
+ },
+ {
+  "nome": "[escuro] modal com fundo escuro",
+  "ok": true,
+  "detalhe": "modal=rgb(21, 15, 35) corpo=rgb(31, 22, 51)"
+ },
+ {
+  "nome": "[375] modal cabe na largura do celular",
+  "ok": true,
+  "detalhe": "{\"largura\":343,\"esquerda\":16,\"direita\":359,\"vw\":375,\"scrollH\":1385,\"clientH\":627,\"overflowX\":false,\"dialogOverflowX\":false,\"overflowY\":\"auto\"}"
+ },
+ {
+  "nome": "[375] sem rolagem horizontal da pagina",
+  "ok": true,
+  "detalhe": "{\"largura\":343,\"esquerda\":16,\"direita\":359,\"vw\":375,\"scrollH\":1385,\"clientH\":627,\"overflowX\":false,\"dialogOverflowX\":false,\"overflowY\":\"auto\"}"
+ },
+ {
+  "nome": "[375] modal rola verticalmente (conteudo maior que a tela)",
+  "ok": true,
+  "detalhe": "scroll=1385 client=627 overflowY=auto"
+ },
+ {
+  "nome": "[375] botao CADASTRAR CLIENTE alcancavel com rolagem",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[375] salvar pelo celular fecha o modal e escolhe o cliente",
+  "ok": true,
+  "detalhe": "aberto=false id=69"
+ }
+]

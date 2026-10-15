@@ -1,0 +1,207 @@
+[
+ {
+  "nome": "[os] modal abre pelo rodape",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[os] nome pre-preenchido com o texto digitado",
+  "ok": true,
+  "detalhe": "nome=Teste3003 os 164890"
+ },
+ {
+  "nome": "[os] texto com letras nao vai para documento",
+  "ok": true,
+  "detalhe": "doc="
+ },
+ {
+  "nome": "[os] Buscar CNPJ preenche dados da empresa",
+  "ok": true,
+  "detalhe": "cidade=Brasilia nome=Teste3003 os 164890"
+ },
+ {
+  "nome": "[os] CEP preenche rua/cidade",
+  "ok": true,
+  "detalhe": "cep=01001-000 rua=Quadra Saun Quadra 5 Bloco B Torre I, Ii, Iii"
+ },
+ {
+  "nome": "[os] modal fecha apos salvar",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[os] toast de sucesso aparece",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[os] cliente escolhido no campo",
+  "ok": true,
+  "detalhe": "campo=Teste3003 os 164890"
+ },
+ {
+  "nome": "[os] id oculto gravado",
+  "ok": true,
+  "detalhe": "id=71"
+ },
+ {
+  "nome": "[os] campos da tela preservados apos modal",
+  "ok": true,
+  "detalhe": "Defeito os 164890"
+ },
+ {
+  "nome": "[os] formulario principal salvo",
+  "ok": true,
+  "detalhe": "http://mapos.test/index.php/os/visualizar/34?aba=produtos"
+ },
+ {
+  "nome": "[venda] modal abre pelo rodape",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[venda] nome pre-preenchido com o texto digitado",
+  "ok": true,
+  "detalhe": "nome=Teste3003 venda 164890"
+ },
+ {
+  "nome": "[venda] texto com letras nao vai para documento",
+  "ok": true,
+  "detalhe": "doc="
+ },
+ {
+  "nome": "[venda] Buscar CNPJ preenche dados da empresa",
+  "ok": true,
+  "detalhe": "cidade=Brasilia nome=Teste3003 venda 164890"
+ },
+ {
+  "nome": "[venda] CEP preenche rua/cidade",
+  "ok": true,
+  "detalhe": "cep=01001-000 rua=Setor Setor Sbs"
+ },
+ {
+  "nome": "[venda] modal fecha apos salvar",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[venda] toast de sucesso aparece",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[venda] cliente escolhido no campo",
+  "ok": true,
+  "detalhe": "campo=Teste3003 venda 164890"
+ },
+ {
+  "nome": "[venda] id oculto gravado",
+  "ok": true,
+  "detalhe": "id=72"
+ },
+ {
+  "nome": "[venda] campos da tela preservados apos modal",
+  "ok": true,
+  "detalhe": "Obs interna 164890"
+ },
+ {
+  "nome": "[venda] formulario principal salvo",
+  "ok": true,
+  "detalhe": "http://mapos.test/index.php/vendas/visualizar/9#secao-adicionar-produto"
+ },
+ {
+  "nome": "[erro] nome vazio mostra mensagem no campo, modal continua aberto",
+  "ok": true,
+  "detalhe": "Informe o nome do cliente."
+ },
+ {
+  "nome": "[erro] e-mail invalido mostra mensagem, modal continua aberto",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[erro] e-mail duplicado (422 do servidor) mostra no campo, modal continua aberto",
+  "ok": true,
+  "detalhe": "já está cadastrado."
+ },
+ {
+  "nome": "[esc] Esc fecha o modal",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[esc] nenhum cliente escolhido ao fechar",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[esc] reabrir limpa o form (telefone) e atualiza o nome",
+  "ok": true,
+  "detalhe": "nome=Outro3003 164890 tel="
+ },
+ {
+  "nome": "[esc] Cancelar fecha o modal",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[esc] reabrir apos Cancelar limpa o e-mail",
+  "ok": true,
+  "detalhe": ""
+ },
+ {
+  "nome": "[esc] \"Cadastro completo\" aponta para clientes/adicionar em nova aba",
+  "ok": true,
+  "detalhe": "href=http://mapos.test/index.php/clientes/adicionar target=_blank"
+ },
+ {
+  "nome": "[esc] Cadastro completo abre nova aba",
+  "ok": true,
+  "detalhe": "http://mapos.test/index.php/clientes/adicionar"
+ },
+ {
+  "nome": "[servidor] nome vazio via POST direto responde 422 com erro do campo",
+  "ok": true,
+  "detalhe": "status=422 {\"nomeCliente\":\"O campo Nome ou razão social é obrigatório.\"}"
+ },
+ {
+  "nome": "[servidor] GET em clientes/cadastroRapido nao grava (405/redirect)",
+  "ok": true,
+  "detalhe": "status=405"
+ },
+ {
+  "nome": "[restrito] login teste.3003@mapos.test",
+  "ok": true,
+  "detalhe": "http://mapos.test/index.php/mapos"
+ },
+ {
+  "nome": "[restrito] /os/adicionar: rodape \"Cadastrar novo cliente\" ausente",
+  "ok": true,
+  "detalhe": "url=http://mapos.test/index.php/os/adicionar rodape=0"
+ },
+ {
+  "nome": "[restrito] /os/adicionar: modal ausente no HTML",
+  "ok": true,
+  "detalhe": "modal=0"
+ },
+ {
+  "nome": "[restrito] /vendas/adicionar: rodape \"Cadastrar novo cliente\" ausente",
+  "ok": true,
+  "detalhe": "url=http://mapos.test/index.php/vendas/adicionar rodape=0"
+ },
+ {
+  "nome": "[restrito] /vendas/adicionar: modal ausente no HTML",
+  "ok": true,
+  "detalhe": "modal=0"
+ },
+ {
+  "nome": "[restrito] token CSRF obtido da pagina",
+  "ok": true,
+  "detalhe": "ok"
+ },
+ {
+  "nome": "[restrito] POST clientes/cadastroRapido negado sem gravar (teste.3003@mapos.test)",
+  "ok": true,
+  "detalhe": "status=303 location=http://mapos.test/"
+ }
+]
