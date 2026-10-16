@@ -1075,6 +1075,12 @@ class Relatorios extends MY_Controller
             return redirect('/relatorios/receitasBrutasMei');
         }
 
+        $nomeArquivo = sprintf(
+            "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format",
+            preg_replace('/[^0-9\-]/', '', (string) $dataInicial),
+            preg_replace('/[^0-9\-]/', '', (string) $dataFinal)
+        );
+
         $tempFilePath = $this->arquivoTemporario('docx');
         $generatedFilePath = $this->arquivoTemporario($format);
 
@@ -1088,14 +1094,7 @@ class Relatorios extends MY_Controller
             $fileContents = file_get_contents($generatedFilePath);
             unlink($generatedFilePath);
 
-            return force_download(
-                sprintf(
-                    "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format",
-                    preg_replace('/[^0-9\-]/', '', (string) $dataInicial),
-                    preg_replace('/[^0-9\-]/', '', (string) $dataFinal)
-                ),
-                $fileContents
-            );
+            return force_download($nomeArquivo, $fileContents);
         } else {
             Settings::setPdfRendererName(Settings::PDF_RENDERER_MPDF);
             Settings::setPdfRendererPath('.');
@@ -1110,7 +1109,7 @@ class Relatorios extends MY_Controller
             unlink($generatedFilePath);
 
             return $this->output
-                ->set_header('Content-disposition: inline;filename=' . "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format")
+                ->set_header('Content-disposition: inline;filename=' . $nomeArquivo)
                 ->set_content_type(get_mime_by_extension($generatedFilePath))
                 ->set_status_header(200)
                 ->set_output($fileContents)

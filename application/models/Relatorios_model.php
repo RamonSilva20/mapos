@@ -467,7 +467,7 @@ class Relatorios_model extends CI_Model
         $servicosTotalComNf = 0;
         $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
 
-        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+        $totalMes = $mercadoriasTotal + $industriaTotal + $servicosTotal;
 
         $periodo = sprintf('%s à %s', $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
 
@@ -523,7 +523,7 @@ class Relatorios_model extends CI_Model
         $servicosTotalComNf = 0;
         $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
 
-        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+        $totalMes = $mercadoriasTotal + $industriaTotal + $servicosTotal;
 
         $periodo = sprintf('%s à %s', $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
 
