@@ -16,6 +16,7 @@
 <div class="widget-box">
     <h5 style="padding: 3px 0"></h5>
     <div class="widget-content nopadding tab-content">
+        <div style="overflow-x: auto">
         <table id="tabela" class="table table-bordered ">
             <thead>
                 <tr>
@@ -43,6 +44,7 @@
                 <?php } ?>
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 <?php echo $this->pagination->create_links(); ?>
