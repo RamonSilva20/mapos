@@ -102,6 +102,7 @@ $periodo = $this->input->get('periodo');
             <div class="widget-content nopadding tab-content">
 
 
+                <div style="overflow-x: auto">
                 <table class="table table-bordered " id="divLancamentos">
                     <thead>
                         <tr>
@@ -240,6 +241,7 @@ echo number_format($soma_descontos_pagos, 2, ',', '.')?></strong></td>
                       </tr>
                     </tfoot>
                 </table>
+                </div>
             </div>
         </div>
     </div>

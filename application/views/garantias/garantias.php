@@ -17,6 +17,7 @@
 
 <div class="widget-box">
     <div class="widget-content nopadding tab-content">
+        <div style="overflow-x: auto">
         <table id="tabela" class="table table-bordered ">
             <thead>
                 <tr>
@@ -61,6 +62,7 @@
     } ?>
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 </div>
