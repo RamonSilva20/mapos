@@ -73,13 +73,21 @@ class Clientes_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    public function getOsByCliente($id)
+    public function getOsByCliente($id, $perpage = 10, $start = 0)
     {
         $this->db->where('clientes_id', $id);
+        $this->db->order_by('dataFinal', 'desc');
         $this->db->order_by('idOs', 'desc');
-        $this->db->limit(10);
+        $this->db->limit($perpage, $start);
 
         return $this->db->get('os')->result();
+    }
+
+    public function countOsByCliente($id)
+    {
+        $this->db->where('clientes_id', $id);
+
+        return $this->db->count_all_results('os');
     }
 
     /**

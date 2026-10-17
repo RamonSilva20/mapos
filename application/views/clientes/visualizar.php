@@ -206,10 +206,9 @@
                         echo  '</td>';
                         echo '</tr>';
                     } ?>
-                    <tr>
-                    </tr>
                     </tbody>
                 </table>
+                <?php echo $this->pagination->create_links(); ?>
                 <?php
             } ?>
         </div>
@@ -286,3 +285,11 @@
           <span class="button__icon"><i class="bx bx-undo"></i></span><span class="button__text2">Voltar</span></a>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (window.location.hash === '#tab2') {
+            $('a[href="#tab2"]').tab('show');
+        }
+    });
+</script>
