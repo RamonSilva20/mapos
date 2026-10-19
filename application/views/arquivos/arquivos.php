@@ -33,6 +33,7 @@
     <div>
         <div class="widget-box">
             <div class="widget-content nopadding tab-content">
+                <div style="overflow-x: auto">
                 <table id="tabela" width="100%" class="table table-bordered ">
                     <thead>
                         <tr>
@@ -86,6 +87,7 @@
                         <?php endforeach ?>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
