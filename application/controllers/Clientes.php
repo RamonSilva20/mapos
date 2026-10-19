@@ -202,7 +202,15 @@ class Clientes extends MY_Controller
 
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
-        $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3));
+        $this->load->library('pagination');
+        $this->data['configuration']['base_url'] = site_url('clientes/visualizar/' . $this->uri->segment(3));
+        $this->data['configuration']['total_rows'] = $this->clientes_model->countOsByCliente($this->uri->segment(3));
+        $this->data['configuration']['uri_segment'] = 4;
+        $this->data['configuration']['suffix'] = '#tab2';
+        $this->data['configuration']['first_url'] = site_url('clientes/visualizar/' . $this->uri->segment(3)) . '#tab2';
+        $this->pagination->initialize($this->data['configuration']);
+
+        $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3), $this->data['configuration']['per_page'], max(0, (int) $this->uri->segment(4)));
         $this->data['result_vendas'] = $this->clientes_model->getAllVendasByClient($this->uri->segment(3));
         $this->data['view'] = 'clientes/visualizar';
 
