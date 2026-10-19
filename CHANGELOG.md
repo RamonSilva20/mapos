@@ -4,6 +4,12 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.55.4] - 2026-10-19
+
+### Fixed
+- Paginação e ordenação por data final na aba Ordens de Serviço da visualização do cliente (#3011, #3013). [@graficaeusebio-cloud](https://github.com/graficaeusebio-cloud)
+- Rolagem horizontal das tabelas de listagem dentro do card em telas estreitas (#3012). [@graficaeusebio-cloud](https://github.com/graficaeusebio-cloud)
+
 ## [4.55.3] - 2026-10-15
 
 ### Fixed
