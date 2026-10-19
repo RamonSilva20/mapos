@@ -105,7 +105,8 @@ if (! function_exists('getMoneyAsCents')) {
             throw new \InvalidArgumentException('A entrada deve ser numérica!');
         }
 
-        return intval(round(floatval($value), 2) * 100);
+        // Arredonda depois de multiplicar: intval(1.15 * 100) dava 114 (#3014).
+        return (int) round(floatval($value) * 100);
     }
 }
 

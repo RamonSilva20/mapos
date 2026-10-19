@@ -48,6 +48,26 @@ abstract class BasePaymentGateway implements PaymentGateway
         }
     }
 
+    /**
+     * Valor da cobrança: o mesmo total que a tela da OS ou da venda mostra
+     * (Os_model::totais() / Vendas_model::totais()), com o preço do cadastro
+     * para serviço sem preço, quantidade fracionada, desconto por item e
+     * desconto geral (#3014). Os gateways não recalculam os itens.
+     *
+     * @param object $entity Resultado de findEntity()
+     */
+    protected function valorDaCobranca(object $entity, string $tipo): float
+    {
+        switch ($tipo) {
+            case PaymentGateway::PAYMENT_TYPE_OS:
+                return (float) $this->ci->Os_model->totais($entity)['total'];
+            case PaymentGateway::PAYMENT_TYPE_VENDAS:
+                return (float) $this->ci->vendas_model->totais($entity)['total'];
+            default:
+                throw new \Exception('Tipo de entidade a ser gerado a cobrança inválido!');
+        }
+    }
+
     public function errosCadastro($entity = null)
     {
         if ($entity == null) {

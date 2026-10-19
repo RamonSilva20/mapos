@@ -584,7 +584,7 @@ final class OsTelaTest extends MaposTestCase
         $this->assertStringContainsString('data-modal-abrir="desconto-item-servico"', $servicos);
     }
 
-    public function testImpressoesEmailEGatewaysUsamOValorComDescontoDoItem(): void
+    public function testImpressoesEEmailUsamOValorComDescontoDoItem(): void
     {
         $views = [
             'os/imprimirOs', 'os/imprimirOsTermica', 'os/emails/os', 'conecte/imprimirOs', 'conecte/imprimirVenda',
@@ -596,11 +596,7 @@ final class OsTelaTest extends MaposTestCase
             $this->assertStringNotContainsString('$preco * ($s->quantidade ?: 1)', $fonte, $view . ' soma o serviço pelo valor com desconto.');
         }
 
-        // Cobrança no gateway = o que a OS cobra: item com desconto vale o subTotal.
-        foreach (['Asaas', 'GerencianetSdk', 'MercadoPago'] as $gateway) {
-            $fonte = (string) file_get_contents(APPPATH . 'libraries/Gateways/' . $gateway . '.php');
-            $this->assertStringContainsString('desconto individual (#2880)', $fonte, $gateway);
-        }
+        // A cobrança nos gateways usa o total da OS: CobrancaValorTest (#3014).
     }
 
     public function testTrechosDosEndpointsRenderizamSozinhos(): void
