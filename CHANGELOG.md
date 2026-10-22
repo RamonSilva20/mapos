@@ -6,6 +6,9 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- Tabela de suporte das versões (4.x, 5.x e a futura versão em Laravel) no README e no `SECURITY.md`. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [5.0.0] - 2026-10-22
 
 Primeira versão estável da v5. Exige PHP 8.5; leia o [guia de migração](docs/migracao-4x-para-5.md) e teste numa cópia antes de usar em produção. Quem está na 4.x deve atualizar para a 4.55.5 e migrar pelo guia: o botão "Atualizar Mapos" da 4.x não instala a v5. Sem migration nem variável nova no `.env` em relação à beta.3.
