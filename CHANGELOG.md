@@ -7,7 +7,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
-- Capturas do README com o nome Map-OS e a versão 5.0.0, e tabela de suporte das versões (4.x, 5.x e a futura versão em Laravel) no README e no `SECURITY.md`. [@RamonSilva20](https://github.com/RamonSilva20)
+- Tabela de suporte das versões (4.x, 5.x e a futura versão em Laravel) no README e no `SECURITY.md`. [@RamonSilva20](https://github.com/RamonSilva20)
 
 ## [5.0.0] - 2026-10-22
 
