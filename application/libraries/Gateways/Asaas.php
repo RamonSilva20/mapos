@@ -169,55 +169,14 @@ class Asaas extends BasePaymentGateway
     protected function gerarCobrancaBoleto($id, $tipo)
     {
         $entity = $this->findEntity($id, $tipo);
-        $produtos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getProdutos($id)
-            : $this->ci->vendas_model->getProdutos($id);
-        $servicos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getServicos($id)
-            : [];
-
-        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
-
-        $tipo_desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
-
-        $totalProdutos = array_reduce(
-            $produtos,
-            function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
-            },
-            0
-        );
-        $totalServicos = array_reduce(
-            $servicos,
-            function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
-            },
-            0
-        );
-        $tipoDesconto = array_reduce(
-            $tipo_desconto,
-            function ($total, $item) {
-                return $item->tipo_desconto;
-            },
-            0
-        );
-        $totalDesconto = array_reduce(
-            $desconto,
-            function ($total, $item) {
-                return $item->desconto;
-            },
-            0
-        );
 
         if (empty($entity)) {
             throw new \Exception('OS ou venda não existe!');
         }
 
-        if (($totalProdutos + $totalServicos) <= 0) {
+        $valor = $this->valorDaCobranca($entity, $tipo);
+
+        if ($valor <= 0) {
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
@@ -231,7 +190,7 @@ class Asaas extends BasePaymentGateway
             'customer' => $this->criarOuRetornarClienteAsaasId($entity->clientes_id),
             'billingType' => 'BOLETO',
             'dueDate' => $expirationDate,
-            'value' => $this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto),
+            'value' => $valor,
             'description' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
             'externalReference' => $id,
             'postalService' => false,
@@ -258,7 +217,7 @@ class Asaas extends BasePaymentGateway
             'expire_at' => $result->dueDate,
             'charge_id' => $result->id,
             'status' => $result->status,
-            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto)),
+            'total' => getMoneyAsCents($valor),
             'payment' => $result->billingType,
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'boleto',
@@ -285,54 +244,14 @@ class Asaas extends BasePaymentGateway
     protected function gerarCobrancaLink($id, $tipo)
     {
         $entity = $this->findEntity($id, $tipo);
-        $produtos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getProdutos($id)
-            : $this->ci->vendas_model->getProdutos($id);
-        $servicos = $tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getServicos($id)
-            : [];
-        $tipo_desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
-
-        $desconto = [$tipo === PaymentGateway::PAYMENT_TYPE_OS
-            ? $this->ci->Os_model->getById($id)
-            : $this->ci->vendas_model->getById($id)];
-
-        $totalProdutos = array_reduce(
-            $produtos,
-            function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
-            },
-            0
-        );
-        $totalServicos = array_reduce(
-            $servicos,
-            function ($total, $item) {
-                return $total + (floatval($item->preco) * intval($item->quantidade));
-            },
-            0
-        );
-        $tipoDesconto = array_reduce(
-            $tipo_desconto,
-            function ($total, $item) {
-                return $item->tipo_desconto;
-            },
-            0
-        );
-        $totalDesconto = array_reduce(
-            $desconto,
-            function ($total, $item) {
-                return $item->desconto;
-            },
-            0
-        );
 
         if (empty($entity)) {
             throw new \Exception('OS ou venda não existe!');
         }
 
-        if (($totalProdutos + $totalServicos) <= 0) {
+        $valor = $this->valorDaCobranca($entity, $tipo);
+
+        if ($valor <= 0) {
             throw new \Exception('OS ou venda com valor negativo ou zero!');
         }
 
@@ -346,7 +265,7 @@ class Asaas extends BasePaymentGateway
             'name' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
             'description' => $tipo === PaymentGateway::PAYMENT_TYPE_OS ? "OS #$id" : "Venda #$id",
             'endDate' => $expirationDate,
-            'value' => $this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto),
+            'value' => $valor,
             'billingType' => 'UNDEFINED',
             'chargeType' => 'DETACHED',
             'dueDateLimitDays' => preg_replace('/[^0-9]/', '', $this->asaasConfig['boleto_expiration']),
@@ -370,7 +289,7 @@ class Asaas extends BasePaymentGateway
             'expire_at' => $result->endDate,
             'charge_id' => $result->id,
             'status' => 'PENDING',
-            'total' => getMoneyAsCents($this->valorTotal($totalProdutos, $totalServicos, $totalDesconto, $tipoDesconto)),
+            'total' => getMoneyAsCents($valor),
             'clientes_id' => $entity->idClientes,
             'payment_method' => 'link',
             'payment_gateway' => 'Asaas',
@@ -396,18 +315,6 @@ class Asaas extends BasePaymentGateway
         return $data;
     }
 
-    private function valorTotal($produtosValor, $servicosValor, $desconto, $tipo_desconto)
-    {
-        if ($tipo_desconto == 'porcento') {
-            $def_desconto = $desconto * ($produtosValor + $servicosValor) / 100;
-        } elseif ($tipo_desconto == 'real') {
-            $def_desconto = $desconto;
-        } else {
-            $def_desconto = 0;
-        }
-
-        return ($produtosValor + $servicosValor) - $def_desconto;
-    }
 
     private function criarOuRetornarClienteAsaasId($clienteId)
     {

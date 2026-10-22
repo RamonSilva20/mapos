@@ -1,256 +1,67 @@
-<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+<?php
+/**
+ * Início da área do cliente (#2848): resumo em kpi-card e as últimas OS e
+ * compras. "Abrir OS" é a ação principal, na Top Nav. No celular, as
+ * cobranças (fora da tabbar) têm o atalho no cartão de resumo.
+ *
+ * @var list<object> $os
+ * @var list<object> $compras
+ * @var array{os_em_andamento: int, os: int, compras: int, cobrancas: int} $resumo
+ * @var string $cliente_nome
+ */
+$primeiroNome = strtok(trim($cliente_nome), ' ') ?: $cliente_nome;
+$quantos = static fn (int $n, string $um, string $varios) => $n === 0 ? 'Nenhuma ainda' : $n . ' ' . ($n === 1 ? $um : $varios);
+$verTodas = static fn (string $rotulo, string $url) => component('link', ['label' => $rotulo, 'href' => site_url($url)]);
+?>
+<div class="flex flex-col gap-6">
+    <header>
+        <h1 class="font-display text-heading-xl text-text"><?= e('Olá, ' . $primeiroNome) ?></h1>
+        <p class="text-caption text-muted">Acompanhe suas ordens de serviço, compras e cobranças.</p>
+    </header>
 
-<div class="quick-actions_homepage">
-    <ul class="cardBox">
-        <li class="card">
-            <a href="<?php echo base_url() ?>index.php/mine/os">
-                <div class="lord-icon04">
-                    <i class='bx bx-file iconBx04'></i>
-                </div>
-            </a>
-            <a href="<?php echo base_url() ?>index.php/mine/os">
-                <div style="font-size: 1.2em" class="numbers">Ordens de Serviço</div>
-            </a>
-        </li>
-
-        <li class="card">
-            <a href="<?php echo base_url() ?>index.php/mine/compras">
-                <div class="lord-icon05">
-                    <i class='bx bx-cart-alt iconBx05'></i>
-                </div>
-            </a>
-            <a href="<?php echo base_url() ?>index.php/mine/compras">
-                <div style="font-size: 1.2em" class="numbers">Compras&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            </a>
-        <li class="card">
-            <a href="<?php echo base_url() ?>index.php/mine/cobrancas">
-                <div class="lord-icon05">
-                    <i class='bx bx-credit-card-front iconBx05'></i>
-                </div>
-            </a>
-            <a href="<?php echo base_url() ?>index.php/mine/cobrancas">
-                <div style="font-size: 1.2em" class="numbers">Cobranças&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            </a>
-        </li>
-        <li class="card">
-            <a href="<?php echo base_url() ?>index.php/mine/conta">
-                <div class="lord-icon07">
-                    <i class='bx bx-user-circle iconBx07'></i></span>
-                </div>
-            </a>
-            <a href="<?php echo base_url() ?>index.php/mine/conta">
-                <div style="font-size: 1.2em" class="numbers">Minha Conta</div>
-            </a>
-        </li>
-    </ul>
-</div>
-
-<div class="span12" style="margin-left: 0">
-    <div class="widget-box">
-        <div class="widget-title" style="margin: -20px 0 0">
-            <span class="icon"><i class="fas fa-signal"></i></span>
-            <h5>Últimas Ordens de Serviço</h5>
-        </div>
-        <div class="widget-content">
-            <div class="c-table-responsive">
-            <table id="tabela" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Nº</th>
-                        <th>Responsável</th>
-                        <th>Data Inicial</th>
-                        <th>Data Final</th>
-                        <th>Venc. da Garantia</th>
-                        <th>Status</th>
-                        <th style="text-align:right">Visualizar / Imprimir</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($os != null) {
-                        foreach ($os as $o) {
-                            $vencGarantia = '';
-
-                            if ($o->garantia && is_numeric($o->garantia)) {
-                                $vencGarantia = dateInterval($o->dataFinal, $o->garantia);
-                            }
-                            $corGarantia = '';
-                            if (!empty($vencGarantia)) {
-                                $dataGarantia = explode('/', $vencGarantia);
-                                $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                                if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                                    $corGarantia = '#4d9c79';
-                                } else {
-                                    $corGarantia = '#f24c6f';
-                                }
-                            } elseif ($o->garantia == "0") {
-                                $vencGarantia = 'Sem Garantia';
-                                $corGarantia = '';
-                            } else {
-                                $vencGarantia = '';
-                                $corGarantia = '';
-                            }
-
-                            switch ($o->status) {
-                                case 'Aberto':
-                                    $cor = '#00cd00';
-                                    break;
-                                case 'Em Andamento':
-                                    $cor = '#436eee';
-                                    break;
-                                case 'Orçamento':
-                                    $cor = '#CDB380';
-                                    break;
-                                case 'Negociação':
-                                    $cor = '#AEB404';
-                                    break;
-                                case 'Cancelado':
-                                    $cor = '#CD0000';
-                                    break;
-                                case 'Finalizado':
-                                    $cor = '#256';
-                                    break;
-                                case 'Faturado':
-                                    $cor = '#B266FF';
-                                    break;
-                                case 'Aguardando Peças':
-                                    $cor = '#FF7F00';
-                                    break;
-                                case 'Aprovado':
-                                    $cor = '#808080';
-                                    break;
-                                default:
-                                    $cor = '#E0E4CC';
-                                    break;
-                            }
-
-                            echo '<tr>';
-                            echo '<td>' . $o->idOs . '</td>';
-                            echo '<td>' . $o->nome . '</td>';
-                            echo '<td>' . date('d/m/Y', strtotime($o->dataInicial)) . '</td>';
-                            echo '<td>' . date('d/m/Y', strtotime($o->dataFinal)) . '</td>';
-                            echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-                            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $o->status . '</span> </td>';
-                            echo '<td style="text-align:right">';
-                            echo '<a href="' . base_url() . 'index.php/mine/visualizarOs/' . $o->idOs . '" class="btn"> <i class="fas fa-eye" ></i></a> ';
-                            echo '<a href="' . base_url('index.php/mine/imprimirOs/' . $o->idOs) . '" class="btn" target="_blank"> <i class="fas fa-print"></i></a>';
-                            echo '</td>';
-                            echo '</tr>';
-                        }
-                    } else {
-                        echo '<tr><td colspan="3">Nenhum ordem de serviço encontrada.</td></tr>';
-                    }
-
-            ?>
-                </tbody>
-            </table>
-            </div>
-        </div>
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <?= component('kpi-card', ['label' => 'OS em andamento', 'value' => $resumo['os_em_andamento'], 'icon' => 'wrench', 'caption' => $verTodas($quantos($resumo['os'], 'OS no total', 'OS no total'), 'mine/os')]) ?>
+        <?= component('kpi-card', ['label' => 'Compras', 'value' => $resumo['compras'], 'icon' => 'shopping-cart', 'caption' => $verTodas('Ver compras', 'mine/compras')]) ?>
+        <?= component('kpi-card', ['label' => 'Cobranças', 'value' => $resumo['cobrancas'], 'icon' => 'receipt', 'caption' => $verTodas('Ver cobranças', 'mine/cobrancas'), 'class' => 'col-span-2 lg:col-span-1']) ?>
     </div>
 
-    <div class="widget-box">
-        <div class="widget-title" style="margin: -20px 0 0">
-            <span class="icon"><i class="fas fa-signal"></i></span>
-            <h5>Últimas Compras</h5>
+    <section class="flex flex-col gap-3" aria-labelledby="titulo-ultimas-os">
+        <div class="flex items-baseline justify-between gap-3">
+            <h2 id="titulo-ultimas-os" class="text-heading-sm text-text">Últimas ordens de serviço</h2>
+            <?php if ($os !== []) { ?>
+                <?= component('link', ['label' => 'Ver todas', 'href' => site_url('mine/os')]) ?>
+            <?php } ?>
         </div>
-        <div class="widget-content">
-            <div class="c-table-responsive">
-            <table id="tabela" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Responsável</th>
-                        <th>Data da Venda</th>
-                        <th>Faturado</th>
-                        <th>Venc. da Garantia</th>
-                        <th>Status</th>
-                        <th style="text-align:right">Visualizar / Imprimir</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-            if ($compras != null) {
-                foreach ($compras as $c) {
-                    $vencGarantia = '';
+        <?= component('data-table', [
+            'columns' => conecteColunasOs(false),
+            'rows' => $os,
+            'caption' => 'Últimas ordens de serviço',
+            'empty' => component('empty-state', [
+                'title' => 'Nenhuma ordem de serviço ainda',
+                'message' => 'Quando você deixar um equipamento na assistência ou abrir uma OS por aqui, ela aparece nesta lista.',
+                'icon' => 'wrench',
+                'class' => 'border-0',
+            ]),
+        ]) ?>
+    </section>
 
-                    if ($c->garantia && is_numeric($c->garantia)) {
-                        $vencGarantia = dateInterval($c->dataVenda, $c->garantia);
-                    }
-                    $corGarantia = '';
-                    if (!empty($vencGarantia)) {
-                        $dataGarantia = explode('/', $vencGarantia);
-                        $dataGarantiaFormatada = $dataGarantia[2] . '-' . $dataGarantia[1] . '-' . $dataGarantia[0];
-                        if (strtotime($dataGarantiaFormatada) >= strtotime(date('d-m-Y'))) {
-                            $corGarantia = '#4d9c79';
-                        } else {
-                            $corGarantia = '#f24c6f';
-                        }
-                    } elseif ($c->garantia == "0") {
-                        $vencGarantia = 'Sem Garantia';
-                        $corGarantia = '';
-                    } else {
-                        $vencGarantia = '';
-                        $corGarantia = '';
-                    }
-                    if ($c->faturado == 1) {
-                        $faturado = 'Sim';
-                    } else {
-                        $faturado = 'Não';
-                    }
-                    
-                    switch ($c->status) {
-                        case 'Aberto':
-                            $cor = '#00cd00';
-                            break;
-                        case 'Em Andamento':
-                            $cor = '#436eee';
-                            break;
-                        case 'Orçamento':
-                            $cor = '#CDB380';
-                            break;
-                        case 'Negociação':
-                            $cor = '#AEB404';
-                            break;
-                        case 'Cancelado':
-                            $cor = '#CD0000';
-                            break;
-                        case 'Finalizado':
-                            $cor = '#256';
-                            break;
-                        case 'Faturado':
-                            $cor = '#B266FF';
-                            break;
-                        case 'Aguardando Peças':
-                            $cor = '#FF7F00';
-                            break;
-                        case 'Aprovado':
-                            $cor = '#808080';
-                            break;
-                        default:
-                            $cor = '#E0E4CC';
-                            break;
-                    }
-                    echo '<tr>';
-                    echo '<td>' . $c->idVendas . '</td>';
-                    echo '<td>' . $c->nome . '</td>';
-                    echo '<td>' . date('d/m/Y', strtotime($c->dataVenda)) . '</td>';
-                    echo '<td>' . $faturado . '</td>';
-                    echo '<td><span class="badge" style="background-color: ' . $corGarantia . '; border-color: ' . $corGarantia . '">' . $vencGarantia . '</span> </td>';
-                    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $c->status . '</span> </td>';
-                    echo '<td style="text-align:right">';
-                    echo '<a href="' . base_url() . 'index.php/mine/visualizarCompra/' . $c->idVendas . '" class="btn"> <i class="fas fa-eye" ></i> </a> ';
-                    echo '<a href="' . base_url() . 'index.php/mine/imprimirCompra/' . $c->idVendas . '" class="btn"> <i class="fas fa-print" ></i> </a>';
-                    echo '</td>';
-                    echo '</tr>';
-                }
-            } else {
-                echo '<tr><td colspan="5">Nenhum venda encontrada.</td></tr>';
-            }
-
-            ?>
-                </tbody>
-            </table>
-            </div>
+    <section class="flex flex-col gap-3" aria-labelledby="titulo-ultimas-compras">
+        <div class="flex items-baseline justify-between gap-3">
+            <h2 id="titulo-ultimas-compras" class="text-heading-sm text-text">Últimas compras</h2>
+            <?php if ($compras !== []) { ?>
+                <?= component('link', ['label' => 'Ver todas', 'href' => site_url('mine/compras')]) ?>
+            <?php } ?>
         </div>
-    </div>
+        <?= component('data-table', [
+            'columns' => conecteColunasCompras(false),
+            'rows' => $compras,
+            'caption' => 'Últimas compras',
+            'empty' => component('empty-state', [
+                'title' => 'Nenhuma compra ainda',
+                'message' => 'As compras feitas na loja aparecem aqui, com a garantia de cada uma.',
+                'icon' => 'shopping-cart',
+                'class' => 'border-0',
+            ]),
+        ]) ?>
+    </section>
 </div>

@@ -1,0 +1,22 @@
+/*
+ * CSS do instalador (install/), gerado em install/assets/css/instalador.css
+ * por `npm run build:css`.
+ *
+ * O instalador roda antes de o Map-OS estar configurado e é independente do
+ * painel: tem o CSS dele, sem as fontes locais (usa as do sistema) e sem
+ * depender de assets/dist.
+ */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "./tokens.css";
+
+@source "../../install/view/**/*.php";
+@source "../../install/assets/js/*.js";
+
+@layer base {
+  body {
+    background-color: var(--mapos-bg);
+    color: var(--mapos-text);
+  }
+}

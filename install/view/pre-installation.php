@@ -1,134 +1,101 @@
-<div class="section">
-  <p>1. Por favor, verifique se as configurações do seu <strong>PHP</strong> atende aos seguintes requisitos:</p>
-  <hr />
+<?php
+defined('INSTALADOR') || exit;
+/**
+ * Pré-instalação: requisitos de PHP, extensões e permissões de escrita.
+ * Cada tabela mostra o valor atual, o requerido e o status.
+ *
+ * @var string $current_php_version
+ * @var string $php_version_required
+ * @var bool   $php_version_success
+ * @var bool   $allow_url_fopen_success
+ * @var bool   $vendor_success
+ * @var bool   $all_requirement_success
+ */
+$cabecalho = 'border-b border-border bg-surface-subtle px-3 py-2 font-medium';
+$celula = 'border-b border-border px-3 py-2';
+?>
+<div class="flex flex-col gap-6 p-4 sm:p-6">
   <div>
-    <table>
+    <p class="mb-2">1. Confira se as configurações do seu <strong>PHP</strong> atendem aos requisitos:</p>
+    <div class="overflow-x-auto"><table class="w-full text-sm">
       <thead>
         <tr>
-          <th width="25%">Configurações</th>
-          <th width="25%">Atuais</th>
-          <th>Requeridas</th>
-          <th width="15%" class="text-center">Status</th>
+          <th class="<?= $cabecalho ?> text-left">Configuração</th>
+          <th class="<?= $cabecalho ?> text-left">Atual</th>
+          <th class="<?= $cabecalho ?> text-left">Requerida</th>
+          <th class="<?= $cabecalho ?> text-center">Status</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>PHP Version</td>
-          <td>
-            <?php echo $current_php_version; ?>
-          </td>
-          <td>
-            <?php echo $php_version_required; ?> >=</td>
-            <td class="text-center">
-              <?php if ($php_version_success) { ?>
-                <i class="status fa fa-check-circle-o"></i>
-              <?php } else { ?>
-                <i class="status fa fa-times-circle-o"></i>
-              <?php } ?>
-            </td>
-          </tr>
-          <tr>
-            <td>allow_url_fopen</td>
-            <td>
-              <?php if ($allow_url_fopen_success) { ?>
-                On
-              <?php } else { ?>
-                Off
-              <?php } ?>
-            </td>
-            <td>On</td>
-            <td class="text-center">
-              <?php if ($allow_url_fopen_success) { ?>
-                <i class="status fa fa-check-circle-o"></i>
-              <?php } else { ?>
-                <i class="status fa fa-times-circle-o"></i>
-              <?php } ?>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          <td class="<?= $celula ?>">PHP</td>
+          <td class="<?= $celula ?>"><?= htmlspecialchars($current_php_version, ENT_QUOTES) ?></td>
+          <td class="<?= $celula ?>"><?= htmlspecialchars($php_version_required, ENT_QUOTES) ?> ou superior</td>
+          <td class="<?= $celula ?> text-center"><?= instalador_status($php_version_success) ?></td>
+        </tr>
+        <tr>
+          <td class="<?= $celula ?>">allow_url_fopen</td>
+          <td class="<?= $celula ?>"><?= $allow_url_fopen_success ? 'On' : 'Off' ?></td>
+          <td class="<?= $celula ?>">On</td>
+          <td class="<?= $celula ?> text-center"><?= instalador_status($allow_url_fopen_success) ?></td>
+        </tr>
+        <tr>
+          <td class="<?= $celula ?>">Dependências (application/vendor)</td>
+          <td class="<?= $celula ?>"><?= $vendor_success ? 'Instaladas' : 'Ausentes' ?></td>
+          <td class="<?= $celula ?>">Instaladas</td>
+          <td class="<?= $celula ?> text-center"><?= instalador_status($vendor_success) ?></td>
+        </tr>
+      </tbody>
+    </table></div>
   </div>
 
-  <div class="section">
-    <p>2. Por favor, verifique se as extensões listadas abaixo estão <strong>instaladas/habilitadas</strong> no seu servidor:</p>
-    <hr />
-    <div>
-      <table>
-        <thead>
+  <div>
+    <p class="mb-2">2. Confira se as extensões abaixo estão <strong>instaladas e habilitadas</strong> no servidor:</p>
+    <div class="overflow-x-auto"><table class="w-full text-sm">
+      <thead>
+        <tr>
+          <th class="<?= $cabecalho ?> text-left">Extensão</th>
+          <th class="<?= $cabecalho ?> text-left">Atual</th>
+          <th class="<?= $cabecalho ?> text-left">Requerida</th>
+          <th class="<?= $cabecalho ?> text-center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($settings['extensions'] as $extensao) { ?>
           <tr>
-            <th width="25%">Extensões</th>
-            <th width="25%">Atuais</th>
-            <th>Requeridas</th>
-            <th width="15%" class="text-center">Status</th>
+            <td class="<?= $celula ?>"><?= htmlspecialchars($extensao, ENT_QUOTES) ?></td>
+            <td class="<?= $celula ?>"><?= extension_loaded($extensao) ? 'On' : 'Off' ?></td>
+            <td class="<?= $celula ?>">On</td>
+            <td class="<?= $celula ?> text-center"><?= instalador_status(extension_loaded($extensao)) ?></td>
           </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($settings['extensions'] as $value) { ?>
-            <tr>
-              <td>
-                <?php echo $value; ?>
-              </td>
-              <td>
-                <?php if (extension_loaded($value)) { ?>
-                  On
-                <?php } else { ?>
-                  Off
-                <?php } ?>
-              </td>
-              <td>On</td>
-              <td class="text-center">
-                <?php if (extension_loaded($value)) { ?>
-                  <i class="status fa fa-check-circle-o"></i>
-                <?php } else { ?>
-                  <i class="status fa fa-times-circle-o"></i>
-                <?php } ?>
-              </td>
-            </tr>
-          <?php } ?>
-        </tbody>
-      </table>
-    </div>
+        <?php } ?>
+      </tbody>
+    </table></div>
   </div>
 
-  <div class="section">
-    <p>3. Por favor, certifique-se de ter definido a permissão para <strong>leitura e escrita</strong> nos seguintes
-    diretórios e arquivos:</p>
-    <hr />
-    <div>
-      <table>
-        <thead>
+  <div>
+    <p class="mb-2">3. Dê permissão de <strong>leitura e escrita</strong> aos diretórios e arquivos abaixo:</p>
+    <div class="overflow-x-auto"><table class="w-full text-sm">
+      <thead>
+        <tr>
+          <th class="<?= $cabecalho ?> text-left">Arquivo ou diretório</th>
+          <th class="<?= $cabecalho ?> text-center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($settings['writeable_directories'] as $diretorio) { ?>
           <tr>
-            <th>Arquivos</th>
-            <th width="15%" class="text-center">Status</th>
+            <td class="<?= $celula ?>"><?= htmlspecialchars($diretorio, ENT_QUOTES) ?></td>
+            <td class="<?= $celula ?> text-center"><?= instalador_status(is_writable('..' . $diretorio)) ?></td>
           </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($settings['writeable_directories'] as $value) { ?>
-            <tr>
-              <td>
-                <?php echo $value; ?>
-              </td>
-              <td class="text-center">
-                <?php if (is_writable('..' . $value)) { ?>
-                  <i class="status fa fa-check-circle-o"></i>
-                  <?php
-                } else {
-                    $all_requirement_success = false; ?>
-                  <i class="status fa fa-times-circle-o"></i>
-                <?php
-                } ?>
-              </td>
-            </tr>
-          <?php } ?>
-        </tbody>
-      </table>
-    </div>
+        <?php } ?>
+      </tbody>
+    </table></div>
   </div>
 
-  <div class="panel-footer">
-    <button <?php if (! $all_requirement_success) {
-        echo 'disabled=disabled';
-    } ?> class="btn btn-info
-      form-next"><i class='fa fa-chevron-right'></i> Próximo</button>
-    </div>
+  <div class="flex justify-end">
+    <button type="button" data-proxima <?= $all_requirement_success ? '' : 'disabled' ?> class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 font-bold text-on-primary hover:bg-primary-hover disabled:cursor-not-allowed disabled:bg-disabled-bg disabled:text-disabled">
+      Próximo <?= instalador_icone('seta', 'size-4') ?>
+    </button>
+  </div>
+</div>

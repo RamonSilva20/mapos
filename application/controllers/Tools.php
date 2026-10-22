@@ -6,7 +6,13 @@ if (! defined('BASEPATH')) {
 
 class Tools extends CI_Controller
 {
-    /** @var \Faker\Generator */
+    /**
+     * Gerador de dados falsos dos seeds. Só existe com as dependências de
+     * desenvolvimento (composer install sem --no-dev); migrate e rollback não
+     * dependem dele, para funcionar na instalação de produção.
+     *
+     * @var \Faker\Generator|null
+     */
     public $faker;
 
     /** @var Seeder */
@@ -24,9 +30,6 @@ class Tools extends CI_Controller
         $this->load->dbforge();
 
         $this->load->library('Seeder');
-
-        // initiate faker
-        $this->faker = Faker\Factory::create();
 
         // initiate seeder
         $this->seeder = Seeder::create();
@@ -62,17 +65,17 @@ class Tools extends CI_Controller
     {
         $this->load->library('migration');
 
-        if ($version != null) {
-            if ($this->migration->version($version) === false) {
-                show_error($this->migration->error_string());
-            } else {
-                echo 'Migrations run successfully' . PHP_EOL;
-            }
+        try {
+            $resultado = $version != null ? $this->migration->version($version) : $this->migration->latest();
+        } catch (Throwable $erro) {
+            // A migration que falhou não é marcada como concluída: corrija a causa e rode de novo.
+            log_message('error', 'tools migrate: ' . $erro->getMessage());
+            show_error('A migration parou: ' . $erro->getMessage());
 
             return;
         }
 
-        if ($this->migration->latest() === false) {
+        if ($resultado === false) {
             show_error($this->migration->error_string());
         } else {
             echo 'Migrations run successfully' . PHP_EOL;
@@ -86,6 +89,11 @@ class Tools extends CI_Controller
 
     public function seed($name = null)
     {
+        // initiate faker (pacote de desenvolvimento: ausente em composer install --no-dev)
+        if ($this->faker === null && class_exists(\Faker\Factory::class)) {
+            $this->faker = \Faker\Factory::create();
+        }
+
         if ($name) {
             $this->seeder->call($name);
 

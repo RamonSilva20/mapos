@@ -20,6 +20,9 @@ if (! defined('BASEPATH')) {
  */
 class Permission
 {
+    /** @var object Instância do CodeIgniter, preenchida no construtor */
+    private $CI;
+
     private $permissions = [];
 
     private $table = 'permissoes'; //Nome tabela onde ficam armazenadas as permissões
@@ -65,10 +68,17 @@ class Permission
         if ($id != null) {
             $this->CI->db->select($this->table . '.' . $this->select);
             $this->CI->db->where($this->pk, $id);
+            // Grupo desativado não concede nada (#2846): até a v4 a situação
+            // do grupo era só informativa.
+            $this->CI->db->where('situacao', 1);
             $this->CI->db->limit(1);
+            // row_array() devolve null quando a consulta não traz linha, e
+            // count(null) é TypeError fatal no PHP 8. Um usuário cujo
+            // permissoes_id aponta para uma linha removida derrubava a tela
+            // em vez de receber a negação de acesso.
             $array = $this->CI->db->get($this->table)->row_array();
 
-            if (count($array) > 0) {
+            if (! empty($array)) {
                 $raw = $array[$this->select];
                 $array = json_decode_legacy($raw);
                 $this->permissions = [$array];

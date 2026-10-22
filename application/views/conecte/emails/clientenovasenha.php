@@ -113,7 +113,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="<?= $emitente ? $emitente->url_logo : "" ?>" style="width:100%; max-width:120px;">
+                                <img src="<?= e($emitente ? $emitente->url_logo : "") ?>" style="width:100%; max-width:120px;">
                             </td>
                             <td style="text-align: right">
                                 <br>
@@ -130,11 +130,11 @@
                     <table>
                         <tr>
                             <td>
-                                Cliente: <?= $cliente->nomeCliente ?><br>
+                                Cliente: <?= e($cliente->nomeCliente) ?><br>
                             </td>
 
                             <td style="text-align: right">
-                                <?= $emitente ? $emitente->nome : ""; ?> <br>
+                                <?= e($emitente ? $emitente->nome : "") ?> <br>
 
                             </td>
                         </tr>
@@ -145,7 +145,7 @@
             <tr class="details">
 
                 <td colspan="4" style="text-align: left">
-                    Caro(a) <b><?= $cliente->nomeCliente ?></b>,
+                    Caro(a) <b><?= e($cliente->nomeCliente) ?></b>,
                     <br>
 
                 </td>
@@ -153,20 +153,21 @@
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
-                    Por favor, para mudar sua senha clique <a class="btn btn-primary stretched-link" href="<?= base_url() . "index.php/mine/verifyTokenSenha/token/" . $resets_de_senha->token ?>">AQUI</a> <br>
-                    Ao carregar a página você devera digitar sua nova senha.
+                    Por favor, para mudar sua senha clique <a class="btn btn-primary stretched-link" href="<?= e(base_url() . 'index.php/mine/verifyTokenSenha/token/' . $resets_de_senha->token) ?>">AQUI</a> <br>
+                    Ao carregar a página você devera digitar sua nova senha. <br>
+                    O link vale por 1 hora e só pode ser usado uma vez.
                 </td>
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Caso não funcione o link, por favor acessar <?= base_url() . "index.php/mine/tokenManual"?> <br><br>
-                    Ao carregar a página você devera copiar e colar <strong><?= $resets_de_senha->token ?></strong>
+                    Ao carregar a página você devera copiar e colar <strong><?= e($resets_de_senha->token) ?></strong>
                 </td>
             </tr>
             <tr class="details">
                 <td colspan="4" style="text-align: left">
                     Um abraço! <br>
-                    Equipe <?= $emitente ? $emitente->nome : ""; ?>
+                    Equipe <?= e($emitente ? $emitente->nome : "") ?>
                 </td>
             </tr>
 

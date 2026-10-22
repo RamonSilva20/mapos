@@ -1,126 +1,112 @@
-<div class="new122">
-    <link rel="stylesheet" href="<?= base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css" />
-    <script type="text/javascript" src="<?= base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
+<?php
+/**
+ * Listagem de arquivos (#2845), no padrão das listagens (#2852): busca e
+ * período na URL, data-table, estados vazios, ações por linha e exclusão em
+ * modal-confirm. "Novo arquivo" vem pela topbar.
+ *
+ * @var list<object>          $results
+ * @var array<string, string> $filtros  pesquisa, de e ate (AAAA-MM-DD)
+ * @var int                   $total
+ * @var array                 $paginacao
+ * @var array{adicionar: bool, editar: bool, excluir: bool} $pode
+ */
+$temFiltro = $filtros !== [];
+$imagem = static fn (object $a): bool => in_array(strtolower(ltrim((string) $a->tipo, '.')), ['jpg', 'jpeg', 'gif', 'png'], true);
 
-    <div class="span12" style="margin-left: 0">
-    <div class="widget-title" style="margin: -20px 0 0">
-                <span class="icon">
-                    <i class="fas fa-hdd"></i>
-                </span>
-                <h5>Arquivos</h5>
-            </div>
-        <form method="get" action="<?= current_url(); ?>">
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aArquivo')) : ?>
-                <div class="span3">
-                    <a href="<?= base_url(); ?>index.php/arquivos/adicionar" class="button btn btn-mini btn-success" style="max-width:150px">
-                        <span class="button__icon"><i class='bx bx-plus-circle'></i></span><span class="button__text2">Arquivo</span></a>
-                </div>
-            <?php endif ?>
+$colunas = [
+    ['key' => 'idDocumentos', 'label' => 'Cód.', 'align' => 'right', 'nowrap' => true],
+    ['label' => 'Prévia', 'nowrap' => true, 'hide_until' => 'md', 'render' => fn ($a) => $imagem($a)
+        ? html_purificado('<img src="' . e(componenteUrl($a->url)) . '" alt="" width="40" height="40" loading="lazy" class="size-10 rounded-md border border-border object-cover">')
+        : icon('file', ['class' => 'size-5 text-muted'])],
+    ['label' => 'Nome', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($a) => component('link', ['label' => (string) $a->documento, 'href' => site_url('arquivos/download/' . (int) $a->idDocumentos), 'class' => 'font-medium'])],
+    ['label' => 'Descrição', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'hide_until' => 'xl', 'render' => fn ($a) => mb_strimwidth((string) $a->descricao, 0, 80, '…', 'UTF-8')],
+    ['label' => 'Data', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'md', 'render' => fn ($a) => dataBr($a->cadastro)],
+    ['label' => 'Tamanho', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'lg', 'render' => fn ($a) => tamanhoDeArquivo($a->tamanho)],
+    ['label' => 'Tipo', 'nowrap' => true, 'hide_until' => 'lg', 'render' => fn ($a) => component('pill-status', ['label' => strtoupper(ltrim((string) $a->tipo, '.')) ?: '—', 'variant' => 'neutral'])],
+    ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($a) use ($pode) {
+        $acoes = [component('button', ['label' => 'Baixar ' . $a->documento, 'icon' => 'download', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('arquivos/download/' . (int) $a->idDocumentos)])];
+        if ($pode['editar']) {
+            $acoes[] = component('button', ['label' => 'Editar ' . $a->documento, 'icon' => 'pencil', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('arquivos/editar/' . (int) $a->idDocumentos)]);
+        }
+        if ($pode['excluir']) {
+            $acoes[] = component('button', ['label' => 'Excluir ' . $a->documento, 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
+                'data-modal-abrir' => 'excluir-arquivo',
+                'data-valor-id' => (string) $a->idDocumentos,
+                'data-valor-nome' => $a->documento,
+            ]]);
+        }
 
-            <div class="span5">
-                <input type="text" name="pesquisa" id="pesquisa" placeholder="Digite o nome do documento para pesquisar" class="span12" value="<?= html_escape($this->input->get('pesquisa')) ?>">
-            </div>
-            <div class="span3">
-                <input type="text" name="data" id="data" placeholder="Data de" class="span6 datepicker" value="<?= html_escape($this->input->get('data')) ?>">
-                <input type="text" name="data2" id="data2" placeholder="Data até" class="span6 datepicker" value="<?= html_escape($this->input->get('data2')) ?>">
-            </div>
-            <div class="span1">
-                <button class="button btn btn-mini btn-warning" style="min-width: 30px"><span class="button__icon"><i class='bx bx-search-alt'></i></span></button>
-            </div>
-        </form>
-    </div>
+        return $acoes;
+    }],
+];
 
-    <div>
-        <div class="widget-box">
-            <div class="widget-content nopadding tab-content">
-                <div style="overflow-x: auto">
-                <table id="tabela" width="100%" class="table table-bordered ">
-                    <thead>
-                        <tr>
-                            <th width="5%">#</th>
-                            <th width="10%">Miniatura</th>
-                            <th width="10%">Nome</th>
-                            <th width="8%">Data</th>
-                            <th>Descrição</th>
-                            <th width="8%">Tamanho</th>
-                            <th width="5%">Extensão</th>
-                            <th width="14%">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+$vazio = $temFiltro
+    ? component('empty-state', [
+        'title' => 'Nenhum arquivo encontrado',
+        'message' => 'Nada corresponde à busca. Confira o texto e o período, ou limpe os filtros.',
+        'icon' => 'search-x',
+        'action' => component('button', ['label' => 'Limpar filtros', 'variant' => 'outline', 'href' => site_url('arquivos')]),
+        'class' => 'border-0',
+    ])
+    : component('empty-state', [
+        'title' => 'Nenhum arquivo enviado',
+        'message' => 'Documentos, fotos e PDFs guardados aqui ficam disponíveis para baixar.',
+        'icon' => 'archive',
+        'action' => $pode['adicionar'] ? component('button', ['label' => 'Enviar arquivo', 'icon' => 'upload', 'variant' => 'outline', 'href' => site_url('arquivos/adicionar')]) : null,
+        'class' => 'border-0',
+    ]);
+?>
+<div class="flex flex-col gap-4 pt-2 pb-8">
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Arquivos</h1>
+        <p class="text-caption text-muted" aria-live="polite">
+            <?= e(($total === 1 ? '1 arquivo' : number_format($total, 0, ',', '.') . ' arquivos') . ($temFiltro ? ($total === 1 ? ' encontrado' : ' encontrados') . ' com os filtros' : '')) ?>
+        </p>
+    </header>
 
-                        if (!$results) {
-                            echo '<tr>
-                                <td colspan="8">Nenhum Arquivo Encontrado</td>
-                            </tr>';
-                        }
-    foreach ($results as $r) : ?>
-                            <tr>
-                                <td><?= $r->idDocumentos ?></td>
-                                <td>
-                                    <?php if (@getimagesize($r->path)) : ?>
-                                        <a href="<?= $r->url ?>"> <img src="<?= $r->url ?> "></a>
-                                    <?php else : ?>
-                                        <span>-</span>
-                                    <?php endif ?>
-                                </td>
-                                <td><?= $r->documento ?></td>
-                                <td><?= date('d/m/Y', strtotime($r->cadastro)) ?></td>
-                                <td><?= $r->descricao ?></td>
-                                <td><?= $r->tamanho ?> KB</td>
-                                <td><?= $r->tipo ?></td>
-                                <td><?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) : ?>
-                                        <a href="<?= base_url() ?>index.php/arquivos/download/<?= $r->idDocumentos; ?>" class="btn-nwe" title="Baixar Arquivo"><i class="bx bx-download"></i>
-                                        <?php endif ?>
-
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eArquivo')) : ?>
-                                            <a href="<?= base_url() ?>index.php/arquivos/editar/<?= $r->idDocumentos ?>" class="btn-nwe3" title="Editar"><i class="bx bx-edit"></i></a>
-                                        <?php endif ?>
-
-                                        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dArquivo')) : ?>
-                                            <a href="#modal-excluir" style="margin-right: 1%" role="button" data-toggle="modal" arquivo="<?= $r->idDocumentos ?>" class="btn-nwe4" title="Excluir"><i class="bx bx-trash-alt"></i></a>
-                                        </a>
-                                    <?php endif ?>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-                </div>
-            </div>
+    <form method="get" action="<?= e(site_url('arquivos')) ?>" role="search" aria-label="Filtrar arquivos" class="grid items-end gap-3 rounded-xl border border-border bg-surface p-4 sm:grid-cols-[minmax(0,1fr)_11.5rem_11.5rem_auto]">
+        <?= component('input', [
+            'name' => 'pesquisa',
+            'label' => 'Buscar',
+            'type' => 'search',
+            'value' => $filtros['pesquisa'] ?? null,
+            'placeholder' => 'Nome ou descrição',
+            'attrs' => ['maxlength' => 100],
+        ]) ?>
+        <?= component('input', ['name' => 'de', 'label' => 'De', 'type' => 'date', 'value' => $filtros['de'] ?? null]) ?>
+        <?= component('input', ['name' => 'ate', 'label' => 'Até', 'type' => 'date', 'value' => $filtros['ate'] ?? null]) ?>
+        <div class="flex gap-2">
+            <?= component('button', ['label' => 'Filtrar', 'icon' => 'search', 'variant' => 'outline', 'type' => 'submit']) ?>
+            <?php if ($temFiltro) { ?>
+                <?= component('button', ['label' => 'Limpar', 'icon' => 'x', 'variant' => 'ghost', 'href' => site_url('arquivos')]) ?>
+            <?php } ?>
         </div>
-    </div>
+    </form>
 
-    <?= $this->pagination->create_links() ?>
+    <?= component('data-table', [
+        'columns' => $colunas,
+        'rows' => $results,
+        'empty' => $vazio,
+        'caption' => 'Arquivos',
+    ]) ?>
 
-    <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?= base_url() ?>index.php/arquivos/excluir" method="post">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h5 id="myModalLabel">Excluir Arquivo</h5>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="idDocumento" name="id" value="" />
-                <h5 style="text-align: center">Deseja realmente excluir este arquivo?</h5>
-            </div>
-            <div class="modal-footer" style="display:flex;justify-content: center">
-                <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true">
-                    <span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-                <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
-            </div>
-        </form>
-    </div>
+    <?= component('pagination', $paginacao) ?>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(document).on('click', 'a', function(event) {
-            var arquivo = $(this).attr('arquivo');
-            $('#idDocumento').val(arquivo);
-        });
-        $(".datepicker").datepicker({
-            dateFormat: 'dd/mm/yy'
-        });
-    });
-</script>
+<?php if ($pode['excluir']) { ?>
+    <form id="form-excluir-arquivo" method="post" action="<?= e(site_url('arquivos/excluir') . listagemQuery($filtros)) ?>" hidden>
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+        <input type="hidden" name="id" value="" data-modal-de="excluir-arquivo" data-modal-valor="id">
+    </form>
+    <?= component('modal-confirm', [
+        'id' => 'excluir-arquivo',
+        'title' => 'Excluir arquivo?',
+        // O nome entra pelo modal.js (textContent); aqui só o marcador vazio.
+        'message' => [
+            new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="nome"></strong>'),
+            ' será apagado do servidor. Essa ação não pode ser desfeita.',
+        ],
+        'confirm_label' => 'Excluir',
+        'confirm_attrs' => ['form' => 'form-excluir-arquivo'],
+    ]) ?>
+<?php } ?>

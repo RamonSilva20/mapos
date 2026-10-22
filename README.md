@@ -1,16 +1,17 @@
 
 ![MapOS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/assets/img/logo.png)
 
-![version](https://img.shields.io/badge/version-4.55.5-blue.svg?longCache=true&style=flat-square)
+![version](https://img.shields.io/badge/version-5.0.0-blue.svg?longCache=true&style=flat-square)
 ![license](https://img.shields.io/badge/license-Apache-green.svg?longCache=true&style=flat-square)
-![theme](https://img.shields.io/badge/theme-Matrix--Admin-lightgrey.svg?longCache=true&style=flat-square)
 ![issues](https://img.shields.io/github/issues/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 ![contributors](https://img.shields.io/github/contributors/RamonSilva20/mapos.svg?longCache=true&style=flat-square)
 
 ### Contato: contato@mapos.com.br
 ### [Feedback](https://github.com/RamonSilva20/mapos/discussions) - Vote ou sugira melhorias
 
-![Map-OS](https://raw.githubusercontent.com/RamonSilva20/mapos/master/docs/dashboard.png)
+![Painel do Map-OS v5, modo claro](docs/dashboard.png)
+
+![Painel do Map-OS v5, modo escuro](docs/dashboard-escuro.png)
 
 ### Apoie o Projeto Map-OS - Doações
 
@@ -50,12 +51,13 @@ Solicite seu acesso agora: [Fale com um Especialista!](https://wa.me/sysgo)
 
 ### [Instalação](Instalacao_xampp_windows.md)
 
-1. Faça o download dos arquivos.
+1. Faça o download do pacote da release (`vX.Y.Z-release.zip`, que já traz o `application/vendor`) ou clone o repositório.
 2. Extraia o pacote e copie para seu webserver.
-3. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
-4. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS**.
-5. Configure o email de envio em Configurações > Sistema > E-mail .
-6. Configurar cron jobs para envio de e-mail:
+3. Se instalou pelo código-fonte (e não pelo zip da release), rode o comando `composer install --no-dev` a partir da raiz do projeto.
+4. Acesse sua URL e inicie a instalação, é bem simples, basta preencher as informações no assistente de instalação **MAPOS** (inclusive a pasta dos anexos, o `STORAGE_PATH`, que deve ficar fora da pasta pública). O instalador cria o banco, aplica as atualizações do banco de dados e grava o `application/.env` só para o dono do arquivo. Se não conseguir aplicar as atualizações, a tela final avisa e o painel mostra o aviso até você usar `Atualizar banco de dados` (Configurações > Sistema) ou rodar `php index.php tools migrate`. Terminada a instalação, o instalador se bloqueia sozinho (`install/instalado.lock` e `application/.env`), mas **apague a pasta `install`** do servidor.
+5. Proteja o servidor web (veja [Segurança do servidor](#segurança-do-servidor)): `application/` não pode ser acessível pela URL, e `STORAGE_PATH` deve apontar para uma pasta fora da pasta pública.
+6. Configure o email de envio em Configurações > Sistema > E-mail .
+7. Configurar cron jobs para envio de e-mail:
     ##### Enviar emails pendentes a cada 2 minutos.
     - */2 * * * * php /var/www/index.php email/process
     ##### Enviar emails com falha a cada 5 minutos.
@@ -102,38 +104,40 @@ Tutorial Instalação: [https://youtu.be/NgXzzBB_2bM?si=FS_R2xq_W0Jnfn33](https:
 3. Execute o comando: `curl -o MapOS_Install.sh -L https://raw.githubusercontent.com/RamonSilva20/mapos/master/install.sh && chmod +x MapOS_Install.sh && ./MapOS_Install.sh`
 4. Siga as instruções na tela.
 
-### Atualização
+### Segurança do servidor
 
-1. Faça o backup dos arquivos e do banco de dados:
-2. Logado como administrador vá em `configurações > backup`.
-3. Dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
-4. Dentro da pasta `application` copie o arquivo `.env`.;
-5. Substitua os arquivos pelos da nova versão.
-6. Rode o comando `composer install --no-dev` a partir da raiz do projeto.
-7. Restaure os backups para seus locais devidos.
-8. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados.
-    Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
-9. Pronto, sua atualização está concluída;
+- O servidor web deve entregar apenas `index.php` e `assets/`. **Não deixe `application/` (onde ficam o `.env`, os logs e, sem `STORAGE_PATH`, os anexos), `updates/` nem arquivos `.sql` acessíveis pela URL.** No Apache isso depende de os `.htaccess` valerem (`AllowOverride`); em Nginx, Caddy e outros, aplique as regras de [docs/servidor-web.md](docs/servidor-web.md). Depois de configurar, teste: `curl -I https://seu-dominio/application/.env` deve responder 403 ou 404, nunca 200.
+- Defina `STORAGE_PATH` no `application/.env` com uma pasta **fora** da pasta pública para os anexos de OS e os arquivos enviados ([docs/armazenamento-de-arquivos.md](docs/armazenamento-de-arquivos.md)).
+- Atrás de proxy reverso, preencha `APP_PROXY_IPS` ([docs/cookies-e-sessao.md](docs/cookies-e-sessao.md)). Os cabeçalhos de segurança e a CSP estão em [docs/cabecalhos-de-seguranca.md](docs/cabecalhos-de-seguranca.md).
+- Autenticação em dois fatores opcional em Meu perfil ([docs/dois-fatores.md](docs/dois-fatores.md)).
+
+### Atualização da 4.x para a v5
+
+A v5 troca a interface, o armazenamento de arquivos e a autenticação, e exige PHP >= 8.5. **Siga o guia [Migração do Map-OS 4.x para a v5](docs/migracao-4x-para-5.md)**: backup, variáveis novas do `.env`, `STORAGE_PATH`, migrations, configuração do servidor web, o que muda para quem personalizou o painel ou usa a API, e como voltar atrás.
+
+### Atualização (v5 em diante)
+
+1. Faça o backup do banco de dados (Configurações > Backup) e dos arquivos: `application/.env`, a pasta do `STORAGE_PATH`, `assets/uploads`, `assets/userImage` e qualquer personalização feita dentro de `assets/img`.
+2. Substitua os arquivos pelos da nova versão (o zip da release já traz o `application/vendor`; pelo código-fonte, rode `composer install --no-dev` na raiz).
+3. Restaure os backups para seus locais devidos.
+4. Logue como administrador, vá em Configurações > Sistema e clique em `Atualizar banco de dados`.
+    Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto.
+5. Pronto, sua atualização está concluída.
 
 ### Atualização (Docker)
 
-1. Pare o docker de rodar;
-2. Faça o backup dos arquivos e do banco de dados:
-3. Logado como administrador vá em `configurações > backup`.
-4. Dentro da pasta `Assets` copie as pastas `anexos`, `arquivos`, `uploads`, `userimage` e qualquer personalização feita dentro da pasta `img`.
-5. Dentro da pasta `application` copie o arquivo `.env`.
-6. Substitua os arquivos pelos da nova versão;
-7. Entre na pasta `docker` no seu terminal e rode o comando `docker-compose up --force-recreate`;
-8. Logue no sistema como administrador e navegue até Configurações -> Sistema e clique no botão `Atualizar Banco de Dados` para atualizar seu banco de dados.
-    Obs.: Também é possível atualizar o banco de dados via terminal rodando o comando `php index.php tools migrate` a partir da raiz do projeto;
-9. Restaure os backups para seus locais devidos;
-10. Pronto, sua atualização está concluída;
+1. Pare o docker de rodar.
+2. Faça o backup do banco de dados e dos arquivos, como na atualização acima.
+3. Substitua os arquivos pelos da nova versão.
+4. Entre na pasta `docker` no seu terminal e rode o comando `docker-compose up --force-recreate`.
+5. Logue como administrador, vá em Configurações > Sistema e clique em `Atualizar banco de dados` (ou rode `php index.php tools migrate`).
+6. Restaure os backups para seus locais devidos.
 
 ### Atualização via sistema
 
-1. Primeiro é necessário atualizar manualmente o sistema para a versão v4.4.0;
-2. Quando estiver nessa versão é possível atualizar o sistema clicando no botão "Atualizar Mapos" em Sistema >> Configurações;
-3. Serão baixados e atualizados todos os arquivos exceto: `config.php`, `database.php` e `email.php`;
+Configurações > Atualizar > **Verificar atualização** baixa a última release com tag do repositório, confere o SHA256 do zip e guarda um backup dos arquivos trocados. Depois clique em `Atualizar banco de dados`. Por padrão só entram releases estáveis (`UPDATER_PRERELEASES=true` inclui pré-releases). O `application/.env`, os uploads, o `application/storage` e a pasta `install/` nunca são alterados. Detalhes em [docs/atualizacao.md](docs/atualizacao.md).
+
+Esse recurso vale a partir da v5. Quem está na 4.x deve usar o guia de migração acima.
 
 ### Comandos de terminal
 
@@ -141,18 +145,27 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 
 ### Frameworks/Bibliotecas
 * [bcit-ci/CodeIgniter](https://github.com/bcit-ci/CodeIgniter)
-* [twbs/bootstrap](https://github.com/twbs/bootstrap)
-* [jquery/jquery](https://github.com/jquery/jquery)
-* [jquery/jquery-ui](https://github.com/jquery/jquery-ui)
 * [mpdf/mpdf](https://github.com/mpdf/mpdf)
-* [Matrix Admin](http://wrappixel.com/demos/free-admin-templates/matrix-admin/index.html)
+* [tailwindlabs/tailwindcss](https://github.com/tailwindlabs/tailwindcss)
 * [filp/whoops](https://github.com/filp/whoops)
 * [ezyang/htmlpurifier](https://github.com/ezyang/htmlpurifier)
 
 ### Requerimentos
-* PHP >= 8.4
-* MySQL >= 5.7 ou >= 8.0
-* Composer >= 2
+* PHP >= 8.5, com as extensões `curl`, `gd`, `mysqli`, `zip`, `mbstring`, `dom`, `xml`, `zlib`, `iconv`, `json`, `openssl` e `fileinfo` (o instalador confere todas)
+* MySQL >= 5.7 ou >= 8.0 (ou MariaDB)
+* Composer >= 2, só para instalar pelo código-fonte (o zip da release já traz o `application/vendor`)
+* Node >= 22, só para quem altera views, CSS ou bibliotecas de JavaScript (veja o [Guia de Contribuição](CONTRIBUTING.md)); instalar o Map-OS nunca exige Node
+
+### Documentação
+* [Migração da 4.x para a v5](docs/migracao-4x-para-5.md)
+* [Servidor web: o que não pode ser público](docs/servidor-web.md)
+* [Atualização pelo painel](docs/atualizacao.md)
+* [Armazenamento de arquivos (`STORAGE_PATH`)](docs/armazenamento-de-arquivos.md)
+* [Autenticação da API](docs/api-autenticacao.md)
+* [Autenticação em dois fatores](docs/dois-fatores.md)
+* [Cabeçalhos de segurança e CSP](docs/cabecalhos-de-seguranca.md)
+* [Cookies e sessão](docs/cookies-e-sessao.md)
+* [Design system (`DESIGN.md`)](DESIGN.md)
 
 ### Estrelas
 [![Estrelas](https://star-history.dera.page/svg?repos=RamonSilva20/mapos&type=Date)](https://star-history.dera.page/#RamonSilva20/mapos&Date)

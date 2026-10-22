@@ -6,6 +6,8 @@
 # misc
 .DS_Store
 .vscode
+.phpunit.cache/
+.phpunit.result.cache
 
 /vendor/
 /application/vendor/
@@ -20,6 +22,9 @@ desktop.ini
 
 application/vendor/
 vendor/
+# As libs de JS copiadas pelo npm run build:vendor são commitadas (#2837).
+!/assets/vendor/
+node_modules/
 .idea/
 .php_cs.cache
 .php-cs-fixer.cache
@@ -29,3 +34,4 @@ ci_sessions/
 uploads
 application/.env
 assets/userImage
+application/storage/

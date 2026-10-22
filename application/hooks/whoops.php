@@ -15,7 +15,9 @@ class WhoopsHook
             && ENVIRONMENT === 'development'
             && filter_var($_ENV['WHOOPS_ERROR_PAGE_ENABLED'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-        if (! $whoopsEnabled) {
+        // O Whoops é dependência de desenvolvimento (#2877): o pacote de
+        // instalação (composer install --no-dev) não o traz.
+        if (! $whoopsEnabled || ! class_exists(Run::class)) {
             return;
         }
 
