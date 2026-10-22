@@ -13,6 +13,7 @@ class UsuariosController extends REST_Controller
         $this->load->library('Authorization_Token');
         $this->load->model('Mapos_model');
         $this->load->model('usuarios_model');
+        $this->load->helper(['api', 'usuarios']);
     }
 
     public function index_get($id = '')
@@ -105,13 +106,10 @@ class UsuariosController extends REST_Controller
 
         if ($this->usuarios_model->add('usuarios', $data)) {
 
-            $this->load->model('api_model');
-            $data = $this->api_model->lastRow('usuarios', 'idUsuarios');
-
             $this->response([
                 'status' => true,
                 'message' => 'Usuário adicionado com sucesso!',
-                'result' => $data,
+                'result' => $this->usuarios_model->getById($this->db->insert_id()),
             ], REST_Controller::HTTP_OK);
         }
     }
@@ -127,69 +125,36 @@ class UsuariosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        if ($this->logged_user()->usuario->idUsuarios != $id) {
-            if (! $this->permission->checkPermission($this->logged_user()->level, 'cUsuario')) {
-                $this->response([
-                    'status' => false,
-                    'message' => 'Você não está autorizado a Editar Usuários!',
-                ], REST_Controller::HTTP_UNAUTHORIZED);
+        $entrada = [];
+        foreach (['nome', 'rg', 'cpf', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'email', 'telefone', 'celular', 'dataExpiracao', 'situacao', 'permissoes_id', 'senha', 'senha_atual'] as $campo) {
+            $valor = $this->put($campo, true);
+            if ($valor !== null) {
+                $entrada[$campo] = $valor;
             }
         }
 
-        if (! $this->put(['nome'], true) ||
-            ! $this->put(['rg'], true) ||
-            ! $this->put(['cpf'], true) ||
-            ! $this->put(['cep'], true) ||
-            ! $this->put(['rua'], true) ||
-            ! $this->put(['numero'], true) ||
-            ! $this->put(['bairro'], true) ||
-            ! $this->put(['cidade'], true) ||
-            ! $this->put(['estado'], true) ||
-            ! $this->put(['email'], true) ||
-            ! $this->put(['telefone'], true) ||
-            ! $this->put(['situacao'], true) ||
-            ! $this->put(['permissoes_id'], true)
-        ) {
+        $plano = usuarioApiPlanoEdicao(
+            $this->usuarios_model,
+            (int) $this->logged_user()->usuario->idUsuarios,
+            (int) $id,
+            (bool) $this->permission->checkPermission($this->logged_user()->level, 'cUsuario'),
+            $entrada
+        );
+        if (! $plano['ok']) {
             $this->response([
                 'status' => false,
-                'message' => 'Preencha todos campos',
-            ], REST_Controller::HTTP_BAD_REQUEST);
+                'message' => $plano['message'],
+            ], $plano['status']);
         }
+        $data = $plano['dados'];
 
-        if ($id == 1 && $this->put('situacao', true) == 0) {
-            $this->response([
-                'status' => false,
-                'message' => 'error', 'O usuário super admin não pode ser desativado!',
-            ], REST_Controller::HTTP_BAD_REQUEST);
-        }
+        // O nome vem antes da gravação: trocar a própria senha invalida o token em uso (ver usuarioApiGravarEdicao).
+        $nomeLogado = (string) $this->logged_user()->usuario->nome;
 
-        $data = [
-            'nome' => $this->put('nome', true),
-            'rg' => $this->put('rg', true),
-            'cpf' => $this->put('cpf', true),
-            'cep' => $this->put('cep', true),
-            'rua' => $this->put('rua', true),
-            'numero' => $this->put('numero', true),
-            'bairro' => $this->put('bairro', true),
-            'cidade' => $this->put('cidade', true),
-            'estado' => $this->put('estado', true),
-            'email' => $this->put('email', true),
-            'telefone' => $this->put('telefone', true),
-            'celular' => $this->put('celular', true),
-            'dataExpiracao' => $this->put('dataExpiracao', true),
-            'situacao' => $this->put('situacao', true),
-            'permissoes_id' => $this->put('permissoes_id', true),
-        ];
-
-        if ($this->put('senha', true)) {
-            $data['senha'] = $this->put('senha', true);
-        }
-
-        if ($this->usuarios_model->edit('usuarios', $data, 'idUsuarios', $id)) {
-            $this->log_app('Alterou um usuário. ID: ' . $id);
+        if (usuarioApiGravarEdicao($this->usuarios_model, fn (string $tarefa, string $nome) => $this->log_app($tarefa, $nome), $nomeLogado, (int) $id, $data)) {
             $this->response([
                 'status' => true,
-                'message' => 'Cliente editado com sucesso!',
+                'message' => 'Usuário editado com sucesso!',
                 'result' => $this->usuarios_model->getById($id),
             ], REST_Controller::HTTP_OK);
         }
@@ -257,47 +222,55 @@ class UsuariosController extends REST_Controller
         $this->load->model('Mapos_model');
         $email = $this->post('email', true);
         $password = $this->post('password', true);
+        $ip = $this->input->ip_address();
+
+        // Limite de tentativas (#2870), no mesmo escopo do login do painel.
+        $this->load->library('Limite_login');
+        $restantes = $this->limite_login->segundosRestantes('usuario', $email, $ip);
+        if ($restantes > 0) {
+            header('Retry-After: ' . $restantes);
+            $this->response([
+                'status' => false,
+                'message' => Limite_login::MENSAGEM,
+            ], REST_Controller::HTTP_TOO_MANY_REQUESTS);
+        }
+
         $user = $this->Mapos_model->check_credentials($email);
 
-        if ($user) {
-            // Verificar se acesso está expirado
+        // senhaConfere() antes de testar $user: sem conta ela gasta o mesmo bcrypt (#2879).
+        $senhaConfere = senhaConfere((string) $password, $user->senha ?? null);
+        if ($user && $senhaConfere) {
+            // Conta expirada: mesma resposta genérica de antes.
             if ($this->chk_date($user->dataExpiracao)) {
+                $this->limite_login->registrarSucesso('usuario', $email);
                 $this->response([
                     'status' => false,
                     'message' => 'Os dados de acesso estão incorretos!',
                 ], REST_Controller::HTTP_UNAUTHORIZED);
             }
 
-            // Verificar credenciais do usuário
-            if (password_verify($password, $user->senha)) {
-                $this->log_app('Efetuou login no sistema', $user->nome);
-                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
+            // 2FA (#2876): com ele ativo a senha sozinha não gera token; o contador de falhas só zera com o código certo.
+            $this->conferirDoisFatores($user, $email, $ip);
+            $this->limite_login->registrarSucesso('usuario', $email);
 
-                $token_data = [
-                    'uid' => $user->idUsuarios,
-                    'email' => $user->email,
-                    'permissao' => $user->permissoes_id,
-                    'type' => REST_Controller::TOKEN_TYPE_USER,
-                ];
+            $this->log_app('Efetuou login no sistema', $user->nome);
+            $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
 
-                $result = [
-                    'access_token' => $this->authorization_token->generateToken($token_data),
-                    'permissions' => [$permissoes],
-                ];
-
-                $this->response([
-                    'status' => true,
-                    'message' => 'Login realizado com sucesso!',
-                    'result' => $result,
-                ], REST_Controller::HTTP_OK);
-            }
+            // Campos novos e opcionais (#2869): quem não os conhece continua só com access_token e permissions.
+            $sessao = $this->sessaoDoToken((int) $user->idUsuarios);
+            $result = ['access_token' => $this->accessTokenDoUsuario($user, $sessao['refresh_token'] ?? null)] + $sessao + [
+                'permissions' => [$permissoes],
+            ];
 
             $this->response([
-                'status' => false,
-                'message' => 'Os dados de acesso estão incorretos!',
-            ], REST_Controller::HTTP_UNAUTHORIZED);
+                'status' => true,
+                'message' => 'Login realizado com sucesso!',
+                'result' => $result,
+            ], REST_Controller::HTTP_OK);
         }
 
+        // E-mail inexistente ou senha errada: mesma resposta, e conta para o limite.
+        $this->limite_login->registrarFalha('usuario', $email, $ip);
         $this->response([
             'status' => false,
             'message' => 'Os dados de acesso estão incorretos!',
@@ -305,56 +278,147 @@ class UsuariosController extends REST_Controller
     }
 
     /**
-     * reGenToken function.
-     *
-     * @return void
+     * Segundo fator do login pela API (#2876). Usuário com 2FA ativo manda o
+     * campo `totp` (código do aplicativo ou de recuperação); grupo que exige o
+     * 2FA recusa quem ainda não o ativou. Responde e encerra se não passar.
      */
-    public function reGenToken_get()
+    private function conferirDoisFatores(object $user, string $email, string $ip): void
     {
-        $user = $this->logged_user(true)->usuario;
+        $this->load->model('Mapos_model');
 
-        // Usuário removido ou desativado não pode renovar o token
-        if (empty($user) || (int) $user->situacao !== 1) {
-            $this->response([
-                'status' => false,
-                'message' => 'Faça o login novamente!',
-            ], REST_Controller::HTTP_FORBIDDEN);
-        }
-
-        if (! empty($user->email)) {
-            if (! empty($user)) {
-                // token regeneration process
-                $token_data = [
-                    'uid' => $user->idUsuarios,
-                    'email' => $user->email,
-                    'permissao' => $user->permissoes_id,
-                    'type' => REST_Controller::TOKEN_TYPE_USER,
-                ];
-
-                $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $user->permissoes_id, 1, true)['permissoes']);
-
-                $result = [
-                    'access_token' => $this->authorization_token->generateToken($token_data),
-                    'permissions' => [$permissoes],
-                ];
-
+        if (! ($user->totp_ativado_em ?? null)) {
+            if ($this->Mapos_model->grupoExige2fa((int) $user->permissoes_id)) {
                 $this->response([
-                    'status' => true,
-                    'message' => 'Login realizado com sucesso!',
-                    'result' => $result,
-                ], REST_Controller::HTTP_OK);
+                    'status' => false,
+                    'message' => 'O seu grupo de permissão exige a autenticação em dois fatores. Ative em Meu perfil, no painel, para usar a API.',
+                    'two_factor_setup_required' => true,
+                ], REST_Controller::HTTP_FORBIDDEN);
             }
 
+            return;
+        }
+
+        $codigo = trim((string) $this->post('totp', true));
+        if ($codigo === '') {
             $this->response([
                 'status' => false,
-                'message' => 'Usuário não encontrado, verifique se suas credenciais estão corretas!',
+                'message' => 'Informe o código de verificação em dois fatores (campo "totp").',
+                'two_factor_required' => true,
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
+        $this->load->library('Totp');
+        if (! $this->totp->aceitar($this->Mapos_model, $user, $codigo)) {
+            $this->limite_login->registrarFalha('usuario', $email, $ip);
+            $this->response([
+                'status' => false,
+                'message' => 'Código de verificação incorreto.',
+                'two_factor_required' => true,
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    /**
+     * Renova o access token com o refresh token (#2869).
+     *
+     * POST /api/v1/refresh {"refresh_token": "..."}. O refresh token é de uso
+     * único: a resposta traz um novo, que substitui o anterior.
+     */
+    public function refresh_post()
+    {
+        $_POST = (array) json_decode(file_get_contents('php://input'), true);
+        $refreshToken = (string) $this->post('refresh_token', true);
+
+        $this->load->library('Refresh_token');
+        $girado = $this->refresh_token->girar($refreshToken, $this->input->ip_address(), $this->input->user_agent());
+
+        $usuario = $girado['ok'] ? $this->usuarios_model->getById($girado['usuario_id']) : null;
+        // Usuário removido, desativado ou com a conta expirada: a sessão acaba aqui.
+        if ($girado['ok'] && (empty($usuario) || (int) $usuario->situacao !== 1 || $this->chk_date($usuario->dataExpiracao))) {
+            $this->refresh_token->revogarDoUsuario((int) $girado['usuario_id']);
+            $girado = ['ok' => false];
+        }
+
+        if (! $girado['ok']) {
+            $this->response([
+                'status' => false,
+                'message' => 'Faça o login novamente!',
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
+        $permissoes = json_decode_legacy($this->getInstanceDatabase('permissoes', '*', 'idPermissao = ' . (int) $usuario->permissoes_id, 1, true)['permissoes']);
+
         $this->response([
-            'status' => false,
-            'message' => 'O x-api-key expirado é necessário para gerar um novo x-api-key!',
+            'status' => true,
+            'message' => 'Token renovado!',
+            'result' => [
+                'access_token' => $this->accessTokenDoUsuario($usuario, null, $girado['familia']),
+                'refresh_token' => $girado['refresh_token'],
+                'token_type' => 'Bearer',
+                'expires_in' => $this->authorization_token->expiresIn(Authorization_Token::TETO_COM_REFRESH),
+                'permissions' => [$permissoes],
+            ],
         ], REST_Controller::HTTP_OK);
+    }
+
+    /**
+     * Encerra a sessão da API: revoga o refresh token (e a sessão a que ele pertence).
+     * POST /api/v1/logout {"refresh_token": "..."}. Sempre responde 200: o app
+     * apaga os tokens locais de qualquer forma.
+     */
+    public function logout_post()
+    {
+        $_POST = (array) json_decode(file_get_contents('php://input'), true);
+
+        $this->load->library('Refresh_token');
+        $this->refresh_token->revogar((string) $this->post('refresh_token', true));
+
+        $this->response([
+            'status' => true,
+            'message' => 'Sessão encerrada.',
+        ], REST_Controller::HTTP_OK);
+    }
+
+    /**
+     * Campos da sessão que o login devolve além do access_token: refresh_token
+     * (só se a migration rodou), token_type e expires_in.
+     *
+     * @return array<string, mixed>
+     */
+    private function sessaoDoToken(int $usuarioId): array
+    {
+        $this->load->library('Refresh_token');
+        $refresh = $this->refresh_token->emitir($usuarioId, $this->input->ip_address(), $this->input->user_agent());
+
+        return array_filter([
+            'refresh_token' => $refresh,
+            'token_type' => 'Bearer',
+            'expires_in' => $this->authorization_token->expiresIn($refresh !== null ? Authorization_Token::TETO_COM_REFRESH : null),
+        ], static fn ($valor) => $valor !== null);
+    }
+
+    /**
+     * Access token do operador. Leva a versão dos tokens do usuário (`tv`) e, se
+     * houver sessão de refresh token, o id dela (`sid`): trocar a senha, desativar
+     * a conta ou sair invalida o token na hora. Com refresh token dura no máximo 1 hora.
+     */
+    private function accessTokenDoUsuario(object $usuario, ?string $refreshToken, ?string $familia = null): string
+    {
+        $this->load->library('Refresh_token');
+        $familia ??= $refreshToken !== null ? $this->refresh_token->familiaDoToken($refreshToken) : null;
+
+        $dados = [
+            'uid' => $usuario->idUsuarios,
+            'email' => $usuario->email,
+            'permissao' => $usuario->permissoes_id,
+            'type' => REST_Controller::TOKEN_TYPE_USER,
+            'tv' => $this->authorization_token->versaoAtual('usuarios', 'idUsuarios', (int) $usuario->idUsuarios),
+        ];
+        if ($familia !== null) {
+            $dados['sid'] = $familia;
+        }
+
+        return $this->authorization_token->generateToken($dados, $familia !== null ? Authorization_Token::TETO_COM_REFRESH : null);
     }
 
     public function conta_get()
@@ -370,11 +434,19 @@ class UsuariosController extends REST_Controller
         ], REST_Controller::HTTP_OK);
     }
 
+    /**
+     * Diz se a conta está expirada.
+     *
+     * Sem data cadastrada a conta não expira: usuarios.dataExpiracao é
+     * date DEFAULT NULL e a API não exige o campo, então tratar o vazio como
+     * expirado recusava o token de quem nunca teve expiração configurada.
+     *
+     * Mesma regra do painel e da sessão: contaExpirada() (general_helper).
+     *
+     * @param  string|null  $data_banco  Data no formato aceito por DateTime, ou null
+     */
     private function chk_date($data_banco)
     {
-        $data_banco = new DateTime($data_banco);
-        $data_hoje = new DateTime('now');
-
-        return $data_banco < $data_hoje;
+        return contaExpirada($data_banco);
     }
 }

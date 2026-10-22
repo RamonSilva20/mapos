@@ -16,6 +16,7 @@ class ClientOsController extends REST_Controller
     {
         parent::__construct();
         $this->load->model('Conecte_model');
+        $this->load->helper('os');
         $this->load->library('Authorization_Token');
         $this->load->library('pagination');
         $this->load->library('format');
@@ -104,9 +105,7 @@ class ClientOsController extends REST_Controller
             );
         }
 
-        foreach ($anexos as $anexo) {
-            unset($anexo->path);
-        }
+        $anexos = osAnexosParaApi($anexos, site_url('api/v1/client/os/' . (int) $osId . '/anexos'));
 
         unset($os->senha);
 
@@ -131,9 +130,6 @@ class ClientOsController extends REST_Controller
     public function os_post()
     {
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: POST');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
         
         $_POST = (array) json_decode(file_get_contents('php://input'), true);
 
@@ -175,10 +171,10 @@ class ClientOsController extends REST_Controller
             'clientes_id' => $this->logged_client()->usuario->idClientes,
             'usuarios_id' => $usuarioId,
             'dataFinal' => date('Y-m-d'),
-            'descricaoProduto' => $this->security->xss_clean($this->input->post('descricaoProduto')),
-            'defeito' => $this->security->xss_clean($this->input->post('defeito')),
+            'descricaoProduto' => osTextoParaGravar((string) $this->input->post('descricaoProduto')),
+            'defeito' => osTextoParaGravar((string) $this->input->post('defeito')),
             'status' => 'Aberto',
-            'observacoes' => $this->security->xss_clean($this->input->post('observacoes')),
+            'observacoes' => osTextoParaGravar((string) $this->input->post('observacoes')),
             'faturado' => 0,
         ];
 
@@ -206,5 +202,31 @@ class ClientOsController extends REST_Controller
                 'message' => 'Ocorreu um erro ao criar a ordem de serviço.',
             ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /** Arquivo (ou miniatura com ?miniatura=1) de um anexo de uma OS do cliente autenticado. */
+    public function anexo_get(int $id, int $idAnexo)
+    {
+        $clientLogged = $this->logged_client();
+        $os = $this->os_model->getById($id);
+
+        if (! $os || (int) $os->idClientes !== (int) $clientLogged->usuario->idClientes) {
+            $this->response([
+                'status' => false,
+                'message' => 'Anexo não encontrado',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        $anexo = $this->os_model->getAnexoDaOs($id, $idAnexo);
+        $arquivo = $anexo ? armazenamentoArquivoDoAnexo($anexo, $this->get('miniatura') !== null) : null;
+
+        if ($arquivo === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Anexo não encontrado',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        armazenamentoEnviar($arquivo, 'anexo-' . (int) $anexo->idAnexos . '.' . strtolower(pathinfo($arquivo, PATHINFO_EXTENSION)));
     }
 }

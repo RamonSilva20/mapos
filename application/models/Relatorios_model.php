@@ -132,16 +132,14 @@ class Relatorios_model extends CI_Model
         return $this->db->query($query)->result();
     }
 
+    /**
+     * Produtos filtrados por faixa de preço de venda e de estoque. Cada limite
+     * vale sozinho (só "de" ou só "até"); null não filtra.
+     */
     public function produtosCustom($precoInicial = null, $precoFinal = null, $estoqueInicial = null, $estoqueFinal = null)
     {
-        $wherePreco = '';
-        $whereEstoque = '';
-        if ($precoInicial != null) {
-            $wherePreco = 'AND precoVenda BETWEEN ' . $this->db->escape($precoInicial) . ' AND ' . $this->db->escape($precoFinal);
-        }
-        if ($estoqueInicial != null) {
-            $whereEstoque = 'AND estoque BETWEEN ' . $this->db->escape($estoqueInicial) . ' AND ' . $this->db->escape($estoqueFinal);
-        }
+        $wherePreco = $this->faixa('precoVenda', $precoInicial, $precoFinal);
+        $whereEstoque = $this->faixa('estoque', $estoqueInicial, $estoqueFinal);
         $query = "
             SELECT produtos.*,
             SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
@@ -153,6 +151,20 @@ class Relatorios_model extends CI_Model
         ";
 
         return $this->db->query($query)->result();
+    }
+
+    /** Trecho "AND coluna >= x AND coluna <= y" com os limites informados, ou "". */
+    private function faixa(string $coluna, $minimo, $maximo): string
+    {
+        $sql = '';
+        if ($minimo !== null && $minimo !== '') {
+            $sql .= " AND {$coluna} >= " . $this->db->escape($minimo);
+        }
+        if ($maximo !== null && $maximo !== '') {
+            $sql .= " AND {$coluna} <= " . $this->db->escape($maximo);
+        }
+
+        return $sql;
     }
 
     public function produtosEtiquetas($de, $ate)
@@ -249,9 +261,15 @@ class Relatorios_model extends CI_Model
 
     public function servicosCustom($precoInicial = null, $precoFinal = null)
     {
-        $query = 'SELECT * FROM servicos WHERE preco BETWEEN ? AND ? ORDER BY nome';
+        $this->db->from('servicos');
+        if ($precoInicial !== null && $precoInicial !== '') {
+            $this->db->where('preco >=', $precoInicial);
+        }
+        if ($precoFinal !== null && $precoFinal !== '') {
+            $this->db->where('preco <=', $precoFinal);
+        }
 
-        return $this->db->query($query, [$precoInicial, $precoFinal])->result();
+        return $this->db->order_by('nome')->get()->result();
     }
 
     public function osRapid($array = false)
@@ -449,7 +467,7 @@ class Relatorios_model extends CI_Model
         $servicosTotalComNf = 0;
         $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
 
-        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+        $totalMes = $mercadoriasTotal + $industriaTotal + $servicosTotal;
 
         $periodo = sprintf('%s à %s', $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
 
@@ -505,7 +523,7 @@ class Relatorios_model extends CI_Model
         $servicosTotalComNf = 0;
         $servicosTotal = $servicosTotalSemNf + $servicosTotalComNf;
 
-        $totalMes = $mercadoriasTotal + $industriaTotal = $servicosTotal;
+        $totalMes = $mercadoriasTotal + $industriaTotal + $servicosTotal;
 
         $periodo = sprintf('%s à %s', $inicio->format('d/m/Y'), $fim->format('d/m/Y'));
 

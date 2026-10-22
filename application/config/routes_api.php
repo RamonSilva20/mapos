@@ -10,7 +10,8 @@ $route['api/v1/audit'] = 'api/v1/ApiController/audit';
 $route['api/v1/emitente'] = 'api/v1/ApiController/emitente';
 $route['api/v1/calendario'] = 'api/v1/ApiController/calendario';
 $route['api/v1/login'] = 'api/v1/UsuariosController/login';
-$route['api/v1/reGenToken'] = 'api/v1/UsuariosController/reGenToken';
+$route['api/v1/refresh'] = 'api/v1/UsuariosController/refresh';
+$route['api/v1/logout'] = 'api/v1/UsuariosController/logout';
 $route['api/v1/conta'] = 'api/v1/UsuariosController/conta';
 $route['api/v1/clientes'] = 'api/v1/ClientesController/index';
 $route['api/v1/clientes/(:num)'] = 'api/v1/ClientesController/index/$1';
@@ -42,6 +43,7 @@ $route['api/v1/client/auth'] = 'api/v1/client/ClientLoginController/login';
 
 $route['api/v1/client/os'] = 'api/v1/client/ClientOsController/os';
 $route['api/v1/client/os/(:num)'] = 'api/v1/client/ClientOsController/os/$1';
+$route['api/v1/client/os/(:num)/anexos/(:num)'] = 'api/v1/client/ClientOsController/anexo/$1/$2';
 
 $route['api/v1/client/compras'] = 'api/v1/client/ClientComprasController/index';
 $route['api/v1/client/compras/(:num)'] = 'api/v1/client/ClientComprasController/index/$1';

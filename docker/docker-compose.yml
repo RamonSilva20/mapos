@@ -9,7 +9,7 @@ services:
       - "../:/var/www/html"
       - "./etc/nginx/default.template.conf:/etc/nginx/conf.d/default.template"
     ports:
-      - "${NGINX_PORT}:${NGINX_PORT}"
+      - "127.0.0.1:${NGINX_PORT}:${NGINX_PORT}"
     env_file:
       - ".env"
     command: /bin/sh -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
@@ -42,9 +42,8 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
     ports:
-      - "${PHP_MY_ADMIN_PORT}:80"
+      - "127.0.0.1:${PHP_MY_ADMIN_PORT}:80"
     environment:
-      - PMA_ARBITRARY=1
       - PMA_HOST=${MYSQL_MAPOS_HOST}
       - PMA_USER=${MYSQL_MAPOS_USER}
       - PMA_PASSWORD=${MYSQL_MAPOS_PASSWORD}
@@ -64,6 +63,6 @@ services:
       - MYSQL_USER=${MYSQL_MAPOS_USER}
       - MYSQL_PASSWORD=${MYSQL_MAPOS_PASSWORD}
     ports:
-      - "${MYSQL_MAPOS_PORT}:3306"
+      - "127.0.0.1:${MYSQL_MAPOS_PORT}:3306"
     volumes:
       - "./data/db/mysql:/var/lib/mysql"

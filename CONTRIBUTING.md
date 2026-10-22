@@ -15,7 +15,9 @@ Ao participar deste projeto, você concorda em seguir o nosso [Código de Condut
 - [Ambiente de desenvolvimento](#ambiente-de-desenvolvimento)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Padrão de código](#padrão-de-código)
+- [Front-end](#front-end)
 - [Alterações no banco de dados](#alterações-no-banco-de-dados)
+- [Testes e verificações](#testes-e-verificações)
 - [Comandos de terminal](#comandos-de-terminal)
 - [Mensagens de commit](#mensagens-de-commit)
 - [Abrindo um Pull Request](#abrindo-um-pull-request)
@@ -56,9 +58,10 @@ Descreva **o problema** que você quer resolver, não apenas a solução imagina
 
 ### Requisitos
 
-- PHP >= 8.4, com as extensões `curl` e `gd`
+- PHP >= 8.5, com as extensões `curl` e `gd`
 - MySQL >= 5.7 (recomendado 8.0+)
 - Composer >= 2
+- Node.js >= 22, só se você for mexer em views ou em CSS (veja [Front-end](#front-end))
 
 ### 1. Fork e clone
 
@@ -102,7 +105,10 @@ Aponte o document root do seu webserver para a raiz do projeto, acesse a URL e s
 ### Observações importantes
 
 - O `vendor-dir` do projeto é **`application/vendor`**, e não `./vendor` (definido em `composer.json`). Os binários ficam em `application/vendor/bin/`.
-- As configurações de ambiente ficam em `application/.env`, que é ignorado pelo Git. **Nunca** faça commit dele nem de credenciais.
+- As configurações de ambiente ficam em `application/.env`, que é ignorado pelo Git. **Nunca** faça commit dele nem de credenciais. A lista completa de variáveis está em `application/.env.example`.
+- Os anexos de OS e os arquivos enviados ficam em `STORAGE_PATH` (padrão `application/storage`), fora de `assets/` e servidos por controller com checagem de permissão. Veja [`docs/armazenamento-de-arquivos.md`](docs/armazenamento-de-arquivos.md). Ao testar upload, o limite vem de `UPLOAD_MAX_KB`.
+- O que o servidor web não pode entregar (`application/`, `.env`, `updates/`...) e as regras de cada servidor estão em [`docs/servidor-web.md`](docs/servidor-web.md).
+- A API só existe com `API_ENABLED=true` no `.env`; desligada, todas as rotas `api/v1` respondem 404. A autenticação está em [`docs/api-autenticacao.md`](docs/api-autenticacao.md).
 - A página de erro detalhada (Whoops) só é exibida quando `APP_ENVIRONMENT=development` **e** `WHOOPS_ERROR_PAGE_ENABLED=true` no `application/.env`. Em qualquer outro ambiente ela fica desabilitada.
 
 ## Estrutura do projeto
@@ -122,6 +128,10 @@ application/
 ├── models/       Acesso a dados
 └── views/        Templates das telas
 assets/           CSS, JS, imagens e uploads
+├── src/          Fontes do CSS (Tailwind), compiladas para dist/
+├── dist/         CSS compilado, commitado
+└── vendor/       Bibliotecas de JS copiadas do npm, commitadas (gerado)
+scripts/          Scripts de build do front-end
 docker/           Ambiente de desenvolvimento com Docker
 install/          Assistente de instalação
 banco.sql         Schema base usado na instalação inicial
@@ -150,11 +160,188 @@ application/vendor/bin/php-cs-fixer fix --dry-run --diff
 
 Boas práticas adicionais:
 
-- Escape a saída nas views para evitar XSS: use `html_escape()` para texto e o helper `printSafeHtml()` (`application/helpers/general_helper.php`, baseado no HTMLPurifier) quando precisar renderizar HTML vindo do usuário.
+- Escape a saída nas views para evitar XSS: use `e()` para texto (`<?= e($cliente->nome) ?>`) e o helper `printSafeHtml()` (`application/helpers/general_helper.php`, baseado no HTMLPurifier) quando precisar renderizar HTML vindo do usuário. Veja [Escape nas views](#escape-nas-views).
 - Use o Query Builder do CodeIgniter ou *query bindings* nos models. **Nunca** concatene entrada do usuário em SQL.
 - Valide e autorize no controller: confira o ID recebido e a permissão do usuário antes de operar sobre o registro.
 - Siga o idioma já usado no arquivo que você está editando (o código do projeto mistura português e inglês; mantenha a consistência local em vez de renomear o entorno).
 - Mantenha o Pull Request focado: evite reformatar arquivos inteiros junto com uma correção funcional, pois isso dificulta muito a revisão.
+
+### Escape nas views
+
+Toda saída dinâmica numa view passa por `e()`, que é o `html_escape()` do CodeIgniter devolvendo sempre string (`null` vira `''`, e array gera erro em vez de imprimir `Array`). HTML confiável, como uma descrição com formatação, passa por `printSafeHtml()`. Nunca imprima HTML cru.
+
+O CI roda `php scripts/check-escape.php`, que acusa `<?= $x ?>`, `echo $x` e `print $x` sem escape em `application/views/`. Números podem sair com cast (`<?= (int) $os->idOs ?>`) ou por `number_format()`, `count()` e `date()`.
+
+As views antigas têm ocorrências conhecidas, contadas por arquivo no `escape-baseline.json`. O CI só falha quando um arquivo passa da contagem. Ao corrigir ocorrências antigas, baixe a contagem com:
+
+```bash
+php scripts/check-escape.php --update-baseline
+```
+
+Para ver todas as ocorrências: `php scripts/check-escape.php --list`. Não suba a contagem do baseline para fazer o CI passar: escape a saída.
+
+## Front-end
+
+O CSS da v5 usa **[Tailwind CSS v4](https://tailwindcss.com/)**, compilado pela CLI do Tailwind. As fontes ficam em `assets/src/` (`app.css` para as telas novas, `layout.css` para a moldura do painel, `tokens.css` compartilhado) e o resultado em `assets/dist/`, que **é commitado**. Por isso quem só instala ou atualiza o Map-OS não precisa de Node.
+
+Se você alterar uma view ou o CSS, rode o build e commite o resultado junto:
+
+```bash
+npm ci
+npm run build
+```
+
+Durante o desenvolvimento, `npm run watch:css` recompila a cada alteração.
+
+O Tailwind lê as classes de `application/views/**/*.php`. Escreva o nome da classe inteiro no PHP (`'bg-red-500'`), e não montado por concatenação (`'bg-' . $cor . '-500'`), senão ela não é encontrada e não entra no CSS.
+
+O CI refaz o build e falha se o `assets/dist` commitado não for o resultado dele.
+
+### Design system
+
+A interface da v5 segue o **[`DESIGN.md`](DESIGN.md)**, a fonte de verdade de cores, tipografia, componentes, estados, modo escuro e responsividade. Leia antes de mexer em views ou CSS. Os componentes prontos e todas as variantes ficam no catálogo `/index.php/componentes`, disponível com `APP_ENVIRONMENT=development`.
+
+Em resumo:
+- Há **uma única cor de ação**, o laranja `#F37338`, sempre com texto escuro, e **um único botão primário por tela**.
+- **Status** (aberta, em andamento, finalizada…) usam a paleta semântica em `pill-status`, nunca laranja. O vermelho fica para erros e ações destrutivas.
+- **Dados** (células, valores, texto digitado) usam peso 400; labels e nomes usam 500.
+
+Se o código atual divergir do `DESIGN.md`, vale o documento: a base está sendo ajustada no épico #2911. Para propor uma mudança no design system, altere primeiro o `DESIGN.md`, com os contrastes recalculados, e só depois o código.
+
+### Cores e modo escuro
+
+As views novas usam os **tokens** definidos em `assets/src/tokens.css`, nunca uma cor fixa: `bg-bg`, `bg-surface`, `bg-surface-subtle`, `text-text`, `text-muted`, `border-border`, `border-input`, `bg-primary`/`text-on-primary` (botão primário), `text-success-ink` sobre `bg-success-soft` e afins. A lista completa está no topo do arquivo. A paleta padrão do Tailwind está desligada, então classes como `bg-white` não existem. Assim a tela funciona nos modos claro e escuro sem precisar de `dark:`.
+
+O tema é configurado por `app_tema_modo` (`claro`, `escuro` ou `sistema`). O layout aplica o modo no `<html>` com `temaAtributosHtml($configuration)` e carrega `assets/js/tema.js` no `<head>` para o modo "sistema". Não existe cor de destaque: o `DESIGN.md` define uma cor de marca única, e a configuração `app_tema_destaque` foi removida na #2913. A antiga `app_theme` da 4.x só é lida para converter o tema antigo no modo de cor, e cada usuário pode ter o próprio modo (`usuarios.tema_modo`).
+
+### Bibliotecas de JavaScript
+
+As bibliotecas de JS da v5 (Alpine.js, Tom Select, flatpickr, IMask, SweetAlert2, Chart.js e FullCalendar) são instaladas pelo npm, com versão fixa no `package.json`. O `npm run build` também roda o `build:vendor` (`scripts/build-vendor.mjs`), que copia os arquivos de navegador e a licença de cada uma para `assets/vendor/<lib>/`, pasta commitada pelo mesmo motivo do CSS. As versões copiadas ficam em `assets/vendor/versions.json`.
+
+O `assets/vendor` é inteiro gerado pelo script: não edite nada lá dentro à mão. Para atualizar uma biblioteca:
+
+```bash
+npm install --save-exact nome-da-lib@versao
+npm run build
+```
+
+Para adicionar uma nova, ou outro arquivo de uma já existente, inclua-a na lista do `scripts/build-vendor.mjs`. Não adicione bibliotecas que dependam de jQuery: ele saiu do projeto todo (painel na #2855; impressões, PDFs e instalador na #2960).
+
+### JavaScript nas views
+
+View nova não tem `<script>` com código. O JavaScript da página fica num ES module em `assets/js/modules/<pasta>/<nome>.js`, sem bundler, e a view só declara qual módulo usa e entrega os dados:
+
+```php
+<div <?= js_module('servicos/listagem') ?>>
+    <a href="#modal-excluir" data-servico="<?= (int) $r->idServicos ?>">Excluir</a>
+</div>
+<?= page_data('dados-servicos', ['porPagina' => $porPagina]) ?>
+```
+
+```js
+// assets/js/modules/servicos/listagem.js
+import { lerJson } from '../../lib/dados.js';
+import { post, ErroHttp } from '../../lib/http.js';
+
+export default function iniciar(elemento) {
+    const { porPagina } = lerJson('dados-servicos');
+    // elemento é o <div data-module="servicos/listagem">
+}
+```
+
+- O `assets/js/app.js`, carregado pelo layout, procura `[data-module]` e chama o `export default` de cada módulo com o elemento.
+- Dado simples vai em atributo `data-*`, lido com `lerDado(elemento, 'chave')`. Estrutura maior vai em `page_data()`, que gera um `<script type="application/json">` com escape seguro, lido com `lerJson(id)`.
+- AJAX usa `get()`/`post()` de `assets/js/lib/http.js`. Eles mandam o token do CSRF e o `X-Requested-With`, e transformam a negação de permissão (JSON 403) em `ErroHttp`.
+
+Isso tira o `'unsafe-inline'` do caminho da CSP (#2878). O CI roda `php scripts/check-inline-script.php` pelo PHPUnit e falha se uma view ganhar `<script>` inline. As views antigas estão contadas por arquivo em `inline-script-baseline.json`; ao migrar uma delas, baixe a contagem com `php scripts/check-inline-script.php --update-baseline`.
+
+Os utilitários de `assets/js` têm testes em `tests/js`, rodados com `npm run test:js`.
+
+### Componentes
+
+Telas novas são montadas com a biblioteca de componentes, em vez de HTML escrito à mão:
+
+```php
+<?= component('input', ['name' => 'nome', 'label' => 'Nome', 'required' => true, 'error' => form_error('nome')]) ?>
+<?= component('button', ['label' => 'Salvar', 'type' => 'submit', 'icon' => 'save']) ?>
+```
+
+Os componentes seguem as specs do `DESIGN.md`: `button` (primary, outline, ghost, danger, inverted, ghost-on-dark e link; um primary por tela), campos (`input`, `select`, `textarea`, `checkbox`, `radio`, `switch`), `pill-status` para estados de OS, venda e cobrança (o `badge` é só para contadores), `alert`, `toast`, `modal`, `modal-confirm` para ações destrutivas, `data-table`, `kpi-card`, `tabs`, `pagination`, `card`, `empty-state` e `breadcrumb`.
+
+Os partials ficam em `application/views/components/` e as props aceitas em `application/helpers/componente_helper.php`. Prop desconhecida, obrigatória faltando ou valor fora das opções gera erro na hora, em vez de ser ignorado. A lista de componentes disponíveis é a do parágrafo acima, e o catálogo `/index.php/componentes` mostra todos com as variantes.
+
+Todo valor é escapado. Os slots (`body`, `footer`, `actions`, `message`, células da tabela) recebem texto, que também é escapado, ou um `HtmlSeguro`: a saída de outro `component()` ou de `html_purificado()`, que passa HTML do usuário pelo HTMLPurifier. Não crie um `HtmlSeguro` à mão com dado do usuário. Atributos extras vão na prop `attrs`; handlers `on*` são recusados (o JavaScript fica nos módulos).
+
+Listagens novas paginam com o componente `pagination`, e não com o `create_links()` do CodeIgniter. O controller monta as props com `MY_Controller::paginacao()`, que usa o mesmo offset na URL que o `CI_Pagination`, então o model não muda:
+
+```php
+// controller
+$this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $total, $this->uri->segment(3));
+// view
+<?= component('pagination', $paginacao) ?>
+```
+
+Nenhuma tela do painel usa mais o `create_links()` do `CI_Pagination`. O `application/config/pagination.php` (com o markup antigo da paginação) só continua para a API do app, que inicializa a biblioteca para calcular as páginas.
+
+**Padrão das listagens** (#2852). A referência é a listagem de clientes (`Clientes::gerenciar()` e `views/clientes/clientes.php`):
+
+- **Filtros na URL.** O formulário de filtro é um GET simples. O controller lê os filtros com `listagemFiltros()`, que só aceita os nomes e valores listados (texto livre ou uma lista fechada), e repassa para o model e para a paginação, que leva os filtros nos links:
+
+  ```php
+  $filtros = listagemFiltros(['pesquisa' => 'texto', 'tipo' => ['cliente', 'fornecedor']], $this->input->get());
+  $total = $this->clientes_model->contar($filtros);
+  $this->data['results'] = $this->clientes_model->listar($filtros, $porPagina, $offset);
+  $this->data['paginacao'] = $this->paginacao(site_url('clientes/gerenciar'), $total, $offset, null, $filtros);
+  ```
+
+  O total vem de uma contagem com os **mesmos filtros** da listagem. No model, um OR de busca fica entre `group_start()` e `group_end()`, para não anular os outros filtros.
+- **Estados vazios distintos.** Sem nada cadastrado, um `empty-state` convida a cadastrar. Sem resultado para os filtros, outro oferece "Limpar filtros".
+- **Ações por linha** com botões ghost só de ícone (o `label` vira o nome acessível), na coluna `nowrap` do `data-table`. Cada ação aparece conforme `$this->permite('eCliente')`, que serve só para a interface: quem protege a rota é o mapa de permissões.
+- **Ação principal na topbar** (`topbar_acao`). Na tela fica um único `button-primary`.
+- **Exclusão** com um `modal-confirm` só, para todas as linhas. O botão da linha leva `data-modal-abrir` e os valores em `data-valor-<campo>`; o `modal.js` preenche os elementos com `data-modal-valor="<campo>"`, como o nome na mensagem e o `id` do formulário POST com o token CSRF.
+
+**Padrão dos formulários** (#2851). A referência é o formulário de cliente (`Clientes::formulario()` e `views/clientes/formulario.php`), o mesmo para cadastrar e editar:
+
+- **Envio:** é um POST comum, com o token CSRF. O `<form>` leva `novalidate` e `js_module('formulario/padrao')`.
+  - O módulo valida no navegador com as regras do próprio HTML (`required`, `type`, `maxlength`, `pattern`) e com os textos de `data-msg-vazio` e `data-msg-invalido`.
+  - Cada erro aparece no campo, com a mesma marcação do erro do servidor (`assets/js/lib/formulario.js`), e o foco vai para o primeiro campo com erro.
+  - Ao enviar, o botão fica em carregamento (`data-rotulo-carregando`).
+- **Validação no servidor**, sempre: `$erros = $this->validarFormulario('clientes')` roda o `form_validation` com mensagens em português e devolve os erros por campo. A view passa `'error' => $erros['campo'] ?? null` para cada componente. Com erro, a tela volta com os valores enviados e um `alert-danger` resumindo quantos campos conferir. Com sucesso, a tela redireciona com o flash de sucesso, que vira toast.
+- **Id editado:** é sempre o da URL, nunca um campo do POST. Os dados a salvar vêm de uma função que só lê os campos do formulário (ex.: `clienteDadosDoFormulario()`), testável fora do controller.
+- **Máscaras:** `data-mascara="documento|telefone|cep"`. Para mostrar a senha, um botão com `data-mostrar-senha="<id do campo>"`.
+- **Layout:** seções com título curto, campos em duas colunas a partir de 640px e um único `button-primary` (Salvar) no fim, com Cancelar em ghost. Formulário de tela inteira não usa `topbar_acao`.
+
+**Partes da tela que mudam sem recarregar** (#2842). A referência é a tela da OS (`Os::visualizar()`, `views/os/visualizar.php`, `views/os/partes/` e `assets/js/modules/os/tela.js`), onde produtos, serviços, anexos, anotações e desconto são alterados na própria tela:
+
+- **Trechos:** cada parte que muda é uma view em `views/<módulo>/partes/`, usada no carregamento da tela e dentro de um elemento `data-os-parte="<parte>"`.
+- **Formulários:** levam `data-os-acao` e são enviados pelo `post()` de `lib/http.js`. Exclusões usam um `modal-confirm` por tipo, que aponta (`form="..."`) para um formulário oculto preenchido pelo `data-valor-*` do botão da linha.
+- **Resposta do servidor:** JSON `{result, message, erros?, html?}`. `html` traz as partes renderizadas de novo, e o módulo troca o conteúdo de cada `data-os-parte`; `erros` traz as mensagens por nome de campo, mostradas como o erro do servidor. Status: 403 sem permissão ou registro fechado, 404 para item de outro registro, 422 para erro de campo.
+- **Servidor:** o registro vem do POST, mas é conferido no banco (existe, pode ser alterado), e cada item precisa pertencer a ele. Valores calculados (totais, desconto, estoque) saem sempre do banco, nunca do navegador.
+
+**Ícones** são do [Lucide](https://lucide.dev/icons), servidos de um sprite SVG (`assets/vendor/lucide/sprite.svg`) que só tem os ícones listados em `assets/src/icones.json`. Nas views use `<?= icon('wrench', ['class' => 'size-4']) ?>` (ou a prop `icon` dos componentes); no JavaScript, `criarIcone('wrench', 'size-4')` de `assets/js/lib/icone.js`. O ícone segue a cor do texto (`currentColor`) e tem 20px por padrão. Para usar um ícone novo, inclua o nome no `icones.json` e rode `npm run build:vendor`; o `IconeTest` falha se uma view citar um ícone fora da lista. O Boxicons (`<i class="bx ...">`) só continua nas telas legadas.
+
+Para ver todos os componentes e variantes, nos modos claro e escuro, abra `/index.php/componentes` com `APP_ENVIRONMENT=development`. Em outros ambientes a página responde 404.
+
+### Layout do painel
+
+Toda tela do painel passa por `MY_Controller::layout()`, que monta a moldura da v5 (`application/views/tema/`): sidebar recolhível (gaveta no celular), topbar com busca, troca de modo de cor e menu do usuário, breadcrumb e mensagens de flash como toast. O menu sai de `layoutMenu()` (`application/helpers/layout_helper.php`), dividido em seções pela chave `grupo` de cada item (Operação, Financeiro, Sistema), e cada item só aparece se o mapa de permissões liberar a rota de destino.
+
+A ação principal da tela, o único `button-primary` dela, vai na topbar, ao lado da busca:
+
+```php
+$this->data['topbar_acao'] = ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar')];
+```
+
+São as props do `button`, e o ícone é obrigatório: no celular a topbar mostra só o ícone, com o rótulo como nome acessível.
+
+Toda tela do painel passa por `layout()`, que carrega `assets/dist/app.css` e `assets/dist/layout.css`. Não há mais modo legado: Bootstrap, jQuery, matrix-style e os `tema-*.css` saíram na #2855, e o Font Awesome e o que restava de Bootstrap nas impressões, nos PDFs e no instalador saíram na #2960. As impressões do navegador (`imprimir*.php`) usam `assets/dist/imprimir.css`, os PDFs dos relatórios (`relatorios/imprimir/`) usam `assets/dist/pdf.css` e o instalador usa `install/assets/css/instalador.css`, todos gerados pelo Tailwind em `npm run build:css`. O mPDF só lê CSS 2.1 e um pouco de CSS 3, então o `pdf.css` é achatado pelo `scripts/build-pdf-css.mjs`: nos relatórios use só as classes `rel-*` e utilities de tabela, borda, cor, tipografia e espaçamento, e confira o resultado com um PDF de verdade.
+
+```php
+$this->data['view'] = 'clientes/clientes';
+return $this->layout();
+```
+
+A moldura usa um CSS próprio, `assets/src/layout.css` → `assets/dist/layout.css`: as utilities e o reset só valem dentro de elementos `.v5-shell`, e são `!important`. Use `npm run watch:layout` ao mexer nela. HTML novo da moldura fica dentro de um wrapper `.v5-shell`; o conteúdo da tela vai em `.v5-conteudo`, fora do shell, e usa o `app.css`.
 
 ## Alterações no banco de dados
 
@@ -202,7 +389,9 @@ Regras:
 
 - **Nunca edite uma migration que já foi publicada em uma release.** Crie outra para ajustar.
 - Teste tanto a instalação nova quanto a atualização de uma base existente.
-- O `down()` deve realmente reverter o `up()`.
+- O `down()` deve realmente reverter o `up()`. Para voltar a uma versão específica: `php index.php tools migrate <versão>`.
+- Migration que mexe em arquivos (como a `move_uploads_to_storage`) deve poder rodar de novo sem estragar nada e ter rollback documentado.
+- O código deve continuar funcionando, no que for possível, com a migration ainda não aplicada, e avisar o administrador para usar "Atualizar banco de dados" quando o recurso novo precisar dela.
 
 Para dados de teste, use seeders:
 
@@ -210,6 +399,23 @@ Para dados de teste, use seeders:
 php index.php tools seeder "nome_do_seeder"
 php index.php tools seed nome_do_seeder
 ```
+
+## Testes e verificações
+
+O CI roda o que está abaixo; rode localmente antes de abrir o PR:
+
+| Comando | O que verifica |
+| --- | --- |
+| `composer format` | Formata o PHP (`application/vendor/bin/php-cs-fixer fix --dry-run --diff` só confere) |
+| `composer test` | PHPUnit (`phpunit.xml`, testes em `tests/Unit`); inclui a checagem de `<script>` inline |
+| `composer analyse` | PHPStan, com os erros antigos em `phpstan-baseline.neon` |
+| `php scripts/check-escape.php` | Saída sem escape nas views |
+| `php scripts/check-inline-script.php` | `<script>` inline novo nas views |
+| `npm run test:js` | Testes dos utilitários de `assets/js` |
+| `composer audit` e `npm audit --audit-level=high` | Vulnerabilidades conhecidas nas dependências |
+| `npm ci && npm run build` | Refaz CSS, bibliotecas de JS e ilustrações; o `assets/dist` commitado precisa ser igual ao resultado |
+
+Escreva testes que **executem** o comportamento (PHPUnit, com o harness de `tests/MaposTestCase.php`), não só que leiam o código-fonte. Correção de bug deve vir com um teste que falhava antes dela. Mudança de segurança precisa de teste do caso negado (usuário sem permissão, registro de outro cliente, valor inválido).
 
 ## Comandos de terminal
 
@@ -259,11 +465,11 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 
 ## Abrindo um Pull Request
 
-1. Atualize seu `master` a partir do upstream:
+1. Atualize a branch base a partir do upstream. **Enquanto a v5 está em desenvolvimento, a base é a `v5`**; correções da série 4.x vão para a `master`:
 
    ```bash
-   git checkout master
-   git pull upstream master
+   git checkout v5
+   git pull upstream v5
    ```
 
 2. Crie uma branch descritiva:
@@ -276,18 +482,21 @@ A descrição pode ser em português ou inglês — o histórico aceita ambos. P
 
 4. Teste manualmente o fluxo afetado. Se a mudança envolveu o banco, teste também a migration nos dois sentidos.
 
-5. Faça o push e abra o Pull Request contra a branch `master` do repositório oficial.
+5. Faça o push e abra o Pull Request contra a branch base (`v5` durante a pré-release da v5, `master` para a série 4.x) do repositório oficial.
 
 ### Checklist antes de enviar
 
 - [ ] O PR resolve **um** problema (evite juntar assuntos diferentes).
-- [ ] O código está formatado (`composer format`).
+- [ ] O código está formatado (`composer format`) e `composer test` e `composer analyse` passam.
+- [ ] A saída nova nas views passa por `e()` ou `printSafeHtml()` (`php scripts/check-escape.php`).
 - [ ] Não há credenciais, `.env`, dumps de banco ou arquivos de IDE no diff.
-- [ ] A pasta `application/vendor/` não foi commitada.
+- [ ] As pastas `application/vendor/` e `node_modules/` não foram commitadas.
+- [ ] Se mexeu em view, CSS ou biblioteca de JS, rodou `npm run build` e commitou o `assets/dist` e o `assets/vendor`.
 - [ ] Alterações de schema têm migration com `up()` e `down()`.
 - [ ] A descrição explica o problema, a solução e como testar.
 - [ ] Há capturas de tela (antes/depois) quando a mudança é visual.
-- [ ] Issues relacionadas foram referenciadas (ex.: `Closes #123`).
+- [ ] Issues relacionadas foram referenciadas (ex.: `Closes #123`). Como a `v5` não é a branch padrão do repositório, o `Closes` não fecha a issue sozinho: o mantenedor a fecha no merge.
+- [ ] Se a mudança altera o que quem atualiza precisa fazer (variável nova no `.env`, migration, rota), a documentação em `docs/` ou o guia de migração foi atualizado.
 
 ### O que esperar
 

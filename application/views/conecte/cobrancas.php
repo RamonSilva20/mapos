@@ -1,142 +1,59 @@
-<div class="widget-box">
-    <div class="widget-title" style="margin: -20px 0 0">
-        <span class="icon">
-            <i class="fas fa-cash-register"></i>
-        </span>
-        <h5>Cobranças</h5>
-    </div>
-    <div class="widget-content nopadding tab-content">
-        <div class="c-table-responsive">
-        <table id="tabela" class="table table-bordered ">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Data de Vencimento</th>
-                    <th>Referência</th>
-                    <th>Status</th>
-                    <th>Valor</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
+<?php
+/**
+ * Cobranças do cliente (#2848): a que se referem (OS ou venda), vencimento,
+ * status em pill-status (cobrancaStatusPill()) e o valor. "Pagar" abre o
+ * boleto ou o link do gateway, só quando a URL é http(s)
+ * (cobrancaUrlSegura()); cobrança paga, cancelada ou estornada não mostra.
+ *
+ * @var list<object> $results
+ * @var int          $total
+ * @var array        $paginacao
+ */
+$colunas = [
+    ['label' => 'Referência', 'nowrap' => true, 'render' => function ($c) {
+        $referencia = conecteReferenciaDaCobranca($c);
 
-                    if (!$results) {
-                        echo '<tr>
-                                <td colspan="5">Nenhuma cobrança Cadastrada</td>
-                            </tr>';
-                    }
-                foreach ($results as $r) {
-                    $dataVenda = date(('d/m/Y'), strtotime($r->expire_at));
-                    $cobrancaStatus = getCobrancaTransactionStatus(
-                        $this->config->item('payment_gateways'),
-                        $r->payment_gateway,
-                        $r->status
-                    );
+        return $referencia['href'] === null ? $referencia['label'] : component('link', ['label' => $referencia['label'], 'href' => $referencia['href'], 'class' => 'font-medium']);
+    }],
+    ['label' => 'Vencimento', 'align' => 'right', 'nowrap' => true, 'render' => fn ($c) => dataBr($c->expire_at)],
+    ['label' => 'Status', 'nowrap' => true, 'render' => fn ($c) => component('pill-status', cobrancaStatusPill($c->status))],
+    ['label' => 'Valor', 'align' => 'right', 'nowrap' => true, 'render' => fn ($c) => dinheiro(((float) $c->total) / 100)],
+    ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => function ($c) {
+        $pill = cobrancaStatusPill($c->status);
+        $link = cobrancaUrlSegura($c->link) ?? cobrancaUrlSegura($c->payment_url ?? null);
+        $pdf = cobrancaUrlSegura($c->pdf ?? null);
+        $acoes = [];
 
-                    echo '<tr>';
-                    echo '<td>' . $r->charge_id . '</td>';
-                    echo '<td>' . $dataVenda . '</td>';
+        if (! in_array($pill['label'], ['Paga', 'Cancelada', 'Estornada'], true)) {
+            if ($link !== null) {
+                $acoes[] = component('button', ['label' => 'Pagar', 'icon' => 'external-link', 'variant' => 'outline', 'size' => 'sm', 'href' => $link, 'attrs' => ['target' => '_blank', 'rel' => 'noopener', 'aria-label' => 'Pagar a cobrança de ' . dinheiro(((float) $c->total) / 100) . ' (abre o site do pagamento)']]);
+            }
+        }
+        if ($pdf !== null) {
+            $acoes[] = component('button', ['label' => 'Baixar o boleto em PDF', 'icon' => 'download', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => $pdf, 'attrs' => ['target' => '_blank', 'rel' => 'noopener']]);
+        }
 
-                    if ($r->os_id != '') {
-                        echo '<td><a href="' . base_url() . 'index.php/os/visualizar/' . $r->os_id . '">  Ordem de Serviço: #' . $r->os_id . '</a></td>';
-                    }
-                    if ($r->vendas_id != '') {
-                        echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '">  Venda: #' . $r->vendas_id . '</a></td>';
-                    }
+        return $acoes === [] ? '—' : $acoes;
+    }],
+];
+?>
+<div class="flex flex-col gap-4">
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Cobranças</h1>
+        <p class="text-caption text-muted" aria-live="polite"><?= e($total === 1 ? '1 cobrança' : number_format($total, 0, ',', '.') . ' cobranças') ?></p>
+    </header>
 
-                    echo '<td>' . $cobrancaStatus . '</td>';
-                    echo '<td>R$ ' . number_format($r->total / 100, 2, ',', '.') . '</td>';
-                    echo '<td>';
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/atualizarcobranca/' . $r->idCobranca . '"  class="btn-nwe" title="Atualizar Cobrança"><i class="bx bx-refresh"></i></a>';
-                    }
+    <?= component('data-table', [
+        'columns' => $colunas,
+        'rows' => $results,
+        'caption' => 'Cobranças',
+        'empty' => component('empty-state', [
+            'title' => 'Nenhuma cobrança',
+            'message' => 'Os boletos e links de pagamento das suas OS e compras aparecem aqui.',
+            'icon' => 'receipt',
+            'class' => 'border-0',
+        ]),
+    ]) ?>
 
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
-                        echo '<a style="margin-right: 1%" href="' . $r->link . '"  target="_blank" class="btn-nwe" title="Visualizar boleto"><i class="bx bx-barcode" ></i></a>';
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/mine/enviarcobranca/' . $r->idCobranca . '" class="btn-nwe2" title="Reenviar por email"><i class="bx bx-mail-send" ></i></a>';
-                    }
-                    echo '<a style="margin-right: 1%" href="' . $r->link . '"  target="_blank" class="btn-nwe" title="Visualizar boleto"><i class="bx bx-barcode" ></i></a>';
-                    echo '</td>';
-                    echo '</tr>';
-                } ?>
-            </tbody>
-        </table>
-        </div>
-    </div>
+    <?= component('pagination', $paginacao) ?>
 </div>
-<?php echo $this->pagination->create_links(); ?>
-
-<!-- Modal -->
-<div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/excluir" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Excluir cobrança</h5>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="charge_id" name="charge_id" value="" />
-            <h5 style="text-align: center">Deseja realmente excluir esta cobrança? A cobrança será cancelada.</h5>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Excluir</button>
-        </div>
-    </form>
-</div>
-
-
-<div id="modal-confirmar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/confirmarpagamento" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Confirmar pagamento</h5>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="confirma_id" name="confirma_id" value="" />
-            <h5 style="text-align: center">Deseja realmente confirmar pagamento desta cobrança?</h5>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-success">Confirmar</button>
-        </div>
-    </form>
-</div>
-
-
-<div id="modal-cancelar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/cobrancas/cancelar" method="post">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 id="myModalLabel">Cancelar cobrança</h5>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="cancela_id" name="cancela_id" value="" />
-            <h5 style="text-align: center">Deseja realmente Cancelar esta cobrança?</h5>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-            <button class="btn btn-danger">Confirmar</button>
-        </div>
-    </form>
-</div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        $(document).on('click', 'a', function(event) {
-            var cobranca = $(this).attr('charge_id');
-            $('#charge_id').val(cobranca);
-        });
-
-        $(document).on('click', 'a', function(event) {
-            var cobranca = $(this).attr('confirma_id');
-            $('#confirma_id').val(cobranca);
-        });
-
-        $(document).on('click', 'a', function(event) {
-            var cobranca = $(this).attr('cancela_id');
-            $('#cancela_id').val(cobranca);
-        });
-    });
-</script>

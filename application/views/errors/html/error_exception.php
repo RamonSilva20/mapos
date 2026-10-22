@@ -2,31 +2,23 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 
-<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+<aside role="alert" class="m-4 rounded-md border border-danger bg-danger-soft p-4 text-danger-ink">
+    <h4 class="font-medium">Exceção não tratada</h4>
+    <p>Tipo: <?= htmlspecialchars(get_class($exception), ENT_QUOTES, 'UTF-8') ?></p>
+    <p>Mensagem: <?= htmlspecialchars((string) $message, ENT_QUOTES, 'UTF-8') ?></p>
+    <p>Arquivo: <?= htmlspecialchars($exception->getFile(), ENT_QUOTES, 'UTF-8') ?></p>
+    <p>Linha: <?= htmlspecialchars((string) $exception->getLine(), ENT_QUOTES, 'UTF-8') ?></p>
 
-<h4>An uncaught Exception was encountered</h4>
-
-<p>Type: <?php echo get_class($exception); ?></p>
-<p>Message: <?php echo $message; ?></p>
-<p>Filename: <?php echo $exception->getFile(); ?></p>
-<p>Line Number: <?php echo $exception->getLine(); ?></p>
-
-<?php if (defined('SHOW_DEBUG_BACKTRACE') && SHOW_DEBUG_BACKTRACE === true) : ?>
-
-	<p>Backtrace:</p>
-	<?php foreach ($exception->getTrace() as $error) : ?>
-
-		<?php if (isset($error['file']) && strpos($error['file'], realpath(BASEPATH)) !== 0) : ?>
-
-			<p style="margin-left:10px">
-			File: <?php echo $error['file']; ?><br />
-			Line: <?php echo $error['line']; ?><br />
-			Function: <?php echo $error['function']; ?>
-			</p>
-		<?php endif ?>
-
-	<?php endforeach ?>
-
-<?php endif ?>
-
-</div>
+    <?php if (defined('SHOW_DEBUG_BACKTRACE') && SHOW_DEBUG_BACKTRACE === true) : ?>
+        <p class="mt-2 font-medium">Backtrace:</p>
+        <?php foreach ($exception->getTrace() as $error) : ?>
+            <?php if (isset($error['file']) && strpos($error['file'], realpath(BASEPATH)) !== 0) : ?>
+                <p class="ml-3">
+                    Arquivo: <?= htmlspecialchars($error['file'], ENT_QUOTES, 'UTF-8') ?><br>
+                    Linha: <?= htmlspecialchars((string) ($error['line'] ?? ''), ENT_QUOTES, 'UTF-8') ?><br>
+                    Função: <?= htmlspecialchars((string) $error['function'], ENT_QUOTES, 'UTF-8') ?>
+                </p>
+            <?php endif ?>
+        <?php endforeach ?>
+    <?php endif ?>
+</aside>

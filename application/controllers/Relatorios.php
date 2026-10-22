@@ -14,6 +14,7 @@ class Relatorios extends MY_Controller
     {
         parent::__construct();
 
+        $this->load->helper('relatorios');
         $this->load->model('Relatorios_model');
         $this->load->model('Usuarios_model');
         $this->load->model('Mapos_model');
@@ -32,7 +33,8 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de clientes.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_clientes';
+        $this->data['relatorio'] = relatorioDefinicao('clientes');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -43,7 +45,8 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de produtos.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_produtos';
+        $this->data['relatorio'] = relatorioDefinicao('produtos');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -64,7 +67,6 @@ class Relatorios extends MY_Controller
         $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal, $this->input->get('tipocliente'));
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Clientes Customizado';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirClientes', $data, true);
@@ -117,7 +119,7 @@ class Relatorios extends MY_Controller
                 } else {
                     $cliente['pessoa_fisica'] = 'não';
                 }
-                $writer->writeSheetRow('Sheet1', $cliente);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($cliente));
             }
 
             $arquivo = $writer->writeToString();
@@ -130,7 +132,6 @@ class Relatorios extends MY_Controller
         $data['clientes'] = $this->Relatorios_model->clientesRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Clientes';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
 
@@ -148,7 +149,6 @@ class Relatorios extends MY_Controller
         $data['produtos'] = $this->Relatorios_model->produtosRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Produtos';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
@@ -165,7 +165,6 @@ class Relatorios extends MY_Controller
         $data['produtos'] = $this->Relatorios_model->produtosRapidMin();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Produtos Com Estoque Mínimo';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
@@ -179,15 +178,13 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $precoInicial = $this->input->get('precoInicial');
-        $precoFinal = $this->input->get('precoFinal');
-        $estoqueInicial = $this->input->get('estoqueInicial');
-        $estoqueFinal = $this->input->get('estoqueFinal');
+        // Preço em reais ("1.234,56") e estoque em unidades; cada limite vale sozinho.
+        [$precoInicial, $precoFinal] = relatorioFaixa($this->input->get('precoInicial'), $this->input->get('precoFinal'), true);
+        [$estoqueInicial, $estoqueFinal] = relatorioFaixa($this->input->get('estoqueInicial'), $this->input->get('estoqueFinal'), false);
 
         $data['produtos'] = $this->Relatorios_model->produtosCustom($precoInicial, $precoFinal, $estoqueInicial, $estoqueFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Produtos Customizado';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirProdutos', $data, true);
@@ -196,6 +193,11 @@ class Relatorios extends MY_Controller
 
     public function produtosEtiquetas()
     {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar etiquetas de produtos.');
+            redirect(base_url());
+        }
+
         $de = $this->input->get('de_id');
         $ate = $this->input->get('ate_id');
         try {
@@ -222,7 +224,8 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_sku';
+        $this->data['relatorio'] = relatorioDefinicao('sku');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -257,7 +260,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
 
             $arquivo = $writer->writeToString();
@@ -270,7 +273,6 @@ class Relatorios extends MY_Controller
         $data['resultados'] = $this->Relatorios_model->skuRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório SKU';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirSKU', $data, true);
@@ -311,7 +313,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
 
             $arquivo = $writer->writeToString();
@@ -324,7 +326,6 @@ class Relatorios extends MY_Controller
         $data['resultados'] = $this->Relatorios_model->skuCustom($dataInicial, $dataFinal, $cliente, $origem);
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório SKU';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirSKU', $data, true);
@@ -337,7 +338,8 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de serviços.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_servicos';
+        $this->data['relatorio'] = relatorioDefinicao('servicos');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -349,13 +351,11 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $precoInicial = $this->input->get('precoInicial');
-        $precoFinal = $this->input->get('precoFinal');
+        [$precoInicial, $precoFinal] = relatorioFaixa($this->input->get('precoInicial'), $this->input->get('precoFinal'), true);
 
         $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal);
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Serviços Customizado';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
@@ -372,7 +372,6 @@ class Relatorios extends MY_Controller
         $data['servicos'] = $this->Relatorios_model->servicosRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Serviços';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirServicos', $data, true);
@@ -385,7 +384,8 @@ class Relatorios extends MY_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de OS.');
             redirect(base_url());
         }
-        $this->data['view'] = 'relatorios/rel_os';
+        $this->data['relatorio'] = relatorioDefinicao('os');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -466,7 +466,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($osFormatadas as $os) {
-                $writer->writeSheetRow('Sheet1', $os);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($os));
             }
             $writer->writeSheetRow('Sheet1', []);
             $writer->writeSheetRow('Sheet1', [
@@ -495,7 +495,6 @@ class Relatorios extends MY_Controller
         $data['total_geral'] = $totalValorDesconto + $valorTotal;
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de OS';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
@@ -582,7 +581,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($osFormatadas as $os) {
-                $writer->writeSheetRow('Sheet1', $os);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($os));
             }
             $writer->writeSheetRow('Sheet1', []);
             $writer->writeSheetRow('Sheet1', [
@@ -623,7 +622,6 @@ class Relatorios extends MY_Controller
         $data['dataInicial'] = $dataInicial != null ? date('d-m-Y', strtotime($dataInicial)) : 'indefinida';
         $data['dataFinal'] = $dataFinal != null ? date('d-m-Y', strtotime($dataFinal)) : 'indefinida';
         $data['emitente'] = $this->Mapos_model->getEmitente();
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $html = $this->load->view('relatorios/imprimir/imprimirOs', $data, true);
         pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
@@ -636,7 +634,8 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_financeiro';
+        $this->data['relatorio'] = relatorioDefinicao('financeiro');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -689,7 +688,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($lancamentosFormatados as $lancamento) {
-                $writer->writeSheetRow('Sheet1', $lancamento);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($lancamento));
             }
 
             $arquivo = $writer->writeToString();
@@ -702,7 +701,6 @@ class Relatorios extends MY_Controller
         $data['lancamentos'] = $this->Relatorios_model->financeiroRapid();
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório Financeiro';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
@@ -761,7 +759,7 @@ class Relatorios extends MY_Controller
 
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($lancamentosFormatados as $lancamento) {
-                $writer->writeSheetRow('Sheet1', $lancamento);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($lancamento));
             }
 
             $arquivo = $writer->writeToString();
@@ -774,7 +772,6 @@ class Relatorios extends MY_Controller
         $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório Financeiro Customizado';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
@@ -788,7 +785,8 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_vendas';
+        $this->data['relatorio'] = relatorioDefinicao('vendas');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -850,7 +848,7 @@ class Relatorios extends MY_Controller
             $writer->writeSheetRow(null, []);
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendasFormatadas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
             $writer->writeSheetRow(null, []);
             $writer->writeSheetRow(null, []);
@@ -878,7 +876,6 @@ class Relatorios extends MY_Controller
         $data['total_geral'] = $totalValorDesconto;
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Vendas Rápido';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
@@ -944,7 +941,7 @@ class Relatorios extends MY_Controller
             $writer = new XLSXWriter();
             $writer->writeSheetHeader('Sheet1', $cabecalho);
             foreach ($vendasFormatadas as $venda) {
-                $writer->writeSheetRow('Sheet1', $venda);
+                $writer->writeSheetRow('Sheet1', planilhaCelulasSeguras($venda));
             }
             $writer->writeSheetRow(null, []);
             $writer->writeSheetRow(null, []);
@@ -970,7 +967,6 @@ class Relatorios extends MY_Controller
         $data['total_vendas'] = $totalVendas;
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Vendas Customizado';
-        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
@@ -984,7 +980,8 @@ class Relatorios extends MY_Controller
             redirect(base_url());
         }
 
-        $this->data['view'] = 'relatorios/rel_receitas_brutas_mei';
+        $this->data['relatorio'] = relatorioDefinicao('receitasBrutasMei');
+        $this->data['view'] = 'relatorios/relatorio';
 
         return $this->layout();
     }
@@ -1014,8 +1011,8 @@ class Relatorios extends MY_Controller
             return redirect('/relatorios/receitasBrutasMei');
         }
 
-        $tempFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . 'temp.docx';
-        $generatedFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . "RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
+        $tempFilePath = $this->arquivoTemporario('docx');
+        $generatedFilePath = $this->arquivoTemporario($format);
 
         $templateProcessor = new TemplateProcessor($templatePath);
         $data = $this->Relatorios_model->receitasBrutasRapid();
@@ -1078,8 +1075,14 @@ class Relatorios extends MY_Controller
             return redirect('/relatorios/receitasBrutasMei');
         }
 
-        $tempFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . 'temp.docx';
-        $generatedFilePath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'relatorios' . DIRECTORY_SEPARATOR . "RELATORIO_MENSAL_DAS_RECEITAS_BRUTAS_MEI_GERADO.$format";
+        $nomeArquivo = sprintf(
+            "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format",
+            preg_replace('/[^0-9\-]/', '', (string) $dataInicial),
+            preg_replace('/[^0-9\-]/', '', (string) $dataFinal)
+        );
+
+        $tempFilePath = $this->arquivoTemporario('docx');
+        $generatedFilePath = $this->arquivoTemporario($format);
 
         $templateProcessor = new TemplateProcessor($templatePath);
         $data = $this->Relatorios_model->receitasBrutasCustom($dataInicial, $dataFinal);
@@ -1091,14 +1094,7 @@ class Relatorios extends MY_Controller
             $fileContents = file_get_contents($generatedFilePath);
             unlink($generatedFilePath);
 
-            return force_download(
-                sprintf(
-                    "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format",
-                    preg_replace('/[^0-9\-]/', '', (string) $dataInicial),
-                    preg_replace('/[^0-9\-]/', '', (string) $dataFinal)
-                ),
-                $fileContents
-            );
+            return force_download($nomeArquivo, $fileContents);
         } else {
             Settings::setPdfRendererName(Settings::PDF_RENDERER_MPDF);
             Settings::setPdfRendererPath('.');
@@ -1113,11 +1109,27 @@ class Relatorios extends MY_Controller
             unlink($generatedFilePath);
 
             return $this->output
-                ->set_header('Content-disposition: inline;filename=' . "relatorio_receitas_brutas_mei_custom_%s_até_%s.$format")
+                ->set_header('Content-disposition: inline;filename=' . $nomeArquivo)
                 ->set_content_type(get_mime_by_extension($generatedFilePath))
                 ->set_status_header(200)
                 ->set_output($fileContents)
                 ->_display();
         }
+    }
+
+    /**
+     * Caminho único fora do webroot, apagado ao fim da requisição mesmo se a
+     * geração falhar: o nome fixo em assets/ ficava público e podia sobrar.
+     */
+    private function arquivoTemporario(string $extensao): string
+    {
+        $base = tempnam(sys_get_temp_dir(), 'mapos_mei_');
+        $caminho = $base . '.' . $extensao;
+        register_shutdown_function(static function () use ($base, $caminho) {
+            @unlink($base);
+            @unlink($caminho);
+        });
+
+        return $caminho;
     }
 }

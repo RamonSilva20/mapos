@@ -24,6 +24,21 @@ class Permissoes_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Grupos de permissão com quantos usuários usam cada um, para a listagem
+     * da v5 (#2846). São poucos: sem paginação.
+     */
+    public function listarComUsuarios(): array
+    {
+        return $this->db
+            ->select('permissoes.idPermissao, permissoes.nome, permissoes.data, permissoes.situacao')
+            ->select('(SELECT COUNT(*) FROM usuarios WHERE usuarios.permissoes_id = permissoes.idPermissao) AS usuarios', false)
+            ->from('permissoes')
+            ->order_by('permissoes.nome', 'ASC')
+            ->get()
+            ->result();
+    }
+
     public function getActive($table, $fields)
     {
         $this->db->select($fields);

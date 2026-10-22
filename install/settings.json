@@ -4,7 +4,15 @@
 		"cURL",
 		"MySQLi",
 		"GD",
-    "zip"
+		"zip",
+		"mbstring",
+		"dom",
+		"xml",
+		"zlib",
+		"iconv",
+		"json",
+		"openssl",
+		"fileinfo"
 	],
   "database_file": "../banco.sql",
   "writeable_directories": {

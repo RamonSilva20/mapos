@@ -1,152 +1,53 @@
-<div class="widget-box">
-    <div class="widget-title">
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#tab1">Meus Dados</a></li>
+<?php
+/**
+ * Conta do cliente (#2848): os dados do cadastro, "Editar dados" como ação
+ * principal e, abaixo de lg (com a tabbar), os atalhos que não cabem na tabbar (cobranças e
+ * sair).
+ *
+ * @var object $cliente
+ */
+$caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
+$endereco = trim(implode(', ', array_filter([
+    trim(implode(', ', array_filter([$cliente->rua, $cliente->numero, $cliente->complemento]))),
+    $cliente->bairro,
+    trim(implode(' / ', array_filter([$cliente->cidade, $cliente->estado]))),
+    $cliente->cep,
+])));
 
-            <div>
-                <a title="Editar" class="button btn btn-success" style="max-width: 140px;margin: 5px" href="<?php echo base_url() ?>index.php/mine/editarDados/<?php echo $result->idClientes ?>">
-                  <span class="button__icon"><i class="bx bx-edit"></i> </span> <span class="button__text2">Editar</span></a>
-            </div>
-        </ul>
-    </div>
-    <div class="widget-content tab-content">
-        <div id="tab1" class="tab-pane active" style="min-height: 300px">
-
-            <div class="accordion" id="collapse-group">
-                <div class="accordion-group widget-box">
-                    <div class="accordion-heading">
-                        <div class="widget-title">
-                            <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
-                              <span><i class='bx bx-user icon-cli' ></i></span>
-                              <h5 style="padding-left: 28px">Dados Pessoais</h5>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="collapse in accordion-body" id="collapseGOne">
-                        <div class="widget-content">
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Nome</strong></td>
-                                        <td>
-                                            <?php echo $result->nomeCliente ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Contato</strong></td>
-                                        <td>
-                                            <?php echo $result->contato ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Documento</strong></td>
-                                        <td>
-                                            <?php echo $result->documento ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Data de Cadastro</strong></td>
-                                        <td>
-                                            <?php echo date('d/m/Y', strtotime($result->dataCadastro)) ?>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-group widget-box">
-                    <div class="accordion-heading">
-                        <div class="widget-title">
-                            <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse">
-                              <span><i class='bx bx-phone icon-cli'></i></span>
-                              <h5 style="padding-left: 28px">Contatos</h5>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="collapse accordion-body" id="collapseGTwo">
-                        <div class="widget-content">
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Telefone</strong></td>
-                                        <td>
-                                            <?php echo $result->telefone ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Celular</strong></td>
-                                        <td>
-                                            <?php echo $result->celular ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Email</strong></td>
-                                        <td>
-                                            <?php echo $result->email ?>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-group widget-box">
-                    <div class="accordion-heading">
-                        <div class="widget-title">
-                            <a data-parent="#collapse-group" href="#collapseGThree" data-toggle="collapse">
-                              <span><i class='bx bx-map-alt icon-cli' ></i></span>
-                              <h5 style="padding-left: 28px">Endereço</h5>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="collapse accordion-body" id="collapseGThree">
-                        <div class="widget-content">
-                            <table class="table table-bordered">
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: right; width: 30%"><strong>Rua</strong></td>
-                                        <td>
-                                            <?php echo $result->rua ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Número</strong></td>
-                                        <td>
-                                            <?php echo $result->numero ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Complemento</strong></td>
-                                        <td>
-                                            <?php echo $result->complemento ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Bairro</strong></td>
-                                        <td>
-                                            <?php echo $result->bairro ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>Cidade</strong></td>
-                                        <td>
-                                            <?php echo $result->cidade ?> -
-                                            <?php echo $result->estado ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right"><strong>CEP</strong></td>
-                                        <td>
-                                            <?php echo $result->cep ?>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+$secoes = [
+    'Identificação' => ['Nome' => $cliente->nomeCliente, 'CPF ou CNPJ' => $cliente->documento, 'Pessoa de contato' => $cliente->contato, 'Cliente desde' => dataBr($cliente->dataCadastro)],
+    'Contato' => ['E-mail (login)' => $cliente->email, 'Celular' => $cliente->celular, 'Telefone' => $cliente->telefone],
+    'Endereço' => ['Endereço' => $endereco],
+];
+$classeAtalho = 'flex min-h-12 items-center gap-3 rounded-md px-3 text-body-md text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring';
+?>
+<div class="flex flex-col gap-4">
+    <header class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+            <h1 class="font-display text-heading-xl text-text">Minha conta</h1>
+            <p class="text-caption [overflow-wrap:anywhere] text-muted"><?= e($cliente->email) ?></p>
         </div>
+        <?= component('button', ['label' => 'Editar dados', 'icon' => 'pencil', 'href' => site_url('mine/editarDados')]) ?>
+    </header>
+
+    <div class="grid gap-4 lg:grid-cols-3">
+        <?php foreach ($secoes as $titulo => $campos) { ?>
+            <section class="<?= e($caixa) ?>" aria-label="<?= e($titulo) ?>">
+                <h2 class="text-heading-sm text-text"><?= e($titulo) ?></h2>
+                <dl class="mt-3 flex flex-col gap-3">
+                    <?php foreach ($campos as $rotulo => $valor) { ?>
+                        <div>
+                            <dt class="text-caption text-muted"><?= e($rotulo) ?></dt>
+                            <dd class="text-body-md [overflow-wrap:anywhere] text-text"><?= e(trim((string) $valor) !== '' ? $valor : '—') ?></dd>
+                        </div>
+                    <?php } ?>
+                </dl>
+            </section>
+        <?php } ?>
     </div>
+
+    <nav class="rounded-xl border border-border bg-surface p-2 lg:hidden" aria-label="Atalhos da conta">
+        <a href="<?= e(site_url('mine/cobrancas')) ?>" class="<?= e($classeAtalho) ?>"><?= icon('receipt', ['class' => 'size-5 text-muted']) ?><span class="flex-1">Cobranças</span><?= icon('chevron-right', ['class' => 'size-4 text-muted']) ?></a>
+        <a href="<?= e(site_url('mine/sair')) ?>" class="<?= e($classeAtalho) ?>"><?= icon('log-out', ['class' => 'size-5 text-muted']) ?><span class="flex-1">Sair</span></a>
+    </nav>
 </div>

@@ -2,25 +2,28 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 /**
  * Authorization_Token
  * ----------------------------------------------------------
- * API Token Generate/Validation
+ * Gera e valida o access token (JWT HS256, firebase/php-jwt) da API.
  *
- * @author: Jeevan Lal
+ * O token leva a claim padrão `exp` (iat + API_TOKEN_EXPIRE_TIME) e, por
+ * compatibilidade com os apps já instalados e com tokens emitidos antes da
+ * #2869, continua levando `API_TIME`. Tokens antigos, sem `exp`, são validados
+ * por `API_TIME`, com a mesma regra de antes.
  *
- * @version: 0.0.1
+ * As permissões NÃO são lidas do token: o REST_Controller consulta o usuário e
+ * a permissão no banco a cada requisição.
  */
-
-require_once APPPATH . 'third_party/php-jwt/JWT.php';
-require_once APPPATH . 'third_party/php-jwt/BeforeValidException.php';
-require_once APPPATH . 'third_party/php-jwt/ExpiredException.php';
-require_once APPPATH . 'third_party/php-jwt/SignatureInvalidException.php';
-
-use Firebase\JWT\JWT;
-
 class Authorization_Token
 {
+    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor */
+    protected $CI;
+
     /**
      * Token Key
      */
@@ -62,22 +65,68 @@ class Authorization_Token
     /**
      * Generate Token
      *
-     * @param: {array} data
+     * @param  array  $data
      */
-    public function generateToken($data = null)
+    public function generateToken($data = null, ?int $tetoExpiracao = null)
     {
-        if ($data and is_array($data)) {
-            // add api time key in user array()
-            $data['API_TIME'] = time();
-
-            try {
-                return JWT::encode($data, $this->token_key, $this->token_algorithm);
-            } catch (Exception $e) {
-                return 'Message: ' . $e->getMessage();
-            }
-        } else {
+        if (! $data || ! is_array($data)) {
             return 'Token Data Undefined!';
         }
+
+        $agora = time();
+        $data['iat'] = $agora;
+        $data['exp'] = $agora + $this->expiresIn($tetoExpiracao);
+        // Legado: apps e tokens anteriores à #2869 usam API_TIME.
+        $data['API_TIME'] = $agora;
+
+        return JWT::encode($data, $this->token_key, $this->token_algorithm);
+    }
+
+    /**
+     * Duração do access token, em segundos (expires_in da resposta de login).
+     * `$teto` limita a configurada: o token de operador, que tem refresh token,
+     * dura no máximo TETO_COM_REFRESH.
+     */
+    public function expiresIn(?int $teto = null): int
+    {
+        $duracao = (int) $this->token_expire_time;
+
+        return $teto !== null ? min($duracao, $teto) : $duracao;
+    }
+
+    /** Teto do access token que pode ser renovado pelo refresh token: 1 hora. */
+    public const TETO_COM_REFRESH = 3600;
+
+    /**
+     * O token continua valendo? A versão gravada no token (`tv`, 0 nos tokens
+     * anteriores à coluna) precisa ser a do registro: trocar a senha ou
+     * desativar a conta incrementa a versão e derruba os access tokens vivos.
+     */
+    public static function versaoVigente(object $dadosDoToken, int $versaoAtual): bool
+    {
+        return (int) ($dadosDoToken->tv ?? 0) === $versaoAtual;
+    }
+
+    /** Versão atual dos tokens do registro; 0 se a coluna ainda não existe (migration não rodada). */
+    public function versaoAtual(string $tabela, string $campoId, int $id): int
+    {
+        if (! in_array($tabela, ['usuarios', 'clientes'], true) || ! $this->CI->db->field_exists('token_versao', $tabela)) {
+            return 0;
+        }
+
+        $linha = $this->CI->db->select('token_versao')->where($campoId, $id)->limit(1)->get($tabela)->row();
+
+        return (int) ($linha->token_versao ?? 0);
+    }
+
+    /** Invalida os access tokens vivos do registro (usuarios ou clientes). Sem a coluna (migration não rodada), não faz nada. */
+    public function incrementarVersao(string $tabela, string $campoId, int $id): void
+    {
+        if (! in_array($tabela, ['usuarios', 'clientes'], true) || ! $this->CI->db->field_exists('token_versao', $tabela)) {
+            return;
+        }
+
+        $this->CI->db->set('token_versao', 'token_versao + 1', false)->where($campoId, $id)->update($tabela);
     }
 
     /**
@@ -85,71 +134,49 @@ class Authorization_Token
      *
      * @return : user informations
      */
-    public function validateToken($token, $regenToken = false)
+    public function validateToken($token)
     {
-        /**
-         * Request All Headers
-         */
-        $headers = $this->CI->input->request_headers();
-
-        /**
-         * Authorization Header Exists
-         */
-        $token_data = $this->tokenIsExist($headers);
-        if ($token_data['status'] === true) {
-            try {
-                /**
-                 * Token Decode
-                 */
-                try {
-                    $token_decode = JWT::decode($token, $this->token_key, [$this->token_algorithm]);
-                } catch (Exception $e) {
-                    return ['status' => false, 'message' => $e->getMessage()];
-                }
-
-                if (! empty($token_decode) and is_object($token_decode)) {
-                    // Check Token API Time [API_TIME]
-                    if (empty($token_decode->API_TIME) || ! is_numeric($token_decode->API_TIME)) {
-
-                        return ['status' => false, 'message' => 'Token Time Not Define!'];
-                    } else {
-                        /**
-                         * Check Token Time Valid
-                         *
-                         * Na renovação o token pode estar expirado, mas só dentro de uma
-                         * janela igual ao tempo de expiração: sem esse limite um token
-                         * vazado poderia ser renovado indefinidamente.
-                         */
-                        $time_difference = time() - (int) $token_decode->API_TIME;
-                        $expire_time = (int) $this->token_expire_time;
-                        $max_age = $regenToken ? $expire_time * 2 : $expire_time;
-                        if ($time_difference >= $max_age) {
-                            return ['status' => false, 'message' => 'Token Time Expire.'];
-
-                        } else {
-                            /**
-                             * All Validation False Return Data
-                             */
-                            return ['status' => true, 'data' => $token_decode];
-                        }
-                    }
-
-                } else {
-                    return ['status' => false, 'message' => 'Forbidden'];
-                }
-            } catch (Exception $e) {
-                return ['status' => false, 'message' => $e->getMessage()];
-            }
-        } else {
-            // Authorization Header Not Found!
+        $token_data = $this->tokenIsExist($this->CI->input->request_headers());
+        if ($token_data['status'] !== true) {
             return ['status' => false, 'message' => $token_data['message']];
         }
+
+        $expire_time = (int) $this->token_expire_time;
+
+        $leewayAnterior = JWT::$leeway;
+        JWT::$leeway = 0;
+
+        try {
+            $token_decode = JWT::decode((string) $token, new Key($this->token_key, $this->token_algorithm));
+        } catch (ExpiredException $e) {
+            return ['status' => false, 'message' => 'Token Time Expire.'];
+        } catch (Throwable $e) {
+            return ['status' => false, 'message' => $e->getMessage()];
+        } finally {
+            JWT::$leeway = $leewayAnterior;
+        }
+
+        // Token novo: o exp já foi conferido pela biblioteca.
+        if (isset($token_decode->exp)) {
+            return ['status' => true, 'data' => $token_decode];
+        }
+
+        // Token anterior à #2869: só tem API_TIME.
+        if (empty($token_decode->API_TIME) || ! is_numeric($token_decode->API_TIME)) {
+            return ['status' => false, 'message' => 'Token Time Not Define!'];
+        }
+
+        if (time() - (int) $token_decode->API_TIME >= $expire_time) {
+            return ['status' => false, 'message' => 'Token Time Expire.'];
+        }
+
+        return ['status' => true, 'data' => $token_decode];
     }
 
     /**
      * Token Header Check
      *
-     * @param: request headers
+     * @param  array  $headers
      */
     private function tokenIsExist($headers)
     {
