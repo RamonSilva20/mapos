@@ -52,7 +52,7 @@ Em vez de sobrescrever a pasta da 4.x, prefira colocar a v5 numa pasta nova e tr
   composer install --no-dev
   ```
 
-> **Não use o botão "Atualizar Mapos" da 4.x para esta migração.** A 4.x baixa o código do branch `master`, que não traz o `application/vendor`, e só roda `composer install` se o Composer existir no servidor. Além disso, o PHP 8.5, o `.env` novo e o `STORAGE_PATH` exigem passos manuais. A atualização pelo painel da v5 é outra (veja [atualizacao.md](atualizacao.md)) e só vale a partir da v5.
+> **Não use o botão "Atualizar Mapos" da 4.x para esta migração.** Até a 4.55.4 o botão baixava o código do branch `master`, que agora é a v5 e não traz o `application/vendor`; ele só roda `composer install` se o Composer existir no servidor. A partir da 4.55.5 ele segue o branch `4.x` e não instala a v5, então atualize a 4.x para a 4.55.5 antes de migrar. Além disso, o PHP 8.5, o `.env` novo e o `STORAGE_PATH` exigem passos manuais. A atualização pelo painel da v5 é outra (veja [atualizacao.md](atualizacao.md)) e só vale a partir da v5.
 
 ### 3.2. Traga o que é seu
 

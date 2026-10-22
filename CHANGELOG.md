@@ -6,6 +6,14 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-10-22
+
+Primeira versão estável da v5. Exige PHP 8.5; leia o [guia de migração](docs/migracao-4x-para-5.md) e teste numa cópia antes de usar em produção. Quem está na 4.x deve atualizar para a 4.55.5 e migrar pelo guia: o botão "Atualizar Mapos" da 4.x não instala a v5. Sem migration nem variável nova no `.env` em relação à beta.3.
+
+### Fixed
+- PDF do relatório MEI saía com células pretas e o total errado. #3009 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cobranças (Asaas, Gerencianet e Mercado Pago) usam o total da OS e da venda: quantidade fracionada do serviço e serviço sem preço deixam de gerar boleto ou link com valor menor, e nenhum centavo se perde no arredondamento. #3014 [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [5.0.0-beta.3] - 2026-10-15
 
 Correção para quem importa o banco da 4.x numa v5 já instalada. Sem migration nem variável nova no `.env`.

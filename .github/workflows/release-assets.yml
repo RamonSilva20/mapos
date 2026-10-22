@@ -1,0 +1,107 @@
+name: Attach zip to an existing release
+
+# Gera o zip com a pasta vendor (o mesmo do release.yml) para uma release que já
+# existe e o anexa a ela. Serve para releases criadas à mão, sem o zip. O
+# release.yml recusa tag existente, então não dá para reutilizá-lo.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag de uma release existente (e.g. v5.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  attach:
+    runs-on: ubuntu-latest
+
+    # O valor entra por variável de ambiente, nunca interpolado no script:
+    # um nome de tag com aspas ou $() executaria comandos no runner.
+    env:
+      TAG: ${{ inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+
+    steps:
+      - name: Validate tag name
+        run: |
+          if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'; then
+            echo "Invalid tag name."
+            exit 1
+          fi
+
+      - name: Ensure the release exists
+        run: |
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::error::Não existe release para a tag $TAG."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          extensions: gd, mbstring
+
+      # composer install, e não composer update: usa o composer.lock da tag, a
+      # resolução que passou pelos testes. --no-dev deixa de fora php-cs-fixer,
+      # var-dumper e faker, que não são usados em runtime.
+      - name: Install dependencies
+        run: |
+          composer install --optimize-autoloader --no-dev --no-interaction --no-progress
+
+      - name: Confere que o lock está em sincronia com o composer.json
+        run: |
+          if composer validate --no-check-all --no-check-publish 2>&1 | grep -q "not up to date"; then
+            echo "::error::O composer.lock está defasado em relação ao composer.json."
+            exit 1
+          fi
+
+      # Garante que o zip é o da versão da release: a tag e o app_version têm de
+      # ser a mesma.
+      - name: Confere a versão da tag
+        run: |
+          if ! grep -q "\$config\['app_version'\] = '${TAG#v}';" application/config/config.php; then
+            echo "::error::app_version em application/config/config.php não é ${TAG#v}."
+            exit 1
+          fi
+
+      - name: Create release archive
+        run: |
+          zip -r "${TAG}-release.zip" ./ \
+            --exclude './.git/*' \
+            --exclude './.github/*' \
+            --exclude './node_modules/*' \
+            --exclude './tests/*' \
+            --exclude './docker/*' \
+            --exclude './scripts/*' \
+            --exclude './assets/src/*' \
+            --exclude './.php-cs-fixer.cache' \
+            --exclude './.phpunit.cache' \
+            --exclude './.phpunit.result.cache'
+
+      - name: Confere que o zip leva a pasta vendor
+        run: |
+          unzip -l "${TAG}-release.zip" | grep -q ' application/vendor/autoload.php$' || {
+            echo "::error::O zip não contém application/vendor/autoload.php."
+            exit 1
+          }
+
+      - name: Calculate SHA256
+        run: |
+          sha256sum "${TAG}-release.zip" > "${TAG}-release.zip.sha256"
+          cat "${TAG}-release.zip.sha256"
+
+      # --clobber troca anexos de mesmo nome, então rodar de novo é seguro.
+      - name: Upload to the release
+        run: |
+          gh release upload "$TAG" "${TAG}-release.zip" "${TAG}-release.zip.sha256" --clobber
