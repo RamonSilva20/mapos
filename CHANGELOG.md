@@ -4,6 +4,13 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.55.5] - 2026-10-22
+
+Atualize para esta versão antes do lançamento da v5: a v5 passa a viver na `master` e não pode ser instalada pelo botão "Atualizar Mapos" da 4.x.
+
+### Changed
+- O atualizador do painel passa a seguir o branch `4.x` (antes `master`), para que a 4.x continue recebendo só atualizações da 4.x. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ## [4.55.4] - 2026-10-19
 
 ### Fixed

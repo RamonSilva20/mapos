@@ -17,7 +17,7 @@ $config['github_repo'] = 'mapos';
 /**
  * The branch to update from
  */
-$config['github_branch'] = 'master';
+$config['github_branch'] = '4.x';
 
 /**
  * The current commit the files are on.
