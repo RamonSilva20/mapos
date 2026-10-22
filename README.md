@@ -139,6 +139,15 @@ Configurações > Atualizar > **Verificar atualização** baixa a última releas
 
 Esse recurso vale a partir da v5. Quem está na 4.x deve usar o guia de migração acima.
 
+### Suporte das versões
+| Versão | Branch | Situação | Suporte |
+| --- | --- | --- | --- |
+| Map-OS em Laravel | — | Em desenvolvimento | Sem data de lançamento |
+| 5.x (atual) | `master` | Ativa: novidades e correções | Suporte ativo até a versão em Laravel sair; segurança por mais 12 meses depois |
+| 4.x | `4.x` | Só segurança | Até 30/04/2027 |
+
+Quem está na 4.x deve migrar pelo [guia de migração](docs/migracao-4x-para-5.md). O botão "Atualizar Mapos" da 4.55.5 segue o branch `4.x` e não instala a v5.
+
 ### Comandos de terminal
 
 Para listar todos os comandos de terminal disponíveis, basta executar o comando `php index.php tools` a partir da raiz do projeto, após feita todo o processo de instalação.

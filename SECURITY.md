@@ -4,14 +4,15 @@ O Map-OS é usado por empresas para gerenciar ordens de serviço, dados de clien
 
 ## Versões suportadas
 
-Correções de segurança são publicadas apenas na versão mais recente, a partir da branch `master`. O projeto não mantém branches de suporte para versões antigas.
+Correções de segurança são publicadas na `master` (5.x) e, até 30/04/2027, também no branch `4.x`. A versão em Laravel ainda está em desenvolvimento e não tem data de lançamento.
 
-| Versão | Suportada |
-| --- | --- |
-| Última release | ✅ |
-| Versões anteriores | ❌ |
+| Versão | Branch | Situação | Suporte |
+| --- | --- | --- | --- |
+| Map-OS em Laravel | — | Em desenvolvimento | Sem data de lançamento |
+| 5.x (atual) | `master` | Ativa: novidades e correções | Suporte ativo até a versão em Laravel sair; segurança por mais 12 meses depois |
+| 4.x | `4.x` | Só segurança | Até 30/04/2027 |
 
-Se você está em uma versão antiga, a orientação é atualizar seguindo as instruções de [Atualização](README.md#atualização) do README.
+Dentro de cada linha, só a última release recebe a correção: quem está numa versão anterior (na 4.x, abaixo da 4.55.5) deve atualizar seguindo as instruções de [Atualização](README.md#atualização-v5-em-diante) do README, ou migrar da 4.x pelo [guia de migração](docs/migracao-4x-para-5.md).
 
 ## Como reportar uma vulnerabilidade
 
