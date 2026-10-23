@@ -6,6 +6,17 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-10-23
+
+Melhorias na ficha do cliente, no painel e no preenchimento de CEP e CNPJ. Sem migration nem variável nova no `.env`.
+
+### Added
+- Ficha do cliente: as abas Ordens de serviço e Vendas são paginadas (no tamanho de página das Configurações), e as OS e vendas mais antigas deixam de ficar inacessíveis. #3021 [@RamonSilva20](https://github.com/RamonSilva20)
+- Painel: o botão "Ocultar valores" / "Mostrar valores" esconde o saldo do mês, o "A receber", o balanço do ano e os valores dos lançamentos a vencer. A escolha fica no navegador. #3022 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Fixed
+- Cadastro de cliente (e cadastro rápido): trocar o CEP atualiza rua, bairro, cidade e estado (número e complemento digitados são mantidos), e a busca de CNPJ atualiza os campos com os dados da Receita. Antes, só preenchiam campos vazios. #3023 [@cabralwms](https://github.com/cabralwms)
+
 ## [5.0.1] - 2026-10-23
 
 Correção do instalador. Sem migration nem variável nova no `.env`.
