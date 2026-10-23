@@ -50,7 +50,13 @@
     alternar(true);
     try {
       const resposta = await fetch(formulario.action, { method: 'POST', body: new FormData(formulario) });
-      const resultado = await resposta.json();
+      let resultado;
+      try {
+        resultado = await resposta.json();
+      } catch (e) {
+        aviso('O servidor respondeu com erro (HTTP ' + resposta.status + '). Veja o log de erros do PHP/Apache.');
+        return;
+      }
       if (resultado.success) {
         // A instalação terminou, mas as atualizações do banco podem não ter rodado: o aviso diz o que fazer.
         const final = document.querySelector('[data-aviso-final]');

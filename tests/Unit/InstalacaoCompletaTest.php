@@ -66,6 +66,35 @@ final class InstalacaoCompletaTest extends MaposTestCase
         return [proc_close($processo), $saida, $erro];
     }
 
+    // --- trava de instalação ---------------------------------------------------------------
+
+    public function testTravaEsquecidaPorProcessoMortoNaoBloqueiaENovaTentativaPassa(): void
+    {
+        $arquivo = $this->base . '/instalacao.lock';
+        $pegar = '$t = fopen($argv[1], "c"); exit(flock($t, LOCK_EX | LOCK_NB) ? 0 : 3);';
+
+        // O arquivo da trava fica no disco depois de um processo que morreu sem apagá-lo.
+        [$codigo] = $this->executarPhp(['-r', $pegar, $arquivo]);
+        $this->assertSame(0, $codigo);
+        $this->assertFileExists($arquivo);
+
+        [$codigo] = $this->executarPhp(['-r', $pegar, $arquivo]);
+        $this->assertSame(0, $codigo, 'uma trava esquecida não pode impedir nova instalação');
+    }
+
+    public function testTravaAtivaBloqueiaOutraInstalacaoSimultanea(): void
+    {
+        $arquivo = $this->base . '/instalacao.lock';
+        $trava = fopen($arquivo, 'c');
+        $this->assertTrue(flock($trava, LOCK_EX | LOCK_NB));
+
+        [$codigo] = $this->executarPhp(['-r', '$t = fopen($argv[1], "c"); exit(flock($t, LOCK_EX | LOCK_NB) ? 0 : 3);', $arquivo]);
+        $this->assertSame(3, $codigo);
+
+        flock($trava, LOCK_UN);
+        fclose($trava);
+    }
+
     // --- pasta dos anexos (STORAGE_PATH) -------------------------------------------------
 
     public function testArmazenamentoVazioUsaOPadraoDoSistema(): void
