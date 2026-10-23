@@ -14,6 +14,5 @@ final class VersaoExibidaTest extends MaposTestCase
 
         $this->assertMatchesRegularExpression('/^5\.\d+\.\d+(-[0-9A-Za-z.]+)?$/', $achado[1]);
         $this->assertTrue(version_compare($achado[1], '4.55.2', '>'), 'A v5 não pode ser vista como mais antiga que a última 4.x.');
-        $this->assertTrue(version_compare($achado[1], '5.0.0', '<='), 'Antes do lançamento a versão é uma pré-release de 5.0.0.');
     }
 }

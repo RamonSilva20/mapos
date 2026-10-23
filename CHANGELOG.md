@@ -6,6 +6,13 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-10-23
+
+Correção do instalador. Sem migration nem variável nova no `.env`.
+
+### Fixed
+- Instalador: se a instalação falhasse no meio (erro de SQL, tempo esgotado), o arquivo `install/instalacao.lock` ficava para trás e toda nova tentativa mostrava "Já existe uma instalação em andamento". A trava agora é liberada mesmo se o PHP morrer, e o erro do banco aparece na tela. [@RamonSilva20](https://github.com/RamonSilva20)
+
 ### Changed
 - Tabela de suporte das versões (4.x, 5.x e a futura versão em Laravel) no README e no `SECURITY.md`. [@RamonSilva20](https://github.com/RamonSilva20)
 
