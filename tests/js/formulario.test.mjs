@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 
 import { formatarCep, formatarDinheiro, formatarDocumento, formatarTelefone, somenteDigitos } from '../../assets/js/lib/mascaras.js';
 import { MENSAGENS, marcarCarregando, mensagemDoCampo, semDescritor } from '../../assets/js/lib/formulario.js';
-import { consultarCnpj, dadosDoCnpj, dadosDoCnpjWs, enderecoDoCep, preencherEndereco, preencherSobrescrevendo, preencherVazios, URL_CNPJ, URL_CNPJ_MINHA_RECEITA, URL_CNPJ_WS } from '../../assets/js/modules/clientes/formulario.js';
+import { consultarCnpj, dadosDoCnpj, dadosDoCnpjWs, enderecoDoCep, ligarBuscas, preencherEndereco, preencherSobrescrevendo, preencherVazios, URL_CEP, URL_CNPJ, URL_CNPJ_MINHA_RECEITA, URL_CNPJ_WS } from '../../assets/js/modules/clientes/formulario.js';
 import { aplicarMascara } from '../../assets/js/modules/formulario/padrao.js';
 
 test('máscara de CPF, CNPJ e CNPJ alfanumérico', () => {
@@ -454,6 +454,49 @@ test('endereço do CEP não apaga campos quando o ViaCEP não traz o logradouro'
     assert.equal(campos.complemento.value, 'Apto 42', 'O complemento digitado é preservado.');
     assert.equal(campos.cidade.value, 'Jundiaí');
     assert.equal(campos.estado.value, 'SP');
+});
+
+test('CEP: resposta antiga não sobrescreve o endereço do CEP mais novo', async () => {
+    const resolvers = {};
+    global.document = { getElementById: () => null };
+    global.fetch = (url) => new Promise((resolve) => { resolvers[url] = resolve; });
+
+    const cep = {
+        value: '', id: 'cep',
+        addEventListener(tipo, fn) { this[tipo] = fn; },
+        setAttribute() {}, removeAttribute() {}, getAttribute: () => null,
+        classList: { add() {}, remove() {} },
+    };
+    const campos = {
+        cep,
+        rua: { value: '' }, bairro: { value: '' }, cidade: { value: '' }, estado: { value: '' },
+        complemento: { value: '' }, numero: { value: '', focus() {} },
+    };
+    const formulario = { elements: { namedItem: (nome) => campos[nome] ?? null }, querySelector: () => null };
+
+    try {
+        ligarBuscas(formulario);
+
+        cep.value = '01001-000';
+        const buscaA = cep.input();
+        cep.value = '20040-002';
+        const buscaB = cep.input();
+
+        // A resposta do CEP novo (B) chega primeiro e é aplicada.
+        resolvers[URL_CEP('20040002')](resposta(200, { logradouro: 'Rua B', bairro: 'Centro', localidade: 'Rio de Janeiro', uf: 'RJ' }));
+        await buscaB;
+        // A do CEP antigo (A) chega depois e deve ser ignorada.
+        resolvers[URL_CEP('01001000')](resposta(200, { logradouro: 'Praça da Sé', bairro: 'Sé', localidade: 'São Paulo', uf: 'SP' }));
+        await buscaA;
+
+        assert.equal(campos.cidade.value, 'Rio de Janeiro', 'A resposta antiga do CEP A não substitui o endereço do CEP B.');
+        assert.equal(campos.rua.value, 'Rua B');
+        assert.equal(campos.bairro.value, 'Centro');
+        assert.equal(campos.estado.value, 'RJ');
+    } finally {
+        delete global.fetch;
+        delete global.document;
+    }
 });
 
 test('máscara de dinheiro: centavos da direita, milhar com ponto', () => {

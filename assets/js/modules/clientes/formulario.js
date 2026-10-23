@@ -218,6 +218,11 @@ export function ligarBuscas(formulario, raiz = formulario) {
         cep.setAttribute('aria-busy', 'true');
         try {
             const endereco = enderecoDoCep(await consultar(URL_CEP(digitos)));
+            // Entre o pedido e a resposta o usuário pode ter trocado o CEP: uma
+            // resposta antiga não pode sobrescrever o endereço do CEP atual.
+            if (digitos !== ultimoCep) {
+                return;
+            }
             if (!endereco) {
                 mostrarErroDoCampo(cep, 'CEP não encontrado. Confira ou preencha o endereço à mão.');
                 return;
