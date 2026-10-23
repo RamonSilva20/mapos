@@ -2,7 +2,7 @@
 // configuração dos gráficos.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { configuracaoBalanco, configuracaoOs, dataIso, moeda, urlDaAgenda } from '../../assets/js/modules/painel/painel.js';
+import { CHAVE_VALORES, alternarValores, configuracaoBalanco, configuracaoOs, dataIso, moeda, urlDaAgenda } from '../../assets/js/modules/painel/painel.js';
 
 test('dataIso usa o dia local', () => {
     assert.equal(dataIso(new Date(2026, 0, 5)), '2026-01-05');
@@ -41,4 +41,10 @@ test('configuracaoOs: uma cor por variante do status', () => {
     assert.equal(config.type, 'doughnut');
     assert.deepEqual(config.data.labels, ['Aberto', 'Faturado']);
     assert.deepEqual(config.data.datasets[0].backgroundColor, ['cor-info', 'cor-success']);
+});
+
+test('alternarValores: oculta e mostra de novo', () => {
+    assert.equal(alternarValores(false), true);
+    assert.equal(alternarValores(true), false);
+    assert.equal(CHAVE_VALORES, 'mapos:valores-ocultos');
 });

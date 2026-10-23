@@ -2,6 +2,8 @@
 /**
  * Painel inicial (#2847), com os componentes da v5.
  *
+ * - Botão de olho no cabeçalho (#3022): oculta os valores em dinheiro
+ *   (saldo, balanço, lançamentos), só neste navegador.
  * - Cards de resumo (kpi-card): OS em andamento, orçamentos, vendas em aberto
  *   e saldo do mês. Cada um só com a permissão de ver o módulo.
  * - Agenda das entregas de OS (FullCalendar 6), com filtro de status; o
@@ -52,6 +54,7 @@ if ($pode['lancamentos']) {
         'value' => dinheiro($mes['saldo']),
         'icon' => 'circle-dollar-sign',
         'caption' => 'A receber: ' . dinheiro($visao_geral['a_receber']),
+        'sensitive' => true,
     ]);
 }
 
@@ -64,9 +67,18 @@ if ($pode['os']) {
 }
 ?>
 <div class="flex flex-col gap-4 pt-2 pb-8" <?= js_module('painel/painel') ?>>
-    <header>
-        <h1 class="font-display text-heading-xl text-text">Painel</h1>
-        <p class="text-caption text-muted"><?= e(ucfirst(painelDataPorExtenso($hoje))) ?></p>
+    <header class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+            <h1 class="font-display text-heading-xl text-text">Painel</h1>
+            <p class="text-caption text-muted"><?= e(ucfirst(painelDataPorExtenso($hoje))) ?></p>
+        </div>
+        <?php if ($pode['lancamentos'] || $pode['balanco']) { ?>
+            <?php // Os dois botões se alternam por CSS (html[data-valores]); o módulo só troca o atributo e guarda a escolha no navegador.?>
+            <div>
+                <?= component('button', ['label' => 'Ocultar valores', 'icon' => 'eye-off', 'variant' => 'ghost', 'class' => 'painel-valores-ocultar', 'attrs' => ['data-valores-alternar' => true]]) ?>
+                <?= component('button', ['label' => 'Mostrar valores', 'icon' => 'eye', 'variant' => 'ghost', 'class' => 'painel-valores-mostrar', 'attrs' => ['data-valores-alternar' => true]]) ?>
+            </div>
+        <?php } ?>
     </header>
 
     <?php foreach ($avisos_sistema ?? [] as $aviso) { ?>
@@ -153,9 +165,10 @@ if ($pode['os']) {
             <?php if (array_sum($balanco['receitas']) + array_sum($balanco['despesas']) == 0) { ?>
                 <?= component('empty-state', ['title' => 'Nada pago em ' . $ano, 'message' => 'Os lançamentos pagos do ano aparecem aqui, mês a mês.', 'icon' => 'chart-column', 'class' => 'border-0']) ?>
             <?php } else { ?>
-                <div class="relative mt-4 h-72">
+                <div class="relative mt-4 h-72" data-valor-grafico>
                     <canvas data-grafico="balanco" role="img" aria-label="<?= e('Gráfico do balanço de ' . $ano) ?>"></canvas>
                 </div>
+                <p class="painel-valores-aviso mt-4 h-72 items-center justify-center text-caption text-muted">Valores ocultos.</p>
                 <div class="sr-only"><table>
                     <caption><?= e('Balanço de ' . $ano) ?></caption>
                     <thead><tr><th scope="col">Mês</th><th scope="col">Receitas</th><th scope="col">Despesas</th><th scope="col">Saldo</th></tr></thead>
@@ -235,7 +248,7 @@ if ($pode['os']) {
                                 : dataBr($l->data_vencimento)],
                             ['label' => 'Descrição', 'class' => 'min-w-40 [overflow-wrap:anywhere]', 'render' => fn ($l) => trim((string) $l->descricao . ((string) $l->cliente_fornecedor !== '' ? ' · ' . $l->cliente_fornecedor : ''))],
                             ['label' => 'Tipo', 'nowrap' => true, 'render' => fn ($l) => component('pill-status', $l->tipo === 'receita' ? ['label' => 'Receita', 'variant' => 'info'] : ['label' => 'Despesa', 'variant' => 'neutral'])],
-                            ['label' => 'Valor', 'align' => 'right', 'nowrap' => true, 'render' => fn ($l) => dinheiro($l->liquido)],
+                            ['label' => 'Valor', 'align' => 'right', 'nowrap' => true, 'render' => fn ($l) => component('valor-sensivel', ['value' => dinheiro($l->liquido)])],
                         ],
                         'empty' => component('empty-state', ['title' => 'Nenhum lançamento em aberto', 'message' => 'Receitas a receber e despesas a pagar aparecem aqui.', 'icon' => 'circle-dollar-sign', 'class' => 'border-0']),
                     ]) ?>

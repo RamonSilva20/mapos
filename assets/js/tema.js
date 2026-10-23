@@ -15,6 +15,9 @@
  *
  * 2. Sidebar recolhida do layout (chave mapos:sidebar), aplicada como
  *    <html data-sidebar="recolhida"> para a página já abrir no estado certo.
+ *
+ * 3. Valores ocultos no painel (chave mapos:valores-ocultos), aplicados como
+ *    <html data-valores="ocultos"> pelo mesmo motivo.
  */
 (function () {
   var html = document.documentElement;
@@ -39,6 +42,11 @@
 
   if (ler('mapos:sidebar') === 'recolhida') {
     html.setAttribute('data-sidebar', 'recolhida');
+  }
+
+  // Valores em dinheiro do painel ocultos pelo botão de olho (#3022).
+  if (ler('mapos:valores-ocultos') === '1') {
+    html.setAttribute('data-valores', 'ocultos');
   }
 
   if (!window.matchMedia) {

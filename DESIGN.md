@@ -287,6 +287,7 @@ Map-OS doesn't use traditional photography — it uses **illustrated stickers an
 
 **`kpi-card`** — summary cards above lists.
 - White card, 18px 20px padding, label at 14px / 500 `{colors.ink-muted}` with a 34px icon tile on `{colors.surface-subtle}`, value in the display face at 34px / 500, and a caption line that may carry a status-colored phrase (e.g., warning ink for "2 há mais de 5 dias").
+- Money on the dashboard (`sensitive`: the value and caption of "Saldo do mês", the balance chart, the "Lançamentos a vencer" amounts) can be hidden with a `button-ghost` eye toggle in the page header ("Ocultar valores" / "Mostrar valores", `eye-off` / `eye`; only the possible action is shown). Hidden values become `•••••` in `{colors.ink-muted}` (same contrast as a caption, on `{colors.surface}` in light and dark) and the chart is replaced by "Valores ocultos." The choice is per browser (localStorage `mapos:valores-ocultos`), a display preference and not access control.
 
 ### Feedback
 

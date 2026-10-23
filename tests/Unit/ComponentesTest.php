@@ -46,6 +46,7 @@ final class ComponentesTest extends MaposTestCase
             'link' => ['link', ['label' => 'Ana', 'href' => '/clientes/visualizar/1']],
             'pill-status' => ['pill-status', ['label' => 'Aberta', 'variant' => 'info']],
             'kpi-card' => ['kpi-card', ['label' => 'Abertas', 'value' => 18]],
+            'valor-sensivel' => ['valor-sensivel', ['value' => 'R$ 10,00']],
             'tabs' => ['tabs', ['items' => [['label' => 'Detalhes', 'url' => '/os/1', 'active' => true]]]],
             'checkbox' => ['checkbox', ['name' => 'aceite', 'label' => 'Aceito']],
             'radio' => ['radio', ['name' => 'prioridade', 'value' => 'normal', 'label' => 'Normal']],
@@ -74,7 +75,7 @@ final class ComponentesTest extends MaposTestCase
         sort($especificados);
 
         $this->assertSame($especificados, $partials);
-        $this->assertCount(21, $especificados);
+        $this->assertCount(22, $especificados);
     }
 
     // ------------------------------------------------------------ validação
@@ -654,6 +655,26 @@ final class ComponentesTest extends MaposTestCase
         $this->assertStringContainsString('sprite.svg#x"', $html);
         $this->assertStringContainsString('text-warning-ink', $html);
         $this->assertStringNotContainsString('<script>', $html);
+    }
+
+    public function testKpiCardSensivelMarcaOValorELegenda(): void
+    {
+        $normal = $this->html('kpi-card', ['label' => 'Saldo', 'value' => 'R$ 10,00', 'caption' => 'A receber: R$ 5,00']);
+        $this->assertStringNotContainsString('data-valor-sensivel', $normal);
+
+        $html = $this->html('kpi-card', ['label' => 'Saldo', 'value' => 'R$ 10,00', 'caption' => 'A receber: R$ 5,00', 'sensitive' => true]);
+        $this->assertSame(2, substr_count($html, 'data-valor-sensivel'));
+        $this->assertStringContainsString('<span data-valor-sensivel>R$ 10,00</span>', $html);
+        $this->assertStringContainsString('<span data-valor-sensivel>A receber: R$ 5,00</span>', $html);
+    }
+
+    public function testValorSensivelEscapaOTexto(): void
+    {
+        $html = $this->html('valor-sensivel', ['value' => '<b>R$ 1</b>']);
+
+        $this->assertStringContainsString('data-valor-sensivel', $html);
+        $this->assertStringNotContainsString('<b>', $html);
+        $this->assertStringContainsString('&lt;b&gt;', $html);
     }
 
     public function testTabsMarcaAAtivaComSegundaPista(): void

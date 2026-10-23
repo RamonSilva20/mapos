@@ -173,6 +173,7 @@ $statusOs = [
             <?= component('kpi-card', ['label' => 'Em andamento', 'value' => 7, 'icon' => 'file-text', 'caption' => 'tempo médio 2,4 dias']) ?>
             <?= component('kpi-card', ['label' => 'Aguardando peça', 'value' => 4, 'icon' => 'archive', 'caption' => html_purificado('<span class="font-semibold text-warning-ink">2 há mais de 5 dias</span>')]) ?>
             <?= component('kpi-card', ['label' => 'Finalizadas no mês', 'value' => 52, 'icon' => 'circle-check', 'caption' => 'R$ 18.430,00 faturados']) ?>
+            <?= component('kpi-card', ['label' => 'Saldo do mês', 'value' => 'R$ 4.210,00', 'icon' => 'circle-dollar-sign', 'caption' => 'A receber: R$ 1.980,00', 'sensitive' => true]) ?>
         </div>
 
         <?= componenteConteudo($secao('Abas (tabs)', 'Aba ativa com texto ink 600 e sublinhado laranja: o laranja fino nunca marca o estado sozinho.')) ?>

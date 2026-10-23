@@ -7,10 +7,14 @@
  * caption aceita HtmlSeguro, para uma frase com cor de status, por exemplo
  * html_purificado('<span class="font-semibold text-warning-ink">2 há mais de 5 dias</span>').
  *
+ * sensitive marca o valor e a legenda com data-valor-sensivel, para o painel
+ * poder ocultá-los (ver valor-sensivel).
+ *
  * @var string                       $label
  * @var string|int|float             $value
  * @var string|null                  $icon    Ícone Lucide do sprite
  * @var string|HtmlSeguro|array|null $caption
+ * @var bool                         $sensitive Valor e legenda são dinheiro: o botão de olho do painel os oculta (valor-sensivel)
  * @var string|null                  $id
  * @var string                       $class
  * @var array                        $attrs
@@ -27,6 +31,6 @@ $atributos = [
             <span class="inline-flex size-[34px] shrink-0 items-center justify-center rounded-md bg-surface-subtle text-text"><?= icon($icon, ['class' => 'size-4']) ?></span>
         <?php } ?>
     </div>
-    <p class="mt-2.5 font-display text-[2.125rem] leading-[1.1] font-medium tabular-nums"><?= e((string) $value) ?></p>
-    <?php if ($caption !== null) { ?><div class="mt-2 text-caption text-muted"><?= componenteConteudo($caption) ?></div><?php } ?>
+    <p class="mt-2.5 font-display text-[2.125rem] leading-[1.1] font-medium tabular-nums"><?= $sensitive ? component('valor-sensivel', ['value' => (string) $value]) : e((string) $value) ?></p>
+    <?php if ($caption !== null) { ?><div class="mt-2 text-caption text-muted"><?= $sensitive ? component('valor-sensivel', ['value' => $caption]) : componenteConteudo($caption) ?></div><?php } ?>
 </div>

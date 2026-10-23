@@ -192,6 +192,40 @@
 }
 
 /*
+ * Valores ocultos no painel (#3022): o botão de olho põe data-valores="ocultos"
+ * no <html>. O dinheiro (data-valor-sensivel) fica transparente, sem seleção, e
+ * pontos ocupam o lugar; o gráfico do balanço dá lugar a um aviso. Os dois
+ * botões se alternam: só aparece o da ação possível.
+ */
+[data-valor-sensivel] {
+  position: relative;
+}
+
+html[data-valores="ocultos"] [data-valor-sensivel] {
+  color: transparent;
+  user-select: none;
+}
+
+html[data-valores="ocultos"] [data-valor-sensivel]::after {
+  content: "•••••";
+  position: absolute;
+  inset: 0 auto auto 0;
+  color: var(--color-muted);
+  letter-spacing: 0.1em;
+}
+
+html[data-valores="ocultos"] [data-valor-grafico],
+html:not([data-valores="ocultos"]) .painel-valores-aviso,
+html:not([data-valores="ocultos"]) .painel-valores-mostrar,
+html[data-valores="ocultos"] .painel-valores-ocultar {
+  display: none;
+}
+
+html[data-valores="ocultos"] .painel-valores-aviso {
+  display: flex;
+}
+
+/*
  * Quem pede menos movimento (prefers-reduced-motion) não recebe transições nem
  * animações: botões, switch, abas, calendário e a rolagem suave (WCAG 2.3.3).
  */

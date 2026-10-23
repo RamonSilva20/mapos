@@ -4,6 +4,7 @@
 //   com o saldo em linha) e OS por status. Os números vêm do page_data
 //   "painel-dados"; as cores, dos tokens (--color-*), lidas de novo quando o
 //   modo claro/escuro muda.
+// - Botão de olho (#3022): oculta o dinheiro do painel, preferência deste navegador.
 // - Agenda (FullCalendar 6): as OS pela data final, de mapos/calendario, com
 //   o filtro de status. Clicar numa OS abre o modal "agenda-os", preenchido
 //   com textContent.
@@ -210,6 +211,43 @@ async function iniciarAgenda(raiz, { doc, get }) {
     filtro?.addEventListener('change', () => agenda.refetchEvents());
 }
 
+export const CHAVE_VALORES = 'mapos:valores-ocultos';
+
+/** Próximo estado do botão de olho: ocultar ↔ mostrar. */
+export function alternarValores(ocultos) {
+    return !ocultos;
+}
+
+/**
+ * Botão de olho (#3022): oculta ou mostra o dinheiro do painel. A escolha vale
+ * só neste navegador (localStorage); o tema.js a aplica antes da primeira
+ * pintura. Com o localStorage bloqueado, vale até a próxima página.
+ */
+function iniciarValores(doc, armazem = globalThis.localStorage) {
+    const html = doc.documentElement;
+
+    for (const botao of doc.querySelectorAll('[data-valores-alternar]')) {
+        botao.addEventListener('click', () => {
+            const ocultos = alternarValores(html.getAttribute('data-valores') === 'ocultos');
+            if (ocultos) {
+                html.setAttribute('data-valores', 'ocultos');
+            } else {
+                html.removeAttribute('data-valores');
+            }
+
+            try {
+                if (ocultos) {
+                    armazem?.setItem(CHAVE_VALORES, '1');
+                } else {
+                    armazem?.removeItem(CHAVE_VALORES);
+                }
+            } catch {
+                // localStorage bloqueado: a escolha vale só até a próxima página.
+            }
+        });
+    }
+}
+
 export default function iniciar(raiz, { doc = document, get = getPadrao } = {}) {
     const dados = lerJson('painel-dados', null, doc);
 
@@ -217,6 +255,7 @@ export default function iniciar(raiz, { doc = document, get = getPadrao } = {}) 
         console.error('[painel]', erro);
     };
 
+    iniciarValores(doc);
     iniciarGraficos(raiz, dados, doc).catch(avisar);
     iniciarAgenda(raiz, { doc, get }).catch(avisar);
 }

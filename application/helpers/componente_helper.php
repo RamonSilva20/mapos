@@ -229,8 +229,13 @@ if (! function_exists('componenteEspecificacoes')) {
                 'padrao' => [
                     'icon' => null,
                     'caption' => null,
+                    'sensitive' => false,
                 ],
                 'formatos' => ['icon' => COMPONENTE_ICONE],
+            ],
+            'valor-sensivel' => [
+                'obrigatorias' => ['value'],
+                'padrao' => [],
             ],
             'tabs' => [
                 'obrigatorias' => ['items'],
