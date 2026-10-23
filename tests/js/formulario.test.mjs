@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 
 import { formatarCep, formatarDinheiro, formatarDocumento, formatarTelefone, somenteDigitos } from '../../assets/js/lib/mascaras.js';
 import { MENSAGENS, marcarCarregando, mensagemDoCampo, semDescritor } from '../../assets/js/lib/formulario.js';
-import { consultarCnpj, dadosDoCnpj, dadosDoCnpjWs, enderecoDoCep, preencherVazios, URL_CNPJ, URL_CNPJ_MINHA_RECEITA, URL_CNPJ_WS } from '../../assets/js/modules/clientes/formulario.js';
+import { consultarCnpj, dadosDoCnpj, dadosDoCnpjWs, enderecoDoCep, ligarBuscas, preencherEndereco, preencherSobrescrevendo, preencherVazios, URL_CEP, URL_CNPJ, URL_CNPJ_MINHA_RECEITA, URL_CNPJ_WS } from '../../assets/js/modules/clientes/formulario.js';
 import { aplicarMascara } from '../../assets/js/modules/formulario/padrao.js';
 
 test('máscara de CPF, CNPJ e CNPJ alfanumérico', () => {
@@ -368,6 +368,135 @@ test('preenche só os campos vazios', () => {
     assert.equal(campos.nomeCliente.value, 'Digitado');
     assert.equal(campos.cidade.value, 'Brasília');
     assert.equal(campos.estado.value, 'DF');
+});
+
+test('dados do CNPJ sobrescrevem o que o navegador ou uma busca anterior deixou', () => {
+    const campos = {
+        nomeCliente: { value: 'Nome Do Navegador' },
+        contato: { value: '' },
+        telefone: { value: '' },
+        email: { value: '' },
+        cep: { value: '' },
+        rua: { value: '' },
+        numero: { value: '' },
+        complemento: { value: '' },
+        bairro: { value: '' },
+        cidade: { value: 'Cidade Do Autofill' },
+        estado: { value: '' },
+    };
+    const formulario = { elements: { namedItem: (nome) => campos[nome] ?? null } };
+
+    const total = preencherSobrescrevendo(formulario, dadosDoCnpj({
+        razao_social: 'BANCO DO BRASIL SA',
+        nome_fantasia: 'DIRECAO GERAL',
+        ddd_telefone_1: '6134939002',
+        email: null,
+        cep: '70040912',
+        descricao_tipo_de_logradouro: 'QUADRA',
+        logradouro: 'SAUN QUADRA 5 BLOCO B',
+        numero: 'SN',
+        complemento: 'ANDAR 1',
+        bairro: 'ASA NORTE',
+        municipio: 'BRASILIA',
+        uf: 'DF',
+    }));
+
+    assert.equal(campos.nomeCliente.value, 'Banco Do Brasil Sa', 'O nome do autofill é corrigido pela Receita.');
+    assert.equal(campos.cidade.value, 'Brasilia', 'A cidade do autofill é corrigida.');
+    assert.equal(campos.telefone.value, '(61) 3493-9002');
+    assert.equal(campos.cep.value, '70040-912');
+    assert.equal(campos.bairro.value, 'Asa Norte');
+    assert.equal(campos.email.value, '', 'E-mail vazio na Receita não escreve nada.');
+    assert.equal(total, 10);
+});
+
+test('endereço do CEP sobrescreve rua/bairro/cidade/estado e preserva número/complemento', () => {
+    const campos = {
+        rua: { value: 'Rua Antiga' },
+        numero: { value: '100' },
+        complemento: { value: '' },
+        bairro: { value: '' },
+        cidade: { value: 'Cidade Velha' },
+        estado: { value: 'RJ' },
+    };
+    const formulario = { elements: { namedItem: (nome) => campos[nome] ?? null } };
+
+    const total = preencherEndereco(formulario, {
+        rua: 'Praça da Sé', complemento: 'lado ímpar', bairro: 'Sé', cidade: 'São Paulo', estado: 'SP',
+    });
+
+    assert.equal(total, 5);
+    assert.equal(campos.rua.value, 'Praça da Sé', 'A rua já preenchida é corrigida pela consulta.');
+    assert.equal(campos.numero.value, '100', 'O número digitado é mantido.');
+    assert.equal(campos.complemento.value, 'lado ímpar');
+    assert.equal(campos.bairro.value, 'Sé');
+    assert.equal(campos.cidade.value, 'São Paulo');
+    assert.equal(campos.estado.value, 'SP');
+});
+
+test('endereço do CEP não apaga campos quando o ViaCEP não traz o logradouro', () => {
+    const campos = {
+        rua: { value: 'Rua Que Eu Digitei' },
+        numero: { value: '' },
+        complemento: { value: 'Apto 42' },
+        bairro: { value: '' },
+        cidade: { value: '' },
+        estado: { value: '' },
+    };
+    const formulario = { elements: { namedItem: (nome) => campos[nome] ?? null } };
+
+    const total = preencherEndereco(formulario, {
+        rua: '', complemento: '', bairro: '', cidade: 'Jundiaí', estado: 'SP',
+    });
+
+    assert.equal(total, 2);
+    assert.equal(campos.rua.value, 'Rua Que Eu Digitei', 'Valor vazio do ViaCEP não apaga a rua digitada.');
+    assert.equal(campos.complemento.value, 'Apto 42', 'O complemento digitado é preservado.');
+    assert.equal(campos.cidade.value, 'Jundiaí');
+    assert.equal(campos.estado.value, 'SP');
+});
+
+test('CEP: resposta antiga não sobrescreve o endereço do CEP mais novo', async () => {
+    const resolvers = {};
+    global.document = { getElementById: () => null };
+    global.fetch = (url) => new Promise((resolve) => { resolvers[url] = resolve; });
+
+    const cep = {
+        value: '', id: 'cep',
+        addEventListener(tipo, fn) { this[tipo] = fn; },
+        setAttribute() {}, removeAttribute() {}, getAttribute: () => null,
+        classList: { add() {}, remove() {} },
+    };
+    const campos = {
+        cep,
+        rua: { value: '' }, bairro: { value: '' }, cidade: { value: '' }, estado: { value: '' },
+        complemento: { value: '' }, numero: { value: '', focus() {} },
+    };
+    const formulario = { elements: { namedItem: (nome) => campos[nome] ?? null }, querySelector: () => null };
+
+    try {
+        ligarBuscas(formulario);
+
+        cep.value = '01001-000';
+        const buscaA = cep.input();
+        cep.value = '20040-002';
+        const buscaB = cep.input();
+
+        // A resposta do CEP novo (B) chega primeiro e é aplicada.
+        resolvers[URL_CEP('20040002')](resposta(200, { logradouro: 'Rua B', bairro: 'Centro', localidade: 'Rio de Janeiro', uf: 'RJ' }));
+        await buscaB;
+        // A do CEP antigo (A) chega depois e deve ser ignorada.
+        resolvers[URL_CEP('01001000')](resposta(200, { logradouro: 'Praça da Sé', bairro: 'Sé', localidade: 'São Paulo', uf: 'SP' }));
+        await buscaA;
+
+        assert.equal(campos.cidade.value, 'Rio de Janeiro', 'A resposta antiga do CEP A não substitui o endereço do CEP B.');
+        assert.equal(campos.rua.value, 'Rua B');
+        assert.equal(campos.bairro.value, 'Centro');
+        assert.equal(campos.estado.value, 'RJ');
+    } finally {
+        delete global.fetch;
+        delete global.document;
+    }
 });
 
 test('máscara de dinheiro: centavos da direita, milhar com ponto', () => {

@@ -9,9 +9,9 @@
 // usava JSONP, que a CSP da v5 bloqueia). Todas as APIs mandam CORS e estão no
 // connect-src da CSP (application/helpers/seguranca_cabecalhos_helper.php).
 //
-// Os dados só preenchem campos vazios: nada que o usuário digitou é apagado.
-// Falha de consulta vira erro no próprio campo (CEP ou CPF/CNPJ), como os
-// erros de validação; o sucesso da busca de CNPJ mostra um toast.
+// O CNPJ e o CEP sobrescrevem os campos com o que a consulta traz; número e
+// complemento digitados são preservados. Falha de consulta vira erro no próprio
+// campo (CEP ou CPF/CNPJ), como os erros de validação; o sucesso do CNPJ mostra um toast.
 
 import { mostrarErroDoCampo } from '../../lib/formulario.js';
 import { formatarCep, formatarTelefone, somenteDigitos } from '../../lib/mascaras.js';
@@ -104,6 +104,31 @@ export function preencherVazios(formulario, valores) {
     return preenchidos;
 }
 
+/** Preenche os campos sobrescrevendo o que houver; devolve quantos mudaram. */
+export function preencherSobrescrevendo(formulario, valores) {
+    let preenchidos = 0;
+
+    for (const [nome, valor] of Object.entries(valores)) {
+        const campo = formulario.elements.namedItem(nome);
+        if (campo && valor && campo.value !== valor) {
+            campo.value = valor;
+            preenchidos++;
+        }
+    }
+
+    return preenchidos;
+}
+
+const CAMPOS_DO_CEP = ['rua', 'bairro', 'cidade', 'estado'];
+
+/** Endereço do ViaCEP: sobrescreve rua/bairro/cidade/estado e só preenche o complemento vazio. */
+export function preencherEndereco(formulario, endereco) {
+    const principais = Object.fromEntries(CAMPOS_DO_CEP.map((nome) => [nome, endereco[nome]]));
+
+    return preencherSobrescrevendo(formulario, principais)
+        + preencherVazios(formulario, { complemento: endereco.complemento });
+}
+
 async function consultar(url, buscar = fetch) {
     const resposta = await buscar(url, { headers: { Accept: 'application/json' } });
     if (!resposta.ok) {
@@ -193,13 +218,18 @@ export function ligarBuscas(formulario, raiz = formulario) {
         cep.setAttribute('aria-busy', 'true');
         try {
             const endereco = enderecoDoCep(await consultar(URL_CEP(digitos)));
+            // Entre o pedido e a resposta o usuário pode ter trocado o CEP: uma
+            // resposta antiga não pode sobrescrever o endereço do CEP atual.
+            if (digitos !== ultimoCep) {
+                return;
+            }
             if (!endereco) {
                 mostrarErroDoCampo(cep, 'CEP não encontrado. Confira ou preencha o endereço à mão.');
                 return;
             }
 
             mostrarErroDoCampo(cep, '');
-            preencherVazios(formulario, endereco);
+            preencherEndereco(formulario, endereco);
             formulario.elements.namedItem('numero')?.focus();
         } catch {
             mostrarErroDoCampo(cep, 'Não foi possível consultar o CEP agora. Preencha o endereço à mão.');
@@ -226,7 +256,7 @@ export function ligarBuscas(formulario, raiz = formulario) {
             }
 
             mostrarErroDoCampo(documento, '');
-            const preenchidos = preencherVazios(formulario, dados);
+            const preenchidos = preencherSobrescrevendo(formulario, dados);
             mostrarToast({
                 variante: 'success',
                 mensagem: preenchidos ? `${preenchidos} campos preenchidos com os dados da Receita. Confira antes de salvar.` : 'Os campos já estavam preenchidos; nada foi alterado.',
