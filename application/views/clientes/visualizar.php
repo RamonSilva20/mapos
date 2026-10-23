@@ -7,8 +7,9 @@
  *   ghost, e confirma num modal-confirm.
  * - Abas por link (?aba=dados|os|vendas), com o total de cada lista: só a
  *   aba aberta consulta as OS ou as vendas.
- * - OS e vendas mais recentes em data-table, com status em pill-status e as
- *   ações conforme as permissões de OS e de vendas.
+ * - OS e vendas, das mais recentes às mais antigas, em data-table paginada
+ *   (?inicio=), com status em pill-status e as ações conforme as permissões
+ *   de OS e de vendas.
  *
  * @var object $cliente
  * @var string $aba          dados | os | vendas
@@ -17,6 +18,7 @@
  * @var list<object> $os
  * @var list<object> $vendas
  * @var array<string, bool> $pode
+ * @var array|null $paginacao  props do componente pagination (null na aba Dados)
  */
 $id = (int) $cliente->idClientes;
 $url = static fn (string $aba) => site_url('clientes/visualizar/' . $id) . ($aba === 'dados' ? '' : listagemQuery(['aba' => $aba]));
@@ -121,9 +123,7 @@ $secoes = [
                 }],
             ],
         ]) ?>
-        <?php if ($total_os > count($os)) { ?>
-            <p class="text-caption text-muted"><?= e('Mostrando as ' . count($os) . ' mais recentes de ' . $total_os . '.') ?></p>
-        <?php } ?>
+        <?= component('pagination', $paginacao) ?>
     <?php } else { ?>
         <?= component('data-table', [
             'caption' => 'Vendas do cliente',
@@ -147,9 +147,7 @@ $secoes = [
                 }],
             ],
         ]) ?>
-        <?php if ($total_vendas > count($vendas)) { ?>
-            <p class="text-caption text-muted"><?= e('Mostrando as ' . count($vendas) . ' mais recentes de ' . $total_vendas . '.') ?></p>
-        <?php } ?>
+        <?= component('pagination', $paginacao) ?>
     <?php } ?>
 </div>
 

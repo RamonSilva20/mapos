@@ -61,6 +61,27 @@ final class ClienteFichaTest extends MaposTestCase
         $this->assertSame(1, $model->contarVendasDoCliente(2));
         $this->assertSame([4, 2], array_map('intval', array_column($model->osDoCliente(1, 2), 'idOs')));
         $this->assertSame([4, 2, 1], array_map('intval', array_column($model->vendasDoCliente(1, 10), 'idVendas')));
+        // Segunda página e página além do total.
+        $this->assertSame([1], array_map('intval', array_column($model->osDoCliente(1, 2, 2), 'idOs')));
+        $this->assertSame([], $model->osDoCliente(1, 2, 10));
+        $this->assertSame([1], array_map('intval', array_column($model->vendasDoCliente(1, 2, 2), 'idVendas')));
+    }
+
+    /** O offset vai em ?inicio=, junto da aba, porque o segmento 3 da URL é o id do cliente. */
+    public function testPaginacaoDaFichaMantemAAba(): void
+    {
+        $props = paginacaoProps([
+            'base_url' => 'http://mapos.test/index.php/clientes/visualizar/5',
+            'total_rows' => 45,
+            'per_page' => 20,
+            'offset' => 20,
+            'query_string' => 'inicio',
+            'params' => ['aba' => 'os'],
+        ]);
+
+        $this->assertSame(3, $props['total_pages']);
+        $this->assertSame(2, $props['current']);
+        $this->assertSame('http://mapos.test/index.php/clientes/visualizar/5?aba=os&inicio={offset}', $props['url']);
     }
 
     /**

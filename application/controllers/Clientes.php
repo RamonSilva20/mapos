@@ -6,9 +6,6 @@ if (! defined('BASEPATH')) {
 
 class Clientes extends MY_Controller
 {
-    /** Quantas OS e vendas recentes a ficha do cliente mostra. */
-    public const RECENTES = 20;
-
     /** Filtros da listagem, na query string (listagemFiltros()). */
     public const FILTROS = [
         'pesquisa' => 'texto',
@@ -237,8 +234,14 @@ class Clientes extends MY_Controller
         $this->data['aba'] = $aba;
         $this->data['total_os'] = $this->clientes_model->contarOsDoCliente($id);
         $this->data['total_vendas'] = $this->clientes_model->contarVendasDoCliente($id);
-        $this->data['os'] = $aba === 'os' ? $this->clientes_model->osDoCliente($id, self::RECENTES) : [];
-        $this->data['vendas'] = $aba === 'vendas' ? $this->clientes_model->vendasDoCliente($id, self::RECENTES) : [];
+        // O segmento 3 da URL é o id do cliente: o início da página vai na query string.
+        $porPagina = (int) $this->data['configuration']['per_page'];
+        $offset = max(0, (int) $this->input->get('inicio'));
+        $this->data['os'] = $aba === 'os' ? $this->clientes_model->osDoCliente($id, $porPagina, $offset) : [];
+        $this->data['vendas'] = $aba === 'vendas' ? $this->clientes_model->vendasDoCliente($id, $porPagina, $offset) : [];
+        $this->data['paginacao'] = $aba === 'dados'
+            ? null
+            : $this->paginacao(site_url('clientes/visualizar/' . $id), $aba === 'os' ? $this->data['total_os'] : $this->data['total_vendas'], $offset, 'inicio', ['aba' => $aba]);
         $this->data['pode'] = [
             'editar' => $this->permite('eCliente'),
             'excluir' => $this->permite('dCliente'),
