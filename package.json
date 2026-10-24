@@ -1,0 +1,41 @@
+{
+  "name": "mapos",
+  "private": true,
+  "description": "Assets do Map-OS: Tailwind CSS e bibliotecas de JavaScript",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "npm run build:css && npm run build:vendor && npm run build:stickers",
+    "build:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --minify && tailwindcss -i assets/src/layout.css -o assets/dist/layout.css --minify && tailwindcss -i assets/src/imprimir.css -o assets/dist/imprimir.css --minify && tailwindcss -i assets/src/instalador.css -o install/assets/css/instalador.css --minify && npm run build:pdf",
+    "build:stickers": "svgo --multipass --quiet -f assets/src/stickers -o assets/img/stickers",
+    "build:vendor": "node scripts/build-vendor.mjs",
+    "test:js": "node --test tests/js/*.mjs",
+    "watch:css": "tailwindcss -i assets/src/app.css -o assets/dist/app.css --watch",
+    "watch:layout": "tailwindcss -i assets/src/layout.css -o assets/dist/layout.css --watch",
+    "build:pdf": "node scripts/build-pdf-css.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
+    "lightningcss": "1.32.0",
+    "svgo": "4.1.0",
+    "tailwindcss": "4.3.3"
+  },
+  "dependencies": {
+    "@fontsource/rubik": "5.3.0",
+    "@fontsource/space-grotesk": "5.3.0",
+    "@fullcalendar/core": "6.1.21",
+    "alpinejs": "3.17.4",
+    "chart.js": "4.5.1",
+    "flatpickr": "4.6.13",
+    "fullcalendar": "6.1.21",
+    "imask": "7.6.1",
+    "lucide-static": "1.53.0",
+    "sweetalert2": "11.26.25",
+    "tom-select": "2.6.2"
+  },
+  "overrides": {
+    "@parcel/watcher": "2.6.0"
+  }
+}

@@ -1,208 +1,122 @@
- <div class="span12" style="margin-left: 0; margin-top: 0">
-    <div class="span12" style="margin-left: 0">
-        <form action="<?php echo current_url() ?>">
-            <div class="span10" style="margin-left: 0">
-                <input type="text" class="span12" name="termo" placeholder="Digite o termo a pesquisar"/>
-            </div>
-            <div class="span2">
-                <button class="button btn btn-mini btn-warning">
-                  <span class="button__icon"><i class='bx bx-search-alt'></i></span> <span class="button__text2">Pesquisar</span></button>
-            </div>
-        </form>
-    </div>
-    <div class="span12" style="margin-left: 0; margin-top: 0">
-        <!--Produtoss-->
-        <div class="span6" style="margin-left: 0; margin-top: 0">
-            <div class="widget-box" style="min-height: 200px">
-                <div class="widget-title" style="margin: -20px 0 0">
-                    <span class="icon">
-                        <i class="fas fa-shopping-bag"></i>
-                    </span>
-                    <h5>Produtos</h5>
-                </div>
-                <div class="widget-content nopadding tab-content">
-                    <table class="table table-bordered ">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th>Preço</th>
-                            <th>Estoque</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        if ($produtos == null) {
-                            echo '<tr><td colspan="4">Nenhum produto foi encontrado.</td></tr>';
-                        }
-        foreach ($produtos as $r) {
-            echo '<tr>';
-            echo '<td>' . $r->idProdutos . '</td>';
-            echo '<td>' . $r->descricao . '</td>';
-            echo '<td>' . $r->precoVenda . '</td>';
-            echo '<td>' . $r->estoque . '</td>';
-            echo '<td>';
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/produtos/visualizar/' . $r->idProdutos . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
-            }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eProduto')) {
-                echo '<a href="' . base_url() . 'index.php/produtos/editar/' . $r->idProdutos . '" class="btn-nwe3" title="Editar produto"><i class="bx bx-edit"></i></a>';
-            }
-            echo '</td>';
-            echo '</tr>';
-        } ?>
-                        <tr>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!--Clientes-->
-        <div class="span6">
-            <div class="widget-box" style="min-height: 200px">
-                <div class="widget-title" style="margin: -20px 0 0">
-                    <span class="icon">
-                        <i class="fas fa-user"></i>
-                    </span>
-                    <h5>Clientes</h5>
-                </div>
-                <div class="widget-content nopadding tab-content">
-                    <table class="table table-bordered ">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th>CPF/CNPJ</th>
-                            <th>Cliente / Fornecedor</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-        if ($clientes == null) {
-            echo '<tr><td colspan="4">Nenhum cliente foi encontrado.</td></tr>';
-        }
-        foreach ($clientes as $r) {
-            echo '<tr>';
-            echo '<td>' . $r->idClientes . '</td>';
-            echo '<td>' . $r->nomeCliente . '</td>';
-            echo '<td>' . $r->documento . '</td>';
-            $cor = ($r->fornecedor ? '#CDB380' : '#CD0000');
-            echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . ($r->fornecedor ? 'Fornecedor' : 'Cliente') . '</span> </td>';
-            echo '<td>';
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/clientes/visualizar/' . $r->idClientes . '" class="btn tip-top" title="Ver mais detalhes"><i class="fas fa-eye"></i></a>';
-            }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                echo '<a href="' . base_url() . 'index.php/clientes/editar/' . $r->idClientes . '" class="btn btn-info tip-top" title="Editar Cliente"><i class="fas fa-edit"></i></a>';
-            }
-            echo '</td>';
-            echo '</tr>';
-        }
-        ?>
-                        <tr>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Serviços-->
-    <div class="span6" style="margin-left: 0">
-        <div class="widget-box" style="min-height: 200px">
-            <div class="widget-title" style="margin: -20px 0 0">
-                <span class="icon">
-                    <i class="fas fa-wrench"></i>
-                </span>
-                <h5>Serviços</h5>
-            </div>
-            <div class="widget-content nopadding tab-content">
-                <table class="table table-bordered ">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nome</th>
-                        <th>Preço</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    if ($servicos == null) {
-                        echo '<tr><td colspan="4">Nenhum serviço foi encontrado.</td></tr>';
-                    }
-        foreach ($servicos as $r) {
-            echo '<tr>';
-            echo '<td>' . $r->idServicos . '</td>';
-            echo '<td>' . $r->nome . '</td>';
-            echo '<td>' . $r->preco . '</td>';
-            echo '<td>';
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eServico')) {
-                echo '<a href="' . base_url() . 'index.php/servicos/editar/' . $r->idServicos . '" class="btn btn-info tip-top" title="Editar Serviço"><i class="fas fa-edit"></i></a>';
-            }
-            echo '</td>';
-            echo '</tr>';
-        }
-        ?>
-                    <tr>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <!--Ordens de Serviço-->
-    <div class="span6">
-        <div class="widget-box" style="min-height: 200px">
-            <div class="widget-title" style="margin: -20px 0 0">
-                <span class="icon">
-                    <i class="fas fa-diagnoses"></i>
-                </span>
-                <h5>Ordens de Serviço</h5>
-            </div>
-            <div class="widget-content nopadding tab-content">
-                <table class="table table-bordered ">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Data Inicial</th>
-                        <th>Descrição</th>
-                        <th>Defeito</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-        if ($os == null) {
-            echo '<tr><td colspan="4">Nenhuma os foi encontrado.</td></tr>';
-        }
-        foreach ($os as $r) {
-            $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-            $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-            echo '<tr>';
-            echo '<td>' . $r->idOs . '</td>';
-            echo '<td>' . $dataInicial . '</td>';
-            echo '<td>' . printSafeHtml($r->descricaoProduto) . '</td>';
-            echo '<td>' . printSafeHtml($r->defeito) . '</td>';
-            echo '<td>';
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn-nwe" title="Ver mais detalhes"><i class="bx bx-show"></i></a>';
-            }
-            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                echo '<a href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn-nwe3" title="Editar OS"><i class="bx bx-edit"></i></a>';
-            }
-            echo '</td>';
-            echo '</tr>';
-        }
-        ?>
-                    <tr>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+<?php
+/**
+ * Busca geral (#2855): clientes, OS, produtos e serviços que combinam com o
+ * termo. É a tela da busca da topbar. Cada grupo só aparece para quem pode
+ * visualizá-lo; as ações de editar, só com a permissão de editar.
+ *
+ * @var string       $termo
+ * @var list<object> $clientes
+ * @var list<object> $os
+ * @var list<object> $produtos
+ * @var list<object> $servicos
+ * @var array<string, bool> $pode
+ */
+$acao = static fn (string $rotulo, string $icone, string $url) => component('button', ['label' => $rotulo, 'icon' => $icone, 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url($url)]);
+
+$grupos = [
+    'clientes' => [
+        'titulo' => 'Clientes e fornecedores',
+        'icone' => 'users',
+        'vazio' => 'Nenhum cliente encontrado.',
+        'linhas' => $clientes,
+        'colunas' => [
+            ['key' => 'idClientes', 'label' => 'Cód.', 'align' => 'right', 'nowrap' => true],
+            ['label' => 'Nome', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($c) => component('link', ['label' => (string) $c->nomeCliente, 'href' => site_url('clientes/visualizar/' . (int) $c->idClientes), 'class' => 'font-medium'])],
+            ['label' => 'Documento', 'nowrap' => true, 'hide_until' => 'md', 'render' => fn ($c) => (string) $c->documento],
+            ['label' => 'Tipo', 'nowrap' => true, 'render' => fn ($c) => component('pill-status', $c->fornecedor ? ['label' => 'Fornecedor', 'variant' => 'info'] : ['label' => 'Cliente', 'variant' => 'neutral'])],
+            ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => fn ($c) => array_filter([
+                $acao('Ver ' . $c->nomeCliente, 'eye', 'clientes/visualizar/' . (int) $c->idClientes),
+                $pode['editar_cliente'] ? $acao('Editar ' . $c->nomeCliente, 'pencil', 'clientes/editar/' . (int) $c->idClientes) : null,
+            ])],
+        ],
+    ],
+    'os' => [
+        'titulo' => 'Ordens de serviço',
+        'icone' => 'file-text',
+        'vazio' => 'Nenhuma OS encontrada.',
+        'linhas' => $os,
+        'colunas' => [
+            ['label' => 'OS', 'nowrap' => true, 'render' => fn ($o) => component('link', ['label' => 'OS #' . (int) $o->idOs, 'href' => site_url('os/visualizar/' . (int) $o->idOs), 'class' => 'font-medium'])],
+            ['label' => 'Equipamento', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($o) => osTextoCurto($o->descricaoProduto, 60) ?: '—'],
+            ['label' => 'Entrada', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'md', 'render' => fn ($o) => dataBr($o->dataInicial)],
+            ['label' => 'Status', 'nowrap' => true, 'render' => fn ($o) => component('pill-status', osStatusPill($o->status))],
+            ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => fn ($o) => array_filter([
+                $acao('Ver OS #' . (int) $o->idOs, 'eye', 'os/visualizar/' . (int) $o->idOs),
+                $pode['editar_os'] ? $acao('Editar OS #' . (int) $o->idOs, 'pencil', 'os/editar/' . (int) $o->idOs) : null,
+            ])],
+        ],
+    ],
+    'produtos' => [
+        'titulo' => 'Produtos',
+        'icone' => 'package',
+        'vazio' => 'Nenhum produto encontrado.',
+        'linhas' => $produtos,
+        'colunas' => [
+            ['key' => 'idProdutos', 'label' => 'Cód.', 'align' => 'right', 'nowrap' => true],
+            ['label' => 'Descrição', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($p) => component('link', ['label' => (string) $p->descricao, 'href' => site_url('produtos/visualizar/' . (int) $p->idProdutos), 'class' => 'font-medium'])],
+            ['label' => 'Preço', 'align' => 'right', 'nowrap' => true, 'render' => fn ($p) => dinheiro($p->precoVenda)],
+            ['label' => 'Estoque', 'align' => 'right', 'nowrap' => true, 'hide_until' => 'md', 'render' => fn ($p) => (string) $p->estoque],
+            ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => fn ($p) => array_filter([
+                $acao('Ver ' . $p->descricao, 'eye', 'produtos/visualizar/' . (int) $p->idProdutos),
+                $pode['editar_produto'] ? $acao('Editar ' . $p->descricao, 'pencil', 'produtos/editar/' . (int) $p->idProdutos) : null,
+            ])],
+        ],
+    ],
+    'servicos' => [
+        'titulo' => 'Serviços',
+        'icone' => 'wrench',
+        'vazio' => 'Nenhum serviço encontrado.',
+        'linhas' => $servicos,
+        'colunas' => [
+            ['key' => 'idServicos', 'label' => 'Cód.', 'align' => 'right', 'nowrap' => true],
+            ['label' => 'Nome', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($s) => (string) $s->nome],
+            ['label' => 'Preço', 'align' => 'right', 'nowrap' => true, 'render' => fn ($s) => dinheiro($s->preco)],
+            ['label' => 'Ações', 'align' => 'right', 'nowrap' => true, 'render' => fn ($s) => $pode['editar_servico'] ? $acao('Editar ' . $s->nome, 'pencil', 'servicos/editar/' . (int) $s->idServicos) : ''],
+        ],
+    ],
+];
+$visiveis = array_filter($grupos, static fn (string $chave) => $pode[$chave], ARRAY_FILTER_USE_KEY);
+$total = array_sum(array_map(static fn (array $g) => count($g['linhas']), $visiveis));
+?>
+<div class="flex flex-col gap-4 pt-2 pb-8">
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Busca</h1>
+        <p class="text-caption text-muted" aria-live="polite">
+            <?= e($termo === '' ? 'Procure clientes, OS, produtos e serviços.' : ($total === 0 ? 'Nada encontrado para “' . $termo . '”.' : ($total === 1 ? '1 resultado' : $total . ' resultados') . ' para “' . $termo . '”.')) ?>
+        </p>
+    </header>
+
+    <form method="get" action="<?= e(site_url('mapos/pesquisar')) ?>" role="search" aria-label="Buscar no sistema" class="grid items-end gap-3 rounded-xl border border-border bg-surface p-4 sm:grid-cols-[minmax(0,1fr)_auto]">
+        <?= component('input', [
+            'name' => 'termo',
+            'label' => 'Buscar',
+            'type' => 'search',
+            'value' => $termo !== '' ? $termo : null,
+            'placeholder' => 'Nome, documento, telefone, OS, produto ou serviço',
+            'attrs' => ['maxlength' => 100, 'autofocus' => $termo === ''],
+        ]) ?>
+        <?= component('button', ['label' => 'Buscar', 'icon' => 'search', 'variant' => 'outline', 'type' => 'submit']) ?>
+    </form>
+
+    <?php if ($termo === '') { ?>
+        <?= component('empty-state', ['title' => 'O que você procura?', 'message' => 'Digite um nome, documento, telefone, número de OS, produto ou serviço.', 'icon' => 'search']) ?>
+    <?php } elseif ($visiveis === []) { ?>
+        <?= component('empty-state', ['title' => 'Sem acesso à busca', 'message' => 'Seu nível de acesso não permite visualizar clientes, OS, produtos ou serviços.', 'icon' => 'search-x']) ?>
+    <?php } else { ?>
+        <?php foreach ($visiveis as $chave => $grupo) { ?>
+            <section class="flex flex-col gap-2" aria-labelledby="<?= e('busca-' . $chave) ?>">
+                <h2 id="<?= e('busca-' . $chave) ?>" class="flex items-center gap-2 text-heading-sm text-text">
+                    <?= icon($grupo['icone'], ['class' => 'size-5 text-muted']) ?>
+                    <?= e($grupo['titulo']) ?>
+                    <span class="text-caption font-normal text-muted"><?= e((string) count($grupo['linhas'])) ?></span>
+                </h2>
+                <?= component('data-table', [
+                    'columns' => $grupo['colunas'],
+                    'rows' => $grupo['linhas'],
+                    'caption' => $grupo['titulo'],
+                    'empty' => component('empty-state', ['title' => $grupo['vazio'], 'icon' => 'search-x', 'class' => 'border-0']),
+                ]) ?>
+            </section>
+        <?php } ?>
+    <?php } ?>
 </div>

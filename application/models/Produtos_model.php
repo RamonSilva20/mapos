@@ -25,6 +25,40 @@ class Produtos_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Produtos da listagem (#2841), do mais recente para o mais antigo.
+     *
+     * @param  array{pesquisa?: string, estoque?: 'baixo'}  $filtros  Saída de listagemFiltros()
+     */
+    public function listar(array $filtros, int $limite, int $offset): array
+    {
+        $this->aplicarFiltros($filtros);
+
+        return $this->db->order_by('idProdutos', 'desc')->limit($limite, max(0, $offset))->get('produtos')->result();
+    }
+
+    public function contar(array $filtros): int
+    {
+        $this->aplicarFiltros($filtros);
+
+        return (int) $this->db->count_all_results('produtos');
+    }
+
+    /**
+     * pesquisa procura na descrição e no código de barras; estoque=baixo
+     * mostra quem está no mínimo ou abaixo dele (com mínimo definido).
+     */
+    private function aplicarFiltros(array $filtros): void
+    {
+        if (($filtros['pesquisa'] ?? '') !== '') {
+            $this->db->group_start()->like('descricao', $filtros['pesquisa'])->or_like('codDeBarra', $filtros['pesquisa'])->group_end();
+        }
+
+        if (($filtros['estoque'] ?? '') === 'baixo') {
+            $this->db->where('estoqueMinimo >', 0)->where('estoque <= estoqueMinimo', null, false);
+        }
+    }
+
     public function getById($id)
     {
         $this->db->where('idProdutos', $id);

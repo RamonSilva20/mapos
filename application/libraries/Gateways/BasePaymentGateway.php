@@ -6,6 +6,19 @@ use Libraries\Gateways\Contracts\PaymentGateway;
 
 abstract class BasePaymentGateway implements PaymentGateway
 {
+    /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor dos gateways */
+    protected $ci;
+
+    /**
+     * Existe só para satisfazer o PHPStan.
+     *
+     * As subclasses chamam parent::__construct(), mas esta classe não tem
+     * construtor próprio, e o PHPStan resolve a chamada contra CI_Model/_
+     * Controller e acusa "undefined static method __construct()".
+     */
+    public function __construct()
+    {
+    }
     public function gerarCobranca($id, $tipo, $metodoPagamento, $data = [])
     {
         switch ($metodoPagamento) {
@@ -32,6 +45,26 @@ abstract class BasePaymentGateway implements PaymentGateway
             default:
                 throw new \Exception('Tipo de entidade a ser gerado a cobrança inválido!');
                 break;
+        }
+    }
+
+    /**
+     * Valor da cobrança: o mesmo total que a tela da OS ou da venda mostra
+     * (Os_model::totais() / Vendas_model::totais()), com o preço do cadastro
+     * para serviço sem preço, quantidade fracionada, desconto por item e
+     * desconto geral (#3014). Os gateways não recalculam os itens.
+     *
+     * @param object $entity Resultado de findEntity()
+     */
+    protected function valorDaCobranca(object $entity, string $tipo): float
+    {
+        switch ($tipo) {
+            case PaymentGateway::PAYMENT_TYPE_OS:
+                return (float) $this->ci->Os_model->totais($entity)['total'];
+            case PaymentGateway::PAYMENT_TYPE_VENDAS:
+                return (float) $this->ci->vendas_model->totais($entity)['total'];
+            default:
+                throw new \Exception('Tipo de entidade a ser gerado a cobrança inválido!');
         }
     }
 

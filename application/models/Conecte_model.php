@@ -28,26 +28,26 @@ class Conecte_model extends CI_Model
         return false;
     }
 
-    public function getLastOs($cliente)
+    public function getLastOs($cliente, int $limite = 10)
     {
         $this->db->select('os.*, ' . self::USUARIO_CAMPOS_PUBLICOS);
         $this->db->from('os');
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.idUsuarios', 'left');
         $this->db->where('clientes_id', $cliente);
-        $this->db->limit(10);
+        $this->db->limit($limite);
         $this->db->order_by('idOs', 'desc');
 
         return $this->db->get()->result();
     }
 
-    public function getLastCompras($cliente)
+    public function getLastCompras($cliente, int $limite = 10)
     {
         $this->db->select('vendas.*,usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
         $this->db->order_by('idVendas', 'desc');
         $this->db->where('clientes_id', $cliente);
-        $this->db->limit(10);
+        $this->db->limit($limite);
         $this->db->order_by('idVendas', 'desc');
 
         return $this->db->get()->result();
@@ -139,6 +139,17 @@ class Conecte_model extends CI_Model
         return $this->db->count_all_results($table);
     }
 
+    /**
+     * OS do cliente que ainda não terminaram: nem finalizadas, nem faturadas,
+     * nem canceladas.
+     */
+    public function contarOsEmAndamento($cliente): int
+    {
+        return (int) $this->db->where('clientes_id', $cliente)
+            ->where_not_in('status', ['Finalizado', 'Faturado', 'Cancelado'])
+            ->count_all_results('os');
+    }
+
     public function getDados()
     {
         $this->db->where('idclientes', $this->session->userdata('cliente_id'));
@@ -153,6 +164,12 @@ class Conecte_model extends CI_Model
         $this->db->update($table, $data);
 
         if ($this->db->affected_rows() >= 0) {
+            // Senha trocada: os access tokens da API do cliente deixam de valer.
+            if ($table === 'clientes' && $fieldID === 'idClientes' && isset($data['senha'])) {
+                $this->load->library('Authorization_Token');
+                $this->authorization_token->incrementarVersao('clientes', 'idClientes', (int) $ID);
+            }
+
             return true;
         }
 

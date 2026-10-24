@@ -1,5 +1,14 @@
 <?php
 
+require __DIR__ . '/instalador.php';
+
+// Instalado: só uma página de aviso, sem versão do PHP, requisitos nem caminhos.
+if (instaladorInstalado()) {
+    instaladorBloquear();
+}
+
+define('INSTALADOR', true);
+
 $settings_file = __DIR__ . DIRECTORY_SEPARATOR . 'settings.json';
 
 if (! file_exists($settings_file)) {
@@ -12,7 +21,7 @@ if (! file_exists($settings_file)) {
 $php_version_success = false;
 $allow_url_fopen_success = false;
 
-$php_version_required = '8.2';
+$php_version_required = '8.5';
 $current_php_version = PHP_VERSION;
 
 //check required php version
@@ -25,8 +34,11 @@ if (ini_get('allow_url_fopen')) {
     $allow_url_fopen_success = true;
 }
 
+//check the Composer dependencies (application/vendor): without them neither the system nor the migrations start
+$vendor_success = instaladorTemDependencias();
+
 //check if all requirement is success
-if ($php_version_success && $allow_url_fopen_success) {
+if ($php_version_success && $allow_url_fopen_success && $vendor_success) {
     $all_requirement_success = true;
 } else {
     $all_requirement_success = false;
@@ -52,17 +64,8 @@ if (! empty($_SERVER['HTTPS'])) {
     $dashboard_url = 'http://' . $dashboard_url;
 }
 
-/*
- * check the db config file
- * if db already configured, we'll assume that the installation has completed
- */
-$db_file_path = '../application/config/database.php';
-$db_file = file_get_contents($db_file_path);
-$is_installed = file_exists('..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env');
+$storage_sugerido = instaladorSugerirArmazenamento();
 
-$installed = null;
-if ($is_installed) {
-    $installed = true;
-}
+$installed = false;
 
 include 'view/index.php';

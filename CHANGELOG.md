@@ -4,10 +4,164 @@ Todas as alterações serão documentadas neste arquivo
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.55.2] - 2026-10-14
+## [Unreleased]
+
+## [5.1.0] - 2026-10-23
+
+Melhorias na ficha do cliente, no painel e no preenchimento de CEP e CNPJ. Sem migration nem variável nova no `.env`.
+
+### Added
+- Ficha do cliente: as abas Ordens de serviço e Vendas são paginadas (no tamanho de página das Configurações), e as OS e vendas mais antigas deixam de ficar inacessíveis. #3021 [@RamonSilva20](https://github.com/RamonSilva20)
+- Painel: o botão "Ocultar valores" / "Mostrar valores" esconde o saldo do mês, o "A receber", o balanço do ano e os valores dos lançamentos a vencer. A escolha fica no navegador. #3022 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ### Fixed
-- Correção do atualizador que falhava com "The branch to update from GitHub does not exist!" quando o repositório possui mais de 30 branches. [@RamonSilva20](https://github.com/RamonSilva20)
+- Cadastro de cliente (e cadastro rápido): trocar o CEP atualiza rua, bairro, cidade e estado (número e complemento digitados são mantidos), e a busca de CNPJ atualiza os campos com os dados da Receita. Antes, só preenchiam campos vazios. #3023 [@cabralwms](https://github.com/cabralwms)
+
+## [5.0.1] - 2026-10-23
+
+Correção do instalador. Sem migration nem variável nova no `.env`.
+
+### Fixed
+- Instalador: se a instalação falhasse no meio (erro de SQL, tempo esgotado), o arquivo `install/instalacao.lock` ficava para trás e toda nova tentativa mostrava "Já existe uma instalação em andamento". A trava agora é liberada mesmo se o PHP morrer, e o erro do banco aparece na tela. [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Changed
+- Tabela de suporte das versões (4.x, 5.x e a futura versão em Laravel) no README e no `SECURITY.md`. [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [5.0.0] - 2026-10-22
+
+Primeira versão estável da v5. Exige PHP 8.5; leia o [guia de migração](docs/migracao-4x-para-5.md) e teste numa cópia antes de usar em produção. Quem está na 4.x deve atualizar para a 4.55.5 e migrar pelo guia: o botão "Atualizar Mapos" da 4.x não instala a v5. Sem migration nem variável nova no `.env` em relação à beta.3.
+
+### Fixed
+- PDF do relatório MEI saía com células pretas e o total errado. #3009 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cobranças (Asaas, Gerencianet e Mercado Pago) usam o total da OS e da venda: quantidade fracionada do serviço e serviço sem preço deixam de gerar boleto ou link com valor menor, e nenhum centavo se perde no arredondamento. #3014 [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [5.0.0-beta.3] - 2026-10-15
+
+Correção para quem importa o banco da 4.x numa v5 já instalada. Sem migration nem variável nova no `.env`.
+
+### Fixed
+- Banco com migrations pendentes (p. ex. v5 instalada e dump da 4.x importado) quebrava o painel logo depois do login com colunas inexistentes. Agora, enquanto houver migration pendente, o painel mostra uma tela com o botão "Atualizar banco de dados" (para quem tem `cSistema`; os demais veem um aviso para falar com o administrador) em vez de abrir a tela pedida, e as chamadas AJAX recebem 503; ao concluir, o painel abre. #3006 [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [5.0.0-beta.2] - 2026-10-15
+
+Correções e melhorias a partir dos testes da beta.1. Sem migration nem variável nova no `.env`.
+
+### Added
+- Visualização da OS mostra sempre Descrição do produto ou serviço, Defeito, Observações e Laudo técnico (campo vazio aparece como "Não informado") e ganha o botão "Editar" na seção, quando a OS pode ser editada e há permissão. #2997 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cadastro rápido de cliente em modal na OS e na venda: o rodapé "Cadastrar novo cliente" do campo Cliente abre um modal (tipo, CPF/CNPJ com "Buscar CNPJ", nome, contato, telefone, celular, e-mail, CEP com busca e endereço) sem sair da tela; ao salvar, o cliente já fica escolhido e nada do que foi preenchido se perde. Sem a senha da área do cliente (começa com o CPF ou CNPJ, como no cadastro normal) e com o link "Cadastro completo". Nova rota `clientes/cadastroRapido`, que exige `aCliente`; sem essa permissão o rodapé e o modal não aparecem. #3003 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Fixed
+- Lançamentos: o campo Cliente / fornecedor não mostrava as sugestões no Firefox (o `<datalist>` nativo não é exibido por ele). Agora usa o mesmo autocomplete da OS e da venda, com o mesmo estilo; o fornecedor continua podendo ser texto digitado. #2998 [@RamonSilva20](https://github.com/RamonSilva20)
+- A busca de CNPJ do formulário de cliente deixava de funcionar quando a BrasilAPI estava fora do ar. Agora tenta a Minha Receita e depois a CNPJ.ws (cada uma com tempo limite de 8 s), passando para a próxima quando a anterior falha (rede, tempo esgotado, 429, 5xx ou outro erro HTTP); um 400 ou 404 (CNPJ inexistente) encerra a busca. A ReceitaWS não volta porque não manda CORS. As duas origens novas entram no `connect-src` da CSP (`docs/cabecalhos-de-seguranca.md`). #2996 [@RamonSilva20](https://github.com/RamonSilva20)
+- Abas que não cabem na largura (Configurações, OS, ficha do cliente): a aba ativa vem para o centro ao carregar, a roda do mouse rola a faixa na horizontal e setas nas pontas rolam uma página, aparecendo só do lado em que há aba escondida; antes, com o mouse, as abas depois de "Pagamentos" só eram achadas clicando na aba "API" cortada. As setas ficam fora do foco do teclado (o Tab já chega a cada aba) e a rolagem respeita `prefers-reduced-motion`. #2995 [@RamonSilva20](https://github.com/RamonSilva20)
+
+## [5.0.0-beta.1] - 2026-10-15
+
+Primeira beta pública da v5. Exige PHP 8.5; leia o [guia de migração](docs/migracao-4x-para-5.md) e teste numa cópia antes de usar em produção.
+
+### Added
+- README com capturas do painel da v5 (claro e escuro) e guia de migração atualizado com a delegação de permissões, o backup sem sessões, o e-mail da OS por POST, a exclusão de OS faturada, as planilhas e o Docker em localhost. #2859 [@RamonSilva20](https://github.com/RamonSilva20)
+- Preferência de tema por usuário: a escolha de claro, escuro ou sistema na topbar fica gravada no perfil (`usuarios.tema_modo`) e vale em qualquer navegador; sem escolha, vale o tema padrão das Configurações. #2854 [@RamonSilva20](https://github.com/RamonSilva20)
+- Autenticação em dois fatores (TOTP) opcional: ativação em Meu perfil com QR code (desenhado no servidor, sem serviço externo) e confirmação por código, 10 códigos de recuperação de uso único, login em dois passos com limite de tentativas, códigos que não valem duas vezes, segredo cifrado (AES-256-GCM), geração de novos códigos e desativação com a senha. O administrador pode exigir o 2FA por grupo de permissão e redefinir o 2FA de quem perdeu o celular; o login pela API passa a pedir o campo `totp` de quem o ativou. Veja `docs/dois-fatores.md`. #2876 [@RamonSilva20](https://github.com/RamonSilva20)
+- Busca global Ctrl/⌘ K: paleta com resultados por grupo (clientes, OS, produtos e serviços) enquanto se digita, navegação por ↑ ↓ Enter Esc, as mesmas permissões da busca completa e botão de busca na topbar do celular. Os atalhos F1 a F4 (clientes, produtos, serviços e OS) voltam, só para as telas que o usuário pode abrir. #2850 [@RamonSilva20](https://github.com/RamonSilva20)
+- Impressões (OS, vendas, garantias, cupons e área do cliente), PDFs dos relatórios e instalador em Tailwind: `assets/dist/imprimir.css`, `assets/dist/pdf.css` (achatado para o mPDF por `scripts/build-pdf-css.mjs`) e `install/assets/css/instalador.css`. #2960 [@RamonSilva20](https://github.com/RamonSilva20)
+- CI com lint, php-cs-fixer, PHPStan (com baseline) e `composer audit`. #2887 [@RamonSilva20](https://github.com/RamonSilva20)
+- PHPUnit com harness para o CodeIgniter 3 e testes iniciais. #2886 [@RamonSilva20](https://github.com/RamonSilva20)
+- Dependabot para GitHub Actions e Composer. #2890 [@RamonSilva20](https://github.com/RamonSilva20)
+- Helper `e()` para escape de saída nas views e checagem no CI que impede saída sem escape nova. #2897 [@RamonSilva20](https://github.com/RamonSilva20)
+- Tailwind CSS v4 com build via npm; o CSS compilado é commitado e quem só instala não precisa de Node. #2896 [@RamonSilva20](https://github.com/RamonSilva20)
+- Stack de JS da v5 em `assets/vendor` (Alpine.js, Tom Select, flatpickr, IMask, SweetAlert2, Chart.js 4 e FullCalendar 6). #2899 [@RamonSilva20](https://github.com/RamonSilva20)
+- Mapa central de permissões das rotas do painel (`config/permissions_map.php`), negando por padrão o que não estiver mapeado. #2898 [@RamonSilva20](https://github.com/RamonSilva20)
+- Design tokens, modo claro/escuro/sistema e cor de destaque, com migration que converte o `app_theme` atual. #2902 [@RamonSilva20](https://github.com/RamonSilva20)
+- Padrão de JS em módulos ES fora das views (`assets/js/modules`) e checagem de `<script>` inline novo. #2903 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cabeçalhos de segurança (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS em HTTPS) e CSP em modo report-only com endpoint de relatório. #2904 [@RamonSilva20](https://github.com/RamonSilva20)
+- Biblioteca de componentes PHP (`application/views/components`) com catálogo visível só em desenvolvimento. #2905 [@RamonSilva20](https://github.com/RamonSilva20)
+- Paginação das telas novas pelo componente `pagination`. #2906 [@RamonSilva20](https://github.com/RamonSilva20)
+- `DESIGN.md` como fonte de verdade da UI da v5 (cores, tipografia, componentes, estados, modo escuro e responsividade), referenciado no `AGENTS.md`, no `CONTRIBUTING.md` e no template de PR. #2920 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Changed
+- Páginas de erro no visual da v5 (404, erro geral, banco e 500), com os tokens do DESIGN.md, modo de cor do sistema e texto em português; sem detalhes técnicos (SQL, caminhos, mensagens) fora de development, e com `htmlspecialchars` no que sobra. Uma exceção não tratada em produção, que antes deixava a tela em branco, agora responde 500 com a página de erro e continua registrada no log. #2849 [@RamonSilva20](https://github.com/RamonSilva20)
+- `button-ghost-on-dark` segue o `DESIGN.md`: raio `xl` (12px) e padding `sm` (8px), mantendo os 44px de altura no celular. As demais variantes não mudam. #2929 [@RamonSilva20](https://github.com/RamonSilva20)
+- Acessibilidade AA (auditoria com axe-core em 29 telas, claro e escuro): anel de foco opaco (#3B82F6, 3,68:1 sobre branco; a 50% de alfa dava cerca de 1,8:1 e reprovava o WCAG 1.4.11, DESIGN.md atualizado), título da aba por tela ("Clientes — Map-OS"), menu do usuário com nome acessível igual ao texto visível, seletor de modo de cor no menu do usuário no celular (a topbar não estoura mais em 320 px), `prefers-reduced-motion` nos dois CSS, dias de outro mês e setas do calendário do painel com contraste e sem ícone sem texto, e a lista da paleta Ctrl+K fora da ordem de tabulação. #2853 [@RamonSilva20](https://github.com/RamonSilva20)
+- `phpoffice/phpword` 0.18 → 1.4 (relatório de receitas brutas do MEI) e `filp/whoops` movido para `require-dev`: o pacote de instalação não o traz mais, e o hook só o usa se a classe existir. `composer audit` segue no CI. #2877 [@RamonSilva20](https://github.com/RamonSilva20)
+- Produtos migrados para os componentes da v5, completando Clientes, Produtos e Serviços:
+  - listagem com busca e filtro de estoque baixo (pill "Baixo") e etiquetas em modal;
+  - formulário com unidades da tabela de medidas, preços com máscara e cálculo do preço de venda por markup ou margem;
+  - ficha com markup, margem e entrada de estoque.
+
+  A entrada de estoque passa a somar no banco (`estoque = estoque + ?`), em vez de confiar no estoque atual enviado pelo navegador, e não deixa o estoque ficar negativo. #2941 [@RamonSilva20](https://github.com/RamonSilva20)
+- Módulo de OS migrado para os componentes da v5 (#2842), em três etapas:
+  - listagem com filtros na URL, total por linha e exclusão em `modal-confirm`, que também apaga anotações, arquivos dos anexos e o lançamento da fatura. #2940 [@RamonSilva20](https://github.com/RamonSilva20)
+  - formulário único para cadastrar e editar os dados, com autocomplete acessível de cliente, técnico e termo de garantia. A OS faturada ou cancelada passa a ser bloqueada também no GET. #2942 [@RamonSilva20](https://github.com/RamonSilva20) #2947 [@RamonSilva20](https://github.com/RamonSilva20)
+  - tela da OS com abas. Produtos, serviços, anexos, anotações e desconto mudam sem recarregar a página. Também passam a existir:
+    - histórico de status (tabela `os_historico`);
+    - faturamento que preenche `os.lancamento`;
+    - PIX copia e cola gerado no servidor, sem o jsQR do rawgit, também na venda.
+
+    Os endpoints conferem no banco a OS, os itens, a quantidade devolvida ao estoque e o desconto. #2943 [@RamonSilva20](https://github.com/RamonSilva20)
+- Módulo de Vendas migrado para os componentes da v5 (#2843):
+  - listagem com filtros na URL, total da paginação que conta com os filtros (na v4 contava todas as vendas), total por linha calculado no SQL, garantia em `pill-status` e exclusão em `modal-confirm`, que apaga também o lançamento da fatura (a busca antiga nunca o encontrava). Venda cancelada passa a seguir a regra da faturada: só edita e exclui com `control_edit_vendas`, como na OS. #2945 [@RamonSilva20](https://github.com/RamonSilva20)
+  - formulário único para cadastrar e editar os dados e tela da venda numa página, com produtos e desconto sem recarregar, faturamento e cobrança em modal, PIX copia e cola gerado no servidor e impressões. Os endpoints conferem no banco a venda, os itens, a quantidade devolvida ao estoque e o desconto (na v4 vinham do navegador), e a venda faturada ou cancelada é barrada também no GET. Cancelar ou excluir a venda passa a devolver os produtos ao estoque (e reabrir baixa de novo), como na OS. O faturamento grava o lançamento e os dois vínculos (`vendas.lancamentos_id` e `lancamentos.vendas_id`). A regra `vendas` de validação exigia o campo `situacao`, que nenhuma tela enviava. #2947 [@RamonSilva20](https://github.com/RamonSilva20)
+- Lançamentos financeiros migrados para os componentes da v5 (#2844):
+  - listagem com período (dia, semana, mês...), vencimento, tipo, situação (pendente, pago, vencido) e busca na URL, cards de resumo e exclusão em `modal-confirm`;
+  - formulário único para receita e despesa, com desconto, baixa e parcelamento com entrada. O valor líquido, as parcelas (em centavos, sem sobra) e os vencimentos mensais são calculados no servidor.
+
+  Receitas e despesas passam a somar pelo mesmo critério de líquido, e a listagem mostra o mês atual por padrão (antes, só o dia). #2946 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cobranças migradas para os componentes da v5 (#2844): listagem com busca, situação e origem na URL, status do gateway como `pill-status` e detalhe em listas de definição. Atualizar, enviar por e-mail, confirmar, cancelar e excluir passam a ser POST com token CSRF (eram links GET) e voltam para uma tela do Map-OS, não para o Referer. Só URL http(s) do gateway vira link. #2946 [@RamonSilva20](https://github.com/RamonSilva20)
+- Painel inicial migrado para os componentes da v5 (#2847): cards de resumo (OS em andamento, orçamentos, vendas em aberto e saldo do mês), agenda das entregas de OS com FullCalendar 6 e filtro de status, balanço do ano e OS por status com Chart.js 4 (os dois saem do vendor local, sem CDN) e listas de OS em andamento, vendas em aberto, lançamentos a vencer e estoque baixo. Cada bloco só aparece com a permissão do módulo, e o balanço usa o mesmo líquido da listagem de lançamentos para receitas e despesas. #2950 [@RamonSilva20](https://github.com/RamonSilva20)
+- Usuários e Permissões migrados para os componentes da v5 (#2846): listagem de usuários com busca e situação (ativo, inativo, expirado), formulário único com CEP, senha de no mínimo 8 caracteres e endereço opcional, e grupos de permissão com a matriz ver/adicionar/editar/excluir por módulo. O usuário e o grupo editados vêm da URL, excluir usuário passa a ser POST com CSRF, e o administrador principal, o próprio usuário e o grupo do usuário logado não podem ser desativados nem excluídos. #2951 [@RamonSilva20](https://github.com/RamonSilva20)
+- Configurações, Emitente, Fila de e-mails e Auditoria migrados para os componentes da v5 (#2846). As configurações ficam em abas, e cada aba grava só os seus campos. O tema passa a ser Claro, Escuro ou Sistema. Senhas e tokens do `.env` não voltam mais para a tela, e em branco ficam como estão. O `.env` é reescrito linha a linha, com aspas quando precisa. Atualizar o banco, atualizar o Map-OS e limpar a auditoria passam a ser POST com CSRF. Trocar o logo do emitente apaga só o logo antigo, e não a pasta de uploads inteira. #2952 [@RamonSilva20](https://github.com/RamonSilva20)
+- Serviços migrados para os componentes da v5, nos padrões de listagem e de formulário: busca na URL, preço com máscara em reais (`valorDecimal()` no servidor aceita "1.234,56" e "1234.56") e exclusão em `modal-confirm`, que avisa que o serviço sai também das OS. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
+- Ficha do cliente migrada para os componentes da v5:
+  - abas por link (dados, ordens de serviço e vendas), com contadores;
+  - status das OS e das vendas em `pill-status` (`status_helper`: `osStatusPill()`, `vendaFaturadaPill()`, `dinheiro()`, `dataBr()`);
+  - exclusão confirmada em `modal-confirm`.
+
+  As ações da aba de vendas passam a seguir as permissões de vendas; antes conferiam `vOs`/`eOs`. #2937 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cadastro e edição de clientes num só formulário da v5, que define o padrão dos formulários. A validação acontece no navegador e no servidor, com o erro em cada campo e mensagens em português (`MY_Controller::validarFormulario()`). Inclui máscaras de CPF/CNPJ (com o alfanumérico), telefone e CEP, e preenchimento pelo CEP (ViaCEP) e pelo CNPJ (BrasilAPI), só nos campos vazios. O botão mostra o carregamento e o sucesso aparece em toast. A edição usa o id da URL, e não um campo do POST. #2936 [@RamonSilva20](https://github.com/RamonSilva20)
+- Listagem de clientes e fornecedores migrada para os componentes da v5, sem o CSS e o JS legados. A busca e o filtro de tipo ficam na URL e são mantidos na paginação, que agora conta só o que a busca encontra. A tela tem estados vazios distintos, ações por linha com ícones e exclusão confirmada em `modal-confirm`. Ela define o padrão das listagens (`listagemFiltros()`, `MY_Controller::permite()`, filtros em `paginacao()` e `data-valor-*` no `modal.js`). Também entram o componente `link` e botões pequenos com 44px no celular. #2935 [@RamonSilva20](https://github.com/RamonSilva20)
+- Versão mínima do PHP alinhada em 8.5. #2882 [@RamonSilva20](https://github.com/RamonSilva20)
+- `release.yml` gera um zip limpo e publica o SHA256. #2889 [@RamonSilva20](https://github.com/RamonSilva20)
+- Cookies e sessão seguros por padrão: `Secure` automático em HTTPS, `HttpOnly`, `SameSite=Lax` e destruição do ID anterior ao regenerar a sessão. Valores explícitos no `.env` continuam valendo. #2900 [@RamonSilva20](https://github.com/RamonSilva20)
+- Novo login do painel com Tailwind, componentes e módulo JS, sem jQuery e sem particles. #2907 [@RamonSilva20](https://github.com/RamonSilva20)
+- Novo layout do painel (sidebar recolhível, topbar com busca e alternância de tema, flash como toast), com modo legado para as telas ainda não migradas. #2908 [@RamonSilva20](https://github.com/RamonSilva20)
+- Boxicons servido de `assets/vendor` em vez do unpkg. #2909 [@RamonSilva20](https://github.com/RamonSilva20)
+- Tokens do `DESIGN.md` no `tokens.css`: laranja `#F37338` como cor de ação única (rótulo escuro), paleta de status com `-ink`/`-soft` nos modos claro e escuro, modo escuro do painel na paleta violeta, borda de campo com contraste 3:1, escala tipográfica, raios e elevação. A paleta padrão do Tailwind e a escala de cor de destaque foram removidas. #2921 [@RamonSilva20](https://github.com/RamonSilva20)
+- Fontes Rubik (interface) e Space Grotesk (títulos de destaque) servidas de `assets/vendor/fonts` via `@fontsource`, sem CDN, nos subconjuntos latin e latin-ext. #2923 [@RamonSilva20](https://github.com/RamonSilva20)
+- Ícones Lucide num sprite SVG gerado pelo `build-vendor` só com os ícones usados (`assets/src/icones.json`), com o helper `icon()` no PHP e `criarIcone()` no JS. A moldura, os componentes e o login do painel deixam o Boxicons, que passa a ser carregado só no modo legado. #2924 [@RamonSilva20](https://github.com/RamonSilva20)
+- Biblioteca de componentes conforme o `DESIGN.md`: botões em caixa alta com as variantes outline, inverted e ghost-on-dark (`secondary` virou `outline`), campos com borda de 3:1, foco com anel azul e erro com ícone, e os componentes novos `pill-status`, `checkbox`, `radio`, `switch`, `kpi-card`, `tabs` e `modal-confirm`. `table` virou `data-table` (cartões abaixo de 640px), e o `badge` passou a ser só para contadores. #2925 [@RamonSilva20](https://github.com/RamonSilva20)
+- Sidebar e topbar conforme o `DESIGN.md`: marca com a versão, menu em seções (Operação, Financeiro, Sistema), item ativo com barra laranja, fundo e texto em negrito, cartão do usuário com iniciais quando não há foto, busca com atalho Ctrl+K/⌘K e espaço na topbar para a ação principal da tela (`topbar_acao`). As abas esmaecem na borda quando há mais abas para rolar. #2926 [@RamonSilva20](https://github.com/RamonSilva20)
+- Logins do painel e da área do cliente como superfícies de entrada do `DESIGN.md`: fundo escuro com estrelas, título com destaque lima, card escuro com campos claros e ENTRAR com halo, e cada login aponta para o outro na barra do topo. O login do cliente deixa o Bootstrap, o jQuery e o script inline e passa a usar o mesmo módulo do painel. As telas de entrada não seguem mais o modo de cor do painel. #2927 [@RamonSilva20](https://github.com/RamonSilva20)
+- Ilustrações-adesivo em SVG (chave, celular, notebook, caixa de entrega e técnico) nas telas de entrada, com fonte em `assets/src/stickers` e saída otimizada pelo svgo (`npm run build:stickers`). #2928 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Security
+- Delegação e backup (#2879): quem tem `cUsuario` ou `cPermissao` só concede e redefine o que ele mesmo tem (só o administrador concede tudo), o backup não leva `ci_sessions`, tokens e limites de login (a linha de `ci_sessions` é o cookie de sessão de quem está logado), ativar o 2FA pede a senha e trocar e-mail ou senha na área do cliente pede a senha atual. [@RamonSilva20](https://github.com/RamonSilva20)
+- Segunda leva da revisão de segurança: planilhas XLSX neutralizam fórmulas (`=HYPERLINK(...)` num nome); relatórios MEI usam arquivos temporários fora do webroot, apagados mesmo se a geração falhar; OS com pagamento já baixado não é excluída, e a exclusão da fatura só remove lançamentos em aberto; e-mail da OS só por POST e com permissão de editar; valores com `$` escapados no `.env`; portas do Docker só em 127.0.0.1 e sem `PMA_ARBITRARY`; `release.yml` valida o nome da tag (sem interpolar no script) e deixa `tests`, `docker` e `scripts` fora do zip. #2879 [@RamonSilva20](https://github.com/RamonSilva20)
+- CSP em **enforce** por padrão, sem `unsafe-inline` nem `unsafe-eval`: `APP_CSP=enforce|report-only|off` (o antigo `APP_CSP_REPORT_ONLY` ainda vale quando `APP_CSP` não existe). O `window.print()` das 8 views de impressão foi para `assets/js/imprimir.js` (zero scripts inline nas views); o único estilo gerado por JavaScript, o `<style>` do FullCalendar da agenda, usa um nonce por requisição (`<meta name="csp-nonce">`, só no `style-src`); a ReceitaWS saiu do `connect-src`. Auditoria de todas as telas com a política ligada, sem outras violações. Veja `docs/cabecalhos-de-seguranca.md`. #2878 [@RamonSilva20](https://github.com/RamonSilva20)
+- `npm audit` sem alertas: `@parcel/watcher` 2.6.0 (que não usa mais `micromatch` e `braces`) via `overrides` no `package.json`, enquanto o `@tailwindcss/cli` fixa a 2.5.1; o CI passa a rodar `npm audit --audit-level=high`. O CSS compilado não muda. #2930 [@RamonSilva20](https://github.com/RamonSilva20)
+- Atualizador do Map-OS por releases com verificação de integridade: usa a última release com tag (não mais o branch `master`), baixa o zip e o `.sha256` do `release.yml` só do endereço oficial da release, com TLS verificado, e descarta o zip se o SHA256 não conferir; extrai recusando caminhos inseguros, links simbólicos e zip bomba; guarda backup dos arquivos trocados e restaura tudo se algo falhar; nunca toca no `.env`, nos uploads, nos logs nem em `install/`. A nova tela `mapos/atualizacao` mostra o changelog da versão antes de aplicar. Veja `docs/atualizacao.md`. #2871 [@RamonSilva20](https://github.com/RamonSilva20)
+- Autenticação da API modernizada, sem quebrar os apps atuais: `firebase/php-jwt` pelo Composer no lugar da cópia em `third_party`, claim padrão `exp` (o `API_TIME` segue por compatibilidade), refresh token de uso único e revogável (`POST /api/v1/refresh` e `/logout`, tabela `api_refresh_tokens`, revogado na troca de senha ou desativação), usuário e permissão consultados no banco a cada requisição (não ficam mais fixos no token), CORS (`API_CORS_ORIGINS`) e limite de requisições por IP (`API_RATE_LIMIT`, 429 com `Retry-After`) em `config/rest.php`. `GET /api/v1/reGenToken` foi removido (renovava token vencido sem senha nem refresh token). Veja `docs/api-autenticacao.md`. #2869 [@RamonSilva20](https://github.com/RamonSilva20)
+- Instalador bloqueado depois da instalação (`application/.env` ou `install/instalado.lock`): `index.php` e `do_install.php` respondem 403 antes de ler o formulário ou abrir conexão com o banco (o arquivo não serve mais de testador de conexão), `settings.json` e as views deixam de ser públicas (Apache e nginx), a instalação roda uma vez por vez, o formulário é validado (sem quebra de linha, API por allowlist, senha mínima de 8) e `.env` e SQL de carga escapam os valores. O painel avisa quem administra enquanto a pasta `install/` existir e o atualizador não a traz de volta. #2874 [@RamonSilva20](https://github.com/RamonSilva20)
+- Limite de tentativas de login no painel, na área do cliente e nas duas APIs: depois de 5 falhas para o mesmo e-mail (ou 20 do mesmo IP), bloqueio temporário de 1 minuto que dobra a cada nova falha, até 1 hora. A mensagem é a mesma para os dois casos, cada bloqueio vai para a auditoria e a tabela `login_attempts` guarda só um HMAC do e-mail e do IP, com a `encryption_key` da instalação. A API do cliente deixa de responder "Usuário não encontrado", e o painel só informa conta expirada depois da senha certa. #2931 [@RamonSilva20](https://github.com/RamonSilva20)
+
+- Token de recuperação de senha da área do cliente guardado só como hash SHA-256 (busca pelo hash e conferência com `hash_equals`), com 32 bytes aleatórios, validade de 1 hora (antes 24 horas) e uso único; um pedido novo invalida os anteriores do mesmo e-mail. Uma migration invalida os tokens pendentes, que estavam em texto claro. #2934 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Removed
+- Bootstrap 2, 3 e 5.3, matrix-style, Font Awesome, jQuery (do instalador) e as imagens do tema antigo; as fontes do captcha foram para `assets/fonts/captcha`. #2960 [@RamonSilva20](https://github.com/RamonSilva20)
+- Frontend legado do painel: Bootstrap 2, jQuery e jQuery UI, tema Matrix, `tema-*.css`, Trumbowyg, wysihtml5, Select2, DataTables, jqPlot, Flot, Highcharts, Boxicons, SweetAlert v1 e o modo legado do layout (`legacy_assets`). As impressões e os PDFs mantêm o CSS próprio. #2855 [@RamonSilva20](https://github.com/RamonSilva20)
+- Seletor de cor de destaque (`app_tema_destaque`, `data-accent`): o `DESIGN.md` define uma cor de ação única, e o tema passa a ser só o modo claro, escuro ou sistema. Uma migration remove a configuração e o `down()` a recria a partir do `app_theme`. #2922 [@RamonSilva20](https://github.com/RamonSilva20)
+
+### Fixed
+- Pastas ocultas (`.git`, `.github`, `.idea`) respondiam 200 no Apache com `.htaccess` (só arquivos com ponto eram bloqueados); agora dão 403 no `.htaccess`, no nginx do Docker e nas receitas de `docs/servidor-web.md`, com o `.well-known` liberado. #2858 [@RamonSilva20](https://github.com/RamonSilva20)
+- A migration `move_uploads_to_storage` concluía sem erro nem log quando o `STORAGE_PATH` não existia ou não era gravável; agora para com a mensagem (na tela "Atualizar banco" e em `tools migrate`), não conclui, registra no log o que não pôde mover e termina o que faltou ao rodar de novo. Anexo sem arquivo no disco aparece como "Arquivo não encontrado" na OS e na área do cliente. #2858 [@RamonSilva20](https://github.com/RamonSilva20)
+- A versão exibida (`app_version`) na v5 era a 4.55.1, o que fazia o atualizador oferecer a release 4.x como atualização; passa a `5.0.0-alpha`. #2858 [@RamonSilva20](https://github.com/RamonSilva20)
+- Instalações criadas pelas migrations tinham preço de produtos e serviços e saldo das contas sem casas decimais (`DECIMAL(10)`), porque a migration base declarava `'constraint' => 10, 2`. A base foi corrigida, e uma migration nova ajusta as colunas para `DECIMAL(10,2)`. #2939 [@RamonSilva20](https://github.com/RamonSilva20)
+- Backup do banco não tenta mais gravar o arquivo numa URL (`base_url() . 'backup/backup.zip'`), o que falhava sempre e, se funcionasse, deixaria o dump numa pasta pública: agora só é baixado, com nome `backup-AAAA-MM-DD-HHhMM.zip` (antes usava o mês no lugar dos minutos e `:`, inválido no Windows). #2933 [@RamonSilva20](https://github.com/RamonSilva20)
+- Erros 500 do calendário do painel sem datas (agora valida `start`/`end` e responde 400 em JSON), de `os/visualizar` com OS inexistente (agora redireciona com aviso, como o `editar`) e dos autocompletes de Garantias (chamavam um model não carregado e não devolviam JSON sem resultados). #2932 [@RamonSilva20](https://github.com/RamonSilva20)
+- Usuário com `permissoes_id` inexistente recebe negação de acesso em vez de erro fatal. #2891 [@RamonSilva20](https://github.com/RamonSilva20)
+- Conta sem data de expiração volta a conseguir entrar. #2892 [@RamonSilva20](https://github.com/RamonSilva20)
+- `date_format()` sem argumento e data inválida na entrada de receita parcelada. #2893 [@RamonSilva20](https://github.com/RamonSilva20)
+- Data com estouro no filtro de vencimento não consulta mais a janela errada. #2894 [@RamonSilva20](https://github.com/RamonSilva20)
 
 ## [4.55.1] - 2026-10-06
 

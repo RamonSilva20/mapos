@@ -11,7 +11,7 @@ class ClientesController extends REST_Controller
         parent::__construct();
 
         $this->load->model('clientes_model');
-        $this->load->helper('validation_helper');
+        $this->load->helper(['validation_helper', 'api']);
     }
 
     public function index_get($id = '')
@@ -37,7 +37,7 @@ class ClientesController extends REST_Controller
                 $this->response([
                     'status' => true,
                     'message' => 'Lista de Clientes',
-                    'result' => $clientes,
+                    'result' => apiSemSenha($clientes),
                 ], REST_Controller::HTTP_OK);
             }
         }
@@ -50,7 +50,7 @@ class ClientesController extends REST_Controller
                 $this->response([
                     'status' => true,
                     'message' => 'Detalhes do Cliente',
-                    'result' => $cliente,
+                    'result' => apiSemSenha($cliente),
                 ], REST_Controller::HTTP_OK);
             }
 
@@ -113,11 +113,11 @@ class ClientesController extends REST_Controller
             'fornecedor' => $this->post('fornecedor', true) == true ? 1 : 0,
         ];
 
-        if ($this->clientes_model->add('clientes', $data) == true) {
+        if ($idCliente = $this->clientes_model->add('clientes', $data)) {
             $this->response([
                 'status' => true,
                 'message' => 'Cliente adicionado com sucesso!',
-                'result' => $this->clientes_model->get('clientes', '*', "telefone = '{$data['telefone']}'", 1, 0, true),
+                'result' => apiSemSenha($this->clientes_model->getById($idCliente)),
             ], REST_Controller::HTTP_CREATED);
         }
 
@@ -169,7 +169,7 @@ class ClientesController extends REST_Controller
             $this->response([
                 'status' => true,
                 'message' => 'Cliente editado com sucesso!',
-                'result' => $this->clientes_model->getById($id),
+                'result' => apiSemSenha($this->clientes_model->getById($id)),
             ], REST_Controller::HTTP_OK);
         }
 

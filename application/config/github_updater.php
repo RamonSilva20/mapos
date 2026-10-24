@@ -15,17 +15,11 @@ $config['github_user'] = 'RamonSilva20';
 $config['github_repo'] = 'mapos';
 
 /**
- * The branch to update from
+ * Inclui pré-releases (alpha, beta, rc) na busca da versão mais nova. Por
+ * padrão só as releases estáveis; quem testa a v5 liga com UPDATER_PRERELEASES=true
+ * no .env. O atualizador usa a última release com tag, nunca um branch (#2871).
  */
-$config['github_branch'] = 'master';
-
-/**
- * The current commit the files are on.
- *
- * NOTE: You should only need to set this initially it will be
- * automatically set by the library after subsequent updates.
- */
-$config['current_commit'] = 'd93b12025b1533a334cb79b34346fa79ecb9005b';
+$config['github_prereleases'] = filter_var($_ENV['UPDATER_PRERELEASES'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
 /**
  * A list of files or folders to never perform an update on.
@@ -37,10 +31,5 @@ $config['current_commit'] = 'd93b12025b1533a334cb79b34346fa79ecb9005b';
  * 'application/views/admin/test.php'
  * and any other path with the term 'admin' in it.
  */
+// O .env, os uploads, os logs e a pasta install/ nunca são tocados (Github_updater::PROTEGIDOS); aqui entram os extras de cada instalação.
 $config['ignored_files'] = [];
-
-/**
- * Flag to indicate if the downloaded and extracted update files
- * should be removed
- */
-$config['clean_update_files'] = true;

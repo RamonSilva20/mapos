@@ -1,151 +1,211 @@
-<style>
-  select {
-    width: 70px;
-  }
-</style>
-<div class="new122">
-    <div class="widget-title" style="margin: -20px 0 0">
-            <span class="icon">
-                <i class="fas fa-cash-register"></i>
-            </span>
-            <h5>Cobranças</h5>
-    </div>
-    <div class="widget-box">
-        <h5 style="padding: 3px 0"></h5>
-        <div class="widget-content nopadding tab-content">
-            <table id="tabela" class="table table-bordered ">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Gateway</th>
-                        <th>Tipo</th>
-                        <th>Data de Vencimento</th>
-                        <th>Referência</th>
-                        <th>Status</th>
-                        <th>Valor</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (!$results) {
-                        echo '<tr>
-                                <td colspan="8">Nenhuma cobrança Cadastrada</td>
-                            </tr>';
-                    }
-                    foreach ($results as $r) {
-                        $dataVenda = date(('d/m/Y'), strtotime($r->expire_at));
-                        $cobrancaStatus = getCobrancaTransactionStatus(
-                            $this->config->item('payment_gateways'),
-                            $r->payment_gateway,
-                            $r->status
-                        );
+<?php
+/**
+ * Listagem de cobranças (#2844), no padrão das listagens da v5 (#2852, ver
+ * views/clientes/clientes.php): filtros em GET (busca, status do gateway e
+ * tipo), data-table que vira cartões abaixo de 640px, empty-state para "nada
+ * ainda" e "nada encontrado" e paginação que mantém os filtros.
+ *
+ * As ações da linha mudam dados no gateway, então são POST com o token CSRF
+ * (na v4, atualizar e e-mail eram links GET):
+ *
+ * - atualizar e enviar por e-mail: botões de envio do formulário oculto
+ *   form-acao-cobranca, com formaction apontando para a cobrança;
+ * - confirmar pagamento, cancelar e excluir: um modal por ação, preenchido
+ *   pelo botão da linha (data-valor-*), com o id num formulário oculto.
+ *
+ * @var list<object>          $results
+ * @var array<string, string> $filtros
+ * @var int                   $total
+ * @var array                 $paginacao
+ * @var array<string, string> $status_opcoes
+ * @var array                 $gateways
+ * @var array{editar: bool, excluir: bool} $pode
+ */
+$temFiltro = $filtros !== [];
+$query = listagemQuery($filtros);
 
-                        echo '<tr>';
-                        echo '<td>' . $r->idCobranca . '</td>';
-                        echo '<td>' . $r->payment_gateway . '</td>';
-                        echo '<td>' . $r->payment_method . '</td>';
-                        echo '<td>' . $dataVenda . '</td>';
+$colunas = [
+    ['key' => 'idCobranca', 'label' => 'Nº', 'align' => 'right', 'nowrap' => true],
+    ['label' => 'Cliente', 'class' => 'min-w-36 [overflow-wrap:anywhere]', 'render' => fn ($c) => (string) ($c->nomeCliente ?? '')],
+    ['label' => 'Referência', 'nowrap' => true, 'render' => function ($c) {
+        if (! empty($c->os_id)) {
+            return component('link', ['label' => 'OS #' . (int) $c->os_id, 'href' => site_url('os/visualizar/' . (int) $c->os_id)]);
+        }
+        if (! empty($c->vendas_id)) {
+            return component('link', ['label' => 'Venda #' . (int) $c->vendas_id, 'href' => site_url('vendas/visualizar/' . (int) $c->vendas_id)]);
+        }
 
-                        if ($r->os_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/os/visualizar/' . $r->os_id . '"> Ordem de Serviço: #' . $r->os_id . '</a></td>';
-                        }
-                        if ($r->vendas_id != '') {
-                            echo '<td><a href="' . base_url() . 'index.php/vendas/visualizar/' . $r->vendas_id . '"> Venda: #' . $r->vendas_id . '</a></td>';
-                        }
+        return '—';
+    }],
+    ['label' => 'Gateway', 'nowrap' => true, 'hide_until' => '2xl', 'render' => fn ($c) => (string) $c->payment_gateway],
+    ['label' => 'Método', 'nowrap' => true, 'hide_until' => '2xl', 'render' => fn ($c) => (string) $c->payment_method],
+    ['label' => 'Vencimento', 'align' => 'right', 'nowrap' => true, 'render' => fn ($c) => dataBr($c->expire_at)],
+    ['label' => 'Situação', 'nowrap' => true, 'render' => fn ($c) => component('pill-status', cobrancaStatusPill($c->status) + [
+        'attrs' => ['title' => cobrancaDescricaoDoStatus($gateways, $c->payment_gateway, $c->status)],
+    ])],
+    ['label' => 'Valor', 'align' => 'right', 'nowrap' => true, 'render' => fn ($c) => dinheiro((float) $c->total / 100)],
+    ['label' => 'Ações', 'align' => 'right', 'class' => 'max-w-44 sm:min-w-44', 'render' => function ($c) use ($pode, $query) {
+        $nome = 'cobrança ' . $c->idCobranca;
+        $acoes = [
+            component('button', ['label' => 'Ver ' . $nome, 'icon' => 'eye', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('cobrancas/visualizar/' . $c->idCobranca)]),
+        ];
+        $link = cobrancaUrlSegura($c->link);
+        if ($link !== null && $c->barcode !== null && $c->barcode !== '') {
+            $acoes[] = component('button', ['label' => 'Abrir boleto da ' . $nome, 'icon' => 'barcode', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'href' => $link, 'attrs' => ['target' => '_blank', 'rel' => 'noopener']]);
+        }
+        if ($pode['editar']) {
+            $acoes[] = component('button', ['label' => 'Enviar ' . $nome . ' por e-mail', 'icon' => 'mail', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'type' => 'submit', 'attrs' => [
+                'form' => 'form-acao-cobranca',
+                'formaction' => site_url('cobrancas/enviarEmail/' . $c->idCobranca) . $query,
+            ]]);
+            $acoes[] = component('button', ['label' => 'Atualizar status da ' . $nome, 'icon' => 'history', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'type' => 'submit', 'attrs' => [
+                'form' => 'form-acao-cobranca',
+                'formaction' => site_url('cobrancas/atualizar/' . $c->idCobranca) . $query,
+            ]]);
+            $acoes[] = component('button', ['label' => 'Confirmar pagamento da ' . $nome, 'icon' => 'circle-check', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'attrs' => [
+                'data-modal-abrir' => 'confirmar-pagamento',
+                'data-valor-id' => (string) $c->idCobranca,
+                'data-valor-nome' => '#' . $c->idCobranca,
+            ]]);
+            $acoes[] = component('button', ['label' => 'Cancelar ' . $nome, 'icon' => 'x', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
+                'data-modal-abrir' => 'cancelar-cobranca',
+                'data-valor-id' => (string) $c->idCobranca,
+                'data-valor-nome' => '#' . $c->idCobranca,
+            ]]);
+        }
+        if ($pode['excluir']) {
+            $acoes[] = component('button', ['label' => 'Excluir ' . $nome, 'icon' => 'trash-2', 'icon_only' => true, 'variant' => 'ghost', 'size' => 'sm', 'class' => 'hover:text-danger-ink', 'attrs' => [
+                'data-modal-abrir' => 'excluir-cobranca',
+                'data-valor-id' => (string) $c->idCobranca,
+                'data-valor-nome' => '#' . $c->idCobranca,
+            ]]);
+        }
 
-                        echo '<td>' .  $cobrancaStatus . '</td>';
-                        echo '<td>R$ ' . number_format($r->total / 100, 2, ',', '.') . '</td>';
-                        echo '<td>';
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCobranca')) {
-                            echo '<a style="margin-right: 1%" href="#modal-cancelar" role="button" data-toggle="modal" cancela_id="' . $r->idCobranca . '" class="btn-nwe4" title="Cancelar Cobrança"><i class="bx bx-x" ></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/atualizar/' . $r->idCobranca . '" class="btn-nwe" title="Atualizar Cobrança"><i class="bx bx-refresh"></i></a>';
-                            echo '<a style="margin-right: 1%" href="#modal-confirmar" role="button" data-toggle="modal" confirma_id="' . $r->idCobranca . '" class="btn-nwe3" title="Confirmar pagamento"><i class="bx bx-check"></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/visualizar/' . $r->idCobranca . '" class="btn-nwe2" title="Ver mais detalhes"><i class="bx bx-show" ></i></a>';
-                            echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/cobrancas/enviarEmail/' . $r->idCobranca . '" class="btn-nwe5" title="Enviar por E-mail"><i class="bx bx-envelope" ></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca') && $r->barcode != '') {
-                            echo '<a style="margin-right: 1%" href="' . $r->link . '" target="_blank" class="btn-nwe" title="Visualizar boleto"><i class="bx bx-barcode" ></i></a>';
-                        }
-                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCobranca')) {
-                            echo '<a href="#modal-excluir" role="button" data-toggle="modal" excluir_id="' . $r->idCobranca . '" class="btn-nwe4" title="Excluir Cobrança"><i class="bx bx-trash-alt"></i></a>';
-                        }
-                        echo '</td>';
-                        echo '</tr>';
-                    } ?>
-                </tbody>
-            </table>
+        return $acoes;
+    }],
+];
+
+$vazio = $temFiltro
+    ? component('empty-state', [
+        'title' => 'Nenhuma cobrança encontrada',
+        'message' => 'Nada corresponde aos filtros. Confira a busca ou limpe os filtros.',
+        'icon' => 'search-x',
+        'action' => component('button', ['label' => 'Limpar filtros', 'variant' => 'outline', 'href' => site_url('cobrancas/cobrancas')]),
+        'class' => 'border-0',
+    ])
+    : component('empty-state', [
+        'title' => 'Nenhuma cobrança gerada',
+        'message' => 'As cobranças são geradas na tela de uma OS ou de uma venda e aparecem aqui.',
+        'icon' => 'banknote',
+        'class' => 'border-0',
+    ]);
+
+$resumo = ($total === 1 ? '1 cobrança' : number_format($total, 0, ',', '.') . ' cobranças')
+    . ($temFiltro ? ($total === 1 ? ' encontrada' : ' encontradas') . ' com os filtros' : '');
+?>
+<div class="flex flex-col gap-4 pt-2 pb-8">
+    <header>
+        <h1 class="font-display text-heading-xl text-text">Cobranças</h1>
+        <p class="text-caption text-muted" aria-live="polite"><?= e($resumo) ?></p>
+    </header>
+
+    <form method="get" action="<?= e(site_url('cobrancas/cobrancas')) ?>" role="search" aria-label="Filtrar cobranças" class="grid items-end gap-3 rounded-xl border border-border bg-surface p-4 sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_14rem_10rem_auto]">
+        <?= component('input', [
+            'name' => 'pesquisa',
+            'label' => 'Buscar',
+            'type' => 'search',
+            'value' => $filtros['pesquisa'] ?? null,
+            'placeholder' => 'Nº da cobrança, id no gateway ou cliente',
+            'attrs' => ['maxlength' => 100],
+        ]) ?>
+        <?= component('select', [
+            'name' => 'status',
+            'label' => 'Situação',
+            'placeholder' => 'Todas',
+            'options' => $status_opcoes,
+            'selected' => $filtros['status'] ?? null,
+        ]) ?>
+        <?= component('select', [
+            'name' => 'tipo',
+            'label' => 'Origem',
+            'placeholder' => 'Todas',
+            'options' => ['os' => 'Ordem de serviço', 'venda' => 'Venda'],
+            'selected' => $filtros['tipo'] ?? null,
+        ]) ?>
+        <div class="flex gap-2">
+            <?= component('button', ['label' => 'Filtrar', 'icon' => 'search', 'variant' => 'outline', 'type' => 'submit']) ?>
+            <?php if ($temFiltro) { ?>
+                <?= component('button', ['label' => 'Limpar', 'icon' => 'x', 'variant' => 'ghost', 'href' => site_url('cobrancas/cobrancas')]) ?>
+            <?php } ?>
         </div>
-    </div>
-    <?php echo $this->pagination->create_links(); ?>
+    </form>
 
-    <!-- Modal -->
-    <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url() ?>index.php/cobrancas/excluir" method="post">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h5 id="myModalLabel">Excluir cobrança</h5>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="excluir_id" name="excluir_id" value="" />
-                <h5 style="text-align: center">Deseja realmente excluir esta cobrança? A cobrança será cancelada.</h5>
-            </div>
-            <div class="modal-footer" style="display:flex;justify-content: center">
-                <button class="button btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="button__icon"><i class="bx bx-x"></i></span><span class="button__text2">Cancelar</span></button>
-                <button class="button btn btn-danger"><span class="button__icon"><i class='bx bx-trash'></i></span> <span class="button__text2">Excluir</span></button>
-            </div>
-        </form>
-    </div>
+    <?= component('data-table', [
+        'columns' => $colunas,
+        'rows' => $results,
+        'empty' => $vazio,
+        'caption' => 'Cobranças',
+    ]) ?>
 
-    <div id="modal-confirmar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url() ?>index.php/cobrancas/confirmarpagamento" method="post">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h5 id="myModalLabel">Confirmar pagamento</h5>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="confirma_id" name="confirma_id" value="" />
-                <h5 style="text-align: center">Deseja realmente confirmar pagamento desta cobrança?</h5>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                <button class="btn btn-success">Confirmar</button>
-            </div>
-        </form>
-    </div>
-
-    <div id="modal-cancelar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url() ?>index.php/cobrancas/cancelar" method="post">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h5 id="myModalLabel">Cancelar cobrança</h5>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="cancela_id" name="cancela_id" value="" />
-                <h5 style="text-align: center">Deseja realmente Cancelar esta cobrança?</h5>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                <button class="btn btn-danger">Confirmar</button>
-            </div>
-        </form>
-    </div>
+    <?= component('pagination', $paginacao) ?>
 </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(document).on('click', 'a', function(event) {
-                var cobranca = $(this).attr('excluir_id');
-                $('#excluir_id').val(cobranca);
-            });
 
-            $(document).on('click', 'a', function(event) {
-                var cobranca = $(this).attr('confirma_id');
-                $('#confirma_id').val(cobranca);
-            });
+<form id="form-acao-cobranca" method="post" action="<?= e(site_url('cobrancas/cobrancas')) ?>" hidden>
+    <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+</form>
 
-            $(document).on('click', 'a', function(event) {
-                var cobranca = $(this).attr('cancela_id');
-                $('#cancela_id').val(cobranca);
-            });
-        });
-    </script>
+<?php if ($pode['editar']) { ?>
+    <form id="form-confirmar-pagamento" method="post" action="<?= e(site_url('cobrancas/confirmarPagamento') . $query) ?>" hidden>
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+        <input type="hidden" name="id" value="" data-modal-de="confirmar-pagamento" data-modal-valor="id">
+    </form>
+    <?= component('modal', [
+        'id' => 'confirmar-pagamento',
+        'title' => 'Confirmar pagamento?',
+        'size' => 'sm',
+        'body' => [
+            'A cobrança ',
+            new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="nome"></strong>'),
+            ' será marcada como paga no gateway.',
+        ],
+        'footer' => [
+            component('button', ['label' => 'Voltar', 'variant' => 'ghost', 'attrs' => ['data-modal-fechar' => true]]),
+            component('button', ['label' => 'Confirmar', 'icon' => 'circle-check', 'type' => 'submit', 'attrs' => ['form' => 'form-confirmar-pagamento', 'data-rotulo-carregando' => 'Confirmando…']]),
+        ],
+    ]) ?>
+
+    <form id="form-cancelar-cobranca" method="post" action="<?= e(site_url('cobrancas/cancelar') . $query) ?>" hidden>
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+        <input type="hidden" name="id" value="" data-modal-de="cancelar-cobranca" data-modal-valor="id">
+    </form>
+    <?= component('modal-confirm', [
+        'id' => 'cancelar-cobranca',
+        'title' => 'Cancelar cobrança?',
+        'message' => [
+            'A cobrança ',
+            new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="nome"></strong>'),
+            ' será cancelada no gateway e o cliente não poderá mais pagá-la.',
+        ],
+        'confirm_label' => 'Cancelar cobrança',
+        'cancel_label' => 'Voltar',
+        'confirm_attrs' => ['form' => 'form-cancelar-cobranca'],
+    ]) ?>
+<?php } ?>
+
+<?php if ($pode['excluir']) { ?>
+    <form id="form-excluir-cobranca" method="post" action="<?= e(site_url('cobrancas/excluir') . $query) ?>" hidden>
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+        <input type="hidden" name="id" value="" data-modal-de="excluir-cobranca" data-modal-valor="id">
+    </form>
+    <?= component('modal-confirm', [
+        'id' => 'excluir-cobranca',
+        'title' => 'Excluir cobrança?',
+        'message' => [
+            'A cobrança ',
+            new HtmlSeguro('<strong class="font-semibold text-text" data-modal-valor="nome"></strong>'),
+            ' será cancelada no gateway e removida do Map-OS. Essa ação não pode ser desfeita.',
+        ],
+        'confirm_label' => 'Excluir',
+        'confirm_attrs' => ['form' => 'form-excluir-cobranca'],
+    ]) ?>
+<?php } ?>

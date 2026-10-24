@@ -1,113 +1,122 @@
 <?php
 
+require __DIR__ . '/instalador.php';
+
+// Antes de qualquer outra coisa: com o sistema instalado, nem lê o POST nem abre conexão com o banco.
+if (instaladorInstalado()) {
+    instaladorBloquear(true);
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    header('Allow: POST');
+    exit;
+}
+
 ini_set('max_execution_time', 300); //300 seconds
+header('Content-Type: application/json; charset=utf-8');
 
 $settings_file = __DIR__ . DIRECTORY_SEPARATOR . 'settings.json';
 
 if (! file_exists($settings_file)) {
-    exit('Arquivo de configuração não encontrado!');
-} else {
-    $contents = file_get_contents($settings_file);
-    $settings = json_decode($contents, true);
+    exit(json_encode(['success' => false, 'message' => 'Arquivo de configuração não encontrado!']));
 }
 
-if (! empty($_POST)) {
-    $host = $_POST['host'];
-    $dbuser = $_POST['dbuser'];
-    $dbpassword = $_POST['dbpassword'];
-    $dbname = $_POST['dbname'];
+$settings = json_decode(file_get_contents($settings_file), true);
 
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
-    $login_password = $_POST['password'] ? $_POST['password'] : '';
-    $base_url = $_POST['base_url'];
+[$dados, $erro] = instaladorValidar($_POST);
+if ($erro !== null) {
+    exit(json_encode(['success' => false, 'message' => $erro]));
+}
 
-    //check required fields
-    if (! ($host && $dbuser && $dbname && $full_name && $email && $login_password && $base_url)) {
-        echo json_encode(['success' => false, 'message' => 'Por favor insira todos os campos.']);
-        exit();
+if (! instaladorTemDependencias()) {
+    exit(json_encode(['success' => false, 'message' => 'As dependências do sistema não estão instaladas (pasta application/vendor). Use a versão completa da release ou, a partir do código-fonte, execute "composer install --no-dev" na pasta do projeto.']));
+}
+
+// Pasta dos anexos (opcional): criada e conferida antes de mexer no banco.
+[$armazenamento, $erro] = instaladorPrepararArmazenamento($dados['storage_path']);
+if ($erro !== null) {
+    exit(json_encode(['success' => false, 'message' => $erro]));
+}
+
+if (! is_file($settings['database_file'])) {
+    exit(json_encode(['success' => false, 'message' => 'O arquivo ../banco.sql não foi encontrado na pasta de instalação!']));
+}
+
+// Uma instalação por vez: lock exclusivo no arquivo, então a segunda requisição simultânea é recusada.
+// O sistema operacional solta o lock se o PHP morrer no meio, então um arquivo esquecido nunca trava novas tentativas.
+$arquivoDeTrava = __DIR__ . DIRECTORY_SEPARATOR . 'instalacao.lock';
+$trava = @fopen($arquivoDeTrava, 'c');
+if ($trava === false || ! flock($trava, LOCK_EX | LOCK_NB)) {
+    exit(json_encode(['success' => false, 'message' => 'Já existe uma instalação em andamento. Aguarde alguns instantes.']));
+}
+
+$terminar = static function (bool $sucesso, string $mensagem, ?string $aviso = null) use ($trava, $arquivoDeTrava): never {
+    @unlink($arquivoDeTrava);
+    flock($trava, LOCK_UN);
+    fclose($trava);
+    exit(json_encode(['success' => $sucesso, 'message' => $mensagem, 'aviso' => $aviso]));
+};
+
+try {
+    $mysqli = @new mysqli($dados['host'], $dados['dbuser'], $dados['dbpassword'], $dados['dbname']);
+
+    if (mysqli_connect_errno()) {
+        $terminar(false, $mysqli->connect_error ?: 'Não foi possível conectar ao banco de dados.');
     }
+} catch (Throwable $e) {
+    $terminar(false, $e->getMessage());
+}
 
-    //check for valid email
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-        echo json_encode(['success' => false, 'message' => 'Por favor insira um email válido.']);
-        exit();
-    }
+// Confere de novo já com a trava: outra instalação pode ter terminado enquanto esta validava.
+if (instaladorInstalado()) {
+    $mysqli->close();
+    $terminar(false, 'Parece que este aplicativo já está instalado! Você não pode reinstalá-lo novamente.');
+}
 
-    //check for valid database connection
-    try {
-        $mysqli = @new mysqli($host, $dbuser, $dbpassword, $dbname);
+try {
+    $sql = instaladorMontarSql(
+        file_get_contents($settings['database_file']),
+        $dados,
+        date('Y-m-d H:i:s'),
+        static fn (string $valor): string => $mysqli->real_escape_string($valor)
+    );
 
-        if (mysqli_connect_errno()) {
-            echo json_encode(['success' => false, 'message' => $mysqli->connect_error]);
-            exit();
-        }
-    } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-        exit();
-    }
-
-    //all input seems to be ok. check required fiels
-    if (! is_file($settings['database_file'])) {
-        echo json_encode(['success' => false, 'message' => 'O arquivo ../banco.sql não foi encontrado na pasta de instalação!']);
-        exit();
-    }
-
-    /*
-     * check the db config file
-     * if db already configured, we'll assume that the installation has completed
-     */
-    $is_installed = file_exists('..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env');
-
-    if ($is_installed) {
-        echo json_encode(['success' => false, 'message' => 'Parece que este aplicativo já está instalado! Você não pode reinstalá-lo novamente.']);
-        exit();
-    }
-
-    //start installation
-    $sql = file_get_contents($settings['database_file']);
-
-    //set admin information to database
-    $now = date('Y-m-d H:i:s');
-    $sql = str_replace('admin_name', $full_name, $sql);
-    $sql = str_replace('admin_email', $email, $sql);
-    $sql = str_replace('admin_password', password_hash($login_password, PASSWORD_DEFAULT), $sql);
-    $sql = str_replace('admin_created_at', $now, $sql);
-
+    // Erros do mysqli (PHP 8.1+ lança exceção) viram resposta JSON em vez de deixar a instalação pela metade.
     //create tables in datbase
     $mysqli->multi_query($sql);
     do {
     } while (mysqli_more_results($mysqli) && mysqli_next_result($mysqli));
     $mysqli->close();
-    // database created
 
-    $env_file_path = '..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env.example';
-    $env_file = file_get_contents($env_file_path);
+    $modelo = file_get_contents(dirname(__DIR__) . '/application/.env.example');
+    $env = instaladorMontarEnv($modelo, $dados, bin2hex(random_bytes(16)), base64_encode(random_bytes(32)), $armazenamento);
 
-    // set the database config file
-    $env_file = str_replace('enter_db_hostname', $host, $env_file);
-    $env_file = str_replace('enter_db_username', $dbuser, $env_file);
-    $env_file = str_replace('enter_db_password', $dbpassword, $env_file);
-    $env_file = str_replace('enter_db_name', $dbname, $env_file);
+    $arquivoEnv = dirname(__DIR__) . '/application/.env';
+    if (! file_put_contents($arquivoEnv, $env)) {
+        $terminar(false, 'Erro ao criar arquivo env.');
+    }
+    // Guarda a senha do banco e as chaves: só o dono do arquivo lê (se o sistema de arquivos permitir).
+    @chmod($arquivoEnv, 0600);
 
-    // set random enter_encryption_key
-    $encryption_key = bin2hex(random_bytes(16));
-    $env_file = str_replace('enter_encryption_key', $encryption_key, $env_file);
-    $env_file = str_replace('enter_baseurl', $base_url, $env_file);
-
-    // set random enter_jwt_key
-    $env_file = str_replace('enter_jwt_key', base64_encode(openssl_random_pseudo_bytes(32)), $env_file);
-    $env_file = str_replace('enter_token_expire_time', $_POST['enter_token_expire_time'], $env_file);
-    $env_file = str_replace('enter_api_enabled', (string) $_POST['enter_api_enabled'], $env_file);
-
-    // set the environment = production
-    $env_file = str_replace('pre_installation', 'production', $env_file);
-
-    if (file_put_contents('..' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . '.env', $env_file)) {
-        echo json_encode(['success' => true, 'message' => 'Instalação bem sucedida.']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Erro ao criar arquivo env.']);
+    // O banco.sql traz o esquema da 4.x: as migrations da v5 (limite de login, 2FA, histórico da OS, API...) rodam agora (#2858).
+    [$migrou, $saidaMigracao] = instaladorMigrar();
+    $aviso = null;
+    if ($migrou === null) {
+        $aviso = 'O instalador não conseguiu rodar as atualizações do banco de dados. ' . $saidaMigracao . ' '
+            . 'Depois de entrar, abra Configurações, aba Sistema, e use "Atualizar banco de dados", ou rode php index.php tools migrate na pasta do sistema. '
+            . 'Até lá o limite de tentativas de login e o 2FA ficam desligados.';
+    } elseif ($migrou === false) {
+        $aviso = 'O banco foi criado, mas as atualizações do banco de dados falharam' . ($saidaMigracao !== '' ? ': ' . $saidaMigracao : '') . '. '
+            . 'Corrija o erro e rode php index.php tools migrate na pasta do sistema, ou use "Atualizar banco de dados" em Configurações, aba Sistema. '
+            . 'Até lá o limite de tentativas de login e o 2FA ficam desligados.';
     }
 
-    exit();
+    // Trava definitiva e regra do servidor web que deixa só a página de aviso acessível.
+    @file_put_contents(__DIR__ . '/instalado.lock', date('c'));
+    @file_put_contents(__DIR__ . '/.htaccess', instaladorHtaccessInstalado());
+
+    $terminar(true, 'Instalação bem sucedida.', $aviso);
+} catch (Throwable $e) {
+    $terminar(false, 'A instalação falhou: ' . $e->getMessage());
 }

@@ -4,18 +4,42 @@ if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
+/**
+ * Área do cliente (#2848).
+ *
+ * Telas de entrada (login, cadastro, recuperação de senha) usam a superfície
+ * escura de views/entrada/; as telas de quem está logado usam a moldura
+ * própria de views/conecte/template.php (Top Nav escura no desktop e
+ * tabbar-mobile no celular, DESIGN.md), com os componentes da v5.
+ */
 class Mine extends CI_Controller
 {
+    /** Validade do token de recuperação de senha (#2875). */
+    public const TOKEN_VALIDADE_SEGUNDOS = 3600;
+
+    /** Itens por página das listagens e itens recentes do início. */
+    private const POR_PAGINA = 10;
+
+    private const RECENTES = 5;
+
+    /** @var array<string, string>|null Cache de configuracoes(). */
+    private ?array $configuracoesLidas = null;
+
     public function __construct()
     {
         parent::__construct();
         $this->load->model('Conecte_model');
-        $this->load->helper('Security_helper');
+        $this->load->helper(['Security_helper', 'os', 'vendas', 'financeiro', 'clientes', 'conecte']);
     }
 
     public function index()
     {
-        $this->load->view('conecte/login');
+        $this->load->view('conecte/login', [
+            'erro' => $this->session->flashdata('error'),
+            'sucesso' => $this->session->flashdata('success'),
+            // O atalho da listagem de clientes abre mine?e=<e-mail> com o campo preenchido.
+            'email' => trim((string) $this->input->get('e')),
+        ]);
     }
 
     public function sair()
@@ -24,93 +48,92 @@ class Mine extends CI_Controller
         redirect('mine');
     }
 
+    // --- Recuperação de senha ---------------------------------------------
+
     public function resetarSenha()
     {
-        $this->load->view('conecte/resetar_senha');
+        $this->load->view('conecte/resetar_senha', ['erro' => $this->session->flashdata('error')]);
     }
 
+    /**
+     * Grava a senha nova a partir do token (formulário de nova_senha). Com
+     * erro de campo, a tela volta com o erro; com token inválido, volta para o
+     * login com a mensagem genérica.
+     */
     public function senhaSalvar()
     {
-        $this->load->library('form_validation');
-        $data['custom_error'] = '';
-        $this->form_validation->set_rules('senha', 'Senha', 'required');
-
-        if ($this->input->post('token') == null || $this->input->post('token') == '') {
+        $tokenEmClaro = (string) $this->input->post('token');
+        if ($tokenEmClaro === '') {
             return redirect('mine');
         }
-        if ($this->form_validation->run() == false) {
-            echo json_encode(['result' => false, 'message' => 'Por favor digite uma senha']);
-        } else {
-            $token = $this->check_token($this->input->post('token'));
-            $cliente = $token ? $this->check_credentials($token->email) : null;
 
-            // O token precisa existir, estar dentro da validade, ainda não ter
-            // sido utilizado e corresponder a um cliente existente.
-            if ($token == null || $cliente == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
-                log_info('Alteração de senha. Porém, o token é inválido, expirado ou já utilizado.');
-                echo json_encode(['result' => false, 'message' => 'Token inválido ou expirado. Solicite uma nova recuperação de senha.']);
-            } else {
-                if ($token->email == $cliente->email) {
-                    $data = [
-                        'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
-                    ];
+        $token = $this->check_token($tokenEmClaro);
+        $cliente = $token ? $this->check_credentials($token->email) : null;
 
-                    $dataToken = [
-                        'token_utilizado' => true,
-                    ];
-                    $this->load->model('resetSenhas_model', '', true);
-                    if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $cliente->idClientes) == true) {
-                        if ($this->resetSenhas_model->edit('resets_de_senha', $dataToken, 'id', $token->id) == true) {
-                            $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                            $this->session->set_userdata($session_mine_data);
-                            log_info('Alteração da senha realizada com sucesso.');
-                            echo json_encode(['result' => true]);
-                        }
-                    }
-                } else {
-                    $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                    $this->session->set_userdata($session_mine_data);
-                    log_info('Alteração de senha. Porém, dados divergentes.');
-                    echo json_encode(['result' => false, 'message' => 'Dados divergentes.']);
-                }
-            }
+        // O token precisa existir, estar dentro da validade, ainda não ter
+        // sido utilizado e corresponder a um cliente existente.
+        if ($token == null || $cliente == null || ! $this->tokenVigente($token) || $token->email != $cliente->email) {
+            log_info('Alteração de senha. Porém, o token é inválido, expirado ou já utilizado.');
+            $this->session->set_flashdata('error', 'Token inválido ou expirado. Solicite uma nova recuperação de senha.');
+
+            return redirect('mine');
         }
+
+        $erros = $this->validarRegras([['field' => 'senha', 'label' => 'Senha', 'rules' => 'required|min_length[8]|max_length[72]']]);
+        $confirmacao = conecteErroDaConfirmacao($this->input->post());
+        if ($confirmacao !== null && ! isset($erros['senha'])) {
+            $erros['senha_confirmacao'] = $confirmacao;
+        }
+
+        if ($erros !== []) {
+            return $this->load->view('conecte/nova_senha', ['token' => $tokenEmClaro, 'erros' => $erros]);
+        }
+
+        $this->load->model('resetSenhas_model', '', true);
+        $senha = password_hash((string) $this->input->post('senha'), PASSWORD_DEFAULT);
+        if (! $this->Conecte_model->edit('clientes', ['senha' => $senha], 'idClientes', $cliente->idClientes)
+            || ! $this->resetSenhas_model->edit('resets_de_senha', ['token_utilizado' => true], 'id', $token->id)) {
+            return $this->load->view('conecte/nova_senha', ['token' => $tokenEmClaro, 'erros' => ['_geral' => 'Não foi possível salvar a senha. Tente de novo.']]);
+        }
+
+        log_info('Alteração da senha realizada com sucesso.');
+        $this->session->set_flashdata('success', 'Senha alterada. Entre com a senha nova.');
+
+        return redirect('mine?' . http_build_query(['e' => $cliente->email]));
     }
 
     public function tokenManual()
     {
-        $this->load->library('form_validation');
-        $data['custom_error'] = '';
-        $this->form_validation->set_rules('token', 'Token', 'required');
-
-        if ($this->form_validation->run('token') == false) {
-            $this->session->set_flashdata(['error' => (validation_errors() ? 'Por favor digite o token' : false)]);
-
-            return $this->load->view('conecte/token_digita');
-        } else {
-            $token = $this->check_token($this->input->post('token'));
-
-            // Um token inexistente, expirado ou já utilizado recebe sempre a
-            // mesma resposta genérica, para não revelar quais tokens existem.
-            if ($token == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
-                $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
-                log_info('Digitou Token. Porém, o token é inválido, expirado ou já utilizado.');
-
-                return redirect(base_url() . 'index.php/mine');
-            }
-
-            $cliente = $this->check_credentials($token->email);
-
-            if ($cliente == null || $token->email != $cliente->email) {
-                $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
-                log_info('Digitou Token. Porém, os dados de acesso estão incorretos.');
-
-                return redirect(base_url() . 'index.php/mine');
-            }
-
-            return $this->load->view('conecte/nova_senha', $token);
+        if ($this->input->method() !== 'post') {
+            return $this->load->view('conecte/token_digita', ['erro' => null]);
         }
-        $this->load->view('conecte/token_digita');
+
+        $digitado = trim((string) $this->input->post('token'));
+        if ($digitado === '') {
+            return $this->load->view('conecte/token_digita', ['erro' => 'Cole o código que chegou no seu e-mail.']);
+        }
+
+        $token = $this->check_token($digitado);
+
+        // Um token inexistente, expirado ou já utilizado recebe sempre a
+        // mesma resposta genérica, para não revelar quais tokens existem.
+        if ($token == null || ! $this->tokenVigente($token)) {
+            $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
+            log_info('Digitou Token. Porém, o token é inválido, expirado ou já utilizado.');
+
+            return redirect(base_url() . 'index.php/mine');
+        }
+
+        $cliente = $this->check_credentials($token->email);
+
+        if ($cliente == null || $token->email != $cliente->email) {
+            $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
+            log_info('Digitou Token. Porém, os dados de acesso estão incorretos.');
+
+            return redirect(base_url() . 'index.php/mine');
+        }
+
+        return $this->load->view('conecte/nova_senha', ['token' => $digitado, 'erros' => []]);
     }
 
     public function verifyTokenSenha()
@@ -120,7 +143,7 @@ class Mine extends CI_Controller
 
         // Um token inexistente, expirado ou já utilizado recebe sempre a mesma
         // resposta genérica, para não revelar quais tokens existem.
-        if ($token == null || $token->token_utilizado || $this->validateDate($token->data_expiracao)) {
+        if ($token == null || ! $this->tokenVigente($token)) {
             $this->session->set_flashdata(['error' => 'Token inválido ou expirado']);
             log_info('Acesso via link do email (Token). Porém, o token é inválido, expirado ou já utilizado.');
 
@@ -136,42 +159,62 @@ class Mine extends CI_Controller
             return redirect(base_url() . 'index.php/mine');
         }
 
-        return $this->load->view('conecte/nova_senha', $token);
+        return $this->load->view('conecte/nova_senha', ['token' => $segment['token'], 'erros' => []]);
     }
 
     public function gerarTokenResetarSenha()
     {
         $emailSolicitado = (string) $this->input->post('email');
 
+        // Limite de pedidos por e-mail e IP (#2879): cada pedido conta, exista ou
+        // não a conta, e quem passa do limite recebe a mesma resposta de sucesso,
+        // sem e-mail, para o limite não revelar quais e-mails têm cadastro nem
+        // permitir encher a caixa de um cliente.
+        $this->load->library('Limite_login');
+        $ip = $this->input->ip_address();
+
+        if ($this->limite_login->bloqueado('reset', $emailSolicitado, $ip)) {
+            log_info('Pedido de alteração de senha ignorado pelo limite de tentativas.');
+            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para ' . $emailSolicitado . '.');
+            redirect(base_url() . 'index.php/mine');
+        }
+        $this->limite_login->registrarFalha('reset', $emailSolicitado, $ip);
+
         if (! $cliente = $this->check_credentials($emailSolicitado)) {
             // Mesma resposta de sucesso quando o e-mail não existe, para não
             // permitir enumeração de contas.
             log_info('Cliente solicitou alteração de senha para um e-mail inexistente.');
-            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . html_escape($emailSolicitado));
+            // Texto puro: o alert da tela de login já escapa a mensagem.
+            $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para ' . $emailSolicitado . '.');
             redirect(base_url() . 'index.php/mine');
         } else {
             $this->load->model('resetSenhas_model', '', true);
+
+            // Só o hash do token vai para o banco; o token em claro vai só no
+            // e-mail. Um pedido novo invalida os anteriores do mesmo e-mail (#2875).
+            [$tokenEmClaro, $tokenHash] = tokenRecuperacaoGerar();
+            $this->db->where('email', $cliente->email)->where('token_utilizado', 0)->update('resets_de_senha', ['token_utilizado' => 1]);
+
             $data = [
                 'email' => $cliente->email,
-                'token' => bin2hex(random_bytes(16)),
-                'data_expiracao' => date('Y-m-d H:i:s'),
+                'token' => $tokenHash,
+                'data_expiracao' => date('Y-m-d H:i:s', time() + self::TOKEN_VALIDADE_SEGUNDOS),
+                'token_utilizado' => 0,
             ];
             if ($this->resetSenhas_model->add('resets_de_senha', $data) == true) {
-                $this->enviarRecuperarSenha($cliente->idClientes, $cliente->email, 'Recuperar Senha', json_encode($data));
-                $session_mine_data = ['nome' => $cliente->nomeCliente];
-                $this->session->set_userdata($session_mine_data);
+                $this->enviarRecuperarSenha($cliente->idClientes, $cliente->email, 'Recuperar Senha', json_encode(['token' => $tokenEmClaro] + $data));
                 log_info('Cliente solicitou alteração de senha.');
-                $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! <br> Um e-mail com as instruções será enviado para ' . $cliente->email);
+                $this->session->set_flashdata('success', 'Solicitação realizada com sucesso! Um e-mail com as instruções será enviado para ' . $cliente->email . '.');
                 redirect(base_url() . 'index.php/mine');
             } else {
                 $this->session->set_flashdata('error', 'Falha ao realizar solicitação!');
-                $session_mine_data = $cliente->nomeCliente ? ['nome' => $cliente->nomeCliente] : ['nome' => 'Inexistente'];
-                $this->session->set_userdata($session_mine_data);
                 log_info('Cliente solicitou alteração de senha. Porém falhou ao realizar solicitação!');
-                redirect(current_url());
+                redirect('mine/resetarSenha');
             }
         }
     }
+
+    // --- Login ----------------------------------------------------------
 
     public function login()
     {
@@ -185,339 +228,640 @@ class Mine extends CI_Controller
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
         if ($this->form_validation->run() == false) {
             echo json_encode(['result' => false, 'message' => validation_errors()]);
-        } else {
-            $email = $this->input->post('email');
-            $password = $this->input->post('senha');
-            $cliente = $this->check_credentials($email);
 
-            if ($cliente) {
-                // Verificar credenciais do usuário
-                if (password_verify($password, $cliente->senha)) {
-                    // Novo ID de sessão a cada autenticação, para que um ID
-                    // fixado antes do login não continue válido depois dele.
-                    $this->session->sess_regenerate(true);
-
-                    $session_mine_data = [
-                        'nome' => $cliente->nomeCliente,
-                        'cliente_id' => $cliente->idClientes,
-                        'email' => $cliente->email,
-                        'conectado' => true,
-                        'isCliente' => true
-                    ];
-                    $this->session->set_userdata($session_mine_data);
-                    $this->load->model('Audit_model');
-                    $log_data = [
-                        'usuario' => $cliente->nomeCliente,
-                        'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login',
-                        'data' => date('Y-m-d'),
-                        'hora' => date('H:i:s'),
-                        'ip' => $_SERVER['REMOTE_ADDR']
-                    ];
-
-                    $this->Audit_model->add($log_data);
-
-                    echo json_encode(['result' => true]);
-                } else {
-                    echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
-                }
-            } else {
-                // Mesma mensagem do erro de senha: mensagens distintas revelam
-                // quais e-mails possuem cadastro.
-                echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
-            }
+            return;
         }
+
+        $email = $this->input->post('email');
+        $password = $this->input->post('senha');
+        $ip = $this->input->ip_address();
+
+        // Limite de tentativas (#2870): bloqueado, nem consulta a senha.
+        $this->load->library('Limite_login');
+        if ($this->limite_login->bloqueado('cliente', $email, $ip)) {
+            echo json_encode(['result' => false, 'message' => Limite_login::MENSAGEM, 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+
+            return;
+        }
+
+        $cliente = $this->check_credentials($email);
+
+        // Mesma mensagem para e-mail inexistente e senha errada: mensagens
+        // distintas revelam quais e-mails possuem cadastro.
+        $senhaConfere = senhaConfere((string) $password, $cliente->senha ?? null);
+        if (! $cliente || ! $senhaConfere) {
+            $this->limite_login->registrarFalha('cliente', $email, $ip);
+            echo json_encode(['result' => false, 'message' => 'Os dados de acesso estão incorretos.', 'MAPOS_TOKEN' => $this->security->get_csrf_hash()]);
+
+            return;
+        }
+
+        $this->limite_login->registrarSucesso('cliente', $email);
+
+        // Novo ID de sessão a cada autenticação, para que um ID
+        // fixado antes do login não continue válido depois dele.
+        $this->session->sess_regenerate(true);
+
+        $this->session->set_userdata([
+            'nome' => $cliente->nomeCliente,
+            'cliente_id' => $cliente->idClientes,
+            'email' => $cliente->email,
+            'conectado' => true,
+            'isCliente' => true,
+        ]);
+
+        $this->load->model('Audit_model');
+        $this->Audit_model->add([
+            'usuario' => $cliente->nomeCliente,
+            'tarefa' => 'Cliente ' . $cliente->nomeCliente . ' efetuou login',
+            'data' => date('Y-m-d'),
+            'hora' => date('H:i:s'),
+            'ip' => $ip,
+        ]);
+
+        echo json_encode(['result' => true]);
     }
+
+    // --- Telas do cliente logado ----------------------------------------------
 
     public function painel()
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
+        $idCliente = $this->clienteLogado();
 
-        $data['menuPainel'] = 'painel';
-        $data['compras'] = $this->Conecte_model->getLastCompras($this->session->userdata('cliente_id'));
-        $data['os'] = $this->Conecte_model->getLastOs($this->session->userdata('cliente_id'));
-        $data['output'] = 'conecte/painel';
-        $this->load->view('conecte/template', $data);
+        return $this->tela('conecte/painel', 'painel', [
+            'os' => $this->Conecte_model->getLastOs($idCliente, self::RECENTES),
+            'compras' => $this->Conecte_model->getLastCompras($idCliente, self::RECENTES),
+            'resumo' => [
+                'os_em_andamento' => $this->Conecte_model->contarOsEmAndamento($idCliente),
+                'os' => $this->Conecte_model->count('os', $idCliente),
+                'compras' => $this->Conecte_model->count('vendas', $idCliente),
+                'cobrancas' => $this->Conecte_model->count('cobrancas', $idCliente),
+            ],
+        ], $this->acaoAbrirOs());
     }
 
     public function conta()
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
+        $this->clienteLogado();
 
-        $data['menuConta'] = 'conta';
-        $data['result'] = $this->Conecte_model->getDados();
-
-        $data['output'] = 'conecte/conta';
-        $this->load->view('conecte/template', $data);
+        return $this->tela('conecte/conta', 'conta', ['cliente' => $this->Conecte_model->getDados()]);
     }
 
+    /**
+     * "Meus dados" (#2851): POST comum; com erro, a tela volta com os valores
+     * e o erro em cada campo; com sucesso, volta para a conta com o toast. O
+     * cadastro alterado é sempre o da sessão.
+     */
     public function editarDados()
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
+        $idCliente = $this->clienteLogado();
+        $cliente = $this->Conecte_model->getDados();
+        $erros = [];
 
-        $data['menuConta'] = 'conta';
-
-        $this->load->library('form_validation');
-        $data['custom_error'] = '';
-
-        if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-            $senha = $this->input->post('senha');
-            if ($senha != null) {
-                $senha = password_hash($senha, PASSWORD_DEFAULT);
-                $data = [
-                    'nomeCliente' => $this->input->post('nomeCliente'),
-                    'documento' => $this->input->post('documento'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'email' => $this->input->post('email'),
-                    'senha' => $senha,
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'complemento' => $this->input->post('complemento'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'cep' => $this->input->post('cep'),
-                    'contato' => $this->input->post('contato'),
-                ];
-            } else {
-                $data = [
-                    'nomeCliente' => $this->input->post('nomeCliente'),
-                    'documento' => $this->input->post('documento'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'email' => $this->input->post('email'),
-                    'rua' => $this->input->post('rua'),
-                    'numero' => $this->input->post('numero'),
-                    'complemento' => $this->input->post('complemento'),
-                    'bairro' => $this->input->post('bairro'),
-                    'cidade' => $this->input->post('cidade'),
-                    'estado' => $this->input->post('estado'),
-                    'cep' => $this->input->post('cep'),
-                    'contato' => $this->input->post('contato'),
-                ];
+        if ($this->input->method() === 'post') {
+            $erros = $this->validarRegras(conecteRegrasDoCliente($idCliente));
+            $confirmacao = conecteErroDaConfirmacao($this->input->post());
+            if ($confirmacao !== null && ! isset($erros['senha'])) {
+                $erros['senha_confirmacao'] = $confirmacao;
             }
 
-            if ($this->Conecte_model->edit('clientes', $data, 'idClientes', $this->session->userdata('cliente_id')) == true) {
-                $this->session->set_flashdata('success', 'Dados editados com sucesso!');
-                redirect(base_url() . 'index.php/mine/conta');
-            } else {
+            // Trocar e-mail (o login) ou senha pede a senha atual (#2879): quem só
+            // sequestrou a sessão não assume a conta de forma permanente.
+            $dados = $erros === [] ? conecteDadosDoCliente($this->input->post(), false) : [];
+            if ($erros === [] && (strcasecmp((string) $dados['email'], (string) $cliente->email) !== 0 || ! empty($dados['senha'])) && ! senhaConfere((string) $this->input->post('senha_atual'), (string) $cliente->senha)) {
+                $erros['senha_atual'] = 'Para trocar o e-mail ou a senha, informe a sua senha atual.';
+            }
+
+            if ($erros === []) {
+                if ($this->Conecte_model->edit('clientes', $dados, 'idClientes', $idCliente)) {
+                    $this->session->set_userdata(['nome' => $dados['nomeCliente'], 'email' => $dados['email']]);
+                    $this->session->set_flashdata('success', 'Seus dados foram salvos.');
+
+                    return redirect('mine/conta');
+                }
+
+                $erros['_geral'] = 'Não foi possível salvar. Tente de novo.';
             }
         }
 
-        $data['result'] = $this->Conecte_model->getDados();
-
-        $data['output'] = 'conecte/editar_dados';
-        $this->load->view('conecte/template', $data);
-    }
-
-    public function compras()
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        $data['menuVendas'] = 'vendas';
-        $this->load->library('pagination');
-
-        $config['base_url'] = base_url() . 'index.php/mine/compras/';
-        $config['total_rows'] = $this->Conecte_model->count('vendas', $this->session->userdata('cliente_id'));
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-
-        $data['results'] = $this->Conecte_model->getCompras('vendas', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
-
-        $data['output'] = 'conecte/compras';
-        $this->load->view('conecte/template', $data);
-    }
-
-    public function cobrancas()
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        $this->load->library('pagination');
-        $this->load->config('payment_gateways');
-
-        $data['menuCobrancas'] = 'cobrancas';
-
-        $config['base_url'] = base_url() . 'index.php/mine/cobrancas/';
-        $config['total_rows'] = $this->Conecte_model->count('cobrancas', $this->session->userdata('cliente_id'));
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-
-        $data['results'] = $this->Conecte_model->getCobrancas('cobrancas', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
-        $data['output'] = 'conecte/cobrancas';
-
-        $this->load->view('conecte/template', $data);
-    }
-
-    public function atualizarcobranca($id = null)
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
-        }
-
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
-            redirect(base_url());
-        }
-
-        $this->load->model('cobrancas_model');
-        $this->cobrancas_model->atualizarStatus($this->uri->segment(3));
-
-        redirect(site_url('mine/cobrancas/'));
-    }
-
-    public function enviarcobranca()
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        if (! $this->uri->segment(3) || ! is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('mapos');
-        }
-
-        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eCobranca')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para atualizar cobrança.');
-            redirect(base_url());
-        }
-
-        $this->load->model('cobrancas_model');
-        $this->cobrancas_model->enviarEmail($this->uri->segment(3));
-        $this->session->set_flashdata('success', 'Email adicionado na fila.');
-
-        redirect(site_url('mine/cobrancas/'));
+        return $this->tela('conecte/editar_dados', 'conta', [
+            'valores' => clienteValoresDoFormulario($this->input->method() === 'post' ? $this->input->post() : null, $cliente),
+            'erros' => $erros,
+        ]);
     }
 
     public function os()
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
+        $idCliente = $this->clienteLogado();
+        $offset = max(0, (int) $this->uri->segment(3));
+        $total = $this->Conecte_model->count('os', $idCliente);
 
-        $data['menuOs'] = 'os';
-        $this->load->library('pagination');
-
-        $config['base_url'] = base_url() . 'index.php/mine/os/';
-        $config['total_rows'] = $this->Conecte_model->count('os', $this->session->userdata('cliente_id'));
-        $config['per_page'] = 10;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-
-        $data['results'] = $this->Conecte_model->getOs('os', '*', '', $config['per_page'], $this->uri->segment(3), '', '', $this->session->userdata('cliente_id'));
-
-        $data['output'] = 'conecte/os';
-        $this->load->view('conecte/template', $data);
+        return $this->tela('conecte/os', 'os', [
+            'results' => $this->Conecte_model->getOs('os', '*', '', self::POR_PAGINA, $offset, '', '', $idCliente),
+            'total' => $total,
+            'paginacao' => $this->paginacao(site_url('mine/os'), $total, $offset),
+        ], $this->acaoAbrirOs());
     }
 
+    /**
+     * Tela da OS para o cliente: status, valores, textos, produtos, serviços,
+     * anexos e o PIX. Só a OS do cliente logado; as demais voltam para o
+     * início sem dizer se existem.
+     */
     public function visualizarOs($id = null)
     {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
+        $idCliente = $this->clienteLogado();
+        $this->load->model('os_model');
+        $this->load->model('mapos_model');
 
-        $data['menuOs'] = 'os';
-        $this->data['custom_error'] = '';
+        $os = $this->osDoCliente($id, $idCliente);
+        $idOs = (int) $os->idOs;
+        $emitente = $this->mapos_model->getEmitente();
+        $pixKey = $this->configuracao('pix_key');
+        $totais = $this->os_model->totais($os);
+        $pixPayload = $this->os_model->getPixPayload($idOs, $pixKey, $emitente);
+
+        return $this->tela('conecte/visualizar_os', 'os', [
+            'os' => $os,
+            'totais' => $totais,
+            'produtos' => $this->os_model->getProdutos($idOs),
+            'servicos' => $this->os_model->getServicos($idOs),
+            'anexos' => $this->os_model->getAnexos($idOs),
+            // Os trechos do painel (os/partes/*) sem as ações de edição.
+            'pode' => ['editar' => false],
+            'garantia_ate' => osVencimentoGarantia($os->dataFinal, $os->garantia, $os->status),
+            'pix' => $pixPayload === null ? null : [
+                'payload' => $pixPayload,
+                'qr' => $this->os_model->getQrCode($idOs, $pixKey, $emitente),
+                'chave' => $this->formatarChave($pixKey),
+            ],
+        ]);
+    }
+
+    /** Endereço antigo da tela de detalhes: agora é a mesma tela da OS. */
+    public function detalhesOs($id = null)
+    {
+        $this->clienteLogado();
+
+        return redirect('mine/visualizarOs/' . (ctype_digit((string) $id) ? (int) $id : 0));
+    }
+
+    public function imprimirOs($id = null)
+    {
+        $idCliente = $this->clienteLogado();
         $this->load->model('mapos_model');
         $this->load->model('os_model');
-        $this->CI = &get_instance();
-        $this->CI->load->database();
 
-        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['result'] = $this->os_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
-        $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $data['anexos'] = $this->os_model->getAnexos($this->uri->segment(3));
+        $os = $this->osDoCliente($id, $idCliente);
+        $idOs = (int) $os->idOs;
+
+        $data['result'] = $os;
+        $data['produtos'] = $this->os_model->getProdutos($idOs);
+        $data['servicos'] = $this->os_model->getServicos($idOs);
         $data['emitente'] = $this->mapos_model->getEmitente();
-        $data['qrCode'] = $this->os_model->getQrCode(
-            $id,
-            $data['pix_key'],
-            $data['emitente']
-        );
+        $data['pix_key'] = $this->configuracao('pix_key');
+        $data['qrCode'] = $this->os_model->getQrCode($idOs, $data['pix_key'], $data['emitente']);
         $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
 
-        if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
+        $this->load->view('conecte/imprimirOs', $data);
+    }
+
+    /**
+     * Link da OS nos e-mails (mine/minha_ordem_de_servico/<y>): abre a tela da
+     * OS, depois do login. O número do link só identifica a OS (ver
+     * conecteIdDoLinkDoEmail()); a checagem de dono é a da tela.
+     */
+    public function minha_ordem_de_servico($y = null)
+    {
+        $this->clienteLogado();
+
+        $id = conecteIdDoLinkDoEmail($y);
+        if ($id === null) {
+            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
+
+            return redirect('mine/painel');
+        }
+
+        return redirect('mine/visualizarOs/' . $id);
+    }
+
+    /**
+     * Abrir uma OS pelo cliente: só a descrição é obrigatória. A OS vai para o
+     * técnico com menos OS e os textos são gravados no formato dos textos da
+     * OS (osTextoParaGravar()), sem HTML do cliente.
+     */
+    public function adicionarOs()
+    {
+        $idCliente = $this->clienteLogado();
+        $erros = [];
+
+        if ($this->input->method() === 'post') {
+            $erros = $this->validarRegras([
+                ['field' => 'descricaoProduto', 'label' => 'Equipamento ou serviço', 'rules' => 'required|trim|max_length[2000]'],
+                ['field' => 'defeito', 'label' => 'Defeito', 'rules' => 'trim|max_length[2000]'],
+                ['field' => 'observacoes', 'label' => 'Observações', 'rules' => 'trim|max_length[2000]'],
+            ]);
+
+            $tecnico = $erros === [] ? $this->tecnicoParaNovaOs() : null;
+            if ($erros === [] && $tecnico === null) {
+                $erros['_geral'] = 'Não foi possível abrir a OS agora. Fale com a assistência.';
+            }
+
+            if ($erros === []) {
+                $texto = fn (string $campo) => osTextoParaGravar(is_string($this->input->post($campo)) ? $this->input->post($campo) : '');
+                $dados = [
+                    'dataInicial' => date('Y-m-d'),
+                    'clientes_id' => $idCliente,
+                    'usuarios_id' => $tecnico,
+                    'dataFinal' => date('Y-m-d'),
+                    'descricaoProduto' => $texto('descricaoProduto'),
+                    'defeito' => $texto('defeito'),
+                    'status' => 'Aberto',
+                    'observacoes' => $texto('observacoes'),
+                    'faturado' => 0,
+                ];
+
+                $idOs = $this->Conecte_model->add('os', $dados, true);
+                if (is_numeric($idOs)) {
+                    $this->load->model('mapos_model');
+                    $this->load->model('usuarios_model');
+                    $this->load->model('os_model');
+
+                    // Histórico de status da OS (#2842); sem usuário = aberta pelo cliente.
+                    $this->os_model->registrarStatus((int) $idOs, null, 'Aberto', null);
+
+                    $remetentes = array_map(static fn ($usuario) => $usuario->email, $this->usuarios_model->getAll());
+                    $remetentes[] = (string) $this->session->userdata('email');
+
+                    $this->enviarOsPorEmail($idOs, $remetentes, 'Nova Ordem de Serviço #' . $idOs . ' - Criada pelo Cliente');
+                    $this->session->set_flashdata('success', 'OS #' . $idOs . ' aberta. A assistência vai entrar em contato.');
+
+                    return redirect('mine/visualizarOs/' . $idOs);
+                }
+
+                $erros['_geral'] = 'Não foi possível abrir a OS. Tente de novo.';
+            }
+        }
+
+        return $this->tela('conecte/adicionarOs', 'os', [
+            'valores' => array_map(fn ($campo) => is_string($this->input->post($campo)) ? $this->input->post($campo) : '', ['descricaoProduto' => 'descricaoProduto', 'defeito' => 'defeito', 'observacoes' => 'observacoes']),
+            'erros' => $erros,
+        ]);
+    }
+
+    public function compras()
+    {
+        $idCliente = $this->clienteLogado();
+        $offset = max(0, (int) $this->uri->segment(3));
+        $total = $this->Conecte_model->count('vendas', $idCliente);
+
+        return $this->tela('conecte/compras', 'compras', [
+            'results' => $this->Conecte_model->getCompras('vendas', '*', '', self::POR_PAGINA, $offset, '', '', $idCliente),
+            'total' => $total,
+            'paginacao' => $this->paginacao(site_url('mine/compras'), $total, $offset),
+        ]);
+    }
+
+    public function visualizarCompra($id = null)
+    {
+        $idCliente = $this->clienteLogado();
+        $this->load->model('mapos_model');
+        $this->load->model('vendas_model');
+
+        $venda = $this->compraDoCliente($id, $idCliente);
+        $idVenda = (int) $venda->idVendas;
+        $emitente = $this->mapos_model->getEmitente();
+        $pixKey = $this->configuracao('pix_key');
+        $pixPayload = $this->vendas_model->getPixPayload($idVenda, $pixKey, $emitente);
+
+        return $this->tela('conecte/visualizar_compra', 'compras', [
+            'venda' => $venda,
+            'totais' => $this->vendas_model->totais($venda),
+            'produtos' => $this->vendas_model->getProdutos($idVenda),
+            // Os trechos do painel (vendas/partes/*) sem as ações de edição.
+            'pode' => ['itens' => false],
+            'garantia_ate' => vendaGarantiaAte($venda->dataVenda, $venda->garantia),
+            'pix' => $pixPayload === null ? null : [
+                'payload' => $pixPayload,
+                'qr' => $this->vendas_model->getQrCode($idVenda, $pixKey, $emitente),
+                'chave' => $this->formatarChave($pixKey),
+            ],
+        ]);
+    }
+
+    public function imprimirCompra($id = null)
+    {
+        $idCliente = $this->clienteLogado();
+        $this->load->model('mapos_model');
+        $this->load->model('vendas_model');
+
+        $venda = $this->compraDoCliente($id, $idCliente);
+        $idVenda = (int) $venda->idVendas;
+
+        $data['result'] = $venda;
+        $data['produtos'] = $this->vendas_model->getProdutos($idVenda);
+        $data['emitente'] = $this->mapos_model->getEmitente();
+        $data['pix_key'] = $this->configuracao('pix_key');
+        $data['qrCode'] = $this->vendas_model->getQrCode($idVenda, $data['pix_key'], $data['emitente']);
+        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
+
+        $this->load->view('conecte/imprimirVenda', $data);
+    }
+
+    public function cobrancas()
+    {
+        $idCliente = $this->clienteLogado();
+        $offset = max(0, (int) $this->uri->segment(3));
+        $total = $this->Conecte_model->count('cobrancas', $idCliente);
+
+        return $this->tela('conecte/cobrancas', 'cobrancas', [
+            'results' => $this->Conecte_model->getCobrancas('cobrancas', '*', '', self::POR_PAGINA, $offset, '', '', $idCliente),
+            'total' => $total,
+            'paginacao' => $this->paginacao(site_url('mine/cobrancas'), $total, $offset),
+        ]);
+    }
+
+    /** Exibe o anexo de uma OS do cliente (imagens e PDF na página). */
+    public function anexo($id = null, $parte = null)
+    {
+        $this->enviarAnexo($id, $parte === 'thumb', false);
+    }
+
+    public function downloadanexo($id = null)
+    {
+        $this->enviarAnexo($id, false, true);
+    }
+
+    /**
+     * O anexo precisa pertencer a uma OS do cliente autenticado; o arquivo vem
+     * de STORAGE_PATH (#2872), nunca de uma URL pública.
+     */
+    private function enviarAnexo($id, bool $miniatura, bool $baixar): void
+    {
+        $idCliente = $this->clienteLogado();
+
+        $file = ($id != null && is_numeric($id)) ? $this->db->where('idAnexos', (int) $id)->get('anexos', 1)->row() : null;
+
+        $os = null;
+        if ($file) {
+            $this->load->model('os_model');
+            $os = $this->os_model->getById($file->os_id);
+        }
+
+        $arquivo = ($os && $os->idClientes == $idCliente) ? armazenamentoArquivoDoAnexo($file, $miniatura) : null;
+
+        if ($arquivo === null) {
+            if ($miniatura) {
+                show_404();
+            }
+            $this->session->set_flashdata('error', 'Anexo não encontrado.');
             redirect('mine/painel');
         }
 
-        $data['output'] = 'conecte/visualizar_os';
-        $this->load->view('conecte/template', $data);
+        armazenamentoEnviar($arquivo, 'anexo-' . (int) $file->idAnexos . '.' . strtolower(pathinfo($arquivo, PATHINFO_EXTENSION)), $baixar);
     }
 
-    public function validarCPF($cpf)
+    // --- Cadastro -------------------------------------------------------------
+
+    /**
+     * Cadastro do cliente pela área do cliente, com captcha. Com erro, a tela
+     * volta com os valores e o erro em cada campo; com sucesso, vai para o
+     * login com o e-mail preenchido.
+     */
+    public function cadastrar()
+    {
+        $this->load->model('clientes_model', '', true);
+        $erros = [];
+
+        if ($this->input->method() === 'post') {
+            $captchaEsperado = (string) $this->session->userdata('captchaWord');
+            $captchaInformado = trim((string) $this->input->post('captcha'));
+            // Um captcha só vale para uma tentativa, certa ou errada.
+            $this->session->unset_userdata('captchaWord');
+
+            $erros = $this->validarRegras(conecteRegrasDoCliente(null));
+            $confirmacao = conecteErroDaConfirmacao($this->input->post());
+            if ($confirmacao !== null && ! isset($erros['senha'])) {
+                $erros['senha_confirmacao'] = $confirmacao;
+            }
+
+            // Sem a checagem de "vazio", uma sessão sem captcha gerado compara
+            // '' com '' e libera o cadastro sem resolver a imagem.
+            if ($captchaEsperado === '' || $captchaInformado === '' || strtolower($captchaInformado) !== strtolower($captchaEsperado)) {
+                $erros['captcha'] = 'Os caracteres não conferem com a imagem. Digite os da imagem nova.';
+            }
+
+            if ($erros === []) {
+                $dados = conecteDadosDoCliente($this->input->post(), true) + ['dataCadastro' => date('Y-m-d')];
+                $id = $this->clientes_model->add('clientes', $dados);
+
+                if ($id > 0) {
+                    $this->enviarEmailBoasVindas($id);
+                    $this->enviarEmailTecnicoNotificaClienteNovo($id);
+                    $this->session->set_flashdata('success', 'Cadastro feito! Entre com o seu e-mail e a senha que você criou.');
+
+                    return redirect('mine?' . http_build_query(['e' => $dados['email']]));
+                }
+
+                $erros['_geral'] = 'Não foi possível concluir o cadastro. Tente de novo.';
+            }
+        }
+
+        $this->load->view('conecte/cadastrar', [
+            'valores' => clienteValoresDoFormulario($this->input->method() === 'post' ? $this->input->post() : null, null),
+            'erros' => $erros,
+        ]);
+    }
+
+    public function captcha()
+    {
+        header('Content-type: image/png');
+        header('Cache-Control: no-store');
+
+        $arrFont = [
+            'font-ZXX_Noise.otf',
+            'font-karabine.ttf',
+            'font-capture.ttf',
+            'font-captcha.ttf',
+        ];
+
+        shuffle($arrFont);
+
+        $codigoCaptcha = substr(bin2hex(random_bytes(4)), 0, 7);
+
+        $img = imagecreatefromjpeg(FCPATH . 'assets/img/captcha_bg.jpg');
+        $corCaptcha = imagecolorallocate($img, 255, 0, 0);
+
+        $font = FCPATH . 'assets/fonts/captcha/' . $arrFont[0];
+
+        imagettftext(
+            $img,
+            23,
+            0,
+            5,
+            rand(30, 35),
+            $corCaptcha,
+            $font,
+            $codigoCaptcha
+        );
+
+        imagepng($img);
+        imagedestroy($img);
+
+        $this->session->set_userdata('captchaWord', $codigoCaptcha);
+    }
+
+    // --- Apoio ----------------------------------------------------------------
+
+    /**
+     * Id do cliente da sessão; sem login, volta para a tela de entrada.
+     */
+    private function clienteLogado(): int
+    {
+        if (! session_id() || ! $this->session->userdata('conectado') || ! $this->session->userdata('cliente_id')) {
+            redirect('mine');
+        }
+
+        return (int) $this->session->userdata('cliente_id');
+    }
+
+    /**
+     * OS do cliente logado; id inválido, inexistente ou de outro cliente
+     * recebe a mesma mensagem, para não revelar quais OS existem.
+     */
+    private function osDoCliente($id, int $idCliente): object
+    {
+        $os = ctype_digit((string) $id) ? $this->os_model->getById((int) $id) : null;
+
+        if (! $os || (int) $os->idClientes !== $idCliente) {
+            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
+            redirect('mine/os');
+        }
+
+        return $os;
+    }
+
+    /** Venda do cliente logado; as demais recebem a mesma mensagem. */
+    private function compraDoCliente($id, int $idCliente): object
+    {
+        $venda = ctype_digit((string) $id) ? $this->vendas_model->getById((int) $id) : null;
+
+        if (! $venda || (int) $venda->clientes_id !== $idCliente) {
+            $this->session->set_flashdata('error', 'Compra não encontrada.');
+            redirect('mine/compras');
+        }
+
+        return $venda;
+    }
+
+    /** Ação principal das telas de OS: abrir uma nova (topo da moldura). */
+    private function acaoAbrirOs(): array
+    {
+        return ['label' => 'Abrir OS', 'icon' => 'plus', 'href' => site_url('mine/adicionarOs')];
+    }
+
+    /**
+     * Renderiza uma tela dentro da moldura da área do cliente
+     * (views/conecte/template.php).
+     *
+     * @param  array|null  $acao  Props do button-primary da tela, no topo
+     */
+    private function tela(string $view, string $menu, array $dados = [], ?array $acao = null)
+    {
+        $flash = [];
+        foreach (['success' => ['success', 'Sucesso!', 5000], 'error' => ['danger', 'Falha!', 8000]] as $chave => [$variante, $titulo, $duracao]) {
+            $mensagem = $this->session->flashdata($chave);
+            if (is_string($mensagem) && trim($mensagem) !== '') {
+                $flash[] = ['variant' => $variante, 'title' => $titulo, 'duration' => $duracao, 'message' => $mensagem];
+            }
+        }
+
+        $this->load->view('conecte/template', $dados + [
+            'view' => $view,
+            'menu' => conecteMenu($menu),
+            'acao' => $acao,
+            'flash' => $flash,
+            'configuration' => $this->configuracoes(),
+            'cliente_nome' => (string) $this->session->userdata('nome'),
+        ]);
+    }
+
+    /** Props do componente pagination das listagens. */
+    private function paginacao(string $urlBase, int $total, int $offset): array
+    {
+        return paginacaoProps([
+            'base_url' => $urlBase,
+            'total_rows' => $total,
+            'per_page' => self::POR_PAGINA,
+            'offset' => $offset,
+        ]);
+    }
+
+    /**
+     * Roda o form_validation com as regras e devolve os erros por campo
+     * (vazio quando passou), com as mensagens em português, como o
+     * MY_Controller::validarFormulario() do painel.
+     *
+     * @return array<string, string>
+     */
+    private function validarRegras(array $regras): array
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->reset_validation();
+        $this->form_validation->set_data($this->input->post() ?: []);
+        $this->form_validation->set_rules($regras);
+
+        $idioma = $this->config->item('language');
+        $this->config->set_item('language', 'pt-br');
+        try {
+            $valido = $this->form_validation->run();
+        } finally {
+            $this->config->set_item('language', $idioma);
+        }
+
+        return $valido ? [] : $this->form_validation->error_array();
+    }
+
+    /**
+     * Configurações do sistema (tabela configuracoes), lidas uma vez: modo de
+     * cor da moldura e chave PIX.
+     *
+     * @return array<string, string>
+     */
+    private function configuracoes(): array
+    {
+        if ($this->configuracoesLidas === null) {
+            $this->configuracoesLidas = ['app_name' => (string) $this->config->item('app_name')];
+            foreach ($this->db->get('configuracoes')->result() as $linha) {
+                $this->configuracoesLidas[$linha->config] = (string) $linha->valor;
+            }
+        }
+
+        return $this->configuracoesLidas;
+    }
+
+    private function configuracao(string $nome): string
+    {
+        return $this->configuracoes()[$nome] ?? '';
+    }
+
+    /**
+     * Técnico que recebe a OS aberta pelo cliente: o com menos OS; sem OS no
+     * sistema, o primeiro usuário ativo.
+     */
+    private function tecnicoParaNovaOs(): ?int
+    {
+        $usuario = $this->db->query('SELECT usuarios_id, count(*) as down FROM os GROUP BY usuarios_id ORDER BY down LIMIT 1')->row();
+        if ($usuario !== null && $usuario->usuarios_id) {
+            return (int) $usuario->usuarios_id;
+        }
+
+        $usuario = $this->db->where('situacao', 1)->limit(1)->get('usuarios')->row();
+
+        return $usuario ? (int) $usuario->idUsuarios : null;
+    }
+
+    private function validarCPF($cpf)
     {
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
         if (strlen($cpf) !== 11 || preg_match('/^(\d)\1+$/', $cpf)) {
@@ -542,7 +886,7 @@ class Mine extends CI_Controller
         return $dv2 == $cpf[10];
     }
 
-    public function validarCNPJ($cnpj)
+    private function validarCNPJ($cnpj)
     {
         $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
         if (strlen($cnpj) !== 14 || preg_match('/^(\d)\1+$/', $cnpj)) {
@@ -567,7 +911,7 @@ class Mine extends CI_Controller
         return $dv2 == $cnpj[13];
     }
 
-    public function formatarChave($chave)
+    private function formatarChave($chave)
     {
         if ($this->validarCPF($chave)) {
             return substr($chave, 0, 3) . '.' . substr($chave, 3, 3) . '.' . substr($chave, 6, 3) . '-' . substr($chave, 9);
@@ -580,347 +924,6 @@ class Mine extends CI_Controller
         return $chave;
     }
 
-    public function gerarPagamentoGerencianetBoleto()
-    {
-        print_r(json_encode(['code' => 4001, 'error' => 'Erro interno', 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente']));
-
-    }
-
-    public function gerarPagamentoGerencianetLink()
-    {
-        print_r(json_encode(['code' => 4001, 'error' => 'Erro interno', 'errorDescription' => 'Cobrança não pode ser gerada pelo lado do cliente']));
-
-    }
-
-    public function imprimirOs($id = null)
-    {
-        if (!session_id() || !$this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        $data['menuOs'] = 'os';
-        $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
-        $this->load->model('os_model');
-        $data['result'] = $this->os_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
-        $data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $data['emitente'] = $this->mapos_model->getEmitente();
-        $data['pix_key'] = $this->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['qrCode'] = $this->os_model->getQrCode(
-            $id,
-            $data['pix_key'],
-            $data['emitente']
-        );
-        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
-
-        if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
-            redirect('mine/painel');
-        }
-
-        $this->load->view('conecte/imprimirOs', $data);
-    }
-
-    public function visualizarCompra($id = null)
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        $data['menuVendas'] = 'vendas';
-        $data['custom_error'] = '';
-        $this->CI = &get_instance();
-        $this->CI->load->database();
-        $this->load->model('mapos_model');
-        $this->load->model('os_model');
-        $this->load->model('vendas_model');
-
-        $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
-        $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
-        $data['emitente'] = $this->mapos_model->getEmitente();
-        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['qrCode'] = $this->vendas_model->getQrCode(
-            $id,
-            $data['pix_key'],
-            $data['emitente']
-        );
-        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
-        
-        if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
-            redirect('mine/painel');
-        }
-
-        $data['output'] = 'conecte/visualizar_compra';
-
-        $this->load->view('conecte/template', $data);
-    }
-
-    public function imprimirCompra($id = null)
-    {
-        if (!session_id() || !$this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        $data['menuVendas'] = 'vendas';
-        $data['custom_error'] = '';
-
-        $this->load->model('mapos_model');
-        $this->load->model('vendas_model');
-        $this->load->model('os_model');
-
-        $data['result'] = $this->vendas_model->getById($id);
-        $data['produtos'] = $this->vendas_model->getProdutos($id);
-        $data['emitente'] = $this->mapos_model->getEmitente();
-
-        $this->CI = &get_instance();
-        $this->CI->load->database();
-        $data['pix_key'] = $this->CI->db->get_where('configuracoes', ['config' => 'pix_key'])->row_object()->valor;
-        $data['qrCode'] = $this->vendas_model->getQrCode($id, $data['pix_key'], $data['emitente']);
-        $data['chaveFormatada'] = $this->formatarChave($data['pix_key']);
-
-        if ($data['result']->clientes_id != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta venda não pertence ao cliente logado.');
-            redirect('mine/painel');
-        }
-
-        $this->load->view('conecte/imprimirVenda', $data);
-    }
-
-    public function minha_ordem_de_servico($y = null, $when = null)
-    {
-        // O identificador enviado por e-mail é apenas uma ofuscação reversível
-        // (y = 7653 * ID + 44023), portanto não pode ser tratado como segredo.
-        // O cliente precisa estar autenticado e a OS precisa ser dele.
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        if (($y == null) || (! is_numeric($y))) {
-            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
-            redirect('mine/painel');
-        }
-
-        $y = intval($y);
-        $id = ($y - 44023) / 7653;
-
-        if ($id <= 0 || floor($id) != $id) {
-            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
-            redirect('mine/painel');
-        }
-
-        $data['menuOs'] = 'os';
-        $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
-        $this->load->model('os_model');
-        $data['result'] = $this->os_model->getById((int) $id);
-
-        if ($data['result'] == null) {
-            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
-            redirect('mine/painel');
-        }
-
-        if ($data['result']->idClientes != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
-            redirect('mine/painel');
-        }
-
-        $data['produtos'] = $this->os_model->getProdutos((int) $id);
-        $data['servicos'] = $this->os_model->getServicos((int) $id);
-        $data['emitente'] = $this->mapos_model->getEmitente();
-
-        $this->load->view('conecte/minha_os', $data);
-    }
-
-    public function adicionarOs()
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('descricaoProduto', 'Descrição', 'required');
-        $this->form_validation->set_rules('defeito', 'Defeito');
-        $this->form_validation->set_rules('observacoes', 'Observações');
-
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? true : false);
-        } else {
-            $id = null;
-            $usuario = $this->db->query('SELECT usuarios_id, count(*) as down FROM os GROUP BY usuarios_id ORDER BY down LIMIT 1')->row();
-            if ($usuario == null) {
-                $this->db->where('situacao', 1);
-                $this->db->limit(1);
-                $usuario = $this->db->get('usuarios')->row();
-
-                if ($usuario->idUsuarios == null) {
-                    $this->session->set_flashdata('error', 'Ocorreu um erro ao cadastrar a ordem de serviço, por favor contate o administrador do sistema.');
-                    redirect('mine/os');
-                } else {
-                    $id = $usuario->idUsuarios;
-                }
-            } else {
-                $id = $usuario->usuarios_id;
-            }
-
-            $data = [
-                'dataInicial' => date('Y-m-d'),
-                'clientes_id' => $this->session->userdata('cliente_id'),
-                'usuarios_id' => $id,
-                'dataFinal' => date('Y-m-d'),
-                'descricaoProduto' => $this->security->xss_clean($this->input->post('descricaoProduto')),
-                'defeito' => $this->security->xss_clean($this->input->post('defeito')),
-                'status' => 'Aberto',
-                'observacoes' => $this->security->xss_clean(set_value('observacoes')),
-                'faturado' => 0,
-            ];
-
-            if (is_numeric($id = $this->Conecte_model->add('os', $data, true))) {
-                $this->load->model('mapos_model');
-                $this->load->model('usuarios_model');
-
-                $idOs = $id;
-                $os = $this->Conecte_model->getById($id);
-
-                $remetentes = [];
-                $usuarios = $this->usuarios_model->getAll();
-
-                foreach ($usuarios as $usuario) {
-                    array_push($remetentes, $usuario->email);
-                }
-                array_push($remetentes, $os->email);
-
-                $this->enviarOsPorEmail($idOs, $remetentes, 'Nova Ordem de Serviço #' . $idOs . ' - Criada pelo Cliente');
-                $this->session->set_flashdata('success', 'OS adicionada com sucesso!');
-                redirect('mine/detalhesOs/' . $id);
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
-            }
-        }
-
-        $data['output'] = 'conecte/adicionarOs';
-        $this->load->view('conecte/template', $data);
-    }
-
-    public function detalhesOs($id = null)
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        if (! is_numeric($id) || $id == null) {
-            $this->session->set_flashdata('error', 'Ordem de serviço não encontrada.');
-            redirect('mine/painel');
-        }
-
-        $this->load->model('mapos_model');
-        $this->load->model('os_model');
-
-        $this->data['result'] = $this->os_model->getById((int) $id);
-
-        // Sem OS, ou OS de outro cliente, o acesso é negado.
-        if (! $this->data['result'] || $this->data['result']->idClientes != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Esta OS não pertence ao cliente logado.');
-            redirect('mine/painel');
-        }
-
-        $this->data['produtos'] = $this->os_model->getProdutos((int) $id);
-        $this->data['servicos'] = $this->os_model->getServicos((int) $id);
-        $this->data['anexos'] = $this->os_model->getAnexos((int) $id);
-
-        $this->data['output'] = 'conecte/detalhes_os';
-        $this->load->view('conecte/template', $this->data);
-    }
-
-    public function cadastrar()
-    {
-        $this->load->model('clientes_model', '', true);
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-        $id = 0;
-
-        $captchaEsperado = (string) $this->session->userdata('captchaWord');
-        $captchaInformado = (string) $this->input->post('captcha');
-
-        // Sem a checagem de "vazio", uma sessão sem captcha gerado compara
-        // '' com '' e libera o cadastro sem resolver a imagem.
-        if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } elseif ($captchaEsperado === '' || $captchaInformado === '' || strtolower($captchaInformado) !== strtolower($captchaEsperado)) {
-            // Um captcha só vale para uma tentativa.
-            $this->session->unset_userdata('captchaWord');
-            $this->session->set_flashdata('error', 'Os caracteres da imagem não foram preenchidos corretamente!');
-        } else {
-            // Consome o captcha para impedir reuso do mesmo código.
-            $this->session->unset_userdata('captchaWord');
-
-            $data = [
-                'nomeCliente' => set_value('nomeCliente'),
-                'documento' => set_value('documento'),
-                'telefone' => set_value('telefone'),
-                'celular' => $this->input->post('celular'),
-                'email' => set_value('email'),
-                'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
-                'rua' => set_value('rua'),
-                'complemento' => set_value('complemento'),
-                'numero' => set_value('numero'),
-                'bairro' => set_value('bairro'),
-                'cidade' => set_value('cidade'),
-                'estado' => set_value('estado'),
-                'cep' => set_value('cep'),
-                'dataCadastro' => date('Y-m-d'),
-                'contato' => $this->input->post('contato'),
-            ];
-
-            $id = $this->clientes_model->add('clientes', $data);
-
-            if ($id > 0) {
-                $this->enviarEmailBoasVindas($id);
-                $this->enviarEmailTecnicoNotificaClienteNovo($id);
-                $this->session->set_flashdata('success', 'Cadastro realizado com sucesso! <br> Um e-mail de boas vindas será enviado para ' . $data['email']);
-                redirect(base_url() . 'index.php/mine');
-            } else {
-                $this->session->set_flashdata('error', 'Falha ao realizar cadastro!');
-            }
-        }
-
-        $this->load->view('conecte/cadastrar', $this->data);
-    }
-
-    public function downloadanexo($id = null)
-    {
-        if (! session_id() || ! $this->session->userdata('conectado')) {
-            redirect('mine');
-        }
-
-        if ($id == null || ! is_numeric($id)) {
-            $this->session->set_flashdata('error', 'Anexo não encontrado.');
-            redirect('mine/painel');
-        }
-
-        $this->db->where('idAnexos', (int) $id);
-        $file = $this->db->get('anexos', 1)->row();
-
-        if (! $file) {
-            $this->session->set_flashdata('error', 'Anexo não encontrado.');
-            redirect('mine/painel');
-        }
-
-        // O anexo precisa pertencer a uma OS do cliente autenticado.
-        $this->load->model('os_model');
-        $os = $this->os_model->getById($file->os_id);
-
-        if (! $os || $os->idClientes != $this->session->userdata('cliente_id')) {
-            $this->session->set_flashdata('error', 'Anexo não encontrado.');
-            redirect('mine/painel');
-        }
-
-        $this->load->library('zip');
-        $this->zip->read_file($file->path . '/' . $file->anexo);
-        $this->zip->download('file' . date('d-m-Y-H.i.s') . '.zip');
-    }
-
     private function check_credentials($email)
     {
         $this->db->where('email', $email);
@@ -929,32 +932,29 @@ class Mine extends CI_Controller
         return $this->db->get('clientes')->row();
     }
 
+    /**
+     * Linha de resets_de_senha do token em claro, buscada pelo hash (#2875).
+     * Token fora do formato (64 hex) nem consulta o banco.
+     */
     private function check_token($token)
     {
-        // Sem essa guarda, um token nulo vira "WHERE token IS NULL" e pode
-        // casar com uma linha da tabela.
-        if ($token === null || $token === '') {
+        $hash = tokenRecuperacaoHash($token);
+        if ($hash === null) {
             return null;
         }
 
-        $this->db->where('token', $token);
-        $this->db->limit(1);
+        $linha = $this->db->where('token', $hash)->limit(1)->get('resets_de_senha')->row();
 
-        return $this->db->get('resets_de_senha')->row();
+        return ($linha && hash_equals((string) $linha->token, $hash)) ? $linha : null;
     }
 
-    private function validateDate($date, $format = 'Y-m-d H:i:s')
+    /**
+     * Token ainda não usado e dentro da validade. data_expiracao guarda o
+     * instante em que o token expira.
+     */
+    private function tokenVigente(object $token): bool
     {
-        $dateStart = new \DateTime($date);
-        $dateNow = new \DateTime(date($format));
-
-        $dateDiff = $dateStart->diff($dateNow);
-
-        if ($dateDiff->days >= 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return ! $token->token_utilizado && strtotime((string) $token->data_expiracao) > time();
     }
 
     private function enviarRecuperarSenha($idClientes, $clienteEmail, $assunto, $token)
@@ -1020,7 +1020,7 @@ class Mine extends CI_Controller
 
         $this->load->model('email_model');
 
-        $remetentes = array_unique($remetentes);
+        $remetentes = array_unique(array_filter($remetentes));
         foreach ($remetentes as $remetente) {
             $headers = [
                 'From' => $emitente->email,
@@ -1053,6 +1053,10 @@ class Mine extends CI_Controller
         $remetente = $dados['cliente'];
         $assunto = 'Bem-vindo!';
 
+        if ($emitente == null || $remetente == null) {
+            return false;
+        }
+
         $html = $this->load->view('os/emails/clientenovo', $dados, true);
 
         $this->load->model('email_model');
@@ -1079,6 +1083,7 @@ class Mine extends CI_Controller
         $this->load->model('mapos_model');
         $this->load->model('clientes_model', '', true);
         $this->load->model('usuarios_model');
+        $this->load->model('email_model');
 
         $dados['emitente'] = $this->mapos_model->getEmitente();
         $dados['cliente'] = $this->clientes_model->getById($id);
@@ -1086,10 +1091,11 @@ class Mine extends CI_Controller
         $emitente = $dados['emitente'];
         $assunto = 'Novo Cliente Cadastrado no Sistema';
 
-        $usuarios = [];
-        $usuarios = $this->usuarios_model->getAll();
+        if ($emitente == null) {
+            return;
+        }
 
-        foreach ($usuarios as $usuario) {
+        foreach ($this->usuarios_model->getAll() as $usuario) {
             $dados['usuario'] = $usuario;
             $html = $this->load->view('os/emails/clientenovonotifica', $dados, true);
             $headers = [
@@ -1107,45 +1113,4 @@ class Mine extends CI_Controller
             $this->email_model->add('email_queue', $email);
         }
     }
-
-    public function captcha()
-    {
-        header('Content-type: image/jpeg');
-
-        $arrFont = [
-            'font-ZXX_Noise.otf',
-            'font-karabine.ttf',
-            'font-capture.ttf',
-            'font-captcha.ttf'
-        ];
-
-        shuffle($arrFont);
-
-        $codigoCaptcha = substr(bin2hex(random_bytes(4)), 0, 7);
-
-        $img = imagecreatefromjpeg(FCPATH . 'assets/img/captcha_bg.jpg');
-        $corCaptcha = imagecolorallocate($img, 255, 0, 0);
-
-        $font = FCPATH . 'assets/font-awesome/' . $arrFont[0];
-
-        imagettftext(
-            $img,
-            23,
-            0,
-            5,
-            rand(30, 35),
-            $corCaptcha,
-            $font,
-            $codigoCaptcha
-        );
-
-        imagepng($img);
-        imagedestroy($img);
-
-        $this->session->set_userdata('captchaWord', $codigoCaptcha);
-    }
-
 }
-
-/* End of file conecte.php */
-/* Location: ./application/controllers/conecte.php */
