@@ -121,11 +121,8 @@ final class RelatoriosTest extends MaposTestCase
         $model = $this->model();
         $nomes = static fn (array $linhas) => array_column($linhas, 'descricao');
 
-        // Busca livre por nome (descrição): traz todos com aquele nome, sem id.
         $this->assertSame(['B'], $nomes($model->produtosCustom(null, null, null, null, 'B')));
-        // Busca por código de barras.
         $this->assertSame(['C'], $nomes($model->produtosCustom(null, null, null, null, '333')));
-        // Em branco não filtra.
         $this->assertSame(['A', 'B', 'C'], $nomes($model->produtosCustom(null, null, null, null, '   ')));
     }
 
@@ -145,8 +142,6 @@ final class RelatoriosTest extends MaposTestCase
         $model = $this->model();
         $nomes = static fn (array $linhas) => array_column($linhas, 'nome');
 
-        // Vínculo serviço -> OS -> cliente: 'barato' (id 1) para João (os 1),
-        // 'caro' (id 2) para Maria (os 2).
         $this->db->query('CREATE TABLE clientes (idClientes INTEGER PRIMARY KEY AUTOINCREMENT, nomeCliente TEXT)');
         $this->db->query('CREATE TABLE os (idOs INTEGER PRIMARY KEY AUTOINCREMENT, clientes_id INTEGER)');
         $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, servicos_id INTEGER)');
@@ -154,16 +149,12 @@ final class RelatoriosTest extends MaposTestCase
         $this->db->query('INSERT INTO os (clientes_id) VALUES (1), (2)');
         $this->db->query('INSERT INTO servicos_os (os_id, servicos_id) VALUES (1, 1), (2, 2)');
 
-        // Busca livre pelo nome do serviço (catálogo, sem N. da OS).
         $this->assertSame(['barato'], $nomes($model->servicosCustom(null, null, 'barat')));
-        // Serviços executados para um cliente (via OS): uma linha por execução,
-        // com N. da OS e cliente.
         $linhasJoao = $model->servicosCustom(null, null, null, 'João');
         $this->assertSame(['barato'], $nomes($linhasJoao));
         $this->assertSame(1, (int) $linhasJoao[0]->idOs);
         $this->assertSame('João Silva', $linhasJoao[0]->nomeCliente);
         $this->assertSame(['caro'], $nomes($model->servicosCustom(null, null, null, 'Souza')));
-        // Em branco não filtra.
         $this->assertSame(['barato', 'caro'], $nomes($model->servicosCustom(null, null, '  ', '  ')));
     }
 
@@ -180,12 +171,9 @@ final class RelatoriosTest extends MaposTestCase
 
         $descricoes = static fn (array $linhas) => array_column($linhas, 'descricao');
 
-        // Só a forma escolhida.
         $this->assertSame(['A', 'C'], $descricoes($model->financeiroCustom(null, null, null, null, 'Pix')));
         $this->assertSame(['B'], $descricoes($model->financeiroCustom(null, null, null, null, 'Dinheiro')));
-        // Combina com outros filtros (tipo).
         $this->assertSame(['A'], $descricoes($model->financeiroCustom(null, null, 'receita', null, 'Pix')));
-        // Em branco não filtra.
         $this->assertSame(['A', 'B', 'C'], $descricoes($model->financeiroCustom(null, null, null, null, '')));
     }
 

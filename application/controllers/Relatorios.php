@@ -15,8 +15,6 @@ class Relatorios extends MY_Controller
         parent::__construct();
 
         $this->load->helper('relatorios');
-        // A tela de relatório financeiro reaproveita a lista de formas de
-        // pagamento (FINANCEIRO_FORMAS_PAGAMENTO) definida no financeiro_helper.
         $this->load->helper('financeiro');
         $this->load->model('Relatorios_model');
         $this->load->model('Usuarios_model');
@@ -358,7 +356,6 @@ class Relatorios extends MY_Controller
 
         $cliente = $this->input->get('cliente');
         $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal, $this->input->get('servico'), $cliente);
-        // Busca por cliente: a tabela ganha as colunas N. da OS e Cliente.
         $data['porCliente'] = is_string($cliente) && trim($cliente) !== '';
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Serviços Customizado';

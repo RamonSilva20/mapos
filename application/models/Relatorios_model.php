@@ -146,7 +146,6 @@ class Relatorios_model extends CI_Model
     {
         $wherePreco = $this->faixa('precoVenda', $precoInicial, $precoFinal);
         $whereEstoque = $this->faixa('estoque', $estoqueInicial, $estoqueFinal);
-        // Busca livre por nome (descrição) ou código de barras; vazio não filtra.
         $whereProduto = '';
         if (is_string($produto) && trim($produto) !== '') {
             $termo = '%' . $this->db->escape_like_str(trim($produto)) . '%';
@@ -274,9 +273,6 @@ class Relatorios_model extends CI_Model
 
     public function servicosCustom($precoInicial = null, $precoFinal = null, $servico = null, $cliente = null)
     {
-        // Com nome do cliente, o relatório vira uma linha por execução, trazendo
-        // N. da OS e cliente (servicos_os -> os -> clientes -> servicos). Sem
-        // cliente, é o catálogo de serviços com seus preços.
         if (is_string($cliente) && trim($cliente) !== '') {
             $this->db->select('os.idOs, clientes.nomeCliente, servicos.nome, servicos.descricao, servicos.preco');
             $this->db->from('servicos_os');
@@ -304,7 +300,6 @@ class Relatorios_model extends CI_Model
         if ($precoFinal !== null && $precoFinal !== '') {
             $this->db->where('preco <=', $precoFinal);
         }
-        // Busca livre pelo nome do serviço.
         if (is_string($servico) && trim($servico) !== '') {
             $this->db->like('nome', trim($servico));
         }
@@ -416,7 +411,6 @@ class Relatorios_model extends CI_Model
             }
         }
 
-        // Forma de pagamento escolhida na lista; vazio não filtra.
         if (is_string($forma) && trim($forma) !== '') {
             $this->db->where('forma_pgto', trim($forma));
         }
