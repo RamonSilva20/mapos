@@ -15,6 +15,9 @@ class Relatorios extends MY_Controller
         parent::__construct();
 
         $this->load->helper('relatorios');
+        // A tela de relatório financeiro reaproveita a lista de formas de
+        // pagamento (FINANCEIRO_FORMAS_PAGAMENTO) definida no financeiro_helper.
+        $this->load->helper('financeiro');
         $this->load->model('Relatorios_model');
         $this->load->model('Usuarios_model');
         $this->load->model('Mapos_model');
@@ -64,7 +67,7 @@ class Relatorios extends MY_Controller
         $data['dataInicial'] = date('d/m/Y', strtotime($dataInicial));
         $data['dataFinal'] = date('d/m/Y', strtotime($dataFinal));
 
-        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal, $this->input->get('tipocliente'));
+        $data['clientes'] = $this->Relatorios_model->clientesCustom($dataInicial, $dataFinal, $this->input->get('tipocliente'), $this->input->get('busca'));
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Clientes Customizado';
 
@@ -182,7 +185,7 @@ class Relatorios extends MY_Controller
         [$precoInicial, $precoFinal] = relatorioFaixa($this->input->get('precoInicial'), $this->input->get('precoFinal'), true);
         [$estoqueInicial, $estoqueFinal] = relatorioFaixa($this->input->get('estoqueInicial'), $this->input->get('estoqueFinal'), false);
 
-        $data['produtos'] = $this->Relatorios_model->produtosCustom($precoInicial, $precoFinal, $estoqueInicial, $estoqueFinal);
+        $data['produtos'] = $this->Relatorios_model->produtosCustom($precoInicial, $precoFinal, $estoqueInicial, $estoqueFinal, $this->input->get('produto'));
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Produtos Customizado';
 
@@ -353,7 +356,10 @@ class Relatorios extends MY_Controller
 
         [$precoInicial, $precoFinal] = relatorioFaixa($this->input->get('precoInicial'), $this->input->get('precoFinal'), true);
 
-        $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal);
+        $cliente = $this->input->get('cliente');
+        $data['servicos'] = $this->Relatorios_model->servicosCustom($precoInicial, $precoFinal, $this->input->get('servico'), $cliente);
+        // Busca por cliente: a tabela ganha as colunas N. da OS e Cliente.
+        $data['porCliente'] = is_string($cliente) && trim($cliente) !== '';
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório de Serviços Customizado';
 
@@ -718,10 +724,11 @@ class Relatorios extends MY_Controller
         $dataFinal = $this->input->get('dataFinal');
         $tipo = $this->input->get('tipo');
         $situacao = $this->input->get('situacao');
+        $forma = $this->input->get('forma_pgto');
         $format = $this->input->get('format');
 
         if ($format == 'xls') {
-            $lancamentos = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao, true);
+            $lancamentos = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao, $forma, true);
 
             $lancamentosFormatados = array_map(function ($item) {
                 return [
@@ -769,7 +776,7 @@ class Relatorios extends MY_Controller
             return;
         }
 
-        $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
+        $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao, $forma);
         $data['emitente'] = $this->Mapos_model->getEmitente();
         $data['title'] = 'Relatório Financeiro Customizado';
 

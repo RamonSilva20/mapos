@@ -61,7 +61,7 @@ class Relatorios_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    public function clientesCustom($dataInicial = null, $dataFinal = null, $tipo = null)
+    public function clientesCustom($dataInicial = null, $dataFinal = null, $tipo = null, $busca = null)
     {
         $whereData = '';
         if ($dataInicial != null) {
@@ -72,6 +72,12 @@ class Relatorios_model extends CI_Model
         }
         if ($tipo != null) {
             $whereData .= 'AND fornecedor = ' . $this->db->escape($tipo);
+        }
+        // Busca livre por nome, telefone, celular ou documento (CPF/CNPJ).
+        if (is_string($busca) && trim($busca) !== '') {
+            $termo = '%' . $this->db->escape_like_str(trim($busca)) . '%';
+            $termo = $this->db->escape($termo);
+            $whereData .= " AND (nomeCliente LIKE $termo OR telefone LIKE $termo OR celular LIKE $termo OR documento LIKE $termo)";
         }
         $query = "SELECT idClientes, nomeCliente, sexo, pessoa_fisica,
         documento, telefone, celular, contato, email, fornecedor,
@@ -136,16 +142,23 @@ class Relatorios_model extends CI_Model
      * Produtos filtrados por faixa de preço de venda e de estoque. Cada limite
      * vale sozinho (só "de" ou só "até"); null não filtra.
      */
-    public function produtosCustom($precoInicial = null, $precoFinal = null, $estoqueInicial = null, $estoqueFinal = null)
+    public function produtosCustom($precoInicial = null, $precoFinal = null, $estoqueInicial = null, $estoqueFinal = null, $produto = null)
     {
         $wherePreco = $this->faixa('precoVenda', $precoInicial, $precoFinal);
         $whereEstoque = $this->faixa('estoque', $estoqueInicial, $estoqueFinal);
+        // Busca livre por nome (descrição) ou código de barras; vazio não filtra.
+        $whereProduto = '';
+        if (is_string($produto) && trim($produto) !== '') {
+            $termo = '%' . $this->db->escape_like_str(trim($produto)) . '%';
+            $termo = $this->db->escape($termo);
+            $whereProduto = "AND (produtos.descricao LIKE $termo OR produtos.codDeBarra LIKE $termo)";
+        }
         $query = "
             SELECT produtos.*,
             SUM(produtos.estoque * produtos.precoVenda) as valorEstoque,
             SUM(produtos.estoque * produtos.precoCompra) as valorEstoqueR
             FROM produtos
-            WHERE estoque >= 0 $wherePreco $whereEstoque
+            WHERE estoque >= 0 $wherePreco $whereEstoque $whereProduto
             GROUP BY produtos.idProdutos
             ORDER BY descricao
         ";
@@ -259,14 +272,41 @@ class Relatorios_model extends CI_Model
         return $this->db->get('servicos')->result();
     }
 
-    public function servicosCustom($precoInicial = null, $precoFinal = null)
+    public function servicosCustom($precoInicial = null, $precoFinal = null, $servico = null, $cliente = null)
     {
+        // Com nome do cliente, o relatório vira uma linha por execução, trazendo
+        // N. da OS e cliente (servicos_os -> os -> clientes -> servicos). Sem
+        // cliente, é o catálogo de serviços com seus preços.
+        if (is_string($cliente) && trim($cliente) !== '') {
+            $this->db->select('os.idOs, clientes.nomeCliente, servicos.nome, servicos.descricao, servicos.preco');
+            $this->db->from('servicos_os');
+            $this->db->join('os', 'os.idOs = servicos_os.os_id');
+            $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
+            $this->db->join('servicos', 'servicos.idServicos = servicos_os.servicos_id');
+            $this->db->like('clientes.nomeCliente', trim($cliente));
+            if ($precoInicial !== null && $precoInicial !== '') {
+                $this->db->where('servicos.preco >=', $precoInicial);
+            }
+            if ($precoFinal !== null && $precoFinal !== '') {
+                $this->db->where('servicos.preco <=', $precoFinal);
+            }
+            if (is_string($servico) && trim($servico) !== '') {
+                $this->db->like('servicos.nome', trim($servico));
+            }
+
+            return $this->db->order_by('os.idOs')->get()->result();
+        }
+
         $this->db->from('servicos');
         if ($precoInicial !== null && $precoInicial !== '') {
             $this->db->where('preco >=', $precoInicial);
         }
         if ($precoFinal !== null && $precoFinal !== '') {
             $this->db->where('preco <=', $precoFinal);
+        }
+        // Busca livre pelo nome do serviço.
+        if (is_string($servico) && trim($servico) !== '') {
+            $this->db->like('nome', trim($servico));
         }
 
         return $this->db->order_by('nome')->get()->result();
@@ -353,7 +393,7 @@ class Relatorios_model extends CI_Model
         return $result->result();
     }
 
-    public function financeiroCustom($dataInicial = null, $dataFinal = null, $tipo = null, $situacao = null, $array = false)
+    public function financeiroCustom($dataInicial = null, $dataFinal = null, $tipo = null, $situacao = null, $forma = null, $array = false)
     {
         if ($dataInicial) {
             $this->db->where('data_vencimento >=', $dataInicial);
@@ -374,6 +414,11 @@ class Relatorios_model extends CI_Model
             if ($situacao === 'pago') {
                 $this->db->where('baixado', 1);
             }
+        }
+
+        // Forma de pagamento escolhida na lista; vazio não filtra.
+        if (is_string($forma) && trim($forma) !== '') {
+            $this->db->where('forma_pgto', trim($forma));
         }
 
         $this->db->order_by('data_vencimento', 'asc');
