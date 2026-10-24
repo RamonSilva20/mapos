@@ -41,9 +41,10 @@ if (! function_exists('relatorioDefinicao')) {
                 'icone' => 'users',
                 'rapidos' => $pdfXls('clientesRapid', 'Todos os clientes'),
                 'acao' => 'relatorios/clientesCustom',
-                'dica' => null,
+                'dica' => 'Deixe em branco o que não quiser usar como filtro.',
                 'campos' => [
                     ...$periodo('Cadastrados de'),
+                    ['tipo' => 'texto', 'name' => 'busca', 'label' => 'Buscar cliente', 'placeholder' => 'Nome, telefone, celular ou CPF'],
                     ['tipo' => 'select', 'name' => 'tipocliente', 'label' => 'Tipo de cadastro', 'opcoes' => ['0' => 'Clientes', '1' => 'Fornecedores']],
                 ],
             ],
@@ -58,6 +59,7 @@ if (! function_exists('relatorioDefinicao')) {
                 'acao' => 'relatorios/produtosCustom',
                 'dica' => 'Deixe em branco o que não quiser usar como filtro.',
                 'campos' => [
+                    ['tipo' => 'texto', 'name' => 'produto', 'label' => 'Buscar produto', 'placeholder' => 'Nome ou código de barras', 'cheio' => true],
                     ['tipo' => 'dinheiro', 'name' => 'precoInicial', 'label' => 'Preço de venda de (R$)'],
                     ['tipo' => 'dinheiro', 'name' => 'precoFinal', 'label' => 'Preço de venda até (R$)'],
                     ['tipo' => 'numero', 'name' => 'estoqueInicial', 'label' => 'Estoque de'],
@@ -72,6 +74,8 @@ if (! function_exists('relatorioDefinicao')) {
                 'acao' => 'relatorios/servicosCustom',
                 'dica' => 'Deixe em branco o que não quiser usar como filtro.',
                 'campos' => [
+                    ['tipo' => 'texto', 'name' => 'servico', 'label' => 'Nome do serviço', 'placeholder' => 'Nome do serviço'],
+                    ['tipo' => 'texto', 'name' => 'cliente', 'label' => 'Nome do cliente', 'placeholder' => 'Cliente que executou o serviço'],
                     ['tipo' => 'dinheiro', 'name' => 'precoInicial', 'label' => 'Preço de (R$)'],
                     ['tipo' => 'dinheiro', 'name' => 'precoFinal', 'label' => 'Preço até (R$)'],
                 ],
@@ -116,6 +120,7 @@ if (! function_exists('relatorioDefinicao')) {
                     ...$periodo('Vencimento de'),
                     ['tipo' => 'select', 'name' => 'tipo', 'label' => 'Tipo', 'opcoes' => ['todos' => 'Todos', 'receita' => 'Receitas', 'despesa' => 'Despesas']],
                     ['tipo' => 'select', 'name' => 'situacao', 'label' => 'Situação', 'opcoes' => ['todos' => 'Todas', 'pago' => 'Pagas', 'pendente' => 'Pendentes']],
+                    ['tipo' => 'select', 'name' => 'forma_pgto', 'label' => 'Forma de pagamento', 'opcoes' => array_combine(FINANCEIRO_FORMAS_PAGAMENTO, FINANCEIRO_FORMAS_PAGAMENTO), 'placeholder' => 'Todas'],
                     $formato(),
                 ],
             ],

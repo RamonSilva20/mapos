@@ -88,10 +88,10 @@ final class RelatoriosTest extends MaposTestCase
 
     private function model(): Relatorios_model
     {
-        $this->db->query('CREATE TABLE produtos (idProdutos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, precoCompra REAL, precoVenda REAL, estoque INTEGER)');
-        $this->db->query('CREATE TABLE servicos (idServicos INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, preco REAL)');
-        foreach ([['A', 50, 5], ['B', 1500.5, 20], ['C', 3000, 0]] as [$nome, $preco, $estoque]) {
-            $this->db->query('INSERT INTO produtos (descricao, precoCompra, precoVenda, estoque) VALUES (?, 1, ?, ?)', [$nome, $preco, $estoque]);
+        $this->db->query('CREATE TABLE produtos (idProdutos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, codDeBarra TEXT, precoCompra REAL, precoVenda REAL, estoque INTEGER)');
+        $this->db->query('CREATE TABLE servicos (idServicos INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, descricao TEXT, preco REAL)');
+        foreach ([['A', '111', 50, 5], ['B', '222', 1500.5, 20], ['C', '333', 3000, 0]] as [$nome, $codDeBarra, $preco, $estoque]) {
+            $this->db->query('INSERT INTO produtos (descricao, codDeBarra, precoCompra, precoVenda, estoque) VALUES (?, ?, 1, ?, ?)', [$nome, $codDeBarra, $preco, $estoque]);
         }
         foreach ([['barato', 40], ['caro', 1200]] as [$nome, $preco]) {
             $this->db->query('INSERT INTO servicos (nome, preco) VALUES (?, ?)', [$nome, $preco]);
@@ -116,6 +116,16 @@ final class RelatoriosTest extends MaposTestCase
         $this->assertSame(['A', 'C'], $nomes($model->produtosCustom(null, null, null, '5')));
     }
 
+    public function testProdutosCustomBuscaPorNomeOuCodigoDeBarras(): void
+    {
+        $model = $this->model();
+        $nomes = static fn (array $linhas) => array_column($linhas, 'descricao');
+
+        $this->assertSame(['B'], $nomes($model->produtosCustom(null, null, null, null, 'B')));
+        $this->assertSame(['C'], $nomes($model->produtosCustom(null, null, null, null, '333')));
+        $this->assertSame(['A', 'B', 'C'], $nomes($model->produtosCustom(null, null, null, null, '   ')));
+    }
+
     public function testServicosCustomFiltraPorFaixaComLimitesIndependentes(): void
     {
         $model = $this->model();
@@ -125,6 +135,46 @@ final class RelatoriosTest extends MaposTestCase
         $this->assertSame(['caro'], $nomes($model->servicosCustom('1000.00', null)));
         $this->assertSame(['barato'], $nomes($model->servicosCustom(null, '100.00')));
         $this->assertSame(['barato'], $nomes($model->servicosCustom('40.00', '100.00')));
+    }
+
+    public function testServicosCustomBuscaPorNomeDoServicoEDoCliente(): void
+    {
+        $model = $this->model();
+        $nomes = static fn (array $linhas) => array_column($linhas, 'nome');
+
+        $this->db->query('CREATE TABLE clientes (idClientes INTEGER PRIMARY KEY AUTOINCREMENT, nomeCliente TEXT)');
+        $this->db->query('CREATE TABLE os (idOs INTEGER PRIMARY KEY AUTOINCREMENT, clientes_id INTEGER)');
+        $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, servicos_id INTEGER)');
+        $this->db->query("INSERT INTO clientes (nomeCliente) VALUES ('João Silva'), ('Maria Souza')");
+        $this->db->query('INSERT INTO os (clientes_id) VALUES (1), (2)');
+        $this->db->query('INSERT INTO servicos_os (os_id, servicos_id) VALUES (1, 1), (2, 2)');
+
+        $this->assertSame(['barato'], $nomes($model->servicosCustom(null, null, 'barat')));
+        $linhasJoao = $model->servicosCustom(null, null, null, 'João');
+        $this->assertSame(['barato'], $nomes($linhasJoao));
+        $this->assertSame(1, (int) $linhasJoao[0]->idOs);
+        $this->assertSame('João Silva', $linhasJoao[0]->nomeCliente);
+        $this->assertSame(['caro'], $nomes($model->servicosCustom(null, null, null, 'Souza')));
+        $this->assertSame(['barato', 'caro'], $nomes($model->servicosCustom(null, null, '  ', '  ')));
+    }
+
+    public function testFinanceiroCustomFiltraPorFormaDePagamento(): void
+    {
+        $this->db->query("CREATE TABLE lancamentos (idLancamentos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, tipo TEXT, baixado INTEGER, forma_pgto TEXT, data_vencimento TEXT)");
+        $this->db->query("INSERT INTO lancamentos (descricao, tipo, baixado, forma_pgto, data_vencimento) VALUES
+            ('A', 'receita', 1, 'Pix', '2026-01-10'),
+            ('B', 'receita', 1, 'Dinheiro', '2026-01-11'),
+            ('C', 'despesa', 0, 'Pix', '2026-01-12')");
+
+        $model = $this->makeInstance(Relatorios_model::class);
+        $this->setPrivateProperty($model, 'db', $this->db);
+
+        $descricoes = static fn (array $linhas) => array_column($linhas, 'descricao');
+
+        $this->assertSame(['A', 'C'], $descricoes($model->financeiroCustom(null, null, null, null, 'Pix')));
+        $this->assertSame(['B'], $descricoes($model->financeiroCustom(null, null, null, null, 'Dinheiro')));
+        $this->assertSame(['A'], $descricoes($model->financeiroCustom(null, null, 'receita', null, 'Pix')));
+        $this->assertSame(['A', 'B', 'C'], $descricoes($model->financeiroCustom(null, null, null, null, '')));
     }
 
     private function renderizar(array $variaveis): string
