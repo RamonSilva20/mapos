@@ -138,7 +138,7 @@ foreach ($campos as $nome => $def) {
         </form>
 
         <?php if ($aba === 'geral') { ?>
-            <?php // Tema de cor (prova de conceito): client-side (localStorage), fora do formulário de configurações do servidor. ?>
+            <?php // Tema de cor (prova de conceito): client-side (localStorage), fora do formulário de configurações do servidor.?>
             <section class="<?= e($caixa) ?>" aria-labelledby="config-tema-cor" <?= js_module('painel/tema') ?>>
                 <h2 id="config-tema-cor" class="text-heading-sm text-text">Tema de cor (beta)</h2>
                 <p class="mt-1 text-caption text-muted">Esquema de cores da interface. A escolha vale neste navegador (ainda não é salva no perfil).</p>

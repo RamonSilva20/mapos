@@ -690,7 +690,7 @@ if (! function_exists('sparklinePontos')) {
      */
     function sparklinePontos(array $valores, int $largura = 120, int $altura = 28): string
     {
-        $valores = array_values(array_map('floatval', $valores));
+        $valores = array_map('floatval', $valores);
         $n = count($valores);
         if ($n < 2) {
             return '';

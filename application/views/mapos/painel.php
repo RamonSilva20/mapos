@@ -102,7 +102,7 @@ if ($pode['os']) {
         </div>
     <?php } ?>
 
-    <?php // Linha 1: agenda + donut (esquerda) e últimas atividades (direita), mesma altura. ?>
+    <?php // Linha 1: agenda + donut (esquerda) e últimas atividades (direita), mesma altura.?>
     <div class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-stretch">
         <?php if ($pode['os']) { ?>
             <div class="grid min-w-0 gap-4 2xl:grid-cols-3">
@@ -179,7 +179,7 @@ if ($pode['os']) {
         <?php } ?>
     </div>
 
-    <?php // Linha 2: balanço (esquerda) e atalhos rápidos (direita), mesma altura. ?>
+    <?php // Linha 2: balanço (esquerda) e atalhos rápidos (direita), mesma altura.?>
     <div class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-stretch">
         <?php if ($pode['balanco']) { ?>
             <section class="<?= e($caixa) ?> flex min-w-0 flex-col" aria-labelledby="titulo-balanco">
