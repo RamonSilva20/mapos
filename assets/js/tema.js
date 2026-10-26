@@ -40,6 +40,14 @@
     html.classList.toggle('dark', modoLocal === 'escuro');
   }
 
+  // Tema de cor (prova de conceito, #tema): aplica data-tema do localStorage
+  // antes da pintura, para a página já abrir na paleta escolhida, sem flash.
+  var CORES = ['claro', 'azul', 'grafite', 'verde', 'violeta'];
+  var cor = ler('mapos:tema-cor');
+  if (CORES.indexOf(cor) !== -1) {
+    html.setAttribute('data-tema', cor);
+  }
+
   if (ler('mapos:sidebar') === 'recolhida') {
     html.setAttribute('data-sidebar', 'recolhida');
   }

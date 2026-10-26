@@ -24,39 +24,44 @@
  */
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 
+// Tendência e sparkline do "Saldo do mês" (#visual Lote 2): só quando a série
+// do ano (balanço) está disponível e é o ano atual.
+$saldoTrend = null;
+$saldoSpark = null;
+if ($pode['lancamentos'] && $pode['balanco'] && isset($balanco['saldo'], $ano) && (int) $ano === (int) date('Y')) {
+    $idxMes = (int) date('n') - 1;
+    $inicioMes = max(0, $idxMes - 5);
+    $trechoSaldo = array_slice($balanco['saldo'], $inicioMes, $idxMes - $inicioMes + 1);
+    $saldoSpark = count($trechoSaldo) >= 2 ? $trechoSaldo : null;
+    if ($idxMes > 0) {
+        $saldoTrend = tendenciaKpi($mes['saldo'], $balanco['saldo'][$idxMes - 1], true, 'vs. mês anterior');
+    }
+}
+
+// KPIs do painel (#painel): cards clicáveis com ícone colorido e acento, pelo
+// componente kpi-card (prop accent: primary/info/success/progress...).
 $kpis = [];
 if ($pode['os']) {
     $aguardando = (int) ($os_por_status['Aguardando Peças'] ?? 0);
-    $kpis[] = component('kpi-card', [
-        'label' => 'OS em andamento',
-        'value' => painelSomar($os_por_status, PAINEL_OS_ANDAMENTO),
-        'icon' => 'wrench',
-        'caption' => $aguardando === 0 ? 'Nenhuma aguardando peças' : $aguardando . ' aguardando peças',
-    ]);
-    $kpis[] = component('kpi-card', [
-        'label' => 'Orçamentos',
-        'value' => painelSomar($os_por_status, PAINEL_OS_ORCAMENTO),
-        'icon' => 'file-text',
-        'caption' => 'Em orçamento ou negociação',
-    ]);
+    $kpis[] = ['label' => 'OS em andamento', 'value' => (string) painelSomar($os_por_status, PAINEL_OS_ANDAMENTO), 'icon' => 'wrench', 'caption' => $aguardando === 0 ? 'Nenhuma aguardando peças' : $aguardando . ' aguardando peças', 'accent' => 'primary', 'href' => site_url('os')];
+    $kpis[] = ['label' => 'Orçamentos', 'value' => (string) painelSomar($os_por_status, PAINEL_OS_ORCAMENTO), 'icon' => 'file-text', 'caption' => 'Em orçamento ou negociação', 'accent' => 'info', 'href' => site_url('os')];
 }
 if ($pode['vendas']) {
-    $kpis[] = component('kpi-card', [
-        'label' => 'Vendas em aberto',
-        'value' => painelSomar($vendas_por_status, PAINEL_VENDAS_ABERTAS),
-        'icon' => 'shopping-cart',
-        'caption' => 'Ainda não faturadas',
-    ]);
+    $kpis[] = ['label' => 'Vendas em aberto', 'value' => (string) painelSomar($vendas_por_status, PAINEL_VENDAS_ABERTAS), 'icon' => 'shopping-cart', 'caption' => 'Ainda não faturadas', 'accent' => 'success', 'href' => site_url('vendas')];
 }
 if ($pode['lancamentos']) {
-    $kpis[] = component('kpi-card', [
-        'label' => 'Saldo do mês',
-        'value' => dinheiro($mes['saldo']),
-        'icon' => 'circle-dollar-sign',
-        'caption' => 'A receber: ' . dinheiro($visao_geral['a_receber']),
-        'sensitive' => true,
-    ]);
+    $kpis[] = ['label' => 'Saldo do mês', 'value' => dinheiro($mes['saldo']), 'icon' => 'circle-dollar-sign', 'caption' => 'A receber: ' . dinheiro($visao_geral['a_receber']), 'accent' => 'progress', 'href' => site_url('financeiro/lancamentos'), 'sensitive' => true, 'trend' => $saldoTrend, 'spark' => $saldoSpark];
 }
+
+// $atalhos e $pode_auditoria vêm do controller (Mapos::index).
+
+// Classes do ícone de cada atividade (nomes completos, para o Tailwind detectar).
+$atividadeClasses = [
+    'success' => 'bg-success-soft text-success-ink',
+    'info' => 'bg-info-soft text-info-ink',
+    'danger' => 'bg-danger-soft text-danger-ink',
+    'neutral' => 'bg-neutral-soft text-neutral-ink',
+];
 
 $dadosDoModulo = [];
 if ($pode['balanco']) {
@@ -90,97 +95,146 @@ if ($pode['os']) {
     <?php } ?>
 
     <?php if ($kpis !== []) { ?>
-        <div class="grid grid-cols-2 gap-4 xl:grid-cols-4"><?= componenteConteudo($kpis) ?></div>
+        <div class="grid grid-cols-2 gap-4 xl:grid-cols-4">
+            <?php foreach ($kpis as $k) { ?>
+                <?= component('kpi-card', $k) ?>
+            <?php } ?>
+        </div>
     <?php } ?>
 
-    <?php if ($pode['os']) { ?>
-        <div class="grid gap-4 xl:grid-cols-3">
-            <section class="<?= e($caixa) ?> min-w-0 xl:col-span-2" aria-labelledby="titulo-agenda">
+    <?php // Linha 1: agenda + donut (esquerda) e últimas atividades (direita), mesma altura. ?>
+    <div class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-stretch">
+        <?php if ($pode['os']) { ?>
+            <div class="grid min-w-0 gap-4 2xl:grid-cols-3">
+                <section class="<?= e($caixa) ?> min-w-0 2xl:col-span-2" aria-labelledby="titulo-agenda">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                            <h2 id="titulo-agenda" class="text-heading-sm text-text">Agenda de entregas</h2>
+                            <p class="text-caption text-muted">OS pela data final. Clique numa OS para ver os detalhes.</p>
+                        </div>
+                        <div class="sm:w-56">
+                            <?= component('select', [
+                                'name' => 'status',
+                                'id' => 'agenda-status',
+                                'label' => 'Status',
+                                'placeholder' => 'Todos os status',
+                                'options' => array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
+                                'attrs' => ['data-agenda-status' => true],
+                            ]) ?>
+                        </div>
+                    </div>
+                    <div class="painel-agenda mt-4 min-h-96" data-agenda="<?= e(site_url('mapos/calendario')) ?>" aria-live="polite">
+                        <p class="text-caption text-muted" data-agenda-carregando>Carregando a agenda…</p>
+                    </div>
+                </section>
+
+                <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-os-status">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h2 id="titulo-os-status" class="text-heading-sm text-text">OS por status</h2>
+                        <?= component('button', ['label' => 'Ver OS', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os')]) ?>
+                    </div>
+                    <?php if ($os_grafico === []) { ?>
+                        <?= component('empty-state', ['title' => 'Nenhuma OS cadastrada', 'message' => 'As OS aparecem aqui por status.', 'icon' => 'chart-pie', 'class' => 'border-0']) ?>
+                    <?php } else { ?>
+                        <div class="relative mx-auto mt-4 aspect-square max-w-72">
+                            <canvas data-grafico="os" role="img" aria-label="Gráfico de OS por status"></canvas>
+                        </div>
+                        <div class="sr-only"><table>
+                            <caption>OS por status</caption>
+                            <thead><tr><th scope="col">Status</th><th scope="col">OS</th></tr></thead>
+                            <tbody>
+                                <?php foreach ($os_grafico as $fatia) { ?>
+                                    <tr><td><?= e($fatia['status']) ?></td><td><?= e($fatia['total']) ?></td></tr>
+                                <?php } ?>
+                            </tbody>
+                        </table></div>
+                    <?php } ?>
+                </section>
+            </div>
+        <?php } ?>
+
+        <?php if (! empty($pode_auditoria)) { ?>
+            <section class="<?= e($caixa) ?> flex min-w-0 flex-col" aria-labelledby="titulo-atividades">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 id="titulo-atividades" class="flex items-center gap-2 text-heading-sm text-text"><?= icon('history', ['class' => 'size-5 text-muted']) ?>Últimas atividades</h2>
+                    <?= component('button', ['label' => 'Ver todas', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('auditoria')]) ?>
+                </div>
+                <?php if (($atividades ?? []) === []) { ?>
+                    <p class="mt-4 text-caption text-muted">Nenhuma atividade registrada ainda.</p>
+                <?php } else { ?>
+                    <ul class="mt-4 flex flex-col gap-3.5">
+                        <?php foreach ($atividades as $at) {
+                            $visual = painelAtividadeVisual((string) $at->tarefa); ?>
+                            <li class="flex items-start gap-3">
+                                <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-md <?= e($atividadeClasses[$visual['variante']]) ?>"><?= icon($visual['icon'], ['class' => 'size-4']) ?></span>
+                                <div class="min-w-0">
+                                    <p class="text-sm text-text [overflow-wrap:anywhere]"><?= e($at->tarefa) ?></p>
+                                    <p class="text-caption text-muted"><?= e(trim(trim((string) ($at->usuario ?? '')) . ' · ' . painelTempoRelativo($at->data ?? null, $at->hora ?? null), ' ·')) ?></p>
+                                </div>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                <?php } ?>
+            </section>
+        <?php } ?>
+    </div>
+
+    <?php // Linha 2: balanço (esquerda) e atalhos rápidos (direita), mesma altura. ?>
+    <div class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-stretch">
+        <?php if ($pode['balanco']) { ?>
+            <section class="<?= e($caixa) ?> flex min-w-0 flex-col" aria-labelledby="titulo-balanco">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h2 id="titulo-agenda" class="text-heading-sm text-text">Agenda de entregas</h2>
-                        <p class="text-caption text-muted">OS pela data final. Clique numa OS para ver os detalhes.</p>
+                        <h2 id="titulo-balanco" class="text-heading-sm text-text"><?= e('Balanço de ' . $ano) ?></h2>
+                        <p class="text-caption text-muted">Receitas e despesas pagas, pelo mês do pagamento.</p>
                     </div>
-                    <div class="sm:w-56">
-                        <?= component('select', [
-                            'name' => 'status',
-                            'id' => 'agenda-status',
-                            'label' => 'Status',
-                            'placeholder' => 'Todos os status',
-                            'options' => array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
-                            'attrs' => ['data-agenda-status' => true],
-                        ]) ?>
-                    </div>
+                    <form method="get" action="<?= e(site_url('mapos')) ?>" class="flex items-end gap-2">
+                        <div class="w-32">
+                            <?= component('select', [
+                                'name' => 'ano',
+                                'id' => 'balanco-ano',
+                                'label' => 'Ano',
+                                'options' => array_combine(array_map('strval', $anos), array_map('strval', $anos)),
+                                'selected' => (string) $ano,
+                            ]) ?>
+                        </div>
+                        <?= component('button', ['label' => 'Ver', 'variant' => 'outline', 'type' => 'submit']) ?>
+                    </form>
                 </div>
-                <div class="painel-agenda mt-4 min-h-96" data-agenda="<?= e(site_url('mapos/calendario')) ?>" aria-live="polite">
-                    <p class="text-caption text-muted" data-agenda-carregando>Carregando a agenda…</p>
-                </div>
-            </section>
-
-            <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-os-status">
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 id="titulo-os-status" class="text-heading-sm text-text">OS por status</h2>
-                    <?= component('button', ['label' => 'Ver OS', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os')]) ?>
-                </div>
-                <?php if ($os_grafico === []) { ?>
-                    <?= component('empty-state', ['title' => 'Nenhuma OS cadastrada', 'message' => 'As OS aparecem aqui por status.', 'icon' => 'chart-pie', 'class' => 'border-0']) ?>
+                <?php if (array_sum($balanco['receitas']) + array_sum($balanco['despesas']) == 0) { ?>
+                    <?= component('empty-state', ['title' => 'Nada pago em ' . $ano, 'message' => 'Os lançamentos pagos do ano aparecem aqui, mês a mês.', 'icon' => 'chart-column', 'class' => 'border-0']) ?>
                 <?php } else { ?>
-                    <div class="relative mx-auto mt-4 aspect-square max-w-72">
-                        <canvas data-grafico="os" role="img" aria-label="Gráfico de OS por status"></canvas>
+                    <div class="relative mt-4 min-h-96 flex-1" data-valor-grafico>
+                        <canvas data-grafico="balanco" role="img" aria-label="<?= e('Gráfico do balanço de ' . $ano) ?>"></canvas>
                     </div>
+                    <p class="painel-valores-aviso mt-4 min-h-96 flex-1 items-center justify-center text-caption text-muted">Valores ocultos.</p>
                     <div class="sr-only"><table>
-                        <caption>OS por status</caption>
-                        <thead><tr><th scope="col">Status</th><th scope="col">OS</th></tr></thead>
+                        <caption><?= e('Balanço de ' . $ano) ?></caption>
+                        <thead><tr><th scope="col">Mês</th><th scope="col">Receitas</th><th scope="col">Despesas</th><th scope="col">Saldo</th></tr></thead>
                         <tbody>
-                            <?php foreach ($os_grafico as $fatia) { ?>
-                                <tr><td><?= e($fatia['status']) ?></td><td><?= e($fatia['total']) ?></td></tr>
+                            <?php foreach ($balanco['meses'] as $i => $mesNome) { ?>
+                                <tr><td><?= e($mesNome) ?></td><td><?= e(dinheiro($balanco['receitas'][$i])) ?></td><td><?= e(dinheiro($balanco['despesas'][$i])) ?></td><td><?= e(dinheiro($balanco['saldo'][$i])) ?></td></tr>
                             <?php } ?>
                         </tbody>
                     </table></div>
                 <?php } ?>
             </section>
-        </div>
-    <?php } ?>
+        <?php } ?>
 
-    <?php if ($pode['balanco']) { ?>
-        <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-balanco">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 id="titulo-balanco" class="text-heading-sm text-text"><?= e('Balanço de ' . $ano) ?></h2>
-                    <p class="text-caption text-muted">Receitas e despesas pagas, pelo mês do pagamento.</p>
+        <?php if ($atalhos !== []) { ?>
+            <section class="<?= e($caixa) ?> flex flex-col" aria-labelledby="titulo-atalhos">
+                <h2 id="titulo-atalhos" class="text-heading-sm text-text">Atalhos rápidos</h2>
+                <div class="mt-4 flex flex-1 flex-col gap-2.5">
+                    <?php foreach ($atalhos as $a) { ?>
+                        <a href="<?= e($a['href']) ?>" class="ui-lift flex flex-1 items-center gap-3 rounded-lg border border-border px-4 py-3 text-sm font-medium text-text hover:border-input hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring<?= ! empty($a['primario']) ? ' bg-primary-tint' : '' ?>">
+                            <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-md <?= ! empty($a['primario']) ? 'bg-primary text-on-primary' : 'bg-surface-subtle text-text' ?>"><?= icon($a['icon'], ['class' => 'size-[18px]']) ?></span>
+                            <?= e($a['label']) ?>
+                        </a>
+                    <?php } ?>
                 </div>
-                <form method="get" action="<?= e(site_url('mapos')) ?>" class="flex items-end gap-2">
-                    <div class="w-32">
-                        <?= component('select', [
-                            'name' => 'ano',
-                            'id' => 'balanco-ano',
-                            'label' => 'Ano',
-                            'options' => array_combine(array_map('strval', $anos), array_map('strval', $anos)),
-                            'selected' => (string) $ano,
-                        ]) ?>
-                    </div>
-                    <?= component('button', ['label' => 'Ver', 'variant' => 'outline', 'type' => 'submit']) ?>
-                </form>
-            </div>
-            <?php if (array_sum($balanco['receitas']) + array_sum($balanco['despesas']) == 0) { ?>
-                <?= component('empty-state', ['title' => 'Nada pago em ' . $ano, 'message' => 'Os lançamentos pagos do ano aparecem aqui, mês a mês.', 'icon' => 'chart-column', 'class' => 'border-0']) ?>
-            <?php } else { ?>
-                <div class="relative mt-4 h-72" data-valor-grafico>
-                    <canvas data-grafico="balanco" role="img" aria-label="<?= e('Gráfico do balanço de ' . $ano) ?>"></canvas>
-                </div>
-                <p class="painel-valores-aviso mt-4 h-72 items-center justify-center text-caption text-muted">Valores ocultos.</p>
-                <div class="sr-only"><table>
-                    <caption><?= e('Balanço de ' . $ano) ?></caption>
-                    <thead><tr><th scope="col">Mês</th><th scope="col">Receitas</th><th scope="col">Despesas</th><th scope="col">Saldo</th></tr></thead>
-                    <tbody>
-                        <?php foreach ($balanco['meses'] as $i => $mesNome) { ?>
-                            <tr><td><?= e($mesNome) ?></td><td><?= e(dinheiro($balanco['receitas'][$i])) ?></td><td><?= e(dinheiro($balanco['despesas'][$i])) ?></td><td><?= e(dinheiro($balanco['saldo'][$i])) ?></td></tr>
-                        <?php } ?>
-                    </tbody>
-                </table></div>
-            <?php } ?>
-        </section>
-    <?php } ?>
+            </section>
+        <?php } ?>
+    </div>
 
     <div class="grid gap-4 2xl:grid-cols-2">
         <?php if ($pode['os']) { ?>

@@ -157,6 +157,60 @@ if (! function_exists('painelEventoDaOs')) {
     }
 }
 
+if (! function_exists('painelAtividadeVisual')) {
+    /**
+     * Ícone e variante de status de uma linha do feed de atividades (#painel),
+     * pela ação registrada no log (tarefa). Palavra-chave no texto → visual.
+     *
+     * @return array{icon: string, variante: string}
+     */
+    function painelAtividadeVisual(string $tarefa): array
+    {
+        $t = mb_strtolower($tarefa);
+        $tem = static fn (string ...$termos): bool => array_filter($termos, static fn ($x) => mb_strpos($t, $x) !== false) !== [];
+
+        return match (true) {
+            $tem('removeu', 'excluiu', 'apagou', 'deletou') => ['icon' => 'trash-2', 'variante' => 'danger'],
+            $tem('adicionou', 'cadastrou', 'criou', 'gerou', 'nova', 'novo') => ['icon' => 'plus', 'variante' => 'success'],
+            $tem('faturou', 'pagamento', 'recebeu', 'baixou') => ['icon' => 'circle-dollar-sign', 'variante' => 'success'],
+            $tem('venda') => ['icon' => 'shopping-cart', 'variante' => 'info'],
+            $tem('cliente', 'fornecedor') => ['icon' => 'user', 'variante' => 'info'],
+            $tem('produto', 'estoque') => ['icon' => 'package', 'variante' => 'info'],
+            $tem('alterou', 'editou', 'atualizou') => ['icon' => 'pencil', 'variante' => 'info'],
+            default => ['icon' => 'history', 'variante' => 'neutral'],
+        };
+    }
+}
+
+if (! function_exists('painelTempoRelativo')) {
+    /**
+     * "há 5 min", "há 2 h", "há 3 dias" a partir de uma data e hora do log, ou a
+     * data curta quando já tem mais de uma semana. $agora permite testar.
+     */
+    function painelTempoRelativo(?string $data, ?string $hora, ?int $agora = null): string
+    {
+        $data = trim((string) $data);
+        if ($data === '' || str_starts_with($data, '0000')) {
+            return '';
+        }
+
+        $instante = strtotime(substr($data, 0, 10) . ' ' . substr((string) $hora, 0, 8));
+        if ($instante === false) {
+            return '';
+        }
+
+        $diff = max(0, ($agora ?? time()) - $instante);
+
+        return match (true) {
+            $diff < 60 => 'agora',
+            $diff < 3600 => 'há ' . (int) ($diff / 60) . ' min',
+            $diff < 86400 => 'há ' . (int) ($diff / 3600) . ' h',
+            $diff < 604800 => 'há ' . (int) ($diff / 86400) . ($diff < 172800 ? ' dia' : ' dias'),
+            default => date('d/m/Y', $instante),
+        };
+    }
+}
+
 if (! function_exists('painelDataPorExtenso')) {
     /** "quinta-feira, 9 de outubro de 2026" (sem depender da extensão intl). */
     function painelDataPorExtenso(string $ymd): string

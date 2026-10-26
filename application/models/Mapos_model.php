@@ -290,6 +290,23 @@ class Mapos_model extends CI_Model
     }
 
     /**
+     * Últimas atividades do sistema (registro de auditoria, tabela logs) para o
+     * feed do painel: as mais recentes primeiro, com data e hora juntas.
+     *
+     * @return list<object>
+     */
+    public function ultimasAtividades(int $limite): array
+    {
+        return $this->db
+            ->select('idLogs, usuario, tarefa, data, hora')
+            ->from('logs')
+            ->order_by('idLogs', 'DESC')
+            ->limit($limite)
+            ->get()
+            ->result();
+    }
+
+    /**
      * Produtos no estoque mínimo ou abaixo dele (só os que têm mínimo), os que
      * estão mais abaixo primeiro.
      */

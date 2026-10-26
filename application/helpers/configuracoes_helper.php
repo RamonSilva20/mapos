@@ -74,7 +74,7 @@ if (! function_exists('configuracaoCampos')) {
             'geral' => [
                 'app_name' => ['destino' => 'config', 'tipo' => 'texto', 'rotulo' => 'Nome do sistema', 'obrigatorio' => true, 'max' => 100, 'ajuda' => 'Aparece no título das páginas e nos e-mails.'],
                 'per_page' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Registros por página', 'opcoes' => ['10' => '10', '20' => '20', '50' => '50', '100' => '100']],
-                'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Cada pessoa pode trocar o tema na barra do topo, e a escolha fica salva no perfil dela. Este é o tema de quem ainda não escolheu.'],
+                'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Mostra o tema que você está usando agora (o mesmo da barra do topo). Salvar aplica a você e vale como padrão para quem ainda não escolheu.'],
             ],
             'os' => [
                 'control_editos' => ['destino' => 'config', 'tipo' => 'sim_nao', 'rotulo' => 'Permitir editar OS faturada ou cancelada'],
@@ -296,8 +296,18 @@ if (! function_exists('configuracaoValores')) {
             };
         }
 
-        if ($aba === 'geral' && ! isset($configuracao['app_tema_modo']) && $post === null) {
-            $valores['app_tema_modo'] = temaConfiguracao(array_diff_key($configuracao, ['tema_usuario_modo' => true]))['modo'];
+        if ($aba === 'geral' && $post === null) {
+            // O campo mostra o modo que a pessoa logada realmente vê: a
+            // preferência pessoal dela (topbar/perfil) tem prioridade sobre o
+            // padrão do sistema, então a palavra no formulário acompanha o tema
+            // aplicado. Sem preferência pessoal, cai no padrão do sistema
+            // (app_tema_modo) ou no modo derivado quando ele ainda não existe.
+            $pessoal = strtolower(trim((string) ($configuracao['tema_usuario_modo'] ?? '')));
+            if (in_array($pessoal, ['claro', 'escuro', 'sistema'], true)) {
+                $valores['app_tema_modo'] = $pessoal;
+            } elseif (! isset($configuracao['app_tema_modo'])) {
+                $valores['app_tema_modo'] = temaConfiguracao(array_diff_key($configuracao, ['tema_usuario_modo' => true]))['modo'];
+            }
         }
 
         return $valores;

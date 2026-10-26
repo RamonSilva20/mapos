@@ -42,7 +42,9 @@ $tamanhos = [
 $atributos = [
     'id' => $id,
     'class' => componenteClasses(
-        'inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-colors',
+        'inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform]',
+        // Leve afundar ao clicar (feedback tátil), desligado para quem pede menos movimento.
+        'active:translate-y-px motion-reduce:active:translate-y-0',
         'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring',
         // DESIGN.md button-disabled: legível, sem opacidade.
         'disabled:cursor-not-allowed disabled:border-transparent disabled:bg-disabled-bg disabled:text-disabled disabled:shadow-none',

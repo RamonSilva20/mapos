@@ -109,6 +109,26 @@ final class ConfiguracoesTest extends MaposTestCase
         $this->assertSame('escuro', $geral['app_tema_modo'], 'Sem app_tema_modo (migration não rodou), vem do tema antigo.');
     }
 
+    public function testCampoDeTemaMostraOModoQueOUsuarioVe(): void
+    {
+        // A preferência pessoal (topbar/perfil) tem prioridade sobre o padrão
+        // do sistema na tela que a pessoa vê, então o campo a reflete e a
+        // palavra acompanha o tema aplicado.
+        $comPreferencia = configuracaoValores('geral', null, ['app_tema_modo' => 'claro', 'tema_usuario_modo' => 'escuro'], []);
+        $this->assertSame('escuro', $comPreferencia['app_tema_modo'], 'O campo mostra o modo pessoal, não o padrão do sistema.');
+
+        // Sem preferência pessoal (ou com valor inválido) o campo fica no
+        // padrão do sistema.
+        $semPreferencia = configuracaoValores('geral', null, ['app_tema_modo' => 'claro', 'tema_usuario_modo' => ''], []);
+        $this->assertSame('claro', $semPreferencia['app_tema_modo']);
+        $invalida = configuracaoValores('geral', null, ['app_tema_modo' => 'escuro', 'tema_usuario_modo' => 'lixo'], []);
+        $this->assertSame('escuro', $invalida['app_tema_modo']);
+
+        // O POST sempre vence (o que a pessoa acabou de escolher no formulário).
+        $comPost = configuracaoValores('geral', ['app_tema_modo' => 'sistema'], ['app_tema_modo' => 'claro', 'tema_usuario_modo' => 'escuro'], []);
+        $this->assertSame('sistema', $comPost['app_tema_modo']);
+    }
+
     public function testValorDoEnvVoltaIgualNoPhpdotenv(): void
     {
         $valores = ['simples' => 'smtp.gmail.com', 'espaco' => 'Minha senha', 'aspas' => "it's \"ok\" \\ fim", 'cifrao' => 'a$b${X}', 'vazio' => '', 'quebra' => "linha1\nlinha2"];

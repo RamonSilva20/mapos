@@ -81,6 +81,18 @@ export function gravarNoServidor(url, modo) {
     return post(url, { modo }).then(() => true, () => false);
 }
 
+/*
+ * Tela de Configurações aberta: o campo "Tema padrão" (select app_tema_modo)
+ * acompanha a troca feita na topbar, sem recarregar a página. Só mexe quando o
+ * campo existe e tem a opção escolhida; fora dessa tela não faz nada.
+ */
+export function sincronizarCampoTema(corpo, modo) {
+    const campo = corpo.querySelector('#config-app_tema_modo');
+    if (campo && campo.value !== modo && [...campo.options].some((o) => o.value === modo)) {
+        campo.value = modo;
+    }
+}
+
 export default function iniciar(corpo) {
     const html = document.documentElement;
     const desktop = window.matchMedia?.(CONSULTA_DESKTOP);
@@ -160,6 +172,7 @@ export default function iniciar(corpo) {
             salvarModo(escolhido);
             gravarNoServidor(corpo.dataset.temaUrl, escolhido);
             marcarModo();
+            sincronizarCampoTema(corpo, escolhido);
         }
 
         // Clique fora do menu do usuário fecha o menu.

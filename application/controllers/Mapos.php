@@ -75,6 +75,22 @@ class Mapos extends MY_Controller
             $painel['estoque_lista'] = $this->mapos_model->produtosEstoqueBaixo(8);
         }
 
+        // Feed de "Últimas atividades" do painel (#painel), do registro de
+        // auditoria: só para quem pode ver a auditoria.
+        $painel['pode_auditoria'] = $this->permite('cAuditoria');
+        $painel['atividades'] = $painel['pode_auditoria'] ? $this->mapos_model->ultimasAtividades(6) : [];
+
+        // Atalhos rápidos do painel (#painel): cada ação só com a permissão de
+        // criar no módulo.
+        $painel['atalhos'] = array_values(array_filter([
+            $this->permite('aOs') ? ['label' => 'Nova OS', 'icon' => 'plus', 'href' => site_url('os/adicionar'), 'primario' => true] : null,
+            $this->permite('aCliente') ? ['label' => 'Novo Cliente', 'icon' => 'user', 'href' => site_url('clientes/adicionar')] : null,
+            $this->permite('aProduto') ? ['label' => 'Novo Produto', 'icon' => 'package', 'href' => site_url('produtos/adicionar')] : null,
+            $this->permite('aServico') ? ['label' => 'Novo Serviço', 'icon' => 'wrench', 'href' => site_url('servicos/adicionar')] : null,
+            $this->permite('aLancamento') ? ['label' => 'Lançar Pagamento', 'icon' => 'circle-dollar-sign', 'href' => site_url('financeiro/adicionar')] : null,
+            ($this->permite('rOs') || $this->permite('rVenda') || $this->permite('rFinanceiro')) ? ['label' => 'Ver Relatórios', 'icon' => 'chart-column', 'href' => site_url('relatorios/os')] : null,
+        ]));
+
         $this->data = array_merge($this->data, $painel);
 
         if ($this->permite('aOs')) {
@@ -683,6 +699,15 @@ class Mapos extends MY_Controller
             }
 
             if ($erros === [] && ($config === [] || $this->mapos_model->saveConfiguracao($config))) {
+                // Mudou o "Tema padrão" do sistema? Aplica também ao próprio
+                // admin, senão a preferência pessoal dele (que tem prioridade)
+                // continuaria valendo e o padrão não apareceria pra ele.
+                if ($aba === 'geral' && isset($config['app_tema_modo'])
+                    && $config['app_tema_modo'] !== ($this->data['configuration']['app_tema_modo'] ?? null)) {
+                    $this->mapos_model->salvarTemaModo((int) $this->session->userdata('id_admin'), $config['app_tema_modo']);
+                    $this->session->set_userdata('tema_modo_admin', $config['app_tema_modo']);
+                }
+
                 log_info('Alterou as configurações do sistema (' . CONFIG_ABAS[$aba] . ').');
                 $this->session->set_flashdata('success', 'Configurações salvas.');
 

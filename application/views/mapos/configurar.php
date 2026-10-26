@@ -136,5 +136,18 @@ foreach ($campos as $nome => $def) {
                 <?= component('button', ['label' => 'Salvar', 'icon' => 'save', 'type' => 'submit', 'attrs' => ['data-rotulo-carregando' => 'Salvando…']]) ?>
             </div>
         </form>
+
+        <?php if ($aba === 'geral') { ?>
+            <?php // Tema de cor (prova de conceito): client-side (localStorage), fora do formulário de configurações do servidor. ?>
+            <section class="<?= e($caixa) ?>" aria-labelledby="config-tema-cor" <?= js_module('painel/tema') ?>>
+                <h2 id="config-tema-cor" class="text-heading-sm text-text">Tema de cor (beta)</h2>
+                <p class="mt-1 text-caption text-muted">Esquema de cores da interface. A escolha vale neste navegador (ainda não é salva no perfil).</p>
+                <div class="mt-4 flex flex-wrap gap-3" role="group" aria-label="Tema de cor">
+                    <?php foreach (['padrao' => 'Padrão (laranja)', 'claro' => 'Claro', 'azul' => 'Azul Corporativo', 'verde' => 'Verde Moderno', 'violeta' => 'Violeta Criativo', 'grafite' => 'Grafite (escuro)'] as $cor => $rotulo) { ?>
+                        <button type="button" data-tema-cor-escolher="<?= e($cor) ?>" aria-pressed="false" title="<?= e($rotulo) ?>" aria-label="<?= e($rotulo) ?>" class="painel-swatch-<?= e($cor) ?> size-10 rounded-full border-2 border-border transition-transform hover:scale-110 aria-pressed:border-text aria-pressed:ring-2 aria-pressed:ring-primary aria-pressed:ring-offset-2 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"></button>
+                    <?php } ?>
+                </div>
+            </section>
+        <?php } ?>
     <?php } ?>
 </div>

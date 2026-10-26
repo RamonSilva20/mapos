@@ -106,3 +106,23 @@ test('a troca de modo é gravada no servidor, e sem URL não faz nada nem quebra
         globalThis.document = documentoOriginal;
     }
 });
+
+test('a troca de modo na topbar acompanha o campo da tela de Configurações', async () => {
+    const { sincronizarCampoTema } = await import('../../assets/js/modules/layout/shell.js');
+
+    const campo = { value: 'claro', options: [{ value: 'claro' }, { value: 'escuro' }, { value: 'sistema' }] };
+    const corpo = { querySelector: (sel) => (sel === '#config-app_tema_modo' ? campo : null) };
+
+    sincronizarCampoTema(corpo, 'escuro');
+    assert.equal(campo.value, 'escuro', 'O select passa a mostrar o modo escolhido na topbar.');
+
+    sincronizarCampoTema(corpo, 'sistema');
+    assert.equal(campo.value, 'sistema');
+
+    // Modo sem opção correspondente não muda o campo.
+    sincronizarCampoTema(corpo, 'roxo');
+    assert.equal(campo.value, 'sistema');
+
+    // Fora da tela de Configurações (sem o campo) não quebra.
+    assert.doesNotThrow(() => sincronizarCampoTema({ querySelector: () => null }, 'escuro'));
+});

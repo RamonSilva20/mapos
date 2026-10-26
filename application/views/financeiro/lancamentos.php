@@ -90,24 +90,34 @@ $resumo = ($total === 1 ? '1 lançamento' : number_format($total, 0, ',', '.') .
             'label' => 'Receitas',
             'value' => dinheiro($totais['receitas']),
             'icon' => 'circle-dollar-sign',
+            'accent' => 'success',
+            'trend' => $tendencias['receitas'] ?? null,
+            'spark' => $series['receitas'] ?? null,
             'caption' => dinheiro($totais['receitas_pagas']) . ' recebidos · ' . dinheiro($totais['receitas_pendentes']) . ' a receber',
         ]) ?>
         <?= component('kpi-card', [
             'label' => 'Despesas',
             'value' => dinheiro($totais['despesas']),
             'icon' => 'banknote',
+            'accent' => 'danger',
+            'trend' => $tendencias['despesas'] ?? null,
+            'spark' => $series['despesas'] ?? null,
             'caption' => dinheiro($totais['despesas_pagas']) . ' pagos · ' . dinheiro($totais['despesas_pendentes']) . ' a pagar',
         ]) ?>
         <?= component('kpi-card', [
             'label' => 'Saldo previsto',
             'value' => dinheiro($saldo),
             'icon' => 'chart-column',
+            'accent' => 'info',
+            'trend' => $tendencias['saldo'] ?? null,
+            'spark' => $series['saldo'] ?? null,
             'caption' => 'Realizado: ' . dinheiro($totais['receitas_pagas'] - $totais['despesas_pagas']),
         ]) ?>
         <?= component('kpi-card', [
             'label' => 'Vencidos',
             'value' => number_format((int) $totais['vencidos'], 0, ',', '.'),
             'icon' => 'triangle-alert',
+            'accent' => 'warning',
             'caption' => dinheiro($totais['receitas_vencidas']) . ' a receber · ' . dinheiro($totais['despesas_vencidas']) . ' a pagar',
         ]) ?>
     </div>

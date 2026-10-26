@@ -78,17 +78,23 @@
   --color-disabled-bg: var(--mapos-disabled-bg);
 
   /*
-   * Ação: uma cor só, o laranja #F37338. Com branco dá 2,87:1 (reprova), com
-   * o ink dá 6,00:1, por isso o rótulo é sempre text-on-primary.
+   * Ação: no tema padrão, o laranja #F37338 (com branco dá 2,87:1, reprova;
+   * com o ink dá 6,00:1, por isso o rótulo é text-on-primary). A cor vem das
+   * variáveis --mapos-primary* para os temas opcionais (data-tema) poderem
+   * trocar a cor de ação. Ver os blocos de tema no fim do arquivo.
    */
-  --color-primary: #f37338;
-  --color-primary-hover: #f47e48;
-  --color-primary-pressed: #db6230;
-  --color-on-primary: #1f1633;
+  --color-primary: var(--mapos-primary);
+  --color-primary-hover: var(--mapos-primary-hover);
+  --color-primary-pressed: var(--mapos-primary-pressed);
+  --color-on-primary: var(--mapos-on-primary);
   /* Ink fixo, para texto sobre preenchimentos claros que não mudam com o modo (button-inverted). */
   --color-ink: #1f1633;
   --color-primary-tint: var(--mapos-primary-tint);
   --color-primary-strong: var(--mapos-primary-strong);
+
+  /* Sidebar: tokens próprios para os temas deixarem a sidebar escura sem mexer
+     no menu (ver a regra .v5-sidebar no fim do arquivo). */
+  --color-sidebar: var(--mapos-sidebar-bg);
 
   /* Foco: o único azul do sistema. Use outline-ring, opaco: com 50% de alfa o contraste cai para cerca de 1,8:1. */
   --color-ring: #3b82f6;
@@ -254,6 +260,21 @@
     --mapos-primary-tint: #feeee7;
     --mapos-primary-strong: #b8501f;
 
+    /* Cor de ação do tema padrão (laranja). Os temas (data-tema) a trocam. */
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+
+    /* Sidebar: por padrão igual ao conteúdo (nenhuma mudança visual). */
+    --mapos-sidebar-bg: var(--mapos-surface);
+    --mapos-sidebar-hover: var(--mapos-surface-subtle);
+    --mapos-sidebar-text: var(--mapos-text);
+    --mapos-sidebar-muted: var(--mapos-muted);
+    --mapos-sidebar-border: var(--mapos-border);
+    --mapos-sidebar-active-bg: var(--mapos-primary-tint);
+    --mapos-sidebar-active-text: var(--mapos-primary-strong);
+
     --mapos-success-ink: #166534;
     --mapos-success-soft: #e3f0e8;
     --mapos-warning-ink: #854d0e;
@@ -280,18 +301,33 @@
   .superficie-entrada {
     color-scheme: dark;
 
-    --mapos-bg: #1f1633;
-    --mapos-surface: #150f23;
-    --mapos-surface-subtle: #1b1430;
+    --mapos-bg: #0e1626;
+    --mapos-surface: #152132;
+    --mapos-surface-subtle: #1e2b40;
     --mapos-text: #ffffff;
-    --mapos-muted: rgb(255 255 255 / 72%);
-    --mapos-border: #362d59;
-    --mapos-input: #756d8a;
-    --mapos-field: #1f1633;
+    --mapos-muted: #9aa7bd;
+    --mapos-border: #2a3850;
+    --mapos-input: #5e6e88;
+    --mapos-field: #152132;
     --mapos-disabled: rgb(255 255 255 / 45%);
     --mapos-disabled-bg: rgb(255 255 255 / 8%);
-    --mapos-primary-tint: #391f26;
+    --mapos-primary-tint: #352313;
     --mapos-primary-strong: #f37338;
+
+    /* Cor de ação do tema padrão no escuro (mesmo laranja). */
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+
+    /* Sidebar: no escuro padrão também acompanha o conteúdo. */
+    --mapos-sidebar-bg: var(--mapos-surface);
+    --mapos-sidebar-hover: var(--mapos-surface-subtle);
+    --mapos-sidebar-text: var(--mapos-text);
+    --mapos-sidebar-muted: var(--mapos-muted);
+    --mapos-sidebar-border: var(--mapos-border);
+    --mapos-sidebar-active-bg: var(--mapos-primary-tint);
+    --mapos-sidebar-active-text: var(--mapos-primary-strong);
 
     --mapos-success-ink: #4ade80;
     --mapos-success-soft: #1d3032;
@@ -303,8 +339,8 @@
     --mapos-info-soft: #1b2b45;
     --mapos-progress-ink: #b8b0f0;
     --mapos-progress-soft: #2b244c;
-    --mapos-neutral-ink: #d6cfe0;
-    --mapos-neutral-soft: #2f253e;
+    --mapos-neutral-ink: #cbd5e1;
+    --mapos-neutral-soft: #273347;
 
     --mapos-shadow-card: none;
     --mapos-shadow-overlay: 0 10px 30px rgb(0 0 0 / 55%);
@@ -324,5 +360,197 @@
     --mapos-surface-subtle: #f6f5f9;
     --mapos-disabled: #8a849c;
     --mapos-disabled-bg: #e5e7eb;
+  }
+
+  /*
+   * Sidebar: redefine as variáveis --mapos-* com os tokens --mapos-sidebar-*.
+   * No tema padrão eles são iguais ao conteúdo, então nada muda. Os temas
+   * (data-tema) trocam os --mapos-sidebar-* e a sidebar fica escura, sem mexer
+   * no HTML do menu (bg-surface, text-text, text-muted, bg-primary-tint...
+   * acompanham). Mesmo truque do .superficie-entrada.
+   */
+  .v5-sidebar {
+    --mapos-surface: var(--mapos-sidebar-bg);
+    --mapos-surface-subtle: var(--mapos-sidebar-hover);
+    --mapos-text: var(--mapos-sidebar-text);
+    --mapos-muted: var(--mapos-sidebar-muted);
+    --mapos-border: var(--mapos-sidebar-border);
+    --mapos-primary-tint: var(--mapos-sidebar-active-bg);
+    --mapos-primary-strong: var(--mapos-sidebar-active-text);
+  }
+
+  /*
+   * Temas opcionais (prova de conceito, #tema). O atributo data-tema no <html>
+   * (assets/js/tema.js, a partir do localStorage) troca a paleta inteira.
+   * Especificidade :root[data-tema=...] vence :root e .dark, então o tema
+   * manda qualquer que seja o modo claro/escuro. Contrastes a conferir no
+   * DESIGN.md antes de virar oficial.
+   */
+
+  /* Claro: canvas claro, sidebar branca, ação laranja (estilo premium claro). */
+  :root[data-tema="claro"] {
+    color-scheme: light;
+
+    --mapos-bg: #f5f7fb;
+    --mapos-surface: #ffffff;
+    --mapos-surface-subtle: #f1f4f9;
+    --mapos-text: #1f2a44;
+    --mapos-muted: #6b7489;
+    --mapos-border: #e6e9f0;
+    --mapos-input: #9aa2b4;
+    --mapos-field: #ffffff;
+    --mapos-disabled: #9aa2b4;
+    --mapos-disabled-bg: #e6e9f0;
+
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+    --mapos-primary-tint: #fef0e9;
+    --mapos-primary-strong: #c2551f;
+
+    /* Sidebar clara (branca), com item ativo em laranja suave. */
+    --mapos-sidebar-bg: #ffffff;
+    --mapos-sidebar-hover: #f1f4f9;
+    --mapos-sidebar-text: #1f2a44;
+    --mapos-sidebar-muted: #6b7489;
+    --mapos-sidebar-border: #e6e9f0;
+    --mapos-sidebar-active-bg: #fef0e9;
+    --mapos-sidebar-active-text: #c2551f;
+
+    --mapos-shadow-card: 0 1px 2px rgb(31 42 68 / 6%), 0 1px 3px rgb(31 42 68 / 8%);
+    --mapos-shadow-overlay: 0 10px 15px -3px rgb(31 42 68 / 10%), 0 4px 6px -4px rgb(31 42 68 / 10%);
+  }
+
+  /* Azul Corporativo: conteúdo claro, sidebar navy, ação azul. */
+  :root[data-tema="azul"] {
+    color-scheme: light;
+
+    --mapos-bg: #f8fafc;
+    --mapos-surface: #ffffff;
+    --mapos-surface-subtle: #f1f5f9;
+    --mapos-text: #0f172a;
+    --mapos-muted: #64748b;
+    --mapos-border: #e2e8f0;
+    --mapos-input: #94a3b8;
+    --mapos-field: #ffffff;
+    --mapos-disabled: #94a3b8;
+    --mapos-disabled-bg: #e2e8f0;
+
+    --mapos-primary: #1d4ed8;
+    --mapos-primary-hover: #2563eb;
+    --mapos-primary-pressed: #1e40af;
+    --mapos-on-primary: #ffffff;
+    --mapos-primary-tint: #e8eefc;
+    --mapos-primary-strong: #1d4ed8;
+
+    --mapos-sidebar-bg: #0f172a;
+    --mapos-sidebar-hover: #1e293b;
+    --mapos-sidebar-text: #e2e8f0;
+    --mapos-sidebar-muted: #94a3b8;
+    --mapos-sidebar-border: #1e293b;
+    --mapos-sidebar-active-bg: #1d4ed8;
+    --mapos-sidebar-active-text: #ffffff;
+
+    --mapos-shadow-overlay: 0 10px 15px -3px rgb(15 23 42 / 12%), 0 4px 6px -4px rgb(15 23 42 / 12%);
+  }
+
+  /* Grafite + Laranja: tema escuro completo, ação laranja. */
+  :root[data-tema="grafite"] {
+    color-scheme: dark;
+
+    --mapos-bg: #171717;
+    --mapos-surface: #1f1f1f;
+    --mapos-surface-subtle: #27272a;
+    --mapos-text: #fafafa;
+    --mapos-muted: #a1a1aa;
+    --mapos-border: #3f3f46;
+    --mapos-input: #6b6b73;
+    --mapos-field: #27272a;
+    --mapos-disabled: rgb(255 255 255 / 45%);
+    --mapos-disabled-bg: rgb(255 255 255 / 8%);
+
+    --mapos-primary: #f97316;
+    --mapos-primary-hover: #fb8c3a;
+    --mapos-primary-pressed: #ea670c;
+    --mapos-on-primary: #171717;
+    --mapos-primary-tint: #2a2015;
+    --mapos-primary-strong: #fb923c;
+
+    --mapos-sidebar-bg: #171717;
+    --mapos-sidebar-hover: #27272a;
+    --mapos-sidebar-text: #e4e4e7;
+    --mapos-sidebar-muted: #a1a1aa;
+    --mapos-sidebar-border: #27272a;
+    --mapos-sidebar-active-bg: #f97316;
+    --mapos-sidebar-active-text: #171717;
+
+    --mapos-shadow-overlay: 0 10px 30px rgb(0 0 0 / 55%);
+  }
+
+  /* Verde Moderno: conteúdo claro, sidebar verde-escura, ação verde. */
+  :root[data-tema="verde"] {
+    color-scheme: light;
+
+    --mapos-bg: #f8fafc;
+    --mapos-surface: #ffffff;
+    --mapos-surface-subtle: #f1f5f9;
+    --mapos-text: #0f172a;
+    --mapos-muted: #64748b;
+    --mapos-border: #e2e8f0;
+    --mapos-input: #94a3b8;
+    --mapos-field: #ffffff;
+    --mapos-disabled: #94a3b8;
+    --mapos-disabled-bg: #e2e8f0;
+
+    --mapos-primary: #15803d;
+    --mapos-primary-hover: #16a34a;
+    --mapos-primary-pressed: #14532d;
+    --mapos-on-primary: #ffffff;
+    --mapos-primary-tint: #e7f3ec;
+    --mapos-primary-strong: #15803d;
+
+    --mapos-sidebar-bg: #14532d;
+    --mapos-sidebar-hover: #166534;
+    --mapos-sidebar-text: #dcfce7;
+    --mapos-sidebar-muted: #86efac;
+    --mapos-sidebar-border: #166534;
+    --mapos-sidebar-active-bg: #15803d;
+    --mapos-sidebar-active-text: #ffffff;
+
+    --mapos-shadow-overlay: 0 10px 15px -3px rgb(2 44 34 / 12%), 0 4px 6px -4px rgb(2 44 34 / 12%);
+  }
+
+  /* Violeta Criativo: conteúdo claro, sidebar violeta-escura, ação violeta. */
+  :root[data-tema="violeta"] {
+    color-scheme: light;
+
+    --mapos-bg: #faf9ff;
+    --mapos-surface: #ffffff;
+    --mapos-surface-subtle: #f3f1fb;
+    --mapos-text: #1e1a3a;
+    --mapos-muted: #6b6391;
+    --mapos-border: #e7e3f5;
+    --mapos-input: #9a92c0;
+    --mapos-field: #ffffff;
+    --mapos-disabled: #9a92c0;
+    --mapos-disabled-bg: #e7e3f5;
+
+    --mapos-primary: #6a5fc1;
+    --mapos-primary-hover: #7a6fd0;
+    --mapos-primary-pressed: #554aa8;
+    --mapos-on-primary: #ffffff;
+    --mapos-primary-tint: #ece9f9;
+    --mapos-primary-strong: #554aa8;
+
+    --mapos-sidebar-bg: #2a1a5e;
+    --mapos-sidebar-hover: #3a2680;
+    --mapos-sidebar-text: #e9e4fb;
+    --mapos-sidebar-muted: #b3a8e0;
+    --mapos-sidebar-border: #3a2680;
+    --mapos-sidebar-active-bg: #6a5fc1;
+    --mapos-sidebar-active-text: #ffffff;
+
+    --mapos-shadow-overlay: 0 10px 15px -3px rgb(30 26 58 / 12%), 0 4px 6px -4px rgb(30 26 58 / 12%);
   }
 }

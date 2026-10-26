@@ -226,6 +226,72 @@ html[data-valores="ocultos"] .painel-valores-aviso {
 }
 
 /*
+ * Painel novo (#painel). Classes próprias porque a CSP não permite style inline
+ * (style-src sem unsafe-inline): o acento colorido dos KPIs, o gradiente do card
+ * promo e as amostras (swatches) do seletor de tema precisam de cor literal.
+ */
+/* KPIs com degradê translúcido na cor do acento (não cor chapada): a cor
+   "sangra" de um canto e esmaece no fundo, com borda e barra lateral tonais.
+   Usado pelo componente kpi-card (prop accent). */
+.kpi-acento-primary,
+.kpi-acento-info,
+.kpi-acento-success,
+.kpi-acento-warning,
+.kpi-acento-danger,
+.kpi-acento-progress {
+  border-color: color-mix(in srgb, var(--kpi-cor) 34%, var(--color-border));
+  background-image: linear-gradient(135deg, color-mix(in srgb, var(--kpi-cor) 20%, transparent), transparent 62%);
+  box-shadow: inset 3px 0 0 var(--kpi-cor);
+}
+
+/* Micro-interações (#visual): cartões/itens clicáveis sobem de leve e ganham
+   sombra ao passar o mouse. Só com movimento permitido (prefers-reduced-motion). */
+.ui-lift {
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.ui-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -12px rgb(0 0 0 / 35%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-lift,
+  .ui-lift:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+.kpi-acento-primary { --kpi-cor: var(--color-primary); }
+.kpi-acento-info { --kpi-cor: var(--color-info); }
+.kpi-acento-success { --kpi-cor: var(--color-success); }
+.kpi-acento-warning { --kpi-cor: var(--color-warning); }
+.kpi-acento-danger { --kpi-cor: var(--color-danger); }
+.kpi-acento-progress { --kpi-cor: var(--color-progress); }
+
+/* Sparkline do kpi-card herda a cor do acento (currentColor = --kpi-cor). */
+.kpi-spark {
+  color: var(--kpi-cor, var(--color-muted));
+}
+
+/* No painel, "Ocultar valores" também esconde a tendência e o sparkline dos
+   cartões sensíveis (dinheiro), para não vazar a forma do dado. */
+html[data-valores="ocultos"] .kpi-oculto-valores {
+  display: none;
+}
+
+.painel-promo { background-image: linear-gradient(135deg, var(--color-surface) 0%, var(--color-primary-tint) 100%); }
+
+/* Amostras de cor de cada tema (mostram a cor real da marca de cada tema). */
+.painel-swatch-padrao { background-color: #f37338; }
+.painel-swatch-claro { background-color: #f5f7fb; }
+.painel-swatch-azul { background-color: #1d4ed8; }
+.painel-swatch-verde { background-color: #15803d; }
+.painel-swatch-grafite { background-color: #171717; }
+.painel-swatch-violeta { background-color: #6a5fc1; }
+
+/*
  * Quem pede menos movimento (prefers-reduced-motion) não recebe transições nem
  * animações: botões, switch, abas, calendário e a rolagem suave (WCAG 2.3.3).
  */
