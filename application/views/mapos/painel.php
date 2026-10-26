@@ -24,6 +24,10 @@
  */
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 
+// O controller sempre envia os atalhos (Mapos::index); o default deixa a view
+// robusta quando ela é renderizada sem eles (ex.: testes de permissão).
+$atalhos ??= [];
+
 // Tendência e sparkline do "Saldo do mês" (#visual Lote 2): só quando a série
 // do ano (balanço) está disponível e é o ano atual.
 $saldoTrend = null;
