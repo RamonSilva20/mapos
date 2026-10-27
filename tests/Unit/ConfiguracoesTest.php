@@ -41,22 +41,22 @@ final class ConfiguracoesTest extends MaposTestCase
     public function testAbaGravaSoOsCamposDelaEConverteOsTipos(): void
     {
         [$config, $env, $erros] = configuracaoDadosDoFormulario('geral', [
-            'app_name' => ' Minha Oficina ', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'pix_key' => 'invasor', 'API_ENABLED' => 'true',
+            'app_name' => ' Minha Oficina ', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'app_tema_cor' => 'azul', 'pix_key' => 'invasor', 'API_ENABLED' => 'true',
         ]);
 
         $this->assertSame([], $erros);
         $this->assertSame([], $env);
-        $this->assertSame(['app_name' => 'Minha Oficina', 'per_page' => '20', 'app_tema_modo' => 'escuro'], $config, 'Só os campos da aba.');
+        $this->assertSame(['app_name' => 'Minha Oficina', 'per_page' => '20', 'app_tema_modo' => 'escuro', 'app_tema_cor' => 'azul'], $config, 'Só os campos da aba.');
 
-        [$config] = configuracaoDadosDoFormulario('geral', ['app_name' => 'X', 'per_page' => '10', 'app_tema_modo' => 'sistema']);
+        [$config] = configuracaoDadosDoFormulario('geral', ['app_name' => 'X', 'per_page' => '10', 'app_tema_modo' => 'sistema', 'app_tema_cor' => 'padrao']);
         $this->assertArrayNotHasKey('control_datatable', $config, 'A busca das tabelas antigas saiu na #2855.');
         $this->assertArrayNotHasKey('app_theme', $config, 'O app_theme não é mais gravado (os tema-*.css saíram na #2855).');
     }
 
     public function testErrosPorCampo(): void
     {
-        [, , $erros] = configuracaoDadosDoFormulario('geral', ['app_name' => '  ', 'per_page' => '7', 'app_tema_modo' => 'roxo']);
-        $this->assertSame(['app_name', 'per_page', 'app_tema_modo'], array_keys($erros));
+        [, , $erros] = configuracaoDadosDoFormulario('geral', ['app_name' => '  ', 'per_page' => '7', 'app_tema_modo' => 'roxo', 'app_tema_cor' => 'rosa']);
+        $this->assertSame(['app_name', 'per_page', 'app_tema_modo', 'app_tema_cor'], array_keys($erros));
 
         [, , $erros] = configuracaoDadosDoFormulario('os', ['os_notification' => 'todos', 'os_status_list' => ['Inventado']]);
         $this->assertSame('Marque ao menos um status.', $erros['os_status_list']);
@@ -276,7 +276,13 @@ final class ConfiguracoesTest extends MaposTestCase
                 'valores' => configuracaoValores($aba, null, ['app_name' => 'Map <b>OS</b>', 'per_page' => '10', 'os_status_list' => '["Aberto"]'], $env),
                 'erros' => [],
                 'pode_backup' => true,
+                'tema_pessoal' => 'Escuro · Azul',
             ]);
+
+            if ($aba === 'geral') {
+                $this->assertStringContainsString('Você está usando: Escuro · Azul.', $html);
+                $this->assertStringContainsString('Cor padrão do sistema', $html);
+            }
 
             $this->assertStringNotContainsString('senha-secreta', $html, $aba);
             $this->assertStringNotContainsString('chave-secreta', $html, $aba);

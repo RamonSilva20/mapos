@@ -74,7 +74,8 @@ if (! function_exists('configuracaoCampos')) {
             'geral' => [
                 'app_name' => ['destino' => 'config', 'tipo' => 'texto', 'rotulo' => 'Nome do sistema', 'obrigatorio' => true, 'max' => 100, 'ajuda' => 'Aparece no título das páginas e nos e-mails.'],
                 'per_page' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Registros por página', 'opcoes' => ['10' => '10', '20' => '20', '50' => '50', '100' => '100']],
-                'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Cada pessoa pode trocar o tema na barra do topo, e a escolha fica salva no perfil dela. Este é o tema de quem ainda não escolheu.'],
+                'app_tema_modo' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Tema padrão', 'opcoes' => ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'], 'ajuda' => 'Cada pessoa pode trocar o tema na barra do topo, e a escolha fica salva no perfil dela. Este é o modo de quem ainda não escolheu.'],
+                'app_tema_cor' => ['destino' => 'config', 'tipo' => 'opcao', 'rotulo' => 'Cor padrão do sistema', 'opcoes' => temaCoresRotulos(), 'ajuda' => 'Cada pessoa pode escolher a própria cor no menu do usuário. Esta é a cor de quem ainda não escolheu.'],
             ],
             'os' => [
                 'control_editos' => ['destino' => 'config', 'tipo' => 'sim_nao', 'rotulo' => 'Permitir editar OS faturada ou cancelada'],
@@ -296,11 +297,31 @@ if (! function_exists('configuracaoValores')) {
             };
         }
 
-        if ($aba === 'geral' && ! isset($configuracao['app_tema_modo']) && $post === null) {
-            $valores['app_tema_modo'] = temaConfiguracao(array_diff_key($configuracao, ['tema_usuario_modo' => true]))['modo'];
+        // Os campos de tema mostram o padrão do SISTEMA, nunca a preferência
+        // pessoal de quem está na tela: salvar a aba não pode gravá-la como padrão.
+        $semPessoal = array_diff_key($configuracao, ['tema_usuario_modo' => true, 'tema_usuario_cor' => true]);
+        if ($aba === 'geral' && $post === null) {
+            if (! isset($configuracao['app_tema_modo'])) {
+                $valores['app_tema_modo'] = temaConfiguracao($semPessoal)['modo'];
+            }
+            $valores['app_tema_cor'] = temaCorConfiguracao($semPessoal);
         }
 
         return $valores;
+    }
+}
+
+if (! function_exists('configuracaoTemaPessoal')) {
+    /**
+     * O que a pessoa logada está usando, para o texto auxiliar da aba Geral
+     * ("Você está usando: Escuro · Azul"): modo e cor já com a preferência
+     * pessoal. Só informa; nada disso é gravado pela aba.
+     */
+    function configuracaoTemaPessoal(array $configuracao): string
+    {
+        $modos = ['claro' => 'Claro', 'escuro' => 'Escuro', 'sistema' => 'Igual ao do sistema operacional'];
+
+        return $modos[temaConfiguracao($configuracao)['modo']] . ' · ' . temaCoresRotulos()[temaCorConfiguracao($configuracao)];
     }
 }
 

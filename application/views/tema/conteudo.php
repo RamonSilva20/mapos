@@ -83,6 +83,17 @@
               <?php } ?>
             </div>
             <div class="my-1 border-t border-border sm:hidden" role="separator"></div>
+            <div class="px-3 py-2" role="group" aria-label="Cor do tema">
+              <p class="mb-2 text-xs font-medium text-muted">Cor do tema</p>
+              <div class="flex items-center justify-between gap-1">
+                <?php foreach (temaCoresRotulos() as $cor => $rotulo) { ?>
+                  <button type="button" data-tema-cor-escolher="<?= e($cor) ?>" aria-pressed="false" aria-label="<?= e($rotulo) ?>" title="<?= e($rotulo) ?>" class="group inline-flex size-9 items-center justify-center rounded-full border border-transparent hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring aria-pressed:border-text">
+                    <span data-tema="<?= e($cor) ?>" class="inline-flex size-6 items-center justify-center rounded-full bg-primary text-on-primary"><?= icon('check', ['class' => 'size-3.5 opacity-0 group-aria-pressed:opacity-100']) ?></span>
+                  </button>
+                <?php } ?>
+              </div>
+            </div>
+            <div class="my-1 border-t border-border" role="separator"></div>
             <a href="<?= e(site_url('mine')) ?>" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring"><?= icon('circle-user', ['class' => 'size-[18px] text-muted']) ?>Área do Cliente</a>
             <a href="<?= e(site_url('mapos/minhaConta')) ?>" class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface-subtle focus-visible:outline-3 focus-visible:outline-ring"><?= icon('id-card', ['class' => 'size-[18px] text-muted']) ?>Meu Perfil</a>
             <div class="my-1 border-t border-border" role="separator"></div>

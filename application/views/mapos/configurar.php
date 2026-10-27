@@ -16,6 +16,7 @@
  * @var array<string, mixed>  $valores
  * @var array<string, string> $erros
  * @var bool                  $pode_backup
+ * @var string                $tema_pessoal  modo · cor que a pessoa logada usa (só informativo)
  */
 $erroGeral = $erros['_geral'] ?? null;
 $errosDeCampo = array_diff_key($erros, ['_geral' => true]);
@@ -29,10 +30,15 @@ foreach (CONFIG_ABAS as $chave => $rotulo) {
 }
 
 /** Um campo de configuracaoCampos() como componente. */
-$campo = static function (string $nome, array $def) use ($valores, $errosDeCampo) {
+$campo = static function (string $nome, array $def) use ($valores, $errosDeCampo, $tema_pessoal) {
     $id = 'config-' . strtolower($nome);
     $erro = $errosDeCampo[$nome] ?? null;
     $valor = $valores[$nome] ?? null;
+
+    // A aba mostra o padrão do sistema; o que a pessoa usa é só uma dica.
+    if ($nome === 'app_tema_modo') {
+        $def['ajuda'] = ($def['ajuda'] ?? '') . ' Você está usando: ' . $tema_pessoal . '.';
+    }
 
     return match ($def['tipo']) {
         'sim_nao', 'bool_env' => component('switch', ['name' => $nome, 'id' => $id, 'value' => $def['tipo'] === 'bool_env' ? 'true' : '1', 'label' => $def['rotulo'], 'checked' => (bool) $valor, 'help' => $def['ajuda'] ?? null]),
