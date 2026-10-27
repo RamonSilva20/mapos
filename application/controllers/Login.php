@@ -194,7 +194,7 @@ class Login extends CI_Controller
         // fixado antes do login não continue válido depois dele.
         $this->session->sess_regenerate(true);
 
-        $this->session->set_userdata(['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'tema_modo_admin' => $user->tema_modo ?? null, 'sessao_versao' => (int) ($user->sessao_versao ?? 0), 'logado' => true]);
+        $this->session->set_userdata(['nome_admin' => $user->nome, 'email_admin' => $user->email, 'url_image_user_admin' => $user->url_image_user, 'id_admin' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'tema_modo_admin' => $user->tema_modo ?? null, 'tema_cor_admin' => $user->tema_cor ?? null, 'sessao_versao' => (int) ($user->sessao_versao ?? 0), 'logado' => true]);
 
         // Grupo que exige 2FA e usuário sem ele: entra, mas só alcança a tela de ativação (MY_Controller).
         if (! ($user->totp_ativado_em ?? null) && $this->mapos_model->grupoExige2fa((int) $user->permissoes_id)) {

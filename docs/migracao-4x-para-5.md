@@ -143,6 +143,7 @@ As migrations da v5, na ordem em que rodam (conferidas em `application/database/
 | `create_api_tokens` | Tabelas `api_refresh_tokens` (refresh token da API) e `api_rate_limit` (limite de requisições). |
 | `create_two_factor` | Colunas e tabela do 2FA. |
 | `add_tema_modo_to_usuarios` | Preferência de tema por usuário. |
+| `add_tema_cor` | Cor do tema do painel (padrão laranja, azul, verde, violeta ou grafite): coluna `usuarios.tema_cor` (preferência de cada pessoa, no menu do usuário) e configuração `app_tema_cor` (cor padrão do sistema, em Configurações → Geral), que nasce `padrao`. Nada muda visualmente até alguém escolher outra cor. Se o banco ainda não tiver rodado a migration, a troca de cor só vale no navegador; rode a atualização do banco. |
 | `move_uploads_to_storage` | Move `assets/anexos` e `assets/arquivos` para o `STORAGE_PATH` e grava no banco o caminho relativo. |
 | `add_desconto_to_itens` | Colunas de desconto por item em OS e vendas. |
 | `add_token_versao` | Coluna `token_versao` em `usuarios` e `clientes`: trocar a senha ou desativar a conta invalida os access tokens já emitidos. |

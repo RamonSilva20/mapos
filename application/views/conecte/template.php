@@ -12,7 +12,9 @@
  *   item ativo fica em ink 600 com o traço laranja de 28×3px no topo. As
  *   cobranças ficam no início e na conta.
  * - O conteúdo usa os tokens do painel e segue o modo de cor das
- *   Configurações (temaAtributosHtml() e assets/js/tema.js).
+ *   Configurações (temaAtributosHtml() e assets/js/tema.js). A cor do tema do
+ *   painel não vale aqui: a Top Nav é escura e a marca laranja (temaAtributosHtml
+ *   com $comCor = false).
  *
  * As mensagens de flash viram toasts, como no painel.
  *
@@ -28,7 +30,7 @@ $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
 $foco = 'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring';
 $atual = array_values(array_filter($menu, static fn ($item) => $item['atual']))[0]['label'] ?? 'Área do cliente';
 ?><!doctype html>
-<html lang="pt-br"<?= temaAtributosHtml($configuration) ?>>
+<html lang="pt-br"<?= temaAtributosHtml($configuration, false) ?>>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">

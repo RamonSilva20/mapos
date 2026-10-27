@@ -34,7 +34,7 @@
   <?php } ?>
 </head>
 
-<body class="v5-layout" <?= js_module('layout/shell') ?> data-tema-url="<?= e(site_url('mapos/salvarTemaModo')) ?>">
+<body class="v5-layout" <?= js_module('layout/shell') ?> data-tema-url="<?= e(site_url('mapos/salvarTemaModo')) ?>" data-tema-cor-url="<?= e(site_url('mapos/salvarTemaCor')) ?>">
   <div class="v5-shell">
     <a href="#conteudo-principal" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-control focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-text focus:shadow-overlay">Pular para o conteúdo</a>
   </div>

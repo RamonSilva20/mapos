@@ -1,12 +1,12 @@
 // Moldura do painel da v5 (views/tema/*.php): sidebar recolhível no desktop,
-// gaveta (drawer) no celular, troca de modo de cor e menu do usuário.
+// gaveta (drawer) no celular, troca de modo e de cor do tema e menu do usuário.
 //
 // Iniciado pelo data-module="layout/shell" do <body>. O estado inicial da
 // sidebar e do modo já vem aplicado pelo assets/js/tema.js no <head>; este
 // módulo só reage às ações do usuário.
 
 import { post } from '../../lib/http.js';
-import { aplicarModo, salvarModo } from '../../lib/tema.js';
+import { aplicarCor, aplicarModo, CORES, salvarCor, salvarModo } from '../../lib/tema.js';
 
 export const CHAVE_SIDEBAR = 'mapos:sidebar';
 
@@ -93,6 +93,19 @@ export function gravarNoServidor(url, modo) {
     return post(url, { modo }).then(() => true, () => false);
 }
 
+/**
+ * Grava a cor do tema do usuário no servidor (#3032), como gravarNoServidor()
+ * faz com o modo. Sem URL ou com falha devolve false: o cache do navegador já
+ * guardou a escolha.
+ */
+export function gravarCorNoServidor(url, cor) {
+    if (!url) {
+        return Promise.resolve(false);
+    }
+
+    return post(url, { cor }).then(() => true, () => false);
+}
+
 export default function iniciar(corpo) {
     const html = document.documentElement;
     const desktop = window.matchMedia?.(CONSULTA_DESKTOP);
@@ -172,6 +185,18 @@ export default function iniciar(corpo) {
             salvarModo(escolhido);
             gravarNoServidor(corpo.dataset.temaUrl, escolhido);
             marcarModo();
+        }
+
+        const cor = alvo.closest?.('[data-tema-cor-escolher]');
+        if (cor && CORES.includes(cor.dataset.temaCorEscolher)) {
+            const escolhida = cor.dataset.temaCorEscolher;
+            aplicarCor(html, escolhida);
+            // A partir daqui a escolha é da pessoa: o tema.js do próximo
+            // carregamento não deixa o cache de outro navegador mandar.
+            html.dataset.temaCorUsuario = '1';
+            salvarCor(escolhida);
+            gravarCorNoServidor(corpo.dataset.temaCorUrl, escolhida);
+            marcarCor();
         }
 
         // Clique fora do menu do usuário fecha o menu.
@@ -260,6 +285,14 @@ export default function iniciar(corpo) {
         }
     };
 
+    // A cor escolhida é a do <html> (data-tema); sem o atributo é o padrão.
+    const marcarCor = () => {
+        for (const botao of corpo.querySelectorAll('[data-tema-cor-escolher]')) {
+            botao.setAttribute('aria-pressed', String(botao.dataset.temaCorEscolher === (html.dataset.tema ?? 'padrao')));
+        }
+    };
+
     marcarModo();
+    marcarCor();
     marcarBotoes();
 }

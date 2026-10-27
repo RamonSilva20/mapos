@@ -13,10 +13,14 @@
  *    o servidor a manda no <html> (data-tema-usuario) e ela vale em qualquer
  *    navegador, no lugar do localStorage.
  *
- * 2. Sidebar recolhida do layout (chave mapos:sidebar), aplicada como
+ * 2. Cor do tema (data-tema), com o mesmo critério do modo: a preferência
+ *    gravada no usuário (data-tema-cor-usuario) manda; sem ela, vale o cache
+ *    do navegador (chave mapos:tema-cor), que é gravada ao trocar a cor.
+ *
+ * 3. Sidebar recolhida do layout (chave mapos:sidebar), aplicada como
  *    <html data-sidebar="recolhida"> para a página já abrir no estado certo.
  *
- * 3. Valores ocultos no painel (chave mapos:valores-ocultos), aplicados como
+ * 4. Valores ocultos no painel (chave mapos:valores-ocultos), aplicados como
  *    <html data-valores="ocultos"> pelo mesmo motivo.
  */
 (function () {
@@ -38,6 +42,20 @@
   if (MODOS.indexOf(modoLocal) !== -1) {
     html.setAttribute('data-tema-modo', modoLocal);
     html.classList.toggle('dark', modoLocal === 'escuro');
+  }
+
+  // Cor do tema (data-tema, #3032). O servidor já manda o atributo; o
+  // localStorage só entra quando a pessoa não tem preferência gravada
+  // (data-tema-cor-usuario) e a tela não fixa a marca (data-tema-fixo, área
+  // do cliente). Allow-list: o padrão (laranja) não leva atributo.
+  var CORES = ['azul', 'verde', 'violeta', 'grafite'];
+  if (!html.hasAttribute('data-tema-cor-usuario') && !html.hasAttribute('data-tema-fixo')) {
+    var corLocal = ler('mapos:tema-cor');
+    if (CORES.indexOf(corLocal) !== -1) {
+      html.setAttribute('data-tema', corLocal);
+    } else if (corLocal === 'padrao') {
+      html.removeAttribute('data-tema');
+    }
   }
 
   if (ler('mapos:sidebar') === 'recolhida') {
