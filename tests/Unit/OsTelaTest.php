@@ -612,6 +612,30 @@ final class OsTelaTest extends MaposTestCase
         $this->assertStringContainsString('Atualizar banco', $this->renderizar('os/partes/historico', ['historico_disponivel' => false] + $vazio));
     }
 
+    public function testHistoricoColoreABolinhaPorStatusSemDependerSoDaCor(): void
+    {
+        $dados = ['aba' => 'historico'] + $this->dadosDaTela(true);
+        $dados['historico'][] = (object) ['status_novo' => 'Cancelado', 'status_anterior' => 'Aberto', 'autor' => 'Ana', 'usuarios_id' => 1, 'data_hora' => '2026-10-03 08:00:00'];
+        $dados['historico'] = array_reverse($dados['historico']);
+
+        $html = $this->renderizar('os/partes/historico', $dados);
+
+        // A mais recente (Cancelado, danger) tem anel e a palavra "Status atual".
+        $this->assertStringContainsString('bg-danger-ink', $html);
+        $this->assertStringContainsString('ring-danger-ink/20', $html);
+        $this->assertStringContainsString('Status atual', $html);
+        // As anteriores usam a cor do próprio status, sem anel.
+        $this->assertStringContainsString('bg-progress-ink', $html);
+        $this->assertStringContainsString('bg-info-ink', $html);
+        $this->assertSame(1, substr_count($html, 'ring-4'));
+        // O estado continua sendo dito por palavra (pill), e a bolinha é decorativa.
+        $this->assertStringContainsString('Cancelado', $html);
+        $this->assertStringContainsString('Em Andamento', $html);
+        $this->assertStringContainsString('aria-hidden="true"', $html);
+        $this->assertStringContainsString('veio de Aberto', $html);
+        $this->assertStringContainsString('OS aberta', $html);
+    }
+
     public function testAnexoSemArquivoNoDiscoMostraEstadoAusenteEmVezDeImagemQuebrada(): void
     {
         $raiz = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'mapos-anexos-view-' . bin2hex(random_bytes(4));
