@@ -8,14 +8,20 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { transform } from 'lightningcss';
 
-const raiz = new URL('..', import.meta.url).pathname;
+// fileURLToPath (e não .pathname) para dar um caminho válido no Windows também
+// ("/S:/..." quebra o cwd do processo); no Linux/CI o resultado é o mesmo.
+const raiz = fileURLToPath(new URL('..', import.meta.url));
 const pasta = mkdtempSync(join(tmpdir(), 'mapos-pdf-'));
 const compilado = join(pasta, 'pdf.css');
 
 try {
-  execFileSync('npx', ['tailwindcss', '-i', 'assets/src/pdf.css', '-o', compilado], { cwd: raiz, stdio: 'inherit' });
+  // Chama a CLI do Tailwind com o próprio Node (sem npx): funciona em Windows e
+  // Linux, sem depender de resolução de .cmd/PATH.
+  const cliTailwind = fileURLToPath(new URL('../node_modules/@tailwindcss/cli/dist/index.mjs', import.meta.url));
+  execFileSync(process.execPath, [cliTailwind, '-i', 'assets/src/pdf.css', '-o', compilado], { cwd: raiz, stdio: 'inherit' });
 
   const origem = readFileSync(compilado);
 
