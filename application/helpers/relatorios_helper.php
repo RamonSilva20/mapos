@@ -75,7 +75,7 @@ if (! function_exists('relatorioDefinicao')) {
                 'dica' => 'Deixe em branco o que não quiser usar como filtro.',
                 'campos' => [
                     ['tipo' => 'texto', 'name' => 'servico', 'label' => 'Nome do serviço', 'placeholder' => 'Nome do serviço'],
-                    ['tipo' => 'texto', 'name' => 'cliente', 'label' => 'Nome do cliente', 'placeholder' => 'Cliente que executou o serviço'],
+                    ['tipo' => 'texto', 'name' => 'cliente', 'label' => 'Nome do cliente', 'placeholder' => 'Cliente da OS'],
                     ['tipo' => 'dinheiro', 'name' => 'precoInicial', 'label' => 'Preço de (R$)'],
                     ['tipo' => 'dinheiro', 'name' => 'precoFinal', 'label' => 'Preço até (R$)'],
                 ],

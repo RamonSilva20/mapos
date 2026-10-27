@@ -63,28 +63,33 @@ class Relatorios_model extends CI_Model
 
     public function clientesCustom($dataInicial = null, $dataFinal = null, $tipo = null, $busca = null)
     {
-        $whereData = '';
-        if ($dataInicial != null) {
-            $whereData .= 'AND dataCadastro >= ' . $this->db->escape($dataInicial);
-        }
-        if ($dataFinal != null) {
-            $whereData .= 'AND dataCadastro <= ' . $this->db->escape($dataFinal);
-        }
-        if ($tipo != null) {
-            $whereData .= 'AND fornecedor = ' . $this->db->escape($tipo);
-        }
-        // Busca livre por nome, telefone, celular ou documento (CPF/CNPJ).
-        if (is_string($busca) && trim($busca) !== '') {
-            $termo = '%' . $this->db->escape_like_str(trim($busca)) . '%';
-            $termo = $this->db->escape($termo);
-            $whereData .= " AND (nomeCliente LIKE $termo OR telefone LIKE $termo OR celular LIKE $termo OR documento LIKE $termo)";
-        }
-        $query = "SELECT idClientes, nomeCliente, sexo, pessoa_fisica,
+        $this->db->select('idClientes, nomeCliente, sexo, pessoa_fisica,
         documento, telefone, celular, contato, email, fornecedor,
         dataCadastro, rua, numero, complemento, bairro, cidade, estado,
-        cep FROM clientes WHERE dataCadastro $whereData ORDER BY nomeCliente";
+        cep');
+        $this->db->from('clientes');
+        $this->db->where('dataCadastro IS NOT NULL', null, false);
+        if ($dataInicial != null) {
+            $this->db->where('dataCadastro >=', $dataInicial);
+        }
+        if ($dataFinal != null) {
+            $this->db->where('dataCadastro <=', $dataFinal);
+        }
+        if ($tipo != null) {
+            $this->db->where('fornecedor', $tipo);
+        }
+        // Busca livre por nome, telefone, celular ou documento (CPF/CNPJ); % e _ valem como texto.
+        if (is_string($busca) && trim($busca) !== '') {
+            $termo = trim($busca);
+            $this->db->group_start()
+                ->like('nomeCliente', $termo)
+                ->or_like('telefone', $termo)
+                ->or_like('celular', $termo)
+                ->or_like('documento', $termo)
+                ->group_end();
+        }
 
-        return $this->db->query($query, [$dataInicial, $dataFinal])->result();
+        return $this->db->order_by('nomeCliente')->get()->result();
     }
 
     public function clientesRapid($array = false)
@@ -274,17 +279,17 @@ class Relatorios_model extends CI_Model
     public function servicosCustom($precoInicial = null, $precoFinal = null, $servico = null, $cliente = null)
     {
         if (is_string($cliente) && trim($cliente) !== '') {
-            $this->db->select('os.idOs, clientes.nomeCliente, servicos.nome, servicos.descricao, servicos.preco');
+            $this->db->select('os.idOs, clientes.nomeCliente, servicos.nome, servicos.descricao, servicos_os.preco, servicos_os.quantidade, servicos_os.subTotal');
             $this->db->from('servicos_os');
             $this->db->join('os', 'os.idOs = servicos_os.os_id');
             $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
             $this->db->join('servicos', 'servicos.idServicos = servicos_os.servicos_id');
             $this->db->like('clientes.nomeCliente', trim($cliente));
             if ($precoInicial !== null && $precoInicial !== '') {
-                $this->db->where('servicos.preco >=', $precoInicial);
+                $this->db->where('servicos_os.preco >=', $precoInicial);
             }
             if ($precoFinal !== null && $precoFinal !== '') {
-                $this->db->where('servicos.preco <=', $precoFinal);
+                $this->db->where('servicos_os.preco <=', $precoFinal);
             }
             if (is_string($servico) && trim($servico) !== '') {
                 $this->db->like('servicos.nome', trim($servico));
