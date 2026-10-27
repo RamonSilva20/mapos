@@ -25,6 +25,18 @@ export function proximoEstado({ desktop, recolhida, gavetaAberta }) {
     return { recolhida, gavetaAberta: !gavetaAberta };
 }
 
+/**
+ * O <summary> de grupo da sidebar (Relatórios, Configurações) onde o clique
+ * caiu, ou null. Tem de testar o elemento: o <html> também leva data-sidebar
+ * quando a sidebar está recolhida, e '[data-sidebar] summary' casaria com o
+ * <summary> do menu do usuário (#3025).
+ */
+export function grupoDaSidebar(alvo, sidebar) {
+    const resumo = alvo.closest?.('summary');
+
+    return resumo && sidebar?.contains(resumo) ? resumo : null;
+}
+
 function gravar(chave, valor) {
     try {
         if (valor === null) {
@@ -148,7 +160,7 @@ export default function iniciar(corpo) {
 
         // Com a sidebar recolhida, abrir um grupo (Relatórios, Configurações)
         // expande a sidebar para os itens aparecerem com o nome.
-        const grupo = alvo.closest?.('[data-sidebar] summary');
+        const grupo = grupoDaSidebar(alvo, sidebar);
         if (grupo && estado().desktop && estado().recolhida) {
             aplicar({ ...estado(), recolhida: false });
         }
