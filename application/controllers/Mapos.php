@@ -138,6 +138,27 @@ class Mapos extends MY_Controller
     }
 
     /**
+     * Grava a cor do tema do usuário logado (#3032): POST {cor}, valor da
+     * allow-list TEMA_CORES. Só mexe na própria pessoa (id da sessão). JSON.
+     */
+    public function salvarTemaCor()
+    {
+        $cor = strtolower(trim((string) $this->input->post('cor')));
+        $this->load->helper('tema');
+        $valido = $this->input->method() === 'post' && in_array($cor, TEMA_CORES, true);
+        $salvou = $valido && $this->mapos_model->salvarTemaCor((int) $this->session->userdata('id_admin'), $cor);
+
+        if ($salvou) {
+            $this->session->set_userdata('tema_cor_admin', $cor);
+        }
+
+        return $this->output
+            ->set_status_header($valido ? 200 : 422)
+            ->set_content_type('application/json', 'utf-8')
+            ->set_output(json_encode(['result' => $salvou, 'cor' => $valido ? $cor : null]));
+    }
+
+    /**
      * Autenticação em dois fatores da própria conta (#2876): ativar (QR code e
      * código de confirmação), ver os códigos de recuperação uma vez, gerar
      * novos e desativar (os dois pedem a senha). Um grupo que exige o 2FA não
@@ -698,6 +719,7 @@ class Mapos extends MY_Controller
         $this->data['valores'] = configuracaoValores($aba, $this->input->method() === 'post' ? $this->input->post() : null, $this->data['configuration'], $_ENV);
         $this->data['erros'] = $erros;
         $this->data['pode_backup'] = $this->permite('cBackup');
+        $this->data['tema_pessoal'] = configuracaoTemaPessoal($this->data['configuration']);
         $this->data['view'] = 'mapos/configurar';
 
         return $this->layout();

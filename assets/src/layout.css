@@ -267,8 +267,8 @@ html[data-gaveta="aberta"] .v5-sidebar {
      * mesmas pistas do item ativo (barra, fundo tint e texto ink).
      */
     html[data-sidebar="recolhida"] .v5-sidebar summary[data-atual] {
-      background-color: var(--color-primary-tint) !important;
-      color: var(--color-text) !important;
+      background-color: var(--mapos-primary-tint) !important;
+      color: var(--mapos-text) !important;
     }
 
     html[data-sidebar="recolhida"] .v5-sidebar summary[data-atual]::before {
@@ -278,7 +278,7 @@ html[data-gaveta="aberta"] .v5-sidebar {
       left: -0.75rem !important;
       width: 3px !important;
       border-radius: 0 3px 3px 0 !important;
-      background-color: var(--color-primary) !important;
+      background-color: var(--mapos-primary) !important;
     }
   }
 }

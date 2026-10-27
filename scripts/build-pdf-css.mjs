@@ -25,7 +25,7 @@ try {
 
   const origem = readFileSync(compilado);
 
-  // 1ª passada: junta as variáveis declaradas (:root, :host, *) para resolver os var().
+  // 1ª passada: junta as variáveis para resolver os var(); vale a primeira declaração de cada uma.
   // Valores iniciais dos @property que as utilities usam (ex.: border-style).
   const variaveis = new Map([['--tw-border-style', [{ type: 'token', value: { type: 'ident', value: 'solid' } }]]]);
   transform({
@@ -34,7 +34,9 @@ try {
     visitor: {
       Declaration: {
         custom(declaracao) {
-          if (declaracao.name.startsWith('--')) variaveis.set(declaracao.name, declaracao.value);
+          // A primeira declaração é a do :root (modo claro, tema padrão); as
+          // seguintes são do modo escuro, dos temas de cor e da sidebar.
+          if (declaracao.name.startsWith('--') && !variaveis.has(declaracao.name)) variaveis.set(declaracao.name, declaracao.value);
         },
       },
     },

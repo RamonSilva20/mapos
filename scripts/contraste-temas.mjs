@@ -14,6 +14,8 @@
  * (PR seguinte). Mude aqui e no DESIGN.md juntos.
  */
 
+import { pathToFileURL } from 'node:url';
+
 const hex = (h) => {
   const n = parseInt(h.slice(1), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
@@ -83,7 +85,7 @@ export const TEMAS = {
     light: claro({
       primary: '#2240b8', hover: '#2b4fd6', pressed: '#1a3190', onPrimary: '#ffffff',
       strong: '#2240b8', tint: tint('#2240b8', '#ffffff', 0.1),
-      sidebar: { bg: '#121a45', hover: '#1c2762', text: '#eef1ff', muted: '#b7c0ea', activeBg: '#2b4fd6', activeText: '#ffffff', ring: ANEL_SIDEBAR },
+      sidebar: { bg: '#121a45', hover: '#1c2762', text: '#eef1ff', muted: '#b7c0ea', activeBg: '#2b4fd6', activeText: '#ffffff', accent: '#a3b4ff', accentInk: '#1f1633', ring: ANEL_SIDEBAR },
     }),
     dark: escuro({
       primary: '#7f98ff', hover: '#93a9ff', pressed: '#6a85f2', onPrimary: '#1f1633',
@@ -94,7 +96,7 @@ export const TEMAS = {
     light: claro({
       primary: '#0b6b60', hover: '#0f7a6e', pressed: '#08524a', onPrimary: '#ffffff',
       strong: '#0b6b60', tint: tint('#0b6b60', '#ffffff', 0.1),
-      sidebar: { bg: '#0a3a35', hover: '#0f4d46', text: '#e8fbf8', muted: '#a9d9d2', activeBg: '#0f7a6e', activeText: '#ffffff', ring: ANEL_SIDEBAR },
+      sidebar: { bg: '#0a3a35', hover: '#0f4d46', text: '#e8fbf8', muted: '#a9d9d2', activeBg: '#0f7a6e', activeText: '#ffffff', accent: '#5eead4', accentInk: '#1f1633', ring: ANEL_SIDEBAR },
     }),
     dark: escuro({
       primary: '#2dd4bf', hover: '#5eead4', pressed: '#19b8a5', onPrimary: '#1f1633',
@@ -105,7 +107,7 @@ export const TEMAS = {
     light: claro({
       primary: '#7424c4', hover: '#8230d6', pressed: '#5f1da3', onPrimary: '#ffffff',
       strong: '#7424c4', tint: tint('#7424c4', '#ffffff', 0.1),
-      sidebar: { bg: '#2b1257', hover: '#3d1c78', text: '#f6eeff', muted: '#cdb6ee', activeBg: '#7424c4', activeText: '#ffffff', ring: ANEL_SIDEBAR },
+      sidebar: { bg: '#2b1257', hover: '#3d1c78', text: '#f6eeff', muted: '#cdb6ee', activeBg: '#7424c4', activeText: '#ffffff', accent: '#d5a6ff', accentInk: '#1f1633', ring: ANEL_SIDEBAR },
     }),
     dark: escuro({
       primary: '#cf86ff', hover: '#da9dff', pressed: '#bd6ff0', onPrimary: '#1f1633',
@@ -116,7 +118,7 @@ export const TEMAS = {
     light: claro({
       primary: '#f37338', hover: '#f47e48', pressed: '#db6230', onPrimary: '#1f1633',
       strong: '#b34d1d', tint: '#feeee7',
-      sidebar: { bg: '#1c1c1f', hover: '#2a2a2e', text: '#f4f4f5', muted: '#b4b4bc', activeBg: '#f37338', activeText: '#1f1633', ring: ANEL_SIDEBAR },
+      sidebar: { bg: '#1c1c1f', hover: '#2a2a2e', text: '#f4f4f5', muted: '#b4b4bc', activeBg: '#f37338', activeText: '#1f1633', accent: '#f37338', accentInk: '#1f1633', ring: ANEL_SIDEBAR },
     }),
     dark: {
       canvas: '#171717', surface: '#1f1f1f', subtle: '#27272a', text: '#fafafa',
@@ -132,18 +134,32 @@ export const TEMAS = {
  * -soft mudam com o modo. Fonte: assets/src/tokens.css.
  */
 const STATUS_BASE = { success: '#15803d', warning: '#a16207', info: '#0369a1', progress: '#6a5fc1', neutral: '#79628c' };
-const STATUS = {
+export const STATUS = {
   light: {
     success: { ink: '#166534', soft: '#e3f0e8' }, warning: { ink: '#854d0e', soft: '#f4ece1' },
     info: { ink: '#075985', soft: '#e1edf4' }, progress: { ink: '#4a3f9e', soft: '#edecf8' },
     neutral: { ink: '#4b4560', soft: '#efecf1' },
+    danger: { ink: '#b91c1c', soft: '#fbe5e5' },
   },
   dark: {
     success: { ink: '#4ade80', soft: '#1d3032' }, warning: { ink: '#facc15', soft: '#3a2d21' },
     info: { ink: '#38bdf8', soft: '#1b2b45' }, progress: { ink: '#b8b0f0', soft: '#2b244c' },
     neutral: { ink: '#d6cfe0', soft: '#2f253e' },
+    danger: { ink: '#f87171', soft: '#391f2f' },
   },
 };
+
+/**
+ * Grafite escuro tem superfície neutra: os -soft violeta do modo escuro padrão
+ * ficariam tingidos de roxo. Aqui o fundo é o -ink a 14% sobre a superfície do
+ * Grafite (#1f1f1f), sem matiz extra. Mantém os -ink do modo escuro.
+ */
+const STATUS_GRAFITE = {};
+for (const [k, v] of Object.entries(STATUS.dark)) {
+  STATUS_GRAFITE[k] = { ink: v.ink, soft: sobre(v.ink, 0.14, TEMAS.grafite.dark.surface) };
+}
+/** Status do tema × modo: o Grafite escuro tem variantes neutras. */
+export const statusDe = (tema, modo) => (tema === 'grafite' && modo === 'dark' ? STATUS_GRAFITE : STATUS[modo]);
 
 /**
  * kpi-card: o degradê é a cor-base do status a KPI_MIX sobre a superfície
@@ -153,19 +169,25 @@ const STATUS = {
  */
 const KPI_MIX = 0.20;
 const KPI_STATUS = ['success', 'warning', 'info', 'progress'];
+const ST = statusDe;
 const kpiFundo = (t, modo, s) => sobre(STATUS_BASE[s], KPI_MIX, t.surface);
 const PARES_KPI = [];
 for (const s of KPI_STATUS) {
   PARES_KPI.push(
     [`kpi ${s}: label/caption (muted) no canto`, 4.5, (t, m) => [t.muted, kpiFundo(t, m, s)]],
     [`kpi ${s}: valor (text) no canto`, 4.5, (t, m) => [t.text, kpiFundo(t, m, s)]],
-    [`kpi ${s}: sparkline (ink) no canto`, 3, (t, m) => [STATUS[m][s].ink, kpiFundo(t, m, s)]],
-    [`kpi ${s}: ícone (ink on soft)`, 4.5, (t, m) => [STATUS[m][s].ink, STATUS[m][s].soft]],
+    [`kpi ${s}: sparkline (ink) no canto`, 3, (t, m, tema) => [ST(tema, m)[s].ink, kpiFundo(t, m, s)]],
+    [`kpi ${s}: ícone (ink on soft)`, 4.5, (t, m, tema) => [ST(tema, m)[s].ink, ST(tema, m)[s].soft]],
   );
 }
 // Pill de tendência: bom = success, ruim = warning, estável = neutral (ink sobre soft).
 for (const s of ['success', 'warning', 'neutral']) {
-  PARES_KPI.push([`kpi tendência ${s}: ink on soft`, 4.5, (t, m) => [STATUS[m][s].ink, STATUS[m][s].soft]]);
+  PARES_KPI.push([`kpi tendência ${s}: ink on soft`, 4.5, (t, m, tema) => [ST(tema, m)[s].ink, ST(tema, m)[s].soft]]);
+}
+
+// Pill de cada status (pill-status): ink sobre soft, em todo tema × modo.
+for (const s of ['success', 'warning', 'danger', 'info', 'progress', 'neutral']) {
+  PARES_KPI.push([`pill ${s}: ink on soft`, 4.5, (t, m, tema) => [ST(tema, m)[s].ink, ST(tema, m)[s].soft]]);
 }
 
 /** Pares conferidos: [rótulo, mínimo, função (t) => [fg, bg]]. */
@@ -185,6 +207,8 @@ const PARES_TEMA = [
   ['sidebar: text', 4.5, (t) => [t.sidebar?.text ?? t.text, t.sidebar?.bg ?? t.surface]],
   ['sidebar: text on hover', 4.5, (t) => [t.sidebar?.text ?? t.text, t.sidebar?.hover ?? t.subtle]],
   ['sidebar: muted', 4.5, (t) => [t.sidebar?.muted ?? t.muted, t.sidebar?.bg ?? t.surface]],
+  ['sidebar: accent bar/logo on sidebar', 3, (t) => (t.sidebar ? [t.sidebar.accent, t.sidebar.bg] : null)],
+  ['sidebar: logo label on accent', 4.5, (t) => (t.sidebar ? [t.sidebar.accentInk, t.sidebar.accent] : null)],
   ['sidebar: active item', 4.5, (t) => [t.sidebar?.activeText ?? t.strong, t.sidebar?.activeBg ?? t.tint]],
 ];
 
@@ -197,57 +221,66 @@ const RESERVADAS = {
   'success-dark': '#4ade80', 'info-dark': '#38bdf8', 'progress-dark': '#b8b0f0',
 };
 
-const linhas = [];
-let falhas = 0;
-for (const [tema, modos] of Object.entries(TEMAS)) {
-  for (const [modo, t] of Object.entries(modos)) {
-    for (const [rotulo, min, fn] of PARES) {
-      const [fg, bg] = fn(t, modo === 'light' ? 'light' : 'dark');
-      const r = razao(fg, bg);
-      const ok = r >= min;
-      if (!ok) falhas++;
-      linhas.push({ tema, modo, rotulo, fg, bg, min, r, ok });
-    }
-    for (const [nome, h] of Object.entries(RESERVADAS)) {
-      if (t.primary.toLowerCase() === h) {
-        falhas++;
-        linhas.push({ tema, modo, rotulo: `primary equals ${nome}`, fg: t.primary, bg: h, min: 0, r: 0, ok: false });
+const executadoPelaCli = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (executadoPelaCli) {
+  const linhas = [];
+  let falhas = 0;
+  for (const [tema, modos] of Object.entries(TEMAS)) {
+    for (const [modo, t] of Object.entries(modos)) {
+      for (const [rotulo, min, fn] of PARES) {
+        const par = fn(t, modo === 'light' ? 'light' : 'dark', tema);
+        if (!par) continue;
+        const [fg, bg] = par;
+        const r = razao(fg, bg);
+        const ok = r >= min;
+        if (!ok) falhas++;
+        linhas.push({ tema, modo, rotulo, fg, bg, min, r, ok });
+      }
+      for (const [nome, h] of Object.entries(RESERVADAS)) {
+        if (t.primary.toLowerCase() === h) {
+          falhas++;
+          linhas.push({ tema, modo, rotulo: `primary equals ${nome}`, fg: t.primary, bg: h, min: 0, r: 0, ok: false });
+        }
       }
     }
   }
-}
 
-const arg = process.argv[2];
-const f = (n) => n.toFixed(2).replace('.', ',');
+  const arg = process.argv[2];
+  const f = (n) => n.toFixed(2).replace('.', ',');
 
-if (arg === '--tokens') {
-  console.log('| Tema | Modo | primary | hover | pressed | on-primary | strong | tint | sidebar | item ativo (fundo / texto) |');
-  console.log('| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |');
-  for (const [tema, modos] of Object.entries(TEMAS)) {
-    for (const [modo, t] of Object.entries(modos)) {
-      const s = t.sidebar;
-      console.log(`| ${tema} | ${modo} | \`${t.primary}\` | \`${t.hover}\` | \`${t.pressed}\` | \`${t.onPrimary}\` | \`${t.strong}\` | \`${t.tint}\` | ${s ? `\`${s.bg}\`` : 'surface'} | ${s ? `\`${s.activeBg}\` / \`${s.activeText}\`` : 'tint / strong'} |`);
+  if (arg === '--tokens') {
+    console.log('| Tema | Modo | primary | hover | pressed | on-primary | strong | tint | sidebar | item ativo (fundo / texto) | acento (barra, logo) |');
+    console.log('| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |');
+    for (const [tema, modos] of Object.entries(TEMAS)) {
+      for (const [modo, t] of Object.entries(modos)) {
+        const s = t.sidebar;
+        console.log(`| ${tema} | ${modo} | \`${t.primary}\` | \`${t.hover}\` | \`${t.pressed}\` | \`${t.onPrimary}\` | \`${t.strong}\` | \`${t.tint}\` | ${s ? `\`${s.bg}\`` : 'surface'} | ${s ? `\`${s.activeBg}\` / \`${s.activeText}\`` : 'tint / strong'} | ${s ? `\`${s.accent}\`` : 'primary'} |`);
+      }
+    }
+  } else if (arg === '--md') {
+    // Um par por linha, um tema × modo por coluna; ponto decimal, como o DESIGN.md.
+    const cols = Object.entries(TEMAS).flatMap(([tema, modos]) => Object.keys(modos).map((modo) => [tema, modo]));
+    const ponto = (n) => n.toFixed(2);
+    console.log(`| Pair | Min | ${cols.map(([t, m]) => `${t} ${m}`).join(' | ')} |`);
+    console.log(`| --- | ---: | ${cols.map(() => '---:').join(' | ')} |`);
+    for (const [rotulo, min] of PARES) {
+      const cel = cols.map(([t, m]) => {
+        const l = linhas.find((x) => x.tema === t && x.modo === m && x.rotulo === rotulo);
+        return l ? ponto(l.r) : '–';
+      });
+      console.log(`| ${rotulo} | ${ponto(min)} | ${cel.join(' | ')} |`);
+    }
+  } else {
+    const w = Math.max(...linhas.map((l) => l.rotulo.length));
+    for (const l of linhas) {
+      console.log(`${l.ok ? 'ok   ' : 'FALHA'} ${l.tema.padEnd(8)} ${l.modo.padEnd(6)} ${l.rotulo.padEnd(w)} ${l.fg} on ${l.bg}  ${f(l.r)}:1 (mín. ${f(l.min)})`);
     }
   }
-} else if (arg === '--md') {
-  // Um par por linha, um tema × modo por coluna; ponto decimal, como o DESIGN.md.
-  const cols = Object.entries(TEMAS).flatMap(([tema, modos]) => Object.keys(modos).map((modo) => [tema, modo]));
-  const ponto = (n) => n.toFixed(2);
-  console.log(`| Pair | Min | ${cols.map(([t, m]) => `${t} ${m}`).join(' | ')} |`);
-  console.log(`| --- | ---: | ${cols.map(() => '---:').join(' | ')} |`);
-  for (const [rotulo, min] of PARES) {
-    const cel = cols.map(([t, m]) => ponto(linhas.find((l) => l.tema === t && l.modo === m && l.rotulo === rotulo).r));
-    console.log(`| ${rotulo} | ${ponto(min)} | ${cel.join(' | ')} |`);
-  }
-} else {
-  const w = Math.max(...linhas.map((l) => l.rotulo.length));
-  for (const l of linhas) {
-    console.log(`${l.ok ? 'ok   ' : 'FALHA'} ${l.tema.padEnd(8)} ${l.modo.padEnd(6)} ${l.rotulo.padEnd(w)} ${l.fg} on ${l.bg}  ${f(l.r)}:1 (mín. ${f(l.min)})`);
-  }
-}
 
-if (falhas > 0) {
-  console.error(`\n${falhas} par(es) reprovado(s).`);
-  process.exit(1);
+  if (falhas > 0) {
+    console.error(`\n${falhas} par(es) reprovado(s).`);
+    process.exit(1);
+  }
+  if (!arg) console.log(`\nTodos os ${linhas.length} pares passam.`);
+
 }
-if (!arg) console.log(`\nTodos os ${linhas.length} pares passam.`);

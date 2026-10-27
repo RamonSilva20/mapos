@@ -227,7 +227,7 @@ final class AreaDoClienteTest extends MaposTestCase
         ], ['label' => 'Abrir OS', 'icon' => 'plus', 'href' => 'http://mapos.test/index.php/mine/adicionarOs']);
 
         $this->semScriptInline($html);
-        $this->assertStringContainsString('<html lang="pt-br" class="dark" data-tema-modo="escuro">', $html, 'Segue o modo de cor das Configurações.');
+        $this->assertStringContainsString('<html lang="pt-br" class="dark" data-tema-modo="escuro" data-tema-fixo="1">', $html, 'Segue o modo de cor das Configurações e fica na marca (sem a cor do tema do painel).');
         $this->assertStringContainsString('assets/js/tema.js', $html);
         $this->assertStringContainsString('<header class="bg-canvas-dark text-on-dark">', $html, 'Top Nav escura.');
         $this->assertMatchesRegularExpression('#<nav class="fixed inset-x-0 bottom-0[^"]*lg:hidden" aria-label="Área do cliente">#', $html, 'tabbar-mobile no celular.');

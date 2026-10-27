@@ -46,7 +46,7 @@ class MY_Controller extends CI_Controller
         $motivo = $this->motivoDeEncerramento($estado, (int) $this->session->userdata('sessao_versao'));
 
         if ($motivo !== null) {
-            $this->session->unset_userdata(['logado', 'id_admin', 'nome_admin', 'email_admin', 'url_image_user_admin', 'tema_modo_admin', 'permissao', 'exigir_2fa_cadastro', 'totp_pendente', 'sessao_versao']);
+            $this->session->unset_userdata(['logado', 'id_admin', 'nome_admin', 'email_admin', 'url_image_user_admin', 'tema_modo_admin', 'tema_cor_admin', 'permissao', 'exigir_2fa_cadastro', 'totp_pendente', 'sessao_versao']);
             $this->session->sess_regenerate(true);
             $this->session->set_flashdata('error', $motivo);
             redirect('login');
@@ -301,6 +301,8 @@ class MY_Controller extends CI_Controller
 
         // Modo de cor do próprio usuário (#2854); separado de app_tema_modo, o padrão do sistema.
         $this->data['configuration']['tema_usuario_modo'] = (string) $this->session->userdata('tema_modo_admin');
+        // Cor do próprio usuário (#3032); separada de app_tema_cor, a cor padrão do sistema.
+        $this->data['configuration']['tema_usuario_cor'] = (string) $this->session->userdata('tema_cor_admin');
     }
 
     /**

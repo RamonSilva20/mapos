@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Tema da v5: modo de cor (claro, escuro ou sistema).
+ * Tema da v5: modo de cor (claro, escuro ou sistema) e cor do tema (padrão,
+ * azul, verde, violeta ou grafite, #3032).
  *
  * A v4 guardava uma única configuração, app_theme, que misturava modo e cor
  * em 7 temas fechados. A v5 guarda só o modo, em app_tema_modo: a cor de ação
@@ -9,7 +10,9 @@
  * CSS (assets/src/tokens.css) troca as variáveis pela classe .dark no <html>.
  *
  * Cada pessoa pode ter o próprio modo (usuarios.tema_modo, #2854), que vale mais
- * que o app_tema_modo, o tema padrão do sistema.
+ * que o app_tema_modo, o tema padrão do sistema. A cor do tema funciona igual:
+ * usuarios.tema_cor vale mais que app_tema_cor, e sem nenhum dos dois é o
+ * laranja da marca ('padrao'). Modo e cor são independentes.
  *
  * O app_theme só é lido como origem do modo num banco que ainda não tem
  * app_tema_modo (instalado pelo banco.sql antes da v5). Nada aqui o altera e
@@ -17,6 +20,10 @@
  */
 if (! defined('TEMA_MODOS')) {
     define('TEMA_MODOS', ['claro', 'escuro', 'sistema']);
+}
+
+if (! defined('TEMA_CORES')) {
+    define('TEMA_CORES', ['padrao', 'azul', 'verde', 'violeta', 'grafite']);
 }
 
 if (! defined('TEMA_PADRAO')) {
@@ -78,6 +85,41 @@ if (! function_exists('temaConfiguracao')) {
     }
 }
 
+if (! function_exists('temaCoresRotulos')) {
+    /**
+     * Nome de cada cor do tema (TEMA_CORES) para mostrar na tela.
+     *
+     * @return array<string, string>
+     */
+    function temaCoresRotulos(): array
+    {
+        return ['padrao' => 'Padrão (laranja)', 'azul' => 'Azul', 'verde' => 'Verde', 'violeta' => 'Violeta', 'grafite' => 'Grafite'];
+    }
+}
+
+if (! function_exists('temaCorValida')) {
+    /** A cor da allow-list (TEMA_CORES) ou null para qualquer outro valor. */
+    function temaCorValida($valor): ?string
+    {
+        $cor = is_scalar($valor) ? strtolower(trim((string) $valor)) : '';
+
+        return in_array($cor, TEMA_CORES, true) ? $cor : null;
+    }
+}
+
+if (! function_exists('temaCorConfiguracao')) {
+    /**
+     * Resolve a cor do tema: preferência da pessoa (tema_usuario_cor) > padrão
+     * do sistema (app_tema_cor) > 'padrao'. Valor fora da allow-list é ignorado.
+     */
+    function temaCorConfiguracao(array $configuration): string
+    {
+        return temaCorValida($configuration['tema_usuario_cor'] ?? null)
+            ?? temaCorValida($configuration['app_tema_cor'] ?? null)
+            ?? 'padrao';
+    }
+}
+
 if (! function_exists('temaAtributosHtml')) {
     /**
      * Atributos do <html> do layout novo, já escapados.
@@ -87,9 +129,15 @@ if (! function_exists('temaAtributosHtml')) {
      * - modo escuro: class="dark", aplicada no servidor, sem flash na carga;
      * - modo sistema: sem a classe; o assets/js/tema.js, carregado no <head>,
      *   lê data-tema-modo e aplica .dark conforme prefers-color-scheme antes
-     *   da primeira pintura.
+     *   da primeira pintura;
+     * - cor do tema: data-tema="azul" (o padrão, laranja, não leva o atributo).
+     *   Com preferência gravada para a pessoa, data-tema-cor-usuario="1" avisa
+     *   o assets/js/tema.js de que o localStorage não manda;
+     * - $comCor = false (área do cliente): sem cor, sempre a marca, e
+     *   data-tema-fixo="1" impede o assets/js/tema.js de aplicar a de outro
+     *   uso do navegador.
      */
-    function temaAtributosHtml(array $configuration)
+    function temaAtributosHtml(array $configuration, bool $comCor = true)
     {
         $tema = temaConfiguracao($configuration);
 
@@ -104,6 +152,19 @@ if (! function_exists('temaAtributosHtml')) {
         // o assets/js/tema.js não deixa o localStorage de um navegador mandar nela.
         if (in_array(strtolower(trim((string) ($configuration['tema_usuario_modo'] ?? ''))), TEMA_MODOS, true)) {
             $atributos .= ' data-tema-usuario="1"';
+        }
+
+        if (! $comCor) {
+            return $atributos . ' data-tema-fixo="1"';
+        }
+
+        $cor = temaCorConfiguracao($configuration);
+        if ($cor !== 'padrao') {
+            $atributos .= ' data-tema="' . htmlspecialchars($cor, ENT_QUOTES, 'UTF-8') . '"';
+        }
+
+        if (temaCorValida($configuration['tema_usuario_cor'] ?? null) !== null) {
+            $atributos .= ' data-tema-cor-usuario="1"';
         }
 
         return $atributos;

@@ -26,3 +26,33 @@ export function salvarModo(modo, armazenamento = globalThis.localStorage) {
         // localStorage bloqueado.
     }
 }
+
+// Cor do tema (#3032): padrao (laranja), azul, verde, violeta ou grafite. Vale
+// para o atributo data-tema do <html>; o padrão não leva atributo.
+export const CORES = ['padrao', 'azul', 'verde', 'violeta', 'grafite'];
+export const CHAVE_COR = 'mapos:tema-cor';
+
+export function aplicarCor(html, cor) {
+    if (!CORES.includes(cor)) {
+        throw new Error(`Cor de tema inválida: ${cor}`);
+    }
+
+    if (cor === 'padrao') {
+        delete html.dataset.tema;
+    } else {
+        html.dataset.tema = cor;
+    }
+}
+
+/** Guarda a cor neste navegador como cache (a preferência fica no servidor). */
+export function salvarCor(cor, armazenamento = globalThis.localStorage) {
+    if (!CORES.includes(cor)) {
+        throw new Error(`Cor de tema inválida: ${cor}`);
+    }
+
+    try {
+        armazenamento?.setItem(CHAVE_COR, cor);
+    } catch {
+        // localStorage bloqueado.
+    }
+}
