@@ -81,17 +81,21 @@
    * Ação: uma cor só, o laranja #F37338. Com branco dá 2,87:1 (reprova), com
    * o ink dá 6,00:1, por isso o rótulo é sempre text-on-primary.
    */
-  --color-primary: #f37338;
-  --color-primary-hover: #f47e48;
-  --color-primary-pressed: #db6230;
-  --color-on-primary: #1f1633;
+  --color-primary: var(--mapos-primary);
+  --color-primary-hover: var(--mapos-primary-hover);
+  --color-primary-pressed: var(--mapos-primary-pressed);
+  --color-on-primary: var(--mapos-on-primary);
   /* Ink fixo, para texto sobre preenchimentos claros que não mudam com o modo (button-inverted). */
   --color-ink: #1f1633;
   --color-primary-tint: var(--mapos-primary-tint);
   --color-primary-strong: var(--mapos-primary-strong);
 
+  /* Sidebar: tokens próprios para os temas de cor (data-tema) escurecerem a
+     sidebar sem mexer no menu (ver .v5-sidebar no fim do arquivo). */
+  --color-sidebar: var(--mapos-sidebar-bg);
+
   /* Foco: o único azul do sistema. Use outline-ring, opaco: com 50% de alfa o contraste cai para cerca de 1,8:1. */
-  --color-ring: #3b82f6;
+  --color-ring: var(--mapos-ring);
 
   /*
    * Status. A base é fixa nos dois modos; -ink (texto) e -soft (fundo) mudam
@@ -252,7 +256,26 @@
     --mapos-disabled: #8a849c;
     --mapos-disabled-bg: #e5e7eb;
     --mapos-primary-tint: #feeee7;
-    --mapos-primary-strong: #b8501f;
+    --mapos-primary-strong: #b34d1d;
+
+    /* Cor de ação do tema padrão (laranja). Os temas (data-tema) a trocam. */
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+
+    /* Sidebar: por padrão igual ao conteúdo (nenhuma mudança visual). */
+    --mapos-sidebar-bg: var(--mapos-surface);
+    --mapos-sidebar-hover: var(--mapos-surface-subtle);
+    --mapos-sidebar-text: var(--mapos-text);
+    --mapos-sidebar-muted: var(--mapos-muted);
+    --mapos-sidebar-border: var(--mapos-border);
+    --mapos-sidebar-active-bg: var(--mapos-primary-tint);
+    --mapos-sidebar-active-text: var(--mapos-primary-strong);
+    --mapos-sidebar-accent: var(--mapos-primary);
+    --mapos-sidebar-accent-ink: var(--mapos-on-primary);
+    --mapos-sidebar-ring: #3b82f6;
+    --mapos-ring: #3b82f6;
 
     --mapos-success-ink: #166534;
     --mapos-success-soft: #e3f0e8;
@@ -293,6 +316,24 @@
     --mapos-primary-tint: #391f26;
     --mapos-primary-strong: #f37338;
 
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+
+    /* Sidebar no escuro: acompanha o conteúdo (tela inteira escura). */
+    --mapos-sidebar-bg: var(--mapos-surface);
+    --mapos-sidebar-hover: var(--mapos-surface-subtle);
+    --mapos-sidebar-text: var(--mapos-text);
+    --mapos-sidebar-muted: var(--mapos-muted);
+    --mapos-sidebar-border: var(--mapos-border);
+    --mapos-sidebar-active-bg: var(--mapos-primary-tint);
+    --mapos-sidebar-active-text: var(--mapos-primary-strong);
+    --mapos-sidebar-accent: var(--mapos-primary);
+    --mapos-sidebar-accent-ink: var(--mapos-on-primary);
+    --mapos-sidebar-ring: #3b82f6;
+    --mapos-ring: #3b82f6;
+
     --mapos-success-ink: #4ade80;
     --mapos-success-soft: #1d3032;
     --mapos-warning-ink: #facc15;
@@ -324,5 +365,195 @@
     --mapos-surface-subtle: #f6f5f9;
     --mapos-disabled: #8a849c;
     --mapos-disabled-bg: #e5e7eb;
+  }
+
+  /*
+   * Sidebar: redefine as variáveis --mapos-* com os tokens --mapos-sidebar-*.
+   * No tema padrão eles são iguais ao conteúdo, então nada muda. Os temas
+   * escurecem a sidebar do modo claro sem mexer no HTML do menu. O anel de
+   * foco também vem de um token, para ser claro sobre a sidebar escura. O
+   * acento (barra do item ativo e quadrado do logo, ambos bg-primary) também:
+   * a cor de ação do tema não tem contraste sobre a sidebar escura.
+   */
+  .v5-sidebar {
+    --mapos-surface: var(--mapos-sidebar-bg);
+    --mapos-surface-subtle: var(--mapos-sidebar-hover);
+    --mapos-text: var(--mapos-sidebar-text);
+    --mapos-muted: var(--mapos-sidebar-muted);
+    --mapos-border: var(--mapos-sidebar-border);
+    --mapos-primary-tint: var(--mapos-sidebar-active-bg);
+    --mapos-primary-strong: var(--mapos-sidebar-active-text);
+    --mapos-primary: var(--mapos-sidebar-accent);
+    --mapos-on-primary: var(--mapos-sidebar-accent-ink);
+    --mapos-ring: var(--mapos-sidebar-ring);
+  }
+
+  /*
+   * Temas de cor (DESIGN.md, Color Themes). O atributo data-tema no <html>
+   * (assets/js/tema.js) é independente do modo (.dark). Claro: troca a cor de
+   * ação e escurece a sidebar. Escuro: só a cor de ação (Grafite troca a
+   * paleta inteira). Valores de scripts/contraste-temas.mjs. As telas de
+   * entrada (.superficie-entrada) voltam à marca laranja. Um elemento com
+   * data-tema (as amostras de Configurações) também recebe a cor do tema.
+   */
+
+  :root[data-tema="azul"]:not(.dark),
+  :root:not(.dark) [data-tema="azul"] {
+    --mapos-primary: #2240b8;
+    --mapos-primary-hover: #2b4fd6;
+    --mapos-primary-pressed: #1a3190;
+    --mapos-on-primary: #ffffff;
+    --mapos-primary-strong: #2240b8;
+    --mapos-primary-tint: #e9ecf8;
+
+    --mapos-sidebar-bg: #121a45;
+    --mapos-sidebar-hover: #1c2762;
+    --mapos-sidebar-text: #eef1ff;
+    --mapos-sidebar-muted: #b7c0ea;
+    --mapos-sidebar-border: #1c2762;
+    --mapos-sidebar-active-bg: #2b4fd6;
+    --mapos-sidebar-active-text: #ffffff;
+    --mapos-sidebar-accent: #a3b4ff;
+    --mapos-sidebar-accent-ink: #1f1633;
+    --mapos-sidebar-ring: #93c5fd;
+  }
+
+  :root[data-tema="verde"]:not(.dark),
+  :root:not(.dark) [data-tema="verde"] {
+    --mapos-primary: #0b6b60;
+    --mapos-primary-hover: #0f7a6e;
+    --mapos-primary-pressed: #08524a;
+    --mapos-on-primary: #ffffff;
+    --mapos-primary-strong: #0b6b60;
+    --mapos-primary-tint: #e7f0ef;
+
+    --mapos-sidebar-bg: #0a3a35;
+    --mapos-sidebar-hover: #0f4d46;
+    --mapos-sidebar-text: #e8fbf8;
+    --mapos-sidebar-muted: #a9d9d2;
+    --mapos-sidebar-border: #0f4d46;
+    --mapos-sidebar-active-bg: #0f7a6e;
+    --mapos-sidebar-active-text: #ffffff;
+    --mapos-sidebar-accent: #5eead4;
+    --mapos-sidebar-accent-ink: #1f1633;
+    --mapos-sidebar-ring: #93c5fd;
+  }
+
+  :root[data-tema="violeta"]:not(.dark),
+  :root:not(.dark) [data-tema="violeta"] {
+    --mapos-primary: #7424c4;
+    --mapos-primary-hover: #8230d6;
+    --mapos-primary-pressed: #5f1da3;
+    --mapos-on-primary: #ffffff;
+    --mapos-primary-strong: #7424c4;
+    --mapos-primary-tint: #f1e9f9;
+
+    --mapos-sidebar-bg: #2b1257;
+    --mapos-sidebar-hover: #3d1c78;
+    --mapos-sidebar-text: #f6eeff;
+    --mapos-sidebar-muted: #cdb6ee;
+    --mapos-sidebar-border: #3d1c78;
+    --mapos-sidebar-active-bg: #7424c4;
+    --mapos-sidebar-active-text: #ffffff;
+    --mapos-sidebar-accent: #d5a6ff;
+    --mapos-sidebar-accent-ink: #1f1633;
+    --mapos-sidebar-ring: #93c5fd;
+  }
+
+  :root[data-tema="grafite"]:not(.dark),
+  :root:not(.dark) [data-tema="grafite"] {
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+    --mapos-primary-strong: #b34d1d;
+    --mapos-primary-tint: #feeee7;
+
+    --mapos-sidebar-bg: #1c1c1f;
+    --mapos-sidebar-hover: #2a2a2e;
+    --mapos-sidebar-text: #f4f4f5;
+    --mapos-sidebar-muted: #b4b4bc;
+    --mapos-sidebar-border: #2a2a2e;
+    --mapos-sidebar-active-bg: #f37338;
+    --mapos-sidebar-active-text: #1f1633;
+    --mapos-sidebar-accent: #f37338;
+    --mapos-sidebar-accent-ink: #1f1633;
+    --mapos-sidebar-ring: #93c5fd;
+  }
+
+  :root.dark[data-tema="azul"],
+  .dark [data-tema="azul"] {
+    --mapos-primary: #7f98ff;
+    --mapos-primary-hover: #93a9ff;
+    --mapos-primary-pressed: #6a85f2;
+    --mapos-on-primary: #1f1633;
+    --mapos-primary-strong: #a3b4ff;
+    --mapos-primary-tint: #262546;
+  }
+
+  :root.dark[data-tema="verde"],
+  .dark [data-tema="verde"] {
+    --mapos-primary: #2dd4bf;
+    --mapos-primary-hover: #5eead4;
+    --mapos-primary-pressed: #19b8a5;
+    --mapos-on-primary: #1f1633;
+    --mapos-primary-strong: #5eead4;
+    --mapos-primary-tint: #192f3c;
+  }
+
+  :root.dark[data-tema="violeta"],
+  .dark [data-tema="violeta"] {
+    --mapos-primary: #cf86ff;
+    --mapos-primary-hover: #da9dff;
+    --mapos-primary-pressed: #bd6ff0;
+    --mapos-on-primary: #1f1633;
+    --mapos-primary-strong: #dcaaff;
+    --mapos-primary-tint: #332246;
+  }
+
+  /* Amostra do tema padrão (Configurações): sempre o laranja, qualquer que seja o tema ativo. */
+  [data-tema="padrao"] {
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+  }
+
+  /* Grafite escuro: paleta neutra completa, ação laranja (tela inteira). */
+  :root.dark[data-tema="grafite"],
+  .dark [data-tema="grafite"] {
+    --mapos-bg: #171717;
+    --mapos-surface: #1f1f1f;
+    --mapos-surface-subtle: #27272a;
+    --mapos-text: #fafafa;
+    --mapos-muted: #a1a1aa;
+    --mapos-border: #3f3f46;
+    --mapos-input: #74747d;
+    --mapos-field: #27272a;
+
+    --mapos-primary: #f97316;
+    --mapos-primary-hover: #fb8c3a;
+    --mapos-primary-pressed: #ea670c;
+    --mapos-on-primary: #171717;
+    --mapos-primary-strong: #fb923c;
+    --mapos-primary-tint: #2a2015;
+
+    /* Status: -ink a 14% sobre #1f1f1f (sem o matiz violeta do modo escuro padrão). */
+    --mapos-success-soft: #253a2d;
+    --mapos-warning-soft: #3e371e;
+    --mapos-danger-soft: #3d2a2a;
+    --mapos-info-soft: #23353d;
+    --mapos-progress-soft: #34333c;
+    --mapos-neutral-soft: #39383a;
+  }
+
+  /* Entrada: sempre a marca, qualquer que seja o tema. */
+  :root[data-tema] .superficie-entrada {
+    --mapos-primary: #f37338;
+    --mapos-primary-hover: #f47e48;
+    --mapos-primary-pressed: #db6230;
+    --mapos-on-primary: #1f1633;
+    --mapos-primary-strong: #f37338;
+    --mapos-primary-tint: #391f26;
   }
 }
