@@ -6,7 +6,7 @@
 
 Map-OS's design language reads like a well-lit workshop bench: dense, organized, and built for people who open dozens of service orders a day, with just enough personality to keep an operational tool from feeling like a spreadsheet. Entry and highlight surfaces — login, the client-area welcome, empty states — sit on a near-black violet midnight (`{colors.surface-canvas-dark}` / `{colors.surface-night}`) with a faint starfield texture and occasional sticker-style illustrations (tools, devices, delivery boxes) that lighten the mood. Headlines run in a chunky display sans where the most important keywords can be wrapped in lime-green highlight chips (`{colors.accent-lime}`), as if the copy itself had been marked with a highlighter.
 
-The palette is deliberately narrow: deep midnight as the dominant dark canvas, a warm signal orange (`{colors.primary}`) as the single action color, electric lime as the keyword highlighter, hot pink (`{colors.accent-pink}`) as illustration-only punctuation, and a violet-mid (`{colors.accent-violet-mid}`) for tag chips and hairline strokes. White appears in two roles — as text on dark (`{colors.on-dark}`), and as the canvas for the operational screens (service orders, sales, finance, reports) where users scan dense tables. The single primary CTA keeps the same orange fill on both canvases: the orange has enough luminance to stand out on midnight and enough saturation to stand out on white, so the button never needs to flip polarity. Its label always runs in dark ink (`{colors.on-primary}`), because white on this orange falls below the WCAG AA threshold. Operational screens default to the light canvas; users can switch the whole panel to a dark mode built from the same midnight palette (see Panel Dark Mode).
+The palette is deliberately narrow: deep midnight as the dominant dark canvas, a warm signal orange (`{colors.primary}`) as the default action color (users may choose a color theme, see Color Themes), electric lime as the keyword highlighter, hot pink (`{colors.accent-pink}`) as illustration-only punctuation, and a violet-mid (`{colors.accent-violet-mid}`) for tag chips and hairline strokes. White appears in two roles — as text on dark (`{colors.on-dark}`), and as the canvas for the operational screens (service orders, sales, finance, reports) where users scan dense tables. The single primary CTA keeps the same orange fill on both canvases: the orange has enough luminance to stand out on midnight and enough saturation to stand out on white, so the button never needs to flip polarity. Its label always runs in dark ink (`{colors.on-primary}`), because white on this orange falls below the WCAG AA threshold. Operational screens default to the light canvas; users can switch the whole panel to a dark mode built from the same midnight palette (see Panel Dark Mode).
 
 Typography splits cleanly between three families: a chunky display sans for hero and section openers (near-condensed, slightly playful), Rubik for every UI text role (body, captions, eyebrow caps, button labels), and Monaco for code. Buttons and eyebrows almost always run in uppercase with a 0.2px tracking lift to give them a crisp, label-maker snap.
 
@@ -15,7 +15,7 @@ Typography splits cleanly between three families: a chunky display sans for hero
 - Lime keyword highlight (`{colors.accent-lime}`) treated as a typographic device, not a color swatch — it wraps single words inside the display headline like a highlighter stroke on the reading flow.
 - Sticker illustration system: floating illustrations from the repair-shop world (tools, devices, packages) with hand-drawn outlines, appearing at section junctions on entry surfaces, never inside cards or operational screens — they create rhythm and personality between dense info blocks.
 - Uppercase eyebrow + button caps in `{typography.button-cap}` and `{typography.eyebrow}`, with a consistent 0.2px tracking lift, give the brand its label-maker cadence.
-- Single-primary CTA hierarchy: every view has one filled `{colors.primary}` orange button with a `{colors.on-primary}` ink label, on either canvas; inverted, outlined, and ghost variants are downgraded.
+- Single-primary CTA hierarchy: every view has one filled `{colors.primary}` button — orange by default, the theme color when the user picked a color theme — with its `{colors.on-primary}` label (ink on orange), on either canvas; inverted, outlined, and ghost variants are downgraded.
 - Card surfaces follow the canvas: dark sections nest dark cards (`{colors.ink-deep}` with subtle hairline) and light sections nest white cards with `{colors.hairline-cloud}` borders — chrome stays consistent, only the polarity flips.
 - A tier-card color rhythm (plans, comparisons) of cream-white cards with one dark inverted "featured" card (`{colors.surface-night}`), avoiding the typical accent-bordered featured pattern.
 - Status never borrows the action color: service-order states use their own semantic palette (success, warning, danger, info, progress, neutral), always as a labeled pill, so orange keeps meaning "act here".
@@ -25,9 +25,9 @@ Typography splits cleanly between three families: a chunky display sans for hero
 > **Applies to:** login and client-area entry surfaces (dark canvas); the admin panel and operational screens — service orders, sales, finance, reports (light canvas).
 
 ### Brand & Accent
-- **Signal Orange** (`{colors.primary}` — `#F37338`): The system's single action color. Fills primary buttons on both canvases, marks the active navigation item, and draws progress and selection states. Its luminance sits mid-scale — 2.87:1 against white, 6.00:1 against `{colors.ink-deep}` — so it always carries a dark ink label (`{colors.on-primary}`), never white.
+- **Signal Orange** (`{colors.primary}` — `#F37338`): The default and brand action color; a user has exactly one action color at a time (orange unless they pick a color theme, see Color Themes). Fills primary buttons on both canvases, marks the active navigation item, and draws progress and selection states. Its luminance sits mid-scale — 2.87:1 against white, 6.00:1 against `{colors.ink-deep}` — so it always carries a dark ink label (`{colors.on-primary}`), never white.
 - **Orange Pressed** (`{colors.primary-pressed}` — `#DB6230`): The pressed/active fill of `button-primary`. Same hue, lower value; keeps the ink label at 4.75:1.
-- **Orange Strong** (`{colors.primary-strong}` — `#B8501F`): The same hue darkened for the two jobs the base orange can't do: orange text or links on light canvas, and the rare orange surface that must carry white text (4.99:1 against white).
+- **Orange Strong** (`{colors.primary-strong}` — `#B34D1D`): The same hue darkened for the two jobs the base orange can't do: orange text or links on light canvas, and the rare orange surface that must carry white text (5.26:1 against white, 4.65:1 against `{colors.primary-tint}`).
 - **Orange Tint** (`{colors.primary-tint}` — `#feeee7`): `{colors.primary}` at 12% over white. The background of the active item in the sidebar, tab bar, and autocomplete lists — the second cue that always accompanies a thin orange indicator. Ink on it reads at 15.2:1.
 - **Ink Violet** (`{colors.ink-deep}` — `#1f1633`): Slightly lifted from `{colors.surface-night}`, this is the dark entry-surface canvas and the default body-text color on light surfaces — a single token doing double duty as background and ink.
 - **Electric Lime** (`{colors.accent-lime}` — `#c2ef4e`): The signature highlight color. Wrapped around individual headline keywords as a syntax-highlight chip (`{rounded.xs}` corner, no padding-y, 12px padding-x). Also used as the squiggly footer divider stroke. Never a button background.
@@ -58,7 +58,7 @@ Typography splits cleanly between three families: a chunky display sans for hero
 - **On Dark Faint** (`{colors.on-dark-faint}` — `rgba(255,255,255,0.18)`): Translucent surface-on-dark — used for ghost button fills and dimmed nav items.
 
 ### Semantic
-- **Focus Ring** (`{colors.ring-focus}` — `#3B82F6`): Opaque blue focus ring, 3px — the only blue in the system outside the info status, reserved for keyboard focus on fields and buttons. It must reach the WCAG 1.4.11 minimum of 3:1 against the surface it sits on: 3.68:1 on white, 3.36:1 on `{colors.surface-subtle}` and 5.08:1 on the dark canvas. The earlier 50% translucent version measured about 1.8:1 on white and failed, so the ring is always drawn fully opaque.
+- **Focus Ring** (`{colors.ring-focus}` — `#3B82F6`): Opaque blue focus ring, 3px — the only blue in the default theme outside the info status (the Azul theme adds a royal-blue action color, never this hex), reserved for keyboard focus on fields and buttons. It must reach the WCAG 1.4.11 minimum of 3:1 against the surface it sits on: 3.68:1 on white, 3.36:1 on `{colors.surface-subtle}` and 5.08:1 on the dark canvas. The earlier 50% translucent version measured about 1.8:1 on white and failed, so the ring is always drawn fully opaque.
 
 **Status colors.** Each state has a base (icons, dots, fills such as `button-danger`), an `-ink` for text, and a `-soft` background (base at 12% over white). Pills and alerts always put `-ink` on `-soft`.
 
@@ -74,7 +74,7 @@ Typography splits cleanly between three families: a chunky display sans for hero
 Warning is a yellow amber (hue 35°) on purpose: the more common `#b45309` sits at 26°, too close to `{colors.primary}` (19°) to be told apart. Status is never shown by color alone — every pill carries its label.
 
 ### Panel Dark Mode
-The operational screens default to the light canvas. Users can switch the whole panel to dark (Claro / Escuro / Sistema); the switch always applies to the entire screen, so the two-canvas rule still holds.
+The operational screens default to the light canvas. Users can switch the whole panel to dark (Claro / Escuro / Sistema); the switch always applies to the entire screen, never to a single band, so the two-canvas rule still holds. The dark sidebar of a color theme in light mode is part of that theme (see Color Themes), not a band of a light screen: in dark mode the whole screen, sidebar included, is dark.
 
 | Role                     | Light                              | Dark                                                     |
 | ------------------------ | ---------------------------------- | -------------------------------------------------------- |
@@ -86,7 +86,7 @@ The operational screens default to the light canvas. Users can switch the whole 
 | Text / secondary text    | `{colors.ink}` / `{colors.ink-muted}` | `{colors.on-dark}` / `{colors.on-dark-muted}`         |
 | Active item background   | `{colors.primary-tint}`            | `{colors.primary-tint-dark}` `#391f26` (orange 16% over night) |
 | Disabled button          | `{colors.hairline-cloud}` + `{colors.text-disabled}` | `rgba(255,255,255,0.08)` + `rgba(255,255,255,0.45)` |
-| Primary button           | unchanged                          | unchanged — `{colors.primary}` is 6.51:1 against night, label stays `{colors.on-primary}` |
+| Primary button           | unchanged                          | unchanged in the default theme — `{colors.primary}` is 6.51:1 against night, label stays `{colors.on-primary}` |
 
 Status in dark mode uses lighter bases that double as text, on a soft fill mixed over `{colors.surface-night}` (16%; 26% for progress and neutral):
 
@@ -100,6 +100,62 @@ Status in dark mode uses lighter bases that double as text, on a soft fill mixed
 | Neutral  | `{colors.neutral-dark}` `#d6cfe0`        | 12.33:1 | `#2f253e`  | 9.53:1  |
 
 `button-danger` keeps `{colors.danger}` with white text in both modes.
+
+### Color Themes
+
+Orange is the default and the brand: a user who never opens the theme setting sees exactly the palette above. Each user may pick a **color theme** — Padrão (orange), Azul, Verde, Violeta or Grafite — saved per user like the color mode. Theme and mode are independent: five themes × Claro / Escuro / Sistema. A theme swaps the action color and, in light mode, the sidebar; it never touches status colors, inputs, muted text, disabled states, or the entry surfaces.
+
+**Light mode.** Canvas, cards, borders, inputs, muted text and disabled states are the default light values (`{colors.surface-canvas-light}`, `{colors.hairline-cloud}`, `{colors.hairline-input}`, `{colors.ink-muted}`, `{colors.text-disabled}`). The theme sets the action color and a **dark sidebar in the theme's color**. The dark sidebar is part of the theme, not a single dark band added to a light screen: Padrão keeps the light sidebar, and the four themes define it as one coordinated palette with the action color. The sidebar's own text, muted text, hover, active item and focus ring are theme tokens (table below) so the sidebar never depends on the content tokens.
+
+**Dark mode.** The whole screen stays on the violet midnight palette of Panel Dark Mode (`{colors.surface-canvas-dark}`, `{colors.surface-night}`), sidebar included. The theme only swaps the action color for a lighter version of its hue with an ink label (`{colors.on-primary}`) and recalculates `{colors.primary-strong}` and `{colors.primary-tint}` on night. Grafite is the exception: its dark mode is a neutral graphite palette (`#171717` canvas, `#1f1f1f` cards, `#27272a` subtle, `#fafafa` text, `#a1a1aa` muted, `#3f3f46` borders, input border `#74747d`) with orange action, still a full-screen switch.
+
+**Entry surfaces.** Logins and the client-area welcome (`.superficie-entrada`) are always the brand palette, whatever the theme.
+
+**Rules.**
+- A theme's action color never equals a status color, the focus ring, or the link violet: Azul is an indigo-leaning royal blue (hue ~228°, away from `{colors.info}` `#0369a1` and `{colors.ring-focus}` `#3B82F6`), Verde a teal-emerald (hue ~174°, away from `{colors.success}` `#15803d`), Violeta a purple (hue ~272°, away from `{colors.accent-violet}` `#6a5fc1`, which is Progress). `scripts/contraste-temas.mjs` fails on an exact match.
+- Status never uses the action hex, in any theme: states stay `pill-status` with their word on the semantic palette, so the action color keeps meaning "act here" and a green or blue button never reads as success or info.
+- One filled `button-primary` per screen, in whatever the action color is. Labels follow the table: ink on orange and on every dark-mode action color, white on the light-mode Azul, Verde and Violeta (white on those is ≥ 4.5:1 in every state, hover and pressed included).
+- A thin action-color indicator keeps its second cue (weight 600 text and a background) in every theme.
+- Dark sidebars (light mode) use a light focus ring `#93c5fd` instead of `{colors.ring-focus}`, which does not reach 3:1 on them; elsewhere the ring is unchanged.
+- Changing a theme value starts in `scripts/contraste-temas.mjs` (the values live there until the tokens implement them): the script exits with an error if any pair below fails.
+
+**Tokens by theme.** Light mode inherits canvas, cards, text, muted, borders and inputs from the default; dark mode inherits them from Panel Dark Mode (Grafite dark replaces them as described above). "Sidebar" is the dark sidebar background of light mode; active item is background / text.
+
+| Theme   | Mode  | `primary`   | `primary-hover` | `primary-pressed` | `on-primary` | `primary-strong` | `primary-tint` | Sidebar     | Active item            |
+| ------- | ----- | ----------- | --------------- | ----------------- | ------------ | ---------------- | -------------- | ----------- | ---------------------- |
+| Padrão  | light | `#f37338`   | `#f47e48`       | `#db6230`         | `#1f1633`    | `#b34d1d`        | `#feeee7`      | surface     | tint / strong          |
+| Padrão  | dark  | `#f37338`   | `#f47e48`       | `#db6230`         | `#1f1633`    | `#f37338`        | `#391f26`      | surface     | tint / strong          |
+| Azul    | light | `#2240b8`   | `#2b4fd6`       | `#1a3190`         | `#ffffff`    | `#2240b8`        | `#e9ecf8`      | `#121a45`   | `#2b4fd6` / `#ffffff`  |
+| Azul    | dark  | `#7f98ff`   | `#93a9ff`       | `#6a85f2`         | `#1f1633`    | `#a3b4ff`        | `#262546`      | surface     | tint / strong          |
+| Verde   | light | `#0b6b60`   | `#0f7a6e`       | `#08524a`         | `#ffffff`    | `#0b6b60`        | `#e7f0ef`      | `#0a3a35`   | `#0f7a6e` / `#ffffff`  |
+| Verde   | dark  | `#2dd4bf`   | `#5eead4`       | `#19b8a5`         | `#1f1633`    | `#5eead4`        | `#192f3c`      | surface     | tint / strong          |
+| Violeta | light | `#7424c4`   | `#8230d6`       | `#5f1da3`         | `#ffffff`    | `#7424c4`        | `#f1e9f9`      | `#2b1257`   | `#7424c4` / `#ffffff`  |
+| Violeta | dark  | `#cf86ff`   | `#da9dff`       | `#bd6ff0`         | `#1f1633`    | `#dcaaff`        | `#332246`      | surface     | tint / strong          |
+| Grafite | light | `#f37338`   | `#f47e48`       | `#db6230`         | `#1f1633`    | `#b34d1d`        | `#feeee7`      | `#1c1c1f`   | `#f37338` / `#1f1633`  |
+| Grafite | dark  | `#f97316`   | `#fb8c3a`       | `#ea670c`         | `#171717`    | `#fb923c`        | `#2a2015`      | surface     | tint / strong          |
+
+Sidebar text tokens for the dark sidebars of light mode (text / muted / hover): Azul `#eef1ff` / `#b7c0ea` / `#1c2762`; Verde `#e8fbf8` / `#a9d9d2` / `#0f4d46`; Violeta `#f6eeff` / `#cdb6ee` / `#3d1c78`; Grafite `#f4f4f5` / `#b4b4bc` / `#2a2a2e`.
+
+**Contrast, generated by `node scripts/contraste-temas.mjs --md`.** Every cell meets its minimum: 4.5:1 for text pairs (on-primary on primary / hover / pressed, strong on canvas / surface / tint, muted on surface / subtle, sidebar text / muted / hover / active item) and 3:1 for the input border and the focus ring (canvas and sidebar). Ratios use a comma as decimal separator.
+
+| Pair | Min | padrao light | padrao dark | azul light | azul dark | verde light | verde dark | violeta light | violeta dark | grafite light | grafite dark |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| on-primary on primary | 4.50 | 6.00 | 6.00 | 8.42 | 6.42 | 6.39 | 9.24 | 7.52 | 6.97 | 6.00 | 6.40 |
+| on-primary on hover | 4.50 | 6.49 | 6.49 | 6.58 | 7.67 | 5.21 | 11.63 | 6.28 | 8.39 | 6.49 | 7.61 |
+| on-primary on pressed | 4.50 | 4.75 | 4.75 | 11.13 | 5.12 | 9.07 | 6.91 | 9.58 | 5.48 | 4.75 | 5.50 |
+| primary-strong on canvas | 4.50 | 5.26 | 6.00 | 8.42 | 8.63 | 6.39 | 11.63 | 7.52 | 9.20 | 5.26 | 7.92 |
+| primary-strong on surface | 4.50 | 5.26 | 6.51 | 8.42 | 9.36 | 6.39 | 12.62 | 7.52 | 9.99 | 5.26 | 7.28 |
+| primary-strong on primary-tint | 4.50 | 4.65 | 5.24 | 7.15 | 7.34 | 5.51 | 9.38 | 6.36 | 7.71 | 4.65 | 7.05 |
+| muted on surface | 4.50 | 7.13 | 9.90 | 7.13 | 9.90 | 7.13 | 9.90 | 7.13 | 9.90 | 7.13 | 6.43 |
+| muted on surface-subtle | 4.50 | 6.57 | 9.36 | 6.57 | 9.36 | 6.57 | 9.36 | 6.57 | 9.36 | 6.57 | 5.81 |
+| input border on surface | 3.00 | 3.58 | 3.83 | 3.58 | 3.83 | 3.58 | 3.83 | 3.58 | 3.83 | 3.58 | 3.56 |
+| input border on canvas | 3.00 | 3.58 | 3.53 | 3.58 | 3.53 | 3.58 | 3.53 | 3.58 | 3.53 | 3.58 | 3.87 |
+| focus ring on canvas | 3.00 | 3.68 | 4.68 | 3.68 | 4.68 | 3.68 | 4.68 | 3.68 | 4.68 | 3.68 | 4.87 |
+| focus ring on sidebar | 3.00 | 3.68 | 5.08 | 9.25 | 5.08 | 6.98 | 5.08 | 8.78 | 5.08 | 9.43 | 4.48 |
+| sidebar: text | 4.50 | 17.20 | 18.68 | 14.82 | 18.68 | 11.73 | 18.68 | 14.01 | 18.68 | 15.47 | 15.79 |
+| sidebar: text on hover | 4.50 | 15.85 | 17.66 | 12.31 | 17.66 | 9.02 | 17.66 | 11.37 | 17.66 | 13.00 | 14.27 |
+| sidebar: muted | 4.50 | 7.13 | 9.90 | 9.32 | 9.90 | 8.11 | 9.90 | 8.68 | 9.90 | 8.25 | 6.43 |
+| sidebar: active item | 4.50 | 4.65 | 5.24 | 6.58 | 7.34 | 5.21 | 9.38 | 7.52 | 7.71 | 6.00 | 7.05 |
 
 ## Typography
 
@@ -343,8 +399,8 @@ Map-OS doesn't use traditional photography — it uses **illustrated stickers an
 - Offer the dark panel mode as a whole-screen preference (Claro / Escuro / Sistema), using the Panel Dark Mode tokens — never a dark band inside a light screen.
 
 ### Don't
-- Don't introduce accents beyond `{colors.primary}`, `{colors.accent-lime}`, and `{colors.accent-pink}` — and keep their jobs apart: orange acts, lime highlights words, pink decorates illustrations. Adding teal, yellow, or a second orange shade dilutes the hierarchy.
-- Don't put white text on `{colors.primary}` — it measures 2.87:1, below WCAG AA. Labels on orange always use `{colors.on-primary}`; when orange has to sit behind white text or work as text on light canvas, switch to `{colors.primary-strong}`.
+- Don't introduce accents beyond `{colors.primary}` (or the user's theme color), `{colors.accent-lime}`, and `{colors.accent-pink}` — and keep their jobs apart: orange acts, lime highlights words, pink decorates illustrations. Adding teal, yellow, or a second orange shade dilutes the hierarchy.
+- Don't put white text on the orange `{colors.primary}` — it measures 2.87:1, below WCAG AA. Labels on orange always use `{colors.on-primary}`; when orange has to sit behind white text or work as text on light canvas, switch to `{colors.primary-strong}`.
 - Don't use `{colors.primary}` for warning or error states — orange already means "act here"; status messages use the semantic status colors.
 - Don't use `{colors.danger}` for anything but errors and destructive actions, and don't make a destructive button orange.
 - Don't use `{colors.hairline-cool}` as the only border of a form control — it measures 1.54:1; inputs use `{colors.hairline-input}`.
