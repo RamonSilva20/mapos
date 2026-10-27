@@ -49,6 +49,10 @@ $novaAba = ['target' => '_blank', 'rel' => 'noopener'];
                     <?php foreach ($relatorio['campos'] as $campo) { ?>
                         <?php if ($campo['tipo'] === 'data') { ?>
                             <?= component('input', ['name' => $campo['name'], 'label' => $campo['label'], 'type' => 'date']) ?>
+                        <?php } elseif ($campo['tipo'] === 'texto') { ?>
+                            <div<?= ! empty($campo['cheio']) ? ' class="sm:col-span-2"' : '' ?>>
+                                <?= component('input', ['name' => $campo['name'], 'label' => $campo['label'], 'type' => 'search', 'placeholder' => $campo['placeholder'] ?? null, 'autocomplete' => 'off']) ?>
+                            </div>
                         <?php } elseif ($campo['tipo'] === 'dinheiro') { ?>
                             <?= component('input', ['name' => $campo['name'], 'label' => $campo['label'], 'placeholder' => '0,00', 'class' => 'text-right tabular-nums', 'attrs' => ['data-mascara' => 'dinheiro', 'inputmode' => 'decimal', 'maxlength' => 20, 'autocomplete' => 'off']]) ?>
                         <?php } elseif ($campo['tipo'] === 'numero') { ?>
@@ -56,7 +60,7 @@ $novaAba = ['target' => '_blank', 'rel' => 'noopener'];
                         <?php } elseif ($campo['tipo'] === 'select') { ?>
                             <?= component('select', ['name' => $campo['name'], 'label' => $campo['label'], 'options' => $campo['opcoes'], 'placeholder' => $campo['placeholder'] ?? null]) ?>
                         <?php } elseif ($campo['tipo'] === 'busca') { ?>
-                            <div class="relative" data-autocomplete="<?= e(site_url($campo['url'])) ?>" data-autocomplete-alvo="<?= e(componenteId($campo['name'])) ?>" data-autocomplete-min="2">
+                            <div class="relative<?= ! empty($campo['cheio']) ? ' sm:col-span-2' : '' ?>" data-autocomplete="<?= e(site_url($campo['url'])) ?>" data-autocomplete-alvo="<?= e(componenteId($campo['name'])) ?>" data-autocomplete-min="2">
                                 <?= component('input', ['name' => $campo['name'] . '_texto', 'label' => $campo['label'], 'placeholder' => $campo['placeholder'] ?? null, 'autocomplete' => 'off', 'attrs' => ['data-msg-invalido' => 'Escolha um nome da lista ou deixe o campo em branco.']]) ?>
                                 <input type="hidden" id="<?= e(componenteId($campo['name'])) ?>" name="<?= e($campo['name']) ?>" value="">
                             </div>
