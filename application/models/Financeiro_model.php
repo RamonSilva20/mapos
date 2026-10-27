@@ -201,6 +201,57 @@ class Financeiro_model extends CI_Model
             ->result();
     }
 
+    /**
+     * Série dos últimos N meses (receitas, despesas e saldo pagos, pelo mês do
+     * pagamento) para os sparklines dos KPIs. Meses sem movimento entram com 0,
+     * na ordem cronológica.
+     *
+     * @return array{receitas: list<float>, despesas: list<float>, saldo: list<float>}
+     */
+    public function serieMensal(int $meses, string $hoje): array
+    {
+        $meses = max(2, $meses);
+        $inicio = date('Y-m-01', strtotime(date('Y-m-01', strtotime($hoje)) . ' -' . ($meses - 1) . ' months'));
+
+        $linhas = $this->db
+            ->select('SUBSTR(lancamentos.data_pagamento, 1, 7) AS mes, lancamentos.tipo', false)
+            ->select('SUM(' . self::LIQUIDO . ') AS total', false)
+            ->from('lancamentos')
+            ->where('lancamentos.baixado', 1)
+            ->where('lancamentos.data_pagamento >=', $inicio)
+            ->where('lancamentos.data_pagamento <=', $hoje)
+            ->group_by(['mes', 'lancamentos.tipo'])
+            ->get()
+            ->result();
+
+        $receitas = [];
+        $despesas = [];
+        for ($i = $meses - 1; $i >= 0; $i--) {
+            $chave = date('Y-m', strtotime(date('Y-m-01', strtotime($hoje)) . ' -' . $i . ' months'));
+            $receitas[$chave] = 0.0;
+            $despesas[$chave] = 0.0;
+        }
+        foreach ($linhas as $l) {
+            if (! array_key_exists((string) $l->mes, $receitas)) {
+                continue;
+            }
+            if ($l->tipo === 'receita') {
+                $receitas[(string) $l->mes] = (float) $l->total;
+            } else {
+                $despesas[(string) $l->mes] = (float) $l->total;
+            }
+        }
+
+        $rec = array_values($receitas);
+        $des = array_values($despesas);
+
+        return [
+            'receitas' => $rec,
+            'despesas' => $des,
+            'saldo' => array_map(static fn ($r, $d) => round($r - $d, 2), $rec, $des),
+        ];
+    }
+
     /** Lançamento com o nome de quem o alterou por último, ou null. */
     public function getLancamento(int $id): ?object
     {

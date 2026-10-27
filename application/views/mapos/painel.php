@@ -24,38 +24,63 @@
  */
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 
+// Tendência e sparkline do "Saldo do mês": só quando a série do ano (balanço)
+// está disponível e é o ano atual.
+$saldoTrend = null;
+$saldoSpark = null;
+if ($pode['lancamentos'] && $pode['balanco'] && isset($balanco['saldo'], $ano) && (int) $ano === (int) date('Y')) {
+    $idxMes = (int) date('n') - 1;
+    $inicioMes = max(0, $idxMes - 5);
+    $trechoSaldo = array_slice($balanco['saldo'], $inicioMes, $idxMes - $inicioMes + 1);
+    $saldoSpark = count($trechoSaldo) >= 2 ? $trechoSaldo : null;
+    if ($idxMes > 0) {
+        $saldoTrend = tendenciaKpi($mes['saldo'], $balanco['saldo'][$idxMes - 1], true, 'vs. mês anterior');
+    }
+}
+
+// Cards clicáveis com acento de status (kpi-card, prop accent).
 $kpis = [];
 if ($pode['os']) {
     $aguardando = (int) ($os_por_status['Aguardando Peças'] ?? 0);
-    $kpis[] = component('kpi-card', [
+    $kpis[] = [
         'label' => 'OS em andamento',
         'value' => painelSomar($os_por_status, PAINEL_OS_ANDAMENTO),
         'icon' => 'wrench',
+        'accent' => 'progress',
+        'href' => site_url('os'),
         'caption' => $aguardando === 0 ? 'Nenhuma aguardando peças' : $aguardando . ' aguardando peças',
-    ]);
-    $kpis[] = component('kpi-card', [
+    ];
+    $kpis[] = [
         'label' => 'Orçamentos',
         'value' => painelSomar($os_por_status, PAINEL_OS_ORCAMENTO),
         'icon' => 'file-text',
+        'accent' => 'info',
+        'href' => site_url('os'),
         'caption' => 'Em orçamento ou negociação',
-    ]);
+    ];
 }
 if ($pode['vendas']) {
-    $kpis[] = component('kpi-card', [
+    $kpis[] = [
         'label' => 'Vendas em aberto',
         'value' => painelSomar($vendas_por_status, PAINEL_VENDAS_ABERTAS),
         'icon' => 'shopping-cart',
+        'accent' => 'success',
+        'href' => site_url('vendas'),
         'caption' => 'Ainda não faturadas',
-    ]);
+    ];
 }
 if ($pode['lancamentos']) {
-    $kpis[] = component('kpi-card', [
+    $kpis[] = [
         'label' => 'Saldo do mês',
         'value' => dinheiro($mes['saldo']),
         'icon' => 'circle-dollar-sign',
+        'accent' => 'info',
+        'href' => site_url('financeiro/lancamentos'),
         'caption' => 'A receber: ' . dinheiro($visao_geral['a_receber']),
         'sensitive' => true,
-    ]);
+        'trend' => $saldoTrend,
+        'spark' => $saldoSpark,
+    ];
 }
 
 $dadosDoModulo = [];
@@ -90,7 +115,11 @@ if ($pode['os']) {
     <?php } ?>
 
     <?php if ($kpis !== []) { ?>
-        <div class="grid grid-cols-2 gap-4 xl:grid-cols-4"><?= componenteConteudo($kpis) ?></div>
+        <div class="grid grid-cols-2 gap-4 xl:grid-cols-4">
+            <?php foreach ($kpis as $kpi) { ?>
+                <?= component('kpi-card', $kpi) ?>
+            <?php } ?>
+        </div>
     <?php } ?>
 
     <?php if ($pode['os']) { ?>

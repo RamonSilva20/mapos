@@ -127,8 +127,49 @@ export const TEMAS = {
   },
 };
 
+/**
+ * Status (DESIGN.md, Semantic e Panel Dark Mode): a cor-base é fixa; -ink e
+ * -soft mudam com o modo. Fonte: assets/src/tokens.css.
+ */
+const STATUS_BASE = { success: '#15803d', warning: '#a16207', info: '#0369a1', progress: '#6a5fc1', neutral: '#79628c' };
+const STATUS = {
+  light: {
+    success: { ink: '#166534', soft: '#e3f0e8' }, warning: { ink: '#854d0e', soft: '#f4ece1' },
+    info: { ink: '#075985', soft: '#e1edf4' }, progress: { ink: '#4a3f9e', soft: '#edecf8' },
+    neutral: { ink: '#4b4560', soft: '#efecf1' },
+  },
+  dark: {
+    success: { ink: '#4ade80', soft: '#1d3032' }, warning: { ink: '#facc15', soft: '#3a2d21' },
+    info: { ink: '#38bdf8', soft: '#1b2b45' }, progress: { ink: '#b8b0f0', soft: '#2b244c' },
+    neutral: { ink: '#d6cfe0', soft: '#2f253e' },
+  },
+};
+
+/**
+ * kpi-card: o degradê é a cor-base do status a KPI_MIX sobre a superfície
+ * (mesmo valor do color-mix em assets/src/app.css). O pior ponto é o canto,
+ * onde o degradê é mais forte; confere texto, valor, caption, pill de
+ * tendência (ink sobre soft) e sparkline (-ink) contra esse fundo.
+ */
+const KPI_MIX = 0.20;
+const KPI_STATUS = ['success', 'warning', 'info', 'progress'];
+const kpiFundo = (t, modo, s) => sobre(STATUS_BASE[s], KPI_MIX, t.surface);
+const PARES_KPI = [];
+for (const s of KPI_STATUS) {
+  PARES_KPI.push(
+    [`kpi ${s}: label/caption (muted) no canto`, 4.5, (t, m) => [t.muted, kpiFundo(t, m, s)]],
+    [`kpi ${s}: valor (text) no canto`, 4.5, (t, m) => [t.text, kpiFundo(t, m, s)]],
+    [`kpi ${s}: sparkline (ink) no canto`, 3, (t, m) => [STATUS[m][s].ink, kpiFundo(t, m, s)]],
+    [`kpi ${s}: ícone (ink on soft)`, 4.5, (t, m) => [STATUS[m][s].ink, STATUS[m][s].soft]],
+  );
+}
+// Pill de tendência: bom = success, ruim = warning, estável = neutral (ink sobre soft).
+for (const s of ['success', 'warning', 'neutral']) {
+  PARES_KPI.push([`kpi tendência ${s}: ink on soft`, 4.5, (t, m) => [STATUS[m][s].ink, STATUS[m][s].soft]]);
+}
+
 /** Pares conferidos: [rótulo, mínimo, função (t) => [fg, bg]]. */
-const PARES = [
+const PARES_TEMA = [
   ['on-primary on primary', 4.5, (t) => [t.onPrimary, t.primary]],
   ['on-primary on hover', 4.5, (t) => [t.onPrimary, t.hover]],
   ['on-primary on pressed', 4.5, (t) => [t.onPrimary, t.pressed]],
@@ -147,6 +188,8 @@ const PARES = [
   ['sidebar: active item', 4.5, (t) => [t.sidebar?.activeText ?? t.strong, t.sidebar?.activeBg ?? t.tint]],
 ];
 
+const PARES = [...PARES_TEMA, ...PARES_KPI];
+
 /** Cores que a ação nunca pode repetir: status e foco (DESIGN.md, Semantic). */
 const RESERVADAS = {
   success: '#15803d', info: '#0369a1', progress: '#6a5fc1', warning: '#a16207',
@@ -159,7 +202,7 @@ let falhas = 0;
 for (const [tema, modos] of Object.entries(TEMAS)) {
   for (const [modo, t] of Object.entries(modos)) {
     for (const [rotulo, min, fn] of PARES) {
-      const [fg, bg] = fn(t);
+      const [fg, bg] = fn(t, modo === 'light' ? 'light' : 'dark');
       const r = razao(fg, bg);
       const ok = r >= min;
       if (!ok) falhas++;
