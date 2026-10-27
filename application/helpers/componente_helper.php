@@ -228,8 +228,12 @@ if (! function_exists('componenteEspecificacoes')) {
                 'obrigatorias' => ['label', 'value'],
                 'padrao' => [
                     'icon' => null,
+                    'accent' => 'neutral',
+                    'href' => null,
                     'caption' => null,
                     'sensitive' => false,
+                    'trend' => null,
+                    'spark' => null,
                 ],
                 'formatos' => ['icon' => COMPONENTE_ICONE],
             ],
@@ -673,5 +677,66 @@ if (! function_exists('html_purificado')) {
     function html_purificado(string $html): HtmlSeguro
     {
         return new HtmlSeguro(printSafeHtml($html));
+    }
+}
+
+if (! function_exists('sparklinePontos')) {
+    /**
+     * Pontos "x,y" de um sparkline (mini-gráfico de linha) para um <polyline>
+     * num viewBox largura×altura. Normaliza os valores entre o mínimo e o
+     * máximo; linha reta no meio quando todos são iguais; '' com menos de 2.
+     *
+     * @param  list<int|float>  $valores
+     */
+    function sparklinePontos(array $valores, int $largura = 120, int $altura = 28): string
+    {
+        $valores = array_map('floatval', $valores);
+        $n = count($valores);
+        if ($n < 2) {
+            return '';
+        }
+
+        $min = min($valores);
+        $span = max($valores) - $min;
+        $pad = 2.0; // respiro para a espessura da linha não cortar nas bordas
+        $pontos = [];
+        foreach ($valores as $i => $v) {
+            $x = round($i / ($n - 1) * $largura, 2);
+            $y = $span > 0
+                ? round($pad + ($altura - 2 * $pad) * (1 - ($v - $min) / $span), 2)
+                : round($altura / 2, 2);
+            $pontos[] = $x . ',' . $y;
+        }
+
+        return implode(' ', $pontos);
+    }
+}
+
+if (! function_exists('tendenciaKpi')) {
+    /**
+     * Props de tendência do kpi-card a partir do valor atual e do anterior:
+     * direção (up/down/flat), se é bom (true), ruim (false) ou estável (null),
+     * o texto curto ("+12%") e o completo ("+12% vs. ..."). $bomSeSobe é false
+     * para despesas (subir é ruim). Devolve null sem base de comparação (os
+     * dois valores zerados). O card mostra bom em success e ruim em warning,
+     * nunca em vermelho (DESIGN.md), e sempre com seta e porcentagem.
+     *
+     * @return array{dir: string, bom: bool|null, curto: string, texto: string}|null
+     */
+    function tendenciaKpi($atual, $anterior, bool $bomSeSobe = true, string $rotulo = 'vs. período anterior'): ?array
+    {
+        $atual = (float) $atual;
+        $anterior = (float) $anterior;
+
+        if ($anterior == 0.0) {
+            return $atual == 0.0 ? null : ['dir' => 'up', 'bom' => $bomSeSobe, 'curto' => 'novo', 'texto' => 'novo ' . $rotulo];
+        }
+
+        $pct = ($atual - $anterior) / abs($anterior) * 100;
+        $dir = $pct > 0.5 ? 'up' : ($pct < -0.5 ? 'down' : 'flat');
+        $bom = $dir === 'flat' ? null : (($dir === 'up') === $bomSeSobe);
+        $curto = ($pct >= 0 ? '+' : '−') . number_format(abs($pct), 0, ',', '.') . '%';
+
+        return ['dir' => $dir, 'bom' => $bom, 'curto' => $curto, 'texto' => $curto . ' ' . $rotulo];
     }
 }

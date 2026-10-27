@@ -53,6 +53,26 @@ class Financeiro extends MY_Controller
         $this->data['results'] = $this->financeiro_model->listar($filtros, (int) $this->data['configuration']['per_page'], $offset, $hoje);
         $this->data['totais'] = $this->financeiro_model->totais($filtros, $hoje);
         $this->data['visao_geral'] = $this->financeiro_model->visaoGeral();
+
+        // Tendência vs. período anterior (mesmo número de dias, logo antes do
+        // filtro) e série dos últimos 6 meses para os sparklines dos KPIs.
+        $totais = $this->data['totais'];
+        $de = $filtros['de'] ?? null;
+        $ate = $filtros['ate'] ?? null;
+        $tendencias = [];
+        if ($de !== null && $ate !== null) {
+            $dias = max(1, (int) round((strtotime($ate) - strtotime($de)) / 86400) + 1);
+            $antAte = date('Y-m-d', strtotime($de . ' -1 day'));
+            $antDe = date('Y-m-d', strtotime($antAte . ' -' . ($dias - 1) . ' days'));
+            $anterior = $this->financeiro_model->totais(['de' => $antDe, 'ate' => $antAte] + array_diff_key($filtros, ['de' => true, 'ate' => true]), $hoje);
+            $tendencias = [
+                'receitas' => tendenciaKpi($totais['receitas'], $anterior['receitas'], true),
+                'despesas' => tendenciaKpi($totais['despesas'], $anterior['despesas'], false),
+                'saldo' => tendenciaKpi($totais['receitas'] - $totais['despesas'], $anterior['receitas'] - $anterior['despesas'], true),
+            ];
+        }
+        $this->data['tendencias'] = $tendencias;
+        $this->data['series'] = $this->financeiro_model->serieMensal(6, $hoje);
         $this->data['paginacao'] = $this->paginacao(site_url('financeiro/lancamentos'), $total, $offset, null, $filtros);
         $this->data['pode'] = [
             'adicionar' => $this->permite('aLancamento'),

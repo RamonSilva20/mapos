@@ -226,6 +226,64 @@ html[data-valores="ocultos"] .painel-valores-aviso {
 }
 
 /*
+ * kpi-card (DESIGN.md): o acento é sempre uma cor de status (success, warning,
+ * info, progress); neutral não recebe classe. O degradê é a cor-base do status
+ * a 20% sobre a superfície, só no canto, com borda e barra lateral tonais. O
+ * mix é o do pior ponto conferido em scripts/contraste-temas.mjs.
+ * --kpi-tinta é o -ink do status (muda com o modo) e pinta o sparkline.
+ */
+.kpi-acento-success,
+.kpi-acento-warning,
+.kpi-acento-info,
+.kpi-acento-progress {
+  border-color: color-mix(in srgb, var(--kpi-cor) 34%, var(--color-border));
+  background-image: linear-gradient(135deg, color-mix(in srgb, var(--kpi-cor) 20%, transparent), transparent 62%);
+  box-shadow: inset 3px 0 0 var(--kpi-cor);
+}
+
+.kpi-acento-success { --kpi-cor: var(--color-success); --kpi-tinta: var(--color-success-ink); }
+.kpi-acento-warning { --kpi-cor: var(--color-warning); --kpi-tinta: var(--color-warning-ink); }
+.kpi-acento-info { --kpi-cor: var(--color-info); --kpi-tinta: var(--color-info-ink); }
+.kpi-acento-progress { --kpi-cor: var(--color-progress); --kpi-tinta: var(--color-progress-ink); }
+
+/* O hover do cartão clicável troca a sombra: a barra lateral fica. */
+.kpi-acento-success.ui-lift:hover,
+.kpi-acento-warning.ui-lift:hover,
+.kpi-acento-info.ui-lift:hover,
+.kpi-acento-progress.ui-lift:hover {
+  box-shadow: inset 3px 0 0 var(--kpi-cor), var(--shadow-overlay);
+}
+
+/* Sparkline do kpi-card: o -ink do acento (currentColor); sem acento, o muted. */
+.kpi-spark {
+  color: var(--kpi-tinta, var(--color-muted));
+}
+
+/* "Ocultar valores" também esconde a tendência e o sparkline dos cartões
+   sensíveis (dinheiro), para não vazar a forma do dado. */
+html[data-valores="ocultos"] .kpi-oculto-valores {
+  display: none;
+}
+
+/* Cartões clicáveis sobem de leve e ganham sombra ao passar o mouse. */
+.ui-lift {
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.ui-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-overlay);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-lift,
+  .ui-lift:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+/*
  * Quem pede menos movimento (prefers-reduced-motion) não recebe transições nem
  * animações: botões, switch, abas, calendário e a rolagem suave (WCAG 2.3.3).
  */

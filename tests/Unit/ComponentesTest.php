@@ -668,6 +668,135 @@ final class ComponentesTest extends MaposTestCase
         $this->assertStringContainsString('<span data-valor-sensivel>A receber: R$ 5,00</span>', $html);
     }
 
+    public function testKpiCardComHrefViraLinkComAcento(): void
+    {
+        $html = $this->html('kpi-card', ['label' => 'Vendas', 'value' => 3, 'icon' => 'wrench', 'accent' => 'success', 'href' => '/vendas?a=1&b=2']);
+
+        $this->assertStringStartsWith('<a ', trim($html));
+        $this->assertStringEndsWith('</a>', trim($html));
+        $this->assertStringContainsString('href="/vendas?a=1&amp;b=2"', $html);
+        $this->assertStringContainsString('kpi-acento-success', $html);
+        $this->assertStringContainsString('bg-success-soft text-success-ink', $html);
+        $this->assertStringContainsString('ui-lift', $html);
+
+        $semLink = $this->html('kpi-card', ['label' => 'Vendas', 'value' => 3]);
+        $this->assertStringStartsWith('<div ', trim($semLink));
+        $this->assertStringNotContainsString('ui-lift', $semLink);
+    }
+
+    #[DataProvider('acentosForaDaLista')]
+    public function testKpiCardAcentoForaDaListaCaiEmNeutral(string $acento): void
+    {
+        $html = $this->html('kpi-card', ['label' => 'X', 'value' => 1, 'icon' => 'wrench', 'accent' => $acento]);
+
+        $this->assertStringNotContainsString('kpi-acento', $html);
+        $this->assertStringContainsString('bg-surface-subtle text-text', $html);
+        $this->assertStringNotContainsString('danger', $html);
+        $this->assertStringNotContainsString('primary', $html);
+    }
+
+    public static function acentosForaDaLista(): array
+    {
+        return [['primary'], ['danger'], ['qualquer'], ['']];
+    }
+
+    public function testKpiCardNuncaUsaVermelhoNemLaranjaNaTendencia(): void
+    {
+        foreach ([true, false, null] as $bom) {
+            $html = $this->html('kpi-card', ['label' => 'X', 'value' => 1, 'accent' => 'info', 'trend' => ['dir' => 'up', 'bom' => $bom, 'curto' => '+5%', 'texto' => '+5% vs. período anterior']]);
+
+            $this->assertStringNotContainsString('danger', $html);
+            $this->assertStringNotContainsString('primary', $html);
+            $this->assertStringContainsString('↑', $html);
+            $this->assertStringContainsString('+5%', $html);
+        }
+
+        $bom = $this->html('kpi-card', ['label' => 'X', 'value' => 1, 'trend' => ['dir' => 'up', 'bom' => true, 'curto' => '+5%', 'texto' => 't']]);
+        $ruim = $this->html('kpi-card', ['label' => 'X', 'value' => 1, 'trend' => ['dir' => 'down', 'bom' => false, 'curto' => '−5%', 'texto' => 't']]);
+        $estavel = $this->html('kpi-card', ['label' => 'X', 'value' => 1, 'trend' => ['dir' => 'flat', 'bom' => null, 'curto' => '+0%', 'texto' => 't']]);
+        $this->assertStringContainsString('bg-success-soft text-success-ink', $bom);
+        $this->assertStringContainsString('bg-warning-soft text-warning-ink', $ruim);
+        $this->assertStringContainsString('↓', $ruim);
+        $this->assertStringContainsString('bg-neutral-soft text-neutral-ink', $estavel);
+        $this->assertStringContainsString('→', $estavel);
+    }
+
+    public function testKpiCardEscapaRotuloTendenciaEHref(): void
+    {
+        $html = $this->html('kpi-card', [
+            'label' => '<img src=x onerror=1>',
+            'value' => '<b>1</b>',
+            'href' => '"><script>x</script>',
+            'trend' => ['dir' => 'up', 'bom' => true, 'curto' => '<i>1</i>', 'texto' => '"><script>y</script>'],
+        ]);
+
+        $this->assertStringNotContainsString('<script>', $html);
+        $this->assertStringNotContainsString('<img', $html);
+        $this->assertStringNotContainsString('<b>', $html);
+        $this->assertStringNotContainsString('<i>', $html);
+        $this->assertStringContainsString('&lt;b&gt;1&lt;/b&gt;', $html);
+    }
+
+    public function testKpiCardSensivelEscondeTendenciaESparklineNoPainel(): void
+    {
+        $props = ['label' => 'Saldo', 'value' => 'R$ 1,00', 'spark' => [1, 3, 2], 'trend' => ['dir' => 'up', 'bom' => true, 'curto' => '+5%', 'texto' => 't']];
+
+        $sensivel = $this->html('kpi-card', $props + ['sensitive' => true]);
+        $this->assertSame(2, substr_count($sensivel, 'kpi-oculto-valores'), 'Tendência e sparkline.');
+        $this->assertStringContainsString('<polyline points="0,26 60,2 120,14"', $sensivel);
+
+        $normal = $this->html('kpi-card', $props);
+        $this->assertStringNotContainsString('kpi-oculto-valores', $normal);
+        $this->assertStringContainsString('<polyline', $normal);
+
+        $umPonto = $this->html('kpi-card', ['label' => 'S', 'value' => 1, 'spark' => [5]]);
+        $this->assertStringNotContainsString('<svg', $umPonto);
+    }
+
+    public function testSparklinePontos(): void
+    {
+        $this->assertSame('', sparklinePontos([]));
+        $this->assertSame('', sparklinePontos([7]));
+        // Todos iguais: linha reta no meio da altura.
+        $this->assertSame('0,14 60,14 120,14', sparklinePontos([5, 5, 5]));
+        // Mínimo embaixo (altura - respiro), máximo em cima (respiro), x espalhado.
+        $this->assertSame('0,26 60,2 120,14', sparklinePontos([1, 3, 2]));
+        $this->assertSame('0,2 50,26', sparklinePontos([10, -10], 50, 28));
+    }
+
+    public function testTendenciaKpi(): void
+    {
+        $this->assertNull(tendenciaKpi(0, 0));
+        $novo = tendenciaKpi(50, 0, false);
+        $this->assertSame(['dir' => 'up', 'bom' => false, 'curto' => 'novo', 'texto' => 'novo vs. período anterior'], $novo);
+
+        $sobe = tendenciaKpi(150, 100, true);
+        $this->assertSame('up', $sobe['dir']);
+        $this->assertTrue($sobe['bom']);
+        $this->assertSame('+50%', $sobe['curto']);
+        $this->assertSame('+50% vs. período anterior', $sobe['texto']);
+
+        $despesaSobe = tendenciaKpi(150, 100, false);
+        $this->assertSame('up', $despesaSobe['dir']);
+        $this->assertFalse($despesaSobe['bom']);
+
+        $desce = tendenciaKpi(50, 100, true, 'vs. mês anterior');
+        $this->assertSame('down', $desce['dir']);
+        $this->assertFalse($desce['bom']);
+        $this->assertSame('−50% vs. mês anterior', $desce['texto']);
+
+        $despesaDesce = tendenciaKpi(50, 100, false);
+        $this->assertTrue($despesaDesce['bom']);
+
+        // Anterior negativo: base em módulo; sair de -100 para -50 é subir.
+        $this->assertSame('up', tendenciaKpi(-50, -100)['dir']);
+
+        $estavel = tendenciaKpi(100.2, 100);
+        $this->assertSame('flat', $estavel['dir']);
+        $this->assertNull($estavel['bom']);
+        $this->assertSame('+0%', $estavel['curto']);
+    }
+
     public function testValorSensivelEscapaOTexto(): void
     {
         $html = $this->html('valor-sensivel', ['value' => '<b>R$ 1</b>']);

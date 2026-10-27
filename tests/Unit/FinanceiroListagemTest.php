@@ -316,4 +316,42 @@ final class FinanceiroListagemTest extends MaposTestCase
         $this->assertSame([['id' => null, 'label' => 'Provedor', 'valor' => 'Provedor', 'detalhe' => 'Já usado em lançamentos']], $nomes);
         $this->assertCount(1, $model->sugerirNomesUsados('ana'), 'Nome repetido em várias linhas aparece uma vez.');
     }
+
+    public function testSerieMensalPreencheMesesSemMovimentoEmOrdemCronologica(): void
+    {
+        $model = $this->model();
+        $this->db->query('DELETE FROM lancamentos');
+        // descricao, valor, vencimento, pagamento, baixado, tipo, desconto, valor_desconto
+        $linhas = [
+            ['a', 100, '2026-06-05', '2026-06-05', 1, 'receita', 0, 100],
+            ['b', 40, '2026-06-20', '2026-06-21', 1, 'despesa', 0, 0],
+            ['c', 300, '2026-08-01', '2026-08-02', 1, 'receita', 0, 300],
+            ['d', 80, '2026-10-01', '2026-10-03', 1, 'despesa', 0, 0],
+            ['e', 999, '2026-10-02', null, 0, 'receita', 0, 999],           // não baixado
+            ['f', 500, '2026-01-02', '2026-01-02', 1, 'receita', 0, 500],   // fora da janela de 6 meses
+            ['g', 70, '2026-10-30', '2026-10-30', 1, 'receita', 0, 70],     // depois de hoje
+        ];
+        foreach ($linhas as $l) {
+            $this->db->query('INSERT INTO lancamentos (descricao, valor, data_vencimento, data_pagamento, baixado, tipo, desconto, valor_desconto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', $l);
+        }
+
+        $serie = $model->serieMensal(6, self::HOJE);
+
+        // Maio a outubro de 2026; setembro e maio sem movimento.
+        $this->assertSame([0.0, 100.0, 0.0, 300.0, 0.0, 0.0], $serie['receitas']);
+        $this->assertSame([0.0, 40.0, 0.0, 0.0, 0.0, 80.0], $serie['despesas']);
+        $this->assertSame([0.0, 60.0, 0.0, 300.0, 0.0, -80.0], $serie['saldo']);
+    }
+
+    public function testSerieMensalAtravessaOAnoEMinimoDeDoisMeses(): void
+    {
+        $model = $this->model();
+        $this->db->query('DELETE FROM lancamentos');
+        $this->db->query("INSERT INTO lancamentos (descricao, valor, data_vencimento, data_pagamento, baixado, tipo, desconto, valor_desconto) VALUES ('x', 10, '2025-12-31', '2025-12-31', 1, 'receita', 0, 10)");
+
+        $serie = $model->serieMensal(3, '2026-01-31');
+        $this->assertSame([0.0, 10.0, 0.0], $serie['receitas']);
+
+        $this->assertCount(2, $model->serieMensal(1, self::HOJE)['saldo']);
+    }
 }
