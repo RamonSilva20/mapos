@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { proximoEstado, CONSULTA_DESKTOP, ehAtalhoBusca } from '../../assets/js/modules/layout/shell.js';
+import { proximoEstado, CONSULTA_DESKTOP, ehAtalhoBusca, grupoDaSidebar } from '../../assets/js/modules/layout/shell.js';
 import { aplicarModo, salvarModo, CHAVE_MODO } from '../../assets/js/lib/tema.js';
 
 test('no desktop o botão de menu recolhe e expande a sidebar', () => {
@@ -125,4 +125,16 @@ test('a troca de modo na topbar acompanha o campo da tela de Configurações', a
 
     // Fora da tela de Configurações (sem o campo) não quebra.
     assert.doesNotThrow(() => sincronizarCampoTema({ querySelector: () => null }, 'escuro'));
+});
+
+test('só o <summary> de dentro da sidebar é um grupo dela (o menu do usuário não é)', () => {
+    const resumoDoGrupo = {};
+    const resumoDoUsuario = {};
+    const sidebar = { contains: (no) => no === resumoDoGrupo };
+    const clique = (resumo) => ({ closest: (seletor) => (seletor === 'summary' ? resumo : null) });
+
+    assert.equal(grupoDaSidebar(clique(resumoDoGrupo), sidebar), resumoDoGrupo);
+    assert.equal(grupoDaSidebar(clique(resumoDoUsuario), sidebar), null);
+    assert.equal(grupoDaSidebar(clique(null), sidebar), null);
+    assert.equal(grupoDaSidebar(clique(resumoDoGrupo), null), null);
 });
