@@ -6,6 +6,13 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.2.2] - 2026-10-29
+
+Correção de segurança na API de usuários. Sem migration nem variável nova no `.env`. **Atualize se usa a API (`API_ENABLED=true`).**
+
+### Security
+- A API de usuários (`POST`, `PUT` e `DELETE` de `/api/v1/usuarios`) passa a aplicar a regra de delegação do painel (#2879). Antes, quem tinha a permissão `cUsuario` sem ser administrador podia criar ou promover contas ao grupo Administrador, trocar a senha do usuário principal e excluir usuários de grupos maiores. Agora só se concede, edita ou exclui o que o próprio grupo do operador tem, e só o usuário principal altera o usuário principal. Afeta a 5.2.0 e a 5.2.1; quem não usa a API (`API_ENABLED=false`, o padrão) não era afetado. Agradecimento a [@HieuPenguinnn](https://github.com/HieuPenguinnn) pelo relato responsável.
+
 ## [5.2.1] - 2026-10-29
 
 Correção nas configurações. Sem migration e sem variável nova no `.env`.
