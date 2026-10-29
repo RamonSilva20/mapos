@@ -522,9 +522,19 @@ class Mapos_model extends CI_Model
     {
         try {
             foreach ($data as $key => $valor) {
-                $this->db->set('valor', $valor);
-                $this->db->where('config', $key);
-                $this->db->update('configuracoes');
+                // Upsert: um banco antigo (instalado pelo banco.sql antes das
+                // migrations de tema) pode não ter a linha da config. Um UPDATE
+                // puro não casaria nada e a configuração nunca seria gravada,
+                // por isso insere quando a linha ainda não existe.
+                $existe = $this->db->where('config', $key)->count_all_results('configuracoes') > 0;
+
+                if ($existe) {
+                    $this->db->set('valor', $valor);
+                    $this->db->where('config', $key);
+                    $this->db->update('configuracoes');
+                } else {
+                    $this->db->insert('configuracoes', ['config' => $key, 'valor' => $valor]);
+                }
             }
         } catch (Exception $e) {
             return false;
