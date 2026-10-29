@@ -13,7 +13,16 @@ class UsuariosController extends REST_Controller
         $this->load->library('Authorization_Token');
         $this->load->model('Mapos_model');
         $this->load->model('usuarios_model');
+        $this->load->model('permissoes_model');
         $this->load->helper(['api', 'usuarios']);
+    }
+
+    /** O operador do token alcança o grupo de permissões (id)? Ver usuarioApiPodeDelegarGrupo(). */
+    private function podeDelegarGrupo(int $idGrupo): bool
+    {
+        $logado = $this->logged_user();
+
+        return usuarioApiPodeDelegarGrupo($this->permissoes_model, (int) $logado->usuario->idUsuarios, (int) $logado->level, $idGrupo);
     }
 
     public function index_get($id = '')
@@ -84,6 +93,20 @@ class UsuariosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
+        $grupo = $this->permissoes_model->getById((int) $this->post('permissoes_id', true));
+        if (! $grupo || (int) $grupo->situacao !== 1) {
+            $this->response([
+                'status' => false,
+                'message' => 'Escolha um grupo de permissão ativo.',
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+        if (! $this->podeDelegarGrupo((int) $grupo->idPermissao)) {
+            $this->response([
+                'status' => false,
+                'message' => 'Você só pode escolher grupos com permissões que você também tem.',
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
+
         $data = [
             'nome' => $this->post('nome', true),
             'rg' => $this->post('rg', true),
@@ -138,7 +161,8 @@ class UsuariosController extends REST_Controller
             (int) $this->logged_user()->usuario->idUsuarios,
             (int) $id,
             (bool) $this->permission->checkPermission($this->logged_user()->level, 'cUsuario'),
-            $entrada
+            $entrada,
+            fn (int $idGrupo): bool => $this->podeDelegarGrupo($idGrupo)
         );
         if (! $plano['ok']) {
             $this->response([
@@ -182,11 +206,29 @@ class UsuariosController extends REST_Controller
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        if ($id == 1) {
+        $alvo = $this->usuarios_model->getById((int) $id);
+        if (! $alvo) {
             $this->response([
                 'status' => false,
-                'message' => 'error', 'O usuário super admin não pode ser deletado!',
-            ], REST_Controller::HTTP_BAD_REQUEST);
+                'message' => 'Usuário não encontrado.',
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
+
+        // Mesmas regras do painel (#2879): super admin protegido, só exclui quem alcança o grupo do alvo.
+        $motivo = usuarioPodeSerRemovido((int) $id, (int) $this->logged_user()->usuario->idUsuarios);
+        $status = REST_Controller::HTTP_BAD_REQUEST;
+        if ($motivo === null && ! $this->podeDelegarGrupo((int) $alvo->permissoes_id)) {
+            $motivo = 'Este usuário tem permissões que você não tem. Só quem as tem pode excluí-lo.';
+            $status = REST_Controller::HTTP_FORBIDDEN;
+        }
+        if ($motivo === null && $this->usuarios_model->referencias((int) $id) > 0) {
+            $motivo = 'Este usuário tem OS, vendas, lançamentos ou termos de garantia. Desative-o em vez de excluir.';
+        }
+        if ($motivo !== null) {
+            $this->response([
+                'status' => false,
+                'message' => $motivo,
+            ], $status);
         }
 
         $this->usuarios_model->delete('usuarios', 'idUsuarios', $id);
