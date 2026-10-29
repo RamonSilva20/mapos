@@ -44,11 +44,17 @@ if (! function_exists('usuarioApiPlanoEdicao')) {
      *   ninguém se promover, reativar ou estender a própria conta.
      * - A senha é sempre gravada com hash; o e-mail não pode repetir.
      *
-     * @param  object  $usuarios  Usuarios_model (emailEmUso e senhaConfere)
+     * - Em outro usuário vale a mesma regra do painel (#2879): o administrador
+     *   principal só é alterado por ele mesmo, e quem não é administrador só
+     *   edita usuários de grupos, e só atribui grupos, com permissões que ele
+     *   próprio tem ($podeDelegarGrupo).
+     *
+     * @param  object  $usuarios  Usuarios_model (emailEmUso, senhaConfere e getById)
      * @param  array<string, mixed>  $entrada  corpo da requisição
+     * @param  callable(int): bool  $podeDelegarGrupo  o operador alcança o grupo (id)? Ver usuarioApiPodeDelegarGrupo()
      * @return array{ok: bool, status: int, message: string, dados: array<string, mixed>}
      */
-    function usuarioApiPlanoEdicao($usuarios, int $idLogado, int $idAlvo, bool $podeGerir, array $entrada): array
+    function usuarioApiPlanoEdicao($usuarios, int $idLogado, int $idAlvo, bool $podeGerir, array $entrada, callable $podeDelegarGrupo): array
     {
         $erro = static fn (int $status, string $message): array => ['ok' => false, 'status' => $status, 'message' => $message, 'dados' => []];
         $texto = static fn ($valor): string => is_scalar($valor) ? trim((string) $valor) : '';
@@ -59,6 +65,19 @@ if (! function_exists('usuarioApiPlanoEdicao')) {
         }
         if (! $proprio && ! $podeGerir) {
             return $erro(401, 'Você não está autorizado a Editar Usuários!');
+        }
+        if (! $proprio) {
+            $motivo = usuarioPodeSerEditadoPor($idAlvo, $idLogado);
+            if ($motivo !== null) {
+                return $erro(403, $motivo);
+            }
+            $alvo = $usuarios->getById($idAlvo);
+            if (! $alvo) {
+                return $erro(404, 'Usuário não encontrado.');
+            }
+            if (! $podeDelegarGrupo((int) $alvo->permissoes_id)) {
+                return $erro(403, 'Este usuário tem permissões que você não tem. Só quem as tem pode alterá-lo.');
+            }
         }
 
         $obrigatorios = ['nome', 'rg', 'cpf', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado', 'email', 'telefone'];
@@ -98,6 +117,10 @@ if (! function_exists('usuarioApiPlanoEdicao')) {
                 return $erro(400, 'O usuário super admin não pode ser desativado nem sair do grupo Administrador!');
             }
 
+            if ((int) $grupo !== (int) $alvo->permissoes_id && ! $podeDelegarGrupo((int) $grupo)) {
+                return $erro(403, 'Você só pode escolher grupos com permissões que você também tem.');
+            }
+
             $dados['situacao'] = (int) $situacao;
             $dados['permissoes_id'] = (int) $grupo;
             if (array_key_exists('dataExpiracao', $entrada)) {
@@ -124,6 +147,31 @@ if (! function_exists('usuarioApiPlanoEdicao')) {
         }
 
         return ['ok' => true, 'status' => 200, 'message' => '', 'dados' => $dados];
+    }
+}
+
+if (! function_exists('usuarioApiPodeDelegarGrupo')) {
+    /**
+     * O operador da API alcança o grupo de permissões? Mesma regra do painel
+     * (MY_Controller::podeDelegarGrupo, #2879): o administrador (usuário
+     * principal ou grupo Administrador) delega tudo; os demais, só grupos cujas
+     * permissões ele também tem. Grupo inexistente nunca é alcançado.
+     *
+     * @param  object  $permissoes  Permissoes_model (getById)
+     */
+    function usuarioApiPodeDelegarGrupo($permissoes, int $idLogado, int $grupoLogado, int $idGrupo): bool
+    {
+        $grupo = $idGrupo > 0 ? $permissoes->getById($idGrupo) : null;
+        if (! $grupo) {
+            return false;
+        }
+        if ($idLogado === USUARIO_SUPER_ADMIN || $grupoLogado === PERMISSAO_ADMIN) {
+            return true;
+        }
+
+        $meu = $permissoes->getById($grupoLogado);
+
+        return delegacaoPermitida(false, permissoesMarcadas($meu->permissoes ?? null), permissoesMarcadas($grupo->permissoes ?? null));
     }
 }
 
