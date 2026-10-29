@@ -1,6 +1,7 @@
 <?php
 
 require_once APPPATH . 'models/Usuarios_model.php';
+require_once APPPATH . 'models/Permissoes_model.php';
 require_once APPPATH . 'helpers/usuarios_helper.php';
 require_once APPPATH . 'helpers/api_helper.php';
 
@@ -12,13 +13,15 @@ final class ApiSegurancaTest extends MaposTestCase
 {
     private const SENHA = 'senha-atual-123';
 
+    private bool $gruposCriados = false;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->db->query('CREATE TABLE usuarios (idUsuarios INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, rg TEXT, cpf TEXT, cep TEXT, rua TEXT, numero TEXT,
             bairro TEXT, cidade TEXT, estado TEXT, email TEXT, telefone TEXT, celular TEXT, dataExpiracao TEXT, situacao INTEGER, permissoes_id INTEGER,
-            senha TEXT, token_versao INTEGER NOT NULL DEFAULT 0)');
+            senha TEXT, dataCadastro TEXT, url_image_user TEXT, token_versao INTEGER NOT NULL DEFAULT 0)');
         $this->db->query('CREATE TABLE logs (idLogs INTEGER PRIMARY KEY AUTOINCREMENT, usuario TEXT, tarefa TEXT, ip TEXT)');
         $hash = password_hash(self::SENHA, PASSWORD_DEFAULT);
         $this->db->query('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?), (?, ?, ?), (?, ?, ?)', [
@@ -50,7 +53,7 @@ final class ApiSegurancaTest extends MaposTestCase
     {
         $plano = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo([
             'permissoes_id' => '1', 'situacao' => '1', 'dataExpiracao' => '2099-01-01',
-        ]));
+        ]), fn () => true);
 
         $this->assertTrue($plano['ok']);
         $this->assertArrayNotHasKey('permissoes_id', $plano['dados']);
@@ -61,7 +64,7 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testQuemTemCUsuarioTambemNaoMudaOProprioGrupo(): void
     {
-        $plano = usuarioApiPlanoEdicao($this->usuarios(), 1, 1, true, $this->corpo(['email' => 'admin@x.com', 'permissoes_id' => '9', 'situacao' => '0']));
+        $plano = usuarioApiPlanoEdicao($this->usuarios(), 1, 1, true, $this->corpo(['email' => 'admin@x.com', 'permissoes_id' => '9', 'situacao' => '0']), fn () => true);
 
         $this->assertTrue($plano['ok']);
         $this->assertArrayNotHasKey('permissoes_id', $plano['dados']);
@@ -70,7 +73,7 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testSemCUsuarioNaoEditaOutroUsuario(): void
     {
-        $plano = usuarioApiPlanoEdicao($this->usuarios(), 2, 3, false, $this->corpo(['permissoes_id' => '1', 'situacao' => '1']));
+        $plano = usuarioApiPlanoEdicao($this->usuarios(), 2, 3, false, $this->corpo(['permissoes_id' => '1', 'situacao' => '1']), fn () => true);
 
         $this->assertFalse($plano['ok']);
         $this->assertSame(401, $plano['status']);
@@ -78,7 +81,7 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testComCUsuarioMudaGrupoSituacaoEExpiracaoDeOutro(): void
     {
-        $plano = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '2', 'situacao' => '0', 'dataExpiracao' => '2030-12-31']));
+        $plano = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '2', 'situacao' => '0', 'dataExpiracao' => '2030-12-31']), fn () => true);
 
         $this->assertTrue($plano['ok']);
         $this->assertSame(2, $plano['dados']['permissoes_id']);
@@ -88,9 +91,9 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testGerenciarExigeSituacaoEGrupoValidos(): void
     {
-        $semGrupo = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'situacao' => '1']));
-        $grupoRuim = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'situacao' => '1', 'permissoes_id' => '1 OR 1=1']));
-        $situacaoRuim = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'situacao' => '7', 'permissoes_id' => '2']));
+        $semGrupo = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'situacao' => '1']), fn () => true);
+        $grupoRuim = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'situacao' => '1', 'permissoes_id' => '1 OR 1=1']), fn () => true);
+        $situacaoRuim = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'situacao' => '7', 'permissoes_id' => '2']), fn () => true);
 
         $this->assertFalse($semGrupo['ok']);
         $this->assertFalse($grupoRuim['ok']);
@@ -99,8 +102,8 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testSuperAdminNaoSaiDoGrupoNemEDesativado(): void
     {
-        $desativar = usuarioApiPlanoEdicao($this->usuarios(), 2, 1, true, $this->corpo(['email' => 'admin@x.com', 'permissoes_id' => '1', 'situacao' => '0']));
-        $rebaixar = usuarioApiPlanoEdicao($this->usuarios(), 2, 1, true, $this->corpo(['email' => 'admin@x.com', 'permissoes_id' => '2', 'situacao' => '1']));
+        $desativar = usuarioApiPlanoEdicao($this->usuarios(), 2, 1, true, $this->corpo(['email' => 'admin@x.com', 'permissoes_id' => '1', 'situacao' => '0']), fn () => true);
+        $rebaixar = usuarioApiPlanoEdicao($this->usuarios(), 2, 1, true, $this->corpo(['email' => 'admin@x.com', 'permissoes_id' => '2', 'situacao' => '1']), fn () => true);
 
         $this->assertFalse($desativar['ok']);
         $this->assertFalse($rebaixar['ok']);
@@ -108,9 +111,9 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testEmailJaUsadoPorOutroUsuarioEhRecusado(): void
     {
-        $outro = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['email' => 'ADMIN@x.com']));
-        $proprio = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['email' => 'tecnico@x.com']));
-        $invalido = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['email' => 'nao-e-email']));
+        $outro = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['email' => 'ADMIN@x.com']), fn () => true);
+        $proprio = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['email' => 'tecnico@x.com']), fn () => true);
+        $invalido = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['email' => 'nao-e-email']), fn () => true);
 
         $this->assertFalse($outro['ok']);
         $this->assertTrue($proprio['ok'], 'Manter o próprio e-mail é permitido.');
@@ -119,9 +122,9 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testSenhaPropriaExigeASenhaAtualEFicaComHash(): void
     {
-        $semAtual = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'nova-senha-456']));
-        $atualErrada = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => 'errada']));
-        $ok = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => self::SENHA]));
+        $semAtual = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'nova-senha-456']), fn () => true);
+        $atualErrada = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => 'errada']), fn () => true);
+        $ok = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => self::SENHA]), fn () => true);
 
         $this->assertFalse($semAtual['ok']);
         $this->assertSame(403, $atualErrada['status']);
@@ -132,7 +135,7 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testSenhaDeOutroUsuarioComCUsuarioTambemVaiComHash(): void
     {
-        $plano = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '2', 'situacao' => '1', 'senha' => 'definida-pelo-admin']));
+        $plano = usuarioApiPlanoEdicao($this->usuarios(), 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '2', 'situacao' => '1', 'senha' => 'definida-pelo-admin']), fn () => true);
 
         $this->assertTrue($plano['ok']);
         $this->assertTrue(password_verify('definida-pelo-admin', $plano['dados']['senha']));
@@ -140,7 +143,7 @@ final class ApiSegurancaTest extends MaposTestCase
 
     public function testSenhaCurtaEhRecusada(): void
     {
-        $plano = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'curta', 'senha_atual' => self::SENHA]));
+        $plano = usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $this->corpo(['senha' => 'curta', 'senha_atual' => self::SENHA]), fn () => true);
 
         $this->assertFalse($plano['ok']);
     }
@@ -150,7 +153,7 @@ final class ApiSegurancaTest extends MaposTestCase
         $corpo = $this->corpo();
         unset($corpo['nome']);
 
-        $this->assertFalse(usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $corpo)['ok']);
+        $this->assertFalse(usuarioApiPlanoEdicao($this->usuarios(), 2, 2, false, $corpo, fn () => true)['ok']);
     }
 
     public function testSenhaConfereLeOHashSemExpor(): void
@@ -226,7 +229,7 @@ final class ApiSegurancaTest extends MaposTestCase
     public function testTrocarAPropriaSenhaGravaEAuditaMesmoComOTokenInvalidado(): void
     {
         $usuarios = $this->usuariosComTokens();
-        $plano = usuarioApiPlanoEdicao($usuarios, 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => self::SENHA]));
+        $plano = usuarioApiPlanoEdicao($usuarios, 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => self::SENHA]), fn () => true);
         $this->assertTrue($plano['ok']);
 
         $this->assertTrue(usuarioApiGravarEdicao($usuarios, $this->auditoria(2, 0), 'Tecnico', 2, $plano['dados']));
@@ -243,7 +246,7 @@ final class ApiSegurancaTest extends MaposTestCase
     public function testAuditarSemONomeDepoisDeInvalidarOTokenFalha(): void
     {
         $usuarios = $this->usuariosComTokens();
-        $plano = usuarioApiPlanoEdicao($usuarios, 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => self::SENHA]));
+        $plano = usuarioApiPlanoEdicao($usuarios, 2, 2, false, $this->corpo(['senha' => 'nova-senha-456', 'senha_atual' => self::SENHA]), fn () => true);
         $usuarios->edit('usuarios', $plano['dados'], 'idUsuarios', 2);
 
         $this->expectExceptionMessage('Faça o login novamente!');
@@ -253,7 +256,7 @@ final class ApiSegurancaTest extends MaposTestCase
     public function testEditarOutroUsuarioAuditaComONomeDeQuemEditou(): void
     {
         $usuarios = $this->usuariosComTokens();
-        $plano = usuarioApiPlanoEdicao($usuarios, 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '2', 'situacao' => '0']));
+        $plano = usuarioApiPlanoEdicao($usuarios, 1, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '2', 'situacao' => '0']), fn () => true);
 
         $this->assertTrue(usuarioApiGravarEdicao($usuarios, $this->auditoria(1, 0), 'Admin', 3, $plano['dados']));
 
@@ -280,5 +283,92 @@ final class ApiSegurancaTest extends MaposTestCase
         $this->assertSame(1, $limpo->itens[0]['id']);
         $this->assertNull(apiSemSenha(null));
         $this->assertSame(['a' => 1], apiSemSenha(['a' => 1, 'senha' => 'x']));
+    }
+
+    /** Grupos: 1 Administrador, 2 gerente de usuários (cUsuario + vCliente), 3 com cUsuario + vCliente + cPermissao (mais que o 2). */
+    private function gruposDeTeste(): Permissoes_model
+    {
+        if (! $this->gruposCriados) {
+            $this->criarGrupos();
+            $this->gruposCriados = true;
+        }
+        $model = $this->makeInstance(Permissoes_model::class);
+        $model->db = $this->db;
+
+        return $model;
+    }
+
+    private function criarGrupos(): void
+    {
+        $this->db->query('CREATE TABLE permissoes (idPermissao INTEGER PRIMARY KEY, nome TEXT, permissoes TEXT, situacao INTEGER DEFAULT 1)');
+        $this->db->query('INSERT INTO permissoes (idPermissao, nome, permissoes) VALUES (1, ?, ?), (2, ?, ?), (3, ?, ?)', [
+            'Administrador', json_encode(array_fill_keys(permissoesCodigos(), '1')),
+            'Gerente', json_encode(['cUsuario' => '1', 'vCliente' => '1']),
+            'Gerente+', json_encode(['cUsuario' => '1', 'vCliente' => '1', 'cPermissao' => '1']),
+        ]);
+    }
+
+    private function podeDelegar(int $idLogado, int $grupoLogado): callable
+    {
+        $grupos = $this->gruposDeTeste();
+
+        return fn (int $idGrupo): bool => usuarioApiPodeDelegarGrupo($grupos, $idLogado, $grupoLogado, $idGrupo);
+    }
+
+    public function testOperadorSemSerAdminNaoConcedeGrupoComMaisPermissoes(): void
+    {
+        $this->db->query('UPDATE usuarios SET permissoes_id = 2 WHERE idUsuarios = 2');
+        $this->db->query('UPDATE usuarios SET permissoes_id = 2 WHERE idUsuarios = 3');
+        $podeDelegar = $this->podeDelegar(2, 2);
+
+        $paraAdmin = usuarioApiPlanoEdicao($this->usuarios(), 2, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '1', 'situacao' => '1']), $podeDelegar);
+        $paraMaior = usuarioApiPlanoEdicao($this->usuarios(), 2, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '3', 'situacao' => '1']), $podeDelegar);
+        $paraIgual = usuarioApiPlanoEdicao($this->usuarios(), 2, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '2', 'situacao' => '1']), $podeDelegar);
+
+        $this->assertFalse($paraAdmin['ok']);
+        $this->assertSame(403, $paraAdmin['status']);
+        $this->assertFalse($paraMaior['ok']);
+        $this->assertTrue($paraIgual['ok']);
+    }
+
+    public function testOperadorNaoEditaUsuarioDeGrupoMaior(): void
+    {
+        $this->db->query('UPDATE usuarios SET permissoes_id = 2 WHERE idUsuarios = 2');
+        $this->db->query('UPDATE usuarios SET permissoes_id = 1 WHERE idUsuarios = 3');
+
+        $plano = usuarioApiPlanoEdicao($this->usuarios(), 2, 3, true, $this->corpo(['email' => 'outro@x.com', 'permissoes_id' => '1', 'situacao' => '1', 'senha' => 'tomada-de-conta-1']), $this->podeDelegar(2, 2));
+
+        $this->assertFalse($plano['ok']);
+        $this->assertSame(403, $plano['status']);
+        $this->assertArrayNotHasKey('senha', $plano['dados']);
+    }
+
+    public function testSoOSuperAdminAlteraASenhaDoSuperAdmin(): void
+    {
+        $this->db->query('UPDATE usuarios SET permissoes_id = 1 WHERE idUsuarios = 1');
+        $this->db->query('UPDATE usuarios SET permissoes_id = 1 WHERE idUsuarios = 2');
+
+        // Outro administrador (grupo Administrador, mas não o usuário principal) também fica de fora.
+        $outroAdmin = usuarioApiPlanoEdicao($this->usuarios(), 2, 1, true, $this->corpo(['email' => 'admin@x.com', 'permissoes_id' => '1', 'situacao' => '1', 'senha' => 'tomada-de-conta-1']), $this->podeDelegar(2, 1));
+        $proprio = usuarioApiPlanoEdicao($this->usuarios(), 1, 1, true, $this->corpo(['email' => 'admin@x.com', 'senha' => 'nova-senha-do-admin', 'senha_atual' => self::SENHA]), $this->podeDelegar(1, 1));
+
+        $this->assertFalse($outroAdmin['ok']);
+        $this->assertSame(403, $outroAdmin['status']);
+        $this->assertTrue($proprio['ok']);
+    }
+
+    public function testAdministradorDelegaQualquerGrupoExistenteMasNaoUmInexistente(): void
+    {
+        $podeDelegar = $this->podeDelegar(1, 1);
+
+        $this->assertTrue($podeDelegar(1));
+        $this->assertTrue($podeDelegar(3));
+        $this->assertFalse($podeDelegar(99));
+        $this->assertFalse($podeDelegar(0));
+    }
+
+    public function testOperadorComGrupoAdministradorDelegaTudo(): void
+    {
+        $this->assertTrue($this->podeDelegar(2, 1)(3));
     }
 }
