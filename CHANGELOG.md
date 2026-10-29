@@ -6,6 +6,13 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.2.1] - 2026-10-29
+
+Correção nas configurações. Sem migration e sem variável nova no `.env`.
+
+### Fixed
+- Configurações que ainda não tinham linha no banco (ex.: modo e tema de cor padrão em instalações pelo `banco.sql`) agora são gravadas, em vez de a tela confirmar sem salvar. #3040 [@cabralwms](https://github.com/cabralwms)
+
 ## [5.2.0] - 2026-10-27
 
 Temas de cor, cards de resumo com tendência e novos filtros nos relatórios. Tem uma migration (`20261027000000_add_tema_cor`): depois de atualizar, use "Atualizar banco de dados" na aba Sistema. Sem variável nova no `.env`.
