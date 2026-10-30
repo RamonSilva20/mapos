@@ -164,7 +164,7 @@ class Financeiro_model extends CI_Model
     }
 
     /**
-     * Lançamentos em aberto do vencimento mais antigo para o mais novo, com o
+     * Lançamentos em aberto do vencimento mais novo para o mais antigo, com o
      * líquido, para a lista do painel inicial (#2847).
      */
     public function proximosPendentes(int $limite): array
@@ -174,8 +174,8 @@ class Financeiro_model extends CI_Model
             ->select('(' . self::LIQUIDO . ') AS liquido', false)
             ->from('lancamentos')
             ->group_start()->where('lancamentos.baixado', 0)->or_where('lancamentos.baixado IS NULL', null, false)->group_end()
-            ->order_by('lancamentos.data_vencimento', 'ASC')
-            ->order_by('lancamentos.idLancamentos', 'ASC')
+            ->order_by('lancamentos.data_vencimento', 'DESC')
+            ->order_by('lancamentos.idLancamentos', 'DESC')
             ->limit($limite)
             ->get()
             ->result();

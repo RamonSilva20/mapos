@@ -24,6 +24,21 @@
  */
 $caixa = 'rounded-xl border border-border bg-surface p-4 sm:p-6';
 
+// Cor da bolinha de contagem de cada aba, na variante do status (facilita
+// identificar o status pela cor). Classes com nome completo para o Tailwind
+// enxergar; variantes azulescuro/roxo só existem com as cores de status novas.
+$contagemAbaCor = [
+    'success' => 'bg-success-soft text-success-ink',
+    'warning' => 'bg-warning-soft text-warning-ink',
+    'danger' => 'bg-danger-soft text-danger-ink',
+    'info' => 'bg-info-soft text-info-ink',
+    'progress' => 'bg-progress-soft text-progress-ink',
+    'neutral' => 'bg-neutral-soft text-neutral-ink',
+    'azulescuro' => 'bg-azulescuro-soft text-azulescuro-ink',
+    'roxo' => 'bg-roxo-soft text-roxo-ink',
+];
+$contagemAbaClasse = static fn (string $variante): string => 'inline-flex min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-semibold leading-5 tabular-nums ' . ($contagemAbaCor[$variante] ?? $contagemAbaCor['neutral']);
+
 // Tendência e sparkline do "Saldo do mês": só quando a série do ano (balanço)
 // está disponível e é o ano atual.
 $saldoTrend = null;
@@ -149,24 +164,29 @@ if ($pode['os']) {
             <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-os-status">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <h2 id="titulo-os-status" class="text-heading-sm text-text">OS por status</h2>
-                    <?= component('button', ['label' => 'Ver OS', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os')]) ?>
-                </div>
-                <?php if ($os_grafico === []) { ?>
-                    <?= component('empty-state', ['title' => 'Nenhuma OS cadastrada', 'message' => 'As OS aparecem aqui por status.', 'icon' => 'chart-pie', 'class' => 'border-0']) ?>
-                <?php } else { ?>
-                    <div class="relative mx-auto mt-4 aspect-square max-w-72">
-                        <canvas data-grafico="os" role="img" aria-label="Gráfico de OS por status"></canvas>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <?php // Mês atual ⇄ mês passado (#3037): troca a série do gráfico (mapos/painelGraficoOs).?>
+                        <div class="inline-flex rounded-md border border-border p-0.5" role="group" aria-label="Mês do gráfico de OS" data-grafico-mes data-grafico-mes-url="<?= e(site_url('mapos/painelGraficoOs')) ?>">
+                            <button type="button" data-grafico-mes-opcao="atual" aria-pressed="<?= ($os_mes ?? 'atual') === 'passado' ? 'false' : 'true' ?>" class="rounded px-2.5 py-1 text-caption font-medium text-muted hover:text-text aria-pressed:bg-surface-subtle aria-pressed:font-semibold aria-pressed:text-text focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring">Mês atual</button>
+                            <button type="button" data-grafico-mes-opcao="passado" aria-pressed="<?= ($os_mes ?? 'atual') === 'passado' ? 'true' : 'false' ?>" class="rounded px-2.5 py-1 text-caption font-medium text-muted hover:text-text aria-pressed:bg-surface-subtle aria-pressed:font-semibold aria-pressed:text-text focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring">Mês passado</button>
+                        </div>
+                        <?php // Qtd. ⇄ R$ (#3037): quantidade ou valor; em R$ o botão de ocultar valores desabilita o modo (painel/painel.js).?>
+                        <div class="inline-flex rounded-md border border-border p-0.5" role="group" aria-label="Medida do gráfico de OS" data-grafico-toggle="os">
+                            <button type="button" data-grafico-modo="qtd" aria-pressed="true" class="rounded px-2.5 py-1 text-caption font-medium text-muted hover:text-text aria-pressed:bg-surface-subtle aria-pressed:font-semibold aria-pressed:text-text focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring">Qtd.</button>
+                            <button type="button" data-grafico-modo="valor" aria-pressed="false" class="rounded px-2.5 py-1 text-caption font-medium text-muted hover:text-text aria-pressed:bg-surface-subtle aria-pressed:font-semibold aria-pressed:text-text focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-40">R$</button>
+                        </div>
                     </div>
-                    <div class="sr-only"><table>
-                        <caption>OS por status</caption>
-                        <thead><tr><th scope="col">Status</th><th scope="col">OS</th></tr></thead>
-                        <tbody>
-                            <?php foreach ($os_grafico as $fatia) { ?>
-                                <tr><td><?= e($fatia['status']) ?></td><td><?= e($fatia['total']) ?></td></tr>
-                            <?php } ?>
-                        </tbody>
-                    </table></div>
-                <?php } ?>
+                </div>
+                <div class="relative mx-auto mt-4 aspect-square max-w-72" data-grafico-os-area>
+                    <canvas data-grafico="os" role="img" aria-label="Gráfico de OS por status"></canvas>
+                    <p data-grafico-os-vazio hidden class="absolute inset-0 flex items-center justify-center text-center text-caption text-muted">Nenhuma OS neste mês.</p>
+                </div>
+                <details class="mt-4">
+                    <summary class="cursor-pointer text-caption text-muted hover:text-text">Ver como tabela</summary>
+                    <div class="mt-2 overflow-x-auto" data-grafico-os-tabela>
+                        <?php $this->load->view('mapos/partes/painel-os-tabela', ['os_grafico' => $os_grafico]); ?>
+                    </div>
+                </details>
             </section>
         </div>
     <?php } ?>
@@ -215,24 +235,18 @@ if ($pode['os']) {
         <?php if ($pode['os']) { ?>
             <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-lista-os">
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 id="titulo-lista-os" class="text-heading-sm text-text">OS em andamento</h2>
+                    <h2 id="titulo-lista-os" class="text-heading-sm text-text">Ordens de serviço</h2>
                     <?= component('button', ['label' => 'Ver todas', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('os')]) ?>
                 </div>
-                <div class="mt-3">
-                    <?= component('data-table', [
-                        'caption' => 'OS em andamento, pela data de entrega',
-                        'dense' => true,
-                        'rows' => $os_lista,
-                        'columns' => [
-                            ['label' => 'Nº', 'align' => 'right', 'nowrap' => true, 'render' => fn ($o) => component('link', ['label' => (string) $o->idOs, 'href' => site_url('os/visualizar/' . (int) $o->idOs)])],
-                            ['label' => 'Cliente', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($o) => (string) ($o->nomeCliente ?? 'Cliente removido')],
-                            ['label' => 'Entrega', 'align' => 'right', 'nowrap' => true, 'render' => fn ($o) => $o->dataFinal !== null && substr((string) $o->dataFinal, 0, 10) < $hoje
-                                ? component('pill-status', ['label' => 'Atrasada · ' . dataBr($o->dataFinal), 'variant' => 'warning'])
-                                : ($o->dataFinal !== null ? dataBr($o->dataFinal) : '—')],
-                            ['label' => 'Status', 'nowrap' => true, 'render' => fn ($o) => component('pill-status', osStatusPill($o->status))],
-                        ],
-                        'empty' => component('empty-state', ['title' => 'Nenhuma OS em andamento', 'message' => 'OS abertas, aprovadas, em andamento ou aguardando peças aparecem aqui.', 'icon' => 'wrench', 'class' => 'border-0']),
-                    ]) ?>
+                <div role="tablist" aria-label="Status das ordens de serviço" data-painel-abas="os" data-painel-url="<?= e(site_url('mapos/painelOs')) ?>" class="mt-3 flex gap-1 overflow-x-auto shadow-[inset_0_-1px_0_var(--color-border)] [scrollbar-width:none]">
+                    <?php foreach (painelStatusAbas(painelAbasStatus(PAINEL_OS_ABAS), $os_abas_contagem, $os_status_ativo) as $aba) { ?>
+                        <button type="button" role="tab" id="aba-os-<?= e(md5($aba['status'])) ?>" aria-selected="<?= $aba['active'] ? 'true' : 'false' ?>" aria-controls="painel-lista-os" tabindex="<?= $aba['active'] ? '0' : '-1' ?>" data-painel-aba data-status="<?= e($aba['status']) ?>" class="relative inline-flex items-center gap-2 whitespace-nowrap rounded-t-md px-3.5 py-3 text-[0.9375rem] leading-tight font-medium text-muted hover:text-text aria-selected:font-semibold aria-selected:text-text after:absolute after:inset-x-2.5 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent aria-selected:after:bg-primary focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring">
+                            <?= e($aba['status']) ?><span class="<?= e($contagemAbaClasse($aba['variante'])) ?>" data-painel-aba-contagem="<?= e($aba['status']) ?>"><?= e((string) $aba['count']) ?></span>
+                        </button>
+                    <?php } ?>
+                </div>
+                <div id="painel-lista-os" role="tabpanel" aria-label="Lista de ordens de serviço" aria-live="polite" class="mt-3 min-h-40" data-painel-lista="os">
+                    <?php $this->load->view('mapos/partes/painel-os', ['os_lista' => $os_lista, 'hoje' => $hoje, 'acoes_os' => $acoes_os]); ?>
                 </div>
             </section>
         <?php } ?>
@@ -240,22 +254,18 @@ if ($pode['os']) {
         <?php if ($pode['vendas']) { ?>
             <section class="<?= e($caixa) ?> min-w-0" aria-labelledby="titulo-lista-vendas">
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 id="titulo-lista-vendas" class="text-heading-sm text-text">Vendas em aberto</h2>
+                    <h2 id="titulo-lista-vendas" class="text-heading-sm text-text">Vendas</h2>
                     <?= component('button', ['label' => 'Ver todas', 'variant' => 'ghost', 'size' => 'sm', 'href' => site_url('vendas')]) ?>
                 </div>
-                <div class="mt-3">
-                    <?= component('data-table', [
-                        'caption' => 'Vendas em aberto, da mais recente',
-                        'dense' => true,
-                        'rows' => $vendas_lista,
-                        'columns' => [
-                            ['label' => 'Nº', 'align' => 'right', 'nowrap' => true, 'render' => fn ($v) => component('link', ['label' => (string) $v->idVendas, 'href' => site_url('vendas/visualizar/' . (int) $v->idVendas)])],
-                            ['label' => 'Cliente', 'class' => 'min-w-32 [overflow-wrap:anywhere]', 'render' => fn ($v) => (string) ($v->nomeCliente ?? 'Cliente removido')],
-                            ['label' => 'Data', 'align' => 'right', 'nowrap' => true, 'render' => fn ($v) => dataBr($v->dataVenda)],
-                            ['label' => 'Status', 'nowrap' => true, 'render' => fn ($v) => component('pill-status', osStatusPill($v->status))],
-                        ],
-                        'empty' => component('empty-state', ['title' => 'Nenhuma venda em aberto', 'message' => 'Vendas ainda não faturadas aparecem aqui.', 'icon' => 'shopping-cart', 'class' => 'border-0']),
-                    ]) ?>
+                <div role="tablist" aria-label="Status das vendas" data-painel-abas="vendas" data-painel-url="<?= e(site_url('mapos/painelVendas')) ?>" class="mt-3 flex gap-1 overflow-x-auto shadow-[inset_0_-1px_0_var(--color-border)] [scrollbar-width:none]">
+                    <?php foreach (painelStatusAbas(painelAbasStatus(PAINEL_VENDAS_ABAS), $vendas_por_status, $vendas_status_ativo) as $aba) { ?>
+                        <button type="button" role="tab" id="aba-vendas-<?= e(md5($aba['status'])) ?>" aria-selected="<?= $aba['active'] ? 'true' : 'false' ?>" aria-controls="painel-lista-vendas" tabindex="<?= $aba['active'] ? '0' : '-1' ?>" data-painel-aba data-status="<?= e($aba['status']) ?>" class="relative inline-flex items-center gap-2 whitespace-nowrap rounded-t-md px-3.5 py-3 text-[0.9375rem] leading-tight font-medium text-muted hover:text-text aria-selected:font-semibold aria-selected:text-text after:absolute after:inset-x-2.5 after:bottom-0 after:h-0.5 after:rounded-full after:bg-transparent aria-selected:after:bg-primary focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring">
+                            <?= e($aba['status']) ?><span class="<?= e($contagemAbaClasse($aba['variante'])) ?>"><?= e((string) $aba['count']) ?></span>
+                        </button>
+                    <?php } ?>
+                </div>
+                <div id="painel-lista-vendas" role="tabpanel" aria-label="Lista de vendas" aria-live="polite" class="mt-3 min-h-40" data-painel-lista="vendas">
+                    <?php $this->load->view('mapos/partes/painel-vendas', ['vendas_lista' => $vendas_lista, 'acoes_vendas' => $acoes_vendas]); ?>
                 </div>
             </section>
         <?php } ?>
@@ -268,7 +278,7 @@ if ($pode['os']) {
                 </div>
                 <div class="mt-3">
                     <?= component('data-table', [
-                        'caption' => 'Lançamentos em aberto, do vencimento mais antigo',
+                        'caption' => 'Lançamentos em aberto, do vencimento mais recente',
                         'dense' => true,
                         'rows' => $lancamentos_lista,
                         'columns' => [

@@ -26,11 +26,12 @@ test('moeda em reais', () => {
 
 test('configuracaoBalanco: barras de receitas e despesas e o saldo em linha', () => {
     const balanco = { meses: ['Jan'], receitas: [10], despesas: [4], saldo: [6] };
-    const cores = { texto: 't', grade: 'g', receitas: 'r', despesas: 'd', saldo: 's' };
+    const cores = { texto: 't', grade: 'g', receitas: 'r', despesas: 'd', saldo: 's', receitasSoft: 'rs', despesasSoft: 'ds' };
     const config = configuracaoBalanco(balanco, cores);
 
     assert.deepEqual(config.data.datasets.map((d) => [d.type, d.label, d.data[0]]), [['bar', 'Receitas', 10], ['bar', 'Despesas', 4], ['line', 'Saldo', 6]]);
-    assert.equal(config.data.datasets[0].backgroundColor, 'r');
+    assert.equal(config.data.datasets[0].backgroundColor, 'rs', 'barra com fundo soft (glass)');
+    assert.equal(config.data.datasets[0].borderColor, 'r', 'borda na cor-base');
     assert.equal(config.options.scales.y.ticks.callback(10).replace(/\s/g, ' '), 'R$ 10,00');
 });
 
@@ -40,7 +41,16 @@ test('configuracaoOs: uma cor por variante do status', () => {
 
     assert.equal(config.type, 'doughnut');
     assert.deepEqual(config.data.labels, ['Aberto', 'Faturado']);
-    assert.deepEqual(config.data.datasets[0].backgroundColor, ['cor-info', 'cor-success']);
+    assert.deepEqual(config.data.datasets[0].backgroundColor, ['cor-info-soft', 'cor-success-soft'], 'fatia com fundo soft (glass)');
+    assert.deepEqual(config.data.datasets[0].borderColor, ['cor-info', 'cor-success'], 'borda na cor-base');
+    assert.deepEqual(config.data.datasets[0].data, [2, 1], 'Sem modo, usa a quantidade.');
+});
+
+test('configuracaoOs: o modo valor usa o R$ de cada fatia', () => {
+    const fatias = [{ status: 'Aberto', total: 2, valor: 350, variante: 'info' }, { status: 'Faturado', total: 1, valor: 500, variante: 'success' }];
+    const config = configuracaoOs(fatias, (variante) => `cor-${variante}`, { texto: 't', fundo: 'f' }, 'valor');
+
+    assert.deepEqual(config.data.datasets[0].data, [350, 500]);
 });
 
 test('alternarValores: oculta e mostra de novo', () => {
