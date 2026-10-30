@@ -13,9 +13,9 @@ final class ClienteFichaTest extends MaposTestCase
     public static function statusDeOs(): array
     {
         return [
-            ['Orçamento', 'neutral'], ['Negociação', 'warning'], ['Aberto', 'info'], ['Aprovado', 'info'],
-            ['Em Andamento', 'progress'], ['Aguardando Peças', 'warning'], ['Finalizado', 'success'],
-            ['Faturado', 'success'], ['Cancelado', 'danger'],
+            ['Orçamento', 'neutral'], ['Negociação', 'warning'], ['Aberto', 'success'], ['Aprovado', 'info'],
+            ['Em Andamento', 'progress'], ['Aguardando Peças', 'warning'], ['Finalizado', 'azulescuro'],
+            ['Faturado', 'roxo'], ['Cancelado', 'danger'],
         ];
     }
 
@@ -29,7 +29,8 @@ final class ClienteFichaTest extends MaposTestCase
     {
         $this->assertSame(['label' => 'Garantia', 'variant' => 'neutral'], osStatusPill('Garantia'));
         $this->assertSame(['label' => 'Sem status', 'variant' => 'neutral'], osStatusPill(null));
-        // Nenhum status usa o laranja (primary), reservado às ações.
+        // Nenhum status usa 'primary' (a cor de ação da marca); as cores por
+        // status (#3044) são variantes próprias (azulescuro, roxo).
         $this->assertNotContains('primary', OS_STATUS_VARIANTES);
     }
 
