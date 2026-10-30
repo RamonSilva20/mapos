@@ -41,15 +41,32 @@ class Mapos extends MY_Controller
             : [];
 
         if ($pode['os']) {
-            $osPorStatus = $this->mapos_model->contarPorStatus('os');
-            $painel['os_por_status'] = $osPorStatus;
-            $painel['os_grafico'] = painelOsPorStatus($osPorStatus);
-            $painel['os_lista'] = $this->mapos_model->osParaPainel(PAINEL_OS_ANDAMENTO, 8);
+            // Contagem total por status (os cards de resumo não dependem do mês).
+            $painel['os_por_status'] = $this->mapos_model->contarPorStatus('os');
+            // Gráfico de OS por status (#3037): abre no mês atual (pela data de
+            // abertura); o filtro de mês troca a série via mapos/painelGraficoOs.
+            $painel['os_mes'] = 'atual';
+            $intervaloOs = painelMesIntervalo($painel['os_mes'], $hoje);
+            $osResumo = $this->mapos_model->osResumoPorStatus($intervaloOs['inicio'], $intervaloOs['fim']);
+            $painel['os_grafico'] = painelOsGrafico($osResumo);
+            // Seção de OS por status (#3036): abas e lista seguem o mês (pela data
+            // de abertura) para não mostrar OS antigas. A contagem das abas vem do
+            // mesmo resumo do gráfico.
+            $osAbasContagem = array_map(static fn ($r) => (int) ($r['qtd'] ?? 0), $osResumo);
+            $painel['os_abas_contagem'] = $osAbasContagem;
+            // A lista abre no status pedido na URL (fallback sem JS) ou no primeiro
+            // que tem registro no mês.
+            $painel['os_status_ativo'] = painelStatusAtivo(painelAbasStatus(PAINEL_OS_ABAS), $osAbasContagem, $this->input->get('os_tab'));
+            $painel['os_lista'] = $this->mapos_model->osParaPainel([$painel['os_status_ativo']], 8, $intervaloOs['inicio'], $intervaloOs['fim']);
+            $painel['acoes_os'] = ['ver' => $this->permite('vOs'), 'editar' => $this->permite('eOs'), 'imprimir' => $this->permite('vOs')];
         }
 
         if ($pode['vendas']) {
-            $painel['vendas_por_status'] = $this->mapos_model->contarPorStatus('vendas');
-            $painel['vendas_lista'] = $this->mapos_model->vendasParaPainel(PAINEL_VENDAS_ABERTAS, 8);
+            $vendasPorStatus = $this->mapos_model->contarPorStatus('vendas');
+            $painel['vendas_por_status'] = $vendasPorStatus;
+            $painel['vendas_status_ativo'] = painelStatusAtivo(painelAbasStatus(PAINEL_VENDAS_ABAS), $vendasPorStatus, $this->input->get('vendas_tab'));
+            $painel['vendas_lista'] = $this->mapos_model->vendasParaPainel([$painel['vendas_status_ativo']], 8);
+            $painel['acoes_vendas'] = ['ver' => $this->permite('vVenda'), 'editar' => $this->permite('eVenda'), 'imprimir' => $this->permite('vVenda')];
         }
 
         if ($pode['lancamentos'] || $pode['balanco']) {
@@ -87,6 +104,102 @@ class Mapos extends MY_Controller
         $this->data['view'] = 'mapos/painel';
 
         return $this->layout();
+    }
+
+    /**
+     * Lista de OS de um status para a seção do painel (#3036), em JSON
+     * { result, html }. As abas por status trocam a lista sem recarregar.
+     */
+    public function painelOs()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para visualizar O.S.']));
+        }
+
+        $this->load->helper(['os', 'painel']);
+        $status = listagemFiltros(['status' => PAINEL_OS_ABAS], $this->input->get())['status'] ?? null;
+
+        if ($status === null) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(422)
+                ->set_output(json_encode(['result' => false, 'message' => 'Status inválido.']));
+        }
+
+        // Mesmo filtro de mês do gráfico (#3037): a lista segue o mês escolhido,
+        // pela data de abertura, para não mostrar OS antigas.
+        $intervalo = painelMesIntervalo(painelMesValido($this->input->get('mes')), date('Y-m-d'));
+
+        $html = $this->load->view('mapos/partes/painel-os', [
+            'os_lista' => $this->mapos_model->osParaPainel([$status], 8, $intervalo['inicio'], $intervalo['fim']),
+            'hoje' => date('Y-m-d'),
+            'acoes_os' => ['ver' => $this->permite('vOs'), 'editar' => $this->permite('eOs'), 'imprimir' => $this->permite('vOs')],
+        ], true);
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['result' => true, 'html' => $html]));
+    }
+
+    /**
+     * Lista de vendas de um status para a seção do painel (#3036), em JSON
+     * { result, html }.
+     */
+    public function painelVendas()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para visualizar vendas.']));
+        }
+
+        $this->load->helper(['os', 'painel']);
+        $status = listagemFiltros(['status' => PAINEL_VENDAS_ABAS], $this->input->get())['status'] ?? null;
+
+        if ($status === null) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(422)
+                ->set_output(json_encode(['result' => false, 'message' => 'Status inválido.']));
+        }
+
+        $html = $this->load->view('mapos/partes/painel-vendas', [
+            'vendas_lista' => $this->mapos_model->vendasParaPainel([$status], 8),
+            'acoes_vendas' => ['ver' => $this->permite('vVenda'), 'editar' => $this->permite('eVenda'), 'imprimir' => $this->permite('vVenda')],
+        ], true);
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['result' => true, 'html' => $html]));
+    }
+
+    /**
+     * Série do gráfico de OS por status para um mês (#3037), em JSON
+     * { result, fatias, html }. O filtro Mês atual/Mês passado troca o gráfico
+     * (fatias) e a tabela (html) sem recarregar a página.
+     */
+    public function painelGraficoOs()
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(403)
+                ->set_output(json_encode(['result' => false, 'message' => 'Você não tem permissão para visualizar O.S.']));
+        }
+
+        $this->load->helper('painel');
+        $mes = painelMesValido($this->input->get('mes'));
+        $intervalo = painelMesIntervalo($mes, date('Y-m-d'));
+        $fatias = painelOsGrafico($this->mapos_model->osResumoPorStatus($intervalo['inicio'], $intervalo['fim']));
+        $html = $this->load->view('mapos/partes/painel-os-tabela', ['os_grafico' => $fatias], true);
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['result' => true, 'fatias' => $fatias, 'html' => $html]));
     }
 
     /**

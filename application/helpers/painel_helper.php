@@ -19,6 +19,16 @@ if (! defined('PAINEL_VENDAS_ABERTAS')) {
     define('PAINEL_VENDAS_ABERTAS', ['Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças']);
 }
 
+if (! defined('PAINEL_OS_ABAS')) {
+    // Status mostrados como abas na seção de OS do painel (#3036), nesta ordem.
+    define('PAINEL_OS_ABAS', ['Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado']);
+}
+
+if (! defined('PAINEL_VENDAS_ABAS')) {
+    // Status mostrados como abas na seção de Vendas do painel (#3036), nesta ordem.
+    define('PAINEL_VENDAS_ABAS', ['Aberto', 'Aprovado', 'Aguardando Peças', 'Finalizado']);
+}
+
 if (! defined('PAINEL_MESES')) {
     define('PAINEL_MESES', ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']);
 }
@@ -97,25 +107,151 @@ if (! function_exists('painelOsPorStatus')) {
      * (OS_STATUS_VARIANTES), só com os status que têm OS. Status fora da lista
      * vai no fim, em neutral.
      *
-     * @param  array<string, int>  $porStatus
-     * @return list<array{status: string, total: int, variante: string}>
+     * O valor por status (#3037), quando informado, entra em cada fatia para o
+     * modo R$ do gráfico; sem ele, a fatia só tem a quantidade (valor 0).
+     *
+     * @param  array<string, int>    $porStatus
+     * @param  array<string, float>  $valores  status => valor somado
+     * @return list<array{status: string, total: int, valor: float, variante: string}>
      */
-    function painelOsPorStatus(array $porStatus): array
+    function painelOsPorStatus(array $porStatus, array $valores = []): array
     {
         $fatias = [];
         foreach (OS_STATUS_VARIANTES as $status => $variante) {
             if ((int) ($porStatus[$status] ?? 0) > 0) {
-                $fatias[] = ['status' => $status, 'total' => (int) $porStatus[$status], 'variante' => $variante];
+                $fatias[] = ['status' => $status, 'total' => (int) $porStatus[$status], 'valor' => round((float) ($valores[$status] ?? 0), 2), 'variante' => $variante];
             }
         }
 
         foreach ($porStatus as $status => $total) {
             if (! array_key_exists($status, OS_STATUS_VARIANTES) && (int) $total > 0) {
-                $fatias[] = ['status' => (string) $status !== '' ? (string) $status : 'Sem status', 'total' => (int) $total, 'variante' => 'neutral'];
+                $fatias[] = ['status' => (string) $status !== '' ? (string) $status : 'Sem status', 'total' => (int) $total, 'valor' => round((float) ($valores[$status] ?? 0), 2), 'variante' => 'neutral'];
             }
         }
 
         return $fatias;
+    }
+}
+
+if (! function_exists('painelAbasStatus')) {
+    /**
+     * Subconjunto de OS_STATUS_VARIANTES (status => variante) na ordem de
+     * $status, para montar só as abas escolhidas das seções de OS/Vendas do
+     * painel (#3036). Status fora de OS_STATUS_VARIANTES vai em neutral.
+     *
+     * @param  list<string>  $status
+     * @return array<string, string>
+     */
+    function painelAbasStatus(array $status): array
+    {
+        $variantes = [];
+        foreach ($status as $s) {
+            $variantes[$s] = OS_STATUS_VARIANTES[$s] ?? 'neutral';
+        }
+
+        return $variantes;
+    }
+}
+
+if (! function_exists('painelStatusAtivo')) {
+    /**
+     * Status da aba aberta nas seções de OS/Vendas do painel (#3036): o pedido
+     * (query string) quando é um status válido; senão o primeiro status que tem
+     * registro; senão o primeiro da lista. Mantém a seção sempre com uma aba
+     * marcada, mesmo sem nada cadastrado.
+     *
+     * @param  array<string, string>  $variantes  status => variante (OS_STATUS_VARIANTES)
+     * @param  array<string, int>     $contagem   status => quantidade
+     * @param  mixed                  $pedido     ?status= da URL
+     */
+    function painelStatusAtivo(array $variantes, array $contagem, $pedido): string
+    {
+        $status = array_keys($variantes);
+        $texto = is_scalar($pedido) ? trim((string) $pedido) : '';
+
+        if ($texto !== '' && in_array($texto, $status, true)) {
+            return $texto;
+        }
+
+        foreach ($status as $s) {
+            if ((int) ($contagem[$s] ?? 0) > 0) {
+                return (string) $s;
+            }
+        }
+
+        return (string) ($status[0] ?? '');
+    }
+}
+
+if (! function_exists('painelStatusAbas')) {
+    /**
+     * Abas por status das seções de OS/Vendas do painel (#3036): uma aba por
+     * status na ordem do fluxo (OS_STATUS_VARIANTES), com a contagem (0 quando
+     * não há registro) e qual está aberta.
+     *
+     * @param  array<string, string>  $variantes  status => variante
+     * @param  array<string, int>     $contagem   status => quantidade
+     * @return list<array{status: string, variante: string, count: int, active: bool}>
+     */
+    function painelStatusAbas(array $variantes, array $contagem, string $ativo): array
+    {
+        $abas = [];
+        foreach ($variantes as $status => $variante) {
+            $abas[] = [
+                'status' => (string) $status,
+                'variante' => (string) $variante,
+                'count' => (int) ($contagem[$status] ?? 0),
+                'active' => (string) $status === $ativo,
+            ];
+        }
+
+        return $abas;
+    }
+}
+
+if (! function_exists('painelMesIntervalo')) {
+    /**
+     * Início e fim do mês escolhido no gráfico de OS por status (#3037):
+     * 'passado' é o mês anterior, qualquer outro valor é o mês de $hoje. O fim
+     * inclui o último dia até 23:59:59 (os.dataInicial costuma ter hora).
+     *
+     * @return array{inicio: string, fim: string}
+     */
+    function painelMesIntervalo(string $mes, string $hoje): array
+    {
+        $ts = strtotime($hoje) ?: time();
+        $base = $mes === 'passado' ? strtotime('first day of last month', $ts) : strtotime('first day of this month', $ts);
+
+        return ['inicio' => date('Y-m-01', $base), 'fim' => date('Y-m-t', $base) . ' 23:59:59'];
+    }
+}
+
+if (! function_exists('painelMesValido')) {
+    /** O mês pedido quando é 'atual' ou 'passado'; senão 'atual'. */
+    function painelMesValido($mes): string
+    {
+        return (is_scalar($mes) ? (string) $mes : '') === 'passado' ? 'passado' : 'atual';
+    }
+}
+
+if (! function_exists('painelOsGrafico')) {
+    /**
+     * Fatias do gráfico de OS por status a partir do resumo (qtd + valor) do
+     * Mapos_model::osResumoPorStatus() (#3037).
+     *
+     * @param  array<string, array{qtd: int, valor: float}>  $resumo
+     * @return list<array{status: string, total: int, valor: float, variante: string}>
+     */
+    function painelOsGrafico(array $resumo): array
+    {
+        $contagens = [];
+        $valores = [];
+        foreach ($resumo as $status => $dados) {
+            $contagens[$status] = (int) $dados['qtd'];
+            $valores[$status] = (float) $dados['valor'];
+        }
+
+        return painelOsPorStatus($contagens, $valores);
     }
 }
 

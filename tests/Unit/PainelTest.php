@@ -68,6 +68,45 @@ final class PainelTest extends MaposTestCase
         $this->assertSame([], painelOsPorStatus([]));
     }
 
+    public function testStatusAtivoDaAbaDoPainel(): void
+    {
+        $variantes = ['Aberto' => 'info', 'Em Andamento' => 'progress', 'Finalizado' => 'success'];
+        $contagem = ['Em Andamento' => 3, 'Finalizado' => 5];
+
+        $this->assertSame('Finalizado', painelStatusAtivo($variantes, $contagem, 'Finalizado'), 'Pedido válido vence.');
+        $this->assertSame('Em Andamento', painelStatusAtivo($variantes, $contagem, 'Inventado'), 'Pedido inválido cai no primeiro com registro.');
+        $this->assertSame('Em Andamento', painelStatusAtivo($variantes, $contagem, null));
+        $this->assertSame('Aberto', painelStatusAtivo($variantes, [], null), 'Sem registro, abre o primeiro da lista.');
+    }
+
+    public function testAbasPorStatusComContagemEAtiva(): void
+    {
+        $abas = painelStatusAbas(['Aberto' => 'info', 'Em Andamento' => 'progress', 'Finalizado' => 'success'], ['Aberto' => 2, 'Finalizado' => 5], 'Em Andamento');
+
+        $this->assertSame(['Aberto', 'Em Andamento', 'Finalizado'], array_column($abas, 'status'));
+        $this->assertSame([2, 0, 5], array_column($abas, 'count'), 'Status sem registro conta zero.');
+        $this->assertSame([false, true, false], array_column($abas, 'active'));
+        $this->assertSame(['info', 'progress', 'success'], array_column($abas, 'variante'));
+    }
+
+    public function testIntervaloDoMes(): void
+    {
+        $this->assertSame(['inicio' => '2026-10-01', 'fim' => '2026-10-31 23:59:59'], painelMesIntervalo('atual', '2026-10-15'));
+        $this->assertSame(['inicio' => '2026-09-01', 'fim' => '2026-09-30 23:59:59'], painelMesIntervalo('passado', '2026-10-15'));
+        $this->assertSame(['inicio' => '2026-02-01', 'fim' => '2026-02-28 23:59:59'], painelMesIntervalo('passado', '2026-03-10'), 'Fevereiro de ano não bissexto.');
+        $this->assertSame('atual', painelMesValido('qualquer'));
+        $this->assertSame('passado', painelMesValido('passado'));
+    }
+
+    public function testAbasStatusSubconjuntoDeVariantes(): void
+    {
+        $abas = painelAbasStatus(['Aberto', 'Finalizado', 'Inventado']);
+
+        $this->assertSame(['Aberto', 'Finalizado', 'Inventado'], array_keys($abas), 'Mantém a ordem pedida.');
+        $this->assertSame('neutral', $abas['Inventado'], 'Status fora de OS_STATUS_VARIANTES vai em neutral.');
+        $this->assertSame(OS_STATUS_VARIANTES['Aberto'], $abas['Aberto']);
+    }
+
     public function testEventoDaAgendaSoComTextoETotalComDesconto(): void
     {
         $os = (object) [
@@ -109,16 +148,23 @@ final class PainelTest extends MaposTestCase
     private function banco(): void
     {
         $this->db->query('CREATE TABLE clientes (idClientes INTEGER PRIMARY KEY AUTOINCREMENT, nomeCliente TEXT)');
-        $this->db->query('CREATE TABLE os (idOs INTEGER PRIMARY KEY AUTOINCREMENT, status TEXT, dataFinal TEXT, clientes_id INTEGER)');
+        $this->db->query('CREATE TABLE os (idOs INTEGER PRIMARY KEY AUTOINCREMENT, status TEXT, dataInicial TEXT, dataFinal TEXT, clientes_id INTEGER, valor_desconto REAL DEFAULT 0)');
+        $this->db->query('CREATE TABLE produtos_os (idProdutos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, preco REAL, quantidade REAL, subTotal REAL, desconto REAL DEFAULT 0)');
+        $this->db->query('CREATE TABLE servicos_os (idServicos_os INTEGER PRIMARY KEY AUTOINCREMENT, os_id INTEGER, preco REAL, quantidade REAL, subTotal REAL, desconto REAL DEFAULT 0)');
         $this->db->query('CREATE TABLE vendas (idVendas INTEGER PRIMARY KEY AUTOINCREMENT, status TEXT, dataVenda TEXT, clientes_id INTEGER)');
         $this->db->query('CREATE TABLE produtos (idProdutos INTEGER PRIMARY KEY AUTOINCREMENT, descricao TEXT, estoque INTEGER, estoqueMinimo INTEGER)');
         $this->db->query('CREATE TABLE lancamentos (idLancamentos INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT, descricao TEXT, cliente_fornecedor TEXT, data_vencimento TEXT,
             data_pagamento TEXT, baixado INTEGER, valor REAL, desconto REAL, valor_desconto REAL)');
 
         $this->db->query("INSERT INTO clientes (nomeCliente) VALUES ('Ana'), ('Bruno')");
-        $this->db->query("INSERT INTO os (status, dataFinal, clientes_id) VALUES
-            ('Aberto', '2026-10-20', 1), ('Em Andamento', '2026-10-05', 2), ('Aguardando Peças', NULL, 1),
-            ('Faturado', '2026-09-01', 1), ('Orçamento', '2026-10-01', 2), ('Aberto', '2026-10-05', 9)");
+        $this->db->query("INSERT INTO os (status, dataInicial, dataFinal, clientes_id) VALUES
+            ('Aberto', '2026-10-02', '2026-10-20', 1), ('Em Andamento', '2026-10-03', '2026-10-05', 2), ('Aguardando Peças', '2026-09-15', NULL, 1),
+            ('Faturado', '2026-09-20', '2026-09-01', 1), ('Orçamento', '2026-10-10', '2026-10-01', 2), ('Aberto', '2026-10-05', '2026-10-05', 9)");
+        // Valores por status (#3037): OS 1 (Aberto) 100+50, OS 6 (Aberto) 200;
+        // OS 4 (Faturado) com valor_desconto que prevalece sobre os itens.
+        $this->db->query('UPDATE os SET valor_desconto = 500 WHERE idOs = 4');
+        $this->db->query('INSERT INTO produtos_os (os_id, preco, quantidade, subTotal) VALUES (1, 100, 1, 100), (6, 200, 1, 200), (4, 999, 1, 999)');
+        $this->db->query('INSERT INTO servicos_os (os_id, preco, quantidade, subTotal) VALUES (1, 50, 1, 50)');
         $this->db->query("INSERT INTO vendas (status, dataVenda, clientes_id) VALUES ('Aberto', '2026-10-01', 1), ('Faturado', '2026-10-02', 2), ('Orçamento', '2026-10-03', 2)");
         $this->db->query("INSERT INTO produtos (descricao, estoque, estoqueMinimo) VALUES ('Cabo', 1, 5), ('Mouse', 5, 5), ('Teclado', 9, 5), ('Sem mínimo', 0, 0), ('Tela', -2, 3)");
         $this->db->query("INSERT INTO lancamentos (tipo, descricao, data_vencimento, data_pagamento, baixado, valor, desconto, valor_desconto) VALUES
@@ -156,6 +202,25 @@ final class PainelTest extends MaposTestCase
 
         $this->expectException(InvalidArgumentException::class);
         $mapos->contarPorStatus('usuarios');
+    }
+
+    public function testResumoPorStatusComMesEDescontoDaOs(): void
+    {
+        $this->banco();
+        $mapos = $this->mapos();
+
+        $todos = $mapos->osResumoPorStatus();
+        $this->assertSame(2, $todos['Aberto']['qtd']);
+        $this->assertSame(350.0, $todos['Aberto']['valor'], 'Soma dos itens das OS do status (100+50 e 200).');
+        $this->assertSame(500.0, $todos['Faturado']['valor'], 'O valor_desconto da OS prevalece sobre os itens.');
+        $this->assertSame(0.0, $todos['Orçamento']['valor'], 'Sem itens nem desconto, zero.');
+
+        // Só as OS abertas em outubro/2026 (pela dataInicial).
+        $outubro = $mapos->osResumoPorStatus('2026-10-01', '2026-10-31 23:59:59');
+        $chaves = array_keys($outubro);
+        sort($chaves);
+        $this->assertSame(['Aberto', 'Em Andamento', 'Orçamento'], $chaves, 'Faturado e Aguardando Peças foram abertas em setembro.');
+        $this->assertSame(350.0, $outubro['Aberto']['valor']);
     }
 
     private function ordenado(array $lista): array
@@ -200,22 +265,51 @@ final class PainelTest extends MaposTestCase
         $this->assertSame(190.0, array_sum($balanco['receitas']), 'Pendente e ano passado não entram.');
     }
 
-    public function testProximosPendentesDoVencimentoMaisAntigo(): void
+    public function testProximosPendentesDoVencimentoMaisRecente(): void
     {
         $this->banco();
 
         $linhas = $this->financeiro()->proximosPendentes(10);
-        $this->assertSame(['Pendente antigo', 'Pendente'], array_column($linhas, 'descricao'), 'baixado NULL conta como pendente.');
-        $this->assertSame(20.0, (float) $linhas[0]->liquido);
+        $this->assertSame(['Pendente', 'Pendente antigo'], array_column($linhas, 'descricao'), 'do vencimento mais novo para o mais antigo; baixado NULL conta como pendente.');
+        $this->assertSame(50.0, (float) $linhas[0]->liquido);
     }
 
     // --- View -----------------------------------------------------------
 
     private function renderizar(array $variaveis): string
     {
+        // Imita o loader do CodeIgniter só o bastante para a view e suas
+        // partes ($this->load->view, como em views/mapos/partes/painel-os.php).
         $carregador = new class() {
+            public object $load;
+
+            public function __construct()
+            {
+                $this->load = new class() {
+                    /** @var array<string, mixed> */
+                    public array $vars = [];
+
+                    public function view(string $nome, array $dados = [], bool $retornar = false): string
+                    {
+                        extract(array_merge($this->vars, $dados));
+                        ob_start();
+                        include APPPATH . 'views/' . $nome . '.php';
+                        $html = (string) ob_get_clean();
+
+                        if ($retornar) {
+                            return $html;
+                        }
+
+                        echo $html;
+
+                        return '';
+                    }
+                };
+            }
+
             public function render(array $variaveis): string
             {
+                $this->load->vars = $variaveis;
                 extract($variaveis);
                 ob_start();
                 include APPPATH . 'views/mapos/painel.php';
@@ -236,9 +330,15 @@ final class PainelTest extends MaposTestCase
             'pode' => ['os' => true, 'vendas' => true, 'lancamentos' => true, 'balanco' => true, 'produtos' => true],
             'os_por_status' => ['Aberto' => 2, 'Aguardando Peças' => 1, 'Orçamento' => 3],
             'os_grafico' => painelOsPorStatus(['Aberto' => 2, 'Aguardando Peças' => 1, 'Orçamento' => 3]),
+            'os_mes' => 'atual',
+            'os_abas_contagem' => ['Aberto' => 2, 'Aguardando Peças' => 1],
+            'os_status_ativo' => 'Aberto',
             'os_lista' => [(object) ['idOs' => 5, 'status' => 'Aberto', 'dataFinal' => '2026-10-01', 'clientes_id' => 1, 'nomeCliente' => 'Ana ' . $xss]],
+            'acoes_os' => ['ver' => true, 'editar' => true, 'imprimir' => true],
             'vendas_por_status' => ['Aberto' => 4],
+            'vendas_status_ativo' => 'Aberto',
             'vendas_lista' => [(object) ['idVendas' => 9, 'status' => 'Aberto', 'dataVenda' => '2026-10-02', 'clientes_id' => 1, 'nomeCliente' => 'Bia ' . $xss]],
+            'acoes_vendas' => ['ver' => true, 'editar' => true, 'imprimir' => true],
             'mes' => ['receitas' => 100.0, 'despesas' => 40.0, 'saldo' => 60.0],
             'visao_geral' => ['saldo_realizado' => 0.0, 'a_receber' => 12.5, 'a_pagar' => 0.0, 'descontos' => 0.0],
             'lancamentos_lista' => [(object) ['idLancamentos' => 3, 'tipo' => 'despesa', 'descricao' => 'Luz ' . $xss, 'cliente_fornecedor' => 'CPFL', 'data_vencimento' => '2026-10-01', 'liquido' => '80']],
