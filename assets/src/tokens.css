@@ -121,6 +121,14 @@
   --color-neutral: #79628c;
   --color-neutral-ink: var(--mapos-neutral-ink);
   --color-neutral-soft: var(--mapos-neutral-soft);
+  /* Cores por status (#3044): azul-escuro (Finalizado) e roxo (Faturado) têm
+     cor própria, além das variantes semânticas. */
+  --color-azulescuro: #1e40af;
+  --color-azulescuro-ink: var(--mapos-azulescuro-ink);
+  --color-azulescuro-soft: var(--mapos-azulescuro-soft);
+  --color-roxo: #9333ea;
+  --color-roxo-ink: var(--mapos-roxo-ink);
+  --color-roxo-soft: var(--mapos-roxo-soft);
 
   /* Marca e superfícies de entrada (login, área do cliente): fixas */
   --color-canvas-dark: #1f1633;
@@ -277,18 +285,22 @@
     --mapos-sidebar-ring: #3b82f6;
     --mapos-ring: #3b82f6;
 
-    --mapos-success-ink: #166534;
-    --mapos-success-soft: #e3f0e8;
-    --mapos-warning-ink: #854d0e;
-    --mapos-warning-soft: #f4ece1;
-    --mapos-danger-ink: #b91c1c;
-    --mapos-danger-soft: #fbe5e5;
-    --mapos-info-ink: #075985;
-    --mapos-info-soft: #e1edf4;
-    --mapos-progress-ink: #4a3f9e;
-    --mapos-progress-soft: #edecf8;
+    --mapos-success-ink: #136234;
+    --mapos-success-soft: #c9ecd5;
+    --mapos-warning-ink: #8a5207;
+    --mapos-warning-soft: #f6e3bf;
+    --mapos-danger-ink: #b31818;
+    --mapos-danger-soft: #f8d2d2;
+    --mapos-info-ink: #0a5a86;
+    --mapos-info-soft: #cde4f6;
+    --mapos-progress-ink: #443a93;
+    --mapos-progress-soft: #ddd8f7;
     --mapos-neutral-ink: #4b4560;
-    --mapos-neutral-soft: #efecf1;
+    --mapos-neutral-soft: #e4ddec;
+    --mapos-azulescuro-ink: #1e3a8a;
+    --mapos-azulescuro-soft: #d3ddf5;
+    --mapos-roxo-ink: #6b21a8;
+    --mapos-roxo-soft: #ecd9fb;
 
     --mapos-shadow-card: none;
     --mapos-shadow-overlay: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
@@ -346,6 +358,10 @@
     --mapos-progress-soft: #2b244c;
     --mapos-neutral-ink: #d6cfe0;
     --mapos-neutral-soft: #2f253e;
+    --mapos-azulescuro-ink: #9db8fc;
+    --mapos-azulescuro-soft: #18233f;
+    --mapos-roxo-ink: #d0bcfb;
+    --mapos-roxo-soft: #2b1d45;
 
     --mapos-shadow-card: none;
     --mapos-shadow-overlay: 0 10px 30px rgb(0 0 0 / 55%);
@@ -545,6 +561,8 @@
     --mapos-info-soft: #23353d;
     --mapos-progress-soft: #34333c;
     --mapos-neutral-soft: #39383a;
+    --mapos-azulescuro-soft: #31343e;
+    --mapos-roxo-soft: #38353e;
   }
 
   /* Entrada: sempre a marca, qualquer que seja o tema. */

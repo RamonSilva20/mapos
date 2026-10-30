@@ -2,21 +2,23 @@
 
 /**
  * Status de OS e vendas como pill-status (DESIGN.md: estado sempre com a
- * palavra, na paleta semântica, nunca em laranja).
+ * palavra). Cada status das OS tem cor própria (#3044) para leitura rápida.
  *
  *     component('pill-status', osStatusPill($os->status))
  */
 if (! defined('OS_STATUS_VARIANTES')) {
-    // Os status da v4, na ordem do fluxo de uma OS.
+    // Os status da v4, na ordem do fluxo de uma OS. Cor própria por status
+    // (#3044) para leitura rápida: além das semânticas, azul-escuro (Finalizado)
+    // e roxo (Faturado).
     define('OS_STATUS_VARIANTES', [
         'Orçamento' => 'neutral',
         'Negociação' => 'warning',
-        'Aberto' => 'info',
+        'Aberto' => 'success',
         'Aprovado' => 'info',
         'Em Andamento' => 'progress',
         'Aguardando Peças' => 'warning',
-        'Finalizado' => 'success',
-        'Faturado' => 'success',
+        'Finalizado' => 'azulescuro',
+        'Faturado' => 'roxo',
         'Cancelado' => 'danger',
     ]);
 }

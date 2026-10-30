@@ -136,16 +136,19 @@ export const TEMAS = {
 const STATUS_BASE = { success: '#15803d', warning: '#a16207', info: '#0369a1', progress: '#6a5fc1', neutral: '#79628c' };
 export const STATUS = {
   light: {
-    success: { ink: '#166534', soft: '#e3f0e8' }, warning: { ink: '#854d0e', soft: '#f4ece1' },
-    info: { ink: '#075985', soft: '#e1edf4' }, progress: { ink: '#4a3f9e', soft: '#edecf8' },
-    neutral: { ink: '#4b4560', soft: '#efecf1' },
-    danger: { ink: '#b91c1c', soft: '#fbe5e5' },
+    success: { ink: '#136234', soft: '#c9ecd5' }, warning: { ink: '#8a5207', soft: '#f6e3bf' },
+    info: { ink: '#0a5a86', soft: '#cde4f6' }, progress: { ink: '#443a93', soft: '#ddd8f7' },
+    neutral: { ink: '#4b4560', soft: '#e4ddec' },
+    danger: { ink: '#b31818', soft: '#f8d2d2' },
+    // Cores por status (#3044): cada status das OS com cor própria.
+    azulescuro: { ink: '#1e3a8a', soft: '#d3ddf5' }, roxo: { ink: '#6b21a8', soft: '#ecd9fb' },
   },
   dark: {
     success: { ink: '#4ade80', soft: '#1d3032' }, warning: { ink: '#facc15', soft: '#3a2d21' },
     info: { ink: '#38bdf8', soft: '#1b2b45' }, progress: { ink: '#b8b0f0', soft: '#2b244c' },
     neutral: { ink: '#d6cfe0', soft: '#2f253e' },
     danger: { ink: '#f87171', soft: '#391f2f' },
+    azulescuro: { ink: '#9db8fc', soft: '#18233f' }, roxo: { ink: '#d0bcfb', soft: '#2b1d45' },
   },
 };
 
@@ -186,7 +189,7 @@ for (const s of ['success', 'warning', 'neutral']) {
 }
 
 // Pill de cada status (pill-status): ink sobre soft, em todo tema × modo.
-for (const s of ['success', 'warning', 'danger', 'info', 'progress', 'neutral']) {
+for (const s of ['success', 'warning', 'danger', 'info', 'progress', 'neutral', 'azulescuro', 'roxo']) {
   PARES_KPI.push([`pill ${s}: ink on soft`, 4.5, (t, m, tema) => [ST(tema, m)[s].ink, ST(tema, m)[s].soft]]);
 }
 
