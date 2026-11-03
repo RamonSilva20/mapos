@@ -61,7 +61,7 @@ class Vendas_model extends CI_Model
     /**
      * pesquisa procura no nome e documento do cliente e, se for número, no Nº
      * da venda (o OR fica entre parênteses para não anular os outros filtros);
-     * status é um só; de e ate limitam a data da venda, inclusive.
+     * status é um só ou um grupo (painelGrupoStatus()); de e ate limitam a data da venda, inclusive.
      */
     private function aplicarFiltros(array $filtros): void
     {
@@ -81,7 +81,12 @@ class Vendas_model extends CI_Model
         }
 
         if (($filtros['status'] ?? '') !== '') {
-            $this->db->where('vendas.status', $filtros['status']);
+            $grupo = painelGrupoStatus($filtros['status']);
+            if ($grupo !== null) {
+                $this->db->where_in('vendas.status', $grupo);
+            } else {
+                $this->db->where('vendas.status', $filtros['status']);
+            }
         }
 
         if (($filtros['de'] ?? '') !== '') {

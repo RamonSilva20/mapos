@@ -9,7 +9,7 @@ class Vendas extends MY_Controller
     /** Filtros da listagem, na query string (listagemFiltros()). */
     public const FILTROS = [
         'pesquisa' => 'texto',
-        'status' => ['Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
+        'status' => ['abertas', 'Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
         'de' => 'texto',
         'ate' => 'texto',
     ];
@@ -18,7 +18,7 @@ class Vendas extends MY_Controller
     {
         parent::__construct();
 
-        $this->load->helper(['form', 'os', 'vendas']);
+        $this->load->helper(['form', 'os', 'vendas', 'painel']);
         $this->load->model('vendas_model');
         $this->data['menuVendas'] = 'Vendas';
     }

@@ -92,7 +92,7 @@ $resumo = ($total === 1 ? '1 venda' : number_format($total, 0, ',', '.') . ' ven
             'name' => 'status',
             'label' => 'Status',
             'placeholder' => 'Todos',
-            'options' => array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
+            'options' => ['abertas' => 'Em aberto (todas)'] + array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
             'selected' => $filtros['status'] ?? null,
         ]) ?>
         <?= component('input', [

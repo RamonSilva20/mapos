@@ -2,6 +2,7 @@
 
 require_once APPPATH . 'models/Vendas_model.php';
 require_once APPPATH . 'controllers/Vendas.php';
+require_once APPPATH . 'helpers/painel_helper.php';
 
 /**
  * Listagem de vendas migrada (#2843): filtros, total calculado no SQL, a
@@ -90,6 +91,15 @@ final class VendasListagemTest extends MaposTestCase
         $this->assertSame([2, 1], $this->ids($model->listar(['de' => '2026-10-01', 'ate' => '2026-10-02'], 10, 0)), 'Os dois limites entram.');
     }
 
+    public function testFiltroPorGrupoDeVendasEmAbertoDoPainel(): void
+    {
+        $model = $this->model();
+
+        $this->assertSame([2, 1], $this->ids($model->listar(['status' => 'abertas'], 10, 0)), 'Sem Faturado nem Cancelado.');
+        $this->assertSame(2, $model->contar(['status' => 'abertas']));
+        $this->assertSame([], listagemFiltros(Vendas::FILTROS, ['status' => 'andamento']), 'Grupo de OS não vale em vendas.');
+    }
+
     public function testContarUsaOsMesmosFiltros(): void
     {
         $model = $this->model();
@@ -139,7 +149,7 @@ final class VendasListagemTest extends MaposTestCase
 
     public function testFiltrosDaListagemSaoOsStatusDeOs(): void
     {
-        $this->assertSame(array_keys(OS_STATUS_VARIANTES), Vendas::FILTROS['status']);
+        $this->assertSame(['abertas', ...array_keys(OS_STATUS_VARIANTES)], Vendas::FILTROS['status']);
         $this->assertSame(['pesquisa', 'status', 'de', 'ate'], array_keys(Vendas::FILTROS));
     }
 

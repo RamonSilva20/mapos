@@ -273,6 +273,20 @@ final class PainelTest extends MaposTestCase
         $this->assertStringNotContainsString(' style=', $html);
     }
 
+    public function testCardsAbremAListagemJaFiltrada(): void
+    {
+        $html = $this->renderizar($this->dadosCompletos());
+
+        $this->assertStringContainsString('href="http://mapos.test/index.php/os?status=andamento"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/os?status=orcamento"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/vendas?status=abertas"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/financeiro/lancamentos?periodo=mes"', $html);
+        $this->assertSame(PAINEL_OS_ANDAMENTO, painelGrupoStatus('andamento'));
+        $this->assertSame(PAINEL_OS_ORCAMENTO, painelGrupoStatus('orcamento'));
+        $this->assertSame(PAINEL_VENDAS_ABERTAS, painelGrupoStatus('abertas'));
+        $this->assertNull(painelGrupoStatus('Aberto'));
+    }
+
     public function testSemPermissoesNadaDosModulosAparece(): void
     {
         $html = $this->renderizar(['hoje' => '2026-10-09', 'pode' => ['os' => false, 'vendas' => false, 'lancamentos' => false, 'balanco' => false, 'produtos' => false]]);
