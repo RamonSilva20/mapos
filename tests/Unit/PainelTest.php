@@ -64,7 +64,7 @@ final class PainelTest extends MaposTestCase
         $fatias = painelOsPorStatus(['Faturado' => 2, 'Aberto' => 1, 'Orçamento' => 0, 'Inventado' => 3, '' => 1]);
 
         $this->assertSame(['Aberto', 'Faturado', 'Inventado', 'Sem status'], array_column($fatias, 'status'));
-        $this->assertSame(['info', 'success', 'neutral', 'neutral'], array_column($fatias, 'variante'));
+        $this->assertSame(['success', 'roxo', 'neutral', 'neutral'], array_column($fatias, 'variante'));
         $this->assertSame([], painelOsPorStatus([]));
     }
 

@@ -222,7 +222,7 @@ if (! function_exists('componenteEspecificacoes')) {
                     'variant' => 'neutral',
                     'dot' => true,
                 ],
-                'opcoes' => ['variant' => ['success', 'warning', 'danger', 'info', 'progress', 'neutral']],
+                'opcoes' => ['variant' => ['success', 'warning', 'danger', 'info', 'progress', 'neutral', 'azulescuro', 'roxo']],
             ],
             'kpi-card' => [
                 'obrigatorias' => ['label', 'value'],

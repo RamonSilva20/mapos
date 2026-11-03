@@ -626,7 +626,7 @@ final class OsTelaTest extends MaposTestCase
         $this->assertStringContainsString('Status atual', $html);
         // As anteriores usam a cor do próprio status, sem anel.
         $this->assertStringContainsString('bg-progress-ink', $html);
-        $this->assertStringContainsString('bg-info-ink', $html);
+        $this->assertStringContainsString('bg-success-ink', $html);
         $this->assertSame(1, substr_count($html, 'ring-4'));
         // O estado continua sendo dito por palavra (pill), e a bolinha é decorativa.
         $this->assertStringContainsString('Cancelado', $html);
