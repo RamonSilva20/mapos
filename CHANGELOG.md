@@ -6,6 +6,15 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.2.3] - 2026-11-03
+
+Correções no painel e na atualização. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
+
+### Fixed
+- A atualização pela tela mantém o bloco do `.htaccess` em que o cPanel (MultiPHP Manager) guarda a versão do PHP do domínio. Antes ele sumia e o sistema parava com "Your Composer dependencies require a PHP version >= 8.5.0" até a versão ser escolhida de novo na hospedagem. #3046 #3047
+- Os cards "OS em andamento", "Orçamentos" e "Vendas em aberto" do painel abrem a listagem já filtrada, com os mesmos status que o card soma. #3037 #3048
+- CSS e JS locais saem com a versão do sistema na URL (`?v=`), então depois de atualizar o navegador não reusa o `painel.js` antigo. Era o que fazia o botão "Ocultar valores" aparecer e não funcionar. #3028 #3049
+
 ## [5.2.2] - 2026-10-29
 
 Correção de segurança na API de usuários. Sem migration nem variável nova no `.env`. **Atualize se usa a API (`API_ENABLED=true`).**
