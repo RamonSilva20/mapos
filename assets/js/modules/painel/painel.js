@@ -55,8 +55,8 @@ export function configuracaoBalanco(balanco, cores) {
         data: {
             labels: balanco.meses,
             datasets: [
-                { type: 'bar', label: 'Receitas', data: balanco.receitas, backgroundColor: cores.receitas, borderRadius: 4, order: 2 },
-                { type: 'bar', label: 'Despesas', data: balanco.despesas, backgroundColor: cores.despesas, borderRadius: 4, order: 2 },
+                { type: 'bar', label: 'Receitas', data: balanco.receitas, backgroundColor: cores.receitasSoft, borderColor: cores.receitas, borderWidth: 1.5, borderRadius: 4, order: 2 },
+                { type: 'bar', label: 'Despesas', data: balanco.despesas, backgroundColor: cores.despesasSoft, borderColor: cores.despesas, borderWidth: 1.5, borderRadius: 4, order: 2 },
                 { type: 'line', label: 'Saldo', data: balanco.saldo, borderColor: cores.saldo, backgroundColor: cores.saldo, pointRadius: 3, tension: 0, order: 1 },
             ],
         },
@@ -75,30 +75,62 @@ export function configuracaoBalanco(balanco, cores) {
     };
 }
 
-/** Configuração do gráfico de OS por status (rosca), uma cor por variante do pill-status. */
-export function configuracaoOs(fatias, corDaVariante, cores) {
+/**
+ * Configuração do gráfico de OS por status (rosca), uma cor por variante do
+ * pill-status. O modo (#3037) escolhe a medida: 'qtd' usa a quantidade de OS,
+ * 'valor' usa o valor somado (R$) de cada status.
+ */
+export function configuracaoOs(fatias, corDaVariante, cores, modo = 'qtd') {
+    // Total no centro da rosca (#3037): a soma das fatias (quantidade ou R$).
+    const centro = {
+        id: 'centroOs',
+        afterDraw(chart) {
+            const dados = chart.data.datasets[0]?.data ?? [];
+            const total = dados.reduce((soma, valor) => soma + (Number(valor) || 0), 0);
+            const arco = chart.getDatasetMeta(0).data[0];
+            if (!arco) {
+                return;
+            }
+
+            const { ctx } = chart;
+            const fonte = getComputedStyle(chart.canvas).fontFamily;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = corDoToken('text');
+            ctx.font = `600 24px ${fonte}`;
+            ctx.fillText(modo === 'valor' ? moeda(total) : String(total), arco.x, arco.y - 8);
+            ctx.fillStyle = corDoToken('muted');
+            ctx.font = `500 12px ${fonte}`;
+            ctx.fillText(modo === 'valor' ? 'total' : 'OS', arco.x, arco.y + 12);
+            ctx.restore();
+        },
+    };
+
     return {
         type: 'doughnut',
         data: {
             labels: fatias.map((fatia) => fatia.status),
             datasets: [{
-                data: fatias.map((fatia) => fatia.total),
-                backgroundColor: fatias.map((fatia) => corDaVariante(fatia.variante)),
-                borderColor: cores.fundo,
+                data: fatias.map((fatia) => (modo === 'valor' ? Number(fatia.valor) || 0 : fatia.total)),
+                backgroundColor: fatias.map((fatia) => corDaVariante(fatia.variante + '-soft')),
+                borderColor: fatias.map((fatia) => corDaVariante(fatia.variante)),
                 borderWidth: 2,
             }],
         },
         options: {
             maintainAspectRatio: false,
-            cutout: '60%',
+            cutout: '68%',
             plugins: {
                 legend: { position: 'bottom', labels: { color: cores.texto, usePointStyle: true } },
+                tooltip: { callbacks: { label: (contexto) => `${contexto.label}: ${modo === 'valor' ? moeda(contexto.parsed) : contexto.parsed}` } },
             },
         },
+        plugins: [centro],
     };
 }
 
-async function iniciarGraficos(raiz, dados, doc) {
+async function iniciarGraficos(raiz, dados, doc, get) {
     const telas = [...raiz.querySelectorAll('[data-grafico]')];
     if (telas.length === 0 || !dados) {
         return;
@@ -107,25 +139,129 @@ async function iniciarGraficos(raiz, dados, doc) {
     await carregarScript(new URL('chart.js/chart.umd.min.js', VENDOR).href, doc);
     const { Chart } = globalThis;
     const graficos = [];
+    const html = doc.documentElement;
+    let modoOs = 'qtd';
 
     const desenhar = () => {
         graficos.splice(0).forEach((grafico) => grafico.destroy());
 
         const estilo = getComputedStyle(doc.documentElement);
         const cor = (nome) => corDoToken(nome, estilo);
-        const cores = { texto: cor('muted'), grade: cor('border'), fundo: cor('surface'), receitas: cor('success'), despesas: cor('warning'), saldo: cor('info') };
+        const cores = { texto: cor('muted'), grade: cor('border'), fundo: cor('surface'), receitas: cor('success'), despesas: cor('warning'), saldo: cor('info'), receitasSoft: cor('success-soft'), despesasSoft: cor('warning-soft') };
         Chart.defaults.font.family = getComputedStyle(doc.body).fontFamily;
 
         for (const tela of telas) {
             if (tela.dataset.grafico === 'balanco' && dados.balanco) {
                 graficos.push(new Chart(tela, configuracaoBalanco(dados.balanco, cores)));
-            } else if (tela.dataset.grafico === 'os' && dados.os) {
-                graficos.push(new Chart(tela, configuracaoOs(dados.os, cor, cores)));
+            } else if (tela.dataset.grafico === 'os') {
+                // Mês sem OS (#3037): esconde a rosca e mostra o aviso.
+                const area = tela.closest('[data-grafico-os-area]');
+                const vazio = area?.querySelector('[data-grafico-os-vazio]');
+                const temDados = Array.isArray(dados.os) && dados.os.length > 0;
+                tela.hidden = !temDados;
+                if (vazio) {
+                    vazio.hidden = temDados;
+                }
+                if (temDados) {
+                    graficos.push(new Chart(tela, configuracaoOs(dados.os, cor, cores, modoOs)));
+                }
             }
         }
     };
 
     desenhar();
+
+    // Toggle Qtd. ⇄ R$ do gráfico de OS (#3037); o botão de olho desabilita o R$.
+    const toggle = raiz.querySelector('[data-grafico-toggle="os"]');
+    if (toggle) {
+        const botoes = [...toggle.querySelectorAll('[data-grafico-modo]')];
+        const botaoValor = toggle.querySelector('[data-grafico-modo="valor"]');
+
+        const aplicarModo = (modo) => {
+            modoOs = modo;
+            for (const botao of botoes) {
+                botao.setAttribute('aria-pressed', botao.dataset.graficoModo === modo ? 'true' : 'false');
+            }
+            desenhar();
+        };
+
+        toggle.addEventListener('click', (evento) => {
+            const botao = evento.target.closest('[data-grafico-modo]');
+            if (botao && !botao.disabled && botao.dataset.graficoModo !== modoOs) {
+                aplicarModo(botao.dataset.graficoModo);
+            }
+        });
+
+        // O botão de olho oculta valores: o R$ fica indisponível e volta para Qtd.
+        const sincronizarValores = () => {
+            const ocultos = html.getAttribute('data-valores') === 'ocultos';
+            if (botaoValor) {
+                botaoValor.disabled = ocultos;
+            }
+            if (ocultos && modoOs === 'valor') {
+                aplicarModo('qtd');
+            }
+        };
+
+        sincronizarValores();
+        new MutationObserver(sincronizarValores).observe(html, { attributes: true, attributeFilter: ['data-valores'] });
+    }
+
+    // Filtro Mês atual ⇄ Mês passado do gráfico de OS (#3037): recarrega a série
+    // e a tabela de mapos/painelGraficoOs, sem recarregar a página.
+    const mesGrupo = raiz.querySelector('[data-grafico-mes]');
+    if (mesGrupo && typeof get === 'function') {
+        const url = mesGrupo.dataset.graficoMesUrl;
+        const opcoes = [...mesGrupo.querySelectorAll('[data-grafico-mes-opcao]')];
+        const tabela = raiz.querySelector('[data-grafico-os-tabela]');
+        let carregando = false;
+
+        const trocarMes = (mes, botao) => {
+            if (carregando || !url) {
+                return;
+            }
+
+            carregando = true;
+            const alvo = new URL(url, doc.location.href);
+            alvo.searchParams.set('mes', mes);
+
+            get(alvo.pathname + alvo.search)
+                .then((resposta) => {
+                    if (resposta && Array.isArray(resposta.fatias)) {
+                        dados.os = resposta.fatias;
+                        desenhar();
+                    }
+                    if (tabela && resposta && resposta.html !== undefined) {
+                        tabela.innerHTML = resposta.html;
+                    }
+                    for (const opcao of opcoes) {
+                        opcao.setAttribute('aria-pressed', opcao === botao ? 'true' : 'false');
+                    }
+                    // Avisa a seção de OS por status (#3036) para seguir o mês:
+                    // atualiza as contagens das abas e recarrega a lista ativa.
+                    raiz.dispatchEvent(new CustomEvent('painel:mes', { detail: { mes, fatias: resposta?.fatias ?? [] } }));
+                })
+                .catch((erro) => {
+                    mostrarToast({
+                        mensagem: erro instanceof ErroHttp && erro.status === 403
+                            ? 'Sua sessão expirou. Recarregue a página.'
+                            : 'Não foi possível carregar o gráfico. Tente de novo.',
+                        variante: 'danger',
+                    }, doc);
+                })
+                .finally(() => {
+                    carregando = false;
+                });
+        };
+
+        mesGrupo.addEventListener('click', (evento) => {
+            const botao = evento.target.closest('[data-grafico-mes-opcao]');
+            if (botao && botao.getAttribute('aria-pressed') !== 'true') {
+                trocarMes(botao.dataset.graficoMesOpcao, botao);
+            }
+        });
+    }
+
     // O modo claro/escuro troca a classe "dark" do <html>.
     new MutationObserver(desenhar).observe(doc.documentElement, { attributes: true, attributeFilter: ['class'] });
 }
@@ -211,6 +347,111 @@ async function iniciarAgenda(raiz, { doc, get }) {
     filtro?.addEventListener('change', () => agenda.refetchEvents());
 }
 
+/** Mês escolhido no filtro do gráfico de OS (#3037): 'passado' ou 'atual'. */
+function mesSelecionado(raiz) {
+    const sel = raiz.querySelector('[data-grafico-mes-opcao][aria-pressed="true"]');
+
+    return sel?.dataset.graficoMesOpcao === 'passado' ? 'passado' : 'atual';
+}
+
+/**
+ * Seções de OS e Vendas por status (#3036): clicar numa aba carrega a lista
+ * daquele status de mapos/painelOs|painelVendas (JSON { result, html }) e troca
+ * o tabpanel, sem recarregar. Setas ← → andam pelas abas (padrão APG). Sem
+ * JavaScript cada aba é só a contagem e o servidor já abre a primeira.
+ *
+ * A seção de OS segue o filtro Mês atual/passado (#3037): manda o mês em cada
+ * carga e, quando o mês muda (evento 'painel:mes'), atualiza as contagens das
+ * abas e recarrega a lista ativa — assim não lista OS antigas.
+ */
+function iniciarListas(raiz, { doc, get }) {
+    for (const abas of raiz.querySelectorAll('[data-painel-abas]')) {
+        const url = abas.dataset.painelUrl;
+        const painel = raiz.querySelector(`[data-painel-lista="${abas.dataset.painelAbas}"]`);
+        if (!url || !painel) {
+            continue;
+        }
+
+        const seguirMes = abas.dataset.painelAbas === 'os';
+        const tabs = [...abas.querySelectorAll('[data-painel-aba]')];
+
+        const trocar = (aba) => {
+            for (const t of tabs) {
+                const ativa = t === aba;
+                t.setAttribute('aria-selected', ativa ? 'true' : 'false');
+                t.tabIndex = ativa ? 0 : -1;
+            }
+
+            painel.setAttribute('aria-busy', 'true');
+            const alvo = new URL(url, doc.location.href);
+            alvo.searchParams.set('status', aba.dataset.status);
+            if (seguirMes) {
+                alvo.searchParams.set('mes', mesSelecionado(raiz));
+            }
+
+            get(alvo.pathname + alvo.search)
+                .then((resposta) => {
+                    if (resposta && resposta.html !== undefined) {
+                        painel.innerHTML = resposta.html;
+                    }
+                })
+                .catch((erro) => {
+                    mostrarToast({
+                        mensagem: erro instanceof ErroHttp && erro.status === 403
+                            ? 'Sua sessão expirou. Recarregue a página.'
+                            : 'Não foi possível carregar a lista. Tente de novo.',
+                        variante: 'danger',
+                    }, doc);
+                })
+                .finally(() => painel.removeAttribute('aria-busy'));
+        };
+
+        abas.addEventListener('click', (evento) => {
+            const aba = evento.target.closest('[data-painel-aba]');
+            if (aba && aba.getAttribute('aria-selected') !== 'true') {
+                trocar(aba);
+            }
+        });
+
+        abas.addEventListener('keydown', (evento) => {
+            if (evento.key !== 'ArrowRight' && evento.key !== 'ArrowLeft') {
+                return;
+            }
+
+            evento.preventDefault();
+            const atual = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+            const passo = evento.key === 'ArrowRight' ? 1 : -1;
+            const proxima = tabs[(atual + passo + tabs.length) % tabs.length];
+            if (proxima) {
+                proxima.focus();
+                trocar(proxima);
+            }
+        });
+
+        // Mês trocado no gráfico (#3037): atualiza as contagens das abas (badge)
+        // com os totais do mês e recarrega a lista da aba ativa.
+        if (seguirMes) {
+            raiz.addEventListener('painel:mes', (evento) => {
+                const fatias = evento.detail?.fatias;
+                if (Array.isArray(fatias)) {
+                    const total = new Map(fatias.map((f) => [f.status, f.total]));
+                    for (const t of tabs) {
+                        const badge = t.querySelector('[data-painel-aba-contagem]');
+                        if (badge) {
+                            badge.textContent = String(total.get(t.dataset.status) ?? 0);
+                        }
+                    }
+                }
+
+                const ativa = tabs.find((t) => t.getAttribute('aria-selected') === 'true');
+                if (ativa) {
+                    trocar(ativa);
+                }
+            });
+        }
+    }
+}
+
 export const CHAVE_VALORES = 'mapos:valores-ocultos';
 
 /** Próximo estado do botão de olho: ocultar ↔ mostrar. */
@@ -256,6 +497,7 @@ export default function iniciar(raiz, { doc = document, get = getPadrao } = {}) 
     };
 
     iniciarValores(doc);
-    iniciarGraficos(raiz, dados, doc).catch(avisar);
+    iniciarGraficos(raiz, dados, doc, get).catch(avisar);
     iniciarAgenda(raiz, { doc, get }).catch(avisar);
+    iniciarListas(raiz, { doc, get });
 }

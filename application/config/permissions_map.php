@@ -110,6 +110,9 @@ $config['permissions_map'] = [
         'pesquisar' => '*',
         'buscaRapida' => '*',
         'calendario' => 'vOs',
+        'painelOs' => 'vOs',
+        'painelVendas' => 'vVenda',
+        'painelGraficoOs' => 'vOs',
         'uploadUserImage' => 'cUsuario',
         'backup' => 'cBackup',
         // Cadastrar, editar e trocar o logo do emitente são POST em emitente.

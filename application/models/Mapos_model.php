@@ -257,16 +257,64 @@ class Mapos_model extends CI_Model
     }
 
     /**
-     * OS nos status pedidos, da entrega mais próxima para a mais distante (sem
-     * data de entrega no fim), para a lista do painel.
+     * Quantidade e valor das OS por status (#3037), opcionalmente só as abertas
+     * (os.dataInicial) num intervalo — o filtro de mês do gráfico do painel. O
+     * valor é o mesmo "valor da OS" das telas (o desconto total quando há; senão
+     * produtos + serviços, já com o desconto por item).
+     *
+     * @return array<string, array{qtd: int, valor: float}>  status => resumo
      */
-    public function osParaPainel(array $status, int $limite): array
+    public function osResumoPorStatus(?string $inicio = null, ?string $fim = null): array
     {
-        return $this->db
+        // Com o desconto individual dos itens (#2880), o valor do item é o subTotal gravado.
+        $valorProduto = 'produtos_os.preco * produtos_os.quantidade';
+        $valorServico = 'servicos_os.preco * servicos_os.quantidade';
+        if ($this->db->field_exists('desconto', 'produtos_os') && $this->db->field_exists('desconto', 'servicos_os')) {
+            $valorProduto = "CASE WHEN produtos_os.desconto > 0 THEN produtos_os.subTotal ELSE {$valorProduto} END";
+            $valorServico = "CASE WHEN servicos_os.desconto > 0 THEN servicos_os.subTotal ELSE {$valorServico} END";
+        }
+
+        $valorOs = "CASE WHEN os.valor_desconto > 0 THEN os.valor_desconto ELSE "
+            . "COALESCE((SELECT SUM({$valorProduto}) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) + "
+            . "COALESCE((SELECT SUM({$valorServico}) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) END";
+
+        $this->db->select("os.status AS status, COUNT(*) AS qtd, SUM({$valorOs}) AS valor", false)->from('os');
+        if ($inicio !== null) {
+            $this->db->where('os.dataInicial >=', $inicio);
+        }
+        if ($fim !== null) {
+            $this->db->where('os.dataInicial <=', $fim);
+        }
+        $this->db->group_by('os.status');
+
+        $resumo = [];
+        foreach ($this->db->get()->result() as $linha) {
+            $resumo[(string) $linha->status] = ['qtd' => (int) $linha->qtd, 'valor' => round((float) $linha->valor, 2)];
+        }
+
+        return $resumo;
+    }
+
+    /**
+     * OS nos status pedidos, da entrega mais próxima para a mais distante (sem
+     * data de entrega no fim), para a lista do painel. Com $inicio/$fim, só as
+     * abertas no intervalo (os.dataInicial), para a lista seguir o mês (#3037).
+     */
+    public function osParaPainel(array $status, int $limite, ?string $inicio = null, ?string $fim = null): array
+    {
+        $this->db
             ->select('os.idOs, os.status, os.dataFinal, os.clientes_id, clientes.nomeCliente')
             ->from('os')
             ->join('clientes', 'clientes.idClientes = os.clientes_id', 'left')
-            ->where_in('os.status', $status)
+            ->where_in('os.status', $status);
+        if ($inicio !== null) {
+            $this->db->where('os.dataInicial >=', $inicio);
+        }
+        if ($fim !== null) {
+            $this->db->where('os.dataInicial <=', $fim);
+        }
+
+        return $this->db
             ->order_by('os.dataFinal IS NULL', 'ASC', false)
             ->order_by('os.dataFinal', 'ASC')
             ->order_by('os.idOs', 'DESC')
