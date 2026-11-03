@@ -2,6 +2,7 @@
 
 require_once APPPATH . 'models/Os_model.php';
 require_once APPPATH . 'controllers/Os.php';
+require_once APPPATH . 'helpers/painel_helper.php';
 
 /**
  * Listagem de OS migrada (#2842): filtros, status visíveis por configuração,
@@ -117,6 +118,18 @@ final class OsListagemTest extends MaposTestCase
         $this->assertSame(2, $model->contar(['de' => '2026-10-01', 'ate' => '2026-10-05']));
     }
 
+    public function testFiltroPorGrupoDeStatusDosCardsDoPainel(): void
+    {
+        $model = $this->model();
+
+        $this->assertSame([1], $this->ids($model->listar(['status' => 'andamento'], 10, 0)), 'Só Aberto/Aprovado/Em Andamento/Aguardando Peças.');
+        $this->assertSame(1, $model->contar(['status' => 'andamento']));
+        $this->assertSame([2], $this->ids($model->listar(['status' => 'orcamento'], 10, 0)));
+        $this->assertSame([], $this->ids($model->listar(['status' => 'andamento', 'pesquisa' => 'Celular'], 10, 0)), 'O grupo não anula a pesquisa.');
+        $this->assertSame([], listagemFiltros(Os::FILTROS, ['status' => 'abertas']), 'Grupo de vendas não vale em OS.');
+        $this->assertSame(['status' => 'andamento'], listagemFiltros(Os::FILTROS, ['status' => 'andamento']));
+    }
+
     public function testStatusVisiveisSoValemSemPesquisaNemStatus(): void
     {
         $model = $this->model();
@@ -168,7 +181,7 @@ final class OsListagemTest extends MaposTestCase
 
     public function testFiltrosDaListagemSaoOsStatusDeOs(): void
     {
-        $this->assertSame(array_keys(OS_STATUS_VARIANTES), Os::FILTROS['status']);
+        $this->assertSame(['andamento', 'orcamento', ...array_keys(OS_STATUS_VARIANTES)], Os::FILTROS['status']);
         $this->assertSame(['pesquisa', 'status', 'de', 'ate'], array_keys(Os::FILTROS));
     }
 

@@ -152,7 +152,7 @@ class Os_model extends CI_Model
     /**
      * pesquisa procura no nome e documento do cliente, na descrição do
      * equipamento e, se for número, no Nº da OS (o OR fica entre parênteses
-     * para não anular os outros filtros); status é um só; de e ate limitam a
+     * para não anular os outros filtros); status é um só ou um grupo (painelGrupoStatus()); de e ate limitam a
      * data inicial e a final.
      *
      * Sem pesquisa e sem status, a listagem mostra só os status marcados em
@@ -178,7 +178,12 @@ class Os_model extends CI_Model
         }
 
         if (($filtros['status'] ?? '') !== '') {
-            $this->db->where('os.status', $filtros['status']);
+            $grupo = painelGrupoStatus($filtros['status']);
+            if ($grupo !== null) {
+                $this->db->where_in('os.status', $grupo);
+            } else {
+                $this->db->where('os.status', $filtros['status']);
+            }
         } elseif ($pesquisa === '' && $statusVisiveis !== null) {
             $this->db->where_in('os.status', $statusVisiveis);
         }
