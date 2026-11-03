@@ -636,6 +636,24 @@ final class OsTelaTest extends MaposTestCase
         $this->assertStringContainsString('OS aberta', $html);
     }
 
+    public function testHistoricoColoreFinalizadoEFaturadoComAsCoresProprias(): void
+    {
+        $dados = ['aba' => 'historico'] + $this->dadosDaTela(true);
+        $dados['historico'] = [
+            (object) ['status_novo' => 'Faturado', 'status_anterior' => 'Finalizado', 'autor' => 'Ana', 'usuarios_id' => 1, 'data_hora' => '2026-10-05 08:00:00'],
+            (object) ['status_novo' => 'Finalizado', 'status_anterior' => 'Em Andamento', 'autor' => 'Ana', 'usuarios_id' => 1, 'data_hora' => '2026-10-04 08:00:00'],
+        ];
+
+        $html = $this->renderizar('os/partes/historico', $dados);
+
+        // A atual (Faturado, roxo) tem anel; a anterior (Finalizado, azul-escuro) não. Nenhuma cai no cinza.
+        $this->assertStringContainsString('bg-roxo-ink', $html);
+        $this->assertStringContainsString('ring-roxo-ink/20', $html);
+        $this->assertStringContainsString('bg-azulescuro-ink', $html);
+        $this->assertStringNotContainsString('bg-neutral-ink', $html);
+        $this->assertSame(1, substr_count($html, 'ring-4'));
+    }
+
     public function testAnexoSemArquivoNoDiscoMostraEstadoAusenteEmVezDeImagemQuebrada(): void
     {
         $raiz = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'mapos-anexos-view-' . bin2hex(random_bytes(4));
