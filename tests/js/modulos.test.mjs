@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { nomeDeModuloValido } from '../../assets/js/app.js';
+import { nomeDeModuloValido, urlDoModulo } from '../../assets/js/app.js';
 import { converter, lerJson } from '../../assets/js/lib/dados.js';
 import { ErroHttp, corpoComCsrf, lerCookie, requisicao, tokenCsrf } from '../../assets/js/lib/http.js';
 
@@ -13,6 +13,11 @@ test('nome de módulo: aceita caminho simples e recusa subida de pasta', () => {
     for (const nome of ['', '../x', 'a/../b', '/a', 'a/', 'a.js', 'A', 'https://x', null, undefined]) {
         assert.equal(nomeDeModuloValido(nome), false, `deveria recusar ${nome}`);
     }
+});
+
+test('urlDoModulo: herda a versão (?v=) do app.js para furar o cache', () => {
+    assert.equal(urlDoModulo('painel/painel', 'http://x/assets/js/app.js?v=5.2.2').href, 'http://x/assets/js/modules/painel/painel.js?v=5.2.2');
+    assert.equal(urlDoModulo('painel/painel', 'http://x/assets/js/app.js').href, 'http://x/assets/js/modules/painel/painel.js');
 });
 
 test('converter: tipos de data-*', () => {

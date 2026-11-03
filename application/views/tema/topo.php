@@ -25,12 +25,12 @@
   <meta name="csp-nonce" content="<?= e(segurancaNonceAtual()) ?>">
   <?php } ?>
   <link rel="shortcut icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
-  <script src="<?= e(base_url('assets/js/tema.js')) ?>"></script>
+  <script src="<?= e(assetUrl('assets/js/tema.js')) ?>"></script>
   <?php foreach ($layout['assets']['css'] as $arquivo) { ?>
-  <link rel="stylesheet" href="<?= e(layoutUrlAsset($arquivo, base_url())) ?>">
+  <link rel="stylesheet" href="<?= e(layoutUrlAsset($arquivo, base_url(), (string) config_item('app_version'))) ?>">
   <?php } ?>
   <?php foreach ($layout['assets']['modulos'] as $arquivo) { ?>
-  <script type="module" src="<?= e(layoutUrlAsset($arquivo, base_url())) ?>"></script>
+  <script type="module" src="<?= e(layoutUrlAsset($arquivo, base_url(), (string) config_item('app_version'))) ?>"></script>
   <?php } ?>
 </head>
 
