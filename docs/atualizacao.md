@@ -16,6 +16,8 @@ Configurações → Atualizar → **Verificar atualização** (precisa da permis
 
 `application/.env`, `assets/anexos`, `assets/arquivos`, `assets/uploads`, `assets/userImage`, `application/storage`, `application/logs`, `application/cache` e a pasta `install/`. Para proteger mais caminhos nesta instalação, use `ignored_files` em `application/config/github_updater.php`.
 
+No `.htaccess` da raiz, o bloco `# php -- BEGIN cPanel-generated handler` (a versão do PHP escolhida no MultiPHP Manager do cPanel, comum na HostGator) é mantido: o `.htaccess` novo vem do zip, e o bloco é recolocado nele. Sem isso o domínio voltaria ao PHP padrão da hospedagem e o sistema pararia com "Your Composer dependencies require a PHP version >= 8.5.0" (#3046).
+
 ## Depois de atualizar
 
 - Clique em **Atualizar banco de dados** (as migrations não rodam sozinhas).

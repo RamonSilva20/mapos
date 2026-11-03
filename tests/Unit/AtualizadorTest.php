@@ -331,6 +331,39 @@ final class AtualizadorTest extends MaposTestCase
         $this->assertFileDoesNotExist($this->raiz . '/index.php.atualizando');
     }
 
+    public function testMantemOPhpEscolhidoNoCpanelAoSubstituirOHtaccess(): void
+    {
+        $bloco = "# php -- BEGIN cPanel-generated handler, do not edit\n<IfModule mime_module>\n  AddHandler application/x-httpd-ea-php85 .php .php8 .phtml\n</IfModule>\n# php -- END cPanel-generated handler, do not edit\n";
+        file_put_contents($this->raiz . '/.htaccess', $bloco . "\n# regras antigas\n");
+        file_put_contents($this->raiz . '/application/.htaccess', "# interno antigo\n");
+        $this->publicar([$this->release('v4.56.0', $this->zip([
+            'index.php' => "<?php // novo\n",
+            '.htaccess' => "# regras novas\n",
+            'application/.htaccess' => "# interno novo\n",
+        ]))]);
+
+        $resultado = $this->atualizador()->atualizar('v4.56.0');
+
+        $htaccess = (string) file_get_contents($this->raiz . '/.htaccess');
+        $this->assertStringContainsString('AddHandler application/x-httpd-ea-php85', $htaccess);
+        $this->assertStringContainsString('# regras novas', $htaccess);
+        $this->assertStringNotContainsString('# regras antigas', $htaccess);
+        $this->assertSame(1, substr_count($htaccess, 'BEGIN cPanel-generated handler'));
+        $this->assertSame("# interno novo\n", file_get_contents($this->raiz . '/application/.htaccess'));
+        $this->assertStringContainsString('# regras antigas', (string) file_get_contents($this->raiz . '/application/cache/atualizacao/' . $resultado['backup'] . '/.htaccess'));
+        $this->assertFileDoesNotExist($this->raiz . '/.htaccess.atualizando');
+    }
+
+    public function testHtaccessSemBlocoDoCpanelFicaIgualAoDoZip(): void
+    {
+        file_put_contents($this->raiz . '/.htaccess', "# regras antigas\n");
+        $this->publicar([$this->release('v4.56.0', $this->zip(['.htaccess' => "# regras novas\n"]))]);
+
+        $this->atualizador()->atualizar('v4.56.0');
+
+        $this->assertSame("# regras novas\n", file_get_contents($this->raiz . '/.htaccess'));
+    }
+
     public function testFalhaNoMeioRestauraTudo(): void
     {
         $this->publicar([$this->release('v4.56.0', $this->zipDaRelease())]);
