@@ -302,11 +302,27 @@ if (! function_exists('layoutAssets')) {
 
 if (! function_exists('layoutUrlAsset')) {
     /**
-     * URL final de um asset de layoutAssets().
+     * URL final de um asset de layoutAssets(). Com $versao, os arquivos locais
+     * levam ?v=<versão>: depois de uma atualização o navegador baixa o CSS e o
+     * JS novos em vez de reusar os antigos do cache (#3028).
      */
-    function layoutUrlAsset(string $caminho, string $baseUrl): string
+    function layoutUrlAsset(string $caminho, string $baseUrl, string $versao = ''): string
     {
-        return preg_match('#^https?://#', $caminho) ? $caminho : $baseUrl . $caminho;
+        if (preg_match('#^https?://#', $caminho)) {
+            return $caminho;
+        }
+
+        return $baseUrl . $caminho . ($versao !== '' ? '?v=' . rawurlencode($versao) : '');
+    }
+}
+
+if (! function_exists('assetUrl')) {
+    /**
+     * URL de um arquivo local de assets/ com a versão do Map-OS (app_version).
+     */
+    function assetUrl(string $caminho, ?string $versao = null): string
+    {
+        return layoutUrlAsset($caminho, base_url(), $versao ?? (string) config_item('app_version'));
     }
 }
 

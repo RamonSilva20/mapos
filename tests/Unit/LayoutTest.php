@@ -426,6 +426,15 @@ final class LayoutTest extends MaposTestCase
         $this->assertSame('http://x/assets/a.css', layoutUrlAsset('assets/a.css', 'http://x/'));
         $this->assertSame('https://unpkg.com/a.css', layoutUrlAsset('https://unpkg.com/a.css', 'http://x/'));
     }
+
+    public function testAssetLocalLevaAVersaoParaFurarOCache(): void
+    {
+        $this->assertSame('http://x/assets/a.css?v=5.2.2', layoutUrlAsset('assets/a.css', 'http://x/', '5.2.2'));
+        $this->assertSame('http://x/assets/a.css?v=5.2.2-rc.1', layoutUrlAsset('assets/a.css', 'http://x/', '5.2.2-rc.1'));
+        $this->assertSame('http://x/assets/a.css?v=a%26b', layoutUrlAsset('assets/a.css', 'http://x/', 'a&b'));
+        $this->assertSame('https://unpkg.com/a.css', layoutUrlAsset('https://unpkg.com/a.css', 'http://x/', '5.2.2'), 'URL externa não muda.');
+        $this->assertSame('http://mapos.test/assets/js/tema.js?v=9.9.9', assetUrl('assets/js/tema.js', '9.9.9'));
+    }
 }
 
 /**

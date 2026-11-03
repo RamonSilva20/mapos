@@ -41,9 +41,9 @@ $statusOs = [
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Componentes — Map-OS</title>
     <link rel="icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
-    <link rel="stylesheet" href="<?= e(base_url('assets/dist/app.css')) ?>">
-    <script src="<?= e(base_url('assets/js/tema.js')) ?>"></script>
-    <script type="module" src="<?= e(base_url('assets/js/app.js')) ?>"></script>
+    <link rel="stylesheet" href="<?= e(assetUrl('assets/dist/app.css')) ?>">
+    <script src="<?= e(assetUrl('assets/js/tema.js')) ?>"></script>
+    <script type="module" src="<?= e(assetUrl('assets/js/app.js')) ?>"></script>
 </head>
 <body class="min-h-screen bg-bg font-sans text-text antialiased">
     <header class="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur">

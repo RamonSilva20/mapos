@@ -13,6 +13,17 @@ export function nomeDeModuloValido(nome) {
     return typeof nome === 'string' && NOME_VALIDO.test(nome);
 }
 
+/**
+ * URL do módulo. Herda a query deste arquivo (?v=<versão>, posta pelo PHP) para
+ * que, depois de uma atualização, o navegador não reuse o módulo antigo (#3028).
+ */
+export function urlDoModulo(nome, base = import.meta.url) {
+    const url = new URL(`./modules/${nome}.js`, base);
+    url.search = new URL(base).search;
+
+    return url;
+}
+
 export async function iniciarModulos(raiz = document) {
     const elementos = raiz.querySelectorAll('[data-module]');
 
@@ -30,7 +41,7 @@ export async function iniciarModulos(raiz = document) {
         elemento.dataset.moduleIniciado = 'true';
 
         try {
-            const modulo = await import(new URL(`./modules/${nome}.js`, import.meta.url));
+            const modulo = await import(urlDoModulo(nome));
             if (typeof modulo.default === 'function') {
                 await modulo.default(elemento);
             }
