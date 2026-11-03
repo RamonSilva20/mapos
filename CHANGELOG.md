@@ -6,6 +6,17 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-11-03
+
+Painel com abas de status e gráfico de OS por mês. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
+
+### Added
+- Painel: as seções de Ordens de serviço e Vendas têm abas por status (com a contagem na cor do status), carregadas sem recarregar a página, e botões de ver, editar e imprimir em cada linha, conforme a permissão. #3045 [@cabralwms](https://github.com/cabralwms)
+- Painel: o gráfico de OS por status alterna entre quantidade e valor (R$), mostra o total no centro e tem filtro de mês (atual ou passado, pela data de abertura). As abas e a lista de OS acompanham o mês escolhido. O botão "Ocultar valores" desabilita o modo R$. #3037 #3045 [@cabralwms](https://github.com/cabralwms)
+
+### Changed
+- "Lançamentos a vencer" no painel lista do vencimento mais distante para o mais próximo. #3045
+
 ## [5.2.4] - 2026-11-03
 
 Cores próprias para os status das OS. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
