@@ -9,7 +9,7 @@ class Os extends MY_Controller
     /** Filtros da listagem, na query string (listagemFiltros()). */
     public const FILTROS = [
         'pesquisa' => 'texto',
-        'status' => ['Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
+        'status' => ['andamento', 'orcamento', 'Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
         'de' => 'texto',
         'ate' => 'texto',
     ];
@@ -17,7 +17,7 @@ class Os extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper(['form', 'os']);
+        $this->load->helper(['form', 'os', 'painel']);
         $this->load->model('os_model');
         $this->data['menuOs'] = 'OS';
     }

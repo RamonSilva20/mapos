@@ -92,7 +92,7 @@ $resumo = ($total === 1 ? '1 ordem de serviço' : number_format($total, 0, ',', 
             'name' => 'status',
             'label' => 'Status',
             'placeholder' => 'Todos',
-            'options' => array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
+            'options' => ['andamento' => 'Em andamento (todos)', 'orcamento' => 'Orçamento e negociação'] + array_combine(array_keys(OS_STATUS_VARIANTES), array_keys(OS_STATUS_VARIANTES)),
             'selected' => $filtros['status'] ?? null,
         ]) ?>
         <?= component('input', [

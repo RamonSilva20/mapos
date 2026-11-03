@@ -35,6 +35,8 @@ $timelineDot = [
     'info' => 'bg-info-ink',
     'progress' => 'bg-progress-ink',
     'neutral' => 'bg-neutral-ink',
+    'azulescuro' => 'bg-azulescuro-ink',
+    'roxo' => 'bg-roxo-ink',
 ];
 $timelineAnel = [
     'success' => 'ring-4 ring-success-ink/20',
@@ -43,6 +45,8 @@ $timelineAnel = [
     'info' => 'ring-4 ring-info-ink/20',
     'progress' => 'ring-4 ring-progress-ink/20',
     'neutral' => 'ring-4 ring-neutral-ink/20',
+    'azulescuro' => 'ring-4 ring-azulescuro-ink/20',
+    'roxo' => 'ring-4 ring-roxo-ink/20',
 ];
 ?>
 <ol class="flex flex-col gap-6 border-l-2 border-border pl-6" aria-label="Histórico de status">

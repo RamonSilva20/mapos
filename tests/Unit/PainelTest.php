@@ -64,7 +64,7 @@ final class PainelTest extends MaposTestCase
         $fatias = painelOsPorStatus(['Faturado' => 2, 'Aberto' => 1, 'Orçamento' => 0, 'Inventado' => 3, '' => 1]);
 
         $this->assertSame(['Aberto', 'Faturado', 'Inventado', 'Sem status'], array_column($fatias, 'status'));
-        $this->assertSame(['info', 'success', 'neutral', 'neutral'], array_column($fatias, 'variante'));
+        $this->assertSame(['success', 'roxo', 'neutral', 'neutral'], array_column($fatias, 'variante'));
         $this->assertSame([], painelOsPorStatus([]));
     }
 
@@ -371,6 +371,20 @@ final class PainelTest extends MaposTestCase
         $this->assertStringContainsString('produtos?estoque=baixo', $html);
         $this->assertStringNotContainsString('bx-', $html);
         $this->assertStringNotContainsString(' style=', $html);
+    }
+
+    public function testCardsAbremAListagemJaFiltrada(): void
+    {
+        $html = $this->renderizar($this->dadosCompletos());
+
+        $this->assertStringContainsString('href="http://mapos.test/index.php/os?status=andamento"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/os?status=orcamento"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/vendas?status=abertas"', $html);
+        $this->assertStringContainsString('href="http://mapos.test/index.php/financeiro/lancamentos?periodo=mes"', $html);
+        $this->assertSame(PAINEL_OS_ANDAMENTO, painelGrupoStatus('andamento'));
+        $this->assertSame(PAINEL_OS_ORCAMENTO, painelGrupoStatus('orcamento'));
+        $this->assertSame(PAINEL_VENDAS_ABERTAS, painelGrupoStatus('abertas'));
+        $this->assertNull(painelGrupoStatus('Aberto'));
     }
 
     public function testSemPermissoesNadaDosModulosAparece(): void

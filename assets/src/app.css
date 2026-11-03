@@ -191,6 +191,22 @@
   color: var(--color-neutral-ink);
 }
 
+/* Cores por status (#3044): variantes próprias de Finalizado e Faturado,
+   mesmo aspecto dos demais eventos (fundo soft, borda e texto ink). */
+.painel-agenda .evento-azulescuro {
+  --fc-event-bg-color: var(--color-azulescuro-soft);
+  --fc-event-border-color: var(--color-azulescuro);
+  --fc-event-text-color: var(--color-azulescuro-ink);
+  color: var(--color-azulescuro-ink);
+}
+
+.painel-agenda .evento-roxo {
+  --fc-event-bg-color: var(--color-roxo-soft);
+  --fc-event-border-color: var(--color-roxo);
+  --fc-event-text-color: var(--color-roxo-ink);
+  color: var(--color-roxo-ink);
+}
+
 /*
  * Valores ocultos no painel (#3022): o botão de olho põe data-valores="ocultos"
  * no <html>. O dinheiro (data-valor-sensivel) fica transparente, sem seleção, e

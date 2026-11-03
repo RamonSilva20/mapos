@@ -30,8 +30,8 @@ $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
     <meta name="csrf-cookie-name" content="<?= e(config_item('csrf_cookie_name')) ?>">
     <title><?= e($entrada['titulo'] . ' — ' . $nomeSistema) ?></title>
     <link rel="icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
-    <link rel="stylesheet" href="<?= e(base_url('assets/dist/app.css')) ?>">
-    <script type="module" src="<?= e(base_url('assets/js/app.js')) ?>"></script>
+    <link rel="stylesheet" href="<?= e(assetUrl('assets/dist/app.css')) ?>">
+    <script type="module" src="<?= e(assetUrl('assets/js/app.js')) ?>"></script>
 </head>
 <body class="flex min-h-screen flex-col bg-canvas-dark bg-[url(../img/entrada/estrelas.svg)] font-sans text-on-dark antialiased">
     <header class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-5 lg:px-8">

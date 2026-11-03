@@ -29,8 +29,30 @@ if (! defined('PAINEL_VENDAS_ABAS')) {
     define('PAINEL_VENDAS_ABAS', ['Aberto', 'Aprovado', 'Aguardando Peças', 'Finalizado']);
 }
 
+if (! defined('PAINEL_GRUPOS_STATUS')) {
+    // Valores de ?status= das listagens que reúnem vários status (os cards do painel apontam para eles, #3037).
+    define('PAINEL_GRUPOS_STATUS', [
+        'andamento' => PAINEL_OS_ANDAMENTO,
+        'orcamento' => PAINEL_OS_ORCAMENTO,
+        'abertas' => PAINEL_VENDAS_ABERTAS,
+    ]);
+}
+
 if (! defined('PAINEL_MESES')) {
     define('PAINEL_MESES', ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']);
+}
+
+if (! function_exists('painelGrupoStatus')) {
+    /**
+     * Status que o filtro ?status= reúne quando o valor é um grupo (andamento,
+     * orcamento, abertas); null quando é um status só.
+     *
+     * @return list<string>|null
+     */
+    function painelGrupoStatus(string $filtro): ?array
+    {
+        return PAINEL_GRUPOS_STATUS[$filtro] ?? null;
+    }
 }
 
 if (! function_exists('painelAno')) {

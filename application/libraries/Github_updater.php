@@ -58,6 +58,9 @@ class Github_updater
         'ci_sessions/',
     ];
 
+    /** Bloco que o MultiPHP Manager do cPanel grava no .htaccess da raiz para fixar a versão do PHP do domínio (#3046). */
+    private const BLOCO_PHP_CPANEL = '/^# php -- BEGIN cPanel-generated handler.*?^# php -- END cPanel-generated handler[^\n]*(?:\n|\z)/ms';
+
     /** @var object Instância do CodeIgniter, injetada por get_instance() no construtor */
     public $ci;
 
@@ -405,6 +408,7 @@ class Github_updater
                 }
 
                 $modo = is_file($alvo) ? (fileperms($alvo) & 0777) : null;
+                $blocoPhp = $relativo === '.htaccess' && is_file($alvo) ? $this->blocoPhpDoCpanel((string) file_get_contents($alvo)) : '';
 
                 if (is_file($alvo)) {
                     $copia = $backup . '/' . $relativo;
@@ -425,7 +429,7 @@ class Github_updater
 
                 // Copia para um nome temporário e renomeia: um arquivo nunca fica pela metade.
                 $temporario = $alvo . '.atualizando';
-                if (! @copy($extraido . '/' . $relativo, $temporario) || ! @rename($temporario, $alvo)) {
+                if (! @copy($extraido . '/' . $relativo, $temporario) || ! $this->manterPhpDoCpanel($temporario, $blocoPhp) || ! @rename($temporario, $alvo)) {
                     @unlink($temporario);
 
                     throw new RuntimeException('Não foi possível gravar ' . $relativo . '.');
@@ -446,6 +450,26 @@ class Github_updater
 
             throw new RuntimeException('A atualização falhou e os arquivos foram restaurados. ' . $erro->getMessage(), 0, $erro);
         }
+    }
+
+    private function blocoPhpDoCpanel(string $htaccess): string
+    {
+        return preg_match_all(self::BLOCO_PHP_CPANEL, $htaccess, $blocos) ? implode('', $blocos[0]) : '';
+    }
+
+    /** Recoloca no .htaccess novo o bloco de versão do PHP do cPanel, que o do zip não traz. */
+    private function manterPhpDoCpanel(string $arquivo, string $bloco): bool
+    {
+        if ($bloco === '') {
+            return true;
+        }
+
+        $novo = (string) file_get_contents($arquivo);
+        if ($this->blocoPhpDoCpanel($novo) !== '') {
+            return true;
+        }
+
+        return file_put_contents($arquivo, rtrim($bloco, "\n") . "\n\n" . $novo) !== false;
     }
 
     private function gravarVersao(string $versao): void

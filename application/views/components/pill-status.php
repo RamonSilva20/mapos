@@ -21,6 +21,8 @@ $variantes = [
     'info' => 'bg-info-soft text-info-ink',
     'progress' => 'bg-progress-soft text-progress-ink',
     'neutral' => 'bg-neutral-soft text-neutral-ink',
+    'azulescuro' => 'bg-azulescuro-soft text-azulescuro-ink',
+    'roxo' => 'bg-roxo-soft text-roxo-ink',
 ];
 
 $atributos = [

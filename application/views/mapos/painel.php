@@ -62,7 +62,7 @@ if ($pode['os']) {
         'value' => painelSomar($os_por_status, PAINEL_OS_ANDAMENTO),
         'icon' => 'wrench',
         'accent' => 'progress',
-        'href' => site_url('os'),
+        'href' => site_url('os') . listagemQuery(['status' => 'andamento']),
         'caption' => $aguardando === 0 ? 'Nenhuma aguardando peças' : $aguardando . ' aguardando peças',
     ];
     $kpis[] = [
@@ -70,7 +70,7 @@ if ($pode['os']) {
         'value' => painelSomar($os_por_status, PAINEL_OS_ORCAMENTO),
         'icon' => 'file-text',
         'accent' => 'info',
-        'href' => site_url('os'),
+        'href' => site_url('os') . listagemQuery(['status' => 'orcamento']),
         'caption' => 'Em orçamento ou negociação',
     ];
 }
@@ -80,7 +80,7 @@ if ($pode['vendas']) {
         'value' => painelSomar($vendas_por_status, PAINEL_VENDAS_ABERTAS),
         'icon' => 'shopping-cart',
         'accent' => 'success',
-        'href' => site_url('vendas'),
+        'href' => site_url('vendas') . listagemQuery(['status' => 'abertas']),
         'caption' => 'Ainda não faturadas',
     ];
 }
@@ -90,7 +90,7 @@ if ($pode['lancamentos']) {
         'value' => dinheiro($mes['saldo']),
         'icon' => 'circle-dollar-sign',
         'accent' => 'info',
-        'href' => site_url('financeiro/lancamentos'),
+        'href' => site_url('financeiro/lancamentos') . listagemQuery(['periodo' => 'mes']),
         'caption' => 'A receber: ' . dinheiro($visao_geral['a_receber']),
         'sensitive' => true,
         'trend' => $saldoTrend,

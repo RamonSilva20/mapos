@@ -64,14 +64,18 @@ Typography splits cleanly between three families: a chunky display sans for hero
 
 | State      | Base token                         | Ink token                          | Soft token                         | Ink on soft | Used for                                   |
 | ---------- | ---------------------------------- | ---------------------------------- | ---------------------------------- | ----------- | ------------------------------------------ |
-| Success    | `{colors.success}` `#15803d`       | `{colors.success-ink}` `#166534`   | `{colors.success-soft}` `#e3f0e8`  | 6.08:1      | Finalizada, pagamento confirmado           |
-| Warning    | `{colors.warning}` `#a16207`       | `{colors.warning-ink}` `#854d0e`   | `{colors.warning-soft}` `#f4ece1`  | 5.85:1      | Aguardando peça/aprovação, garantia vencendo |
-| Danger     | `{colors.danger}` `#dc2626`        | `{colors.danger-ink}` `#b91c1c`    | `{colors.danger-soft}` `#fbe5e5`   | 5.37:1      | Cancelada, erros, ações destrutivas        |
-| Info       | `{colors.info}` `#0369a1`          | `{colors.info-ink}` `#075985`      | `{colors.info-soft}` `#e1edf4`     | 6.35:1      | Aberta, avisos do sistema                  |
-| Progress   | `{colors.accent-violet}` `#6a5fc1` | `{colors.progress-ink}` `#4a3f9e`  | `{colors.progress-soft}` `#edecf8` | 7.19:1      | Em andamento                               |
-| Neutral    | `{colors.accent-violet-mid}` `#79628c` | `{colors.neutral-ink}` `#4b4560` | `{colors.neutral-soft}` `#efecf1` | 7.73:1      | Orçamento enviado, rascunho, contadores    |
+| Success     | `{colors.success}` `#15803d`       | `{colors.success-ink}` `#136234`   | `{colors.success-soft}` `#c9ecd5`  | 5.82:1      | Aberta, pagamento confirmado               |
+| Warning     | `{colors.warning}` `#a16207`       | `{colors.warning-ink}` `#8a5207`   | `{colors.warning-soft}` `#f6e3bf`  | 5.06:1      | Negociação, aguardando peças, garantia vencendo |
+| Danger      | `{colors.danger}` `#dc2626`        | `{colors.danger-ink}` `#b31818`    | `{colors.danger-soft}` `#f8d2d2`   | 4.95:1      | Cancelada, erros, ações destrutivas        |
+| Info        | `{colors.info}` `#0369a1`          | `{colors.info-ink}` `#0a5a86`      | `{colors.info-soft}` `#cde4f6`     | 5.68:1      | Aprovada, avisos do sistema                |
+| Progress    | `{colors.accent-violet}` `#6a5fc1` | `{colors.progress-ink}` `#443a93`  | `{colors.progress-soft}` `#ddd8f7` | 6.71:1      | Em andamento                               |
+| Neutral     | `{colors.accent-violet-mid}` `#79628c` | `{colors.neutral-ink}` `#4b4560` | `{colors.neutral-soft}` `#e4ddec` | 6.84:1    | Orçamento enviado, rascunho, contadores    |
+| Azul-escuro | `{colors.azulescuro}` `#1e40af`    | `{colors.azulescuro-ink}` `#1e3a8a` | `{colors.azulescuro-soft}` `#d3ddf5` | 7.61:1   | Finalizada                                 |
+| Roxo        | `{colors.roxo}` `#9333ea`          | `{colors.roxo-ink}` `#6b21a8`      | `{colors.roxo-soft}` `#ecd9fb`     | 6.60:1      | Faturada                                   |
 
 Warning is a yellow amber (hue 35°) on purpose: the more common `#b45309` sits at 26°, too close to `{colors.primary}` (19°) to be told apart. Status is never shown by color alone — every pill carries its label.
+
+**Per-status color (#3044).** Some OS statuses get their own color for faster reading: Finalizada uses `{colors.azulescuro}`, Faturada `{colors.roxo}`, and Aberta moves to `{colors.success}` — so Finalizada and Faturada no longer share the green they used to. Negociação and Aguardando Peças both keep `{colors.warning}` (both are waiting states). No status uses the brand orange, so "orange means act here" still holds.
 
 ### Panel Dark Mode
 The operational screens default to the light canvas. Users can switch the whole panel to dark (Claro / Escuro / Sistema); the switch always applies to the entire screen, never to a single band, so the two-canvas rule still holds. The dark sidebar of a color theme in light mode is part of that theme (see Color Themes), not a band of a light screen: in dark mode the whole screen, sidebar included, is dark.
@@ -162,29 +166,31 @@ Sidebar accent (active bar and logo) for the dark sidebars of light mode: Azul `
 | sidebar: active item | 4.50 | 4.65 | 5.24 | 6.58 | 7.34 | 5.21 | 9.38 | 7.52 | 7.71 | 6.00 | 7.05 |
 | kpi success: label/caption (muted) no canto | 4.50 | 5.43 | 8.31 | 5.43 | 8.31 | 5.43 | 8.31 | 5.43 | 8.31 | 5.43 | 5.34 |
 | kpi success: valor (text) no canto | 4.50 | 13.10 | 15.67 | 13.10 | 15.67 | 13.10 | 15.67 | 13.10 | 15.67 | 13.10 | 13.11 |
-| kpi success: sparkline (ink) no canto | 3.00 | 5.43 | 9.00 | 5.43 | 9.00 | 5.43 | 9.00 | 5.43 | 9.00 | 5.43 | 7.85 |
-| kpi success: ícone (ink on soft) | 4.50 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.00 |
+| kpi success: sparkline (ink) no canto | 3.00 | 5.66 | 9.00 | 5.66 | 9.00 | 5.66 | 9.00 | 5.66 | 9.00 | 5.66 | 7.85 |
+| kpi success: ícone (ink on soft) | 4.50 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.00 |
 | kpi warning: label/caption (muted) no canto | 4.50 | 5.47 | 8.21 | 5.47 | 8.21 | 5.47 | 8.21 | 5.47 | 8.21 | 5.47 | 5.29 |
 | kpi warning: valor (text) no canto | 4.50 | 13.20 | 15.50 | 13.20 | 15.50 | 13.20 | 15.50 | 13.20 | 15.50 | 13.20 | 12.99 |
-| kpi warning: sparkline (ink) no canto | 3.00 | 5.26 | 10.12 | 5.26 | 10.12 | 5.26 | 10.12 | 5.26 | 10.12 | 5.26 | 8.85 |
-| kpi warning: ícone (ink on soft) | 4.50 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 7.75 |
+| kpi warning: sparkline (ink) no canto | 3.00 | 4.90 | 10.12 | 4.90 | 10.12 | 4.90 | 10.12 | 4.90 | 10.12 | 4.90 | 8.85 |
+| kpi warning: ícone (ink on soft) | 4.50 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 7.75 |
 | kpi info: label/caption (muted) no canto | 4.50 | 5.29 | 8.52 | 5.29 | 8.52 | 5.29 | 8.52 | 5.29 | 8.52 | 5.29 | 5.49 |
 | kpi info: valor (text) no canto | 4.50 | 12.76 | 16.07 | 12.76 | 16.07 | 12.76 | 16.07 | 12.76 | 16.07 | 12.76 | 13.49 |
-| kpi info: sparkline (ink) no canto | 3.00 | 5.61 | 7.50 | 5.61 | 7.50 | 5.61 | 7.50 | 5.61 | 7.50 | 5.61 | 6.57 |
-| kpi info: ícone (ink on soft) | 4.50 | 6.35 | 6.63 | 6.35 | 6.63 | 6.35 | 6.63 | 6.35 | 6.63 | 6.35 | 5.95 |
+| kpi info: sparkline (ink) no canto | 3.00 | 5.52 | 7.50 | 5.52 | 7.50 | 5.52 | 7.50 | 5.52 | 7.50 | 5.52 | 6.57 |
+| kpi info: ícone (ink on soft) | 4.50 | 5.68 | 6.63 | 5.68 | 6.63 | 5.68 | 6.63 | 5.68 | 6.63 | 5.68 | 5.95 |
 | kpi progress: label/caption (muted) no canto | 4.50 | 5.45 | 8.18 | 5.45 | 8.18 | 5.45 | 8.18 | 5.45 | 8.18 | 5.45 | 5.29 |
 | kpi progress: valor (text) no canto | 4.50 | 13.15 | 15.45 | 13.15 | 15.45 | 13.15 | 15.45 | 13.15 | 15.45 | 13.15 | 13.00 |
-| kpi progress: sparkline (ink) no canto | 3.00 | 6.43 | 7.73 | 6.43 | 7.73 | 6.43 | 7.73 | 6.43 | 7.73 | 6.43 | 6.79 |
-| kpi progress: ícone (ink on soft) | 4.50 | 7.19 | 7.20 | 7.19 | 7.20 | 7.19 | 7.20 | 7.19 | 7.20 | 7.19 | 6.24 |
-| kpi tendência success: ink on soft | 4.50 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.00 |
-| kpi tendência warning: ink on soft | 4.50 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 7.75 |
-| kpi tendência neutral: ink on soft | 4.50 | 7.73 | 9.53 | 7.73 | 9.53 | 7.73 | 9.53 | 7.73 | 9.53 | 7.73 | 7.70 |
-| pill success: ink on soft | 4.50 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.92 | 6.08 | 7.00 |
-| pill warning: ink on soft | 4.50 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 8.69 | 5.85 | 7.75 |
-| pill danger: ink on soft | 4.50 | 5.37 | 5.38 | 5.37 | 5.38 | 5.37 | 5.38 | 5.37 | 5.38 | 5.37 | 4.86 |
-| pill info: ink on soft | 4.50 | 6.35 | 6.63 | 6.35 | 6.63 | 6.35 | 6.63 | 6.35 | 6.63 | 6.35 | 5.95 |
-| pill progress: ink on soft | 4.50 | 7.19 | 7.20 | 7.19 | 7.20 | 7.19 | 7.20 | 7.19 | 7.20 | 7.19 | 6.24 |
-| pill neutral: ink on soft | 4.50 | 7.73 | 9.53 | 7.73 | 9.53 | 7.73 | 9.53 | 7.73 | 9.53 | 7.73 | 7.70 |
+| kpi progress: sparkline (ink) no canto | 3.00 | 7.06 | 7.73 | 7.06 | 7.73 | 7.06 | 7.73 | 7.06 | 7.73 | 7.06 | 6.79 |
+| kpi progress: ícone (ink on soft) | 4.50 | 6.71 | 7.20 | 6.71 | 7.20 | 6.71 | 7.20 | 6.71 | 7.20 | 6.71 | 6.24 |
+| kpi tendência success: ink on soft | 4.50 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.00 |
+| kpi tendência warning: ink on soft | 4.50 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 7.75 |
+| kpi tendência neutral: ink on soft | 4.50 | 6.84 | 9.53 | 6.84 | 9.53 | 6.84 | 9.53 | 6.84 | 9.53 | 6.84 | 7.70 |
+| pill success: ink on soft | 4.50 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.92 | 5.82 | 7.00 |
+| pill warning: ink on soft | 4.50 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 8.69 | 5.06 | 7.75 |
+| pill danger: ink on soft | 4.50 | 4.95 | 5.38 | 4.95 | 5.38 | 4.95 | 5.38 | 4.95 | 5.38 | 4.95 | 4.86 |
+| pill info: ink on soft | 4.50 | 5.68 | 6.63 | 5.68 | 6.63 | 5.68 | 6.63 | 5.68 | 6.63 | 5.68 | 5.95 |
+| pill progress: ink on soft | 4.50 | 6.71 | 7.20 | 6.71 | 7.20 | 6.71 | 7.20 | 6.71 | 7.20 | 6.71 | 6.24 |
+| pill neutral: ink on soft | 4.50 | 6.84 | 9.53 | 6.84 | 9.53 | 6.84 | 9.53 | 6.84 | 9.53 | 6.84 | 7.70 |
+| pill azulescuro: ink on soft | 4.50 | 7.61 | 7.92 | 7.61 | 7.92 | 7.61 | 7.92 | 7.61 | 7.92 | 7.61 | 6.32 |
+| pill roxo: ink on soft | 4.50 | 6.60 | 8.99 | 6.60 | 8.99 | 6.60 | 8.99 | 6.60 | 8.99 | 6.60 | 7.02 |
 
 ## Typography
 
