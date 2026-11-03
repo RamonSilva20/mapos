@@ -6,6 +6,13 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.2.4] - 2026-11-03
+
+Cores próprias para os status das OS. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
+
+### Changed
+- Cada status de OS e venda tem cor própria para leitura rápida: Aberto em verde, Finalizado em azul-escuro e Faturado em roxo. As cores de todas as pills de status foram recalibradas (fundo mais marcado, contraste conferido em `DESIGN.md`) e o histórico de status da OS usa as mesmas cores na linha do tempo. #3044 #3052 [@cabralwms](https://github.com/cabralwms)
+
 ## [5.2.3] - 2026-11-03
 
 Correções no painel e na atualização. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
