@@ -173,8 +173,18 @@ EOF
     a2enconf mapos >/dev/null 2>&1
 
     echo "* Habilitando servicos na inicializacao"
-    systemctl enable --now apache2 >/dev/null 2>&1
     systemctl enable --now mariadb >/dev/null 2>&1
+    systemctl enable apache2 >/dev/null 2>&1
+
+    # O Apache geralmente ja sobe ao instalar o pacote e 'systemctl enable --now'
+    # NAO reinicia um servico em execucao: sem este restart explicito as mudancas
+    # acima (mod php8.5, mod_rewrite, AllowOverride All, timezone) nao sao
+    # aplicadas e a protecao do .env via .htaccess do Map-OS fica inativa.
+    echo "* Reiniciando o Apache para aplicar os modulos e o AllowOverride"
+    if ! systemctl restart apache2; then
+        echo "* Falha ao reiniciar o Apache. Verifique 'systemctl status apache2' e 'apachectl -t', corrija e rode novamente."
+        exit 1
+    fi
 
     echo "* Instalando Composer"
     if ! command -v composer >/dev/null 2>&1; then
@@ -215,41 +225,66 @@ EOF
     # Apache (docs/servidor-web.md). NUNCA apagar.
     chown -R $apacheUser:$apacheUser "$dirMapos"
     find "$dirMapos" -type d -exec chmod 755 {} \;
-    find "$dirMapos" -type f -exec chmod 644 {} \;
-    # Pastas que o sistema precisa escrever
+    # O application/.env guarda a senha do banco e as chaves da aplicacao: fica
+    # FORA do chmod em massa para nao virar legivel por qualquer usuario local
+    # (do_install.php grava 0600). O write das pastas abaixo tambem so atinge
+    # diretorios, nunca arquivos, para nao reabrir essa permissao.
+    find "$dirMapos" -type f ! -path "$dirMaposConfig" -exec chmod 644 {} \;
+    # Pastas que o sistema precisa escrever (apenas os diretorios recebem 775)
     for w in application application/logs application/storage updates; do
         if [ -d "$dirMapos/$w" ]; then
-            chmod -R 775 "$dirMapos/$w"
+            find "$dirMapos/$w" -type d -exec chmod 775 {} \;
         fi
     done
+    # Reforca a permissao restrita do .env quando ele ja existe (reexecucao).
+    if [ -f "$dirMaposConfig" ]; then
+        chmod 600 "$dirMaposConfig"
+    fi
 # <=== Fim Instalacao MAP-OS ===>
 
 # <=== Inicio Composer ===>
     clear
     echo "# COMPLEMENTO COMPOSER..."
     echo
-    if [ -d "$dirMapos/application/vendor" ]; then
-        echo "* Dependencias (vendor) ja instaladas."
-    else
-        echo "* Instalando dependencias do projeto."
-        cd "$dirMapos" || exit 1
-        sudo -u $apacheUser COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader -n
-        chown -R $apacheUser:$apacheUser "$dirMapos/application/vendor"
+    # Rodar sempre: a mera existencia da pasta 'vendor' nao garante um
+    # autoload.php valido (um composer install interrompido deixa a pasta pela
+    # metade, e index.php/instalador rejeitam a instalacao incompleta). O
+    # composer install e idempotente, entao uma reexecucao conserta o vendor.
+    echo "* Instalando dependencias do projeto (composer install)."
+    cd "$dirMapos" || exit 1
+    if ! sudo -u $apacheUser COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader -n; then
+        echo "* Falha ao instalar as dependencias com o Composer. Corrija o erro e rode o script novamente."
+        exit 1
     fi
+    chown -R $apacheUser:$apacheUser "$dirMapos/application/vendor"
 # <=== Fim Composer ===>
 
 # <=== Inicio Banco de Dados ===>
     clear
     echo "# BANCO DE DADOS (MariaDB)..."
     echo
-    echo "* Criando banco '$dbName' e usuario '$dbUser'."
-    mysql -u root <<SQL
+    if [ -f "$dirMaposConfig" ]; then
+        # Instalacao ja existente: cada execucao gera uma 'dbPass' nova, mas
+        # trocar a senha do usuario com ALTER USER aqui invalidaria a credencial
+        # ja gravada no .env (o instalador pelo navegador nao refaz com .env
+        # presente), derrubando o acesso ao banco. Preserva o que esta no .env.
+        echo "* Map-OS ja configurado (.env encontrado); mantendo as credenciais do banco."
+        envUser="$(grep -E '^DB_USERNAME=' "$dirMaposConfig" | head -n1 | sed -E 's/^DB_USERNAME=//; s/^"//; s/"$//')"
+        envPass="$(grep -E '^DB_PASSWORD=' "$dirMaposConfig" | head -n1 | sed -E 's/^DB_PASSWORD=//; s/^"//; s/"$//')"
+        envName="$(grep -E '^DB_DATABASE=' "$dirMaposConfig" | head -n1 | sed -E 's/^DB_DATABASE=//; s/^"//; s/"$//')"
+        [ -n "$envUser" ] && dbUser="$envUser"
+        [ -n "$envPass" ] && dbPass="$envPass"
+        [ -n "$envName" ] && dbName="$envName"
+    else
+        echo "* Criando banco '$dbName' e usuario '$dbUser'."
+        mysql -u root <<SQL
 CREATE DATABASE IF NOT EXISTS \`$dbName\` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER IF NOT EXISTS '$dbUser'@'localhost' IDENTIFIED BY '$dbPass';
 ALTER USER '$dbUser'@'localhost' IDENTIFIED BY '$dbPass';
 GRANT ALL PRIVILEGES ON \`$dbName\`.* TO '$dbUser'@'localhost';
 FLUSH PRIVILEGES;
 SQL
+    fi
 # <=== Fim Banco de Dados ===>
 
 # <=== Inicio Configuracao pelo Browser ===>

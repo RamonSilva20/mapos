@@ -81,7 +81,9 @@ CLS
 :: <=== Definições de SETs ===>
 SET step=0
 SET dirDefault=%temp%\InstaladorMAPOS
-SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.5.12/xampp-windows-x64-8.5.12-0-VS17-installer.exe/download"
+:: %%20 preserva o espaco (%20) codificado na URL: em .bat, %20 e lido como o
+:: parametro posicional %2 seguido de 0, corrompendo o caminho de download.
+SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP%%20Windows/8.5.12/xampp-windows-x64-8.5.12-0-VS17-installer.exe/download"
 SET urlComposer=https://getcomposer.org/Composer-Setup.exe
 SET dirXampp=C:\xampp
 SET dirHtdocs=C:\xampp\htdocs
