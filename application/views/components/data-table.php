@@ -74,6 +74,11 @@ foreach ($columns as $chave => $coluna) {
     $colunas[] = $coluna;
 }
 
+foreach ($colunas as $indice => &$colunaItem) {
+    $colunaItem['align'] = $indice === array_key_last($colunas) ? 'right' : 'left';
+}
+unset($colunaItem);
+
 $alinhamentos = ['left' => 'text-left', 'center' => 'text-center', 'right' => 'text-right tabular-nums'];
 $celula = $dense ? 'px-3 py-2' : 'px-4 py-3.5';
 // Abaixo de 640px: linha em bloco e o título da coluna antes do valor.
