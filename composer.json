@@ -3,27 +3,27 @@
         "php": "^8.5",
         "ext-curl": "*",
         "ext-gd": "*",
-        "mercadopago/dx-php": "^3.8.0",
-        "efipay/sdk-php-apis-efi": "^1.17.0",
+        "mercadopago/dx-php": "^3.16.0",
+        "efipay/sdk-php-apis-efi": "^1.19.1",
         "codeigniter/framework": "^3.1.13",
-        "mpdf/mpdf": "^8.2.7",
+        "mpdf/mpdf": "^8.3.1",
         "mk-j/php_xlsxwriter": "^0.38.0",
         "mpdf/qrcode": "^1.2.2",
-        "phpoffice/phpword": "^1.0",
+        "phpoffice/phpword": "^1.4",
         "piggly/php-pix": "^2.0.2",
-        "vlucas/phpdotenv": "^5.6.3",
+        "vlucas/phpdotenv": "^5.8.0",
         "codephix/asaas-sdk": "^2.0.12",
-        "ezyang/htmlpurifier": "^4.19",
-        "firebase/php-jwt": "^7.2",
-        "robthree/twofactorauth": "^3.0"
+        "ezyang/htmlpurifier": "^4.19.1",
+        "firebase/php-jwt": "^7.2.1",
+        "robthree/twofactorauth": "^3.0.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.93.0",
-        "symfony/var-dumper": "^6.4.32",
+        "friendsofphp/php-cs-fixer": "^3.95.30",
+        "symfony/var-dumper": "^6.4.49",
         "fakerphp/faker": "^1.24.1",
-        "phpstan/phpstan": "^2.3",
-        "phpunit/phpunit": "^12.5",
-        "filp/whoops": "^2.18.4"
+        "phpstan/phpstan": "^2.3.5",
+        "phpunit/phpunit": "^12.5.43",
+        "filp/whoops": "^2.19.3"
     },
     "scripts": {
         "format": [
