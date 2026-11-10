@@ -27,7 +27,7 @@ final class DependenciasTest extends MaposTestCase
 
     public function testPhpWordEstaNaVersao1(): void
     {
-        $this->assertSame('^1.0', $this->composer()['require']['phpoffice/phpword']);
+        $this->assertSame('^1.4', $this->composer()['require']['phpoffice/phpword']);
 
         $lock = json_decode((string) file_get_contents(MAPOS_ROOT . '/composer.lock'), true);
         $versao = null;
