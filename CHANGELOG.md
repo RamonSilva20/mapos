@@ -6,6 +6,21 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.3.1] - 2026-11-10
+
+Correções nos instaladores e nas tabelas, e dependências atualizadas. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
+
+### Fixed
+- Instalador do Linux (`install.sh`): como não existe XAMPP com PHP 8.5 para Linux, passou a instalar a stack nativa (Apache, PHP 8.5 e MariaDB) em Debian e Ubuntu, com banco e usuário próprios e senha aleatória. #3055 [@cabralwms](https://github.com/cabralwms)
+- Instalador do Windows (`install.bat`): instala o XAMPP 8.5.12 (PHP 8.5) e baixa com o `curl.exe` do próprio Windows, sem depender do wget de terceiros. #3055 [@cabralwms](https://github.com/cabralwms)
+- Tabelas: as colunas ficam alinhadas à esquerda e a última, à direita. #3058 [@MilsonElias](https://github.com/MilsonElias)
+
+### Security
+- `symfony/filesystem` atualizado para 8.1.11 (GHSA-6prc-h956-hxjq). #3056 [@cabralwms](https://github.com/cabralwms)
+
+### Changed
+- Dependências atualizadas (Mercado Pago SDK 3.16, Efí 1.19, mPDF 8.3, PHPWord 1.4, entre outras); a mensagem de erro da API do Mercado Pago acompanha o novo SDK. #3055
+
 ## [5.3.0] - 2026-11-03
 
 Painel com abas de status e gráfico de OS por mês. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
