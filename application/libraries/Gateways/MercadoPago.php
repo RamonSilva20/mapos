@@ -120,23 +120,12 @@ class MercadoPago extends BasePaymentGateway
         if ($e instanceof \MercadoPago\Exceptions\MPApiException) {
             $content = $e->getApiResponse()->getContent();
 
-            if (is_object($content)) {
-                $content = json_decode(json_encode($content), true);
+            $msg = $content['message'] ?? $content['error'] ?? $content['cause'][0]['description'] ?? null;
+            if (!$msg) {
+                $msg = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             }
 
-            if (is_array($content)) {
-                $msg = $content['message'] ?? $content['error'] ?? $content['cause'][0]['description'] ?? null;
-                if (!$msg) {
-                    $msg = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-                }
-                return "Erro API Mercado Pago: " . $msg;
-            }
-
-            if (is_string($content)) {
-                return "Erro API Mercado Pago: " . $content;
-            }
-
-            return "Erro API Mercado Pago: resposta inesperada.";
+            return "Erro API Mercado Pago: " . $msg;
         }
 
         return $e->getMessage();
@@ -233,7 +222,7 @@ class MercadoPago extends BasePaymentGateway
                 ],
             ]);
         } catch (MPApiException $e) {
-            throw new \Exception($e->getApiResponse()->getContent());
+            throw new \Exception($this->mpErrorMessage($e));
         } catch (MPException $e) {
             throw new \Exception($e->getMessage());
         }

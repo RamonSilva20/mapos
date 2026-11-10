@@ -81,8 +81,9 @@ CLS
 :: <=== Definições de SETs ===>
 SET step=0
 SET dirDefault=%temp%\InstaladorMAPOS
-SET urlWget=https://eternallybored.org/misc/wget/1.21.4/64/wget.exe
-SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP Windows/8.2.12/xampp-windows-x64-8.2.12-0-VS16-installer.exe"
+:: %%20 preserva o espaco (%20) codificado na URL: em .bat, %20 e lido como o
+:: parametro posicional %2 seguido de 0, corrompendo o caminho de download.
+SET urlXampp="https://sourceforge.net/projects/xampp/files/XAMPP%%20Windows/8.5.12/xampp-windows-x64-8.5.12-0-VS17-installer.exe/download"
 SET urlComposer=https://getcomposer.org/Composer-Setup.exe
 SET dirXampp=C:\xampp
 SET dirHtdocs=C:\xampp\htdocs
@@ -151,10 +152,8 @@ ECHO # BAIXANDO DEPENDENCIAS...
 ECHO.
 ECHO - Criando diretorio de instalacao
 IF not EXIST %dirDefault% mkdir %dirDefault% >NUL 2>&1
-ECHO - Verificando Wget
-IF not EXIST "%dirDefault%\wget.exe" PowerShell -command "& { iwr %urlWget% -OutFile %dirDefault%\wget.exe }" >NUL 2>&1
 ECHO - Verificando Xampp
-IF not EXIST "%dirDefault%\xampp.exe" %dirDefault%\wget --quiet --show-progress %urlXampp% -O %dirDefault%\xampp.exe
+IF not EXIST "%dirDefault%\xampp.exe" curl.exe -L %urlXampp% -o %dirDefault%\xampp.exe
 ECHO - Verificando Composer
 IF not EXIST "%dirDefault%\composer.exe" PowerShell -command "& { iwr %urlComposer% -OutFile %dirDefault%\composer.exe }" >NUL 2>&1
 ECHO - Verificando MapOS GitHUB
