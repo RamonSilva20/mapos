@@ -29,8 +29,11 @@
     background-color: var(--mapos-bg);
     color: var(--mapos-text);
   }
-}
 
+  a {
+    text-decoration: none !important;
+  }
+}
 /*
  * Abas que rolam (component tabs): a borda esmaece do lado em que ainda há
  * aba escondida, para o celular mostrar que a faixa rola. Usa scroll-driven
