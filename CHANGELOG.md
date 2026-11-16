@@ -6,7 +6,7 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [5.4.0] - 2026-11-16
+## [5.3.2] - 2026-11-16
 
 URL base da API nas configurações e links sem sublinhado. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
 
