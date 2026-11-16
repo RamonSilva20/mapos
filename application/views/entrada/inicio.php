@@ -31,9 +31,10 @@ $nomeSistema = (string) ($this->config->item('app_name') ?: 'Map-OS');
     <title><?= e($entrada['titulo'] . ' — ' . $nomeSistema) ?></title>
     <link rel="icon" type="image/png" href="<?= e(base_url('assets/img/favicon.png')) ?>">
     <link rel="stylesheet" href="<?= e(assetUrl('assets/dist/app.css')) ?>">
+    <link rel="manifest" href="<?= base_url(); ?>assets/json/manifest.json">
     <script type="module" src="<?= e(assetUrl('assets/js/app.js')) ?>"></script>
 </head>
-<body class="flex min-h-screen flex-col bg-canvas-dark bg-[url(../img/entrada/estrelas.svg)] font-sans text-on-dark antialiased">
+<body class="flex min-h-screen flex-col bg-canvas-dark bg-[url(../img/entrada/estrelas.svg)] font-sans text-on-dark antialiased" <?= js_module('login/service-worker') ?>>
     <header class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-5 lg:px-8">
         <a href="<?= e(base_url()) ?>" class="flex min-w-0 items-center gap-2.5 rounded-md focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring">
             <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-primary text-on-primary"><?= icon('wrench', ['class' => 'size-5']) ?></span>
