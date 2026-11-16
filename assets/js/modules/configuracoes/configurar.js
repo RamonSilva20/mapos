@@ -1,6 +1,9 @@
 // Configurações (views/mapos/configurar.php, #2846): os botões de marcador
 // ({CLIENTE_NOME}...) inserem o texto na mensagem de WhatsApp, na posição do
-// cursor.
+// cursor. Na aba API, o botão data-copiar copia a URL base da API.
+
+import { copiar } from '../conecte/copiar.js';
+import { mostrarToast } from '../../lib/toast.js';
 
 /** Texto com o marcador inserido entre inicio e fim, e a nova posição do cursor. */
 export function inserirMarcador(texto, marcador, inicio = texto.length, fim = inicio) {
@@ -15,6 +18,15 @@ export default function iniciar(raiz, { doc = document } = {}) {
     raiz.querySelector('nav [aria-current="page"]')?.scrollIntoView?.({ block: 'nearest', inline: 'center' });
 
     raiz.addEventListener('click', (evento) => {
+        const botaoCopiar = evento.target.closest?.('[data-copiar]');
+        const alvoCopiar = botaoCopiar ? doc.getElementById(botaoCopiar.dataset.copiar) : null;
+        if (alvoCopiar) {
+            copiar(alvoCopiar).then((copiou) => mostrarToast(copiou
+                ? { mensagem: 'URL copiada.', variante: 'success' }
+                : { mensagem: 'Não foi possível copiar sozinho: a URL ficou selecionada, use Ctrl+C.', variante: 'warning' }, doc));
+            return;
+        }
+
         const botao = evento.target.closest?.('[data-marcador]');
         const campo = botao ? doc.getElementById(botao.dataset.marcadorAlvo) : null;
         if (!campo) {
