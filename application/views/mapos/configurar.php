@@ -101,6 +101,19 @@ foreach ($campos as $nome => $def) {
         <form method="post" action="<?= e(site_url('mapos/configurar') . listagemQuery(['aba' => $aba])) ?>" novalidate class="flex flex-col gap-4" <?= js_module('formulario/padrao') ?>>
             <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
 
+            <?php if ($aba === 'api') { ?>
+                <section class="<?= e($caixa) ?>" aria-labelledby="secao-api-url">
+                    <h2 id="secao-api-url" class="text-heading-sm text-text">Endereço da API</h2>
+                    <p class="mt-1 mb-4 text-caption text-muted">Informe no aplicativo do Map-OS. Só responde com a API ligada.</p>
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+                        <div class="min-w-0 flex-1">
+                            <?= component('input', ['name' => 'api_url_base', 'id' => 'config-api-url', 'label' => 'URL base', 'value' => site_url('api/v1'), 'readonly' => true, 'class' => 'font-mono text-caption']) ?>
+                        </div>
+                        <?= component('button', ['label' => 'Copiar URL', 'icon' => 'copy', 'variant' => 'outline', 'attrs' => ['data-copiar' => 'config-api-url']]) ?>
+                    </div>
+                </section>
+            <?php } ?>
+
             <?php foreach ($grupos as $titulo => $lista) { ?>
                 <section class="<?= e($caixa) ?>" aria-label="<?= e($titulo !== '' ? $titulo : CONFIG_ABAS[$aba]) ?>">
                     <?php if ($titulo !== '') { ?>

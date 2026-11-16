@@ -14,3 +14,15 @@ test('substitui o texto selecionado', () => {
 test('sem cursor, vai para o fim', () => {
     assert.equal(inserirMarcador('Total: ', '{VALOR_OS}').texto, 'Total: {VALOR_OS}');
 });
+
+test('copiar() grava o valor do campo e cai no select() sem permissão', async () => {
+    const { copiar } = await import('../../assets/js/modules/conecte/copiar.js');
+    let gravado = null;
+    assert.equal(await copiar({ value: 'http://x/index.php/api/v1' }, { writeText: async (v) => { gravado = v; } }), true);
+    assert.equal(gravado, 'http://x/index.php/api/v1');
+
+    let selecionou = false;
+    const campo = { value: 'x', select: () => { selecionou = true; } };
+    assert.equal(await copiar(campo, { writeText: async () => { throw new Error('negado'); } }), false);
+    assert.equal(selecionou, true);
+});
