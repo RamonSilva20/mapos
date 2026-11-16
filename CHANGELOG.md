@@ -6,6 +6,16 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [5.3.2] - 2026-11-16
+
+URL base da API nas configurações e links sem sublinhado. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
+
+### Added
+- Configurações › API: o endereço da API (URL base) aparece num campo com o botão "Copiar URL", para informar no aplicativo do Map-OS. #3063
+
+### Fixed
+- Links do painel sem o sublinhado do navegador. #3062 [@MilsonElias](https://github.com/MilsonElias)
+
 ## [5.3.1] - 2026-11-10
 
 Correções nos instaladores e nas tabelas, e dependências atualizadas. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.
