@@ -7,7 +7,7 @@ require_once __DIR__ . '/../helpers/cookie_seguro_helper.php';
 /**
  * App current version
  */
-$config['app_version'] = '5.3.1';
+$config['app_version'] = '5.4.0';
 
 /**
  * Nome do sistema
