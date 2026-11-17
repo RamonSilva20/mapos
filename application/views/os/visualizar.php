@@ -57,6 +57,13 @@ $textos = [
             <p class="text-caption [overflow-wrap:anywhere] text-muted"><?= e($os->nomeCliente . ' · Técnico: ' . $os->nome) ?></p>
         </div>
         <div class="flex flex-wrap gap-2">
+            <?php if ($pode['editar'] && $os->status === 'Aberto') { ?>
+    <form method="post" action="<?= e(site_url('os/gerarOrcamento/' . $idOs)) ?>" class="inline">
+        <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
+        <?= component('button', ['label' => 'Gerar Orçamento', 'icon' => 'file-text', 'variant' => 'outline', 'type' => 'submit']) ?>
+    </form>
+<?php } ?>
+
             <?php if ($pode['faturar']) { ?>
                 <?= component('button', ['label' => 'Faturar', 'icon' => 'circle-dollar-sign', 'variant' => 'outline', 'attrs' => ['data-modal-abrir' => 'faturar-os']]) ?>
             <?php } ?>

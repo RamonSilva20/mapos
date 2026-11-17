@@ -11,16 +11,17 @@ if (! defined('OS_STATUS_VARIANTES')) {
     // (#3044) para leitura rápida: além das semânticas, azul-escuro (Finalizado)
     // e roxo (Faturado).
     define('OS_STATUS_VARIANTES', [
-        'Orçamento' => 'neutral',
-        'Negociação' => 'warning',
-        'Aberto' => 'success',
-        'Aprovado' => 'info',
-        'Em Andamento' => 'progress',
-        'Aguardando Peças' => 'warning',
-        'Finalizado' => 'azulescuro',
-        'Faturado' => 'roxo',
-        'Cancelado' => 'danger',
-    ]);
+           'Aberto' => 'success',
+           'Orçamento' => 'neutral',
+           'Negociação' => 'warning',
+           'Aprovado' => 'info',
+           'Em Andamento' => 'progress',
+           'Aguardando Peças' => 'warning',
+           'Finalizado' => 'azulescuro',
+           'Faturado' => 'roxo',
+           'Cancelado' => 'danger',
+       ]);
+
 }
 
 if (! function_exists('osStatusPill')) {

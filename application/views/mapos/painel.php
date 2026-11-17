@@ -58,7 +58,7 @@ $kpis = [];
 if ($pode['os']) {
     $aguardando = (int) ($os_por_status['Aguardando Peças'] ?? 0);
     $kpis[] = [
-        'label' => 'OS em andamento',
+        'label' => 'Ordens abertas',
         'value' => painelSomar($os_por_status, PAINEL_OS_ANDAMENTO),
         'icon' => 'wrench',
         'accent' => 'progress',
