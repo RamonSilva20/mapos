@@ -1498,4 +1498,36 @@ public const FILTROS = [
         log_info('Removeu anotação de uma OS. ID (OS): ' . $idOs);
         $this->responderTrechos($idOs, 'anotacao', 'Anotação excluída.');
     }
+        public function gerarOrcamento($id = null)
+    {
+        if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar O.S.');
+            redirect(base_url());
+        }
+
+        if ($this->input->method() !== 'post' || ! $id || ! is_numeric($id)) {
+            redirect(site_url('os'));
+        }
+
+        $os = $this->os_model->getById($id);
+        if (! $os) {
+            $this->session->set_flashdata('error', 'Ordem de Serviço não encontrada.');
+            redirect(site_url('os'));
+        }
+
+        $statusAnterior = $os->status;
+
+        if ($this->os_model->edit('os', ['status' => 'Orçamento'], 'idOs', $id)) {
+            if (method_exists($this->os_model, 'registrarStatus')) {
+                $this->os_model->registrarStatus((int) $id, 'Orçamento', $statusAnterior);
+            }
+            log_info('Alterou o status da OS para Orçamento. ID: ' . $id);
+            $this->session->set_flashdata('success', 'Status da OS alterado para Orçamento com sucesso!');
+        } else {
+            $this->session->set_flashdata('error', 'Não foi possível alterar o status da OS.');
+        }
+
+        redirect(site_url('os/editar/' . $id));
+    }
+
 }
