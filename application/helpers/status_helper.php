@@ -10,10 +10,10 @@ if (! defined('OS_STATUS_VARIANTES')) {
     // Os status da v4, na ordem do fluxo de uma OS. Cor própria por status
     // (#3044) para leitura rápida: além das semânticas, azul-escuro (Finalizado)
     // e roxo (Faturado).
-    define('OS_STATUS_VARIANTES', [
+ define('OS_STATUS_VARIANTES', [
+        'Aberto' => 'success',
         'Orçamento' => 'neutral',
         'Negociação' => 'warning',
-        'Aberto' => 'success',
         'Aprovado' => 'info',
         'Em Andamento' => 'progress',
         'Aguardando Peças' => 'warning',
@@ -21,6 +21,7 @@ if (! defined('OS_STATUS_VARIANTES')) {
         'Faturado' => 'roxo',
         'Cancelado' => 'danger',
     ]);
+
 }
 
 if (! function_exists('osStatusPill')) {

@@ -7,9 +7,9 @@ if (! defined('BASEPATH')) {
 class Os extends MY_Controller
 {
     /** Filtros da listagem, na query string (listagemFiltros()). */
-    public const FILTROS = [
+public const FILTROS = [
         'pesquisa' => 'texto',
-        'status' => ['andamento', 'orcamento', 'Orçamento', 'Negociação', 'Aberto', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
+        'status' => ['andamento', 'orcamento', 'Aberto', 'Orçamento', 'Negociação', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
         'de' => 'texto',
         'ate' => 'texto',
     ];
