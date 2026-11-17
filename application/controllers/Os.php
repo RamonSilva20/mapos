@@ -7,12 +7,12 @@ if (! defined('BASEPATH')) {
 class Os extends MY_Controller
 {
     /** Filtros da listagem, na query string (listagemFiltros()). */
-public const FILTROS = [
-        'pesquisa' => 'texto',
-        'status' => ['andamento', 'orcamento', 'Aberto', 'Orçamento', 'Negociação', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
-        'de' => 'texto',
-        'ate' => 'texto',
-    ];
+    public const FILTROS = [
+            'pesquisa' => 'texto',
+            'status' => ['andamento', 'orcamento', 'Aberto', 'Orçamento', 'Negociação', 'Aprovado', 'Em Andamento', 'Aguardando Peças', 'Finalizado', 'Faturado', 'Cancelado'],
+            'de' => 'texto',
+            'ate' => 'texto',
+        ];
 
     public function __construct()
     {
@@ -1498,7 +1498,7 @@ public const FILTROS = [
         log_info('Removeu anotação de uma OS. ID (OS): ' . $idOs);
         $this->responderTrechos($idOs, 'anotacao', 'Anotação excluída.');
     }
-        public function gerarOrcamento($id = null)
+    public function gerarOrcamento($id = null)
     {
         if (! $this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar O.S.');
@@ -1514,6 +1514,13 @@ public const FILTROS = [
             $this->session->set_flashdata('error', 'Ordem de Serviço não encontrada.');
             redirect(site_url('os'));
         }
+        $produtos = $this->os_model->getProdutos($id);
+        $servicos = $this->os_model->getServicos($id);
+
+        if (empty($produtos) && empty($servicos)) {
+            $this->session->set_flashdata('error', 'Não é possível gerar orçamento sem produtos ou serviços lançados na OS.');
+            redirect(site_url('os/visualizar/' . $id));
+        }
 
         $statusAnterior = $os->status;
 
@@ -1527,7 +1534,7 @@ public const FILTROS = [
             $this->session->set_flashdata('error', 'Não foi possível alterar o status da OS.');
         }
 
-        redirect(site_url('os/editar/' . $id));
+        redirect(site_url('os/visualizar/' . $id));
     }
 
 }
