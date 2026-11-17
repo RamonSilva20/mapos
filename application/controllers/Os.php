@@ -1519,7 +1519,7 @@ public const FILTROS = [
 
         if ($this->os_model->edit('os', ['status' => 'Orçamento'], 'idOs', $id)) {
             if (method_exists($this->os_model, 'registrarStatus')) {
-                $this->os_model->registrarStatus((int) $id, 'Orçamento', $statusAnterior);
+                $this->os_model->registrarStatus((int) $id, 'Orçamento', $statusAnterior, (int) $this->session->userdata('id_admin'));
             }
             log_info('Alterou o status da OS para Orçamento. ID: ' . $id);
             $this->session->set_flashdata('success', 'Status da OS alterado para Orçamento com sucesso!');

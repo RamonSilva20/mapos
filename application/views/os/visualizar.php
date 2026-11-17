@@ -60,7 +60,7 @@ $textos = [
             <?php if ($pode['editar'] && $os->status === 'Aberto') { ?>
     <form method="post" action="<?= e(site_url('os/gerarOrcamento/' . $idOs)) ?>" class="inline">
         <input type="hidden" name="<?= e($this->security->get_csrf_token_name()) ?>" value="<?= e($this->security->get_csrf_hash()) ?>">
-        <?= component('button', ['label' => 'Gerar Orçamento', 'icon' => 'calculator', 'variant' => 'outline', 'type' => 'submit']) ?>
+        <?= component('button', ['label' => 'Gerar Orçamento', 'icon' => 'file-text', 'variant' => 'outline', 'type' => 'submit']) ?>
     </form>
 <?php } ?>
 
