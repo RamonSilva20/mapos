@@ -25,7 +25,7 @@ final class VisaoGeral extends Modulo
             'preco' => Schema::decimal()->anulavel()->obrigatorio(),
             'estoque' => Schema::inteiro()->anulavel()->obrigatorio(),
         ])->nome('Sugestao');
-        $termo = Schema::objeto(['busca' => Schema::texto()->obrigatorio()->min(1)->max(100)]);
+        $termo = Schema::objeto(['busca' => Schema::texto()->max(100)->descricao('Sem termo, traz os primeiros em ordem alfabética.')]);
 
         return [
             Rota::get('/painel', [self::class, 'painel'])->tag('Painel')
@@ -249,7 +249,7 @@ final class VisaoGeral extends Modulo
 
     public function sugerirClientes(): Resposta
     {
-        $termo = $this->ctx->consulta()['busca'];
+        $termo = (string) ($this->ctx->consulta()['busca'] ?? '');
         $linhas = $this->db->select('idClientes, nomeCliente, telefone, celular, documento')
             ->group_start()->like('nomeCliente', $termo)->or_like('telefone', $termo)->or_like('celular', $termo)->or_like('documento', $termo)->group_end()
             ->order_by('nomeCliente', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('clientes')->result();
@@ -259,7 +259,7 @@ final class VisaoGeral extends Modulo
 
     public function sugerirProdutos(): Resposta
     {
-        $termo = $this->ctx->consulta()['busca'];
+        $termo = (string) ($this->ctx->consulta()['busca'] ?? '');
         $linhas = $this->db->select('idProdutos, descricao, precoVenda, estoque')
             ->group_start()->like('codDeBarra', $termo)->or_like('descricao', $termo)->group_end()
             ->where('saida', 1)->order_by('descricao', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('produtos')->result();
@@ -269,21 +269,21 @@ final class VisaoGeral extends Modulo
 
     public function sugerirServicos(): Resposta
     {
-        $linhas = $this->db->select('idServicos, nome, preco')->like('nome', $this->ctx->consulta()['busca'])->order_by('nome', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('servicos')->result();
+        $linhas = $this->db->select('idServicos, nome, preco')->like('nome', (string) ($this->ctx->consulta()['busca'] ?? ''))->order_by('nome', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('servicos')->result();
 
         return Resposta::dados(array_map(static fn ($s) => self::sugestao((int) $s->idServicos, $s->nome, '', $s->preco), $linhas));
     }
 
     public function sugerirUsuarios(): Resposta
     {
-        $linhas = $this->db->select('idUsuarios, nome, telefone')->like('nome', $this->ctx->consulta()['busca'])->where('situacao', 1)->order_by('nome', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('usuarios')->result();
+        $linhas = $this->db->select('idUsuarios, nome, telefone')->like('nome', (string) ($this->ctx->consulta()['busca'] ?? ''))->where('situacao', 1)->order_by('nome', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('usuarios')->result();
 
         return Resposta::dados(array_map(static fn ($u) => self::sugestao((int) $u->idUsuarios, $u->nome, (string) $u->telefone), $linhas));
     }
 
     public function sugerirGarantias(): Resposta
     {
-        $linhas = $this->db->select('idGarantias, refGarantia')->like('refGarantia', $this->ctx->consulta()['busca'])->order_by('refGarantia', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('garantias')->result();
+        $linhas = $this->db->select('idGarantias, refGarantia')->like('refGarantia', (string) ($this->ctx->consulta()['busca'] ?? ''))->order_by('refGarantia', 'ASC')->limit(self::LIMITE_SUGESTOES)->get('garantias')->result();
 
         return Resposta::dados(array_map(static fn ($g) => self::sugestao((int) $g->idGarantias, $g->refGarantia, ''), $linhas));
     }
