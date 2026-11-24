@@ -98,30 +98,6 @@ if (! function_exists('osArquivosDosAnexos')) {
     }
 }
 
-if (! function_exists('osAnexosParaApi')) {
-    /**
-     * Anexos para a API: sem o caminho do servidor, e com `url` (e `thumb_url`,
-     * quando há miniatura) apontando para o endpoint que serve o arquivo com
-     * autenticação (#2872), em vez de uma URL pública.
-     *
-     * @param  iterable<object>  $anexos
-     * @return list<object>
-     */
-    function osAnexosParaApi(iterable $anexos, string $endpoint): array
-    {
-        $saida = [];
-        foreach ($anexos as $anexo) {
-            $endereco = rtrim($endpoint, '/') . '/' . (int) $anexo->idAnexos;
-            $anexo->url = $endereco;
-            $anexo->thumb_url = ($anexo->thumb ?? '') !== '' ? $endereco . '?miniatura=1' : null;
-            unset($anexo->path);
-            $saida[] = $anexo;
-        }
-
-        return $saida;
-    }
-}
-
 if (! defined('OS_CAMPOS_TEXTO')) {
     // Textos livres da OS. Na v4 eram editados com o Trumbowyg e guardavam HTML.
     define('OS_CAMPOS_TEXTO', ['descricaoProduto', 'defeito', 'observacoes', 'laudoTecnico']);

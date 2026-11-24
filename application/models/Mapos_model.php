@@ -48,11 +48,8 @@ class Mapos_model extends CI_Model
                 $this->session->set_userdata('sessao_versao', $versao);
             }
 
-            // As sessões da API deste usuário deixam de renovar (#2869).
-            $this->load->library('Refresh_token');
-            $this->refresh_token->revogarDoUsuario((int) $this->session->userdata('id_admin'));
-            $this->load->library('Authorization_Token');
-            $this->authorization_token->incrementarVersao('usuarios', 'idUsuarios', (int) $this->session->userdata('id_admin'));
+            $this->load->library('Api_sessoes');
+            $this->api_sessoes->encerrarDoUsuario((int) $this->session->userdata('id_admin'));
 
             return true;
         }

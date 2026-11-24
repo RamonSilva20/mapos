@@ -83,14 +83,15 @@ Compare o seu `.env` com o `application/.env.example` da v5 e acrescente o que f
 | `APP_COOKIE_SAMESITE` | `SameSite` dos cookies. | `Lax` |
 | `APP_PROXY_IPS` | IPs do proxy reverso em que o Map-OS confia para ler o `X-Forwarded-Proto`. | vazio |
 | `API_REFRESH_TOKEN_EXPIRE_TIME` | Duração do refresh token da API, em segundos. | `2592000` (30 dias) |
-| `API_TOKEN_EXPIRE_TIME` | Duração do access token, em segundos. O token do usuário dura no máximo 1 hora, mesmo que este valor seja maior; o token da área do cliente (sem refresh) dura o configurado. | o instalador grava `3600` (1 hora) |
+| `API_TOKEN_EXPIRE_TIME` | Duração do access token, em segundos, de 60 a 3600 (valores maiores valem como 3600). Vale para usuários e clientes, que renovam pelo refresh token. | `900` (15 minutos); o instalador grava `3600` |
+| `API_SESSION_MAX_LIFETIME` | Duração máxima de uma sessão da API, em segundos, mesmo com renovações. Depois dela, o app pede o login de novo. | `7776000` (90 dias) |
 | `API_CORS_ORIGINS` | Origens que podem chamar a API de um navegador. Vazio: sem CORS. | vazio |
 | `API_RATE_LIMIT` | Requisições por minuto por IP na API. `0` desliga. | `300` |
 | `UPDATER_PRERELEASES` | Inclui pré-releases na busca de atualização. | `false` |
 
 Variáveis que já existiam e **mudaram de comportamento**:
 
-- **`API_ENABLED`:** com `false`, a API deixa de existir: todas as rotas `api/v1` respondem `404`, inclusive por URL direta de controller.
+- **`API_ENABLED`:** com `false`, a API deixa de existir: todas as rotas `api/v2` e a documentação em `/api/docs` respondem `404`, inclusive por URL direta de controller.
 - **`API_JWT_KEY`:** precisa ter **pelo menos 32 caracteres** e não pode ser o `enter_jwt_key` do `.env.example`. Em produção, com a chave vazia, curta ou igual ao exemplo, a API responde `503` até a troca (Configurações > Sistema, "Gerar uma chave nova para os tokens", ou edite o `.env`; para gerar uma, `openssl rand -hex 32`). Trocar a chave invalida todos os tokens: quem usa o app entra de novo.
 - **`APP_ENCRYPTION_KEY`:** o 2FA recusa ativar com o valor do `.env.example`.
 - **`API_CORS_ORIGINS`:** passa a valer também para a API do cliente (que antes respondia `Access-Control-Allow-Origin: *`).
@@ -140,7 +141,7 @@ As migrations da v5, na ordem em que rodam (conferidas em `application/database/
 | `invalidate_plain_password_reset_tokens` | Invalida os tokens de recuperação de senha do cliente que estavam em texto claro. Quem tinha um pedido pendente precisa pedir de novo. |
 | `fix_decimal_scale_of_prices` | Ajusta preços de produtos e serviços e saldo das contas para `DECIMAL(10,2)`. |
 | `create_os_historico` | Histórico de status da OS. |
-| `create_api_tokens` | Tabelas `api_refresh_tokens` (refresh token da API) e `api_rate_limit` (limite de requisições). |
+| `create_api_tokens` | Tabela `api_rate_limit` (limite de requisições da API) e `api_refresh_tokens`, que a `create_api_sessoes` substitui. |
 | `create_two_factor` | Colunas e tabela do 2FA. |
 | `add_tema_modo_to_usuarios` | Preferência de tema por usuário. |
 | `add_tema_cor` | Cor do tema do painel (padrão laranja, azul, verde, violeta ou grafite): coluna `usuarios.tema_cor` (preferência de cada pessoa, no menu do usuário) e configuração `app_tema_cor` (cor padrão do sistema, em Configurações → Geral), que nasce `padrao`. Nada muda visualmente até alguém escolher outra cor. Se o banco ainda não tiver rodado a migration, a troca de cor só vale no navegador; rode a atualização do banco. |
@@ -148,6 +149,7 @@ As migrations da v5, na ordem em que rodam (conferidas em `application/database/
 | `add_desconto_to_itens` | Colunas de desconto por item em OS e vendas. |
 | `add_token_versao` | Coluna `token_versao` em `usuarios` e `clientes`: trocar a senha ou desativar a conta invalida os access tokens já emitidos. |
 | `add_sessao_versao_to_usuarios` | Coluna `usuarios.sessao_versao`: trocar a senha derruba as outras sessões abertas do painel. |
+| `create_api_sessoes` | Sessões da API v2 (`api_sessoes`) e refresh tokens rotativos (`api_tokens_renovacao`, só o hash). Apaga `api_refresh_tokens` e as colunas `token_versao`: quem estava logado no app pela API v1 entra de novo. |
 
 Sobre o `move_uploads_to_storage`: ele pode rodar de novo com segurança; arquivo que não for encontrado fica como estava. Depois de migrar, confira que os anexos abrem e que `assets/anexos` e `assets/arquivos` esvaziaram. O link direto antigo (`/assets/anexos/...`) deixa de funcionar de propósito. Mais detalhes, e o rollback, em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md).
 
@@ -236,23 +238,22 @@ A v5 trocou a base do front-end. Customizações da 4.x **não são aproveitadas
 
 Se você mantém um fork, o caminho mais seguro é reaplicar suas mudanças sobre as telas novas, e não tentar mesclar as views antigas.
 
-### Quem usa a API (`/api/v1`)
+### Quem usa a API
 
-Detalhes completos em [api-autenticacao.md](api-autenticacao.md). **Quem tem app móvel deve rever os pontos abaixo antes de atualizar o servidor:**
+**A API v1 (`/api/v1`) foi removida.** A v5 traz a API v2 em `/api/v2`, reescrita do zero e **sem compatibilidade com a v1**. O app ou a integração que usa a v1 precisa ser atualizado antes de atualizar o servidor. A documentação completa de todas as rotas fica na própria instalação, em `/api/docs` (com a API ligada), e o resumo está em [api.md](api.md).
 
-- **`API_ENABLED=false` desliga a API de verdade:** todas as rotas respondem `404`, inclusive por URL direta de controller. Na 4.x ela continuava acessível pelo roteamento padrão.
-- **Chave:** com `API_JWT_KEY` vazia, com menos de 32 caracteres ou igual ao `.env.example`, a API responde `503` em produção.
-- **Login:** a resposta ganha `refresh_token`, `token_type` e `expires_in`. O access token passa a ter a claim `exp`; o do usuário dura no máximo 1 hora. Tokens da 4.x (sem `exp`) valem até vencer pelo `API_TIME`.
-- **Renovação:** `POST /api/v1/refresh` (refresh token de uso único) e `POST /api/v1/logout`. **`GET /api/v1/reGenToken` foi removida** e responde `404`: o app precisa renovar pelo refresh token ou fazer login de novo.
-- **Tokens revogáveis:** trocar a senha, desativar a conta ou fazer logout invalida na hora os access tokens já emitidos (`403`). Depois de trocar a própria senha pela API, o app precisa entrar de novo.
-- **2FA:** quem ativou o 2FA precisa enviar o campo `totp` no login. O app móvel atual não envia, então esses usuários só devem ligar o 2FA depois que o app for atualizado ([dois-fatores.md](dois-fatores.md)).
-- **`PUT /api/v1/usuarios/{id}` no próprio usuário:** só grava os campos de perfil e **ignora** `permissoes_id`, `situacao` e `dataExpiracao`. Trocar a própria senha exige `senha_atual` (sem ela, `403`), a nova senha tem no mínimo 8 caracteres, a senha é sempre gravada com hash e o e-mail não pode repetir. `situacao` e `permissoes_id` só são obrigatórios ao editar *outro* usuário (que exige a permissão `cUsuario`). O super admin não pode ser desativado nem sair do grupo Administrador.
-- **Usuários pela API seguem a regra de delegação do painel (#2879):** quem tem `cUsuario` e não é administrador só cria, edita ou exclui usuários, e só atribui grupos, com permissões que o próprio grupo dele tem (`403` fora disso). Só o usuário principal altera os dados do usuário principal, e `DELETE` recusa usuário com OS, vendas, lançamentos ou garantias (desative-o). `POST` exige um `permissoes_id` de grupo ativo.
-- **Respostas sem senha:** o hash da senha não aparece mais nas respostas de clientes, usuários e OS. Um app que lia esse campo deixa de recebê-lo.
-- **Anexos de OS:** a resposta deixa de trazer o caminho do arquivo e passa a trazer `url` e `thumb_url`, que **exigem o token**. O arquivo é baixado por `GET api/v1/os/<os>/anexos/<id>` (`?miniatura=1` para a miniatura) e, para o cliente, `GET api/v1/client/os/<os>/anexos/<id>`. Detalhes em [armazenamento-de-arquivos.md](armazenamento-de-arquivos.md).
-- **OS pela API:** o item (produto, serviço) e a anotação precisam pertencer à OS da URL (`404` se não); OS faturada ou cancelada só é editada com `control_editos` ligado (`403`); o desconto é calculado no servidor e preço e quantidade são validados.
-- **Limite de requisições:** `API_RATE_LIMIT` (300 por minuto por IP). Acima disso, `429` com `Retry-After`. O login também tem limite de tentativas, como o painel.
-- **CORS:** só com `API_CORS_ORIGINS` preenchido, vale para a API de usuários e para a do cliente. App Android/iOS não precisa.
+O que muda para quem integra:
+
+- **Endereço:** tudo em `/api/v2`. As rotas da v1 respondem `404`.
+- **Login e renovação:** `POST /auth/login` com `email` e `senha` (antes `password`), `POST /auth/renovar` e `POST /auth/logout`. O access token dura até 1 hora e o refresh token é de uso único: guarde o novo a cada renovação. As sessões ficam listadas em `GET /auth/sessoes`.
+- **2FA:** quem tem o 2FA ativo recebe um `desafio` no login e conclui em `POST /auth/login/dois-fatores` (antes, o campo `totp` no login). O 2FA também pode ser ativado pela API.
+- **Área do cliente:** `POST /cliente/auth/login` (antes `/client/auth`), com refresh token e sessões como os usuários. Também há cadastro com captcha, recuperação de senha e abertura de OS.
+- **Formato:** campos em `snake_case` com nomes próprios da API (`id`, `cliente_id`, `data_inicial`), e não mais as colunas do banco (`idOs`, `clientes_id`, `dataInicial`). Valores em dinheiro vêm como texto com duas casas, e os textos da OS como texto puro.
+- **Envelope:** sucesso em `data`, listagens com `meta` (paginação a partir de 1, `por_pagina` até 100). Não existe mais `{status, message, result}`.
+- **Erros:** RFC 9457 (`application/problem+json`) com um `codigo` estável e, nos `422`, `erros` por campo.
+- **Cobertura:** a v2 cobre todo o painel. Além do que a v1 tinha, há vendas, financeiro, cobranças, relatórios (JSON, PDF e XLSX), termos de garantia, arquivos, usuários, grupos de permissão, emitente, configurações, auditoria, fila de e-mails, backup e atualização do sistema.
+- **Permissões** são lidas do banco a cada chamada, como antes. Agora todas as rotas exigem a mesma permissão da tela equivalente do painel.
+- **Limite de requisições** (`API_RATE_LIMIT`) e **CORS** (`API_CORS_ORIGINS`) continuam no `.env`. Login, renovação e recuperação de senha têm um limite próprio, mais baixo.
 
 ## 5. Rollback
 
@@ -285,7 +286,8 @@ Depois do rollback do banco, volte também os arquivos da 4.x, o `.env` anterior
 | Botões e janelas não respondem; erros de CSP no console | Script inline ou biblioteca de CDN adicionada por customização. Ajuste a customização; evite desligar a CSP. |
 | A API responde `404` | `API_ENABLED` está `false`. |
 | A API responde `503` | `API_JWT_KEY` vazia, com menos de 32 caracteres ou igual ao `.env.example`. |
-| O app móvel pede login a toda hora, ou `reGenToken` dá `404` | Esperado na v5: renove pelo refresh token (`POST /api/v1/refresh`). |
+| O app ou a integração recebe `404` em `/api/v1` | A API v1 foi removida. Atualize o app para a API v2 (`/api/v2`, documentada em `/api/docs`). |
+| A API responde `503` com `codigo: banco_desatualizado` | Há migrations pendentes. Rode a atualização do banco (ou `POST /api/v2/sistema/banco`, com a permissão `cSistema`). |
 | `curl -I .../application/.env` responde `200` | O servidor ignora os `.htaccess`. Aplique as regras de [servidor-web.md](servidor-web.md) agora. |
 | O 2FA de um usuário deixou de abrir | A `APP_ENCRYPTION_KEY` foi trocada. Redefina o 2FA do usuário em Usuários → editar. |
 

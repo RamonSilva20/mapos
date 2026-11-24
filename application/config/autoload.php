@@ -55,7 +55,9 @@ $autoload['packages'] = [];
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = ['database', 'session', 'permission'];
+// A API v2 é sem estado: nenhuma requisição dela abre sessão nem grava cookie.
+$requisicaoDaApi = isset($GLOBALS['RTR']) && in_array(strtolower((string) $GLOBALS['RTR']->class), ['api_v2', 'api_docs'], true);
+$autoload['libraries'] = $requisicaoDaApi ? ['database', 'permission'] : ['database', 'session', 'permission'];
 
 /*
 | -------------------------------------------------------------------

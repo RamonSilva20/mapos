@@ -119,7 +119,9 @@ if (! function_exists('configuracaoCampos')) {
             ],
             'api' => [
                 'API_ENABLED' => ['destino' => 'env', 'tipo' => 'bool_env', 'rotulo' => 'API ligada', 'ajuda' => 'Usada pelo aplicativo do Map-OS.'],
-                'API_TOKEN_EXPIRE_TIME' => ['destino' => 'env', 'tipo' => 'opcao', 'rotulo' => 'Validade do token de acesso (usuários: no máximo 1 hora)', 'opcoes' => ['60' => '1 minuto', '3600' => '1 hora', '86400' => '1 dia', '604800' => '1 semana', '2592000' => '1 mês']],
+                'API_TOKEN_EXPIRE_TIME' => ['destino' => 'env', 'tipo' => 'opcao', 'rotulo' => 'Validade do token de acesso', 'opcoes' => ['300' => '5 minutos', '900' => '15 minutos', '1800' => '30 minutos', '3600' => '1 hora'], 'padrao' => '900', 'ajuda' => 'Quando vence, o aplicativo renova sozinho com o refresh token. Mais curto é mais seguro.'],
+                'API_REFRESH_TOKEN_EXPIRE_TIME' => ['destino' => 'env', 'tipo' => 'opcao', 'rotulo' => 'Sessão parada por até', 'opcoes' => ['86400' => '1 dia', '604800' => '1 semana', '2592000' => '30 dias', '7776000' => '90 dias'], 'padrao' => '2592000', 'ajuda' => 'Sem usar o aplicativo por mais tempo que isso, é preciso entrar de novo.'],
+                'API_SESSION_MAX_LIFETIME' => ['destino' => 'env', 'tipo' => 'opcao', 'rotulo' => 'Duração máxima de uma sessão', 'opcoes' => ['2592000' => '30 dias', '7776000' => '90 dias', '15552000' => '180 dias', '31536000' => '1 ano'], 'padrao' => '7776000', 'ajuda' => 'Mesmo em uso, depois desse prazo é preciso entrar de novo.'],
                 'API_JWT_KEY' => ['destino' => 'env', 'tipo' => 'gerar_jwt', 'rotulo' => 'Gerar uma chave nova para os tokens', 'ajuda' => 'Todos os tokens emitidos deixam de valer: quem usa o aplicativo entra de novo.'],
             ],
             default => [],
@@ -293,6 +295,9 @@ if (! function_exists('configuracaoValores')) {
                     : (osStatusVisiveis($atual) ?? array_keys($campo['opcoes'])),
                 'bool_env' => $post !== null ? in_array($post[$nome] ?? null, ['1', 'on', 'true'], true) : filter_var($atual, FILTER_VALIDATE_BOOLEAN),
                 'sim_nao' => $post !== null ? in_array($post[$nome] ?? null, ['1', 'on'], true) : (string) $atual === '1',
+                'opcao' => $post !== null
+                    ? (is_scalar($post[$nome] ?? null) ? (string) $post[$nome] : '')
+                    : (isset($campo['padrao']) && ! array_key_exists((string) $atual, $campo['opcoes']) ? (string) $campo['padrao'] : (string) $atual),
                 default => $post !== null ? (is_scalar($post[$nome] ?? null) ? (string) $post[$nome] : '') : (string) $atual,
             };
         }
@@ -438,5 +443,14 @@ if (! function_exists('emailFilaAssunto')) {
         $decodificado = function_exists('iconv_mime_decode') ? @iconv_mime_decode($assunto, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8') : mb_decode_mimeheader($assunto);
 
         return trim($decodificado !== false ? $decodificado : $assunto);
+    }
+}
+
+if (! function_exists('configuracaoQrDaApi')) {
+    function configuracaoQrDaApi(string $url): string
+    {
+        $png = (new Mpdf\QrCode\Output\Png())->output(new Mpdf\QrCode\QrCode($url, 'M'), 220, [255, 255, 255], [0, 0, 0], 9);
+
+        return 'data:image/png;base64,' . base64_encode($png);
     }
 }

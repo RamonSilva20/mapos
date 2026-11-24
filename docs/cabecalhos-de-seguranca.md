@@ -13,7 +13,7 @@ A v5 envia cabeçalhos de segurança em toda resposta, pelo hook `pre_system`
 | `Strict-Transport-Security` | `max-age=31536000` | só em acesso por HTTPS |
 | `Content-Security-Policy` | política da v5, em enforce | sempre (`APP_CSP` muda o modo) |
 
-Os cabeçalhos também saem nas respostas da API (`api/v1`) e nos downloads. Lá
+Os cabeçalhos também saem nas respostas da API (`api/v2`) e nos downloads. Lá
 eles não atrapalham: JSON e arquivos não executam script nem são exibidos em
 frame, e o `nosniff` impede que um anexo seja interpretado como HTML.
 

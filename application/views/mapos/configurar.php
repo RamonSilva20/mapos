@@ -104,13 +104,19 @@ foreach ($campos as $nome => $def) {
             <?php if ($aba === 'api') { ?>
                 <section class="<?= e($caixa) ?>" aria-labelledby="secao-api-url">
                     <h2 id="secao-api-url" class="text-heading-sm text-text">Endereço da API</h2>
-                    <p class="mt-1 mb-4 text-caption text-muted">Informe no aplicativo do Map-OS. Só responde com a API ligada.</p>
+                    <p class="mt-1 mb-4 text-caption text-muted">Informe no aplicativo do Map-OS. Só responde com a API ligada. A documentação de todas as rotas fica em <?= component('link', ['label' => site_url('api/docs'), 'href' => site_url('api/docs'), 'attrs' => ['target' => '_blank', 'rel' => 'noopener']]) ?>.</p>
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
                         <div class="min-w-0 flex-1">
-                            <?= component('input', ['name' => 'api_url_base', 'id' => 'config-api-url', 'label' => 'URL base', 'value' => site_url('api/v1'), 'readonly' => true, 'class' => 'font-mono text-caption']) ?>
+                            <?= component('input', ['name' => 'api_url_base', 'id' => 'config-api-url', 'label' => 'URL base', 'value' => site_url('api/v2'), 'readonly' => true, 'class' => 'font-mono text-caption']) ?>
                         </div>
                         <?= component('button', ['label' => 'Copiar URL', 'icon' => 'copy', 'variant' => 'outline', 'attrs' => ['data-copiar' => 'config-api-url']]) ?>
                     </div>
+                    <?php if (! empty($api_qr)) { ?>
+                        <div class="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                            <img src="<?= e($api_qr) ?>" alt="QR code com o endereço da API" width="160" height="160" class="size-40 rounded-md border border-border">
+                            <p class="text-caption text-muted">No aplicativo do Map-OS, toque em <strong class="font-medium text-text">Escanear QR code do servidor</strong> e aponte a câmera para este código. Clientes podem usar o mesmo QR para entrar na área do cliente.</p>
+                        </div>
+                    <?php } ?>
                 </section>
             <?php } ?>
 

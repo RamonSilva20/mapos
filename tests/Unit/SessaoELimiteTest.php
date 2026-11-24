@@ -327,8 +327,8 @@ final class SessaoELimiteTest extends MaposTestCase
         $entradas = [
             'controllers/Login.php' => ['verificarLogin', '$user'],
             'controllers/Mine.php' => ['login', '$cliente'],
-            'controllers/api/v1/UsuariosController.php' => ['login_post', '$user'],
-            'controllers/api/v1/client/ClientLoginController.php' => ['login_post', '$cliente'],
+            'libraries/Api/Modulos/Autenticacao.php' => ['login', '$usuario'],
+            'libraries/Api/Modulos/AreaDoCliente.php' => ['login', '$cliente'],
         ];
 
         foreach ($entradas as $arquivo => [$metodo, $variavel]) {
@@ -337,7 +337,7 @@ final class SessaoELimiteTest extends MaposTestCase
             $this->assertNotFalse($inicio, $arquivo . ' tem ' . $metodo . '().');
             $codigo = substr($inteiro, $inicio);
             $chamada = strpos($codigo, 'senhaConfere(');
-            $teste = preg_match('/if \(\s*!?\s*' . preg_quote($variavel, '/') . '\b/', $codigo, $m, PREG_OFFSET_CAPTURE) ? $m[0][1] : false;
+            $teste = preg_match('/(?:if \(\s*!?\s*|\|\|\s*!\s*)' . preg_quote($variavel, '/') . '\b/', $codigo, $m, PREG_OFFSET_CAPTURE) ? $m[0][1] : false;
 
             $this->assertNotFalse($chamada, $arquivo . ' usa senhaConfere().');
             $this->assertNotFalse($teste, $arquivo . ' testa a conta.');
@@ -363,12 +363,8 @@ final class SessaoELimiteTest extends MaposTestCase
 
     private function usuariosModelo(): Usuarios_model
     {
-        $biblioteca = new class() {
-            public function incrementarVersao(string $tabela, string $campoId, int $id): void
-            {
-            }
-
-            public function revogarDoUsuario(int $id): void
+        $sessoes = new class() {
+            public function encerrarDoUsuario(int $id, string $motivo = 'senha_alterada', ?string $exceto = null): void
             {
             }
         };
@@ -376,9 +372,7 @@ final class SessaoELimiteTest extends MaposTestCase
         $model = new class() extends Usuarios_model {
             public $load;
 
-            public $refresh_token;
-
-            public $authorization_token;
+            public $api_sessoes;
 
             public function __construct()
             {
@@ -391,8 +385,7 @@ final class SessaoELimiteTest extends MaposTestCase
             {
             }
         };
-        $model->refresh_token = $biblioteca;
-        $model->authorization_token = $biblioteca;
+        $model->api_sessoes = $sessoes;
 
         return $model;
     }

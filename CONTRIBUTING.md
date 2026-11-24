@@ -108,7 +108,7 @@ Aponte o document root do seu webserver para a raiz do projeto, acesse a URL e s
 - As configurações de ambiente ficam em `application/.env`, que é ignorado pelo Git. **Nunca** faça commit dele nem de credenciais. A lista completa de variáveis está em `application/.env.example`.
 - Os anexos de OS e os arquivos enviados ficam em `STORAGE_PATH` (padrão `application/storage`), fora de `assets/` e servidos por controller com checagem de permissão. Veja [`docs/armazenamento-de-arquivos.md`](docs/armazenamento-de-arquivos.md). Ao testar upload, o limite vem de `UPLOAD_MAX_KB`.
 - O que o servidor web não pode entregar (`application/`, `.env`, `updates/`...) e as regras de cada servidor estão em [`docs/servidor-web.md`](docs/servidor-web.md).
-- A API só existe com `API_ENABLED=true` no `.env`; desligada, todas as rotas `api/v1` respondem 404. A autenticação está em [`docs/api-autenticacao.md`](docs/api-autenticacao.md).
+- A API (`/api/v2`) só existe com `API_ENABLED=true` no `.env`; desligada, todas as rotas da API e a documentação em `/api/docs` respondem 404. Cada módulo de `application/libraries/Api/Modulos/` declara suas rotas com permissão e schemas de entrada e resposta, e essa declaração valida as requisições e gera o OpenAPI. Detalhes em [`docs/api.md`](docs/api.md).
 - A página de erro detalhada (Whoops) só é exibida quando `APP_ENVIRONMENT=development` **e** `WHOOPS_ERROR_PAGE_ENABLED=true` no `application/.env`. Em qualquer outro ambiente ela fica desabilitada.
 
 ## Estrutura do projeto
@@ -124,7 +124,7 @@ application/
 │   ├── migrations/  Alterações de schema
 │   └── seeds/       Seeders para dados de teste
 ├── helpers/      Funções auxiliares
-├── libraries/    Bibliotecas próprias (Permission, Gateways, REST_Controller etc.)
+├── libraries/    Bibliotecas próprias (Permission, Gateways, Api etc.)
 ├── models/       Acesso a dados
 └── views/        Templates das telas
 assets/           CSS, JS, imagens e uploads

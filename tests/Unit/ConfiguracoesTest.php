@@ -291,4 +291,15 @@ final class ConfiguracoesTest extends MaposTestCase
             $this->assertStringContainsString('hash-csrf', $html, $aba);
         }
     }
+
+    public function testQrDaApiGeraUmPngComOEndereco(): void
+    {
+        $uri = configuracaoQrDaApi('https://loja.com.br/mapos/index.php/api/v2');
+
+        $this->assertStringStartsWith('data:image/png;base64,', $uri);
+        $png = base64_decode(substr($uri, strlen('data:image/png;base64,')), true);
+        $this->assertNotFalse($png);
+        $this->assertSame("\x89PNG", substr($png, 0, 4));
+        $this->assertNotSame($uri, configuracaoQrDaApi('https://outra.com.br/api/v2'));
+    }
 }

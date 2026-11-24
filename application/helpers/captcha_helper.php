@@ -307,7 +307,6 @@ if (! function_exists('create_captcha')) {
         }
 
         $img = '<img ' . ($img_id === '' ? '' : 'id="' . $img_id . '"') . ' src="' . $img_url . $img_filename . '" style="width: ' . $img_width . 'px; height: ' . $img_height . 'px; border: 0;" alt=" " />';
-        imagedestroy($im);
 
         return ['word' => $word, 'time' => $now, 'image' => $img, 'filename' => $img_filename];
     }

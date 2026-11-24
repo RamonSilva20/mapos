@@ -55,7 +55,7 @@ final class RevisaoDeSegurancaTest extends MaposTestCase
     {
         $backup = $this->metodo('application/controllers/Mapos.php', 'backup');
 
-        foreach (['ci_sessions', 'login_attempts', 'api_refresh_tokens', 'api_rate_limit', 'resets_de_senha'] as $tabela) {
+        foreach (['ci_sessions', 'login_attempts', 'api_sessoes', 'api_tokens_renovacao', 'api_rate_limit', 'resets_de_senha'] as $tabela) {
             $this->assertStringContainsString("'$tabela'", $backup, $tabela);
         }
         $this->assertStringContainsString("'ignore' =>", $backup);
