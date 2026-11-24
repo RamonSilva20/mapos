@@ -445,3 +445,12 @@ if (! function_exists('emailFilaAssunto')) {
         return trim($decodificado !== false ? $decodificado : $assunto);
     }
 }
+
+if (! function_exists('configuracaoQrDaApi')) {
+    function configuracaoQrDaApi(string $url): string
+    {
+        $png = (new Mpdf\QrCode\Output\Png())->output(new Mpdf\QrCode\QrCode($url, 'M'), 220, [255, 255, 255], [0, 0, 0], 9);
+
+        return 'data:image/png;base64,' . base64_encode($png);
+    }
+}

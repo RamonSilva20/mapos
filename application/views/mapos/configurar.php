@@ -111,6 +111,12 @@ foreach ($campos as $nome => $def) {
                         </div>
                         <?= component('button', ['label' => 'Copiar URL', 'icon' => 'copy', 'variant' => 'outline', 'attrs' => ['data-copiar' => 'config-api-url']]) ?>
                     </div>
+                    <?php if (! empty($api_qr)) { ?>
+                        <div class="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                            <img src="<?= e($api_qr) ?>" alt="QR code com o endereço da API" width="160" height="160" class="size-40 rounded-md border border-border">
+                            <p class="text-caption text-muted">No aplicativo do Map-OS, toque em <strong class="font-medium text-text">Escanear QR code do servidor</strong> e aponte a câmera para este código. Clientes podem usar o mesmo QR para entrar na área do cliente.</p>
+                        </div>
+                    <?php } ?>
                 </section>
             <?php } ?>
 

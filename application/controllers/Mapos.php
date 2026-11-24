@@ -833,6 +833,7 @@ class Mapos extends MY_Controller
         $this->data['erros'] = $erros;
         $this->data['pode_backup'] = $this->permite('cBackup');
         $this->data['tema_pessoal'] = configuracaoTemaPessoal($this->data['configuration']);
+        $this->data['api_qr'] = $aba === 'api' ? configuracaoQrDaApi(site_url('api/v2')) : null;
         $this->data['view'] = 'mapos/configurar';
 
         return $this->layout();
