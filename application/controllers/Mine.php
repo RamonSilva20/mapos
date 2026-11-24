@@ -706,7 +706,6 @@ class Mine extends CI_Controller
         );
 
         imagepng($img);
-        imagedestroy($img);
 
         $this->session->set_userdata('captchaWord', $codigoCaptcha);
     }

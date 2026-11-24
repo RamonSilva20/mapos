@@ -327,8 +327,8 @@ final class SessaoELimiteTest extends MaposTestCase
         $entradas = [
             'controllers/Login.php' => ['verificarLogin', '$user'],
             'controllers/Mine.php' => ['login', '$cliente'],
-            'controllers/api/v1/UsuariosController.php' => ['login_post', '$user'],
-            'controllers/api/v1/client/ClientLoginController.php' => ['login_post', '$cliente'],
+            'libraries/Api/Modulos/Autenticacao.php' => ['login', '$usuario'],
+            'libraries/Api/Modulos/AreaDoCliente.php' => ['login', '$cliente'],
         ];
 
         foreach ($entradas as $arquivo => [$metodo, $variavel]) {
@@ -337,7 +337,7 @@ final class SessaoELimiteTest extends MaposTestCase
             $this->assertNotFalse($inicio, $arquivo . ' tem ' . $metodo . '().');
             $codigo = substr($inteiro, $inicio);
             $chamada = strpos($codigo, 'senhaConfere(');
-            $teste = preg_match('/if \(\s*!?\s*' . preg_quote($variavel, '/') . '\b/', $codigo, $m, PREG_OFFSET_CAPTURE) ? $m[0][1] : false;
+            $teste = preg_match('/(?:if \(\s*!?\s*|\|\|\s*!\s*)' . preg_quote($variavel, '/') . '\b/', $codigo, $m, PREG_OFFSET_CAPTURE) ? $m[0][1] : false;
 
             $this->assertNotFalse($chamada, $arquivo . ' usa senhaConfere().');
             $this->assertNotFalse($teste, $arquivo . ' testa a conta.');

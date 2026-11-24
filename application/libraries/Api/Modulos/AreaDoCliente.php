@@ -272,7 +272,6 @@ final class AreaDoCliente extends Modulo
         ob_start();
         imagepng($imagem);
         $png = (string) ob_get_clean();
-        imagedestroy($imagem);
 
         $duracao = 600;
         $desafio = $this->ctx->tokens->emitirTemporario(self::CAPTCHA, 0, $duracao, ['h' => $this->hashDoCaptcha($resposta)]);
