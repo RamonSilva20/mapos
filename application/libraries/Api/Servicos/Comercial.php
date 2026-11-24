@@ -26,7 +26,20 @@ final class Comercial
         }
         $modelo = $this->ctx->modelo('Produtos_model');
         foreach ($produtos as $p) {
-            $modelo->updateEstoque((int) $p->produtos_id, $p->quantidade, $operacao);
+            if ($operacao === '-') {
+                $db = $this->ctx->db();
+                if (! $db->query(
+                    'UPDATE produtos SET estoque = estoque - ? WHERE idProdutos = ? AND estoque >= ?',
+                    [$p->quantidade, (int) $p->produtos_id, $p->quantidade]
+                )) {
+                    throw HttpErro::interno('Não foi possível atualizar o estoque. Tente novamente.');
+                }
+                if ($db->affected_rows() !== 1) {
+                    throw HttpErro::regraDeNegocio('Estoque insuficiente. Atualize os dados e tente novamente.', 'estoque_insuficiente');
+                }
+            } else {
+                $modelo->updateEstoque((int) $p->produtos_id, $p->quantidade, $operacao);
+            }
             $this->ctx->auditar('ESTOQUE: Produto id ' . (int) $p->produtos_id . ($operacao === '+' ? ' voltou ao estoque' : ' baixa do estoque') . '. Quantidade: ' . $p->quantidade . '. ' . $motivo);
         }
     }
