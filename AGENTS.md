@@ -43,7 +43,7 @@ Map-OS is an open-source Service Order and Business Management system built in P
    - Run `composer test` (PHPUnit, `tests/Unit`) and `composer analyse` (PHPStan) before opening a PR. Tests must execute the behavior; a test that only reads the source code does not catch runtime errors. Security changes need a test for the denied case (no permission, another customer's record, invalid value).
 6. **Files, API and docs:**
    - Service-order attachments and files from the Arquivos screen live in `STORAGE_PATH` (outside `assets/`) and are served by controllers that check permissions; never link them by a public URL (`docs/armazenamento-de-arquivos.md`).
-   - The API only exists with `API_ENABLED=true` (every `api/v1` route answers 404 otherwise); authentication is described in `docs/api-autenticacao.md`.
+   - The API (`/api/v2`) only exists with `API_ENABLED=true` (every API route, `/api/docs` included, answers 404 otherwise). It lives in `application/libraries/Api/` (`Libraries\Api`): each module in `Modulos/` declares its routes with permission, input and response schemas, and the same declaration validates requests and generates the OpenAPI spec served at `/api/docs`. A new endpoint is a `Rota` in a module, never a new controller; responses come from a serializer in `Recursos/` (snake_case, never raw DB rows). See `docs/api.md`.
    - A change that alters what an upgrading admin has to do (new `.env` variable, migration, route) updates `docs/migracao-4x-para-5.md`.
 
 ## Design System

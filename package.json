@@ -26,6 +26,7 @@
     "@fontsource/rubik": "5.3.0",
     "@fontsource/space-grotesk": "5.3.0",
     "@fullcalendar/core": "6.1.21",
+    "@scalar/api-reference": "1.77.0",
     "alpinejs": "3.17.4",
     "chart.js": "4.5.1",
     "flatpickr": "4.6.13",

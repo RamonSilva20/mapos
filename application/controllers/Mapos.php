@@ -557,7 +557,7 @@ class Mapos extends MY_Controller
             'filename' => 'backup' . date('d-m-Y') . '.sql',
             // Segredos temporários que um backup nunca deve levar (#2879): o id da
             // linha de ci_sessions é o próprio cookie de sessão de quem está logado.
-            'ignore' => ['ci_sessions', 'login_attempts', 'api_refresh_tokens', 'api_rate_limit', 'resets_de_senha'],
+            'ignore' => ['ci_sessions', 'login_attempts', 'api_sessoes', 'api_tokens_renovacao', 'api_rate_limit', 'resets_de_senha'],
         ];
 
         $backup = $this->dbutil->backup($prefs);

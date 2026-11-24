@@ -94,6 +94,12 @@ const bibliotecas = {
       },
     ],
   },
+  // Documentação da API em /api/docs. O bundle standalone não busca nada fora
+  // da instalação: fontes, proxy e cliente externo ficam desligados na página.
+  scalar: {
+    pacote: '@scalar/api-reference',
+    arquivos: { 'dist/browser/standalone.js': 'standalone.js' },
+  },
 };
 
 function lerPacote(pacote) {

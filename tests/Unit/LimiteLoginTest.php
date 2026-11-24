@@ -240,8 +240,8 @@ final class LimiteLoginTest extends MaposTestCase
         $logins = [
             ['application/controllers/Login.php', 'verificarLogin', 'usuario'],
             ['application/controllers/Mine.php', 'login', 'cliente'],
-            ['application/controllers/api/v1/UsuariosController.php', 'login_post', 'usuario'],
-            ['application/controllers/api/v1/client/ClientLoginController.php', 'login_post', 'cliente'],
+            ['application/libraries/Api/Modulos/Autenticacao.php', 'login', 'usuario'],
+            ['application/libraries/Api/Modulos/AreaDoCliente.php', 'login', 'cliente'],
         ];
 
         foreach ($logins as [$arquivo, $metodo, $escopo]) {

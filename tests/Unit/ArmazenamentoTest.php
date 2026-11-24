@@ -223,21 +223,6 @@ final class ArmazenamentoTest extends MaposTestCase
         $this->assertStringNotContainsString("\n", $estranho['Content-Disposition'], 'Sem quebra de linha no nome (header injection).');
     }
 
-    public function testAnexosDaApiNaoExpoemOCaminhoEApontamParaOEndpoint(): void
-    {
-        require_once APPPATH . 'helpers/os_helper.php';
-
-        $anexos = osAnexosParaApi([
-            (object) ['idAnexos' => 4, 'anexo' => 'a.jpg', 'thumb' => 'thumb_a.jpg', 'path' => '/var/www/x', 'url' => 'http://x/assets/anexos/y'],
-            (object) ['idAnexos' => 5, 'anexo' => 'b.pdf', 'thumb' => '', 'path' => 'anexos/z', 'url' => ''],
-        ], 'http://mapos.test/api/v1/os/1/anexos/');
-
-        $this->assertSame('http://mapos.test/api/v1/os/1/anexos/4', $anexos[0]->url);
-        $this->assertSame('http://mapos.test/api/v1/os/1/anexos/4?miniatura=1', $anexos[0]->thumb_url);
-        $this->assertNull($anexos[1]->thumb_url);
-        $this->assertFalse(isset($anexos[0]->path));
-    }
-
     public function testControllersSoServemPeloArmazenamentoComPermissao(): void
     {
         $os = (string) file_get_contents(APPPATH . 'controllers/Os.php');
@@ -265,12 +250,15 @@ final class ArmazenamentoTest extends MaposTestCase
         $this->assertSame(['jpg', 'jpeg', 'png', 'gif', 'pdf', 'cdr', 'docx', 'txt'], $formatos);
         $this->assertSame(implode('|', $formatos), armazenamentoConfigUpload('/x', $formatos)['allowed_types']);
 
-        $api = (string) file_get_contents(APPPATH . 'controllers/api/v1/OsController.php');
+        $api = (string) file_get_contents(APPPATH . 'libraries/Api/Modulos/Ordens.php');
         $this->assertDoesNotMatchRegularExpression('/\bOs::/', $api);
-        $this->assertStringContainsString('armazenamentoConfigUpload($directory, armazenamentoExtensoesAnexo())', $api);
+        $this->assertStringContainsString('armazenamentoExtensoesAnexo()', $api);
         $this->assertStringNotContainsString('Os::', (string) file_get_contents(APPPATH . 'controllers/Os.php'));
+        $upload = (string) file_get_contents(APPPATH . 'libraries/Api/Upload.php');
+        $this->assertStringContainsString('armazenamentoReceber($upload', $upload);
+        $this->assertStringNotContainsString('->do_upload(', $upload);
 
-        foreach (['api/v1/OsController.php', 'Os.php', 'Arquivos.php'] as $controller) {
+        foreach (['Os.php', 'Arquivos.php'] as $controller) {
             $codigo = (string) file_get_contents(APPPATH . 'controllers/' . $controller);
             $this->assertStringContainsString('armazenamentoReceber($this->upload', $codigo, $controller);
             $this->assertStringNotContainsString('$this->upload->do_upload(', $codigo, $controller);

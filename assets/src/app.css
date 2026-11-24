@@ -316,3 +316,17 @@ html[data-valores="ocultos"] .kpi-oculto-valores {
     scroll-behavior: auto !important;
   }
 }
+
+body.api-docs.light-mode,
+body.api-docs .light-mode {
+  --scalar-font: var(--font-sans);
+  --scalar-font-code: var(--font-mono);
+  --scalar-color-accent: var(--mapos-primary-strong);
+}
+
+body.api-docs.dark-mode,
+body.api-docs .dark-mode {
+  --scalar-font: var(--font-sans);
+  --scalar-font-code: var(--font-mono);
+  --scalar-color-accent: var(--mapos-primary);
+}

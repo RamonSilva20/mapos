@@ -363,12 +363,8 @@ final class SessaoELimiteTest extends MaposTestCase
 
     private function usuariosModelo(): Usuarios_model
     {
-        $biblioteca = new class() {
-            public function incrementarVersao(string $tabela, string $campoId, int $id): void
-            {
-            }
-
-            public function revogarDoUsuario(int $id): void
+        $sessoes = new class() {
+            public function encerrarDoUsuario(int $id, string $motivo = 'senha_alterada', ?string $exceto = null): void
             {
             }
         };
@@ -376,9 +372,7 @@ final class SessaoELimiteTest extends MaposTestCase
         $model = new class() extends Usuarios_model {
             public $load;
 
-            public $refresh_token;
-
-            public $authorization_token;
+            public $api_sessoes;
 
             public function __construct()
             {
@@ -391,8 +385,7 @@ final class SessaoELimiteTest extends MaposTestCase
             {
             }
         };
-        $model->refresh_token = $biblioteca;
-        $model->authorization_token = $biblioteca;
+        $model->api_sessoes = $sessoes;
 
         return $model;
     }

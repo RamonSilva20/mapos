@@ -6,7 +6,7 @@ Os anexos das OS e os arquivos da tela **Arquivos** ficam fora de `assets/` e s�
 | --- | --- | --- |
 | Anexo de OS | painel com `vOs` | `os/anexo/<id>` (miniatura: `os/anexo/<id>/thumb`), `os/downloadanexo/<id>` |
 | Anexo de OS | cliente dono da OS | `mine/anexo/<id>`, `mine/downloadanexo/<id>` |
-| Anexo de OS | API (token) | `GET api/v1/os/<os>/anexos/<id>`, `GET api/v1/client/os/<os>/anexos/<id>` (`?miniatura=1` para a miniatura) |
+| Anexo de OS | API (token) | `GET api/v2/os/<os>/anexos/<id>`, `GET api/v2/cliente/os/<os>/anexos/<id>` (`?miniatura=true` para a miniatura) |
 | Arquivo | painel com `vArquivo` | `arquivos/download/<id>` |
 
 Imagens e PDF abrem na página; os demais formatos baixam. A logo do emitente e a foto de perfil continuam em `assets/uploads` e `assets/userImage`, porque aparecem no login, em e-mails e em PDFs e não têm conteúdo sensível.

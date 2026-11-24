@@ -6,6 +6,22 @@ e [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+API reescrita do zero: a v2, em `/api/v2`, com documentação navegável em `/api/docs`. **A API v1 foi removida**: apps e integrações precisam migrar (veja docs/api.md e a seção "Quem usa a API" do guia de migração). Tem migration (`create_api_sessoes`) e uma variável nova opcional no `.env` (`API_SESSION_MAX_LIFETIME`).
+
+### Added
+- API v2 cobrindo todo o painel e a área do cliente: autenticação, conta e 2FA, painel e busca, clientes, produtos, serviços, termos de garantia, arquivos, OS, vendas, lançamentos, cobranças, relatórios (JSON, PDF e XLSX), usuários, grupos de permissão, emitente, configurações, auditoria, fila de e-mails e sistema.
+- Documentação OpenAPI 3.1 gerada das próprias rotas, em `/api/docs` (Scalar, servido pela instalação) e `/api/docs/openapi.json`.
+- Sessões da API revogáveis, com refresh token rotativo de uso único (só o hash fica no banco), detecção de reuso e duração máxima da sessão. Listar e encerrar sessões pela API.
+- Login em dois passos para quem tem 2FA, e ativação do 2FA pela API.
+- Erros no formato RFC 9457 com `codigo` estável e mensagens por campo.
+
+### Changed
+- Configurações › API: a URL base passa a ser `/api/v2`, com link para a documentação; validade do access token de 5 minutos a 1 hora (padrão 15 minutos) e as durações da sessão.
+- Requisições da API não abrem sessão nem gravam cookie.
+
+### Removed
+- API v1 (`/api/v1`), `REST_Controller`, `Authorization_Token`, `Refresh_token` e as colunas `token_versao`.
+
 ## [5.3.2] - 2026-11-16
 
 URL base da API nas configurações e links sem sublinhado. Sem migration e sem variável nova no `.env`. Na primeira vez depois de atualizar, recarregue o painel com Ctrl+F5.

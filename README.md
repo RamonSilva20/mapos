@@ -170,7 +170,7 @@ Para listar todos os comandos de terminal disponíveis, basta executar o comando
 * [Servidor web: o que não pode ser público](docs/servidor-web.md)
 * [Atualização pelo painel](docs/atualizacao.md)
 * [Armazenamento de arquivos (`STORAGE_PATH`)](docs/armazenamento-de-arquivos.md)
-* [Autenticação da API](docs/api-autenticacao.md)
+* [API e autenticação](docs/api.md)
 * [Autenticação em dois fatores](docs/dois-fatores.md)
 * [Cabeçalhos de segurança e CSP](docs/cabecalhos-de-seguranca.md)
 * [Cookies e sessão](docs/cookies-e-sessao.md)
